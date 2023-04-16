@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard Administrativo</title>
+  <title>Invitar nuevo paciente</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -24,13 +24,10 @@
   <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
   <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
-
-  <!-- DataTables -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
+  <link href="assets/css/style.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -42,6 +39,22 @@
 </head>
 
 <body>
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title" id="staticBackdropLabel"></div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <a href="index.html" type="button" class="btn btn-primary">Invitar</a>
+            <a href="index.html" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</a>
+          </div>
+        </div>
+    </div>
+  </div>
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -53,7 +66,6 @@
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
-  
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -231,7 +243,6 @@
             <li>
               <hr class="dropdown-divider">
             </li>
-
             <li>
               <a class="dropdown-item d-flex align-items-center" href="../Medilab/home.html">
                 <i class="bi bi-box-arrow-right"></i>
@@ -244,6 +255,7 @@
 
       </ul>
     </nav><!-- End Icons Navigation -->
+  
 
   </header><!-- End Header -->
 
@@ -266,84 +278,56 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>Invitar nuevo paciente</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a>Administrativo</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+          <li class="breadcrumb-item active">Invitar</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
-      <div class="row">
+    <section class="section">
+      <div class="row align-items-center">
+        <div class="col-lg-10 container">
 
-        <!-- Left side columns -->
-        <div class="col-lg-8">
-          <div class="row">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Formulario de invitación</h5>
 
-            <!-- Top Selling -->
-            <div class="col-12">
-              <div style="padding-bottom: 15px;" class="card top-selling overflow-auto">
-
-                <div class="card-body pb-0">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Pacientes <span>| Referidos por mí</span></h5>
-                    <a class="btn btn-secondary" th:href="@{/administrativo/invitar}"><i class="bi bi-plus"></i>Invitar</a>
+              <!-- General Form Elements -->
+              <form>
+                <div class="row mb-3">
+                  <label for="inputText" class="col-sm-2 col-form-label">Nombres</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control">
                   </div>
-
-                  <table id="datatable" class="table  ">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Perfil</th>
-                        <th scope="col">Nombres y apellidos</th>
-                        <th scope="col">DNI</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr th:each="paciente,obj:${listaPacientes}">
-                        <td th:text="${obj.index + 1}"></td>
-                        <td scope="row"><img class="rounded-circle" src="assets/img/product-1.jpg" alt=""></td>
-                        <td th:text="${paciente}"></td>
-                        <td>78945612</td>
-                        <td><span class="badge bg-primary">Activo</span></td>
-                        <td><a th:href="@{'/administrativo/editar?id='+}"><i class="bi bi-pen"></i></a></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
+                </div>
+                <div class="row mb-3">
+                  <label for="inputText" class="col-sm-2 col-form-label">Apellidos</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="inputEmail" class="col-sm-2 col-form-label">Correo</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control">
+                  </div>
                 </div>
 
-              </div>
-            </div><!-- End Top Selling -->
+                <div class="text-center">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Enviar invitación</button>
+                    <a type="submit" class="btn btn-secondary" href="index.html">Cancelar</a>
+                </div>
 
-          </div>
-        </div><!-- End Left side columns -->
-
-        <!-- Right side columns -->
-        <div class="col-lg-4">
-
-          <!-- Recent Activity -->
-          <div class="card">
-
-            <div class="card-body">
-              <h5 class="card-title">Información <span>| Actual</span></h5>
-              
-              <p><strong>Especialidad:</strong> Ginecología</p>
-              <p><strong>Sede:</strong> San Isidro</p>
-
-              </div>
+              </form><!-- End General Form Elements -->
 
             </div>
-          </div><!-- End Recent Activity -->
+          </div>
 
-          
-
-        </div><!-- End Right side columns -->
-
+        </div>
       </div>
     </section>
 
@@ -375,39 +359,23 @@
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- DataTables from jQuery-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- DataTables activate -->
   <script>
-    $(document).ready(function () {
-      $('#datatable').DataTable({
-        "language": {
-          "lengthMenu": "Mostrar _MENU_ registros por página",
-          "zeroRecords": "Ningún registro encontrado",
-          "info": "Página _PAGE_ de _PAGES_",
-          "infoEmpty": "No hay registros disponibles",
-          "infoFiltered": "(filtrado de _MAX_ registros)",
-          "search": "Buscar:",
-          "loadingRecords": "Cargando...",
-          "paginate":{
-            "first": "Primero",
-            "last": "Último",
-            "next": "Siguiente",
-            "previous": "Anterior",
-          }
-        },
-        "columnDefs": [
-          {"margin-bottom": "10px"}
-        ]
-      }); 
+    $(document).ready(function() {
+    $('#staticBackdrop').on('show.bs.modal', function(event) {
+        var button = event.relatedTarget;
+        var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
+        $('#staticBackdropLabel').html(`Confirmación`);
+        $('.modal-body').html(`¿Seguro de que deseas invitar este paciente?`);
     });
+
+
+  });
   </script>
+
 </body>
 
 </html>
