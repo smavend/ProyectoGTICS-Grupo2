@@ -54,6 +54,10 @@ public class AdministrativoController {
             model.addAttribute("paciente", paciente);
             model.addAttribute("alergias", alergiaRepository.buscarPorPacienteId(id));
             model.addAttribute("listaDistritos", distritoRepository.findAll());
+
+
+            AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
+            model.addAttribute("datos", aes);
             return "administrativo/editar";
         }else {
             return "redirect:/administrativo";
