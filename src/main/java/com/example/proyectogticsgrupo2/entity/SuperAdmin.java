@@ -1,4 +1,4 @@
 package com.example.proyectogticsgrupo2.entity;
 
-public class AdministrativoEntity {
+public class SuperAdmin {
 }
