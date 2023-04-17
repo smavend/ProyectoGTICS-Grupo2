@@ -47,7 +47,7 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a th:href="@{/administrativo}" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">Clínica</span>
       </a>
@@ -253,7 +253,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="index.html">
+        <a class="nav-link " th:href="@{/administrativo}">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -306,9 +306,9 @@
                     <tbody>
                       <tr th:each="paciente,obj:${listaPacientes}">
                         <td th:text="${obj.index + 1}"></td>
-                        <td scope="row"><img class="rounded-circle" src="assets/img/product-1.jpg" alt=""></td>
-                        <td th:text="${paciente}"></td>
-                        <td>78945612</td>
+                        <td scope="row"><img class="rounded-circle" th:src="@{'paciente/foto/' + ${paciente.idPaciente}}" alt=""></td>
+                        <td th:text="${paciente.nombre+' '+paciente.apellidos}"></td>
+                        <td ></td>
                         <td><span class="badge bg-primary">Activo</span></td>
                         <td><a th:href="@{'/administrativo/editar?id='+}"><i class="bi bi-pen"></i></a></td>
                       </tr>

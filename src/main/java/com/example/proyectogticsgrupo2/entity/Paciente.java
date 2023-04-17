@@ -1,15 +1,22 @@
 package com.example.proyectogticsgrupo2.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "paciente")
 public class Paciente {
+
     @Id
     @Column(name="id_paciente", nullable = false)
     private String idPaciente;
+
     @Column(nullable = false)
     private String nombre;
+
     @Column(nullable = false)
     private String apellidos;
 
