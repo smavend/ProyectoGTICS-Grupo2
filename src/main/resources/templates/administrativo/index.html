@@ -10,24 +10,24 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/css/style_administrativo.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="assets/css/style_administrativo.css" rel="stylesheet">
+  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
 
   <!-- DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
@@ -48,7 +48,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a th:href="@{/administrativo}" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
+        <img th:src="@{/assets/img/logo.png}" alt="">
         <span class="d-none d-lg-block">Clínica</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -157,7 +157,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
                 <div>
                   <h4>Maria Hudson</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -171,7 +171,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
                 <div>
                   <h4>Anna Nelson</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -185,7 +185,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
                 <div>
                   <h4>David Muldon</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -208,13 +208,13 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${datos.administrativoId.nombre}"></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
+              <h6 th:text="${datos.administrativoId.nombre + ' ' +datos.administrativoId.apellidos}">Kevin Anderson</h6>
               <span>Administrativo</span>
             </li>
             <li>
@@ -223,7 +223,7 @@
 
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="falta.html">
                 <i class="bi bi-gear"></i>
                 <span>Ajustes</span>
               </a>
@@ -233,7 +233,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="../Medilab/home.html">
+              <a class="dropdown-item d-flex align-items-center" th:href="@{/}">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Cerrar sesión</span>
               </a>
@@ -298,7 +298,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Perfil</th>
                         <th scope="col">Nombres y apellidos</th>
-                        <th scope="col">DNI</th>
+                        <th scope="col">Seguro</th>
                         <th scope="col">Estado</th>
                         <th scope="col"></th>
                       </tr>
@@ -308,9 +308,15 @@
                         <td th:text="${obj.index + 1}"></td>
                         <td scope="row"><img class="rounded-circle" th:src="@{'paciente/foto/' + ${paciente.idPaciente}}" alt=""></td>
                         <td th:text="${paciente.nombre+' '+paciente.apellidos}"></td>
-                        <td ></td>
-                        <td><span class="badge bg-primary">Activo</span></td>
-                        <td><a th:href="@{'/administrativo/editar?id='+}"><i class="bi bi-pen"></i></a></td>
+                        <td th:text="${paciente.seguro.nombre}"></td>
+                        <td th:switch="${paciente.estado}" class="centered">
+                          <span th:case="1" class="badge bg-primary">Activo</span>
+                          <span th:case="2" class="badge bg-secondary">Invitado</span>
+                          <span th:case="3" class="badge bg-info">Registrado</span>
+                          <span th:case="4" class="badge bg-success">Agendado</span>
+                          <span th:case="5" class="badge bg-warning">En consulta</span>
+                        </td>
+                        <td><a th:href="@{'/administrativo/editar?id=' + ${paciente.idPaciente}}"><i class="bi bi-pen"></i></a></td>
                       </tr>
                     </tbody>
                   </table>
@@ -332,8 +338,8 @@
             <div class="card-body">
               <h5 class="card-title">Información <span>| Actual</span></h5>
               
-              <p><strong>Especialidad:</strong> Ginecología</p>
-              <p><strong>Sede:</strong> San Isidro</p>
+              <p><strong>Especialidad: </strong><span th:text="${datos.especialidadId.nombre}"></span></p>
+              <p><strong>Sede: </strong><span th:text="${datos.sedeId.nombre}"></span></p>
 
               </div>
 
@@ -366,14 +372,14 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.min.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+  <script th:src="@{assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
   <!-- DataTables from jQuery-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -381,7 +387,7 @@
   <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script th:src="@{/assets/js/main.js}"></script>
 
   <!-- DataTables activate -->
   <script>

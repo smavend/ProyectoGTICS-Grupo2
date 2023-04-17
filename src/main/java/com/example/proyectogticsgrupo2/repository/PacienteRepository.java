@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, String> {
-    @Query(nativeQuery = true, value = "select * from paciente where administrativo_id_administrativo = ?1")
+    @Query(nativeQuery = true, value = "select * from paciente where administrativo_id_administrativo = ?1 and estado!=0")
     List<Paciente> buscarPorIdAdministrativo(String id);
 }

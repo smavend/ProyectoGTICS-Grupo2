@@ -7,25 +7,23 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name="administrativo")
-public class Administrativo {
+@Table(name = "clinica")
+public class Clinica {
     @Id
-    @Column(name = "id_administrativo", nullable = false)
-    private String idAdministrativo;
+    @Column(name = "id_clinica", nullable = false)
+    private int idClinica;
 
     @Column(nullable = false)
     private String nombre;
 
     @Column(nullable = false)
-    private String apellidos;
-
+    private String color;
     @Column(nullable = false)
-    private int estado; //no activo: 0,activo: 1,
-
+    private String tyc;
+    private String telefono;
     @Column(nullable = false)
     private String correo;
-
 }
