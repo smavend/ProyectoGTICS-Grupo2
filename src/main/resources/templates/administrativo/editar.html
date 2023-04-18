@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard Administrativo</title>
+  <title>Editar formulario de referido</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -24,13 +24,10 @@
   <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
   <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
   <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
-
-  <!-- DataTables -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -42,6 +39,22 @@
 </head>
 
 <body>
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title" id="staticBackdropLabel"></div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <a th:href="@{/administrativo}" type="button" class="btn btn-primary">Guardar cambios</a>
+            <a th:href="@{/administrativo}" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</a>
+          </div>
+        </div>
+    </div>
+  </div>
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -53,7 +66,6 @@
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
-  
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -81,17 +93,17 @@
             </li>
             <div th:each="notificacion:${listaNotificaciones}">
 
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4 th:text="${notificacion.titulo}"></h4>
-                <p th:text="${notificacion.descripcion}"></p>
-                <p th:text="${notificacion.fecha}">4 hrs. ago</p>
-              </div>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+              <li class="notification-item">
+                <i class="bi bi-info-circle text-primary"></i>
+                <div>
+                  <h4 th:text="${notificacion.titulo}"></h4>
+                  <p th:text="${notificacion.descripcion}"></p>
+                  <p th:text="${notificacion.fecha}">4 hrs. ago</p>
+                </div>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
             </div>
 
             <li class="dropdown-footer">
@@ -147,7 +159,7 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${datos.administrativoId.nombre}"></span>
+            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${datos.administrativoId.nombre}">K. Anderson</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -182,6 +194,7 @@
 
       </ul>
     </nav><!-- End Icons Navigation -->
+  
 
   </header><!-- End Header -->
 
@@ -204,90 +217,69 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>Editar formulario de referido</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a>Administrativo</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a th:href="@{/administrativo}">Dashboard</a></li>
+          <li class="breadcrumb-item active">Editar</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
+    <section class="section">
       <div class="row">
+        <div class="col-lg-10 container">
 
-        <!-- Left side columns -->
-        <div class="col-lg-8">
-          <div class="row">
-
-            <!-- Top Selling -->
-            <div class="col-12">
-              <div style="padding-bottom: 15px;" class="card top-selling overflow-auto">
-
-                <div class="card-body pb-0">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Pacientes <span>| Referidos por mí</span></h5>
-                    <a class="btn btn-secondary" th:href="@{/administrativo/invitar}"><i class="bi bi-plus"></i>Invitar</a>
-                  </div>
-
-                  <table id="datatable" class="table  ">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Perfil</th>
-                        <th scope="col">Nombres y apellidos</th>
-                        <th scope="col">Seguro</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr th:each="paciente,obj:${listaPacientes}">
-                        <td th:text="${obj.index + 1}"></td>
-                        <td scope="row"><img class="rounded-circle" th:src="@{'paciente/foto/' + ${paciente.idPaciente}}" alt=""></td>
-                        <td th:text="${paciente.nombre+' '+paciente.apellidos}"></td>
-                        <td th:text="${paciente.seguro.nombre}"></td>
-                        <td th:switch="${paciente.estado}" class="centered">
-                          <span th:case="1" class="badge bg-primary">Activo</span>
-                          <span th:case="2" class="badge bg-secondary">Invitado</span>
-                          <span th:case="3" class="badge bg-info">Registrado</span>
-                          <span th:case="4" class="badge bg-success">Agendado</span>
-                          <span th:case="5" class="badge bg-warning">En consulta</span>
-                        </td>
-                        <td><a th:href="@{'/administrativo/editar?id=' + ${paciente.idPaciente}}"><i class="bi bi-pen"></i></a></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                </div>
-
-              </div>
-            </div><!-- End Top Selling -->
-
-          </div>
-        </div><!-- End Left side columns -->
-
-        <!-- Right side columns -->
-        <div class="col-lg-4">
-
-          <!-- Recent Activity -->
           <div class="card">
-
             <div class="card-body">
-              <h5 class="card-title">Información <span>| Actual</span></h5>
-              
-              <p><strong>Especialidad: </strong><span th:text="${datos.especialidadId.nombre}"></span></p>
-              <p><strong>Sede: </strong><span th:text="${datos.sedeId.nombre}"></span></p>
+              <h5 class="card-title" th:inline="text">
+                <th:block th:utext="${paciente.nombre + ' '+ paciente.apellidos}"/>
+                <span>| Paciente referido</span></h5>
 
-              </div>
+              <!-- General Form Elements -->
+              <form class="row g-3">
+                <div class="col-md-6">
+                  <label for="inputEmail5" class="form-label">Correo</label>
+                  <input type="email" class="form-control" id="inputEmail5" th:value="${paciente.correo}">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputAddress5" class="form-label">Dirección</label>
+                  <input type="text" class="form-control" id="inputAddres5s" th:value="${paciente.direccion}">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputState" class="form-label">Distrito</label>
+                  <select id="inputState" class="form-select">
+                    <option th:each="distrito: ${listaDistritos}"
+                            th:text="${distrito.nombre}"
+                            th:value="${distrito.idDistrito}"
+                            th:selected="${paciente.distrito.idDistrito==distrito.idDistrito}">
+                    </option>
+                  </select>
+                </div>
+                <hr>
+                <div class="row mb-3">
+                  <label for="allergies" class="col-sm-2 col-form-label">Alergias</label>
+                  <div class="col-sm-10">
+                    <div class="alert border-primary alert-dismissible fade show" role="alert" th:each="alergia, obj:${alergias}" th:inline="text">
+                      <th:block th:utext="${alergia.nombre}"/>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div class="text-center">
+                      <button type="button" class="btn btn-outline-secondary"><i class="bi bi-plus"></i> Agregar alergia</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Guardar cambios</button>
+                  <a type="submit" class="btn btn-secondary" th:href="@{/administrativo}">Cancelar</a>
+                </div>
+              </form>
 
             </div>
-          </div><!-- End Recent Activity -->
+          </div>
 
-          
-
-        </div><!-- End Right side columns -->
-
+        </div>
       </div>
     </section>
 
@@ -316,42 +308,26 @@
   <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
   <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
   <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-  <script th:src="@{assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
   <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-
-  <!-- DataTables from jQuery-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- DataTables activate -->
   <script>
-    $(document).ready(function () {
-      $('#datatable').DataTable({
-        "language": {
-          "lengthMenu": "Mostrar _MENU_ registros por página",
-          "zeroRecords": "Ningún registro encontrado",
-          "info": "Página _PAGE_ de _PAGES_",
-          "infoEmpty": "No hay registros disponibles",
-          "infoFiltered": "(filtrado de _MAX_ registros)",
-          "search": "Buscar:",
-          "loadingRecords": "Cargando...",
-          "paginate":{
-            "first": "Primero",
-            "last": "Último",
-            "next": "Siguiente",
-            "previous": "Anterior",
-          }
-        },
-        "columnDefs": [
-          {"margin-bottom": "10px"}
-        ]
-      }); 
+    $(document).ready(function() {
+    $('#staticBackdrop').on('show.bs.modal', function(event) {
+        var button = event.relatedTarget;
+        var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
+        $('#staticBackdropLabel').html(`Confirmación`);
+        $('.modal-body').html(`Al aceptar, se cambiarán definitivamente la edición realizada. ¿Está seguro de continuar?`);
     });
+
+
+  });
   </script>
+
 </body>
 
 </html>
