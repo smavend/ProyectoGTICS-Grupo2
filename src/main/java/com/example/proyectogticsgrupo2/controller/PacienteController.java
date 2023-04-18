@@ -64,4 +64,25 @@ public class PacienteController {
 
     @GetMapping(value = {"/consentimientos"})
     public String consentimientos(){ return "paciente/consentimientos"; }
+
+    @GetMapping(value = {"/doctores"})
+    public String verDoctores(){ return "paciente/verDoctores"; }
+
+    @GetMapping(value = {"/perfilDoctor"})
+    public String verPerfilDoctor(){ return "paciente/perfilDoctor"; }
+
+    @GetMapping(value = {"/reservarCitaDoctor"})
+    public String reservarCitaDoctor(){ return "paciente/reservarCitaDoctor"; }
+
+    @GetMapping(value = {"/confirmarReserva"})
+    public String confirmarReserva(){ return "paciente/confirmacionCita"; }
+
+    @GetMapping(value = {"/sesionVirtual"})
+    public String sesionVirtual(){ return "paciente/sesionVirtual"; }
+
+    @GetMapping(value = {"/reciboPago"})
+    public String verReciboPago(){ return "paciente/reciboPago"; }
+
+    @GetMapping(value = {"/completarCuestionario"})
+    public String completarCuestionario(){ return "paciente/completarCuestionario"; }
 }
