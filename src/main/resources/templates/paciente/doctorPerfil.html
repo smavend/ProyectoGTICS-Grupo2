@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Doctor</title>
+
+        <!-- BOOTSTRAP -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+              crossorigin="anonymous">
+
+        <!-- GOOGLE FONTS -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+
+        <!-- CSS -->
+        <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
+        <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
+
+    </head>
+    <body>
+
+        <!-- ======= Header ======= -->
+        <div th:replace="~{paciente/fragments/header.html :: header}"></div>
+        <!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <!-- End Sidebar-->
+
+        <main style="padding-top: 0;" id="main" class="main">
+            <section style="margin-top: 0; padding-top: 30px;" class="seccionPrincipal">
+                <!-- Perfil doctor -->
+                <div style="margin-bottom: 50px;" class="row">
+                    <!-- Foto Doctor -->
+                    <div class="col-md-5 d-md-flex justify-content-end align-items-center">
+                        <img class="perfilDoctorFoto" th:src="@{/assets/img/messages-3.jpg}" alt="fotoDoctor">
+                    </div>
+                    <!-- Información Doctor -->
+                    <div class="col-md-7">
+                        <div class="perfilDoctorEspecialidad">
+                            Neurología
+                        </div>
+                        <div class="perfilDoctorNombre">
+                            Juan Martinez Rondon
+                        </div>
+                        <div class="perfilDoctorInformacion">
+                            <span style="font-weight: 600;">Colegiatura:</span> 68860
+                        </div>
+                        <div class="perfilDoctorInformacion">
+                            <span style="font-weight: 600;">Pregrado:</span>
+                            Médico Neurólogo - Universidad de San Martín de Porres
+                        </div>
+                        <div class="perfilDoctorInformacion">
+                            <span style="font-weight: 600;">Posgrado:</span>
+                            Especialista en Neurocirugía - Universidad Nacional Mayor de San Marcos
+                        </div>
+                        <div class="perfilDoctorInformacion">
+                            <span style="font-weight: 600;">Idiomas:</span> Español / Inglés
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reservar Cita -->
+                <h3 style="text-align: center; font-weight: 600;">Disponibilidad</h3>
+                <table class="table tablaDisponibilidad">
+                    <thead>
+                        <tr>
+                            <th>Día</th>
+                            <th>Hora</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MARTES</td>
+                            <td>13:00 - 18:00</td>
+                            <td>
+                                <a class="botonReservarCitaHorario" th:href="@{/Paciente/reservarDoctor}">Reservar en este
+                                    horario</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>JUEVES</td>
+                            <td>08:00 - 12:00</td>
+                            <td>
+                                <a class="botonReservarCitaHorario" href="#">Reservar en este horario</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
+
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+    </body>
+</html>
