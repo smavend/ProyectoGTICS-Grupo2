@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio</title>
+
+  <!-- BOOTSTRAP -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+  <!-- GOOGLE FONTS -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
+  <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
+</head>
+<body>
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+  <!-- Clínica y Botón Cita -->
+  <div class="d-flex align-items-center justify-content-between">
+    <a href="Paciente-Dashboard.html" class="logo d-flex align-items-center">
+      <img class="logoNavBar" src="assets/img/logoClinicaPNG.png" alt="Logo de la clínica">
+      <span class="d-none d-lg-block tituloNavBar">Clínica INTERPUCP</span>
+    </a>
+    <i class="bi bi-list toggle-sidebar-btn botonToggle ms-2"></i>
+    <a class="btn btn-primary botonReservarCita ms-3" href="Paciente-Reservar-cita.html">Reservar una cita</a>
+  </div>
+
+  <!-- Íconos y Perfil -->
+  <nav class="header-nav ms-auto">
+
+    <ul class="d-flex align-items-center">
+
+      <!-- Notificaciones -->
+      <li class="nav-item dropdown">
+
+        <!-- Ícono de notificaciones -->
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+          <i class="bi bi-bell"></i>
+          <span class="badge bg-primary badge-number">3</span>
+        </a>
+
+        <!-- Items de notificaciones -->
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+          <li class="dropdown-header">
+            Tiene 3 notificaciones nuevas
+          </li>
+          <li><hr class="dropdown-divider"></li>
+
+          <li class="notification-item">
+            <i class="bi bi-exclamation-circle text-warning"></i>
+            <div>
+              <h4>Lorem Ipsum</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>Hace 30 minutos</p>
+            </div>
+          </li>
+
+          <li><hr class="dropdown-divider"></li>
+
+          <li class="notification-item">
+            <i class="bi bi-exclamation-circle text-warning "></i>
+            <div>
+              <h4>Atque rerum nesciunt</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>Hace 1 hora</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-check-circle text-success"></i>
+            <div>
+              <h4>Sit rerum fuga</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>Hace 2 horas</p>
+            </div>
+          </li>
+
+          <li><hr class="dropdown-divider"></li>
+          <li class="dropdown-footer">
+            <a href="#">Todas las notificaciones</a>
+          </li>
+
+        </ul>
+
+      </li><!-- End Notification Nav -->
+
+      <!-- Mensajes -->
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+          <i class="bi bi-chat-left-text"></i>
+          <span class="badge bg-success badge-number">2</span>
+        </a><!-- End Messages Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+          <li class="dropdown-header">
+            Tiene 2 mensajes nuevos
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+              <div>
+                <h4>Maria Hudson</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>Hace 4 horas</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+              <div>
+                <h4>Anna Nelson</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>Hace 6 horas</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="dropdown-footer">
+            <a href="#">Todos los mensajes</a>
+          </li>
+
+        </ul><!-- End Messages Dropdown Items -->
+
+      </li><!-- End Messages Nav -->
+
+
+      <!-- Perfil -->
+      <li class="nav-item dropdown pe-3">
+
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2">Juanchito P.</span>
+        </a><!-- End Profile Image Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6>Juanchito P.</h6>
+            <span>Paciente</span>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="Paciente-Perfil.html">
+              <i class="bi bi-person"></i>
+              <span>Mi Perfil</span>
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-gear"></i>
+              <span>Configuración</span>
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </li>
+
+        </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
+
+    </ul>
+  </nav>
+  <!-- End Icons Navigation -->
+
+</header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link" href="Paciente-Dashboard.html">
+        <i class="bi bi-house"></i>
+        <span>Inicio</span>
+      </a>
+    </li><!-- End Inicio Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="Paciente-Citas.html">
+        <i class="bi bi-card-checklist"></i>
+        <span>Citas</span>
+      </a>
+    </li><!-- End Citas Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="Paciente-Pagos.html">
+        <i class="bi bi-currency-exchange"></i>
+        <span>Pagos</span>
+      </a>
+    </li><!-- End Pagos Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="Paciente-Cuestionarios.html">
+        <i class="bi bi-journal-text"></i>
+        <span>Cuestionarios</span>
+      </a>
+    </li><!-- End Cuestionarios Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="Paciente-Consentimientos.html">
+        <i class="bi bi-card-list"></i>
+        <span>Consentimientos</span>
+      </a>
+    </li><!-- End Consentimientos Nav -->
+  </ul>
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+  <h1 class="encabezado">Doctores</h1>
+  <section class="seccionPrincipal">
+    <!-- Filtros -->
+    <div class="row filtrosDoctores">
+      <div class="col-lg-6 filtroDoctor d-flex justify-content-start">
+        <label class="labelFiltroDoctor">Sede</label>
+        <select class="selectFiltroDoctor">
+          <option value="">San Isidro</option>
+          <option value="">Villa María del Triunfo</option>
+          <option value="">San Juan de Lurigancho</option>
+          <option value="">Miraflores</option>
+          <option value="">La Molina</option>
+          <option value="">Comas</option>
+          <option value="">La Luna</option>
+        </select>
+      </div>
+      <div class="col-lg-6 filtroDoctor d-flex justify-content-start">
+        <label class="labelFiltroDoctor">Especialidad</label>
+        <select class="selectFiltroDoctor">
+          <option value="">Cardiología</option>
+          <option value="">Cirugía Cardiovascular</option>
+          <option value="">Dermatología</option>
+          <option value="">Ecografía</option>
+          <option value="">Endocrinología</option>
+          <option value="">Gastroenterología</option>
+          <option value="">Ginecología</option>
+          <option value="">Laboratorio</option>
+        </select>
+      </div>
+    </div>
+    <!-- Doctores -->
+    <div class="row">
+      <!-- Primera columna de doctores -->
+      <div class="col-md-6 filaDoctores">
+        <!-- Doctor -->
+        <div class="cardDoctor">
+          <div class="row">
+            <div class="col-5">
+              <img class="fotoDoctor" src="assets/img/messages-3.jpg" alt="fotoDoctor">
+            </div>
+            <div class="col-7 informacionDoctor">
+              <div class="nombreDoctor">Juan Martinez Rondon</div>
+              <div class="disponibilidadDoctor">
+                Disponibilidad
+                <div class="disponibilidadDoctorDato">
+                  MARTES: 13:00 - 18:00
+                </div>
+                <div class="disponibilidadDoctorDato">
+                  JUEVES: 08:00 - 12:00
+                </div>
+              </div>
+              <div class="d-flex justify-content-center align-items-center py-3">
+                <a class="botonVerMasDoctor" href="Paciente-Doctores-Cita.html">Ver Más</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doctor -->
+        <div class="cardDoctor">
+          <div class="row">
+            <div class="col-5">
+              <img class="fotoDoctor" src="assets/img/messages-1.jpg" alt="fotoDoctor">
+            </div>
+            <div class="col-7 informacionDoctor">
+              <div class="nombreDoctor">Victor Tazo Lara</div>
+              <div class="disponibilidadDoctor">
+                Disponibilidad
+                <div class="disponibilidadDoctorDato">
+                  MARTES: 09:00 - 15:00
+                </div>
+                <div class="disponibilidadDoctorDato">
+                  VIERNES: 12:00 - 15:00
+                </div>
+              </div>
+              <div class="d-flex justify-content-center align-items-center py-3">
+                <a class="botonVerMasDoctor" href="#">Ver Más</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doctor -->
+        <div class="cardDoctor">
+          <div class="row">
+            <div class="col-5">
+              <img class="fotoDoctor" src="assets/img/doctor3.jpg" alt="fotoDoctor">
+            </div>
+            <div class="col-7 informacionDoctor">
+              <div class="nombreDoctor">Armando Aitor Tilla</div>
+              <div class="disponibilidadDoctor">
+                Disponibilidad
+                <div class="disponibilidadDoctorDato">
+                  LUNES: 13:00 - 18:00
+                </div>
+                <div class="disponibilidadDoctorDato">
+                  MIÉRCOLES: 10:00 - 12:00
+                </div>
+              </div>
+              <div class="d-flex justify-content-center align-items-center py-3">
+                <a class="botonVerMasDoctor" href="#">Ver Más</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Segunda columna de doctores -->
+      <div class="col-md-6 filaDoctores">
+        <!-- Doctor -->
+        <div class="cardDoctor">
+          <div class="row">
+            <div class="col-5">
+              <img class="fotoDoctor" src="assets/img/messages-2.jpg" alt="fotoDoctor">
+            </div>
+            <div class="col-7 informacionDoctor">
+              <div class="nombreDoctor">Inés Esario Sanchez</div>
+              <div class="disponibilidadDoctor">
+                Disponibilidad
+                <div class="disponibilidadDoctorDato">
+                  LUNES: 11:00 - 20:00
+                </div>
+                <div class="disponibilidadDoctorDato">
+                  JUEVES: 07:00 - 11:00
+                </div>
+              </div>
+              <div class="d-flex justify-content-center align-items-center py-3">
+                <a class="botonVerMasDoctor" href="#">Ver Más</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doctor -->
+        <div class="cardDoctor">
+          <div class="row">
+            <div class="col-5">
+              <img class="fotoDoctor" src="assets/img/doctor1.jpg" alt="fotoDoctor">
+            </div>
+            <div class="col-7 informacionDoctor">
+              <div class="nombreDoctor">Helen Chufe Rodriguez</div>
+              <div class="disponibilidadDoctor">
+                Disponibilidad
+                <div class="disponibilidadDoctorDato">
+                  JUEVES: 11:00 - 18:00
+                </div>
+                <div class="disponibilidadDoctorDato">
+                  SÁBADO: 16:00 - 20:00
+                </div>
+              </div>
+              <div class="d-flex justify-content-center align-items-center py-3">
+                <a class="botonVerMasDoctor" href="#">Ver Más</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doctor -->
+        <div class="cardDoctor">
+          <div class="row">
+            <div class="col-5">
+              <img class="fotoDoctor" src="assets/img/doctor2.jpg" alt="fotoDoctor">
+            </div>
+            <div class="col-7 informacionDoctor">
+              <div class="nombreDoctor">Lola Mento Perez</div>
+              <div class="disponibilidadDoctor">
+                Disponibilidad
+                <div class="disponibilidadDoctorDato">
+                  MIÉRCOLES: 13:00 - 15:00
+                </div>
+                <div class="disponibilidadDoctorDato">
+                  JUEVES: 12:00 - 17:00
+                </div>
+              </div>
+              <div class="d-flex justify-content-center align-items-center py-3">
+                <a class="botonVerMasDoctor" href="#">Ver Más</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <nav>
+      <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+
+  </section>
+
+  <section id="pieDePagina">
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="d-flex align-items-center col-md-10">
+            <img style="height: 30px; margin-left: 30px" src="assets/img/logoClinicaPNG.png" alt="Logo de la clínica">
+            <span class="fw-bold d-none d-lg-block">Clínica INTERPUCP</span>
+          </div>
+          <div class="d-flex align-items-center col-md-auto">
+            <div class="col-md-3">
+              <i class="bi bi-telephone-fill"></i>
+            </div>
+            <div class="col-md-auto justify-content-end">
+              <span class="fw-bold d-none d-lg-block">987-154-200</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </section>
+
+</main>
+
+<!-- Bootstrap CDN JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+</body>
+</html>

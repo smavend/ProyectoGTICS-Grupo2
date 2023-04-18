@@ -10,4 +10,16 @@ public class PacienteController {
     public String index(){
         return "paciente/index";
     }
+    @GetMapping(value = {"/perfil"})
+    public String perfil(){
+        return "paciente/perfil";
+    }
+    @GetMapping(value = {"/reservarCita"})
+    public String reservarCita(){
+        return "paciente/reservarCita";
+    }
+    @GetMapping(value = {"/verCitas"})
+    public String verCitas(){
+        return "paciente/verCitas";
+    }
 }
