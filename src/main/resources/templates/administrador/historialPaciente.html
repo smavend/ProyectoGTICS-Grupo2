@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Historial Clínico - Administrador</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/favicon.png" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+  <link th:href="@{/assets/css/styleadministrador.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Updated: Mar 09 2023 with Bootstrap v5.2.3
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+  <div class="d-flex align-items-center justify-content-between">
+    <a href="index.html" class="logo d-flex align-items-center">
+      <img th:src="@{/assets/img/logoClinica.png" alt="">
+      <span class="d-none d-lg-block">Clinica</span>
+    </a>
+    <i class="bi bi-list toggle-sidebar-btn"></i>
+  </div><!-- End Logo -->
+
+
+
+  <nav class="header-nav ms-auto">
+    <ul class="d-flex align-items-center">
+
+      <li class="nav-item d-block d-lg-none">
+        <a class="nav-link nav-icon search-bar-toggle " href="#">
+          <i class="bi bi-search"></i>
+        </a>
+      </li><!-- End Search Icon-->
+
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+          <i class="bi bi-bell"></i>
+          <span class="badge bg-primary badge-number">4</span>
+        </a><!-- End Notification Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+          <li class="dropdown-header">
+            You have 4 new notifications
+            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-exclamation-circle text-warning"></i>
+            <div>
+              <h4>Lorem Ipsum</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>30 min. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-x-circle text-danger"></i>
+            <div>
+              <h4>Atque rerum nesciunt</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>1 hr. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-check-circle text-success"></i>
+            <div>
+              <h4>Sit rerum fuga</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>2 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-info-circle text-primary"></i>
+            <div>
+              <h4>Dicta reprehenderit</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>4 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li class="dropdown-footer">
+            <a href="#">Show all notifications</a>
+          </li>
+
+        </ul><!-- End Notification Dropdown Items -->
+
+      </li><!-- End Notification Nav -->
+
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+          <i class="bi bi-chat-left-text"></i>
+          <span class="badge bg-success badge-number">3</span>
+        </a><!-- End Messages Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+          <li class="dropdown-header">
+            You have 3 new messages
+            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-1.jpg" alt="" class="rounded-circle">
+              <div>
+                <h4>Maria Hudson</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>4 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-2.jpg" alt="" class="rounded-circle">
+              <div>
+                <h4>Anna Nelson</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>6 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-3.jpg" alt="" class="rounded-circle">
+              <div>
+                <h4>David Muldon</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>8 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="dropdown-footer">
+            <a th:href="@{/administrador-mensajeria.hmtl">Ver todos los mensajes</a>
+          </li>
+
+        </ul><!-- End Messages Dropdown Items -->
+
+      </li><!-- End Messages Nav -->
+
+      <li class="nav-item dropdown pe-3">
+
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <img th:src="@{/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
+        </a><!-- End Profile Iamge Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6>Jorge Dominguez</h6>
+            <span>Administrador de sede</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-person"></i>
+              <span>Mi Perfil</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-gear"></i>
+              <span>Configuraciones</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </li>
+
+        </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
+
+    </ul>
+  </nav><!-- End Icons Navigation -->
+
+</header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link " th:href="@{/administrador-dashboard.html">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="users-profile.html">
+        <i class="bi bi-bar-chart"></i>
+        <span>Finanzas</span>
+      </a>
+    </li><!-- End Profile Page Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="users-profile.html">
+        <i class="bi bi-card-list"></i>
+        <span>Calendario General</span>
+      </a>
+    </li><!-- End Profile Page Nav -->
+    <a class="nav-link collapsed" th:href="@{/administrador-mensajeria.html">
+      <i class="bi bi-wechat"></i>
+      <span>Mensajería</span>
+    </a>
+    </li>
+  </ul>
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="pagetitle">
+      <h1>Historial Clínico</h1>
+    </div><!-- End Page Title -->
+    <div class="icon" >
+      <a th:href="@{/administrador-dashboard.html"><i class="bi bi-arrow-return-left"></i></a>
+    </div>
+
+  </div>
+
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-12">
+        <div class="row">
+
+
+
+          <!-- Top Selling -->
+          <div class="col-12">
+            <div class="card container">
+
+
+              <div class="container my-4">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <img th:src="@{/assets/img/p3.jpg" alt="Foto de paciente" width="200px"  class="rounded img-thumbnail">
+                  </div>
+                  <div class="col-sm-7">
+                    <h1 class="mb-4">JHON RICHETTI JUSHEPI</h1>
+                    <p><strong>Fecha de nacimiento:</strong> 05/07/1997</p>
+                    <p><strong>Género:</strong> Masculino</p>
+                    <p><strong>Teléfono:</strong> (+432) 456-7890-4668-12</p>
+                    <p><strong>Email:</strong> jhonrichetti@gmail.com</p>
+                  </div>
+                </div>
+              </div>
+
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-alergias-tab" data-bs-toggle="tab" data-bs-target="#nav-alergias" type="button" role="tab" aria-controls="nav-alergias" aria-selected="true">Alergias</button>
+                  <button class="nav-link" id="nav-consentimientos-tab" data-bs-toggle="tab" data-bs-target="#nav-consentimientos" type="button" role="tab" aria-controls="nav-consentimientos" aria-selected="false">Consentimientos</button>
+                  <button class="nav-link" id="nav-mensajes-tab" data-bs-toggle="tab" data-bs-target="#nav-mensajes" type="button" role="tab" aria-controls="nav-mensajes" aria-selected="false">Mensajes</button>
+                  <button class="nav-link" id="nav-cuestionarios-tab" data-bs-toggle="tab" data-bs-target="#nav-cuestionarios" type="button" role="tab" aria-controls="nav-cuestionarios" aria-selected="false">Cuestionarios</button>
+                  <button class="nav-link" id="nav-formularios-tab" data-bs-toggle="tab" data-bs-target="#nav-formularios" type="button" role="tab" aria-controls="nav-formularios" aria-selected="false">Formularios</button>
+                  <button class="nav-link" id="nav-tratamiento-tab" data-bs-toggle="tab" data-bs-target="#nav-tratamiento" type="button" role="tab" aria-controls="nav-tratamiento" aria-selected="false">Tratamiento</button>
+                  <button class="nav-link" id="nav-documentos-tab" data-bs-toggle="tab" data-bs-target="#nav-documentos" type="button" role="tab" aria-controls="nav-documentos" aria-selected="false">Documentos anexados</button>
+                  <button class="nav-link" id="nav-info-personal-tab" data-bs-toggle="tab" data-bs-target="#nav-info-personal" type="button" role="tab" aria-controls="nav-info-personal" aria-selected="false">Información personal</button>
+                  <button class="nav-link" id="nav-status-tab" data-bs-toggle="tab" data-bs-target="#nav-status" type="button" role="tab" aria-controls="nav-status" aria-selected="false">Status del paciente</button>
+                  <button class="nav-link" id="nav-citas-tab" data-bs-toggle="tab" data-bs-target="#nav-citas" type="button" role="tab" aria-controls="nav-citas" aria-selected="false">Próximas citas</button>
+                </div>
+              </nav>
+              <br>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-alergias" role="tabpanel" aria-labelledby="nav-alergias-tab">
+                  <h2>Alergias</h2>
+                  <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th>Alergia</th>
+                      <th>Tipo de Reacción</th>
+                      <th>Médico que diagnosticó</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>Polen</td>
+                      <td>Rinitis alérgica</td>
+                      <td>Dr. Pérez</td>
+                    </tr>
+                    <tr>
+                      <td>Mariscos</td>
+                      <td>Urticaria</td>
+                      <td>Dra. Gómez</td>
+                    </tr>
+                    <tr>
+                      <td>Penicilina</td>
+                      <td>Shock anafiláctico</td>
+                      <td>Dr. Rodríguez</td>
+                    </tr>
+                    <tr>
+                      <td>Cacahuate</td>
+                      <td>Edema de glotis</td>
+                      <td>Dra. Hernández</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="nav-consentimientos" role="tabpanel" aria-labelledby="nav-consentimientos-tab">
+                  <h2>Consentimientos</h2>
+                  <table class="table table-striped ">
+                    <thead>
+                    <tr>
+                      <th>Tratamiento o Procedimiento</th>
+                      <th>Descripción</th>
+                      <th>Fecha de la Consulta</th>
+                      <th>Médico que Realizará el Procedimiento</th>
+                      <th>¿Autoriza el Paciente?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>Extracción de una muela</td>
+                      <td>Se extraerá la muela con anestesia local.</td>
+                      <td>2022-05-15</td>
+                      <td>Dr. Pérez</td>
+                      <td>Sí</td>
+                    </tr>
+                    <tr>
+                      <td>Aplicación de vacuna contra la influenza</td>
+                      <td>Se aplicará la vacuna contra la influenza como medida preventiva.</td>
+                      <td>2022-09-01</td>
+                      <td>Dr. Gómez</td>
+                      <td>No</td>
+                    </tr>
+                    <tr>
+                      <td>Revisión dental de rutina</td>
+                      <td>Se realizará una revisión dental para detectar posibles problemas de salud bucal.</td>
+                      <td>2022-10-10</td>
+                      <td>Dr. Hernández</td>
+                      <td>Sí</td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+                <div class="tab-pane fade" id="nav-mensajes" role="tabpanel" aria-labelledby="nav-mensajes-tab">
+                  <h2>Mensajes</h2>
+                  <table class="table ">
+                    <thead>
+                    <tr>
+                      <th scope="col">ID del mensaje</th>
+                      <th scope="col">Fecha y hora</th>
+                      <th scope="col">Destinatario</th>
+                      <th scope="col">Mensaje</th>
+                      <th scope="col">Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>2023-04-07 10:30:00</td>
+                      <td>Dr. Juan Pérez</td>
+                      <td>Hola, me gustaría programar una cita para revisar mi condición médica.</td>
+                      <td>Enviado</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>2023-04-06 15:45:00</td>
+                      <td>Dr. María Gómez</td>
+                      <td>Quisiera saber si el medicamento que me recetaron tiene algún efecto secundario.</td>
+                      <td>Leído</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>2023-04-05 08:00:00</td>
+                      <td>Dr. Juan Pérez</td>
+                      <td>¿Ya están listos los resultados de mi examen? ¿Cómo puedo obtenerlos?</td>
+                      <td>Recibido</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="nav-cuestionarios" role="tabpanel" aria-labelledby="nav-cuestionarios-tab">
+                  <h2>Cuestionarios</h2>
+                  <p>Aquí se muestra la información de los cuestionarios del paciente.</p>
+                </div>
+                <div class="tab-pane fade" id="nav-formularios" role="tabpanel" aria-labelledby="nav-formularios-tab">
+                  <h2>Formularios</h2>
+                  <p>Aquí se muestra la información de los formularios del paciente.</p>
+                </div>
+                <div class="tab-pane fade" id="nav-tratamiento" role="tabpanel" aria-labelledby="nav-tratamiento-tab">
+                  <h2>Tratamiento</h2>
+                  <table class="table table-striped ">
+                    <thead>
+                    <tr>
+                      <th>Fecha del tratamiento</th>
+                      <th>Medicamento</th>
+                      <th>Dosis</th>
+                      <th>Doctor</th>
+                      <th>Diagnóstico</th>
+                      <th>Observaciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>2023-04-01</td>
+                      <td>Ibuprofeno</td>
+                      <td>400mg</td>
+                      <td>Dr. Pérez</td>
+                      <td>Dolor de cabeza</td>
+                      <td>Tomar con comida</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-03</td>
+                      <td>Amoxicilina</td>
+                      <td>500mg</td>
+                      <td>Dra. Gómez</td>
+                      <td>Infección de garganta</td>
+                      <td>Tomar cada 8 horas</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-04</td>
+                      <td>Paracetamol</td>
+                      <td>1g</td>
+                      <td>Dr. Pérez</td>
+                      <td>Fiebre</td>
+                      <td>Tomar con abundante agua</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-05</td>
+                      <td>Omeprazol</td>
+                      <td>20mg</td>
+                      <td>Dra. Gómez</td>
+                      <td>Gastritis</td>
+                      <td>Tomar antes del desayuno</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-06</td>
+                      <td>Aspirina</td>
+                      <td>500mg</td>
+                      <td>Dr. Pérez</td>
+                      <td>Dolor de cuerpo</td>
+                      <td>Tomar después de la comida</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-07</td>
+                      <td>Lorazepam</td>
+                      <td>1mg</td>
+                      <td>Dra. Gómez</td>
+                      <td>Ansiedad</td>
+                      <td>No conducir después de tomar</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="nav-documentos" role="tabpanel" aria-labelledby="nav-documentos-tab">
+                  <h2>Documentos anexados</h2>
+                  <table class="table table-striped ">
+                    <thead>
+                    <tr>
+                      <th scope="col">ID del documento</th>
+                      <th scope="col">Nombre del documento</th>
+                      <th scope="col">Tipo de documento</th>
+                      <th scope="col">Fecha de carga</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Informe médico</td>
+                      <td>PDF</td>
+                      <td>2023-02-25</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Resultados de análisis de sangre</td>
+                      <td>PDF</td>
+                      <td>2022-11-30</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>Recetas médicas</td>
+                      <td>Imagen</td>
+                      <td>2022-08-05</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="nav-info-personal" role="tabpanel" aria-labelledby="nav-info-personal-tab">
+                  <h2>Información personal</h2>
+                  <table class="table ">
+                    <tbody>
+                    <tr>
+                      <th scope="row">Nombre completo:</th>
+                      <td>John Doe</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Fecha de nacimiento:</th>
+                      <td>1990-03-15</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Edad:</th>
+                      <td>33</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Género:</th>
+                      <td>Masculino</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Número de identificación:</th>
+                      <td>1234567890</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Dirección:</th>
+                      <td>123 Main St, Anytown USA</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Número de teléfono:</th>
+                      <td>(123) 456-7890</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Correo electrónico:</th>
+                      <td>johndoe@gmail.com</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="nav-status" role="tabpanel" aria-labelledby="nav-status-tab">
+                  <h2>Status del paciente</h2>
+                  <table class="table ">
+                    <tbody>
+                    <tr>
+                      <th scope="row">ID del paciente:</th>
+                      <td>12345</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Nombre del paciente:</th>
+                      <td>John Doe</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Fecha de admisión:</th>
+                      <td>2023-03-01</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Estado actual:</th>
+                      <td>En tratamiento</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Última consulta:</th>
+                      <td>2023-04-01</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Próxima consulta:</th>
+                      <td>2023-04-15</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Médico tratante:</th>
+                      <td>Dr. Jane Smith</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Departamento:</th>
+                      <td>Cardiología</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="nav-citas" role="tabpanel" aria-labelledby="nav-citas-tab">
+                  <h2>Próximas citas</h2>
+                  <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th scope="col">Fecha</th>
+                      <th scope="col">Hora</th>
+                      <th scope="col">Doctor</th>
+                      <th scope="col">Departamento</th>
+                      <th scope="col">Tipo de cita</th>
+                      <th scope="col">Duración</th>
+                      <th scope="col">Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>13/04/2023</td>
+                      <td>10:30 am</td>
+                      <td>Dr. Juan Pérez</td>
+                      <td>Pediatría</td>
+                      <td>Consulta</td>
+                      <td>30 min</td>
+                      <td>Confirmada</td>
+                    </tr>
+                    <tr>
+                      <td>15/04/2023</td>
+                      <td>2:00 pm</td>
+                      <td>Dra. Ana Gómez</td>
+                      <td>Cardiología</td>
+                      <td>Seguimiento</td>
+                      <td>60 min</td>
+                      <td>Pendiente</td>
+                    </tr>
+                    <tr>
+                      <td>20/04/2023</td>
+                      <td>9:00 am</td>
+                      <td>Dr. Carlos López</td>
+                      <td>Oftalmología</td>
+                      <td>Examen</td>
+                      <td>45 min</td>
+                      <td>Confirmada</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Top Selling -->
+
+
+
+          <div class="card top-selling overflow-auto container">
+
+          </div>
+        </div>
+
+
+
+      </div>
+    </div><!-- End Left side columns -->
+
+    <!-- Right side columns -->
+
+
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+
+  <div class="credits">
+    <!-- All the links in the footer should remain intact. -->
+    <!-- You can delete the links only if you purchased the pro version. -->
+    <!-- Licensing information: https://bootstrapmade.com/license/ -->
+    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+
+  </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js"></script>
+
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js"></script>
+
+</body>
+
+</html>
