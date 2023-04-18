@@ -26,11 +26,13 @@
 
   <!-- Clínica y Botón Cita -->
   <div class="d-flex align-items-center justify-content-between">
-    <a href="Paciente-Dashboard.html" class="logo d-flex align-items-center">
-      <img class="logoNavBar" src="assets/img/logoClinicaPNG.png" alt="Logo de la clínica">
+    <a th:href="@{/index}" class="logo d-flex align-items-center">
+      <img th:src="@{/assets/img/logoClinicaPNG.png}" class="logoNavBar" alt="Logo de la clínica">
       <span class="d-none d-lg-block tituloNavBar">Clínica INTERPUCP</span>
     </a>
     <i class="bi bi-list toggle-sidebar-btn botonToggle ms-2"></i>
+    <a class="btn btn-primary botonReservarCita ms-3" th:href="@{/reservarCita}">Reservar una
+      cita</a>
   </div>
 
   <!-- Íconos y Perfil -->
@@ -52,7 +54,9 @@
           <li class="dropdown-header">
             Tiene 3 notificaciones nuevas
           </li>
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
 
           <li class="notification-item">
             <i class="bi bi-exclamation-circle text-warning"></i>
@@ -63,7 +67,9 @@
             </div>
           </li>
 
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
 
           <li class="notification-item">
             <i class="bi bi-exclamation-circle text-warning "></i>
@@ -87,7 +93,9 @@
             </div>
           </li>
 
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
           <li class="dropdown-footer">
             <a href="#">Todas las notificaciones</a>
           </li>
@@ -152,12 +160,12 @@
 
       </li><!-- End Messages Nav -->
 
-
       <!-- Perfil -->
       <li class="nav-item dropdown pe-3">
 
-        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+           data-bs-toggle="dropdown">
+          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
           <span class="d-none d-md-block dropdown-toggle ps-2">Juanchito P.</span>
         </a><!-- End Profile Image Icon -->
 
@@ -166,23 +174,29 @@
             <h6>Juanchito P.</h6>
             <span>Paciente</span>
           </li>
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="Paciente-Perfil.html">
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/perfil}">
               <i class="bi bi-person"></i>
               <span>Mi Perfil</span>
             </a>
           </li>
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+            <a class="dropdown-item d-flex align-items-center" href="#">
               <i class="bi bi-gear"></i>
               <span>Configuración</span>
             </a>
           </li>
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
 
           <li>
             <a class="dropdown-item d-flex align-items-center" href="#">
@@ -206,32 +220,32 @@
   <ul class="sidebar-nav" id="sidebar-nav">
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="Paciente-Dashboard.html">
+      <a class="nav-link" th:href="@{/index}">
         <i class="bi bi-house"></i>
         <span>Inicio</span>
       </a>
     </li><!-- End Inicio Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="Paciente-Citas.html">
+      <a class="nav-link collapsed" th:href="@{/verCitas}">
         <i class="bi bi-card-checklist"></i>
         <span>Citas</span>
       </a>
     </li><!-- End Citas Nav -->
     <li class="nav-item">
-      <a class="nav-link collapsed" href="Paciente-Pagos.html">
+      <a class="nav-link collapsed" th:href="@{/pagos}">
         <i class="bi bi-currency-exchange"></i>
         <span>Pagos</span>
       </a>
     </li><!-- End Pagos Nav -->
     <li class="nav-item">
-      <a class="nav-link collapsed" href="Paciente-Cuestionarios.html">
+      <a class="nav-link collapsed" th:href="@{/cuestionarios}">
         <i class="bi bi-journal-text"></i>
         <span>Cuestionarios</span>
       </a>
     </li><!-- End Cuestionarios Nav -->
     <li class="nav-item">
-      <a class="nav-link collapsed" href="Paciente-Consentimientos.html">
+      <a class="nav-link collapsed" th:href="@{/consentimientos}">
         <i class="bi bi-card-list"></i>
         <span>Consentimientos</span>
       </a>

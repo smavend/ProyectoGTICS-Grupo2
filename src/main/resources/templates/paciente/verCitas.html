@@ -22,250 +22,238 @@
     </head>
     <body>
 
-        <!-- ======= Header ======= -->
-        <header id="header" class="header fixed-top d-flex align-items-center">
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
 
-            <!-- Clínica y Botón Cita -->
-            <div class="d-flex align-items-center justify-content-between">
-                <a href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/Paciente-Dashboard.html"
-                   class="logo d-flex align-items-center">
-                    <img class="logoNavBar"
-                         src="assets/img/logoClinicaPNG.png"
-                         alt="Logo de la clínica">
-                    <span class="d-none d-lg-block tituloNavBar">Clínica INTERPUCP</span>
-                </a>
-                <i class="bi bi-list toggle-sidebar-btn botonToggle ms-2"></i>
-                <a class="btn btn-primary botonReservarCita ms-3"
-                   href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/Paciente-Reservar-cita.html">Reservar una
-                    cita</a>
-            </div>
+        <!-- Clínica y Botón Cita -->
+        <div class="d-flex align-items-center justify-content-between">
+            <a th:href="@{/index}" class="logo d-flex align-items-center">
+                <img th:src="@{/assets/img/logoClinicaPNG.png}" class="logoNavBar" alt="Logo de la clínica">
+                <span class="d-none d-lg-block tituloNavBar">Clínica INTERPUCP</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn botonToggle ms-2"></i>
+            <a class="btn btn-primary botonReservarCita ms-3" th:href="@{/reservarCita}">Reservar una
+                cita</a>
+        </div>
 
-            <!-- Íconos y Perfil -->
-            <nav class="header-nav ms-auto">
+        <!-- Íconos y Perfil -->
+        <nav class="header-nav ms-auto">
 
-                <ul class="d-flex align-items-center">
+            <ul class="d-flex align-items-center">
 
-                    <!-- Notificaciones -->
-                    <li class="nav-item dropdown">
+                <!-- Notificaciones -->
+                <li class="nav-item dropdown">
 
-                        <!-- Ícono de notificaciones -->
-                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-bell"></i>
-                            <span class="badge bg-primary badge-number">3</span>
-                        </a>
+                    <!-- Ícono de notificaciones -->
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge bg-primary badge-number">3</span>
+                    </a>
 
-                        <!-- Items de notificaciones -->
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                            <li class="dropdown-header">
-                                Tiene 3 notificaciones nuevas
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                    <!-- Items de notificaciones -->
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header">
+                            Tiene 3 notificaciones nuevas
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-                            <li class="notification-item">
-                                <i class="bi bi-exclamation-circle text-warning"></i>
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning"></i>
+                            <div>
+                                <h4>Lorem Ipsum</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>Hace 30 minutos</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning "></i>
+                            <div>
+                                <h4>Atque rerum nesciunt</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>Hace 1 hora</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-check-circle text-success"></i>
+                            <div>
+                                <h4>Sit rerum fuga</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>Hace 2 horas</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-footer">
+                            <a href="#">Todas las notificaciones</a>
+                        </li>
+
+                    </ul>
+
+                </li><!-- End Notification Nav -->
+
+                <!-- Mensajes -->
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-chat-left-text"></i>
+                        <span class="badge bg-success badge-number">2</span>
+                    </a><!-- End Messages Icon -->
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                        <li class="dropdown-header">
+                            Tiene 2 mensajes nuevos
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
                                 <div>
-                                    <h4>Lorem Ipsum</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>Hace 30 minutos</p>
+                                    <h4>Maria Hudson</h4>
+                                    <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                    <p>Hace 4 horas</p>
                                 </div>
-                            </li>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-exclamation-circle text-warning "></i>
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
                                 <div>
-                                    <h4>Atque rerum nesciunt</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>Hace 1 hora</p>
+                                    <h4>Anna Nelson</h4>
+                                    <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                    <p>Hace 6 horas</p>
                                 </div>
-                            </li>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-                            <li class="notification-item">
-                                <i class="bi bi-check-circle text-success"></i>
-                                <div>
-                                    <h4>Sit rerum fuga</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>Hace 2 horas</p>
-                                </div>
-                            </li>
+                        <li class="dropdown-footer">
+                            <a href="#">Todos los mensajes</a>
+                        </li>
 
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li class="dropdown-footer">
-                                <a href="#">Todas las notificaciones</a>
-                            </li>
+                    </ul><!-- End Messages Dropdown Items -->
 
-                        </ul>
+                </li><!-- End Messages Nav -->
 
-                    </li><!-- End Notification Nav -->
+                <!-- Perfil -->
+                <li class="nav-item dropdown pe-3">
 
-                    <!-- Mensajes -->
-                    <li class="nav-item dropdown">
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                       data-bs-toggle="dropdown">
+                        <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">Juanchito P.</span>
+                    </a><!-- End Profile Image Icon -->
 
-                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-chat-left-text"></i>
-                            <span class="badge bg-success badge-number">2</span>
-                        </a><!-- End Messages Icon -->
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>Juanchito P.</h6>
+                            <span>Paciente</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-                            <li class="dropdown-header">
-                                Tiene 2 mensajes nuevos
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" th:href="@{/perfil}">
+                                <i class="bi bi-person"></i>
+                                <span>Mi Perfil</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-                            <li class="message-item">
-                                <a href="#">
-                                    <img src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/messages-1.jpg"
-                                         alt="" class="rounded-circle">
-                                    <div>
-                                        <h4>Maria Hudson</h4>
-                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                                        <p>Hace 4 horas</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-gear"></i>
+                                <span>Configuración</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-                            <li class="message-item">
-                                <a href="#">
-                                    <img src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/messages-2.jpg"
-                                         alt="" class="rounded-circle">
-                                    <div>
-                                        <h4>Anna Nelson</h4>
-                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                                        <p>Hace 6 horas</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Cerrar Sesión</span>
+                            </a>
+                        </li>
 
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                    </ul><!-- End Profile Dropdown Items -->
+                </li><!-- End Profile Nav -->
 
-                            <li class="dropdown-footer">
-                                <a href="#">Todos los mensajes</a>
-                            </li>
-
-                        </ul><!-- End Messages Dropdown Items -->
-
-                    </li><!-- End Messages Nav -->
-
-                    <!-- Perfil -->
-                    <li class="nav-item dropdown pe-3">
-
-                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
-                           data-bs-toggle="dropdown">
-                            <img src="assets/img/profile-img.jpg"
-                                 alt="Profile" class="rounded-circle">
-                            <span class="d-none d-md-block dropdown-toggle ps-2">Juanchito P.</span>
-                        </a><!-- End Profile Image Icon -->
-
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                            <li class="dropdown-header">
-                                <h6>Juanchito P.</h6>
-                                <span>Paciente</span>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center"
-                                   href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/Paciente-Perfil.html">
-                                    <i class="bi bi-person"></i>
-                                    <span>Mi Perfil</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                    <i class="bi bi-gear"></i>
-                                    <span>Configuración</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <i class="bi bi-box-arrow-right"></i>
-                                    <span>Cerrar Sesión</span>
-                                </a>
-                            </li>
-
-                        </ul><!-- End Profile Dropdown Items -->
-                    </li><!-- End Profile Nav -->
-
-                </ul>
-            </nav>
-            <!-- End Icons Navigation -->
-
-        </header><!-- End Header -->
-
-        <!-- ======= Sidebar ======= -->
-        <aside id="sidebar" class="sidebar">
-
-            <ul class="sidebar-nav" id="sidebar-nav">
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed"
-                       href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/Paciente-Dashboard.html">
-                        <i class="bi bi-house"></i>
-                        <span>Inicio</span>
-                    </a>
-                </li><!-- End Inicio Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link" href="verCitas.html">
-                        <i class="bi bi-card-checklist"></i>
-                        <span>Citas</span>
-                    </a>
-                </li><!-- End Citas Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed"
-                       href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/Paciente-Pagos.html">
-                        <i class="bi bi-currency-exchange"></i>
-                        <span>Pagos</span>
-                    </a>
-                </li><!-- End Pagos Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed"
-                       href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/Paciente-Cuestionarios.html">
-                        <i class="bi bi-journal-text"></i>
-                        <span>Cuestionarios</span>
-                    </a>
-                </li><!-- End Cuestionarios Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed"
-                       href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/Paciente-Consentimientos.html">
-                        <i class="bi bi-card-list"></i>
-                        <span>Consentimientos</span>
-                    </a>
-                </li><!-- End Consentimientos Nav -->
             </ul>
+        </nav>
+        <!-- End Icons Navigation -->
 
-        </aside><!-- End Sidebar-->
+    </header><!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/index}">
+                    <i class="bi bi-house"></i>
+                    <span>Inicio</span>
+                </a>
+            </li><!-- End Inicio Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/verCitas}">
+                    <i class="bi bi-card-checklist"></i>
+                    <span>Citas</span>
+                </a>
+            </li><!-- End Citas Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/pagos}">
+                    <i class="bi bi-currency-exchange"></i>
+                    <span>Pagos</span>
+                </a>
+            </li><!-- End Pagos Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/cuestionarios}">
+                    <i class="bi bi-journal-text"></i>
+                    <span>Cuestionarios</span>
+                </a>
+            </li><!-- End Cuestionarios Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/consentimientos}">
+                    <i class="bi bi-card-list"></i>
+                    <span>Consentimientos</span>
+                </a>
+            </li><!-- End Consentimientos Nav -->
+        </ul>
+
+    </aside><!-- End Sidebar-->
 
         <main id="main" class="main">
 
