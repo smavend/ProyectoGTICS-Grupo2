@@ -46,7 +46,7 @@ public class PacienteController {
     /* RESERVAR CITA */
     @GetMapping("/reservar")
     public String reservarCita(){
-        return "paciente/reservarCita";
+        return "paciente/reservar";
     }
 
     /* PERFIL */
@@ -55,25 +55,30 @@ public class PacienteController {
         return "paciente/perfil";
     }
 
+    @GetMapping("/perfil/editar")
+    public String editarPerfil(){
+        return "paciente/perfilEditar";
+    }
+
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
     public String verDoctores(){
-        return "paciente/verDoctores";
+        return "paciente/doctores";
     }
 
     @GetMapping("/perfilDoctor")
     public String verPerfilDoctor(){
-        return "paciente/perfilDoctor";
+        return "paciente/doctorPerfil";
     }
 
     @GetMapping("/reservarDoctor")
     public String reservarCitaDoctor(){
-        return "paciente/reservarCitaDoctor";
+        return "paciente/reservarDoctor";
     }
 
     @GetMapping("/confirmacion")
     public String confirmarReserva(){
-        return "paciente/confirmacionCita";
+        return "paciente/confirmacion";
     }
 
     @GetMapping("/sesionVirtual")
@@ -84,7 +89,7 @@ public class PacienteController {
     /* SECCIÓN CITAS */
     @GetMapping("citas")
     public String verCitas(){
-        return "paciente/verCitas";
+        return "paciente/citas";
     }
 
     /* SECCIÓN PAGOS */
@@ -95,7 +100,7 @@ public class PacienteController {
 
     @GetMapping("/recibo")
     public String verReciboPago(){
-        return "paciente/reciboPago";
+        return "paciente/recibo";
     }
 
     /* SECCIÓN CUESTIONARIOS */
