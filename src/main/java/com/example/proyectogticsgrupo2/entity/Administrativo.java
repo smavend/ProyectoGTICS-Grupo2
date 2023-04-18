@@ -1,12 +1,15 @@
 package com.example.proyectogticsgrupo2.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name="administrativo")
+@Getter
+@Setter
 public class Administrativo {
     @Id
     @Column(name = "id_administrativo", nullable = false)
@@ -24,4 +27,9 @@ public class Administrativo {
     @Column(nullable = false)
     private String correo;
 
+    @OneToMany(mappedBy = "administrativo")
+    private List<SedeXEspecialidadXAdministrativo> sedesAdministrativo;
+
+    @OneToMany(mappedBy = "administrativo")
+    private List<Paciente> paciente_administrativo;
 }

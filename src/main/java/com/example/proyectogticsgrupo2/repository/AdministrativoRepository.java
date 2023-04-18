@@ -1,4 +1,10 @@
 package com.example.proyectogticsgrupo2.repository;
 
-public interface AdministrativoRepository {
+import com.example.proyectogticsgrupo2.entity.Administrativo;
+import com.example.proyectogticsgrupo2.entity.Paciente;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AdministrativoRepository extends JpaRepository<Administrativo, String> {
 }
