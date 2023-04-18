@@ -29,47 +29,10 @@
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
-        <aside id="sidebar" class="sidebar">
-
-            <ul class="sidebar-nav" id="sidebar-nav">
-
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/index}">
-                        <i class="bi bi-house"></i>
-                        <span>Inicio</span>
-                    </a>
-                </li><!-- End Inicio Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" th:href="@{/verCitas}">
-                        <i class="bi bi-card-checklist"></i>
-                        <span>Citas</span>
-                    </a>
-                </li><!-- End Citas Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" th:href="@{/pagos}">
-                        <i class="bi bi-currency-exchange"></i>
-                        <span>Pagos</span>
-                    </a>
-                </li><!-- End Pagos Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" th:href="@{/cuestionarios}">
-                        <i class="bi bi-journal-text"></i>
-                        <span>Cuestionarios</span>
-                    </a>
-                </li><!-- End Cuestionarios Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" th:href="@{/consentimientos}">
-                        <i class="bi bi-card-list"></i>
-                        <span>Consentimientos</span>
-                    </a>
-                </li><!-- End Consentimientos Nav -->
-            </ul>
-
-        </aside><!-- End Sidebar-->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <!-- End Sidebar-->
 
         <main id="main" class="main">
-
 
             <h1 class="encabezado">Bienvenido Juan Perez</h1>
             <p class="text-center fw-medium mt-4 fs-5">Seleccione la sede de su preferencia para acceder a nuestros
@@ -79,9 +42,9 @@
             <section id="Sedes">
                 <div class="row align-items-start contenedor">
                     <div class="col-md-4">
-                        <a th:href="@{/doctores}">
+                        <a th:href="@{/Paciente/doctores}">
                             <figure>
-                                <img class="sedeImg" src="assets/img/sede1.jpg">
+                                <img class="sedeImg" th:src="@{/assets/img/sede1.jpg}">
                                 <div class="capa">
                                     <h6>CLINICAS</h6>
                                     <h2 class="fw-bold" style="color: darkblue">San Isidro</h2>
@@ -99,9 +62,9 @@
                         </a>
                     </div>
                     <div class="col-md-4">
-                        <a th:href="@{/doctores}">
+                        <a th:href="@{/Paciente/doctores}">
                             <figure>
-                                <img class="sedeImg" src="assets/img/sede2.jpg">
+                                <img class="sedeImg" th:src="@{/assets/img/sede2.jpg}">
                                 <div class="capa">
                                     <h6>CLINICAS</h6>
                                     <h2 class="fw-bold" style="color: darkblue">Surco</h2>
@@ -119,9 +82,9 @@
                         </a>
                     </div>
                     <div class="col-md-4">
-                        <a th:href="@{/doctores}">
+                        <a th:href="@{/Paciente/doctores}">
                             <figure>
-                                <img class="sedeImg" src="assets/img/sede1.jpg">
+                                <img class="sedeImg" th:src="@{/assets/img/sede1.jpg}">
                                 <div class="capa">
                                     <h6>CLINICAS</h6>
                                     <h2 class="fw-bold" style="color: darkblue">San Miguel</h2>
@@ -133,7 +96,6 @@
                                         <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
                                            style="color: darkgray"></i>
                                     </div>
-
                                 </div>
                             </figure>
                         </a>

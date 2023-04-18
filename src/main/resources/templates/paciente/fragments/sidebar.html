@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+    </head>
+    <body>
+      <!-- ======= Sidebar ======= -->
+      <aside id="sidebar" class="sidebar" th:fragment="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+          <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/Paciente}">
+              <i class="bi bi-house"></i>
+              <span>Inicio</span>
+            </a>
+          </li><!-- End Inicio Nav -->
+
+          <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/Paciente/citas}">
+              <i class="bi bi-card-checklist"></i>
+              <span>Citas</span>
+            </a>
+          </li><!-- End Citas Nav -->
+          <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/Paciente/pagos}">
+              <i class="bi bi-currency-exchange"></i>
+              <span>Pagos</span>
+            </a>
+          </li><!-- End Pagos Nav -->
+          <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/Paciente/cuestionarios}">
+              <i class="bi bi-journal-text"></i>
+              <span>Cuestionarios</span>
+            </a>
+          </li><!-- End Cuestionarios Nav -->
+          <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/Paciente/consentimientos}">
+              <i class="bi bi-card-list"></i>
+              <span>Consentimientos</span>
+            </a>
+          </li><!-- End Consentimientos Nav -->
+        </ul>
+
+      </aside><!-- End Sidebar-->
+    </body>
+</html>

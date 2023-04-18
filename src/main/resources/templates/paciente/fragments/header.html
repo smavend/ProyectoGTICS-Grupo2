@@ -8,12 +8,12 @@
 
             <!-- Clínica y Botón Cita -->
             <div class="d-flex align-items-center justify-content-between">
-                <a th:href="@{/index}" class="logo d-flex align-items-center">
+                <a th:href="@{/Paciente/}" class="logo d-flex align-items-center">
                     <img th:src="@{/assets/img/logoClinicaPNG.png}" class="logoNavBar" alt="Logo de la clínica">
                     <span class="d-none d-lg-block tituloNavBar">Clínica INTERPUCP</span>
                 </a>
                 <i class="bi bi-list toggle-sidebar-btn botonToggle ms-2"></i>
-                <a class="btn btn-primary botonReservarCita ms-3" th:href="@{/reservarCita}">Reservar una
+                <a class="btn btn-primary botonReservarCita ms-3" th:href="@{/Paciente/reservar}">Reservar una
                     cita</a>
             </div>
 
@@ -161,7 +161,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" th:href="@{/perfil}">
+                                <a class="dropdown-item d-flex align-items-center" th:href="@{/Paciente/perfil}">
                                     <i class="bi bi-person"></i>
                                     <span>Mi Perfil</span>
                                 </a>

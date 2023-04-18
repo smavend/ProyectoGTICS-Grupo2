@@ -7,6 +7,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/Paciente")
 public class PacienteController {
 
     final PacienteRepository pacienteRepository;
@@ -34,55 +36,82 @@ public class PacienteController {
             IOUtils.copy(is, response.getOutputStream());
         }
     }
-    @GetMapping(value = {"", "/", "index"})
+
+    /* INICIO */
+    @GetMapping(value = {"", "/", "/index"})
     public String index(){
         return "paciente/index";
     }
 
-    @GetMapping(value = {"/perfil"})
-    public String perfil(){
-        return "paciente/perfil";
-    }
-
-    @GetMapping(value = {"/reservarCita"})
+    /* RESERVAR CITA */
+    @GetMapping("/reservar")
     public String reservarCita(){
         return "paciente/reservarCita";
     }
 
-    @GetMapping(value = {"/verCitas"})
+    /* PERFIL */
+    @GetMapping("/perfil")
+    public String perfil(){
+        return "paciente/perfil";
+    }
+
+    /* SECCIÓN DOCTORES */
+    @GetMapping("/doctores")
+    public String verDoctores(){
+        return "paciente/verDoctores";
+    }
+
+    @GetMapping("/perfilDoctor")
+    public String verPerfilDoctor(){
+        return "paciente/perfilDoctor";
+    }
+
+    @GetMapping("/reservarDoctor")
+    public String reservarCitaDoctor(){
+        return "paciente/reservarCitaDoctor";
+    }
+
+    @GetMapping("/confirmacion")
+    public String confirmarReserva(){
+        return "paciente/confirmacionCita";
+    }
+
+    @GetMapping("/sesionVirtual")
+    public String sesionVirtual(){
+        return "paciente/sesionVirtual";
+    }
+
+    /* SECCIÓN CITAS */
+    @GetMapping("citas")
     public String verCitas(){
         return "paciente/verCitas";
     }
 
-    @GetMapping(value = {"/pagos"})
+    /* SECCIÓN PAGOS */
+    @GetMapping("/pagos")
     public String pagos(){
         return "paciente/pagos";
     }
 
-    @GetMapping(value = {"/cuestionarios"})
-    public String cuestionarios(){ return "paciente/cuestionarios"; }
+    @GetMapping("/recibo")
+    public String verReciboPago(){
+        return "paciente/reciboPago";
+    }
 
-    @GetMapping(value = {"/consentimientos"})
-    public String consentimientos(){ return "paciente/consentimientos"; }
+    /* SECCIÓN CUESTIONARIOS */
+    @GetMapping("/cuestionarios")
+    public String cuestionarios(){
+        return "paciente/cuestionarios";
+    }
 
-    @GetMapping(value = {"/doctores"})
-    public String verDoctores(){ return "paciente/verDoctores"; }
+    @GetMapping("/completarCuestionario")
+    public String completarCuestionario(){
+        return "paciente/completarCuestionario";
+    }
 
-    @GetMapping(value = {"/perfilDoctor"})
-    public String verPerfilDoctor(){ return "paciente/perfilDoctor"; }
-
-    @GetMapping(value = {"/reservarCitaDoctor"})
-    public String reservarCitaDoctor(){ return "paciente/reservarCitaDoctor"; }
-
-    @GetMapping(value = {"/confirmarReserva"})
-    public String confirmarReserva(){ return "paciente/confirmacionCita"; }
-
-    @GetMapping(value = {"/sesionVirtual"})
-    public String sesionVirtual(){ return "paciente/sesionVirtual"; }
-
-    @GetMapping(value = {"/reciboPago"})
-    public String verReciboPago(){ return "paciente/reciboPago"; }
-
-    @GetMapping(value = {"/completarCuestionario"})
-    public String completarCuestionario(){ return "paciente/completarCuestionario"; }
+    /* SECCIÓN CONSENTIMIENTOS */
+    @GetMapping("/consentimientos")
+    public String consentimientos(){
+        return "paciente/consentimientos";
+    }
 }

@@ -1,372 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagos</title>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pagos</title>
 
 
-  <!-- BOOTSTRAP -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <!-- BOOTSTRAP -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+              crossorigin="anonymous">
 
-  <!-- GOOGLE FONTS -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <!-- GOOGLE FONTS -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
-  <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
+        <!-- CSS -->
+        <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
+        <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
 
-</head>
-<body>
+    </head>
+    <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="header fixed-top d-flex align-items-center">
+        <!-- ======= Header ======= -->
+        <div th:replace="~{paciente/fragments/header.html :: header}"></div>
+        <!-- End Header -->
 
-  <!-- Clínica y Botón Cita -->
-  <div class="d-flex align-items-center justify-content-between">
-    <a th:href="@{/index}" class="logo d-flex align-items-center">
-      <img th:src="@{/assets/img/logoClinicaPNG.png}" class="logoNavBar" alt="Logo de la clínica">
-      <span class="d-none d-lg-block tituloNavBar">Clínica INTERPUCP</span>
-    </a>
-    <i class="bi bi-list toggle-sidebar-btn botonToggle ms-2"></i>
-    <a class="btn btn-primary botonReservarCita ms-3" th:href="@{/reservarCita}">Reservar una
-      cita</a>
-  </div>
+        <!-- ======= Sidebar ======= -->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <!-- End Sidebar-->
 
-  <!-- Íconos y Perfil -->
-  <nav class="header-nav ms-auto">
+        <main id="main" class="main">
 
-    <ul class="d-flex align-items-center">
+            <h1 class="encabezado">Historial de pagos</h1>
+            <section class="seccionPrincipal">
 
-      <!-- Notificaciones -->
-      <li class="nav-item dropdown">
+                <a class="btn filtroSeleccionado">Todos</a>
+                <a class="btn filtroNoSeleccionado">Pendientes</a>
+                <a class="btn filtroNoSeleccionado">Cancelados</a>
 
-        <!-- Ícono de notificaciones -->
-        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-          <i class="bi bi-bell"></i>
-          <span class="badge bg-primary badge-number">3</span>
-        </a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Fecha pago</th>
+                            <th>Pago</th>
+                            <th>Tipo de pago</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Lorem ipsum dol amet consectetur</td>
+                            <td>-</td>
+                            <td>S/ 130.00</td>
+                            <td>-</td>
+                            <td>Pendiente</td>
+                            <td>
+                                <a class="botonPagar">Pagar</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Facere ullam ratione qui</td>
+                            <td>13/12/2022</td>
+                            <td>S/ 250.00</td>
+                            <td>Visa ***1234</td>
+                            <td>Cancelado</td>
+                            <td>
+                                <a class="botonVerRecibo" th:href="@{/Paciente/recibo}">Ver recibo</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ipsum dolor, sit amet cere ea</td>
+                            <td>15/04/2021</td>
+                            <td>S/ 30.00</td>
+                            <td>Efectivo</td>
+                            <td>Cancelado</td>
+                            <td>
+                                <a class="botonVerRecibo" href="#">Ver recibo</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Aspsum dolor, siters ametc cere ea</td>
+                            <td>25/02/2021</td>
+                            <td>S/ 200.00</td>
+                            <td>Crédito ***1234</td>
+                            <td>Cancelado</td>
+                            <td>
+                                <a class="botonVerRecibo" href="#">Ver recibo</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Consequatur culpa deserunt minima tenetur dolorem</td>
+                            <td>03/09/2020</td>
+                            <td>S/ 60.00</td>
+                            <td>Efectivo</td>
+                            <td>Cancelado</td>
+                            <td>
+                                <a class="botonVerRecibo" href="#">Ver recibo</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-        <!-- Items de notificaciones -->
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-          <li class="dropdown-header">
-            Tiene 3 notificaciones nuevas
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </section>
 
-          <li class="notification-item">
-            <i class="bi bi-exclamation-circle text-warning"></i>
-            <div>
-              <h4>Lorem Ipsum</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>Hace 30 minutos</p>
-            </div>
-          </li>
+            <section id="pieDePagina">
+                <footer class="footer">
+                    <div class="container">
+                        <div class="row">
+                            <div class="d-flex align-items-center col-md-10">
+                                <img style="height: 30px; margin-left: 30px" src="assets/img/logoClinicaPNG.png"
+                                     alt="Logo de la clínica">
+                                <span class="fw-bold d-none d-lg-block">Clínica INTERPUCP</span>
+                            </div>
+                            <div class="d-flex align-items-center col-md-auto">
+                                <div class="col-md-3">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </div>
+                                <div class="col-md-auto justify-content-end">
+                                    <span class="fw-bold d-none d-lg-block">987-154-200</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </section>
 
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-exclamation-circle text-warning "></i>
-            <div>
-              <h4>Atque rerum nesciunt</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>Hace 1 hora</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-check-circle text-success"></i>
-            <div>
-              <h4>Sit rerum fuga</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>Hace 2 horas</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li class="dropdown-footer">
-            <a href="#">Todas las notificaciones</a>
-          </li>
-
-        </ul>
-
-      </li><!-- End Notification Nav -->
-
-      <!-- Mensajes -->
-      <li class="nav-item dropdown">
-
-        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-          <i class="bi bi-chat-left-text"></i>
-          <span class="badge bg-success badge-number">2</span>
-        </a><!-- End Messages Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-          <li class="dropdown-header">
-            Tiene 2 mensajes nuevos
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="message-item">
-            <a href="#">
-              <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
-              <div>
-                <h4>Maria Hudson</h4>
-                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                <p>Hace 4 horas</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="message-item">
-            <a href="#">
-              <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
-              <div>
-                <h4>Anna Nelson</h4>
-                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                <p>Hace 6 horas</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="dropdown-footer">
-            <a href="#">Todos los mensajes</a>
-          </li>
-
-        </ul><!-- End Messages Dropdown Items -->
-
-      </li><!-- End Messages Nav -->
-
-      <!-- Perfil -->
-      <li class="nav-item dropdown pe-3">
-
-        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
-           data-bs-toggle="dropdown">
-          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2">Juanchito P.</span>
-        </a><!-- End Profile Image Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-          <li class="dropdown-header">
-            <h6>Juanchito P.</h6>
-            <span>Paciente</span>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{/perfil}">
-              <i class="bi bi-person"></i>
-              <span>Mi Perfil</span>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-              <i class="bi bi-gear"></i>
-              <span>Configuración</span>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Cerrar Sesión</span>
-            </a>
-          </li>
-
-        </ul><!-- End Profile Dropdown Items -->
-      </li><!-- End Profile Nav -->
-
-    </ul>
-  </nav>
-  <!-- End Icons Navigation -->
-
-</header><!-- End Header -->
-
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar">
-
-  <ul class="sidebar-nav" id="sidebar-nav">
-
-    <li class="nav-item">
-      <a class="nav-link" th:href="@{/index}">
-        <i class="bi bi-house"></i>
-        <span>Inicio</span>
-      </a>
-    </li><!-- End Inicio Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/verCitas}">
-        <i class="bi bi-card-checklist"></i>
-        <span>Citas</span>
-      </a>
-    </li><!-- End Citas Nav -->
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/pagos}">
-        <i class="bi bi-currency-exchange"></i>
-        <span>Pagos</span>
-      </a>
-    </li><!-- End Pagos Nav -->
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/cuestionarios}">
-        <i class="bi bi-journal-text"></i>
-        <span>Cuestionarios</span>
-      </a>
-    </li><!-- End Cuestionarios Nav -->
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/consentimientos}">
-        <i class="bi bi-card-list"></i>
-        <span>Consentimientos</span>
-      </a>
-    </li><!-- End Consentimientos Nav -->
-  </ul>
-
-</aside><!-- End Sidebar-->
-
-<main id="main" class="main">
-
-  <h1 class="encabezado">Historial de pagos</h1>
-  <section class="seccionPrincipal">
-
-    <a class="btn filtroSeleccionado">Todos</a>
-    <a class="btn filtroNoSeleccionado">Pendientes</a>
-    <a class="btn filtroNoSeleccionado">Cancelados</a>
-
-    <table class="table">
-      <thead>
-      <tr>
-        <th>Concepto</th>
-        <th>Fecha pago</th>
-        <th>Pago</th>
-        <th>Tipo de pago</th>
-        <th>Estado</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>Lorem ipsum dol amet consectetur</td>
-        <td>-</td>
-        <td>S/ 130.00</td>
-        <td>-</td>
-        <td>Pendiente</td>
-        <td>
-          <a class="botonPagar">Pagar</a>
-        </td>
-      </tr>
-      <tr>
-        <td>Facere ullam ratione qui</td>
-        <td>13/12/2022</td>
-        <td>S/ 250.00</td>
-        <td>Visa ***1234</td>
-        <td>Cancelado</td>
-        <td>
-          <a class="botonVerRecibo" th:href="@{/reciboPago}">Ver recibo</a>
-        </td>
-      </tr>
-      <tr>
-        <td>Ipsum dolor, sit amet cere ea</td>
-        <td>15/04/2021</td>
-        <td>S/ 30.00</td>
-        <td>Efectivo</td>
-        <td>Cancelado</td>
-        <td>
-          <a class="botonVerRecibo" href="#">Ver recibo</a>
-        </td>
-      </tr>
-      <tr>
-        <td>Aspsum dolor, siters ametc cere ea</td>
-        <td>25/02/2021</td>
-        <td>S/ 200.00</td>
-        <td>Crédito ***1234</td>
-        <td>Cancelado</td>
-        <td>
-          <a class="botonVerRecibo" href="#">Ver recibo</a>
-        </td>
-      </tr>
-      <tr>
-        <td>Consequatur culpa deserunt minima tenetur dolorem</td>
-        <td>03/09/2020</td>
-        <td>S/ 60.00</td>
-        <td>Efectivo</td>
-        <td>Cancelado</td>
-        <td>
-          <a class="botonVerRecibo" href="#">Ver recibo</a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-
-    <nav>
-      <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-      </ul>
-    </nav>
-  </section>
-
-  <section id="pieDePagina">
-    <footer class="footer">
-      <div class="container">
-        <div class="row">
-          <div class="d-flex align-items-center col-md-10">
-            <img style="height: 30px; margin-left: 30px" src="assets/img/logoClinicaPNG.png" alt="Logo de la clínica">
-            <span class="fw-bold d-none d-lg-block">Clínica INTERPUCP</span>
-          </div>
-          <div class="d-flex align-items-center col-md-auto">
-            <div class="col-md-3">
-              <i class="bi bi-telephone-fill"></i>
-            </div>
-            <div class="col-md-auto justify-content-end">
-              <span class="fw-bold d-none d-lg-block">987-154-200</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </section>
-
-</main><!-- End #main -->
+        </main><!-- End #main -->
 
 
-<!-- Bootstrap CDN JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
 
-<!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
-</body>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+    </body>
 </html>
