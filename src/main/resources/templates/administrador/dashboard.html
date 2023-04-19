@@ -47,7 +47,7 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
   <div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
+    <a href="index}" class="logo d-flex align-items-center">
       <img th:src="@{/assets/img/logo.png}" alt="">
       <span class="d-none d-lg-block">Clinica INTERPUCP</span>
     </a>
@@ -199,7 +199,7 @@
           </li>
 
           <li class="dropdown-footer">
-            <a href="mensajeria.html">Ver todos los mensajes</a>
+            <a href="mensajeria}">Ver todos los mensajes</a>
           </li>
 
         </ul><!-- End Messages Dropdown Items -->
@@ -268,7 +268,7 @@
   <ul class="sidebar-nav" id="sidebar-nav">
 
     <li class="nav-item">
-      <a class="nav-link " href="dashboard.html">
+      <a class="nav-link " th:href="@{/administrador/dashboard}">
         <i class="bi bi-grid"></i>
         <span>Dashboard</span>
       </a>
@@ -516,13 +516,6 @@
                   <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
 
                 </div>
-                <!--<div class="container-fluid">
-                  <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Buscar paciente" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Buscar</button>
-                  </form>
-                </div>-->
-
                 <div class="d-flex flex-column" >
 
                   <table class="table table-hover" id="mitabla2">
@@ -532,28 +525,31 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr th:each="paciente: ${listaPaciente}">
                       <td>
                         <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          <div class="col-lg-2 col-sm-3">
+                            <img th:src="${paciente.foto}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente.html" >
-                              Iker Osco Chavez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>okerosco@example.com</p>
+                          <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
+                            <div>
+                              <h5 th:text="${paciente.nombre}+' '+${paciente.apellidos}"><a th:href="@{/administrador/historialPaciente}" >
+                                Iker Osco Chavez</a> </h5>
+                              <p th:text="${paciente.correo}">okerosco@example.com</p>
+                            </div>
+                            <span class="text-muted ms-2 float-end"><h6 th:text="${paciente.estado}">•Activo</h6></span>
                           </div>
                         </div>
                       </td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                       <td>
                         <div class="row">
                           <div class="col-2">
                             <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
                           <div class="col-9">
-                            <h5><a href="historialPaciente.html">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <h5><a href="historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
                             <p>rodrisan@example.com</p>
                           </div>
                         </div>
@@ -566,7 +562,7 @@
                             <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
                           <div class="col-9">
-                            <h5><a href="historialPaciente.html">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <h5><a href="historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
                             <p>carlosquis@example.com</p>
                           </div>
                         </div>
@@ -579,7 +575,7 @@
                             <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
                           <div class="col-9">
-                            <h5><a href="historialPaciente.html">Jhon Isla Tesla </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <h5><a href="historialPaciente}">Jhon Isla Tesla </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
                             <p>noejara@example.com</p>
                           </div>
                         </div>
@@ -592,7 +588,7 @@
                             <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
                           <div class="col-9">
-                            <h5><a href="historialPaciente.html">William Lopez Torres</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <h5><a href="historialPaciente}">William Lopez Torres</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
                             <p>williamlo@example.com</p>
                           </div>
                         </div>
@@ -605,7 +601,7 @@
                             <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
                           <div class="col-9">
-                            <h5><a href="historialPaciente.html">Migue Chavez </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <h5><a href="historialPaciente}">Migue Chavez </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
                             <p>miguechavez@example.com</p>
                           </div>
                         </div>
@@ -644,7 +640,7 @@
                             <img th:src="@{/assets/img/p1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
                           <div class="col-9">
-                            <h5><a href="historialPaciente.html" >
+                            <h5><a href="historialPaciente}" >
                               Iker Osco Chavez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
                             <p>okerosco@example.com</p>
                           </div>
@@ -658,7 +654,7 @@
                             <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
                           <div class="col-9">
-                            <h5><a href="historialPaciente.html">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <h5><a href="historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
                             <p>rodrisan@example.com</p>
                           </div>
                         </div>
@@ -671,12 +667,12 @@
                             <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
                           </div>
                           <div class="col-9">
-                            <h5><a href="historialPaciente.html">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <h5><a href="historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
                             <p>carlosquis@example.com</p>
                           </div>
                         </div>
                       </td>
-                    </tr>
+                    </tr>-->
                     </tbody>
                   </table>
                   <br>
@@ -1165,7 +1161,7 @@
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/jsAdministrador.js}"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.js}"></script>
 <script>
   var table = new DataTable('#mitabla', {
     language: {
