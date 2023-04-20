@@ -529,7 +529,7 @@
                       <td>
                         <div class="row">
                           <div class="col-lg-2 col-sm-3">
-                            <img th:src="${paciente.foto}" alt="#" width="70" height="70" class="rounded-circle">
+                            <img th:src="@{'/paciente/foto/id='+${paciente.idPaciente}}" alt="#" width="70" height="70" class="rounded-circle"/>
                           </div>
                           <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
                             <div>
@@ -542,137 +542,7 @@
                         </div>
                       </td>
                     </tr>
-                    <!--<tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>rodrisan@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>carlosquis@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Jhon Isla Tesla </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">William Lopez Torres</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>williamlo@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Migue Chavez </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>miguechavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente">Noe Manrique </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente">Gustavo Pardo </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>gistavito@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}" >
-                              Iker Osco Chavez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>okerosco@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>rodrisan@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>carlosquis@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>-->
+
                     </tbody>
                   </table>
                   <br>
