@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/administrador")
+@RequestMapping("/ ")
 public class AdministradorController {
     final PacienteRepository pacienteRepository;
     final SeguroRepository seguroRepository;
