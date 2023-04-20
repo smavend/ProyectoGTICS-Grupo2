@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -13,10 +14,15 @@ import lombok.Setter;
 public class Horario {
 
     @Id
+    @Column(name = "id_horario", nullable = false)
     private String id_horario;
+    @Column(nullable = false)
     private String comida_inicio;
+    @Column(nullable = false)
     private String comida_fin;
+    @Column(nullable = false)
     private String disponibilidad_inicio;
+    @Column(nullable = false)
     private String disponibilidad_fin;
 
 }
