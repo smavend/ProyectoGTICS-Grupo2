@@ -294,108 +294,95 @@
 
 <main id="main" class="main">
 
-  <div class="pagetitle">
-    <h1>Crear Nuevo Doctor</h1>
 
   </div><!-- End Page Title -->
 
   <section class="section dashboard">
-    <div class="row container">
-
-      <!-- Left side columns -->
-      <div class="col-lg-5 container">
+    <div class="row ">
+      <div class="col-lg-8 container">
         <div class="row">
 
           <!-- Top Selling -->
 
-          <div class="card top-selling overflow-auto container">
+          <div class="card top-selling overflow-auto ">
             <br>
+            <h5 class="card-title text-center">Crear Nuevo Doctor</h5>
             <form>
               <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" required>
+                <div class="col-md-6">
+                  <div class="col-md-12 mb-3">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" required>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" class="form-control" id="telefono" required>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="adads">Nombre del Seguro</label>
+                    <select class="form-select" id="adads" required>
+                      <option value="">Seleccionar</option>
+                      <option value="M">Masculino</option>
+                      <option value="F">Femenino</option>
+                    </select>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="adasd">Administrativo</label>
+                    <select class="form-select" id="adasd" required>
+                      <option value="">Seleccionar</option>
+                      <option value="M">Masculino</option>
+                      <option value="F">Femenino</option>
+                    </select>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" class="form-control" id="email" required>
+                  </div>
                 </div>
+                <div class="col-md-6">
+                  <div class="col-md-12 mb-3">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" class="form-control" id="apellido" required>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="direccion">Dirección</label>
+                    <input type="text" class="form-control" id="direccion" required>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="sexoda">Distrito</label>
+                    <select class="form-select" id="sexoda" required>
+                      <option value="">Seleccionar</option>
+                      <option value="M">Masculino</option>
+                      <option value="F">Femenino</option>
+                    </select>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="foto" class="form-label">Subir foto</label>
+                    <input type="file" class="form-control" id="foto">
+                  </div>
+                </div>
+
+
               </div>
 
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label for="apellido">Apellido</label>
-                  <input type="text" class="form-control" id="apellido" required>
-                </div>
+
+              <div class="col-md-12 mb-3">
+                <button class="btn btn-success" type="submit">Invitar Paciente</button>
+                <a class="btn btn-danger" type="button" href="administrador-dashboard.html">Cancelar</a>
               </div>
 
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label for="telefono">Teléfono</label>
-                  <input type="tel" class="form-control" id="telefono" required>
-                </div>
-              </div>
 
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label for="fecha-nacimiento">Fecha de nacimiento</label>
-                  <input type="date" class="form-control" id="fecha-nacimiento" required>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label for="direccion">Dirección</label>
-                  <input type="text" class="form-control" id="direccion" required>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label for="sexo">Sexo</label>
-                  <select class="form-select" id="sexo" required>
-                    <option value="">Seleccionar</option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Femenino</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label for="email">Correo electrónico</label>
-                  <input type="email" class="form-control" id="email" required>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label for="sexo">Especialidad</label>
-                  <select class="form-select" id="sexoo" required>
-                    <option value="">Seleccionar</option>
-                    <option value="M">Dermatologia</option>
-                    <option value="F">Odonontologia</option>
-                    <option value="M">Pediatria</option>
-                    <option value="F">Ginecologia</option>
-                  </select>
-                </div>
-              </div>
-              <button class="btn btn-success" type="submit">Invitar Paciente</button>
-              <a class="btn btn-danger" type="button" th:href="@{/administrador/dashboard}">Cancelar</a>
             </form>
             <br>
 
 
-
-
-
           </div>
-        </div><!-- End Top Selling -->
 
 
+        </div><!-- End Left side columns -->
 
 
-
-      </div><!-- End Left side columns -->
-
-      <!-- Right side columns -->
-
-
+      </div>
 
     </div>
   </section>
