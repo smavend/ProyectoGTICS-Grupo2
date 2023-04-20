@@ -27,7 +27,7 @@
   <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+  <!--<link th:href="@{/assets/css/style.css}" rel="stylesheet"> -->
   <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
 
 </head>
@@ -47,8 +47,9 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
   <div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
-      <img th:src="@{/assets/img/logoClinica.png}" alt="">
+
+    <a href="index}" class="logo d-flex align-items-center">
+      <img th:src="@{/assets/img/logo.png}" alt="">
       <span class="d-none d-lg-block">Clinica INTERPUCP</span>
     </a>
     <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -158,7 +159,7 @@
 
           <li class="message-item">
             <a href="#">
-              <img th:src="@{/assets/img/messages-1.jpg" alt="" class="rounded-circle">
+              <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
               <div>
                 <h4>Maria Hudson</h4>
                 <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -172,7 +173,7 @@
 
           <li class="message-item">
             <a href="#">
-              <img th:src="@{/assets/img/messages-2.jpg" alt="" class="rounded-circle">
+              <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
               <div>
                 <h4>Anna Nelson</h4>
                 <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -186,7 +187,7 @@
 
           <li class="message-item">
             <a href="#">
-              <img th:src="@{/assets/img/messages-3.jpg" alt="" class="rounded-circle">
+              <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
               <div>
                 <h4>David Muldon</h4>
                 <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -209,7 +210,7 @@
       <li class="nav-item dropdown pe-3">
 
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img th:src="@{/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
           <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
         </a><!-- End Profile Iamge Icon -->
 
@@ -223,7 +224,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+            <a class="dropdown-item d-flex align-items-center" href="users-profile}">
               <i class="bi bi-person"></i>
               <span>Mi Perfil</span>
             </a>
@@ -233,7 +234,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+            <a class="dropdown-item d-flex align-items-center" href="users-profile}">
               <i class="bi bi-gear"></i>
               <span>Configuraciones</span>
             </a>
@@ -268,24 +269,24 @@
   <ul class="sidebar-nav" id="sidebar-nav">
 
     <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/administrador-dashboard.html">
+      <a class="nav-link collapsed" th:href="@{/administrador/dashboard}">
         <i class="bi bi-grid"></i>
         <span>Dashboard</span>
       </a>
     </li><!-- End Dashboard Nav -->
     <li class="nav-item">
-      <a class="nav-link collapsed " th:href="@{/administrador-finanzas.html">
+      <a class="nav-link collapsed " th:href="@{/administrador/finanzas}">
         <i class="bi bi-bar-chart"></i>
         <span>Finanzas</span>
       </a>
     </li><!-- End Profile Page Nav -->
     <li class="nav-item">
-      <a class="nav-link " th:href="@{/administrador-calendario.html">
+      <a class="nav-link " th:href="@{/administrador/calendario}">
         <i class="bi bi-card-list"></i>
         <span>Calendario General</span>
       </a>
     </li><!-- End Profile Page Nav -->
-    <a class="nav-link collapsed" th:href="@{/administrador-mensajeria.html">
+    <a class="nav-link collapsed" th:href="@{/administrador/mensajeria}">
       <i class="bi bi-wechat"></i>
       <span>Mensajería</span>
     </a>
@@ -301,7 +302,7 @@
       <h1>Calendario General</h1>
     </div><!-- End Page Title -->
     <div class="icon" >
-      <a th:href="@{/administrador-dashboard.html"><i class="bi bi-arrow-return-left"></i></a>
+      <a th:href="@{/administrador-dashboard.html}"><i class="bi bi-arrow-return-left"></i></a>
     </div>
 
   </div>
@@ -442,19 +443,19 @@
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
-<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js"></script>
-<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/assets/vendor/chart.js/chart.umd.js"></script>
-<script th:src="@{/assets/vendor/echarts/echarts.min.js"></script>
-<script th:src="@{/assets/vendor/quill/quill.min.js"></script>
-<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js"></script>
-<script th:src="@{/assets/vendor/tinymce/tinymce.min.js"></script>
-<script th:src="@{/assets/vendor/php-email-form/validate.js"></script>
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
 
 
 <!-- Template Main JS File -->
-<script th:src="@{/assets/js/main.js"></script>
+<script th:src="@{/assets/js/main.js}"></script>
 
 </body>
 
