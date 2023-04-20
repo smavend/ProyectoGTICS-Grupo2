@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="seguro")
+@Table(name = "seguro")
 public class Seguro {
     @Id
     @Column(name = "id_seguro", nullable = false)

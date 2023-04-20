@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -9,9 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="especialidad")
+@Table(name = "especialidad")
 public class Especialidad {
     @Id
-    private String id_especialidad;
+    @Column(name = "id_especialidad", nullable = false)
+    private int idEspecialidad;
+
+    @Column(nullable = false)
     private String nombre;
 }

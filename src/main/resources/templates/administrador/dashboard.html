@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - Administrador</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/logo.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+  <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
+  <link href="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.css" rel="stylesheet"/>
+
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Updated: Mar 09 2023 with Bootstrap v5.2.3
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+  <div class="d-flex align-items-center justify-content-between">
+    <a href="index}" class="logo d-flex align-items-center">
+      <img th:src="@{/assets/img/logo.png}" alt="">
+      <span class="d-none d-lg-block">Clinica INTERPUCP</span>
+    </a>
+    <i class="bi bi-list toggle-sidebar-btn"></i>
+  </div><!-- End Logo -->
+
+
+
+  <nav class="header-nav ms-auto">
+    <ul class="d-flex align-items-center">
+
+      <li class="nav-item d-block d-lg-none">
+        <a class="nav-link nav-icon search-bar-toggle " href="#">
+          <i class="bi bi-search"></i>
+        </a>
+      </li><!-- End Search Icon-->
+
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+          <i class="bi bi-bell"></i>
+          <span class="badge bg-primary badge-number">4</span>
+        </a><!-- End Notification Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+          <li class="dropdown-header">
+            You have 4 new notifications
+            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-exclamation-circle text-warning"></i>
+            <div>
+              <h4>Lorem Ipsum</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>30 min. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-x-circle text-danger"></i>
+            <div>
+              <h4>Atque rerum nesciunt</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>1 hr. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-check-circle text-success"></i>
+            <div>
+              <h4>Sit rerum fuga</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>2 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-info-circle text-primary"></i>
+            <div>
+              <h4>Dicta reprehenderit</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>4 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li class="dropdown-footer">
+            <a href="#">Show all notifications</a>
+          </li>
+
+        </ul><!-- End Notification Dropdown Items -->
+
+      </li><!-- End Notification Nav -->
+
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+          <i class="bi bi-chat-left-text"></i>
+          <span class="badge bg-success badge-number">3</span>
+        </a><!-- End Messages Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+          <li class="dropdown-header">
+            You have 3 new messages
+            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>Maria Hudson</h4>
+                <p>Estimado administrador, quisiera solicitar su autorización para realizar una cirugía ...</p>
+                <p>4 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>Anna Nelson</h4>
+                <p>Hola, quisiera informarle que hay un problema en la plataforma que está impidiendo ...</p>
+                <p>6 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>David Muldon</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>8 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="dropdown-footer">
+            <a href="mensajeria}">Ver todos los mensajes</a>
+          </li>
+
+        </ul><!-- End Messages Dropdown Items -->
+
+      </li><!-- End Messages Nav -->
+
+      <li class="nav-item dropdown pe-3">
+
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
+        </a><!-- End Profile Iamge Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6>Jorge Dominguez</h6>
+            <span>Administrador de sede</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="bi bi-person"></i>
+              <span>Mi Perfil</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="bi bi-gear"></i>
+              <span>Configuraciones</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </li>
+
+        </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
+
+    </ul>
+  </nav><!-- End Icons Navigation -->
+
+</header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link " th:href="@{/administrador/dashboard}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/administrador/finanzas}">
+        <i class="bi bi-bar-chart"></i>
+        <span>Finanzas</span>
+      </a>
+    </li><!-- End Profile Page Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/administrador/calendario}">
+        <i class="bi bi-card-list"></i>
+        <span>Calendario General</span>
+      </a>
+    </li><!-- End Profile Page Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/administrador/mensajeria}">
+        <i class="bi bi-wechat"></i>
+        <span>Mensajería</span>
+      </a>
+    </li>
+  </ul>
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+
+  </div><!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+
+      <!-- Left side columns -->
+      <div class="col-lg-7">
+        <div class="row">
+
+
+          <!-- Top Selling -->
+          <div class="col-12">
+            <div class="card top-selling overflow-auto container">
+
+
+
+              <div class="card-body pb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="card-title">DOCTORES <span>| Sede San Isidro</span></h5>
+                  <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
+                </div>
+
+                <!-- <div class="container-fluid">
+                   <form class="d-flex" role="search">
+                     <input class="form-control me-2" type="search" placeholder="Especialidad" aria-label="Search">
+                     <button class="btn btn-outline-success" type="submit">Buscar</button>
+                   </form>
+                 </div>-->
+
+
+                <div class=" flex-column" >
+
+                  <table class="table" id="mitabla">
+                    <thead>
+                    <tr>
+                      <th scope="col">Doctores Disponibles</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Enrique Arana <span class="text-muted ms-2 float-end"><h6>•Psiquiatría</h6></span></h5>
+                            <p>enrique@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Luis Chavez <span class="text-muted ms-2 float-end"><h6>•Oncología</h6></span></h5>
+                            <p>luchavez@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Cardiología</h6></span></h5>
+                            <p>miguechavez@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Dermatología</h6></span></h5>
+                            <p>noejara@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Ginecologia</h6></span></h5>
+                            <p>gistavito@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr >
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Neurología</h6></span></h5>
+                            <p>miguechavez@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr >
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Otopedía</h6></span></h5>
+                            <p>noejara@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr >
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Cirujano</h6></span></h5>
+                            <p>gistavito@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Luis Chavez <span class="text-muted ms-2 float-end"><h6>•Psicologo</h6></span></h5>
+                            <p>luchavez@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Oftalmologo</h6></span></h5>
+                            <p>miguechavez@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Pediatra</h6></span></h5>
+                            <p>noejara@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Dermatologo</h6></span></h5>
+                            <p>gistavito@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+                  <br>
+                </div>
+
+              </div>
+
+            </div>
+          </div><!-- End Top Selling -->
+
+
+          <div class="col-12">
+            <div class="card top-selling overflow-auto container">
+              <div class="card-body pb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="card-title">PACIENTES <span>| Sede San Isidro</span></h5>
+
+                  <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
+
+                </div>
+                <div class="d-flex flex-column" >
+
+                  <table class="table table-hover" id="mitabla2">
+                    <thead>
+                    <tr>
+                      <th scope="col">Pacientes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="paciente: ${listaPaciente}">
+                      <td>
+                        <div class="row">
+                          <div class="col-lg-2 col-sm-3">
+                            <img th:src="${paciente.foto}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
+                            <div>
+                              <h5 th:text="${paciente.nombre}+' '+${paciente.apellidos}"><a th:href="@{/administrador/historialPaciente}" >
+                                Iker Osco Chavez</a> </h5>
+                              <p th:text="${paciente.correo}">okerosco@example.com</p>
+                            </div>
+                            <span class="text-muted ms-2 float-end"><h6 th:text="${paciente.estado}">•Activo</h6></span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <!--<tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>rodrisan@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>carlosquis@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente}">Jhon Isla Tesla </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>noejara@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente}">William Lopez Torres</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>williamlo@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr >
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente}">Migue Chavez </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>miguechavez@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr >
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente">Noe Manrique </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>noejara@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr >
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente">Gustavo Pardo </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>gistavito@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente}" >
+                              Iker Osco Chavez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>okerosco@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>rodrisan@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="row">
+                          <div class="col-2">
+                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          </div>
+                          <div class="col-9">
+                            <h5><a href="historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
+                            <p>carlosquis@example.com</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>-->
+                    </tbody>
+                  </table>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div><!-- End Left side columns -->
+
+      <!-- Right side columns -->
+
+      <div class="col-lg-5">
+
+
+        <div class="card">
+          <div class="card-body">
+
+
+            <div class="info-card revenue-card">
+
+
+              <div class="card-body">
+                <h5 class="card-title">Igresos <span>| Este mes</span></h5>
+
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-currency-dollar"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>$124,264</h6>
+                    <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">incremento</span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Area Chart -->
+            <div id="areaChart"></div>
+
+
+            <!-- End Area Chart -->
+
+          </div>
+        </div>
+
+
+        <!-- Website Traffic -->
+        <div class="card">
+
+          <div class="card-body pb-0">
+
+          </div>
+
+
+
+
+
+        </div><!-- End Website Traffic -->
+
+
+
+      </div><!-- End Right side columns -->
+
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+
+  <div class="credits">
+    <!-- All the links in the footer should remain intact. -->
+    <!-- You can delete the links only if you purchased the pro version. -->
+    <!-- Licensing information: https://bootstrapmade.com/license/ -->
+    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+
+  </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
+
+
+
+
+<!-- Agregamos las librerías de jQuery UI para crear el calendario -->
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const series = {
+      "monthDataSeries1": {
+        "prices": [
+          8107.85,
+          8128.0,
+          8122.9,
+          8165.5,
+          8340.7,
+          8423.7,
+          8423.5,
+          8514.3,
+          8481.85,
+          8487.7,
+          8506.9,
+          8626.2,
+          8668.95,
+          8602.3,
+          8607.55,
+          8512.9,
+          8496.25,
+          8600.65,
+          8881.1,
+          9340.85
+        ],
+        "dates": [
+          "13 Nov 2017",
+          "14 Nov 2017",
+          "15 Nov 2017",
+          "16 Nov 2017",
+          "17 Nov 2017",
+          "20 Nov 2017",
+          "21 Nov 2017",
+          "22 Nov 2017",
+          "23 Nov 2017",
+          "24 Nov 2017",
+          "27 Nov 2017",
+          "28 Nov 2017",
+          "29 Nov 2017",
+          "30 Nov 2017",
+          "01 Dec 2017",
+          "04 Dec 2017",
+          "05 Dec 2017",
+          "06 Dec 2017",
+          "07 Dec 2017",
+          "08 Dec 2017"
+        ]
+      },
+      "monthDataSeries2": {
+        "prices": [
+          8423.7,
+          8423.5,
+          8514.3,
+          8481.85,
+          8487.7,
+          8506.9,
+          8626.2,
+          8668.95,
+          8602.3,
+          8607.55,
+          8512.9,
+          8496.25,
+          8600.65,
+          8881.1,
+          9040.85,
+          8340.7,
+          8165.5,
+          8122.9,
+          8107.85,
+          8128.0
+        ],
+        "dates": [
+          "13 Nov 2017",
+          "14 Nov 2017",
+          "15 Nov 2017",
+          "16 Nov 2017",
+          "17 Nov 2017",
+          "20 Nov 2017",
+          "21 Nov 2017",
+          "22 Nov 2017",
+          "23 Nov 2017",
+          "24 Nov 2017",
+          "27 Nov 2017",
+          "28 Nov 2017",
+          "29 Nov 2017",
+          "30 Nov 2017",
+          "01 Dec 2017",
+          "04 Dec 2017",
+          "05 Dec 2017",
+          "06 Dec 2017",
+          "07 Dec 2017",
+          "08 Dec 2017"
+        ]
+      },
+      "monthDataSeries3": {
+        "prices": [
+          7114.25,
+          7126.6,
+          7116.95,
+          7203.7,
+          7233.75,
+          7451.0,
+          7381.15,
+          7348.95,
+          7347.75,
+          7311.25,
+          7266.4,
+          7253.25,
+          7215.45,
+          7266.35,
+          7315.25,
+          7237.2,
+          7191.4,
+          7238.95,
+          7222.6,
+          7217.9,
+          7359.3,
+          7371.55,
+          7371.15,
+          7469.2,
+          7429.25,
+          7434.65,
+          7451.1,
+          7475.25,
+          7566.25,
+          7556.8,
+          7525.55,
+          7555.45,
+          7560.9,
+          7490.7,
+          7527.6,
+          7551.9,
+          7514.85,
+          7577.95,
+          7592.3,
+          7621.95,
+          7707.95,
+          7859.1,
+          7815.7,
+          7739.0,
+          7778.7,
+          7839.45,
+          7756.45,
+          7669.2,
+          7580.45,
+          7452.85,
+          7617.25,
+          7701.6,
+          7606.8,
+          7620.05,
+          7513.85,
+          7498.45,
+          7575.45,
+          7601.95,
+          7589.1,
+          7525.85,
+          7569.5,
+          7702.5,
+          7812.7,
+          7803.75,
+          7816.3,
+          7851.15,
+          7912.2,
+          7972.8,
+          8145.0,
+          8161.1,
+          8121.05,
+          8071.25,
+          8088.2,
+          8154.45,
+          8148.3,
+          8122.05,
+          8132.65,
+          8074.55,
+          7952.8,
+          7885.55,
+          7733.9,
+          7897.15,
+          7973.15,
+          7888.5,
+          7842.8,
+          7838.4,
+          7909.85,
+          7892.75,
+          7897.75,
+          7820.05,
+          7904.4,
+          7872.2,
+          7847.5,
+          7849.55,
+          7789.6,
+          7736.35,
+          7819.4,
+          7875.35,
+          7871.8,
+          8076.5,
+          8114.8,
+          8193.55,
+          8217.1,
+          8235.05,
+          8215.3,
+          8216.4,
+          8301.55,
+          8235.25,
+          8229.75,
+          8201.95,
+          8164.95,
+          8107.85,
+          8128.0,
+          8122.9,
+          8165.5,
+          8340.7,
+          8423.7,
+          8423.5,
+          8514.3,
+          8481.85,
+          8487.7,
+          8506.9,
+          8626.2
+        ],
+        "dates": [
+          "02 Jun 2017",
+          "05 Jun 2017",
+          "06 Jun 2017",
+          "07 Jun 2017",
+          "08 Jun 2017",
+          "09 Jun 2017",
+          "12 Jun 2017",
+          "13 Jun 2017",
+          "14 Jun 2017",
+          "15 Jun 2017",
+          "16 Jun 2017",
+          "19 Jun 2017",
+          "20 Jun 2017",
+          "21 Jun 2017",
+          "22 Jun 2017",
+          "23 Jun 2017",
+          "27 Jun 2017",
+          "28 Jun 2017",
+          "29 Jun 2017",
+          "30 Jun 2017",
+          "03 Jul 2017",
+          "04 Jul 2017",
+          "05 Jul 2017",
+          "06 Jul 2017",
+          "07 Jul 2017",
+          "10 Jul 2017",
+          "11 Jul 2017",
+          "12 Jul 2017",
+          "13 Jul 2017",
+          "14 Jul 2017",
+          "17 Jul 2017",
+          "18 Jul 2017",
+          "19 Jul 2017",
+          "20 Jul 2017",
+          "21 Jul 2017",
+          "24 Jul 2017",
+          "25 Jul 2017",
+          "26 Jul 2017",
+          "27 Jul 2017",
+          "28 Jul 2017",
+          "31 Jul 2017",
+          "01 Aug 2017",
+          "02 Aug 2017",
+          "03 Aug 2017",
+          "04 Aug 2017",
+          "07 Aug 2017",
+          "08 Aug 2017",
+          "09 Aug 2017",
+          "10 Aug 2017",
+          "11 Aug 2017",
+          "14 Aug 2017",
+          "16 Aug 2017",
+          "17 Aug 2017",
+          "18 Aug 2017",
+          "21 Aug 2017",
+          "22 Aug 2017",
+          "23 Aug 2017",
+          "24 Aug 2017",
+          "28 Aug 2017",
+          "29 Aug 2017",
+          "30 Aug 2017",
+          "31 Aug 2017",
+          "01 Sep 2017",
+          "04 Sep 2017",
+          "05 Sep 2017",
+          "06 Sep 2017",
+          "07 Sep 2017",
+          "08 Sep 2017",
+          "11 Sep 2017",
+          "12 Sep 2017",
+          "13 Sep 2017",
+          "14 Sep 2017",
+          "15 Sep 2017",
+          "18 Sep 2017",
+          "19 Sep 2017",
+          "20 Sep 2017",
+          "21 Sep 2017",
+          "22 Sep 2017",
+          "25 Sep 2017",
+          "26 Sep 2017",
+          "27 Sep 2017",
+          "28 Sep 2017",
+          "29 Sep 2017",
+          "03 Oct 2017",
+          "04 Oct 2017",
+          "05 Oct 2017",
+          "06 Oct 2017",
+          "09 Oct 2017",
+          "10 Oct 2017",
+          "11 Oct 2017",
+          "12 Oct 2017",
+          "13 Oct 2017",
+          "16 Oct 2017",
+          "17 Oct 2017",
+          "18 Oct 2017",
+          "19 Oct 2017",
+          "23 Oct 2017",
+          "24 Oct 2017",
+          "25 Oct 2017",
+          "26 Oct 2017",
+          "27 Oct 2017",
+          "30 Oct 2017",
+          "31 Oct 2017",
+          "01 Nov 2017",
+          "02 Nov 2017",
+          "03 Nov 2017",
+          "06 Nov 2017",
+          "07 Nov 2017",
+          "08 Nov 2017",
+          "09 Nov 2017",
+          "10 Nov 2017",
+          "13 Nov 2017",
+          "14 Nov 2017",
+          "15 Nov 2017",
+          "16 Nov 2017",
+          "17 Nov 2017",
+          "20 Nov 2017",
+          "21 Nov 2017",
+          "22 Nov 2017",
+          "23 Nov 2017",
+          "24 Nov 2017",
+          "27 Nov 2017",
+          "28 Nov 2017"
+        ]
+      }
+    }
+    new ApexCharts(document.querySelector("#areaChart"), {
+      series: [{
+        name: "INGRESOS",
+        data: series.monthDataSeries1.prices
+      }],
+      chart: {
+        type: 'area',
+        height: 350,
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'straight'
+      },
+
+      labels: series.monthDataSeries1.dates,
+      xaxis: {
+        type: 'datetime',
+      },
+      yaxis: {
+        opposite: true
+      },
+      legend: {
+        horizontalAlign: 'left'
+      }
+    }).render();
+  });
+</script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/jsAdministrador.js}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.js}"></script>
+<script>
+  var table = new DataTable('#mitabla', {
+    language: {
+      url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+    },
+    pageLength: 5
+
+  });
+</script>
+<script>
+  var table = new DataTable('#mitabla2', {
+    language: {
+      url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+    },
+    pageLength: 5
+  });
+</script>
+</body>
+
+</html>

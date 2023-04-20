@@ -4,7 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name="administrativo")
 public class Administrativo {
@@ -19,7 +23,7 @@ public class Administrativo {
     private String apellidos;
 
     @Column(nullable = false)
-    private int estado; //activo: 1, no activo: 0
+    private int estado; //no activo: 0,activo: 1,
 
     @Column(nullable = false)
     private String correo;

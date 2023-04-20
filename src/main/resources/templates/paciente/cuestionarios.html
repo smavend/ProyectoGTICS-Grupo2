@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cuestionarios</title>
+
+        <!-- BOOTSTRAP -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+              crossorigin="anonymous">
+
+        <!-- GOOGLE FONTS -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+
+        <!-- CSS -->
+        <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
+        <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
+    </head>
+    <body>
+        <!-- ======= Header ======= -->
+        <div th:replace="~{paciente/fragments/header.html :: header}"></div>
+        <!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <!-- End Sidebar-->
+
+        <main id="main" class="main">
+            <h1 class="encabezado">Cuestionarios</h1>
+            <section class="seccionPrincipal">
+                <a class="btn filtroSeleccionado">Todos</a>
+                <a class="btn filtroNoSeleccionado">Completos</a>
+                <a class="btn filtroNoSeleccionado">Incompletos</a>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cita</th>
+                            <th>Fecha enviada</th>
+                            <th>Fecha completada</th>
+                            <th>Doctor</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Lorem ipsum, dolor sit amet consec</td>
+                            <td>14/07/2022</td>
+                            <td>-</td>
+                            <td>Juan Martinez R.</td>
+                            <td>
+                                <a th:href="@{/Paciente/completarCuestionario}" class="botonCompletar">Completar</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Magn, cor repellendus numquam perspiciatis</td>
+                            <td>13/04/2021</td>
+                            <td>12/04/2022</td>
+                            <td>Pepe Martinez R.</td>
+                            <td>
+                                <a class="botonCompletado">Completado</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Adipisicing elit. Nihil blanditiis aut vel veritatis labore</td>
+                            <td>30/12/2020</td>
+                            <td>01/01/2021</td>
+                            <td>Lucho Martinez R.</td>
+                            <td>
+                                <a class="botonCompletado">Completado</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+
+            </section>
+
+        </main>
+
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
+
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+    </body>
+</html>

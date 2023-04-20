@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="utf-8">
@@ -10,24 +10,24 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/favicon.png" rel="icon">
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/css/style.css" rel="stylesheet">
+  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
 
   <!-- DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
@@ -47,8 +47,8 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
+      <a th:href="@{/administrativo}" class="logo d-flex align-items-center">
+        <img th:src="@{/assets/img/logo.png}" alt="">
         <span class="d-none d-lg-block">Clínica</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -68,71 +68,34 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
+            <span class="badge bg-primary badge-number" th:text="${listaNotificaciones.size()}"></span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            <li class="dropdown-header" th:inline="text">
+              <th:block th:utext="|Tienes ${listaNotificaciones.size()} notificaciones|"/>
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Ver todo</span></a>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
-
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+            <div th:each="notificacion:${listaNotificaciones}">
 
             <li class="notification-item">
               <i class="bi bi-info-circle text-primary"></i>
               <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
+                <h4 th:text="${notificacion.titulo}"></h4>
+                <p th:text="${notificacion.descripcion}"></p>
+                <p th:text="${notificacion.fecha}">4 hrs. ago</p>
               </div>
             </li>
-
             <li>
               <hr class="dropdown-divider">
             </li>
+            </div>
+
             <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
+              <a href="#">Mostrar todas las notificaciones</a>
             </li>
 
           </ul><!-- End Notification Dropdown Items -->
@@ -143,59 +106,34 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
+            <span class="badge bg-success badge-number" th:text="${listaMensajes.size()}"></span>
           </a><!-- End Messages Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
+            <li class="dropdown-header" th:inline="text">
+              <th:block th:utext="|Tienes ${listaMensajes.size()} mensajes|"/>
               <a href="#">
-                <img src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
+                <span class="badge rounded-pill bg-primary p-2 ms-2">Ver todo</span>
               </a>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+            <div th:each="mensaje: ${listaMensajes}">
+              <li class="message-item">
+                <a href="#">
+                  <img th:src="@{'/usuario/foto/'+${mensaje.id_emisor}}" alt="" class="rounded-circle">
+                  <div>
+                    <h4 th:text="${mensaje.nombreemisor}">Maria Hudson</h4>
+                    <p th:text="${mensaje.mensaje}">Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                    <p th:text="${mensaje.fecha}">4 hrs. ago</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+            </div>
 
             <li class="dropdown-footer">
               <a href="#">Show all messages</a>
@@ -208,13 +146,13 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${datos.administrativoId.nombre}"></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
+              <h6 th:text="${datos.administrativoId.nombre + ' ' +datos.administrativoId.apellidos}">Kevin Anderson</h6>
               <span>Administrativo</span>
             </li>
             <li>
@@ -223,7 +161,7 @@
 
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="falta.html">
                 <i class="bi bi-gear"></i>
                 <span>Ajustes</span>
               </a>
@@ -233,7 +171,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="../Medilab/home.html">
+              <a class="dropdown-item d-flex align-items-center" th:href="@{/}">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Cerrar sesión</span>
               </a>
@@ -253,7 +191,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="index.html">
+        <a class="nav-link " th:href="@{/administrativo}">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -289,7 +227,7 @@
                 <div class="card-body pb-0">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title">Pacientes <span>| Referidos por mí</span></h5>
-                    <a class="btn btn-primary" href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/invitar.html"><i class="bi bi-plus"></i>Invitar</a>
+                    <a class="btn btn-secondary" th:href="@{/administrativo/invitar}"><i class="bi bi-plus"></i>Invitar</a>
                   </div>
 
                   <table id="datatable" class="table  ">
@@ -298,51 +236,25 @@
                         <th scope="col">#</th>
                         <th scope="col">Perfil</th>
                         <th scope="col">Nombres y apellidos</th>
-                        <th scope="col">DNI</th>
+                        <th scope="col">Seguro</th>
                         <th scope="col">Estado</th>
                         <th scope="col"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td scope="row"><img class="rounded-circle" src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/product-1.jpg" alt=""></td>
-                        <td>Juan Carlos Loza</td>
-                        <td>78945612</td>
-                        <td><span class="badge bg-primary">Activo</span></td>
-                        <td><a href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/editar.html"><i class="bi bi-pen"></i></a></td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td scope="row"><img class="rounded-circle" src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/product-2.jpg" alt=""></td>
-                        <td>Pedro Palomino</td>
-                        <td>15978645</td>
-                        <td><span class="badge bg-dark">Invitado</span></td>
-                        <td><a href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/editar.html"><i class="bi bi-pen"></i></a></td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td scope="row"><img class="rounded-circle" src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/product-3.jpg" alt=""></td>
-                        <td>Mauricio Felipe De La Cruz</td>
-                        <td>15874693</td>
-                        <td><span class="badge bg-danger">Registrado</span></td>
-                        <td><a href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/editar.html"><i class="bi bi-pen"></i></a></td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td scope="row"><img class="rounded-circle" src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/product-4.jpg" alt=""></td>
-                        <td>Alejandra Carreño</td>
-                        <td>73011577</td>
-                        <td><span class="badge bg-warning">Agendado</span></td>
-                        <td><a href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/editar.html"><i class="bi bi-pen"></i></a></td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td scope="row"><img class="rounded-circle" src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/img/product-5.jpg" alt=""></td>
-                        <td>Juanita Valeria Cárdenas</td>
-                        <td>65498723</td>
-                        <td><span class="badge bg-success">En consulta</span></td>
-                        <td><a href="../../../../../../HTML-ProyectoGTICS/NiceAdmin/editar.html"><i class="bi bi-pen"></i></a></td>
+                      <tr th:each="paciente,obj:${listaPacientes}">
+                        <td th:text="${obj.index + 1}"></td>
+                        <td scope="row"><img class="rounded-circle" th:src="@{'/usuario/foto/' + ${paciente.idPaciente}}" alt=""></td>
+                        <td th:text="${paciente.nombre+' '+paciente.apellidos}"></td>
+                        <td th:text="${paciente.seguro.nombre}"></td>
+                        <td th:switch="${paciente.estado}" class="centered">
+                          <span th:case="1" class="badge bg-primary">Activo</span>
+                          <span th:case="2" class="badge bg-secondary">Invitado</span>
+                          <span th:case="3" class="badge bg-info">Registrado</span>
+                          <span th:case="4" class="badge bg-success">Agendado</span>
+                          <span th:case="5" class="badge bg-warning">En consulta</span>
+                        </td>
+                        <td><a th:href="@{'/administrativo/editar?id=' + ${paciente.idPaciente}}"><i class="bi bi-pen"></i></a></td>
                       </tr>
                     </tbody>
                   </table>
@@ -364,8 +276,8 @@
             <div class="card-body">
               <h5 class="card-title">Información <span>| Actual</span></h5>
               
-              <p><strong>Especialidad:</strong> Ginecología</p>
-              <p><strong>Sede:</strong> San Isidro</p>
+              <p><strong>Especialidad: </strong><span th:text="${datos.especialidadId.nombre}"></span></p>
+              <p><strong>Sede: </strong><span th:text="${datos.sedeId.nombre}"></span></p>
 
               </div>
 
@@ -398,14 +310,14 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/quill/quill.min.js"></script>
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
+  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+  <script th:src="@{assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
   <!-- DataTables from jQuery-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -413,7 +325,7 @@
   <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="../../../../../../HTML-ProyectoGTICS/NiceAdmin/assets/js/main.js"></script>
+  <script th:src="@{/assets/js/main.js}"></script>
 
   <!-- DataTables activate -->
   <script>

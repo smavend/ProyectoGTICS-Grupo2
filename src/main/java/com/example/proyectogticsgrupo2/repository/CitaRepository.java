@@ -1,6 +1,8 @@
 package com.example.proyectogticsgrupo2.repository;
 
 import com.example.proyectogticsgrupo2.entity.Cita;
+import com.example.proyectogticsgrupo2.entity.Doctor;
+import com.example.proyectogticsgrupo2.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

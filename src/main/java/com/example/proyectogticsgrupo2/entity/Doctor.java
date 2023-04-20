@@ -37,10 +37,10 @@ public class Doctor {
 
     @Column(nullable = false)
     private String correo;
+
     @Lob
-    @Column(nullable = false)
     private byte[] foto;
-    @Column(nullable = false)
+
     private String precio;
 
 
