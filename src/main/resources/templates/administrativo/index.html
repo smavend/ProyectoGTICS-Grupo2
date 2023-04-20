@@ -122,7 +122,7 @@
             <div th:each="mensaje: ${listaMensajes}">
               <li class="message-item">
                 <a href="#">
-                  <img th:src="@{'/doctor/foto/'+${mensaje.id_emisor}}" alt="" class="rounded-circle">
+                  <img th:src="@{'/usuario/foto/'+${mensaje.id_emisor}}" alt="" class="rounded-circle">
                   <div>
                     <h4 th:text="${mensaje.nombreemisor}">Maria Hudson</h4>
                     <p th:text="${mensaje.mensaje}">Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -244,7 +244,7 @@
                     <tbody>
                       <tr th:each="paciente,obj:${listaPacientes}">
                         <td th:text="${obj.index + 1}"></td>
-                        <td scope="row"><img class="rounded-circle" th:src="@{'/paciente/foto/' + ${paciente.idPaciente}}" alt=""></td>
+                        <td scope="row"><img class="rounded-circle" th:src="@{'/usuario/foto/' + ${paciente.idPaciente}}" alt=""></td>
                         <td th:text="${paciente.nombre+' '+paciente.apellidos}"></td>
                         <td th:text="${paciente.seguro.nombre}"></td>
                         <td th:switch="${paciente.estado}" class="centered">

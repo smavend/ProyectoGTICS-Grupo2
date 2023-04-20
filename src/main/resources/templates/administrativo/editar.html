@@ -134,7 +134,7 @@
             <div th:each="mensaje: ${listaMensajes}">
               <li class="message-item">
                 <a href="#">
-                  <img th:src="@{'/doctor/foto/'+${mensaje.id_emisor}}" alt="" class="rounded-circle">
+                  <img th:src="@{'/usuario/foto/'+${mensaje.id_emisor}}" alt="" class="rounded-circle">
                   <div>
                     <h4 th:text="${mensaje.nombreemisor}">Maria Hudson</h4>
                     <p th:text="${mensaje.mensaje}">Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>

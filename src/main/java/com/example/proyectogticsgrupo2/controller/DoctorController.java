@@ -1,15 +1,24 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.Cita;
+import com.example.proyectogticsgrupo2.entity.Doctor;
+import com.example.proyectogticsgrupo2.entity.Paciente;
 import com.example.proyectogticsgrupo2.repository.CitaRepository;
 import com.example.proyectogticsgrupo2.repository.DoctorRepository;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/doctor")
 @Controller
@@ -59,8 +68,5 @@ public class DoctorController {
         model.addAttribute("listaCitas",citaList);
         return "doctor/DoctorMensajería";
     }
-
-
-
 
 }
