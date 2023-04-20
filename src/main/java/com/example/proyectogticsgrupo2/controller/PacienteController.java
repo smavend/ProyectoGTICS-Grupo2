@@ -24,18 +24,6 @@ public class PacienteController {
         this.pacienteRepository = pacienteRepository;
     }
 
-    @GetMapping("/paciente/foto/{id}")
-    public void showPacienteImage(@PathVariable String id,
-                                  HttpServletResponse response) throws IOException {
-        response.setContentType("image/jpeg");
-
-        Optional<Paciente> optPaciente = pacienteRepository.findById(id);
-        if(optPaciente.isPresent()){
-            Paciente paciente = optPaciente.get();
-            InputStream is = new ByteArrayInputStream(paciente.getFoto());
-            IOUtils.copy(is, response.getOutputStream());
-        }
-    }
 
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})

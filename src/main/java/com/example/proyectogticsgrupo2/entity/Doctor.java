@@ -31,7 +31,10 @@ public class Doctor {
     private Horario horario;
 
     private String correo;
-    private String foto;
+
+    @Lob
+    private byte[] foto;
+
     private String precio;
 
 
