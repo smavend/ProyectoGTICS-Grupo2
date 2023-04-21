@@ -1,16 +1,21 @@
 package com.example.proyectogticsgrupo2.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-@Entity
-@Table(name="administrativo")
 @Getter
 @Setter
+@Entity
+@Table(name = "administrativo")
 public class Administrativo {
+
     @Id
     @Column(name = "id_administrativo", nullable = false)
     private String idAdministrativo;
@@ -22,7 +27,7 @@ public class Administrativo {
     private String apellidos;
 
     @Column(nullable = false)
-    private int estado; //activo: 1, no activo: 0
+    private int estado; //no activo: 0,activo: 1,
 
     @Column(nullable = false)
     private String correo;

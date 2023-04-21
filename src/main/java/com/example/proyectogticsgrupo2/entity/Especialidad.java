@@ -6,17 +6,19 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
-@Table(name = "especialidad")
 @Getter
 @Setter
-
+@Entity
+@Table(name = "especialidad")
 public class Especialidad {
+
     @Id
-    @Column(name ="id_especialidad",nullable = false)
-    private Integer id_especialidad;
-    @Column(name="nombre",nullable = false)
+    @Column(name = "id_especialidad", nullable = false)
+    private Integer idEspecialidad;
+
+    @Column(nullable = false)
     private String nombre;
+
     @OneToMany(mappedBy = "especialidad")
     private List<SedeXEspecialidadXAdministrativo> sedesAdministrativo;
 }

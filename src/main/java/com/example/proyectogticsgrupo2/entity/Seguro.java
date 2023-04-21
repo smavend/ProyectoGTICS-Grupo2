@@ -7,10 +7,10 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name="seguro")
 @Getter
 @Setter
+@Entity
+@Table(name = "seguro")
 public class Seguro {
     @Id
     @Column(name = "id_seguro", nullable = false)

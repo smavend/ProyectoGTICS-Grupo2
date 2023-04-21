@@ -6,19 +6,22 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
-@Table(name="sede")
 @Getter
 @Setter
+@Entity
+@Table(name = "sede")
 public class Sede {
+
     @Id
     @Column(name = "id_sede", nullable = false)
-    private String id_sede;
+    private String idSede;
+
     @Column(nullable = false)
     private String nombre;
+
     @ManyToOne
-    @JoinColumn(name="clinica_id_clinica",nullable = false)
-    private Clinica clinica_id_clinica;
+    @JoinColumn(name="clinica_id_clinica", nullable = false)
+    private Clinica clinica;
 
     @OneToMany(mappedBy = "sede")
     private List<SedeXEspecialidadXAdministrativo> sedesAdministrativo;

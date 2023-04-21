@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Perfil</title>
+
+        <!-- BOOTSTRAP -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+              crossorigin="anonymous">
+
+        <!-- GOOGLE FONTS -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+
+        <!-- CSS -->
+        <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
+        <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
+
+    </head>
+    <body>
+
+        <!-- ======= Header ======= -->
+        <div th:replace="~{paciente/fragments/header.html :: header}"></div>
+        <!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <!-- End Sidebar-->
+
+        <main style="padding-top: 0;" id="main" class="main">
+
+            <div class="container-xl perfil">
+
+                <div class="row">
+                    <!-- Foto y botones editar -->
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                <img th:src="@{/assets/img/profile-img.jpg}" alt="avatar"
+                                     class="rounded-circle img-fluid" style="width: 150px;">
+                                <h5 class="mt-3 mb-1 fw-semibold">Juanchito Palacios</h5>
+                                <p class="text-muted mb-3">Paciente</p>
+                                <div class="vstack gap-2 col-sm-7 col-md-5 col-lg-6 mx-auto mb-3">
+                                    <a th:href="@{/Paciente/perfil/editar}" class="btn btn-primary botonEditar">Editar perfil</a>
+                                    <a class="btn btn-primary botonEditar">Cambiar contraseña</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Información y historial de citas -->
+                    <div class="col-lg-8">
+                        <!-- Información perfil -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Nombre completo</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">Juanchito Palacios Castro</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Edad</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">25 años</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">DNI</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">72157734</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Seguro</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">Pacífico EPS</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Correo</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">juanpc@gmail.com</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Teléfono</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">965-790-551</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Dirección</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">Av. Las Nuevas Lomas, Lima</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Historial de citas -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card mb-4 mb-md-0">
+                                    <div class="card-body">
+                                        <p style="margin-left: 7px;" class="mb-4"><span
+                                                class="fs-4 font-italic me-1 fw-semibold">Historial de citas</span></p>
+
+                                        <a style="margin-top: 0;" class="btn filtroSeleccionado fs-6">Recientes</a>
+                                        <a style="margin-top: 0;" class="btn filtroNoSeleccionado fs-6">Antiguas</a>
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Especialidad</th>
+                                                    <th>Doctor</th>
+                                                    <th>Fecha</th>
+                                                    <th>Hora</th>
+                                                    <th>Tipo de cita</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Cardiología</td>
+                                                    <td>José Perez</td>
+                                                    <td>15/09/22</td>
+                                                    <td>15:00 Hrs.</td>
+                                                    <td>Presencial</td>
+                                                    <td>
+                                                        <a class="botonVerMasPerfil" data-bs-toggle="modal"
+                                                           data-bs-target="#cita">Ver más</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Psicología</td>
+                                                    <td>María Godoy</td>
+                                                    <td>04/01/21</td>
+                                                    <td>18:30 Hrs.</td>
+                                                    <td>Virtual</td>
+                                                    <td>
+                                                        <a class="botonVerMasPerfil">Ver más</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Cita -->
+            <div class="modal fade" id="cita" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <img class="logoNavBar" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
+                            <h1 class="modal-title fs-5 tituloNavBar" id="exampleModalLabel">Clínica INTERPUCP</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                    style="width: 40px"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row informacionModal">
+                                <div class="col-6">
+                                    <p>Nombres y apellidos:<span
+                                            class="informacionModalDato">Juanchito Palacios Castro</span></p>
+                                    <p>Seguro:<span class="informacionModalDato">Pacífico EPS</span></p>
+                                    <p>Teléfono:<span class="informacionModalDato">934-250-488</span></p>
+                                </div>
+                                <div class="col-6">
+                                    <p>Edad:<span class="informacionModalDato">25 años</span></p>
+                                    <p>Dirección:<span class="informacionModalDato">Av. Las Nuevas Lomas, Lima</span>
+                                    </p>
+                                    <p>Correo:<span class="informacionModalDato">juanpc@gmail.com</span></p>
+                                </div>
+                            </div>
+                            <div class="row informacionModal">
+                                <div class="col-6">
+                                    <p>Especialidad:<span class="informacionModalDato">Cardiología</span></p>
+                                    <p>Tipo de cita:<span class="informacionModalDato">Presencial</span></p>
+                                    <p>Torre:<span class="informacionModalDato">B</span></p>
+                                </div>
+                                <div class="col-6">
+                                    <p>Doctor:<span class="informacionModalDato">José Perez Miranda</span></p>
+                                    <p>Sede:<span class="informacionModalDato">San Miguel - Av. La Marina 2945</span>
+                                    </p>
+                                    <p>Piso:<span class="informacionModalDato">2</span></p>
+                                </div>
+                            </div>
+                            <div class="row informacionModal">
+                                <div class="col-6">
+                                    <p>Diagnóstico:<span class="informacionModalDato">Arrítmia cardiaca</span></p>
+                                </div>
+                                <div class="col-6">
+                                    <p>Fecha:<span class="informacionModalDato">15/09/22</span></p>
+                                </div>
+                            </div>
+                            <div class="row informacionModal">
+                                <p class="mb-2">Receta:</p>
+                                <span class="informacionModalDato">
+                          <ul>
+                            <li>Cefalexina 150mg (Septilisin 500mg)</li>
+                            <li>Comprimidos 1 (una) Caja</li>
+                            <li>Tomar vía oral 1 (uno) c/6 horas por 7 días</li>
+                          </ul>
+                        </span>
+                            </div>
+                            <div class="row informacionModal">
+                                <p>Firma:</p>
+                                <!-- SECCION PARA FIRMA (NO TENGO IDEA DE COMO SERÁ :U) -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
+
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+
+    </body>
+</html>
