@@ -10,7 +10,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link th:href="@{/assets/img/logo.png}" rel="icon">
+  <link th:href="@{/assets/img/logoClinicaPNG.png}" rel="icon">
   <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -49,7 +49,7 @@
 
   <div class="d-flex align-items-center justify-content-between">
     <a href="index}" class="logo d-flex align-items-center">
-      <img th:src="@{/assets/img/logo.png}" alt="">
+      <img th:src="@{/assets/img/logoClinicaPNG.png}" alt="">
       <span class="d-none d-lg-block">Clinica INTERPUCP</span>
     </a>
     <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -322,17 +322,7 @@
                   <h5 class="card-title">DOCTORES <span>| Sede San Isidro</span></h5>
                   <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
                 </div>
-
-                <!-- <div class="container-fluid">
-                   <form class="d-flex" role="search">
-                     <input class="form-control me-2" type="search" placeholder="Especialidad" aria-label="Search">
-                     <button class="btn btn-outline-success" type="submit">Buscar</button>
-                   </form>
-                 </div>-->
-
-
                 <div class=" flex-column" >
-
                   <table class="table" id="datatable">
                     <thead>
                     <tr>
@@ -340,158 +330,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr th:each="doctor : ${listaDoctores}">
                       <td>
                         <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          <div class="col-lg-2 col-sm-3">
+                            <img th:src="@{'/usuario/foto/' + ${doctor.id_doctor}}" alt="#" width="70" height="70" class="rounded-circle"/>
                           </div>
-                          <div class="col-9">
-                            <h5>Enrique Arana <span class="text-muted ms-2 float-end"><h6>•Psiquiatría</h6></span></h5>
-                            <p>enrique@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Luis Chavez <span class="text-muted ms-2 float-end"><h6>•Oncología</h6></span></h5>
-                            <p>luchavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Cardiología</h6></span></h5>
-                            <p>miguechavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Dermatología</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Ginecologia</h6></span></h5>
-                            <p>gistavito@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Neurología</h6></span></h5>
-                            <p>miguechavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Otopedía</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Cirujano</h6></span></h5>
-                            <p>gistavito@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Luis Chavez <span class="text-muted ms-2 float-end"><h6>•Psicologo</h6></span></h5>
-                            <p>luchavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Oftalmologo</h6></span></h5>
-                            <p>miguechavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Pediatra</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Dermatologo</h6></span></h5>
-                            <p>gistavito@example.com</p>
+                          <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
+                            <div>
+                              <h5 th:text="${doctor.nombre}+' '+${doctor.apellidos}"> </h5>
+                              <p th:text="${doctor.correo}">okerosco@example.com</p>
+                            </div>
+                            <span class="text-muted ms-2 float-end"><h6 th:text="${doctor.especialidad.nombre}">•Activo</h6></span>
                           </div>
                         </div>
                       </td>

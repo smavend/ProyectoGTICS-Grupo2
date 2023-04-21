@@ -1,13 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
-import com.example.proyectogticsgrupo2.entity.Administrativo;
-import com.example.proyectogticsgrupo2.entity.Distrito;
-import com.example.proyectogticsgrupo2.entity.Paciente;
-import com.example.proyectogticsgrupo2.entity.Seguro;
-import com.example.proyectogticsgrupo2.repository.AdministrativoRepository;
-import com.example.proyectogticsgrupo2.repository.DistritoRepository;
-import com.example.proyectogticsgrupo2.repository.PacienteRepository;
-import com.example.proyectogticsgrupo2.repository.SeguroRepository;
+import com.example.proyectogticsgrupo2.entity.*;
+import com.example.proyectogticsgrupo2.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,20 +13,28 @@ import java.util.List;
 @RequestMapping("/administrador")
 public class AdministradorController {
     final PacienteRepository pacienteRepository;
+    final DoctorRepository doctorRepository;
     final SeguroRepository seguroRepository;
     final AdministrativoRepository administrativoRepository;
     final DistritoRepository distritoRepository;
-    public AdministradorController(PacienteRepository pacienteRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository) {
+    final EspecialidadRepository especialidadRepository;
+    final SedeRepository sedeRepository;
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository) {
         this.pacienteRepository = pacienteRepository;
+        this.doctorRepository = doctorRepository;
         this.seguroRepository = seguroRepository;
         this.administrativoRepository = administrativoRepository;
         this.distritoRepository = distritoRepository;
+        this.especialidadRepository = especialidadRepository;
+        this.sedeRepository = sedeRepository;
     }
 
     //#####################################33
     @GetMapping("/dashboard")
     public String dashboard (Model model){
         List<Paciente> listaPaciente =pacienteRepository.findAll();
+        List<Doctor> listaDoctores = doctorRepository.findAll();
+        model.addAttribute("listaDoctores",listaDoctores);
         model.addAttribute("listaPaciente", listaPaciente);
         return "administrador/dashboard";
     }
@@ -50,7 +52,12 @@ public class AdministradorController {
     model.addAttribute("listaAdministrativo",listaAdministrativo);
         return "administrador/crearPaciente";}
     @GetMapping("/crearDoctor")
-    public String crearDoctor(){return "administrador/crearDoctor";}
+    public String crearDoctor(Model model){
+        List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede",listaSede);
+        model.addAttribute("listaEspecialidad",listaEspecialidad);
+        return "administrador/crearDoctor";}
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
     @GetMapping("/mensajeria")

@@ -10,7 +10,7 @@
   <meta content="" name="keywords" >
 
   <!-- Favicons -->
-  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/logoClinicaPNG.png}" rel="icon">
   <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -46,7 +46,7 @@
 
   <div class="d-flex align-items-center justify-content-between">
     <a href="index}" class="logo d-flex align-items-center">
-      <img th:src="@{/assets/img/logoClinica.png}" alt="">
+      <img th:src="@{/assets/img/logoClinicaPNG.png}" alt="">
       <span class="d-none d-lg-block">Clinica INTERPUCP</span>
     </a>
     <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -301,87 +301,55 @@
     <div class="row ">
       <div class="col-lg-8 container">
         <div class="row">
-
           <!-- Top Selling -->
-
           <div class="card top-selling overflow-auto ">
             <br>
             <h5 class="card-title text-center">Crear Nuevo Doctor</h5>
-            <form>
+            <form method="post" th:action="@{administrador/nuevoDoctor}">
               <div class="row">
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
                     <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" required>
+                    <input type="text" class="form-control" id="nombre" name ="nombre" required>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="telefono">Teléfono</label>
-                    <input type="tel" class="form-control" id="telefono" required>
-                  </div>
-                  <div class="col-md-12 mb-3">
-                    <label for="adads">Nombre del Seguro</label>
-                    <select class="form-select" id="adads" required>
+                    <label for="sexo">Especialidad</label>
+                    <select class="form-select" id="sexo" name ="especialidad" required>
                       <option value="">Seleccionar</option>
-                      <option value="M">Masculino</option>
-                      <option value="F">Femenino</option>
-                    </select>
-                  </div>
-                  <div class="col-md-12 mb-3">
-                    <label for="adasd">Administrativo</label>
-                    <select class="form-select" id="adasd" required>
-                      <option value="">Seleccionar</option>
-                      <option value="M">Masculino</option>
-                      <option value="F">Femenino</option>
+                      <option th:each="especialidad: ${listaEspecialidad}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" ></option>
                     </select>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="email">Correo electrónico</label>
-                    <input type="email" class="form-control" id="email" required>
+                    <input type="email" class="form-control" id="email" name="correo" required>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
                     <label for="apellido">Apellido</label>
-                    <input type="text" class="form-control" id="apellido" required>
+                    <input type="text" class="form-control" id="apellido" name="apellidos" required>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="direccion">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" required>
-                  </div>
-                  <div class="col-md-12 mb-3">
-                    <label for="sexoda">Distrito</label>
-                    <select class="form-select" id="sexoda" required>
+                    <label for="sede">Sede</label>
+                    <select class="form-select" id="sede" name ="sede" required>
                       <option value="">Seleccionar</option>
-                      <option value="M">Masculino</option>
-                      <option value="F">Femenino</option>
+                      <option th:each="sede: ${listaSede}" th:value="${sede.idSede}" th:text="${sede.nombre}" ></option>
                     </select>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="foto" class="form-label">Subir foto</label>
-                    <input type="file" class="form-control" id="foto">
+                    <input type="file" class="form-control" name="foto" id="foto">
                   </div>
                 </div>
-
-
               </div>
-
-
               <div class="col-md-12 mb-3">
-                <button class="btn btn-success" type="submit">Invitar Paciente</button>
-                <a class="btn btn-danger" type="button" th:href="@{/administrador-dashboard.html">Cancelar</a>
+                <button class="btn btn-success" type="submit">Invitar Doctor</button>
+                <a class="btn btn-danger" type="button" th:href="@{/administrador/dashboard}">Cancelar</a>
               </div>
-
-
             </form>
             <br>
-
-
           </div>
-
-
         </div><!-- End Left side columns -->
-
-
       </div>
 
     </div>
