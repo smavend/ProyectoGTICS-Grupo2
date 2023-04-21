@@ -32,9 +32,4 @@ public class Administrativo {
     @Column(nullable = false)
     private String correo;
 
-    @OneToMany(mappedBy = "administrativo")
-    private List<SedeXEspecialidadXAdministrativo> sedesAdministrativo;
-
-    @OneToMany(mappedBy = "administrativo")
-    private List<Paciente> paciente_administrativo;
 }

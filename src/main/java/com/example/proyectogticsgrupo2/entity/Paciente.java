@@ -48,13 +48,4 @@ public class Paciente {
     @JoinColumn(name = "distrito_id_distrito", nullable = false)
     private Distrito distrito;
 
-    public String obtenerSede() {
-        // Verifica si hay un administrativo asignado al paciente
-        if (administrativo != null && administrativo.getSedesAdministrativo() != null && !administrativo.getSedesAdministrativo().isEmpty()) {
-            // Retorna la primera sede asociada al administrativo
-            return administrativo.getSedesAdministrativo().get(0).getSede().getNombre();
-        }
-        // Retorna null si no hay un administrativo asignado al paciente o si el administrativo no tiene sedes asociadas
-        return null;
-    }
 }

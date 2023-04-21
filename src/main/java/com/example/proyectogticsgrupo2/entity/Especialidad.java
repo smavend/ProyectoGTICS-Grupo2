@@ -19,6 +19,4 @@ public class Especialidad {
     @Column(nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "especialidad")
-    private List<SedeXEspecialidadXAdministrativo> sedesAdministrativo;
 }

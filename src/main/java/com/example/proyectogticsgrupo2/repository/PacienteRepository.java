@@ -3,10 +3,7 @@ import com.example.proyectogticsgrupo2.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-<<<<<<< HEAD
-@Repository
-public interface PacienteRepository extends JpaRepository<Paciente, String>{
-=======
+
 import com.example.proyectogticsgrupo2.dto.MensajeDatosDto;
 import com.example.proyectogticsgrupo2.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,5 +19,4 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
 
     @Query(nativeQuery = true, value = "SELECT m.*, doctor.nombre as 'nombreemisor' FROM mensaje m inner join doctor on (doctor.id_doctor=m.id_emisor) where id_receptor=?1")
     List<MensajeDatosDto> obtenerMensajeDatos(String id);
->>>>>>> 3c6243c3ca5f8aa7c1e8747c1db386c7eaef4415
 }

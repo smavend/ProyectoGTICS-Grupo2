@@ -23,6 +23,4 @@ public class Sede {
     @JoinColumn(name="clinica_id_clinica", nullable = false)
     private Clinica clinica;
 
-    @OneToMany(mappedBy = "sede")
-    private List<SedeXEspecialidadXAdministrativo> sedesAdministrativo;
 }
