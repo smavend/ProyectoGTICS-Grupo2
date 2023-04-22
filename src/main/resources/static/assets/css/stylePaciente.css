@@ -44,9 +44,9 @@ transition: all 0.3s;
 }
 
 @media (max-width: 1199px) {
-#main {
-    padding: 25px 40px;
-}
+    #main{
+        padding: 15px;
+    }
 }
 
 /* -----------------------------
@@ -57,7 +57,7 @@ transition: all 0.3s;
     display: flex;
     justify-content: start;
     align-items: center;
-    height: 100vh;
+    height: auto;
 }
 .contenedor figure{
     position:relative;
@@ -1273,7 +1273,6 @@ background: #3e4f6f;
 padding: 20px 0;
 font-size: 14px;
 transition: all 0.3s;
-border-top: 1px solid #cddfff;
 }
 
 .footer .copyright {
@@ -1308,6 +1307,14 @@ p{
     color: #435067;
 }
 
+@media (max-width: 1199px) {
+    .encabezado{
+        font-size: 2.1rem;
+        width: auto;
+        margin: 0 20px;
+    }
+}
+
 .subEncabezado{
     font-size: 1.9rem;
     font-weight: 600;
@@ -1338,6 +1345,12 @@ p{
 
 .seccionPrincipal td{
     padding: 20px 0 20px 20px;
+}
+
+@media (max-width: 1199px) {
+    .seccionPrincipal{
+        padding: 10px 15px;
+    }
 }
 
 .page-link{
