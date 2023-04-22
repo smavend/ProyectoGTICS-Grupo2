@@ -39,7 +39,7 @@ font-family: "Nunito", sans-serif;
     scrollbar-width: thin;
     scrollbar-color: #aab7cf transparent;
 
-padding: 20px 10px 8px 10px;
+padding: 20px 10px 15px 10px;
 transition: all 0.3s;
 }
 
@@ -1270,9 +1270,12 @@ background: #3e4f6f;
 # Footer
 --------------------------------------------------------------*/
 .footer {
-padding: 20px 0;
+padding: 20px;
 font-size: 14px;
 transition: all 0.3s;
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 40px;
 }
 
 .footer .copyright {
