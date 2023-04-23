@@ -59,41 +59,30 @@ public class AdministradorController {
     model.addAttribute("listaAdministrativo",listaAdministrativo);
         return "administrador/crearPaciente";}
     @PostMapping("/nuevoPaciente")
-    public String nuevoPaciente(@RequestParam("nombre") String nombre, @RequestParam("telefono") String telefono,
+    public String nuevoPaciente(@RequestParam("idPaciente") String idPaciente ,@RequestParam("nombre") String nombre, @RequestParam("telefono") String telefono,
                                 @RequestParam("seguro") int numSeguro, @RequestParam("administrativo") String numAdministrativo,
                                 @RequestParam("correo") String correo, @RequestParam("apellidos") String apellido,
-                                @RequestParam("direccion") String direccion,@RequestParam("distrito") int numDistrito,
-                                @RequestParam("foto") MultipartFile foto){
-        Paciente paciente = new Paciente();
+                                @RequestParam("direccion") String direccion,@RequestParam("distrito") int numDistrito){
+
         Optional<Distrito> optdistrito = distritoRepository.findById(numDistrito);
         Optional<Seguro> optSeguro = seguroRepository.findById(numSeguro);
         Optional<Administrativo> optAdministrativo = administrativoRepository.findById(numAdministrativo);
-        System.out.println("44444444444444444444444444444444444444444444");
-        if(optdistrito.isPresent()){
-            Distrito distrito1 = optdistrito.get();
-            paciente.setDistrito(distrito1);}
-        if(optSeguro.isPresent()){
+        if(optdistrito.isPresent() && optSeguro.isPresent() && optAdministrativo.isPresent()) {
             Seguro seguro1 = optSeguro.get();
-            paciente.setSeguro(seguro1);}
-        if(optAdministrativo.isPresent()){
-            Administrativo administrativo1 = optAdministrativo.get();
-            paciente.setAdministrativo(administrativo1);}
-        paciente.setNombre(nombre);
-        paciente.setApellidos(apellido);
-        paciente.setCorreo(correo);
-        paciente.setDireccion(direccion);
-        paciente.setTelefono(telefono);
-        System.out.println("333333333333333333333333333333333333333333333");
-        try {
-            paciente.setFoto(foto.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("hubo un eror con la fotooooooo");
+            Distrito distrito1 = optdistrito.get();
+            Administrativo admin = optAdministrativo.get();
+
+            pacienteRepository.guardarPaciente(idPaciente, nombre, apellido,1,seguro1.getIdSeguro(), telefono,
+                    admin.getIdAdministrativo(), correo, direccion, distrito1.getIdDistrito());
+            System.out.println("guardadoooooooooooooooooooooooo");
+            return "redirect:/administrador/dashboard";
+        }else {
+            return "redirect:/administrador/crearPaciente";
         }
-        System.out.println("11111111111111111111111111111111111111111111");
-        pacienteRepository.save(paciente);
-        System.out.println("2222222222222222222222222222222222222");
-        return "redirect:/dashboard";
+
+
+
+
     }
 
     @GetMapping("/crearDoctor")

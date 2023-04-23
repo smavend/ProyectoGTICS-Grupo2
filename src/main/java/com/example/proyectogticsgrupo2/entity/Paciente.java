@@ -20,7 +20,7 @@ public class Paciente {
     @Column(nullable = false)
     private String apellidos;
 
-    @Column(nullable = false)
+    @Column(name = "estado")
     private int estado; //no activo: 0, activo: 1,invitado: 2, registrado:3, agendado: 4, en consulta: 5
 
     @ManyToOne
@@ -38,7 +38,7 @@ public class Paciente {
     private String correo;
 
     @Lob
-    @Column(nullable = false)
+    @Column(name = "foto")
     private byte[] foto;
 
     @ManyToOne
