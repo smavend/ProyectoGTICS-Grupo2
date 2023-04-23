@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +60,7 @@ public class AdministradorController {
         return "administrador/crearPaciente";}
     @PostMapping("/nuevoPaciente")
     public String nuevoPaciente(@RequestParam("nombre") String nombre, @RequestParam("telefono") String telefono,
-                                @RequestParam("seguro") String numSeguro, @RequestParam("administrativo") String numAdministrativo,
+                                @RequestParam("seguro") int numSeguro, @RequestParam("administrativo") String numAdministrativo,
                                 @RequestParam("correo") String correo, @RequestParam("apellidos") String apellido,
                                 @RequestParam("direccion") String direccion,@RequestParam("distrito") int numDistrito,
                                 @RequestParam("foto") MultipartFile foto){
@@ -67,18 +68,32 @@ public class AdministradorController {
         Optional<Distrito> optdistrito = distritoRepository.findById(numDistrito);
         Optional<Seguro> optSeguro = seguroRepository.findById(numSeguro);
         Optional<Administrativo> optAdministrativo = administrativoRepository.findById(numAdministrativo);
-        Administrativo administrativo = new Administrativo();
-
+        System.out.println("44444444444444444444444444444444444444444444");
+        if(optdistrito.isPresent()){
+            Distrito distrito1 = optdistrito.get();
+            paciente.setDistrito(distrito1);}
+        if(optSeguro.isPresent()){
+            Seguro seguro1 = optSeguro.get();
+            paciente.setSeguro(seguro1);}
+        if(optAdministrativo.isPresent()){
+            Administrativo administrativo1 = optAdministrativo.get();
+            paciente.setAdministrativo(administrativo1);}
         paciente.setNombre(nombre);
         paciente.setApellidos(apellido);
         paciente.setCorreo(correo);
         paciente.setDireccion(direccion);
         paciente.setTelefono(telefono);
-
-
-
-
-        return "redirect:/administrador/dashboard";
+        System.out.println("333333333333333333333333333333333333333333333");
+        try {
+            paciente.setFoto(foto.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("hubo un eror con la fotooooooo");
+        }
+        System.out.println("11111111111111111111111111111111111111111111");
+        pacienteRepository.save(paciente);
+        System.out.println("2222222222222222222222222222222222222");
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/crearDoctor")
