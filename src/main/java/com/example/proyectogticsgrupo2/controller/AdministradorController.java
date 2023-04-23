@@ -5,9 +5,13 @@ import com.example.proyectogticsgrupo2.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/administrador")
@@ -40,6 +44,8 @@ public class AdministradorController {
     }
     @GetMapping("/finanzas")
     public String finanzas(){return "administrador/finanzas";}
+    @GetMapping("/perfil")
+    public String perfil(){return "administrador/perfil";}
     @GetMapping("/finanzas-recibos")
     public String finanzas_recibos(){return "administrador/finanzas-recibos";}
     @GetMapping("/crearPaciente")
@@ -51,6 +57,30 @@ public class AdministradorController {
     model.addAttribute("listaDistrito",listaDistrito);
     model.addAttribute("listaAdministrativo",listaAdministrativo);
         return "administrador/crearPaciente";}
+    @PostMapping("/nuevoPaciente")
+    public String nuevoPaciente(@RequestParam("nombre") String nombre, @RequestParam("telefono") String telefono,
+                                @RequestParam("seguro") String numSeguro, @RequestParam("administrativo") String numAdministrativo,
+                                @RequestParam("correo") String correo, @RequestParam("apellidos") String apellido,
+                                @RequestParam("direccion") String direccion,@RequestParam("distrito") int numDistrito,
+                                @RequestParam("foto") MultipartFile foto){
+        Paciente paciente = new Paciente();
+        Optional<Distrito> optdistrito = distritoRepository.findById(numDistrito);
+        Optional<Seguro> optSeguro = seguroRepository.findById(numSeguro);
+        Optional<Administrativo> optAdministrativo = administrativoRepository.findById(numAdministrativo);
+        Administrativo administrativo = new Administrativo();
+
+        paciente.setNombre(nombre);
+        paciente.setApellidos(apellido);
+        paciente.setCorreo(correo);
+        paciente.setDireccion(direccion);
+        paciente.setTelefono(telefono);
+
+
+
+
+        return "redirect:/administrador/dashboard";
+    }
+
     @GetMapping("/crearDoctor")
     public String crearDoctor(Model model){
         List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
