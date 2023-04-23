@@ -75,9 +75,9 @@ public class AdministradorController {
             pacienteRepository.guardarPaciente(idPaciente, nombre, apellido,1,seguro1.getIdSeguro(), telefono,
                     admin.getIdAdministrativo(), correo, direccion, distrito1.getIdDistrito());
             System.out.println("guardadoooooooooooooooooooooooo");
-            return "redirect:/administrador/dashboard";
+            return "redirect: /administrador/dashboard";
         }else {
-            return "redirect:/administrador/crearPaciente";
+            return "redirect:/crearPaciente";
         }
 
 
