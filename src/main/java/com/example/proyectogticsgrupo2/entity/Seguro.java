@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Seguro {
     @Id
     @Column(name = "id_seguro", nullable = false)
-    private String idSeguro;
+    private int idSeguro;
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)
