@@ -1,18 +1,27 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.entity.Especialidad;
+import com.example.proyectogticsgrupo2.entity.Paciente;
+import com.example.proyectogticsgrupo2.repository.EspecialidadRepository;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/Paciente")
 public class PacienteController {
 
     final PacienteRepository pacienteRepository;
+    final EspecialidadRepository especialidadRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository) {
         this.pacienteRepository = pacienteRepository;
+        this.especialidadRepository = especialidadRepository;
     }
 
     /* INICIO */
@@ -29,7 +38,12 @@ public class PacienteController {
 
     /* PERFIL */
     @GetMapping("/perfil")
-    public String perfil(){
+    public String perfil(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/perfil";
     }
 
@@ -40,7 +54,9 @@ public class PacienteController {
 
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
-    public String verDoctores(){
+    public String verDoctores(Model model){
+        List<Especialidad> especialidadList = especialidadRepository.findAll();
+        model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
     }
 

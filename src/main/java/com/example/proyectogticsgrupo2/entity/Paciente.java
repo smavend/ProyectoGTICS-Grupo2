@@ -48,4 +48,9 @@ public class Paciente {
     @Column(nullable = false)
     private String direccion;
 
+    public String getNombreYApellido(){
+        String[] nombres = this.getNombre().split(" ");
+        String[] apellidos = this.getApellidos().split(" ");
+        return nombres[0] + " " + apellidos[0];
+    }
 }
