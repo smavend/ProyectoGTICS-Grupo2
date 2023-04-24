@@ -41,7 +41,12 @@ public class PacienteController {
 
     /* RESERVAR CITA */
     @GetMapping("/reservar")
-    public String reservarCita(){
+    public String reservarCita(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/reservar";
     }
 
@@ -57,7 +62,12 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/editar")
-    public String editarPerfil(){
+    public String editarPerfil(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/perfilEditar";
     }
 
@@ -72,56 +82,106 @@ public class PacienteController {
     }
 
     @GetMapping("/perfilDoctor")
-    public String verPerfilDoctor(){
+    public String verPerfilDoctor(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/doctorPerfil";
     }
 
     @GetMapping("/reservarDoctor")
-    public String reservarCitaDoctor(){
+    public String reservarCitaDoctor(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/reservarDoctor";
     }
 
     @GetMapping("/confirmacion")
-    public String confirmarReserva(){
+    public String confirmarReserva(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/confirmacion";
     }
 
     @GetMapping("/sesionVirtual")
-    public String sesionVirtual(){
+    public String sesionVirtual(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/sesionVirtual";
     }
 
     /* SECCIÓN CITAS */
     @GetMapping("citas")
-    public String verCitas(){
+    public String verCitas(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/citas";
     }
 
     /* SECCIÓN PAGOS */
     @GetMapping("/pagos")
-    public String pagos(){
+    public String pagos(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/pagos";
     }
 
     @GetMapping("/recibo")
-    public String verReciboPago(){
+    public String verReciboPago(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/recibo";
     }
 
     /* SECCIÓN CUESTIONARIOS */
     @GetMapping("/cuestionarios")
-    public String cuestionarios(){
+    public String cuestionarios(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/cuestionarios";
     }
 
     @GetMapping("/completarCuestionario")
-    public String completarCuestionario(){
+    public String completarCuestionario(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/completarCuestionario";
     }
 
     /* SECCIÓN CONSENTIMIENTOS */
     @GetMapping("/consentimientos")
-    public String consentimientos(){
+    public String consentimientos(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/consentimientos";
     }
 }
