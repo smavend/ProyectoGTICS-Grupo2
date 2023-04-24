@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <img th:src="@{'data:image/jpeg;base64,' + #strings.toHexString(foto)}" />
+
+
+    </body>
+</html>

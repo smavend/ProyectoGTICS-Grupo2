@@ -313,96 +313,74 @@
 
 
             <section class="section dashboard">
-                <form method="post" th:action="@{/doctor/guardarReporte}" th:object="${cita}" class="mt-2">
-                    <div class="row ">
+                <div class="row ">
 
-                        <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: 2rem;height: fit-content" class="container col-5">
-                            <div class="row" >
-                                <div >
-
-
-                                        <input th:field="*{cita.id_cita}" name="id_cita" type="hidden"/>
-                                        <input th:field="*{cita.paciente.idPaciente}" name="paciente" type="hidden"/>
-                                        <input th:field="*{cita.doctor.id_doctor}" name="doctor" type="hidden"/>
-                                        <input th:field="*{cita.inicio}" name="inicio" type="hidden"/>
-                                        <input th:field="*{cita.fin}" name="fin" type="hidden"/>
-                                        <input th:field="*{cita.modalidad}" name="modalidad" type="hidden"/>
-                                        <input th:field="*{cita.reporte}" name="modalidad" type="hidden"/>
-                                        <input th:field="*{cita.sede.idSede}" name="sede" type="hidden"/>
-                                        <input th:field="*{cita.reporte}" name="reporte" type="hidden"/>
-                                        <input th:field="*{cita.link_cita}" name="reporte" type="hidden"/>
-                                        <input th:field="*{cita.estado}" name="reporte" type="hidden"/>
-                                        <input th:field="*{cita.fecha_emision}" name="reporte" type="hidden"/>
-                                        <input th:field="*{cita.fecha_emision}" name="reporte" type="hidden"/>
-
-                                        <h1 style="color: black;text-align: center;">Informe Médico</h1>
-                                        <hr>
-                                        <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Paciente: </strong><span style="font-size: 1.2rem" th:text="${paciente.nombre+ ' ' + paciente.apellidos}" > </span>
-                                        <br>
-                                        <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">DNI: </strong><span style="font-size: 1.2rem" th:text="${paciente.idPaciente}" > </span>
-                                        <br>
-                                          <!-- DESPUES PONER EDAD -->
-                                        <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><span style="font-size: 1.2rem" th:text="${fecha}" > </span>
-                                        <br>
-                                        <div>
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <strong class="d-inline" style="font-size: 1.2rem; line-height: 1.5; margin-left: 20px;">Dirección:</strong>
-                                                </div>
-                                                <div class="col-md-9">
-                                                    <input th:field="*{cita.direccion}" type="text" class="form-control d-inline">
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-                                        <hr style="border-top: 3px solid #ccc">
-
-                                        <h2 style="color: black;text-align: center;" >Diagnóstico y Tratamiento Recomendado</h2>
-                                        <div class="mb-3">
-                                            <textarea style="height: 400px; overflow-y: scroll; resize: none; font-family: inherit;" th:field="*{cita.receta}" class="form-control"></textarea>
-                                        </div>
-
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Finalizar Reporte</button>
-                        <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: -3rem" class="container col-6">
-                            <div class="row">
-                                <div >
-                                    <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
+                    <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: 2rem;height: fit-content" class="container col-5">
+                        <div class="row" >
+                            <div >
+                                    <h1 style="color: black;text-align: center;">Informe Médico</h1>
                                     <hr>
-                                    <img th:src="@{/assets/img/zoom.jpg}" style="width: 600px">
-                                    <div style="margin-top: 5px;text-align: center">
-                                        <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
-                                        <button type="button" class="btn btn-secondary">Resultados de cuestionario</button>
-                                    </div>
-
-                                    <div style="text-align: center">
-                                        <button type="button" style="margin-top: 5px" class="btn btn-danger">Finalizar llamada</button>
-                                    </div>
+                                    <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Paciente: </strong><span style="font-size: 1.2rem" th:text="${paciente.nombre+ ' ' + paciente.apellidos}" > </span> <br>
+                                    <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">DNI: </strong><span style="font-size: 1.2rem" th:text="${paciente.idPaciente}" > </span> <br>
+                                    <!-- DESPUES PONER EDAD -->
+                                    <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><span style="font-size: 1.2rem" th:text="${fecha}" > </span>
                                     <hr style="border-top: 3px solid #ccc">
-                                    <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem" class="container card">
-
-                                        <h1 style="color: black;text-align: center;">Bitácora Personal</h1>
-                                        <div class="mb-3">
-                                            <textarea style="height: 400px; overflow-y: scroll; resize: none; font-family: inherit;" th:field="*{cita.bitacora}" class="form-control"></textarea>
-                                        </div>
-
-
-
-
-                                    </div>
-                                </div>
+                                    <h2 style="color: black;text-align: center;" >Diagnóstico</h2>
+                                    <p style="font-size: 1.2rem;line-height: 1.5;padding: 20px;">El paciente presenta una fractura de la tibia en la pierna derecha como resultado de un accidente de tráfico. Se observa una inflamación moderada en la zona afectada.</p>
+                                    <h2 style="color: black;text-align: center;">Tratamiento Recomendado</h2>
+                                    <p style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px">Se recomienda inmovilizar la pierna afectada mediante una férula para permitir la cicatrización de la fractura. Se prescriben medicamentos para reducir la inflamación y el dolor, y se indica al paciente que mantenga la pierna elevada para ayudar a reducir la hinchazón.</p>
+                                </form>
                             </div>
+
                         </div>
                     </div>
 
-                </form>
+
+                    <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: -3rem" class="container col-6">
+                        <div class="row">
+                            <div >
+                                <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
+                                <hr>
+                                <img th:src="@{/assets/img/zoom.jpg}" style="width: 600px">
+                                <div style="margin-top: 5px;text-align: center">
+                                    <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
+                                    <button type="button" class="btn btn-secondary">Resultados de cuestionario</button>
+                                </div>
+
+                                <div style="text-align: center">
+                                    <button type="button" style="margin-top: 5px" class="btn btn-danger">Finalizar llamada</button>
+                                </div>
+                                <hr style="border-top: 3px solid #ccc">
+                                <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem" class="container card">
+
+                                    <h1 style="color: black;text-align: center;">Bitácora Personal</h1>
+                                    <p style="font-size: 1.2rem;line-height: 1.5;margin-left: 40px;margin-right: 40px">
+
+                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+                                        لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+                                        لكرة القدم ، مرحبا ميسي بايرن لكرة
+                                        القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم
+                                        ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ميسي بايرن لكرة القدم
+                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
+
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
 
 
             </section>

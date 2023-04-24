@@ -337,7 +337,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody style="text-align: center">
-                                                        <tr th:each="cita,obj: ${listaCitas}">
+                                                        <tr th:each="cita,obj: ${listaCitas}" th:with="horario=${listaHorarios[obj.index]}">
 
 
                                                             <td style="font-size: 1rem" th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}">
@@ -348,7 +348,7 @@
 
                                                             </td>
 
-                                                            <td style="font-size: 1rem;color: black" th:text="${cita.inicio}">
+                                                            <td style="font-size: 1rem;color: black" th:text="${horario}">
 
                                                             </td>
 
@@ -357,10 +357,8 @@
                                                             </td>
 
                                                             <td>
-                                                                <div style="width: min-content">
-                                                                    <a th:href="@{/doctor/reporte}" type="button" class="btn btn-success">Iniciar cita</a>
-                                                                    <button style="margin-top: 5px;width: max-content" type="button" class="btn btn-danger">Enviar cuestionario</button>
-                                                                </div>
+                                                                <a th:href="@{'/doctor/reporte?id=' + ${cita.paciente.idPaciente}+ '&id2=' + ${cita.id_cita}}" type="button" class="btn btn-success">Iniciar cita</a>
+                                                                <a style="margin-top: 5px;width: max-content" type="button" class="btn btn-danger">Enviar cuestionario</a>
                                                             </td>
                                                         </tr>
 
@@ -422,14 +420,14 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody >
-                                                        <tr th:each="paciente,obj: ${listaPacientes}">
-                                                            <td>
-                                                                <img style="border-radius: 50%;border: 2px solid #000" th:src="@{assets/img/messi.jpg}"
+                                                        <tr th:each="cita,obj: ${listaCitas}">
+                                                            <td >
+                                                                <img style="border-radius: 50%;border: 2px solid #000" th:src="@{'/usuario/foto/'+${cita.paciente.idPaciente}}"
                                                                      height="70" width="70" alt="Profile">
                                                             </td>
                                                             <td style="font-size: 1rem; color: black">
-                                                                <span th:text="${paciente.nombre + ' ' + paciente.apellidos}"></span>
-                                                                <div><button style="height: 30px" type="button" class="btn btn-warning">Ver reporte</button></div>
+                                                                <a th:href="@{/doctor/dashboard}" th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}"></a>
+
 
                                                             </td>
 

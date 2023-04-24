@@ -43,5 +43,4 @@ public class Doctor {
 
     private String precio;
 
-
 }
