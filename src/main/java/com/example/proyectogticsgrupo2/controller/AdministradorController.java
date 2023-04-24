@@ -73,7 +73,7 @@ public class AdministradorController {
             Administrativo admin = optAdministrativo.get();
 
             pacienteRepository.guardarPaciente(idPaciente, nombre, apellido,1,seguro1.getIdSeguro(), telefono,
-                    admin.getIdAdministrativo(), correo, direccion, distrito1.getIdDistrito());
+                    admin.getIdAdministrativo(), correo, Byte.valueOf("/assets/img/news-1.jpg"),direccion, distrito1.getIdDistrito());
             System.out.println("guardadoooooooooooooooooooooooo");
             return "redirect: /administrador/dashboard";
         }else {
@@ -92,6 +92,14 @@ public class AdministradorController {
         model.addAttribute("listaSede",listaSede);
         model.addAttribute("listaEspecialidad",listaEspecialidad);
         return "administrador/crearDoctor";}
+
+    @PostMapping("/nuevoDoctor")
+    public String guardarDcotor(Doctor doctor){
+
+        doctorRepository.save(doctor);
+        System.out.println("guardoooooooo");
+        return "redirect:/administrador/dashboard";
+    }
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
     @GetMapping("/mensajeria")

@@ -17,7 +17,7 @@ public class Doctor {
     private String nombre;
     @Column(nullable = false)
     private String apellidos;
-    @Column(nullable = false)
+
     private String estado;
 
     @ManyToOne
@@ -28,17 +28,18 @@ public class Doctor {
     @JoinColumn(name = "sede_id_sede",nullable = false)
     private Sede sede;
 
-    @Column(nullable = false)
+    @Column(name = "duracion_cita_horas")
     private String duracion_cita_horas;
 
     @ManyToOne
-    @JoinColumn(name = "horario_id_horario",nullable = false)
+    @JoinColumn(name = "horario_id_horario")
     private Horario horario;
 
     @Column(nullable = false)
     private String correo;
 
     @Lob
+    @Column(name = "foto")
     private byte[] foto;
 
     private String precio;

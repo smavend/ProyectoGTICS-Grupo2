@@ -305,9 +305,13 @@
           <div class="card top-selling overflow-auto ">
             <br>
             <h5 class="card-title text-center">Crear Nuevo Doctor</h5>
-            <form method="post" th:action="@{administrador/nuevoDoctor}">
+            <form method="post" th:action="@{/administrador/nuevoDoctor}">
               <div class="row">
                 <div class="col-md-6">
+                  <div class="col-md-12 mb-3">
+                    <label for="dni">DNI</label>
+                    <input type="text" class="form-control" id="dni" name ="id_doctor" required>
+                  </div>
                   <div class="col-md-12 mb-3">
                     <label for="nombre">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name ="nombre" required>
@@ -331,15 +335,15 @@
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="sede">Sede</label>
-                    <select class="form-select" id="sede" name ="sede" required>
+                      <select class="form-select" id="sede" name ="sede" required>
                       <option value="">Seleccionar</option>
                       <option th:each="sede: ${listaSede}" th:value="${sede.idSede}" th:text="${sede.nombre}" ></option>
                     </select>
                   </div>
-                  <div class="col-md-12 mb-3">
+                  <!--<div class="col-md-12 mb-3">
                     <label for="foto" class="form-label">Subir foto</label>
                     <input type="file" class="form-control" name="foto" id="foto">
-                  </div>
+                  </div>-->
                 </div>
               </div>
               <div class="col-md-12 mb-3">
