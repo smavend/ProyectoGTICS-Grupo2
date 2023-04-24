@@ -2,8 +2,10 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.Especialidad;
 import com.example.proyectogticsgrupo2.entity.Paciente;
+import com.example.proyectogticsgrupo2.entity.Sede;
 import com.example.proyectogticsgrupo2.repository.EspecialidadRepository;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
+import com.example.proyectogticsgrupo2.repository.SedeRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +19,23 @@ import java.util.Optional;
 public class PacienteController {
 
     final PacienteRepository pacienteRepository;
+    final SedeRepository sedeRepository;
     final EspecialidadRepository especialidadRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
+        this.sedeRepository = sedeRepository;
     }
 
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
-    public String index(){
+    public String index(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
         return "paciente/index";
     }
 
@@ -55,7 +64,9 @@ public class PacienteController {
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
     public String verDoctores(Model model){
+        List<Sede> sedeList =  sedeRepository.findAll();
         List<Especialidad> especialidadList = especialidadRepository.findAll();
+        model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
     }

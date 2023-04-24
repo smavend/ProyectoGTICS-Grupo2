@@ -39,13 +39,7 @@
                     <div class="col-lg-6 filtroDoctor d-flex justify-content-start">
                         <label class="labelFiltroDoctor">Sede</label>
                         <select class="selectFiltroDoctor">
-                            <option value="">San Isidro</option>
-                            <option value="">Villa María del Triunfo</option>
-                            <option value="">San Juan de Lurigancho</option>
-                            <option value="">Miraflores</option>
-                            <option value="">La Molina</option>
-                            <option value="">Comas</option>
-                            <option value="">La Luna</option>
+                            <option th:each="sede: ${sedeList}" th:value="${sede.nombre}" th:text="${sede.nombre}"></option>
                         </select>
                     </div>
                     <div class="col-lg-6 filtroDoctor d-flex justify-content-start">
