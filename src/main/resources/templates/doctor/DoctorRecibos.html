@@ -351,18 +351,33 @@
                                                             <th>Paciente</th>
                                                             <th>Concepto</th>
                                                             <th>Monto</th>
-                                                            <th>Forma de Pago</th>
                                                             <th>Recibo</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>01/01/2023</td>
-                                                            <td>John Doe</td>
-                                                            <td>Consulta médica</td>
-                                                            <td>$100.00</td>
-                                                            <td>Transferencia bancaria</td>
-                                                            <td> <button type="button" class="btn btn-primary">Ver recibo</button></td>
+                                                        <tr th:each="cita,obj: ${listaCitas}" th:with="horario=${listaHorarios[obj.index]}" >
+
+
+                                                            <td style="font-size: 1rem" th:text="${horario}">
+
+                                                            </td>
+
+                                                            <td style="font-size: 1rem" th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}">
+
+                                                            </td>
+
+                                                            <td style="font-size: 1rem;color: black" >
+                                                                <h6>Consulta médica</h6>
+                                                            </td>
+
+                                                            <td >
+                                                                <h6>$100</h6>
+                                                            </td>
+
+                                                            <td>
+                                                                <a th:href="@{'/doctor/reporte?id=' + ${cita.paciente.idPaciente}+ '&id2=' + ${cita.id_cita}}" type="button" class="btn btn-success">
+                                                                    Ver Recibo</a>
+                                                            </td>
                                                         </tr>
 
                                                     </tbody>

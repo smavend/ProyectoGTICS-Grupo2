@@ -66,18 +66,32 @@ public class DoctorController {
         return "doctor/DoctorDashboard";
     }
 
+    @GetMapping("/recibo")
+    public String recibo(Model model) {
+        List<Cita> optionalCita = citaRepository.BuscarPorDoctor(1);
+        ArrayList<String> listaHorarios= new ArrayList<>();
+
+        for (int i = 0; i < optionalCita.size(); i++) {
+            String tiempoInicio = optionalCita.get(i).getInicio();
+            String[] partesInicio = tiempoInicio.split(" ");
+            String fechaCompletaInicio = partesInicio[0];
+
+            listaHorarios.add(fechaCompletaInicio);
+        }
+
+        model.addAttribute("listaHorarios", listaHorarios);
+        model.addAttribute("listaCitas", optionalCita);//CAMBIAR POR ID SESION
+
+        return "doctor/DoctorRecibos";
+    }
+
+
+
     @GetMapping("/calendario")
     public String reportes(Model model){
 
 
         return "doctor/DoctorCalendario";
-    }
-
-    @GetMapping("/recibo")
-    public String recibo(Model model){
-
-
-        return "doctor/DoctorRecibos";
     }
 
     @GetMapping("/reporte")
@@ -110,8 +124,8 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarReporte")
-    public String guardarProducto(Cita product, RedirectAttributes attr) {
-        citaRepository.save(product);
-        return "redirect:/dashboard";
+    public String guardarReporte(Cita cita, RedirectAttributes attr) {
+        citaRepository.save(cita);
+        return "redirect:/doctor/dashboard";
     }
 }
