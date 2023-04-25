@@ -1,13 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
-import com.example.proyectogticsgrupo2.entity.Alergia;
-import com.example.proyectogticsgrupo2.entity.Especialidad;
-import com.example.proyectogticsgrupo2.entity.Paciente;
-import com.example.proyectogticsgrupo2.entity.Sede;
-import com.example.proyectogticsgrupo2.repository.AlergiaRepository;
-import com.example.proyectogticsgrupo2.repository.EspecialidadRepository;
-import com.example.proyectogticsgrupo2.repository.PacienteRepository;
-import com.example.proyectogticsgrupo2.repository.SedeRepository;
+import com.example.proyectogticsgrupo2.entity.*;
+import com.example.proyectogticsgrupo2.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,12 +22,14 @@ public class PacienteController {
     final SedeRepository sedeRepository;
     final EspecialidadRepository especialidadRepository;
     final AlergiaRepository alergiaRepository;
+    final SeguroRepository seguroRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
         this.alergiaRepository = alergiaRepository;
+        this.seguroRepository = seguroRepository;
     }
 
     /* INICIO */
@@ -79,6 +75,8 @@ public class PacienteController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
+            List<Seguro> seguroList = seguroRepository.findAll();
+            model.addAttribute("seguroList", seguroList);
             model.addAttribute("paciente", paciente);
             return "paciente/perfilEditar";
         }

@@ -57,13 +57,13 @@
 
                         <div class="card mb-4">
                             <div class="card-body">
-                                <form th:action="@{/Paciente/perfil/guardar}" method="post">
+                                <form th:action="@{/Paciente/perfil/guardar}" method="post" th:object="${paciente}">
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <p class="mb-0">Nombre completo</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="Juanchito Palacios Castro">
+                                            <input class="form-control mb-0" value="Juanchito Palacios Castro" name="nombre" th:value="${paciente.getNombreYApellido()}">
                                         </div>
                                     </div>
                                     <hr>
@@ -72,16 +72,7 @@
                                             <p class="mb-0">Edad</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="25 años">
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">DNI</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="72157734">
+                                            <input class="form-control mb-0" value="30/11/2002" th:field="*{fechanacimiento}">
                                         </div>
                                     </div>
                                     <hr>
@@ -90,7 +81,9 @@
                                             <p class="mb-0">Seguro</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="Pacífico EPS">
+                                            <select name="seguro">
+                                                <option th:each="seguro: ${seguroList}" th:tel="${seguro.nombre}" th:text="${seguro.nombre}"></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <hr>
@@ -99,7 +92,7 @@
                                             <p class="mb-0">Correo</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="juanpc@gmail.com">
+                                            <input class="form-control mb-0" value="juanpc@gmail.com" th:field="*{correo}">
                                         </div>
                                     </div>
                                     <hr>
@@ -108,7 +101,7 @@
                                             <p class="mb-0">Teléfono</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="965-790-551">
+                                            <input class="form-control mb-0" value="965-790-551" th:field="*{telefono}">
                                         </div>
                                     </div>
                                     <hr>
@@ -117,7 +110,16 @@
                                             <p class="mb-0">Dirección</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="Av. Las Nuevas Lomas, Lima">
+                                            <input class="form-control mb-0" value="Av. Las Nuevas Lomas, Lima" th:field="*{direccion}">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Alergias</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input class="form-control mb-0" value="Av. Las Nuevas Lomas, Lima" th:field="*{direccion}">
                                         </div>
                                     </div>
                                     <button type="submit" style="margin: 40px 0 0 0;" href="#"
