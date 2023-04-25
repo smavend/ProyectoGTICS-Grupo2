@@ -57,8 +57,10 @@ public class PacienteController {
         }
         List<Seguro> seguroList = seguroRepository.findAll();
         List<Especialidad> especialidadList = especialidadRepository.findAll();
+        List<Doctor> doctorList = doctorRepository.findAll();
         model.addAttribute("especialidadList", especialidadList);
         model.addAttribute("seguroList", seguroList);
+        model.addAttribute("doctorList",doctorList);
         return "paciente/reservar";
     }
 
