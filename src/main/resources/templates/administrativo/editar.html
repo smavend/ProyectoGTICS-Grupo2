@@ -39,22 +39,6 @@
 </head>
 
 <body>
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-          <div class="modal-header">
-            <div class="modal-title" id="staticBackdropLabel"></div>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-          </div>
-          <div class="modal-footer">
-            <a th:href="@{/administrativo}" type="button" class="btn btn-primary">Guardar cambios</a>
-            <a th:href="@{/administrativo}" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</a>
-          </div>
-        </div>
-    </div>
-  </div>
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -208,6 +192,13 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/administrativo/mensajeria}">
+          <i class="bi bi-people"></i>
+          <span>Mensajería</span>
+        </a>
       </li><!-- End Dashboard Nav -->
 
     </ul>
@@ -238,22 +229,22 @@
                 <span>| Paciente referido</span></h5>
 
               <!-- General Form Elements -->
-              <form class="row g-3">
+              <form class="row g-3" th:method="post" th:action="@{/administrativo/guardar}" th:object="${paciente}">
+                <input type="hidden" name="idPaciente" th:value="*{idPaciente}">
                 <div class="col-md-6">
-                  <label for="inputEmail5" class="form-label">Correo</label>
-                  <input type="email" class="form-control" id="inputEmail5" th:value="${paciente.correo}">
+                  <label for="correo" class="form-label">Correo</label>
+                  <input type="email" class="form-control" th:field="*{correo}">
                 </div>
                 <div class="col-md-6">
-                  <label for="inputAddress5" class="form-label">Dirección</label>
-                  <input type="text" class="form-control" id="inputAddres5s" th:value="${paciente.direccion}">
+                  <label for="direccion" class="form-label">Dirección</label>
+                  <input type="text" class="form-control" th:field="*{direccion}">
                 </div>
                 <div class="col-md-6">
-                  <label for="inputState" class="form-label">Distrito</label>
-                  <select id="inputState" class="form-select">
-                    <option th:each="distrito: ${listaDistritos}"
-                            th:text="${distrito.nombre}"
-                            th:value="${distrito.idDistrito}"
-                            th:selected="${paciente.distrito.idDistrito==distrito.idDistrito}">
+                  <label for="distrito" class="form-label">Distrito</label>
+                  <select class="form-select" th:field="*{distrito}">
+                    <option th:each="distritoitem: ${listaDistritos}"
+                            th:text="${distritoitem.nombre}"
+                            th:value="${distritoitem.idDistrito}">
                     </option>
                   </select>
                 </div>
@@ -272,13 +263,27 @@
                 </div>
                 <div class="text-center">
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Guardar cambios</button>
-                  <a type="submit" class="btn btn-secondary" th:href="@{/administrativo}">Cancelar</a>
+                  <a type="button" class="btn btn-secondary" th:href="@{/administrativo}">Cancelar</a>
+                </div>
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <div class="modal-title" id="staticBackdropLabel"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </form>
-
             </div>
           </div>
-
         </div>
       </div>
     </section>
