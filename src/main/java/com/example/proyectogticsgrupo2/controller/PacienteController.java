@@ -95,7 +95,11 @@ public class PacienteController {
         }
         List<Sede> sedeList =  sedeRepository.findAll();
         List<Especialidad> especialidadList = especialidadRepository.findAll();
-
+        Optional<Sede> optionalSede = sedeRepository.findById(idSede);
+        if (optionalSede.isPresent()){
+            Sede sede = optionalSede.get();
+            model.addAttribute("sede", sede);
+        }
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
