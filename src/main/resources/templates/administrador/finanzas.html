@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Finanzas - Administrador</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    <!-- Template Main CSS File -->
+    <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+    <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
+    <link href="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.css" rel="stylesheet"/>
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Mar 09 2023 with Bootstrap v5.2.3
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <a href="index}" class="logo d-flex align-items-center">
+            <img th:src="@{/assets/img/logo.png}" alt="">
+            <span class="d-none d-lg-block">Clinica INTERPUCP</span>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+
+
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+            <li class="nav-item d-block d-lg-none">
+                <a class="nav-link nav-icon search-bar-toggle " href="#">
+                    <i class="bi bi-search"></i>
+                </a>
+            </li><!-- End Search Icon-->
+
+            <li class="nav-item dropdown">
+
+                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-primary badge-number">4</span>
+                </a><!-- End Notification Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                    <li class="dropdown-header">
+                        You have 4 new notifications
+                        <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="notification-item">
+                        <i class="bi bi-exclamation-circle text-warning"></i>
+                        <div>
+                            <h4>Lorem Ipsum</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>30 min. ago</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="notification-item">
+                        <i class="bi bi-x-circle text-danger"></i>
+                        <div>
+                            <h4>Atque rerum nesciunt</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>1 hr. ago</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="notification-item">
+                        <i class="bi bi-check-circle text-success"></i>
+                        <div>
+                            <h4>Sit rerum fuga</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>2 hrs. ago</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="notification-item">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <div>
+                            <h4>Dicta reprehenderit</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>4 hrs. ago</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li class="dropdown-footer">
+                        <a href="#">Show all notifications</a>
+                    </li>
+
+                </ul><!-- End Notification Dropdown Items -->
+
+            </li><!-- End Notification Nav -->
+
+            <li class="nav-item dropdown">
+
+                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                    <i class="bi bi-chat-left-text"></i>
+                    <span class="badge bg-success badge-number">3</span>
+                </a><!-- End Messages Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                    <li class="dropdown-header">
+                        You have 3 new messages
+                        <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="message-item">
+                        <a href="#">
+                            <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>Maria Hudson</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>4 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="message-item">
+                        <a href="#">
+                            <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>Anna Nelson</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>6 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="message-item">
+                        <a href="#">
+                            <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>David Muldon</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>8 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="dropdown-footer">
+                        <a href="#">Show all messages</a>
+                    </li>
+
+                </ul><!-- End Messages Dropdown Items -->
+
+            </li><!-- End Messages Nav -->
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
+                </a><!-- End Profile Iamge Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>Jorge Dominguez</h6>
+                        <span>Administrador de sede</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile}">
+                            <i class="bi bi-person"></i>
+                            <span>Mi Perfil</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile}">
+                            <i class="bi bi-gear"></i>
+                            <span>Configuraciones</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Cerrar Sesión</span>
+                        </a>
+                    </li>
+
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+        </ul>
+    </nav><!-- End Icons Navigation -->
+
+</header><!-- End Header -->
+<br>
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar " >
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/administrador/dashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+        <li class="nav-item">
+            <a class="nav-link " th:href="@{/administrador/finanzas}">
+                <i class="bi bi-bar-chart"></i>
+                <span>Finanzas</span>
+            </a>
+        </li><!-- End Profile Page Nav -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/administrador/calendario}">
+                <i class="bi bi-card-list"></i>
+                <span>Calendario General</span>
+            </a>
+        </li><!-- End Profile Page Nav -->
+        <a class="nav-link collapsed" th:href="@{/administrador/mensajeria}">
+            <i class="bi bi-wechat"></i>
+            <span>Mensajería</span>
+        </a>
+        </li>
+    </ul>
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="pagetitle">
+            <h1>Finanzas de Sede</h1>
+        </div><!-- End Page Title -->
+        <div class="icon" >
+            <a th:href="@{/administrador/dashboard}"><i class="bi bi-arrow-return-left"></i></a>
+        </div>
+
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+
+            <!-- Left side columns -->
+            <div class="col-lg-10 container">
+                <div class="row">
+
+                    <div class="col-12">
+                        <div class="card top-selling overflow-auto container">
+                            <div class="info-card revenue-card">
+
+
+
+                                <h5 class="card-title">Gráfico de ingresos mensuales <span>| Sede San Isidro</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-currency-dollar"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>$124,264</h6>
+                                        <h4><span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">incrementó</span></h4>
+
+                                    </div>
+                                </div>
+                                <div id="lineChart"></div>
+
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                        new ApexCharts(document.querySelector("#lineChart"), {
+                                            series: [{
+                                                name: "Ingresos Totales",
+                                                data: [124000.31, 141798.32, 241563.25, 151563.24, 189258.36, 162254.25, 219563.23, 191178.89, 148587.26, 169563.23, 191178.89, 148587.26]
+                                            }],
+                                            chart: {
+                                                height: 350,
+                                                type: 'line',
+                                                zoom: {
+                                                    enabled: false
+                                                }
+                                            },
+                                            dataLabels: {
+                                                enabled: false
+                                            },
+                                            stroke: {
+                                                curve: 'straight'
+                                            },
+                                            grid: {
+                                                row: {
+                                                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                                                    opacity: 0.5
+                                                },
+                                            },
+                                            xaxis: {
+                                                categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Agost', 'Sep','Oct','Nov','Dic'],
+                                            }
+                                        }).render();
+                                    });
+                                </script>
+                                <!-- End Line Chart -->
+
+
+
+                            </div>
+
+                            <!-- Area Chart -->
+
+
+                        </div>
+                    </div><!-- End Top Selling -->
+
+                    <!-- Top Selling -->
+                    <div class="col-12">
+                        <div class="card top-selling overflow-auto container">
+
+
+
+                            <div class="card-body pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
+                                    <div>
+                                        <a class="btn btn-danger" href="#">
+                                            <i class="bi bi-file-earmark-pdf"></i>
+                                        </a>
+                                        <a class="btn btn-success" href="#">
+                                            <i class="bi bi-file-earmark-excel"></i>
+                                        </a>
+                                        <a class="btn btn-primary" href="#">
+                                            <i class="bi bi-file-earmark-text"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="d-flex flex-column" >
+
+                                    <table class="table " id="datatable">
+                                        <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Paciente</th>
+                                            <th>Concepto</th>
+                                            <th>Monto</th>
+                                            <th>Forma de Pago</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>01/01/2023</td>
+                                            <td>John Doe</td>
+                                            <td>Consulta médica</td>
+                                            <td>$100.00</td>
+                                            <td>Efectivo</td>
+                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+                                        </tr>
+                                        <tr>
+                                            <td>02/01/2023</td>
+                                            <td>Jane Smith</td>
+                                            <td>Análisis de sangre</td>
+                                            <td>$50.00</td>
+                                            <td>Tarjeta de crédito</td>
+                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>03/01/2023</td>
+                                            <td>Bob Johnson</td>
+                                            <td>Tratamiento dental</td>
+                                            <td>$200.00</td>
+                                            <td>Transferencia bancaria</td>
+                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>04/01/2023</td>
+                                            <td>Lucy Lee</td>
+                                            <td>Rayos X</td>
+                                            <td>$75.00</td>
+                                            <td>Efectivo</td>
+                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>05/01/2023</td>
+                                            <td>Adam Jones</td>
+                                            <td>Consulta médica</td>
+                                            <td>$120.00</td>
+                                            <td>Tarjeta de débito</td>
+                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>06/01/2023</td>
+                                            <td>Samantha Kim</td>
+                                            <td>Limpieza dental</td>
+                                            <td>$80.00</td>
+                                            <td>Transferencia bancaria</td>
+                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>07/01/2023</td>
+                                            <td>William Davis</td>
+                                            <td>Extracción de muelas</td>
+                                            <td>$350.00</td>
+                                            <td>Efectivo</td>
+                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+
+                                        </tr>
+
+                                        <!-- Aquí puedes agregar más filas con los ingresos de la clínica -->
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div><!-- End Top Selling -->
+
+
+                    <div class="col-12">
+                        <div class="card top-selling overflow-auto container">
+                            <div class="card-body pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">EGRESOS <span>| Sede San Isidro</span></h5>
+                                    <div>
+                                        <a class="btn btn-danger" href="#">
+                                            <i class="bi bi-file-earmark-pdf"></i>
+                                        </a>
+                                        <a class="btn btn-success" href="#">
+                                            <i class="bi bi-file-earmark-excel"></i>
+                                        </a>
+                                        <a class="btn btn-primary" href="#">
+                                            <i class="bi bi-file-earmark-text"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column" >
+
+                                    <table class="table table-striped " id="datatable2">
+                                        <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Concepto</th>
+                                            <th>Monto</th>
+                                            <th>Forma de Pago</th>
+                                            <th>Proveedor</th>
+                                            <th>Categoría de Gasto</th>
+                                            <th>Descripción</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>01/01/2023</td>
+                                            <td>Pago de renta de local</td>
+                                            <td>$1,000.00</td>
+                                            <td>Transferencia bancaria</td>
+                                            <td>Propietario del local</td>
+                                            <td>Gastos Generales</td>
+                                            <td>Pago de la renta del mes de enero</td>
+                                        </tr>
+                                        <tr>
+                                            <td>05/01/2023</td>
+                                            <td>Compra de suministros médicos</td>
+                                            <td>$500.00</td>
+                                            <td>Tarjeta de crédito</td>
+                                            <td>Proveedor de suministros</td>
+                                            <td>Gastos de Suministros</td>
+                                            <td>Compra de suministros médicos para el mes de enero</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10/01/2023</td>
+                                            <td>Pago de servicios de limpieza</td>
+                                            <td>$150.00</td>
+                                            <td>Efectivo</td>
+                                            <td>Compañía de limpieza</td>
+                                            <td>Gastos de Limpieza</td>
+                                            <td>Pago de servicios de limpieza para el mes de enero</td>
+                                        </tr>
+                                        <tr>
+                                            <td>01/01/2023</td>
+                                            <td>Pago de renta de local</td>
+                                            <td>$1,000.00</td>
+                                            <td>Transferencia bancaria</td>
+                                            <td>Propietario del local</td>
+                                            <td>Gastos Generales</td>
+                                            <td>Pago de la renta del mes de enero</td>
+                                        </tr>
+                                        <tr>
+                                            <td>05/01/2023</td>
+                                            <td>Compra de suministros médicos</td>
+                                            <td>$500.00</td>
+                                            <td>Tarjeta de crédito</td>
+                                            <td>Proveedor de suministros</td>
+                                            <td>Gastos de Suministros</td>
+                                            <td>Compra de suministros médicos para el mes de enero</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10/01/2023</td>
+                                            <td>Pago de servicios de limpieza</td>
+                                            <td>$150.00</td>
+                                            <td>Efectivo</td>
+                                            <td>Compañía de limpieza</td>
+                                            <td>Gastos de Limpieza</td>
+                                            <td>Pago de servicios de limpieza para el mes de enero</td>
+                                        </tr>
+                                        <!-- Puedes agregar más filas con información sobre los egresos de la clínica -->
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div><!-- End Left side columns -->
+
+            <!-- Right side columns -->
+
+
+
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+
+    <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+
+    </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- DataTables from jQuery-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/jsAdministrador.js}"></script>
+<!-- DataTables activate -->
+<script>
+    $(document).ready(function () {
+        $('#datatable').DataTable({
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "Ningún registro encontrado",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar:",
+                "loadingRecords": "Cargando...",
+                "paginate":{
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior",
+                }
+            },
+            "columnDefs": [
+                {"margin-bottom": "10px"}
+            ]
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#datatable2').DataTable({
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "Ningún registro encontrado",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar:",
+                "loadingRecords": "Cargando...",
+                "paginate":{
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior",
+                }
+            },
+            "pageLength": 5,
+            "columnDefs": [
+                {"margin-bottom": "10px"}
+            ]
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const series = {
+            "monthDataSeries1": {
+                "prices": [
+                    8107.85,
+                    8128.0,
+                    8122.9,
+                    8165.5,
+                    8340.7,
+                    8423.7,
+                    8423.5,
+                    8514.3,
+                    8481.85,
+                    8487.7,
+                    8506.9,
+                    8626.2,
+                    8668.95,
+                    8602.3,
+                    8607.55,
+                    8512.9,
+                    8496.25,
+                    8600.65,
+                    8881.1,
+                    9340.85
+                ],
+                "dates": [
+                    "13 Nov 2017",
+                    "14 Nov 2017",
+                    "15 Nov 2017",
+                    "16 Nov 2017",
+                    "17 Nov 2017",
+                    "20 Nov 2017",
+                    "21 Nov 2017",
+                    "22 Nov 2017",
+                    "23 Nov 2017",
+                    "24 Nov 2017",
+                    "27 Nov 2017",
+                    "28 Nov 2017",
+                    "29 Nov 2017",
+                    "30 Nov 2017",
+                    "01 Dec 2017",
+                    "04 Dec 2017",
+                    "05 Dec 2017",
+                    "06 Dec 2017",
+                    "07 Dec 2017",
+                    "08 Dec 2017"
+                ]
+            },
+            "monthDataSeries2": {
+                "prices": [
+                    8423.7,
+                    8423.5,
+                    8514.3,
+                    8481.85,
+                    8487.7,
+                    8506.9,
+                    8626.2,
+                    8668.95,
+                    8602.3,
+                    8607.55,
+                    8512.9,
+                    8496.25,
+                    8600.65,
+                    8881.1,
+                    9040.85,
+                    8340.7,
+                    8165.5,
+                    8122.9,
+                    8107.85,
+                    8128.0
+                ],
+                "dates": [
+                    "13 Nov 2017",
+                    "14 Nov 2017",
+                    "15 Nov 2017",
+                    "16 Nov 2017",
+                    "17 Nov 2017",
+                    "20 Nov 2017",
+                    "21 Nov 2017",
+                    "22 Nov 2017",
+                    "23 Nov 2017",
+                    "24 Nov 2017",
+                    "27 Nov 2017",
+                    "28 Nov 2017",
+                    "29 Nov 2017",
+                    "30 Nov 2017",
+                    "01 Dec 2017",
+                    "04 Dec 2017",
+                    "05 Dec 2017",
+                    "06 Dec 2017",
+                    "07 Dec 2017",
+                    "08 Dec 2017"
+                ]
+            },
+            "monthDataSeries3": {
+                "prices": [
+                    7114.25,
+                    7126.6,
+                    7116.95,
+                    7203.7,
+                    7233.75,
+                    7451.0,
+                    7381.15,
+                    7348.95,
+                    7347.75,
+                    7311.25,
+                    7266.4,
+                    7253.25,
+                    7215.45,
+                    7266.35,
+                    7315.25,
+                    7237.2,
+                    7191.4,
+                    7238.95,
+                    7222.6,
+                    7217.9,
+                    7359.3,
+                    7371.55,
+                    7371.15,
+                    7469.2,
+                    7429.25,
+                    7434.65,
+                    7451.1,
+                    7475.25,
+                    7566.25,
+                    7556.8,
+                    7525.55,
+                    7555.45,
+                    7560.9,
+                    7490.7,
+                    7527.6,
+                    7551.9,
+                    7514.85,
+                    7577.95,
+                    7592.3,
+                    7621.95,
+                    7707.95,
+                    7859.1,
+                    7815.7,
+                    7739.0,
+                    7778.7,
+                    7839.45,
+                    7756.45,
+                    7669.2,
+                    7580.45,
+                    7452.85,
+                    7617.25,
+                    7701.6,
+                    7606.8,
+                    7620.05,
+                    7513.85,
+                    7498.45,
+                    7575.45,
+                    7601.95,
+                    7589.1,
+                    7525.85,
+                    7569.5,
+                    7702.5,
+                    7812.7,
+                    7803.75,
+                    7816.3,
+                    7851.15,
+                    7912.2,
+                    7972.8,
+                    8145.0,
+                    8161.1,
+                    8121.05,
+                    8071.25,
+                    8088.2,
+                    8154.45,
+                    8148.3,
+                    8122.05,
+                    8132.65,
+                    8074.55,
+                    7952.8,
+                    7885.55,
+                    7733.9,
+                    7897.15,
+                    7973.15,
+                    7888.5,
+                    7842.8,
+                    7838.4,
+                    7909.85,
+                    7892.75,
+                    7897.75,
+                    7820.05,
+                    7904.4,
+                    7872.2,
+                    7847.5,
+                    7849.55,
+                    7789.6,
+                    7736.35,
+                    7819.4,
+                    7875.35,
+                    7871.8,
+                    8076.5,
+                    8114.8,
+                    8193.55,
+                    8217.1,
+                    8235.05,
+                    8215.3,
+                    8216.4,
+                    8301.55,
+                    8235.25,
+                    8229.75,
+                    8201.95,
+                    8164.95,
+                    8107.85,
+                    8128.0,
+                    8122.9,
+                    8165.5,
+                    8340.7,
+                    8423.7,
+                    8423.5,
+                    8514.3,
+                    8481.85,
+                    8487.7,
+                    8506.9,
+                    8626.2
+                ],
+                "dates": [
+                    "02 Jun 2017",
+                    "05 Jun 2017",
+                    "06 Jun 2017",
+                    "07 Jun 2017",
+                    "08 Jun 2017",
+                    "09 Jun 2017",
+                    "12 Jun 2017",
+                    "13 Jun 2017",
+                    "14 Jun 2017",
+                    "15 Jun 2017",
+                    "16 Jun 2017",
+                    "19 Jun 2017",
+                    "20 Jun 2017",
+                    "21 Jun 2017",
+                    "22 Jun 2017",
+                    "23 Jun 2017",
+                    "27 Jun 2017",
+                    "28 Jun 2017",
+                    "29 Jun 2017",
+                    "30 Jun 2017",
+                    "03 Jul 2017",
+                    "04 Jul 2017",
+                    "05 Jul 2017",
+                    "06 Jul 2017",
+                    "07 Jul 2017",
+                    "10 Jul 2017",
+                    "11 Jul 2017",
+                    "12 Jul 2017",
+                    "13 Jul 2017",
+                    "14 Jul 2017",
+                    "17 Jul 2017",
+                    "18 Jul 2017",
+                    "19 Jul 2017",
+                    "20 Jul 2017",
+                    "21 Jul 2017",
+                    "24 Jul 2017",
+                    "25 Jul 2017",
+                    "26 Jul 2017",
+                    "27 Jul 2017",
+                    "28 Jul 2017",
+                    "31 Jul 2017",
+                    "01 Aug 2017",
+                    "02 Aug 2017",
+                    "03 Aug 2017",
+                    "04 Aug 2017",
+                    "07 Aug 2017",
+                    "08 Aug 2017",
+                    "09 Aug 2017",
+                    "10 Aug 2017",
+                    "11 Aug 2017",
+                    "14 Aug 2017",
+                    "16 Aug 2017",
+                    "17 Aug 2017",
+                    "18 Aug 2017",
+                    "21 Aug 2017",
+                    "22 Aug 2017",
+                    "23 Aug 2017",
+                    "24 Aug 2017",
+                    "28 Aug 2017",
+                    "29 Aug 2017",
+                    "30 Aug 2017",
+                    "31 Aug 2017",
+                    "01 Sep 2017",
+                    "04 Sep 2017",
+                    "05 Sep 2017",
+                    "06 Sep 2017",
+                    "07 Sep 2017",
+                    "08 Sep 2017",
+                    "11 Sep 2017",
+                    "12 Sep 2017",
+                    "13 Sep 2017",
+                    "14 Sep 2017",
+                    "15 Sep 2017",
+                    "18 Sep 2017",
+                    "19 Sep 2017",
+                    "20 Sep 2017",
+                    "21 Sep 2017",
+                    "22 Sep 2017",
+                    "25 Sep 2017",
+                    "26 Sep 2017",
+                    "27 Sep 2017",
+                    "28 Sep 2017",
+                    "29 Sep 2017",
+                    "03 Oct 2017",
+                    "04 Oct 2017",
+                    "05 Oct 2017",
+                    "06 Oct 2017",
+                    "09 Oct 2017",
+                    "10 Oct 2017",
+                    "11 Oct 2017",
+                    "12 Oct 2017",
+                    "13 Oct 2017",
+                    "16 Oct 2017",
+                    "17 Oct 2017",
+                    "18 Oct 2017",
+                    "19 Oct 2017",
+                    "23 Oct 2017",
+                    "24 Oct 2017",
+                    "25 Oct 2017",
+                    "26 Oct 2017",
+                    "27 Oct 2017",
+                    "30 Oct 2017",
+                    "31 Oct 2017",
+                    "01 Nov 2017",
+                    "02 Nov 2017",
+                    "03 Nov 2017",
+                    "06 Nov 2017",
+                    "07 Nov 2017",
+                    "08 Nov 2017",
+                    "09 Nov 2017",
+                    "10 Nov 2017",
+                    "13 Nov 2017",
+                    "14 Nov 2017",
+                    "15 Nov 2017",
+                    "16 Nov 2017",
+                    "17 Nov 2017",
+                    "20 Nov 2017",
+                    "21 Nov 2017",
+                    "22 Nov 2017",
+                    "23 Nov 2017",
+                    "24 Nov 2017",
+                    "27 Nov 2017",
+                    "28 Nov 2017"
+                ]
+            }
+        }
+        new ApexCharts(document.querySelector("#areaChart"), {
+            series: [{
+                name: "INGRESOS",
+                data: series.monthDataSeries1.prices
+            }],
+            chart: {
+                type: 'area',
+                height: 350,
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+
+            labels: series.monthDataSeries1.dates,
+            xaxis: {
+                type: 'datetime',
+            },
+            yaxis: {
+                opposite: true
+            },
+            legend: {
+                horizontalAlign: 'left'
+            }
+        }).render();
+    });
+</script>
+
+
+</body>
+
+</html>
