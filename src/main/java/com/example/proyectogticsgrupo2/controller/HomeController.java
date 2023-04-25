@@ -1,29 +1,40 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.entity.Distrito;
 import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Paciente;
+import com.example.proyectogticsgrupo2.entity.Seguro;
+import com.example.proyectogticsgrupo2.repository.DistritoRepository;
 import com.example.proyectogticsgrupo2.repository.DoctorRepository;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
+import com.example.proyectogticsgrupo2.repository.SeguroRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class HomeController {
     final PacienteRepository pacienteRepository;
     final DoctorRepository doctorRepository;
+    final DistritoRepository distritoRepository;
+    final SeguroRepository seguroRepository;
 
-    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository) {
+    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
+        this.distritoRepository = distritoRepository;
+        this.seguroRepository = seguroRepository;
     }
 
     @GetMapping("/")
@@ -55,7 +66,11 @@ public class HomeController {
         return "general/confirmacioncontrasenia";
     }
     @GetMapping("/signin")
-    public String vistaRegistro(){
+    public String vistaRegistro(Model model){
+        List<Distrito> list = distritoRepository.findAll();
+        List<Seguro> list1 = seguroRepository.findAll();
+        model.addAttribute("distritos", list);
+        model.addAttribute("seguros", list1);
         return "general/registro";
     }
 
@@ -81,5 +96,10 @@ public class HomeController {
             InputStream is = new ByteArrayInputStream(doctor.getFoto());
             IOUtils.copy(is, response.getOutputStream());
         }
+    }
+    @PostMapping("/general/registrar")
+    public String registrarPaciente(Paciente paciente){
+        pacienteRepository.save(paciente);
+        return "general/confirmacionregistro";
     }
 }
