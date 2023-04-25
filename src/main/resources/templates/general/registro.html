@@ -73,35 +73,29 @@
                     <p class="text-center small">Ingresa los datos solicitados para comenzar como paciente en la clínica.</p>
                   </div>
 
-                  <form class="row g-3">
+                  <form class="row g-3" th:method="post" th:action="@{/general/registrar}">
                     <div class="row col-md-6">
                       <div class="col-md-12">
                         <label for="nombre" class="form-label">Nombres<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="nombre">
+                        <input type="text" class="form-control" id="nombre" name="nombre">
                       </div>
                       <div class="col-md-12">
                         <label for="apellidos" class="form-label">Apellidos<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="apellidos" >
+                        <input type="text" class="form-control" id="apellidos" name="apellidos">
                       </div>
                       <div class="col-md-12">
                         <label for="correo" class="form-label">Correo electrónico<span style="color:red;">*</span></label>
-                        <input type="email" class="form-control" id="correo" >
+                        <input type="email" class="form-control" id="correo" name="correo">
                       </div>
                       <div class="col-md-12">
-                        <label for="dni" class="form-label">DNI<span style="color:red;">*</span></label>
-                        <input type="number" class="form-control" id="dni" >
+                        <label for="idPaciente" class="form-label">DNI<span style="color:red;">*</span></label>
+                        <input type="number" class="form-control" id="idPaciente" name="idPaciente">
                       </div>
                       <div class="col-md-12">
                         <label for="seguro" class="form-label">Seguro médico<span style="color:red;">*</span></label>
-                        <select id="seguro" class="form-select">
+                        <select id="seguro" class="form-select" name="seguro">
                           <option>--Seleccione una opción--</option>
-                          <option>Rimac EPS</option>
-                          <option>Rimac Seguros</option>
-                          <option>Pacífico EPS</option>
-                          <option>Pacífico Seguros</option>
-                          <option>Mapfre</option>
-                          <option>Plan Salud</option>
-                          <option>Sin seguro</option>
+                          <option th:each="seguro: ${seguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                         </select>
                       </div>
                       <div class="col-md-12">
@@ -121,32 +115,33 @@
                           </div>
                         </div>
                         <div class="col-md-12">
-                          <input style="display: none;" type="text" class="form-control" id="alergias" placeholder="Abejas, cetirizina, ...">
+                          <input style="display: none;" type="text" class="form-control" id="alergias" name="alergias" placeholder="Abejas, cetirizina, ...">
                         </div>
                       </div>
                     </div>
                     <div class="row col-md-6">
-                      <h5 class="card-title pb-0 fs-5">Lugar de residencia</h5>
                       <div class="col-md-12">
                         <label for="distrito" class="form-label">Distrito<span style="color:red;">*</span></label>
-                        <select id="distrito" class="form-select">
+                        <select id="distrito" class="form-select" name="distrito">
                           <option>--Seleccione una opción--</option>
-                          <option>Distrito 1</option>
-                          <option>Distrito 2</option>
-                          <option>Distrito 3</option>
-                          <option>Distrito 4</option>
-                          <option>Distrito 5</option>
-                          <option>Distrito 6</option>
-                          <option>Distrito 7</option>
-                          <option>Distrito 8</option>
-                          <option>Distrito 9</option>
-                          <option>Distrito 10</option>
-                          <option>Distrito 11</option>
+                          <option th:each="distrito :${distritos}" th:value="${distrito.idDistrito}" th:text="${distrito.nombre}"></option>
                         </select>
                       </div>
                       <div class="col-md-12">
                         <label for="direccion" class="form-label">Dirección<span style="color:red;">*</span></label>
-                        <input type="number" class="form-control" id="direccion">
+                        <input type="text" class="form-control" id="direccion" name="direccion">
+                      </div>
+                      <div class="col-md-12">
+                        <label for="fechanacimiento" class="form-label">Fecha de nacimiento<span style="color:red;">*</span></label>
+                        <input type="date" class="form-control" id="fechanacimiento" name="fechanacimiento">
+                      </div>
+                      <div class="col-md-12">
+                        <label for="genero" class="form-label">Género<span style="color:red;">*</span></label>
+                        <select id="genero" class="form-select" name="genero">
+                          <option>--Seleccione una opción--</option>
+                          <option value="M">Masculino</option>
+                          <option value="F">Femenino</option>
+                        </select>
                       </div>
                       <div style="padding-bottom: 5px;" class="col-md-12">
                         <hr>  
@@ -161,7 +156,7 @@
                       </div>
                       <br>
                       <div style="padding-bottom: 5px;" class="text-center">
-                        <a type="submit" class="btn btn-primary" th:href="@{/signin/confirmacion}">Continuar</a>
+                        <button type="submit" class="btn btn-primary">Continuar</button>
                       </div>
                       <div class="col-12">
                         <p class="small mb-0">¿Ya tienes una cuenta? <a th:href="@{/login}">Inicia sesión aquí.</a></p>
