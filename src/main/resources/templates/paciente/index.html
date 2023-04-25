@@ -44,13 +44,13 @@
 
             <section id="Sedes">
                 <div class="row align-items-start contenedor mx-0">
-                    <div class="col-md-4">
-                        <a th:href="@{/Paciente/doctores}">
+                    <div class="col-md-4" th:each="sede:${sedeList}">
+                        <a th:href="@{/Paciente/doctores(idSede=${sede.idSede})}">
                             <figure>
                                 <img class="sedeImg" th:src="@{/assets/img/sede1.jpg}">
                                 <div class="capa">
                                     <h6>CLINICAS</h6>
-                                    <h2 class="fw-bold" style="color: darkblue">San Isidro</h2>
+                                    <h2 class="fw-bold" style="color: darkblue" th:text="${sede.nombre}">San Isidro</h2>
                                     <p>Av. Javier Prado Este 1066, Lima.</p>
 
                                     <div class="d-flex align-items-center justify-content-end"
@@ -64,44 +64,7 @@
                             </figure>
                         </a>
                     </div>
-                    <div class="col-md-4">
-                        <a th:href="@{/Paciente/doctores}">
-                            <figure>
-                                <img class="sedeImg" th:src="@{/assets/img/sede2.jpg}">
-                                <div class="capa">
-                                    <h6>CLINICAS</h6>
-                                    <h2 class="fw-bold" style="color: darkblue">Surco</h2>
-                                    <p>Av. Polo N° 345, Lima.</p>
 
-                                    <div class="d-flex align-items-center justify-content-end"
-                                         style="margin-right: 30px">
-                                        <span>Conoce la sede</span>
-                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
-                                           style="color: darkgray"></i>
-                                    </div>
-                                </div>
-                            </figure>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a th:href="@{/Paciente/doctores}">
-                            <figure>
-                                <img class="sedeImg" th:src="@{/assets/img/sede1.jpg}">
-                                <div class="capa">
-                                    <h6>CLINICAS</h6>
-                                    <h2 class="fw-bold" style="color: darkblue">San Miguel</h2>
-                                    <p>Av. La Marina N° 2997, Lima.</p>
-
-                                    <div class="d-flex align-items-center justify-content-end"
-                                         style="margin-right: 30px">
-                                        <span>Conoce la sede</span>
-                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
-                                           style="color: darkgray"></i>
-                                    </div>
-                                </div>
-                            </figure>
-                        </a>
-                    </div>
                 </div>
             </section>
 

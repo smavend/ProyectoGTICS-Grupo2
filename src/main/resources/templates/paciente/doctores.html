@@ -39,7 +39,8 @@
                     <div class="col-lg-6 filtroDoctor d-flex justify-content-start">
                         <label class="labelFiltroDoctor">Sede</label>
                         <select class="selectFiltroDoctor">
-                            <option th:each="sede: ${sedeList}" th:value="${sede.nombre}" th:text="${sede.nombre}"></option>
+                            <option th:text="${sede.nombre}"></option>
+                            <option th:each="sedes: ${sedeList}" th:value="${sedes.nombre}" th:text="${sedes.nombre}" th:if="${sedes.nombre} != ${sede.nombre}"></option>
                         </select>
                     </div>
                     <div class="col-lg-6 filtroDoctor d-flex justify-content-start">

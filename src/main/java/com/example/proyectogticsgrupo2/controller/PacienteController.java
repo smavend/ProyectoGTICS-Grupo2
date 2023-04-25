@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ public class PacienteController {
     }
 
     /* INICIO */
+    int idClinica = 1;
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model){
         Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
@@ -36,6 +38,8 @@ public class PacienteController {
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
         }
+        List<Sede> sedeList = sedeRepository.listarSedes(idClinica);
+        model.addAttribute("sedeList", sedeList);
         return "paciente/index";
     }
 
@@ -73,15 +77,20 @@ public class PacienteController {
 
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
-    public String verDoctores(Model model){
+    public String verDoctores(@RequestParam("idSede") int idSede,
+                                Model model){
         Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
         }
-
-        List<Sede> sedeList =  sedeRepository.findAll();
+        List<Sede> sedeList =  sedeRepository.listarSedes(idClinica);
         List<Especialidad> especialidadList = especialidadRepository.findAll();
+        Optional<Sede> optionalSede = sedeRepository.findById(idSede);
+        if (optionalSede.isPresent()){
+            Sede sede = optionalSede.get();
+            model.addAttribute("sede", sede);
+        }
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
