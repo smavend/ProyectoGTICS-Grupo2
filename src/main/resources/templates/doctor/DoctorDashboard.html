@@ -349,7 +349,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody style="text-align: center">
-                                                        <tr th:each="cita,obj: ${listaCitas}">
+                                                        <tr th:each="cita,obj: ${listaCitas}" th:with="horario=${listaHorarios[obj.index]}">
 
 
                                                             <td style="font-size: 1rem" th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}">
@@ -360,7 +360,7 @@
 
                                                             </td>
 
-                                                            <td style="font-size: 1rem;color: black" th:text="${cita.inicio}">
+                                                            <td style="font-size: 1rem;color: black" th:text="${horario}">
 
                                                             </td>
 

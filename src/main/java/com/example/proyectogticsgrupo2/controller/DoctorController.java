@@ -55,6 +55,7 @@ public class DoctorController {
             String horaFin = partes2Fin[0] + ":" + partes2Fin[1];
 
             String horario = horaInicio + " - " + horaFin;
+            System.out.println(horario);
             listaHorarios.add(horario);
         }
 
