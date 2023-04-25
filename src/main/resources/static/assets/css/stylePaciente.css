@@ -1832,6 +1832,14 @@ p{
     font-family: 'Nunito', sans-serif;
 }
 
+.alergia{
+    display: inline-block;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    margin-right: 10px;
+    padding: 8px 20px;
+}
+
 .botonEditar{
     border: none;
     border-radius: 50px;

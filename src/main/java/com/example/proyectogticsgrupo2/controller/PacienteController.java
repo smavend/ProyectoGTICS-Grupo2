@@ -74,11 +74,18 @@ public class PacienteController {
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
     public String verDoctores(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
+
         List<Sede> sedeList =  sedeRepository.findAll();
         List<Especialidad> especialidadList = especialidadRepository.findAll();
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
+
     }
 
     @GetMapping("/perfilDoctor")
