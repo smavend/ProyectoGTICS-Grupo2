@@ -54,6 +54,7 @@ public class AdministradorController {
     public String perfil(){return "administrador/perfil";}
     @GetMapping("/finanzas-recibos")
     public String finanzas_recibos(){return "administrador/finanzas-recibos";}
+    //###########################################################################
     @GetMapping("/crearPaciente")
     public String crearPaciente(Model model){
     List<Seguro> listaSeguro  = seguroRepository.findAll();
@@ -70,30 +71,25 @@ public class AdministradorController {
             model.addAttribute("msg", "Debe subir un archivo");
             return "redirect:/administrador/crearPaciente";
         }
-
         String fileName = file.getOriginalFilename();
-
         if (fileName.contains("..")) {
             model.addAttribute("msg", "No se permiten '..' en el archivo");
             return "redirect:/administrador/crearPaciente";
         }
-
         try {
-
             paciente.setFoto(file.getBytes());
             paciente.setFotoname(fileName);
             paciente.setFotocontenttype(file.getContentType());
             paciente.setFecharegistro(LocalDateTime.now());
             pacienteRepository.save(paciente);
             return "redirect:/administrador/dashboard";
-
         } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("msg", "ocurrió un error al subir el archivo");
             return "redirect:/administrador/crearPaciente";
         }
     }
-
+    //###########################################################################
     @GetMapping("/crearDoctor")
     public String crearDoctor(Model model){
         List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
@@ -101,13 +97,30 @@ public class AdministradorController {
         model.addAttribute("listaSede",listaSede);
         model.addAttribute("listaEspecialidad",listaEspecialidad);
         return "administrador/crearDoctor";}
-
-    @PostMapping("/nuevoDoctor")
-    public String guardarDcotor(Doctor doctor){
-
-        doctorRepository.save(doctor);
-        System.out.println("guardoooooooo");
-        return "redirect:/administrador/dashboard";
+    @PostMapping("/guardarDoctor")
+    public String guardarDoctor(@RequestParam("archivo") MultipartFile file,
+                                 Doctor doctor, Model model){
+        if (file.isEmpty()) {
+            model.addAttribute("msg", "Debe subir un archivo");
+            return "redirect:/administrador/crearDoctor";
+        }
+        String fileName = file.getOriginalFilename();
+        if (fileName.contains("..")) {
+            model.addAttribute("msg", "No se permiten '..' en el archivo");
+            return "redirect:/administrador/crearDoctor";
+        }
+        try {
+            doctor.setFoto(file.getBytes());
+            doctor.setFotoname(fileName);
+            doctor.setFotocontenttype(file.getContentType());
+            doctor.setEstado(1);
+            doctorRepository.save(doctor);
+            return "redirect:/administrador/dashboard";
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("msg", "ocurrió un error al subir el archivo");
+            return "redirect:/administrador/crearDoctor";
+        }
     }
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
@@ -116,9 +129,10 @@ public class AdministradorController {
     @GetMapping("/historialPaciente")
     public String historialPaciente(){return "administrador/historialPaciente";}
 
-    @GetMapping("/image/{id}")
+    @GetMapping("/imagePaci/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String dni) {
         Optional<Paciente> opt = pacienteRepository.findById(dni);
+
         if (opt.isPresent()) {
             Paciente p = opt.get();
 
@@ -127,6 +141,27 @@ public class AdministradorController {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
                     MediaType.parseMediaType(p.getFotocontenttype()));
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
+    @GetMapping("/imageDoc/{id}")
+    public ResponseEntity<byte[]> mostrarImagenDoc(@PathVariable("id") String dni) {
+        Optional<Doctor> opt = doctorRepository.findById(dni);
+
+        if (opt.isPresent()) {
+            Doctor doc = opt.get();
+
+            byte[] imagenComoBytes = doc.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(doc.getFotocontenttype()));
 
             return new ResponseEntity<>(
                     imagenComoBytes,
