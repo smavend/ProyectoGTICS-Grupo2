@@ -35,9 +35,9 @@ public class DoctorController {
         this.citaRepository = citaRepository;
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping(value={"/dashboard","/",""})
     public String dashboard(Model model) {
-        List<Cita> optionalCita = citaRepository.BuscarPorDoctor(1);
+        List<Cita> optionalCita = citaRepository.BuscarPorDoctor("09568265");
 
         ArrayList<String> listaHorarios= new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class DoctorController {
 
 
 
-        model.addAttribute("listaCitas", citaRepository.BuscarPorDoctor(1));//CAMBIAR POR ID SESION
+        model.addAttribute("listaCitas", citaRepository.BuscarPorDoctor("09568265"));//CAMBIAR POR ID SESION
         model.addAttribute("listaHorarios", listaHorarios);
 
         return "doctor/DoctorDashboard";
@@ -69,7 +69,7 @@ public class DoctorController {
 
     @GetMapping("/recibo")
     public String recibo(Model model) {
-        List<Cita> optionalCita = citaRepository.BuscarPorDoctor(1);
+        List<Cita> optionalCita = citaRepository.BuscarPorDoctor("09568265");
         ArrayList<String> listaHorarios= new ArrayList<>();
 
         for (int i = 0; i < optionalCita.size(); i++) {
@@ -86,7 +86,12 @@ public class DoctorController {
         return "doctor/DoctorRecibos";
     }
 
+    @GetMapping("/verRecibo")
+    public String verRecibo(Model model) {
 
+
+        return "doctor/DoctorVerRecibo";
+    }
 
     @GetMapping("/calendario")
     public String reportes(Model model){
@@ -119,7 +124,7 @@ public class DoctorController {
 
     @GetMapping("/mensajeria")
     public String mensajeria(Model model){
-        List<Cita> citaList=citaRepository.BuscarPorDoctor(1); //CAMBIAR CON ID DE SESION
+        List<Cita> citaList=citaRepository.BuscarPorDoctor("09568265"); //CAMBIAR CON ID DE SESION
         model.addAttribute("listaCitas",citaList);
         return "doctor/DoctorMensajería";
     }
@@ -128,5 +133,11 @@ public class DoctorController {
     public String guardarReporte(Cita cita, RedirectAttributes attr) {
         citaRepository.save(cita);
         return "redirect:/doctor/dashboard";
+    }
+
+    @GetMapping("/prueba")
+    public String prueba(Model model){
+
+        return "doctor/prueba";
     }
 }

@@ -38,7 +38,6 @@ public class Paciente {
     private String correo;
 
     @Lob
-    @Column(nullable = false)
     private byte[] foto;
 
     @ManyToOne
@@ -48,4 +47,15 @@ public class Paciente {
     @Column(nullable = false)
     private String direccion;
 
+    private String fotoname;
+    private String fotocontenttype;
+
+    @Column(nullable = false)
+    private String fechanacimiento;
+
+    @Column(nullable = false)
+    private String genero;
+
+    @Column(nullable = false)
+    private String fecharegistro;
 }

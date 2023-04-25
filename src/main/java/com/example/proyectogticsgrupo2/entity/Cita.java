@@ -25,11 +25,10 @@ public class Cita {
     private String inicio;
     @Column(nullable = false)
     private String fin;
-    @Column(nullable = false)
     private String receta;
     private String bitacora;
     @Column(nullable = false)
-    private String modalidad;
+    private int modalidad;
     @Column(nullable = false)
 
     @Lob
@@ -38,14 +37,15 @@ public class Cita {
     private String link_cita;
     private String direccion;
     @Column(nullable = false)
-    private String estado;
+    private int estado;
     private String fecha_emision;
 
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)
     private Sede sede;
 
-    private String tipo;
+    @Column(nullable = false)
+    private int es_examen;
 
     @ManyToOne
     @JoinColumn(name = "id_cita_previa")

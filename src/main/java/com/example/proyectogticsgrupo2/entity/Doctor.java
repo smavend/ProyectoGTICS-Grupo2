@@ -18,7 +18,7 @@ public class Doctor {
     @Column(nullable = false)
     private String apellidos;
     @Column(nullable = false)
-    private String estado;
+    private int estado;
 
     @ManyToOne
     @JoinColumn(name = "especialidad_id_especialidad",nullable = false)
@@ -29,7 +29,7 @@ public class Doctor {
     private Sede sede;
 
     @Column(nullable = false)
-    private String duracion_cita_horas;
+    private float duracion_cita_horas;
 
     @ManyToOne
     @JoinColumn(name = "horario_id_horario",nullable = false)
@@ -38,10 +38,15 @@ public class Doctor {
     @Column(nullable = false)
     private String correo;
 
+    private String precio;
     @Lob
     private byte[] foto;
 
-    private String precio;
+    private String fotoname;
+    private String fotocontenttype;
+    private String genero;
+
+
 
 
 }
