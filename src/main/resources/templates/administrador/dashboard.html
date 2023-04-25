@@ -387,7 +387,8 @@
                                 Iker Osco Chavez</a> </h5>
                               <p th:text="${paciente.correo}">okerosco@example.com</p>
                             </div>
-                            <span class="text-muted ms-2 float-end"><h6 th:text="${paciente.estado}">•Activo</h6></span>
+                            <span class="text-muted ms-2 float-end"><h6 th:if="${paciente.estado == 1}" th:text="Activo"></h6></span>
+                            
                           </div>
                         </div>
                       </td>
