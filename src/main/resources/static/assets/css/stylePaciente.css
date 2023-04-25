@@ -39,10 +39,28 @@ font-family: "Nunito", sans-serif;
     scrollbar-width: thin;
     scrollbar-color: #aab7cf transparent;
 
-padding: 20px 10px 8px 10px;
+padding: 20px 10px 15px 10px;
 transition: all 0.3s;
 }
+/*styles mensajeria*/
+.mensajeria{
+    font-family: 'Poppins', sans-serif;
+}
+.ellipsis{
+    white-space: nowrap; /* para evitar el salto de línea */
+    overflow: hidden; /* para ocultar el texto que no cabe en el contenedor */
+    text-overflow: ellipsis; /* para mostrar los tres puntos (...) al final del texto que no cabe */
+}
+.scrollable1{
+    max-height: 550px; /* Establece una altura máxima para el div */
+    overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
+}
+.scrollable2{
+    max-height: 450px; /* Establece una altura máxima para el div */
+    overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
+}
 
+/*End styles mensajeria*/
 @media (max-width: 1199px) {
     #main{
         padding: 15px;
@@ -1270,9 +1288,12 @@ background: #3e4f6f;
 # Footer
 --------------------------------------------------------------*/
 .footer {
-padding: 20px 0;
+padding: 20px;
 font-size: 14px;
 transition: all 0.3s;
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 40px;
 }
 
 .footer .copyright {
@@ -1829,6 +1850,25 @@ p{
     font-family: 'Nunito', sans-serif;
 }
 
+.alergia{
+    display: inline-block;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    margin-right: 10px;
+    padding: 8px 20px;
+}
+
+.botonAgregarAlergia{
+    background-color: #0AA1DD;
+    color: white;
+}
+
+.botonAgregarAlergia:hover{
+    background-color: #197ce6;
+    color: white;
+    border: none;
+}
+
 .botonEditar{
     border: none;
     border-radius: 50px;
@@ -1841,7 +1881,7 @@ p{
     background-color: #0b5ed7;
 }
 
-.perfil .table th{
+.table th{
     padding: 15px 0 15px 5px;
 }
 

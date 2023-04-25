@@ -24,7 +24,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header}"></div>
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -41,10 +41,10 @@
                     </div>
                     <!-- Información Doctor -->
                     <div class="col-md-7">
-                        <div class="perfilDoctorEspecialidad">
+                        <div class="perfilDoctorEspecialidad" th:text="${doctor.especialidad.nombre}">
                             Neurología
                         </div>
-                        <div class="perfilDoctorNombre">
+                        <div class="perfilDoctorNombre" th:text="${doctor.nombre}+' '+${doctor.apellidos}">
                             Juan Martinez Rondon
                         </div>
                         <div class="perfilDoctorInformacion">
@@ -79,7 +79,7 @@
                             <td>MARTES</td>
                             <td>13:00 - 18:00</td>
                             <td>
-                                <a class="botonReservarCitaHorario" th:href="@{/Paciente/reservarDoctor}">Reservar en este
+                                <a class="botonReservarCitaHorario" th:href="@{/Paciente/reservarDoctor(idDoctor=${doctor.id_doctor})}">Reservar en este
                                     horario</a>
                             </td>
                         </tr>
@@ -93,6 +93,11 @@
                     </tbody>
                 </table>
             </section>
+
+            <!-- ====== Footer ====== -->
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <!-- End footer -->
+
         </main>
 
         <!-- Bootstrap CDN JS -->

@@ -26,7 +26,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header}">
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente=${paciente})}">
         </div>
         <!-- End Header -->
 
@@ -36,7 +36,7 @@
 
         <main id="main" class="main">
 
-            <h1 class="encabezado">Bienvenido Juan Perez</h1>
+            <h1 class="encabezado" th:text="'Bienvenido ' +${paciente.getNombreYApellido()}">Bienvenido Juan Perez</h1>
             <p class="text-center fw-medium mt-4" style="font-size: 1.2rem">Seleccione la sede de su preferencia para
                 acceder a nuestros
                 servicios</p>
@@ -44,14 +44,14 @@
 
             <section id="Sedes">
                 <div class="row align-items-start contenedor mx-0">
-                    <div class="col-md-4">
-                        <a th:href="@{/Paciente/doctores}">
+                    <div class="col-md-4" th:each="sede:${sedeList}">
+                        <a th:href="@{/Paciente/doctores(idSede=${sede.idSede})}">
                             <figure>
                                 <img class="sedeImg" th:src="@{/assets/img/sede1.jpg}">
                                 <div class="capa">
                                     <h6>CLINICAS</h6>
-                                    <h2 class="fw-bold" style="color: darkblue">San Isidro</h2>
-                                    <p>Av. Javier Prado Este 1066, Lima.</p>
+                                    <h2 class="fw-bold" style="color: darkblue" th:text="${sede.nombre}">San Isidro</h2>
+                                    <p th:text="${sede.direccion}">Av. Javier Prado Este 1066, Lima.</p>
 
                                     <div class="d-flex align-items-center justify-content-end"
                                          style="margin-right: 30px">
@@ -64,64 +64,14 @@
                             </figure>
                         </a>
                     </div>
-                    <div class="col-md-4">
-                        <a th:href="@{/Paciente/doctores}">
-                            <figure>
-                                <img class="sedeImg" th:src="@{/assets/img/sede2.jpg}">
-                                <div class="capa">
-                                    <h6>CLINICAS</h6>
-                                    <h2 class="fw-bold" style="color: darkblue">Surco</h2>
-                                    <p>Av. Polo N° 345, Lima.</p>
 
-                                    <div class="d-flex align-items-center justify-content-end"
-                                         style="margin-right: 30px">
-                                        <span>Conoce la sede</span>
-                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
-                                           style="color: darkgray"></i>
-                                    </div>
-                                </div>
-                            </figure>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a th:href="@{/Paciente/doctores}">
-                            <figure>
-                                <img class="sedeImg" th:src="@{/assets/img/sede1.jpg}">
-                                <div class="capa">
-                                    <h6>CLINICAS</h6>
-                                    <h2 class="fw-bold" style="color: darkblue">San Miguel</h2>
-                                    <p>Av. La Marina N° 2997, Lima.</p>
-
-                                    <div class="d-flex align-items-center justify-content-end"
-                                         style="margin-right: 30px">
-                                        <span>Conoce la sede</span>
-                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
-                                           style="color: darkgray"></i>
-                                    </div>
-                                </div>
-                            </figure>
-                        </a>
-                    </div>
                 </div>
             </section>
 
-            <!-- ====== Pie de página ====== -->
-            <footer class="footer">
-                <div class="container">
-                    <div class="row">
-                        <div class="d-flex align-items-center col-md-6">
-                            <img style="height: 30px; margin-left: 30px" th:src="@{/assets/img/logoClinicaPNG.png"
-                                 alt="Logo de la clínica">
-                            <span class="fw-bold d-none d-lg-block">Clínica INTERPUCP</span>
-                        </div>
-                        <div class="d-flex align-items-cent col-md-6">
-                            <i class="bi bi-telephone-fill me-2"></i>
-                            <span class="fw-bold d-none d-lg-block">987-154-200</span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-            <!-- Fin pie de página -->
+            <!-- ====== Footer ====== -->
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <!-- End footer -->
+
         </main>
         <!-- End #main -->
 

@@ -35,6 +35,7 @@ public class Paciente {
     private String fotoname;
     private String fotocontenttype;
     private byte[] foto;
+
     @ManyToOne
     @JoinColumn(name = "distrito_id_distrito", nullable = false)
     private Distrito distrito;
@@ -45,5 +46,11 @@ public class Paciente {
     private LocalDate fechanacimiento;
     private String genero;
     private LocalDateTime fecharegistro;
+
+    public String getNombreYApellido(){
+        String[] nombres = this.getNombre().split(" ");
+        String[] apellidos = this.getApellidos().split(" ");
+        return nombres[0] + " " + apellidos[0];
+    }
 
 }

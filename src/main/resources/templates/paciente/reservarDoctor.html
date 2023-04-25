@@ -23,7 +23,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header}"></div>
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -63,7 +63,7 @@
 
                 <div class="row" style="margin-top: 20px">
                     <div class="col-6">
-                        <p><span class="fw-bold">Especialidad:</span><span style="margin-left: 13px">Cardiología</span>
+                        <p><span class="fw-bold">Especialidad:</span><span th:text="${doctor.especialidad.nombre}" style="margin-left: 13px">Cardiología</span>
                         </p>
 
                         <p style="margin-top: 15px"><span class="fw-bold">DNI:</span><span class="fw-bold"
@@ -76,7 +76,7 @@
                     </div>
                     <div class="col-6">
                         <p><span class="fw-bold">Doctor:</span><span
-                                style="margin-left: 13px">Juan Martinez Rondon</span></p>
+                                style="margin-left: 13px" th:text="${doctor.nombre}+' '+${doctor.apellidos}">Juan Martinez Rondon</span></p>
 
                         <p style="margin-top: 15px"><span class="fw-bold">Tipo de cita:</span><span class="fw-bold"
                                                                                                     style="color: red">*</span>

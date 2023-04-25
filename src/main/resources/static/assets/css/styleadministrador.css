@@ -26,6 +26,7 @@
     max-height: 450px; /* Establece una altura máxima para el div */
     overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
 }
+
 .fondo {
     position: relative;
     display: block;
