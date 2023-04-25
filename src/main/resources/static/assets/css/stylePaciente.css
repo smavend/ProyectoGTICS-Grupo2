@@ -1858,6 +1858,17 @@ p{
     padding: 8px 20px;
 }
 
+.botonAgregarAlergia{
+    background-color: #0AA1DD;
+    color: white;
+}
+
+.botonAgregarAlergia:hover{
+    background-color: #197ce6;
+    color: white;
+    border: none;
+}
+
 .botonEditar{
     border: none;
     border-radius: 50px;
@@ -1870,7 +1881,7 @@ p{
     background-color: #0b5ed7;
 }
 
-.perfil .table th{
+.table th{
     padding: 15px 0 15px 5px;
 }
 

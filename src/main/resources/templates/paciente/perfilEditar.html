@@ -57,13 +57,27 @@
 
                         <div class="card mb-4">
                             <div class="card-body">
-                                <form th:action="@{/Paciente/perfil/guardar}" method="post" th:object="${paciente}">
+                                <form th:action="@{/Paciente/perfil/guardar}" method="post" th:object="${paciente}" id="formPaciente">
+                                    <input type="hidden" name="idPaciente" id="idPaciente" th:field="*{idPaciente}">
+                                    <input type="hidden" name="estado" id="estado" th:field="*{estado}">
+                                    <input type="hidden" name="idPaciente" id="fechanacimiento" th:field="*{fechanacimiento}">
+                                    <input type="hidden" name="idPaciente" id="genero" th:field="*{genero}">
+                                    <input type="hidden" name="idPaciente" id="fecharegistro" th:field="*{fecharegistro}">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <p class="mb-0">Nombre completo</p>
+                                            <p class="mb-0">Nombres</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="Juanchito Palacios Castro" name="nombre" th:value="${paciente.getNombreYApellido()}">
+                                            <input class="form-control mb-0" type="text" value="Juanchito" th:field="*{nombre}">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Apellidos</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input class="form-control mb-0" type="text" value="Palacios Castro" th:field="*{apellidos}">
                                         </div>
                                     </div>
                                     <hr>
@@ -72,7 +86,20 @@
                                             <p class="mb-0">Edad</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="30/11/2002" th:field="*{fechanacimiento}">
+                                            <input class="form-control mb-0" type="text" value="30/11/2002" th:field="*{fechanacimiento}">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Distrito</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <select class="form-select" name="distrito" id="distrito">
+                                                <option th:each="distrito: ${distritoList}"
+                                                        th:value="${distrito.idDistrito}"
+                                                        th:text="${distrito.nombre}" th:selected="${paciente.distrito.nombre == distrito.nombre}"></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <hr>
@@ -81,8 +108,11 @@
                                             <p class="mb-0">Seguro</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <select name="seguro">
-                                                <option th:each="seguro: ${seguroList}" th:tel="${seguro.nombre}" th:text="${seguro.nombre}"></option>
+                                            <select class="form-select" name="seguro" id="seguro">
+                                                <option th:each="seguro: ${seguroList}"
+                                                        th:value="${seguro.idSeguro}"
+                                                        th:text="${seguro.nombre}"
+                                                        th:selected="${paciente.seguro.nombre == seguro.nombre}"></option>
                                             </select>
                                         </div>
                                     </div>
@@ -92,7 +122,7 @@
                                             <p class="mb-0">Correo</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="juanpc@gmail.com" th:field="*{correo}">
+                                            <input class="form-control mb-0" type="text" value="juanpc@gmail.com" th:field="*{correo}">
                                         </div>
                                     </div>
                                     <hr>
@@ -101,7 +131,7 @@
                                             <p class="mb-0">Teléfono</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="965-790-551" th:field="*{telefono}">
+                                            <input class="form-control mb-0" type="text" value="965-790-551" th:field="*{telefono}">
                                         </div>
                                     </div>
                                     <hr>
@@ -110,7 +140,7 @@
                                             <p class="mb-0">Dirección</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="Av. Las Nuevas Lomas, Lima" th:field="*{direccion}">
+                                            <input class="form-control mb-0" type="text" value="Av. Las Nuevas Lomas, Lima" th:field="*{direccion}">
                                         </div>
                                     </div>
                                     <hr>
@@ -119,12 +149,18 @@
                                             <p class="mb-0">Alergias</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" value="Av. Las Nuevas Lomas, Lima" th:field="*{direccion}">
+                                            <div class="hstack gap-2">
+                                                <form method="post" th:action="@{/Paciente/perfil/guardarAlergia}" id="formAlergias">
+                                                    <input type="hidden" name="paciente">
+                                                    <input type="text" class="form-control mb-0" placeholder="Nueva alergia" name="nombre">
+                                                    <button type="submit" class="btn botonAgregarAlergia" form="formAlergias">Agregar</button>
+                                                </form>
+                                            </div>
+                                            <!-- Use esa estructura rara y el th:inline para no sobreescribir los botones de X -->
+                                            <p class="mb-2 mb-lg-0 mt-3 alergia" th:each="alergia: ${alergiasPaciente}" th:inline="text">[[${alergia.nombre}]]<a th:href="@{'/Paciente/perfil/borrarAlergia?idPaciente='+${paciente.idPaciente}+'&idAlergia='+${alergia.idAlergia}}" class="ms-2" style="color: red"><i class="bi bi-x-circle ms-2"></i></a></p>
                                         </div>
                                     </div>
-                                    <button type="submit" style="margin: 40px 0 0 0;" href="#"
-                                            class="btn btn-primary botonActualizarConsentimientos">Actualizar
-                                    </button>
+                                    <button type="submit" style="margin: 40px 0 0 0;" class="btn btn-primary botonActualizarConsentimientos" form="formPaciente">Actualizar</button>
                                     <a type="submit" style="margin: 40px 10px 0 10px;" th:href="@{/Paciente/perfil}"
                                             class="btn btn-danger botonCancelar">Cancelar
                                     </a>

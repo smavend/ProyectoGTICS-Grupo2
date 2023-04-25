@@ -23,13 +23,15 @@ public class PacienteController {
     final EspecialidadRepository especialidadRepository;
     final AlergiaRepository alergiaRepository;
     final SeguroRepository seguroRepository;
+    final DistritoRepository distritoRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
         this.alergiaRepository = alergiaRepository;
         this.seguroRepository = seguroRepository;
+        this.distritoRepository = distritoRepository;
     }
 
     /* INICIO */
@@ -62,8 +64,8 @@ public class PacienteController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
-            List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(idPrueba);
-            model.addAttribute("alergiaList", alergiaList);
+            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPrueba);
+            model.addAttribute("alergiasPaciente", alergiasPaciente);
             model.addAttribute("paciente", paciente);
         }
         return "paciente/perfil";
@@ -71,21 +73,44 @@ public class PacienteController {
 
     @GetMapping("/perfil/editar")
     public String editarPerfil(Model model,
-                               @RequestParam(name = "id") String idPaciente){
+                               @RequestParam(name = "idPaciente") String idPaciente){
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
             List<Seguro> seguroList = seguroRepository.findAll();
+            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPrueba);
+            List<Distrito> distritoList = distritoRepository.findAll();
+
             model.addAttribute("seguroList", seguroList);
+            model.addAttribute("alergiasPaciente", alergiasPaciente);
             model.addAttribute("paciente", paciente);
+            model.addAttribute("distritoList", distritoList);
             return "paciente/perfilEditar";
         }
         return "redirect:Paciente/perfil";
     }
 
+    @PostMapping("/perfil/guardarAlergia")
+    public String guardarAlergia(Alergia alergia){
+        System.out.println(alergia.getNombre());
+        alergiaRepository.save(alergia);
+        return "redirect:/Paciente/perfil/editar?idPaciente="+alergia.getPaciente().getIdPaciente();
+    }
+
+    @GetMapping("/perfil/borrarAlergia")
+    public String borrarAlergia(@RequestParam(name = "idPaciente") String idPaciente,
+                                @RequestParam(name = "idAlergia") int idAlergia){
+        Optional<Alergia> optionalAlergia = alergiaRepository.findById(idAlergia);
+        if (optionalAlergia.isPresent()){
+            alergiaRepository.deleteById(idAlergia);
+        }
+        return "redirect:/Paciente/perfil/editar?idPaciente="+idPaciente;
+    }
+
     @PostMapping("/perfil/guardar")
-    public String guardarPerfil(){
-        return "redirect:Paciente/perfil";
+    public String guardarPerfil(Paciente paciente){
+        pacienteRepository.save(paciente);
+        return "redirect:/Paciente/perfil";
     }
 
     /* SECCIÓN DOCTORES */

@@ -11,4 +11,5 @@ import java.util.List;
 public interface AlergiaRepository extends JpaRepository<Alergia, Integer> {
     @Query(nativeQuery = true, value = "select * from alergias where paciente_id_paciente=?1")
     List<Alergia> buscarPorPacienteId(String id);
+
 }
