@@ -9,6 +9,35 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+/*styles mensajeria*/
+.mensajeria{
+    font-family: 'Poppins', sans-serif;
+}
+.ellipsis{
+    white-space: nowrap; /* para evitar el salto de línea */
+    overflow: hidden; /* para ocultar el texto que no cabe en el contenedor */
+    text-overflow: ellipsis; /* para mostrar los tres puntos (...) al final del texto que no cabe */
+}
+.scrollable1{
+    max-height: 550px; /* Establece una altura máxima para el div */
+    overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
+}
+.scrollable2{
+    max-height: 450px; /* Establece una altura máxima para el div */
+    overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
+}
+.fondo {
+    position: relative;
+    display: block;
+    padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+    color: var(--bs-list-group-color);
+    text-decoration: none;
+    background-color: #F2F2F2;
+    border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+}
+
+/*End styles mensajeria*/
+
 :root {
     scroll-behavior: smooth;
 }
