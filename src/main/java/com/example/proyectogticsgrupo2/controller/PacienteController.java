@@ -23,13 +23,15 @@ public class PacienteController {
     final EspecialidadRepository especialidadRepository;
     final AlergiaRepository alergiaRepository;
     final SeguroRepository seguroRepository;
+    final DoctorRepository doctorRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DoctorRepository doctorRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
         this.alergiaRepository = alergiaRepository;
         this.seguroRepository = seguroRepository;
+        this.doctorRepository = doctorRepository;
     }
 
     /* INICIO */
@@ -104,6 +106,8 @@ public class PacienteController {
             Sede sede = optionalSede.get();
             model.addAttribute("sede", sede);
         }
+        List<Doctor> listDoctorSede = doctorRepository.listDoctorSede(idSede);
+        model.addAttribute("doctorList", listDoctorSede);
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";

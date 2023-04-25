@@ -22,6 +22,4 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
     void guardarPaciente (String dni, String nombre, String apellido, int estado, int numseguro, String telefono, String numadmin,
                           String correo, Byte foto, String direccion, int numdistrito);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM proyectogtics.doctor where sede_id_sede=?1")
-    List<Doctor> listDoctorSede(int idSede);
 }
