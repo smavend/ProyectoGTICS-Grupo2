@@ -41,12 +41,12 @@ public class Paciente {
     @Column(nullable = false)
     private byte[] foto;
 
+    @Column(nullable = false)
+    private String direccion;
+
     @ManyToOne
     @JoinColumn(name = "distrito_id_distrito", nullable = false)
     private Distrito distrito;
-
-    @Column(nullable = false)
-    private String direccion;
 
     public String getNombreYApellido(){
         String[] nombres = this.getNombre().split(" ");
