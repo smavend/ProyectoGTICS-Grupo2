@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Entity
@@ -38,14 +40,27 @@ public class Paciente {
     private String correo;
 
     @Lob
-    @Column(nullable = false)
     private byte[] foto;
+
+    @Column(nullable = false)
+    private String direccion;
 
     @ManyToOne
     @JoinColumn(name = "distrito_id_distrito", nullable = false)
     private Distrito distrito;
 
-    @Column(nullable = false)
-    private String direccion;
+    @Column(name = "fotoname")
+    private String fotoName;
 
+    @Column(name = "fotocontenttype")
+    private String fotoContentType;
+
+    @Column(name = "fechanacimiento", nullable = false)
+    private Date fechaNacimiento;
+
+    @Column(nullable = false)
+    private String genero;
+
+    @Column(name = "fecharegistro",nullable = false)
+    private java.sql.Date fechaRegistro;
 }

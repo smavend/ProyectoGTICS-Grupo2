@@ -195,6 +195,12 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/administrativo/mensajeria}">
+          <i class="bi bi-people"></i>
+          <span>Mensajería</span>
+        </a>
       </li><!-- End Dashboard Nav -->
 
     </ul>
@@ -234,22 +240,31 @@
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Perfil</th>
                         <th scope="col">Nombres y apellidos</th>
-                        <th scope="col">Seguro</th>
+                        <th scope="col">Fecha de estado activo o invitado</th>
+                        <th scope="col">Correo</th>
                         <th scope="col">Estado</th>
                         <th scope="col"></th>
                       </tr>
                     </thead>
                     <tbody>
+                      <tr th:each="temp,obj:${listaTemp}" >
+                        <td th:text="${obj.index+1}"></td>
+                        <td th:text="${temp.nombre+' '+temp.apellidos}"></td>
+                        <td th:each="dia: ${dias}" th:if="${temp.idTemporal==dia.getId_usuario_temporal()}">
+                          <span th:text="|Hace ${dia.getDias()} días|"></span>
+                        </td>
+                        <td th:text="${temp.correo}"></td>
+                        <td class="centered"><span class="badge bg-secondary">Invitado</span></td>
+                        <td><a th:href="@{'/administrativo/editar/invitado?id=' + ${temp.idTemporal}}"><i class="bi bi-pen"></i></a></td>
+                      </tr>
                       <tr th:each="paciente,obj:${listaPacientes}">
-                        <td th:text="${obj.index + 1}"></td>
-                        <td scope="row"><img class="rounded-circle" th:src="@{'/usuario/foto/' + ${paciente.idPaciente}}" alt=""></td>
+                        <td th:text="${obj.index + 1 + listaTemp.size()}"></td>
                         <td th:text="${paciente.nombre+' '+paciente.apellidos}"></td>
-                        <td th:text="${paciente.seguro.nombre}"></td>
+                        <td th:text="${paciente.fechaRegistro}"></td>
+                        <td th:text="${paciente.correo}"></td>
                         <td th:switch="${paciente.estado}" class="centered">
                           <span th:case="1" class="badge bg-primary">Activo</span>
-                          <span th:case="2" class="badge bg-secondary">Invitado</span>
                           <span th:case="3" class="badge bg-info">Registrado</span>
                           <span th:case="4" class="badge bg-success">Agendado</span>
                           <span th:case="5" class="badge bg-warning">En consulta</span>
@@ -331,6 +346,10 @@
   <script>
     $(document).ready(function () {
       $('#datatable').DataTable({
+        lengthMenu: [
+                [10,25,50,100,-1],
+                [10,25,50,100,'Todos'],
+        ],
         "language": {
           "lengthMenu": "Mostrar _MENU_ registros por página",
           "zeroRecords": "Ningún registro encontrado",
