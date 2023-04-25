@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.repository;
 
 import com.example.proyectogticsgrupo2.dto.MensajeDatosDto;
+import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
             "?6, ?7, ?8, ?9, ?10, ?11")
     void guardarPaciente (String dni, String nombre, String apellido, int estado, int numseguro, String telefono, String numadmin,
                           String correo, Byte foto, String direccion, int numdistrito);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM proyectogtics.doctor where sede_id_sede=?1")
+    List<Doctor> listDoctorSede(int idSede);
 }
