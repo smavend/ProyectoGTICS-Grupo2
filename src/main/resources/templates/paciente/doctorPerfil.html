@@ -41,10 +41,10 @@
                     </div>
                     <!-- Información Doctor -->
                     <div class="col-md-7">
-                        <div class="perfilDoctorEspecialidad">
+                        <div class="perfilDoctorEspecialidad" th:text="${doctor.especialidad.nombre}">
                             Neurología
                         </div>
-                        <div class="perfilDoctorNombre">
+                        <div class="perfilDoctorNombre" th:text="${doctor.nombre}+' '+${doctor.apellidos}">
                             Juan Martinez Rondon
                         </div>
                         <div class="perfilDoctorInformacion">
@@ -79,7 +79,7 @@
                             <td>MARTES</td>
                             <td>13:00 - 18:00</td>
                             <td>
-                                <a class="botonReservarCitaHorario" th:href="@{/Paciente/reservarDoctor}">Reservar en este
+                                <a class="botonReservarCitaHorario" th:href="@{/Paciente/reservarDoctor(idDoctor=${doctor.id_doctor})}">Reservar en este
                                     horario</a>
                             </td>
                         </tr>

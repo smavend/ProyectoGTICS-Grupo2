@@ -54,15 +54,15 @@
                 <!-- Doctores -->
                 <div class="row">
                     <!-- Primera columna de doctores -->
-                    <div class="col-md-6 filaDoctores">
+                    <div class="col-md-6 filaDoctores" th:each="doctor: ${doctorList}">
                         <!-- Doctor -->
-                        <div class="cardDoctor">
+                        <div class="cardDoctor" >
                             <div class="row">
                                 <div class="col-5">
                                     <img class="fotoDoctor" th:src="@{/assets/img/messages-3.jpg}" alt="fotoDoctor">
                                 </div>
                                 <div class="col-7 informacionDoctor">
-                                    <div class="nombreDoctor">Juan Martinez Rondon</div>
+                                    <div class="nombreDoctor" th:text="${doctor.nombre} +' '+ ${doctor.apellidos}">Juan Martinez Rondon</div>
                                     <div class="disponibilidadDoctor">
                                         Disponibilidad
                                         <div class="disponibilidadDoctorDato">
@@ -73,137 +73,13 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center align-items-center py-3">
-                                        <a class="botonVerMasDoctor" th:href="@{/Paciente/perfilDoctor}">Ver Más</a>
+                                        <a class="botonVerMasDoctor" th:href="@{/Paciente/perfilDoctor(idDoctor=${doctor.id_doctor})}">Ver Más</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Doctor -->
-                        <div class="cardDoctor">
-                            <div class="row">
-                                <div class="col-5">
-                                    <img class="fotoDoctor" th:src="@{/assets/img/messages-1.jpg}" alt="fotoDoctor">
-                                </div>
-                                <div class="col-7 informacionDoctor">
-                                    <div class="nombreDoctor">Victor Tazo Lara</div>
-                                    <div class="disponibilidadDoctor">
-                                        Disponibilidad
-                                        <div class="disponibilidadDoctorDato">
-                                            MARTES: 09:00 - 15:00
-                                        </div>
-                                        <div class="disponibilidadDoctorDato">
-                                            VIERNES: 12:00 - 15:00
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center py-3">
-                                        <a class="botonVerMasDoctor" href="#">Ver Más</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Doctor -->
-                        <div class="cardDoctor">
-                            <div class="row">
-                                <div class="col-5">
-                                    <img class="fotoDoctor" th:src="@{/assets/img/doctor3.jpg}" alt="fotoDoctor">
-                                </div>
-                                <div class="col-7 informacionDoctor">
-                                    <div class="nombreDoctor">Armando Aitor Tilla</div>
-                                    <div class="disponibilidadDoctor">
-                                        Disponibilidad
-                                        <div class="disponibilidadDoctorDato">
-                                            LUNES: 13:00 - 18:00
-                                        </div>
-                                        <div class="disponibilidadDoctorDato">
-                                            MIÉRCOLES: 10:00 - 12:00
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center py-3">
-                                        <a class="botonVerMasDoctor" href="#">Ver Más</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
 
-                    <!-- Segunda columna de doctores -->
-                    <div class="col-md-6 filaDoctores">
-                        <!-- Doctor -->
-                        <div class="cardDoctor">
-                            <div class="row">
-                                <div class="col-5">
-                                    <img class="fotoDoctor" th:src="@{/assets/img/messages-2.jpg}" alt="fotoDoctor">
-                                </div>
-                                <div class="col-7 informacionDoctor">
-                                    <div class="nombreDoctor">Inés Esario Sanchez</div>
-                                    <div class="disponibilidadDoctor">
-                                        Disponibilidad
-                                        <div class="disponibilidadDoctorDato">
-                                            LUNES: 11:00 - 20:00
-                                        </div>
-                                        <div class="disponibilidadDoctorDato">
-                                            JUEVES: 07:00 - 11:00
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center py-3">
-                                        <a class="botonVerMasDoctor" href="#">Ver Más</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Doctor -->
-                        <div class="cardDoctor">
-                            <div class="row">
-                                <div class="col-5">
-                                    <img class="fotoDoctor" th:src="@{/assets/img/doctor1.jpg}" alt="fotoDoctor">
-                                </div>
-                                <div class="col-7 informacionDoctor">
-                                    <div class="nombreDoctor">Helen Chufe Rodriguez</div>
-                                    <div class="disponibilidadDoctor">
-                                        Disponibilidad
-                                        <div class="disponibilidadDoctorDato">
-                                            JUEVES: 11:00 - 18:00
-                                        </div>
-                                        <div class="disponibilidadDoctorDato">
-                                            SÁBADO: 16:00 - 20:00
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center py-3">
-                                        <a class="botonVerMasDoctor" href="#">Ver Más</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Doctor -->
-                        <div class="cardDoctor">
-                            <div class="row">
-                                <div class="col-5">
-                                    <img class="fotoDoctor" th:src="@{/assets/img/doctor2.jpg}" alt="fotoDoctor">
-                                </div>
-                                <div class="col-7 informacionDoctor">
-                                    <div class="nombreDoctor">Lola Mento Perez</div>
-                                    <div class="disponibilidadDoctor">
-                                        Disponibilidad
-                                        <div class="disponibilidadDoctorDato">
-                                            MIÉRCOLES: 13:00 - 15:00
-                                        </div>
-                                        <div class="disponibilidadDoctorDato">
-                                            JUEVES: 12:00 - 17:00
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center py-3">
-                                        <a class="botonVerMasDoctor" href="#">Ver Más</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
                 </div>
 
                 <nav>

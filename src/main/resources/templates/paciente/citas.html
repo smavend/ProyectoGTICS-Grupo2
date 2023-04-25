@@ -108,16 +108,16 @@
                             <div class="modal-body">
                                 <div class="row informacionModal">
                                     <div class="col-6">
-                                        <p>Nombres y apellidos:<span class="informacionModalDato">Juanchito Palacios Castro</span>
+                                        <p>Nombres y apellidos:<span class="informacionModalDato" th:text="${paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
                                         </p>
-                                        <p>Seguro:<span class="informacionModalDato">Pacífico EPS</span></p>
-                                        <p>Teléfono:<span class="informacionModalDato">934-250-488</span></p>
+                                        <p>Seguro:<span class="informacionModalDato" th:text="${paciente.seguro.nombre}">Pacífico EPS</span></p>
+                                        <p>Teléfono:<span class="informacionModalDato" th:text="${paciente.telefono}">934-250-488</span></p>
                                     </div>
                                     <div class="col-6">
                                         <p>Edad:<span class="informacionModalDato">25 años</span></p>
                                         <p>Dirección:<span
-                                                class="informacionModalDato">Av. Las Nuevas Lomas, Lima</span></p>
-                                        <p>Correo:<span class="informacionModalDato">juanpc@gmail.com</span></p>
+                                                class="informacionModalDato" th:text="${paciente.direccion}">Av. Las Nuevas Lomas, Lima</span></p>
+                                        <p>Correo:<span class="informacionModalDato" th:text="${paciente.correo}">juanpc@gmail.com</span></p>
                                     </div>
                                 </div>
                                 <span class="textoModal">Cita programada para el 15 de abril del 2023 a las 10:00 Hrs.</span>
@@ -160,16 +160,16 @@
                             <div class="modal-body">
                                 <div class="row informacionModal">
                                     <div class="col-6">
-                                        <p>Nombres y apellidos:<span class="informacionModalDato">Juanchito Palacios Castro</span>
+                                        <p>Nombres y apellidos:<span class="informacionModalDato" th:text="${paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
                                         </p>
-                                        <p>Seguro:<span class="informacionModalDato">Pacífico EPS</span></p>
-                                        <p>Teléfono:<span class="informacionModalDato">934-250-488</span></p>
+                                        <p>Seguro:<span class="informacionModalDato" th:text="${paciente.seguro.nombre}">Pacífico EPS</span></p>
+                                        <p>Teléfono:<span class="informacionModalDato" th:text="${paciente.telefono}">934-250-488</span></p>
                                     </div>
                                     <div class="col-6">
                                         <p>Edad:<span class="informacionModalDato">25 años</span></p>
                                         <p>Dirección:<span
-                                                class="informacionModalDato">Av. Las Nuevas Lomas, Lima</span></p>
-                                        <p>Correo:<span class="informacionModalDato">juanpc@gmail.com</span></p>
+                                                class="informacionModalDato" th:text="${paciente.direccion}">Av. Las Nuevas Lomas, Lima</span></p>
+                                        <p>Correo:<span class="informacionModalDato" th:text="${paciente.correo}">juanpc@gmail.com</span></p>
                                     </div>
                                 </div>
                                 <span class="textoModal">Cita programada para el 27 de abril del 2023 a las 13:00 Hrs.</span>

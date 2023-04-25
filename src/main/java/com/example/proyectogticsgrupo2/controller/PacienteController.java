@@ -24,14 +24,16 @@ public class PacienteController {
     final AlergiaRepository alergiaRepository;
     final SeguroRepository seguroRepository;
     final DistritoRepository distritoRepository;
+    final DoctorRepository doctorRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
         this.alergiaRepository = alergiaRepository;
         this.seguroRepository = seguroRepository;
         this.distritoRepository = distritoRepository;
+        this.doctorRepository = doctorRepository;
     }
 
     /* INICIO */
@@ -55,6 +57,12 @@ public class PacienteController {
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
         }
+        List<Seguro> seguroList = seguroRepository.findAll();
+        List<Especialidad> especialidadList = especialidadRepository.findAll();
+        List<Doctor> doctorList = doctorRepository.findAll();
+        model.addAttribute("especialidadList", especialidadList);
+        model.addAttribute("seguroList", seguroList);
+        model.addAttribute("doctorList",doctorList);
         return "paciente/reservar";
     }
 
@@ -129,6 +137,8 @@ public class PacienteController {
             Sede sede = optionalSede.get();
             model.addAttribute("sede", sede);
         }
+        List<Doctor> listDoctorSede = doctorRepository.listDoctorSede(idSede);
+        model.addAttribute("doctorList", listDoctorSede);
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
@@ -136,21 +146,33 @@ public class PacienteController {
     }
 
     @GetMapping("/perfilDoctor")
-    public String verPerfilDoctor(Model model){
+    public String verPerfilDoctor(Model model,
+                                  @RequestParam("idDoctor") String idDoctor){
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
         }
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
+        if(optionalDoctor.isPresent()){
+            Doctor doctor = optionalDoctor.get();
+            model.addAttribute("doctor", doctor);
+        }
         return "paciente/doctorPerfil";
     }
 
     @GetMapping("/reservarDoctor")
-    public String reservarCitaDoctor(Model model){
+    public String reservarCitaDoctor(Model model,
+                                     @RequestParam("idDoctor") String idDoctor){
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
+        }
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
+        if(optionalDoctor.isPresent()){
+            Doctor doctor = optionalDoctor.get();
+            model.addAttribute("doctor",doctor);
         }
         return "paciente/reservarDoctor";
     }
