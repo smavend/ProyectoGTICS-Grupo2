@@ -64,7 +64,7 @@ public class HomeController {
         return "general/confirmacionregistro";
     }
 
-    /*@GetMapping("/usuario/foto/{id}")
+    @GetMapping("/usuario/foto/{id}")
     public void showUsuarioImage(@PathVariable String id,
                                  HttpServletResponse response) throws IOException {
         response.setContentType("image/jpeg");
@@ -81,5 +81,5 @@ public class HomeController {
             InputStream is = new ByteArrayInputStream(doctor.getFoto());
             IOUtils.copy(is, response.getOutputStream());
         }
-    }*/
+    }
 }

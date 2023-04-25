@@ -303,7 +303,8 @@
           <div class="card top-selling overflow-auto ">
             <br>
             <h5 class="card-title text-center">Crear Nuevo Paciente</h5>
-              <form method="post" th:action="@{administrador/nuevoPaciente}">
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-danger" role="alert"></div>
+              <form method="post" th:action="@{/administrador/guardarPaciente}" enctype="multipart/form-data">
               <div class="row">
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
@@ -356,14 +357,14 @@
 
                     </select>
                   </div>
-                 <!-- <div class="col-md-12 mb-3">
-                    <label for="foto" class="form-label">Subir foto</label>
-                    <input type="file" class="form-control" name="foto" id="foto">
-                  </div>-->
+                 <div class="col-md-12 mb-3">
+                    <label for="archivo" class="form-label">Subir foto</label>
+                    <input type="file" class="form-control-file" id="archivo" name="archivo">
+                  </div>
                 </div>
               </div>
               <div class="col-md-12 mb-3">
-                <button class="btn btn-success" type="submit">Invitar Paciente</button>
+                <button class="btn btn-success" type="submit">Registrar Paciente</button>
                 <a class="btn btn-danger" type="button" th:href="@{/administrador/dashboard}">Cancelar</a>
               </div>
             </form>

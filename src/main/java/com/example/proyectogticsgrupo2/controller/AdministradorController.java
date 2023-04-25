@@ -2,12 +2,13 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -58,31 +59,34 @@ public class AdministradorController {
     model.addAttribute("listaDistrito",listaDistrito);
     model.addAttribute("listaAdministrativo",listaAdministrativo);
         return "administrador/crearPaciente";}
-    @PostMapping("/nuevoPaciente")
-    public String nuevoPaciente(@RequestParam("idPaciente") String idPaciente ,@RequestParam("nombre") String nombre, @RequestParam("telefono") String telefono,
-                                @RequestParam("seguro") int numSeguro, @RequestParam("administrativo") String numAdministrativo,
-                                @RequestParam("correo") String correo, @RequestParam("apellidos") String apellido,
-                                @RequestParam("direccion") String direccion,@RequestParam("distrito") int numDistrito){
+    @PostMapping("/guardarPaciente")
+    public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
+                                  Paciente paciente, Model model) {
 
-        Optional<Distrito> optdistrito = distritoRepository.findById(numDistrito);
-        Optional<Seguro> optSeguro = seguroRepository.findById(numSeguro);
-        Optional<Administrativo> optAdministrativo = administrativoRepository.findById(numAdministrativo);
-        if(optdistrito.isPresent() && optSeguro.isPresent() && optAdministrativo.isPresent()) {
-            Seguro seguro1 = optSeguro.get();
-            Distrito distrito1 = optdistrito.get();
-            Administrativo admin = optAdministrativo.get();
-
-            pacienteRepository.guardarPaciente(idPaciente, nombre, apellido,1,seguro1.getIdSeguro(), telefono,
-                    admin.getIdAdministrativo(), correo, Byte.valueOf("/assets/img/news-1.jpg"),direccion, distrito1.getIdDistrito());
-            System.out.println("guardadoooooooooooooooooooooooo");
-            return "redirect: /administrador/dashboard";
-        }else {
-            return "redirect:/crearPaciente";
+        if (file.isEmpty()) {
+            model.addAttribute("msg", "Debe subir un archivo");
+            return "redirect:/administrador/crearPaciente";
         }
 
+        String fileName = file.getOriginalFilename();
 
+        if (fileName.contains("..")) {
+            model.addAttribute("msg", "No se permiten '..' en el archivo");
+            return "redirect:/administrador/crearPaciente";
+        }
 
+        try {
+            paciente.setFoto(file.getBytes());
+            paciente.setFotoname(fileName);
+            paciente.setFotocontenttype(file.getContentType());
+            pacienteRepository.save(paciente);
+            return "redirect:/administrador/dashboard";
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("msg", "ocurrió un error al subir el archivo");
+            return "redirect:/administrador/crearPaciente";
+        }
     }
 
     @GetMapping("/crearDoctor")
@@ -106,6 +110,27 @@ public class AdministradorController {
     public String mensajeria(){return "administrador/mensajeria";}
     @GetMapping("/historialPaciente")
     public String historialPaciente(){return "administrador/historialPaciente";}
+
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String dni) {
+        Optional<Paciente> opt = pacienteRepository.findById(dni);
+        if (opt.isPresent()) {
+            Paciente p = opt.get();
+
+            byte[] imagenComoBytes = p.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(p.getFotocontenttype()));
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
 
     //###############################3
 
