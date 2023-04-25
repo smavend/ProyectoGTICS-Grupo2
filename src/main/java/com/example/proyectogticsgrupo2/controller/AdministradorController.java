@@ -1,7 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
-import com.example.proyectogticsgrupo2.entity.Paciente;
-import com.example.proyectogticsgrupo2.repository.PacienteRepository;
+import com.example.proyectogticsgrupo2.entity.*;
+import com.example.proyectogticsgrupo2.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +13,28 @@ import java.util.List;
 @RequestMapping("/administrador")
 public class AdministradorController {
     final PacienteRepository pacienteRepository;
-
-    public AdministradorController(PacienteRepository pacienteRepository) {
+    final DoctorRepository doctorRepository;
+    final SeguroRepository seguroRepository;
+    final AdministrativoRepository administrativoRepository;
+    final DistritoRepository distritoRepository;
+    final EspecialidadRepository especialidadRepository;
+    final SedeRepository sedeRepository;
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository) {
         this.pacienteRepository = pacienteRepository;
+        this.doctorRepository = doctorRepository;
+        this.seguroRepository = seguroRepository;
+        this.administrativoRepository = administrativoRepository;
+        this.distritoRepository = distritoRepository;
+        this.especialidadRepository = especialidadRepository;
+        this.sedeRepository = sedeRepository;
     }
 
     //#####################################33
     @GetMapping("/dashboard")
     public String dashboard (Model model){
         List<Paciente> listaPaciente =pacienteRepository.findAll();
+        List<Doctor> listaDoctores = doctorRepository.findAll();
+        model.addAttribute("listaDoctores",listaDoctores);
         model.addAttribute("listaPaciente", listaPaciente);
         return "administrador/dashboard";
     }
@@ -30,9 +43,21 @@ public class AdministradorController {
     @GetMapping("/finanzas-recibos")
     public String finanzas_recibos(){return "administrador/finanzas-recibos";}
     @GetMapping("/crearPaciente")
-    public String crearPaciente(){return "administrador/crearPaciente";}
+    public String crearPaciente(Model model){
+    List<Seguro> listaSeguro  = seguroRepository.findAll();
+    List<Distrito> listaDistrito = distritoRepository.findAll();
+    List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
+    model.addAttribute("listaSeguro",listaSeguro);
+    model.addAttribute("listaDistrito",listaDistrito);
+    model.addAttribute("listaAdministrativo",listaAdministrativo);
+        return "administrador/crearPaciente";}
     @GetMapping("/crearDoctor")
-    public String crearDoctor(){return "administrador/crearDoctor";}
+    public String crearDoctor(Model model){
+        List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede",listaSede);
+        model.addAttribute("listaEspecialidad",listaEspecialidad);
+        return "administrador/crearDoctor";}
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
     @GetMapping("/mensajeria")

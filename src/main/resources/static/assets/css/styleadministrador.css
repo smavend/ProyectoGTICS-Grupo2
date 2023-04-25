@@ -9,6 +9,25 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+/*styles mensajeria*/
+.mensajeria{
+    font-family: 'Poppins', sans-serif;
+}
+.ellipsis{
+    white-space: nowrap; /* para evitar el salto de línea */
+    overflow: hidden; /* para ocultar el texto que no cabe en el contenedor */
+    text-overflow: ellipsis; /* para mostrar los tres puntos (...) al final del texto que no cabe */
+}
+.scrollable1{
+    max-height: 550px; /* Establece una altura máxima para el div */
+    overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
+}
+.scrollable2{
+    max-height: 450px; /* Establece una altura máxima para el div */
+    overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
+}
+
+/*End styles mensajeria*/
 :root {
     scroll-behavior: smooth;
 }
@@ -73,6 +92,7 @@ body {
     font-family: "Open Sans", sans-serif;
     background: #f6f9ff;
     color: #444444;
+
 }
 
 a {
@@ -680,11 +700,12 @@ table a:hover {
     z-index: 996;
     transition: all 0.3s;
     padding: 20px;
-    overflow-y: auto;
+    overflow-y: hidden;
     scrollbar-width: thin;
     scrollbar-color: #aab7cf transparent;
     box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
     background-color: #fff;
+
 }
 
 @media (max-width: 1199px) {

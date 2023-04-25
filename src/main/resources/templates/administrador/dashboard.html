@@ -10,7 +10,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link th:href="@{/assets/img/logo.png}" rel="icon">
+  <link th:href="@{/assets/img/logoClinicaPNG.png}" rel="icon">
   <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -29,7 +29,8 @@
   <!-- Template Main CSS File -->
   <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
   <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
-  <link href="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.css" rel="stylesheet"/>
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
 
 
   <!-- =======================================================
@@ -48,7 +49,7 @@
 
   <div class="d-flex align-items-center justify-content-between">
     <a href="index}" class="logo d-flex align-items-center">
-      <img th:src="@{/assets/img/logo.png}" alt="">
+      <img th:src="@{/assets/img/logoClinicaPNG.png}" alt="">
       <span class="d-none d-lg-block">Clinica INTERPUCP</span>
     </a>
     <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -321,176 +322,26 @@
                   <h5 class="card-title">DOCTORES <span>| Sede San Isidro</span></h5>
                   <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
                 </div>
-
-                <!-- <div class="container-fluid">
-                   <form class="d-flex" role="search">
-                     <input class="form-control me-2" type="search" placeholder="Especialidad" aria-label="Search">
-                     <button class="btn btn-outline-success" type="submit">Buscar</button>
-                   </form>
-                 </div>-->
-
-
                 <div class=" flex-column" >
-
-                  <table class="table" id="mitabla">
+                  <table class="table" id="datatable">
                     <thead>
                     <tr>
                       <th scope="col">Doctores Disponibles</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr th:each="doctor : ${listaDoctores}">
                       <td>
                         <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
+                          <div class="col-lg-2 col-sm-3">
+                            <img th:src="@{'/usuario/foto/' + ${doctor.id_doctor}}" alt="#" width="70" height="70" class="rounded-circle"/>
                           </div>
-                          <div class="col-9">
-                            <h5>Enrique Arana <span class="text-muted ms-2 float-end"><h6>•Psiquiatría</h6></span></h5>
-                            <p>enrique@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Luis Chavez <span class="text-muted ms-2 float-end"><h6>•Oncología</h6></span></h5>
-                            <p>luchavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Cardiología</h6></span></h5>
-                            <p>miguechavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Dermatología</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Ginecologia</h6></span></h5>
-                            <p>gistavito@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Neurología</h6></span></h5>
-                            <p>miguechavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Otopedía</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Cirujano</h6></span></h5>
-                            <p>gistavito@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Luis Chavez <span class="text-muted ms-2 float-end"><h6>•Psicologo</h6></span></h5>
-                            <p>luchavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Migue Chavez <span class="text-muted ms-2 float-end"><h6>•Oftalmologo</h6></span></h5>
-                            <p>miguechavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Noe Manrique <span class="text-muted ms-2 float-end"><h6>•Pediatra</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets_home/img/doctors/doctors-3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5>Gustavo Pardo <span class="text-muted ms-2 float-end"><h6>•Dermatologo</h6></span></h5>
-                            <p>gistavito@example.com</p>
+                          <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
+                            <div>
+                              <h5 th:text="${doctor.nombre}+' '+${doctor.apellidos}"> </h5>
+                              <p th:text="${doctor.correo}">okerosco@example.com</p>
+                            </div>
+                            <span class="text-muted ms-2 float-end"><h6 th:text="${doctor.especialidad.nombre}">•Activo</h6></span>
                           </div>
                         </div>
                       </td>
@@ -506,7 +357,6 @@
             </div>
           </div><!-- End Top Selling -->
 
-
           <div class="col-12">
             <div class="card top-selling overflow-auto container">
               <div class="card-body pb-0">
@@ -518,7 +368,7 @@
                 </div>
                 <div class="d-flex flex-column" >
 
-                  <table class="table table-hover" id="mitabla2">
+                  <table class="table table-hover" id="datatable2">
                     <thead>
                     <tr>
                       <th scope="col">Pacientes</th>
@@ -529,7 +379,7 @@
                       <td>
                         <div class="row">
                           <div class="col-lg-2 col-sm-3">
-                            <img th:src="${paciente.foto}" alt="#" width="70" height="70" class="rounded-circle">
+                            <img th:src="@{'/usuario/foto/' + ${paciente.idPaciente}}" alt="#" width="70" height="70" class="rounded-circle"/>
                           </div>
                           <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
                             <div>
@@ -542,137 +392,7 @@
                         </div>
                       </td>
                     </tr>
-                    <!--<tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>rodrisan@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>carlosquis@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Jhon Isla Tesla </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">William Lopez Torres</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>williamlo@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Migue Chavez </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>miguechavez@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente">Noe Manrique </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>noejara@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr >
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente">Gustavo Pardo </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>gistavito@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}" >
-                              Iker Osco Chavez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>okerosco@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>rodrisan@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="row">
-                          <div class="col-2">
-                            <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                          </div>
-                          <div class="col-9">
-                            <h5><a href="historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h6>•Activo</h6></span></h5>
-                            <p>carlosquis@example.com</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>-->
+
                     </tbody>
                   </table>
                   <br>
@@ -680,9 +400,6 @@
               </div>
             </div>
           </div>
-
-
-
         </div>
       </div><!-- End Left side columns -->
 
@@ -769,14 +486,63 @@
 <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
 <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
 <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-<!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
 
-
-
-
-<!-- Agregamos las librerías de jQuery UI para crear el calendario -->
-
-
+<!-- DataTables from jQuery-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/jsAdministrador.js}"></script>
+<!-- DataTables activate -->
+<script>
+  $(document).ready(function () {
+    $('#datatable').DataTable({
+      "language": {
+        "lengthMenu": "Mostrar _MENU_ registros por página",
+        "zeroRecords": "Ningún registro encontrado",
+        "info": "Página _PAGE_ de _PAGES_",
+        "infoEmpty": "No hay registros disponibles",
+        "infoFiltered": "(filtrado de _MAX_ registros)",
+        "search": "Buscar:",
+        "loadingRecords": "Cargando...",
+        "paginate":{
+          "first": "Primero",
+          "last": "Último",
+          "next": "Siguiente",
+          "previous": "Anterior",
+        }
+      },
+      "columnDefs": [
+        {"margin-bottom": "10px"}
+      ]
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('#datatable2').DataTable({
+      "language": {
+        "lengthMenu": "Mostrar _MENU_ registros por página",
+        "zeroRecords": "Ningún registro encontrado",
+        "info": "Página _PAGE_ de _PAGES_",
+        "infoEmpty": "No hay registros disponibles",
+        "infoFiltered": "(filtrado de _MAX_ registros)",
+        "search": "Buscar:",
+        "loadingRecords": "Cargando...",
+        "paginate":{
+          "first": "Primero",
+          "last": "Último",
+          "next": "Siguiente",
+          "previous": "Anterior",
+        }
+      },
+      "pageLength": 5,
+      "columnDefs": [
+        {"margin-bottom": "10px"}
+      ]
+    });
+  });
+</script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const series = {
@@ -1158,27 +924,7 @@
   });
 </script>
 
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/jsAdministrador.js}"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.js}"></script>
-<script>
-  var table = new DataTable('#mitabla', {
-    language: {
-      url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
-    },
-    pageLength: 5
 
-  });
-</script>
-<script>
-  var table = new DataTable('#mitabla2', {
-    language: {
-      url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
-    },
-    pageLength: 5
-  });
-</script>
 </body>
 
 </html>

@@ -11,7 +11,7 @@ import lombok.Setter;
 public class Cita {
     @Id
     @Column(name = "id_cita", nullable = false)
-    private String id_cita;
+    private int id_cita;
 
     @ManyToOne
     @JoinColumn(name = "paciente_id_paciente", nullable = false)
@@ -31,7 +31,10 @@ public class Cita {
     @Column(nullable = false)
     private String modalidad;
     @Column(nullable = false)
-    private String reporte;
+
+    @Lob
+    private byte[] reporte;
+
     private String link_cita;
     private String direccion;
     @Column(nullable = false)
@@ -46,7 +49,7 @@ public class Cita {
 
     @ManyToOne
     @JoinColumn(name = "id_cita_previa")
-    private Cita cita;
+    private Cita cita_previa;
 
 
 }

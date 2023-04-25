@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -10,7 +10,7 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/logo.png}" rel="icon">
     <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -27,9 +27,14 @@
     <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <!--<link th:href="@{/assets/css/style.css}" rel="stylesheet"> -->
+    <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
     <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
-    <link th:href="@{/assets/js/javascript.js}" rel="stylesheet">
+
+
+    <!--Links para mensajeria-->
+
+    <!--End link mensajeria-->
+
     <!-- =======================================================
     * Template Name: NiceAdmin
     * Updated: Mar 09 2023 with Bootstrap v5.2.3
@@ -45,8 +50,8 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a href="index}" class="logo d-flex align-items-center">
-            <img th:src="@{/assets/img/logoClinica.png}" alt="">
+        <a href="index.html" class="logo d-flex align-items-center">
+            <img th:src="@{/assets/img/logo.png}" alt="">
             <span class="d-none d-lg-block">Clinica INTERPUCP</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -221,7 +226,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile}">
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                             <i class="bi bi-person"></i>
                             <span>Mi Perfil</span>
                         </a>
@@ -231,7 +236,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile}">
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                             <i class="bi bi-gear"></i>
                             <span>Configuraciones</span>
                         </a>
@@ -294,249 +299,176 @@
 
 </aside><!-- End Sidebar-->
 
-<main id="main" class="main">
+<main id="main" class="main ">
 
+    <section  >
+        <div class="row d-flex justify-content ">
+            <div  class = "bg-white col-md-4 col-sm-2 p-6 ">
+                <h3 class=" m-3">Tus chats</h3>
 
-    <section class="section dashboard">
-        <div class="row justify-content-between">
-
-            <!-- Left side columns -->
-            <div class="col-lg-12">
-                <div class="row">
-
-                    <section class = "col-lg-5">
-                        <div class="card top-selling card-body pb-0 ">
-
-
-
-                            <div class="card-body pb-0">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title fw-bold">Chats</h5>
-                                </div>
-                                <form class="d-flex">
-                                    <div class="input-group">
-
-                                        <input type="text" class="form-control rounded-pill" placeholder="Buscar mensaje">
-                                    </div>
-                                </form>
-                                <br>
-
-                                <div class="d-flex flex-column" style="height: 540px; overflow: auto;">
-
-                                    <table class="table table-hover ">
-
-                                        <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="row d-flex justify-content-between align-items-center">
-                                                    <div class="col-2">
-                                                        <img th:src="@{/assets/img/p1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <h5><a th:href="@{/administrador/historialPaciente}" >
-                                                            Iker Osco Chavez</a> <span class="text-muted ms-2 float-end"><h3 class="text-success">•</h3></span></h5>
-                                                        <p>Manito me debes un sol •9sem</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="row d-flex justify-content-between align-items-center">
-                                                    <div class="col-2">
-                                                        <img th:src="@{/assets/img/p2.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <h5><a th:href="@{/administrador/historialPaciente}">Rodrigo Sanchez</a> <span class="text-muted ms-2 float-end"><h3 class="text-success">•</h3></span></h5>
-                                                        <p> Olviste tu celular •2sem</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="row d-flex justify-content-between align-items-center">
-                                                    <div class="col-2">
-                                                        <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <h5><a th:href="@{/administrador/historialPaciente}">Carlos Quispe Richetti </a><span class="text-muted ms-2 float-end"><h3 class="text-success">•</h3></span></h5>
-                                                        <p> Olviste tu celular •2sem</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="row d-flex justify-content-between align-items-center">
-                                                    <div class="col-2">
-                                                        <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <h5><a th:href="@{/administrador/historialPaciente}">Jhon Isla Tesla </a><span class="text-muted ms-2 float-end"><h3 class="text-success">•</h3></span></h5>
-                                                        <p>tú: Te di info falsa •9sem</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="row d-flex justify-content-between align-items-center">
-                                                    <div class="col-2">
-                                                        <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <h5><a th:href="@{/administrador/historialPaciente}">William Lopez Torres</a> <span class="text-muted ms-2 float-end"><h3 class="text-success">•</h3></span></h5>
-                                                        <p> Olviste tu celular •2sem</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr >
-                                            <td>
-                                                <div class="row d-flex justify-content-between align-items-center">
-                                                    <div class="col-2">
-                                                        <img th:src="@{/assets/img/p3.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <h5><a th:href="@{/administrador/historialPaciente}">Migue Chavez </a><span class="text-muted ms-2 float-end"><h3 class="text-success">•</h3></span></h5>
-                                                        <p> Olviste tu celular •2sem</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr >
-                                            <td>
-                                                <div class="row d-flex justify-content-between align-items-center">
-                                                    <div class="col-2">
-                                                        <img th:src="@{/assets/img/p4.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <h5><a href="#">Noe Manrique </a><span class="text-muted ms-2 float-end"><h3 class="text-success">•</h3></span></h5>
-                                                        <p>tú: Te di info falsa •9sem</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr >
-                                            <td>
-                                                <div class="row d-flex justify-content-between align-items-center">
-                                                    <div class="col-2">
-                                                        <img th:src="@{/assets/img/p5.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <h5><a href="#">Gustavo Pardo </a><span class="text-muted ms-2 float-end"><h3 class="text-success">•</h3></span></h5>
-                                                        <p> Olviste tu celular •2sem</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
+                <div class = "scrollable1 px-3"  >
+                    <div class=" d-flex  justify-content p-3 mb-2 rounded border" style="background-color: #F2F2F2" >
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
+                        <div class="overflow-hidden">
+                            <div class = "d-flex justify-content-between mb-0">
+                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                                <small>09:55 am</small>
                             </div>
-
+                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
                         </div>
-
-                    </section>
-                    <section class = "col-lg-7">
-
-                        <div class="card top-selling  ">
-
-
-
-                            <div class="card-body pb-0">
-                                <br>
-                                <nav class="navbar bg-body-tertiary"  >
-                                    <div class="container-fluid">
-                                        <table class="table ">
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col-2">
-                                                            <img th:src="@{/assets/img/p1.jpg}" alt="#" width="70" height="70" class="rounded-circle">
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <h3>
-                                                                Iker Osco Chavez</h3>
-                                                            <p>Última actividad hace 2h</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </nav>
-                                <div class="message-box overflow-auto container">
-                                    <div class="media">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <p><span><b><i>Messi:</i></b></span> Hola, ¿cómo estás?</p>
-                                            <p><span><b><i>Tú:</i></b></span> Hola, estoy bien, gracias. ¿Y tú?</p>
-
-                                        </div>
-                                        <div class="media-body left person1">
-
-                                            <p class="time">10:00 am</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <p><span><b><i>Messi:</i></b></span> Hola, ¿cómo estás?</p>
-                                            <p><span><b><i>Tú:</i></b></span> Hola, estoy bien, gracias. ¿Y tú?</p>
-
-                                        </div>
-                                        <div class="media-body left person1">
-
-                                            <p class="time">10:00 am</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <p><span><b><i>Messi:</i></b></span> Hola, ¿cómo estás?</p>
-                                            <p><span><b><i>Tú:</i></b></span> Hola, estoy bien, gracias. ¿Y tú?</p>
-
-                                        </div>
-                                        <div class="media-body left person1">
-
-                                            <p class="time">10:00 am</p>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <p><span><b><i>Messi:</i></b></span> Hola, ¿cómo estás?</p>
-                                            <p><span><b><i>Tú:</i></b></span> Hola, estoy bien, gracias. ¿Y tú?</p>
-
-                                        </div>
-                                        <div class="media-body left person1">
-
-                                            <p class="time">10:00 am</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-
+                    </div>
+                    <div class=" d-flex  justify-content p-3 mb-2 rounded border" style="background-color: #F2F2F2" >
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
+                        <div class="overflow-hidden">
+                            <div class = "d-flex justify-content-between mb-0">
+                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                                <small>09:55 am</small>
                             </div>
-
+                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
                         </div>
-                    </section>
-                    <!-- Top Selling -->
-
-
-
-
-
+                    </div>
+                    <div class=" d-flex  justify-content p-3 mb-2 rounded border" style="background-color: #F2F2F2" >
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
+                        <div class="overflow-hidden">
+                            <div class = "d-flex justify-content-between mb-0">
+                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                                <small>09:55 am</small>
+                            </div>
+                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
+                        </div>
+                    </div>
+                    <div class=" d-flex  justify-content p-3 mb-2 rounded border" style="background-color: #F2F2F2" >
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
+                        <div class="overflow-hidden">
+                            <div class = "d-flex justify-content-between mb-0">
+                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                                <small>09:55 am</small>
+                            </div>
+                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
+                        </div>
+                    </div>
+                    <div class=" d-flex  justify-content p-3 mb-2 rounded border" style="background-color: #F2F2F2" >
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
+                        <div class="overflow-hidden">
+                            <div class = "d-flex justify-content-between mb-0">
+                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                                <small>09:55 am</small>
+                            </div>
+                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
+                        </div>
+                    </div>
+                    <div class=" d-flex  justify-content p-3 mb-2 rounded border" style="background-color: #F2F2F2" >
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
+                        <div class="overflow-hidden">
+                            <div class = "d-flex justify-content-between mb-0">
+                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                                <small>09:55 am</small>
+                            </div>
+                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
+                        </div>
+                    </div>
+                    <div class=" d-flex  justify-content p-3 mb-2 rounded border" style="background-color: #F2F2F2" >
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
+                        <div class="overflow-hidden">
+                            <div class = "d-flex justify-content-between mb-0">
+                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                                <small>09:55 am</small>
+                            </div>
+                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
+                        </div>
+                    </div>
+                    <div class=" d-flex  justify-content p-3 mb-2 rounded border" style="background-color: #F2F2F2" >
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
+                        <div class="overflow-hidden">
+                            <div class = "d-flex justify-content-between mb-0">
+                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                                <small>09:55 am</small>
+                            </div>
+                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
+                        </div>
+                    </div>
                 </div>
-            </div><!-- End Left side columns -->
+                <br>
 
-            <!-- Right side columns -->
+            </div>
+            <div class = "col-md-8 col-sm-10" style="background-color: #F2F2F2" >
+                <div class=" d-flex  justify-content p-4 px-5 mb-2  border-bottom"  >
+                    <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-3"/>
+                    <div class="overflow-hidden">
+                        <div class = "d-flex justify-content-between mb-0">
+                            <span class="fw-bold">Diego Juan Velazquez Torres</span>
+                        </div>
+                        <p>En línea</p>
+                    </div>
+                </div>
+                <div class = "scrollable2 px-5"  >
+                    <div class="d-flex mb-4">
 
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
+                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
+                            <div class="bg-white p-2 ms-2 rounded">
+                                <p class="mb-1 fw-bold">Diego Velazquez</p>
+                                <small class=" ">
+                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
+                                </small>
+                            </div>
+                            <div>
+                                <small class=" ms-2">09:55 am</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row-reverse mb-4">
 
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
+                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
+                            <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
+                                <p class="mb-1 fw-bold">Alexandra Manrique</p>
+                                <small class=" ">
+                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
+                                </small>
+                            </div>
+                            <div class ="text-end">
+                                <small class="ms-2">09:55 am</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
 
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
+                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
+                            <div class="bg-white p-2 ms-2 rounded">
+                                <p class="mb-1 fw-bold">Diego Velazquez</p>
+                                <small class=" ">
+                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
+                                </small>
+                            </div>
+                            <div>
+                                <small class=" ms-2">09:55 am</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row-reverse mb-4">
+
+                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
+                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
+                            <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
+                                <p class="mb-1 fw-bold">Alexandra Manrique</p>
+                                <small class=" ">
+                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
+                                </small>
+                            </div>
+                            <div class ="text-end">
+                                <small class="ms-2">09:55 am</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-3  d-flex align-items-center">
+                    <input type="text" class="form-control me-2  border-0" placeholder="Escribe tu mensaje...">
+                    <button type="button" class="btn btn-primary">Enviar</button>
+                </div>
+
+            </div>
         </div>
     </section>
 
@@ -556,16 +488,11 @@
 <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
 <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
 <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-<!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
-
-
-
-
-<!-- Agregamos las librerías de jQuery UI para crear el calendario -->
-
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/jsAdministrador.js}"></script>
+
+
 
 </body>
 

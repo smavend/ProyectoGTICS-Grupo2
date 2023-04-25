@@ -9,6 +9,16 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+#sidebar {
+    border-radius: 35px;
+}
+
+.ellipsis{
+    white-space: nowrap; /* para evitar el salto de línea */
+    overflow: hidden; /* para ocultar el texto que no cabe en el contenedor */
+    text-overflow: ellipsis; /* para mostrar los tres puntos (...) al final del texto que no cabe */
+}
+
 :root {
     scroll-behavior: smooth;
 }
@@ -44,7 +54,7 @@ h6 {
 # Main
 --------------------------------------------------------------*/
 #main {
-    margin-top: 60px;
+    margin-top: 80px;
 
     transition: all 0.3s;
     width: auto;
@@ -654,7 +664,7 @@ table a:hover {
 
     #main,
     #footer {
-        margin-left: 190px;
+        margin-left: 210px;
     }
 }
 
