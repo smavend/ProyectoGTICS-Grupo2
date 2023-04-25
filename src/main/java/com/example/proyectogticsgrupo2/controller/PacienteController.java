@@ -55,6 +55,10 @@ public class PacienteController {
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
         }
+        List<Seguro> seguroList = seguroRepository.findAll();
+        List<Especialidad> especialidadList = especialidadRepository.findAll();
+        model.addAttribute("especialidadList", especialidadList);
+        model.addAttribute("seguroList", seguroList);
         return "paciente/reservar";
     }
 

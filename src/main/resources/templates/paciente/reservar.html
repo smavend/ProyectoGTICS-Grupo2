@@ -40,29 +40,25 @@
 
                 <div class="row" style="margin-top: 40px;margin-left: 20px">
                     <div class="col-6">
-                        <p class="mb-2"><span class="fw-bold">Paciente:</span><span style="margin-left: 13px">Juanchito Palacios Castro</span>
+                        <p class="mb-2"><span class="fw-bold">Paciente:</span><span style="margin-left: 13px" th:text="${paciente.nombre}+' '+${paciente.apellidos}">Juanchito Palacios Castro</span>
                         </p>
-                        <p class="mb-2"><span class="fw-bold">Edad:</span><span style="margin-left: 20px">25 años</span>
+                        <p class="mb-2"><span class="fw-bold">Edad:</span><span style="margin-left: 20px" >25 años</span>
                         </p>
-                        <p class="mb-2"><span class="fw-bold">Correo:</span><span style="margin-left: 13px">juanpc98@gmail.com</span>
+                        <p class="mb-2"><span class="fw-bold">Correo:</span><span style="margin-left: 13px" th:text="${paciente.correo}">juanpc98@gmail.com</span>
                         </p>
 
                     </div>
                     <div class="col-6">
-                        <p class="mb-2"><span class="fw-bold">Dirección:</span><span style="margin-left: 13px">Av. Las Nuevas Lomas, Lima</span>
+                        <p class="mb-2"><span class="fw-bold">Dirección:</span><span style="margin-left: 13px" th:text="${paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
                         </p>
-                        <p class="mb-2"><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px">934-250-488</span>
+                        <p class="mb-2"><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px" th:text="${paciente.telefono}">934-250-488</span>
                         </p>
                         <p class="mb-2"><span class="fw-bold">Seguro:</span><span style="margin-left: 13px">
-          <select style="border-radius: 8px; padding-left: 13px; font-size: 15px">
-            <option value="">Pacifico EPS</option>
-            <option value="">Rimac EPS</option>
-            <option value="">Rimas seguros</option>
-            <option value="">Pacifico seguros</option>
-            <option value="">Mapfre</option>
-            <option value="">Plan Salud</option>
-            <option value="">Sin Seguro</option>
-          </select></span>
+                            <select style="border-radius: 8px; padding-left: 13px; font-size: 15px">
+                                <option th:text="${paciente.seguro.nombre}"></option>
+                                <option th:each="seguro: ${seguroList}" th:value="${seguro.nombre}" th:text="${seguro.nombre}" th:if="${seguro.nombre} != ${paciente.seguro.nombre}"></option>
+                            </select>
+                        </span>
                         </p>
                     </div>
                 </div>
@@ -72,15 +68,8 @@
                         <p><span class="fw-bold">Especialidad:</span><span class="fw-bold" style="color: red">*</span>
                         </p>
                         <select style="border-radius: 8px; padding-left: 13px; font-size: 15px; margin-top: 5px; padding-right: 20px">
-                            <option value="">--Seleccione una especialidad--</option>
-                            <option value="">Cardiología</option>
-                            <option value="">Cirugía Cardiovascular</option>
-                            <option value="">Dermatología</option>
-                            <option value="">Ecografía</option>
-                            <option value="">Endocrinología</option>
-                            <option value="">Gastroenterología</option>
-                            <option value="">Ginecología</option>
-                            <option value="">Laboratorio</option>
+                            <option value="" selected>--Seleccione una especialidad--</option>
+                            <option th:each="especialidad: ${especialidadList}" th:value="${especialidad.nombre}" th:text="${especialidad.nombre}">Dermatología</option>
                         </select>
                         <p style="margin-top: 15px"><span class="fw-bold">DNI:</span><span class="fw-bold"
                                                                                            style="color: red">*</span>
