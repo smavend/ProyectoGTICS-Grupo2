@@ -200,7 +200,7 @@
           </li>
 
           <li class="dropdown-footer">
-            <a href="mensajeria}">Ver todos los mensajes</a>
+            <a th:href="@{/administrador/mensajeria}">Ver todos los mensajes</a>
           </li>
 
         </ul><!-- End Messages Dropdown Items -->
@@ -375,9 +375,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="paciente: ${listaPaciente}">
+
+                      <tr th:each="paciente: ${listaPaciente}">
+
                       <td>
-                        <a  th:href="@{/administrador/historialPaciente}" class="row">
+                        <a th:href="@{/administrador/historialPaciente}">
+                        <div class="row">
                           <div class="col-lg-2 col-sm-3">
                             <img th:src="@{|/administrador/imagePaci/${paciente.idPaciente}|}" alt="#" width="70" height="70" class="rounded-circle"/>
                           </div>
@@ -389,10 +392,10 @@
                             <span class="text-muted ms-2 float-end"><h6 th:if="${paciente.estado == 1}" th:text="Activo"></h6></span>
 
                           </div>
+                        </div>
                         </a>
                       </td>
                     </tr>
-
                     </tbody>
                   </table>
                   <br>

@@ -199,7 +199,7 @@
                     </li>
 
                     <li class="dropdown-footer">
-                        <a href="#">Show all messages</a>
+                        <a th:href="@{/administrador/mensajeria}">Show all messages</a>
                     </li>
 
                 </ul><!-- End Messages Dropdown Items -->
@@ -223,7 +223,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile}">
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/dashboard}">
                             <i class="bi bi-person"></i>
                             <span>Mi Perfil</span>
                         </a>
@@ -323,7 +323,7 @@
                         <div class="card-body pb-0">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="card-title">Recibo - 13/12/2022 <span>| Pago a suministros</span></h5>
-                                <a type="button"class="btn btn-secondary rounded-pill" th:href="@{/administrador-crearPaciente}">Imprimir <i class="bi bi-printer-fill"></i></a>
+                                <a type="button"class="btn btn-secondary rounded-pill" href="#">Imprimir <i class="bi bi-printer-fill"></i></a>
                             </div>
 
                             <br>
