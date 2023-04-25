@@ -2,6 +2,7 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,7 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,8 +65,7 @@ public class AdministradorController {
         return "administrador/crearPaciente";}
     @PostMapping("/guardarPaciente")
     public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
-                                  Paciente paciente, Model model) {
-
+                                  Paciente paciente, Model model){
         if (file.isEmpty()) {
             model.addAttribute("msg", "Debe subir un archivo");
             return "redirect:/administrador/crearPaciente";
@@ -76,9 +79,11 @@ public class AdministradorController {
         }
 
         try {
+
             paciente.setFoto(file.getBytes());
             paciente.setFotoname(fileName);
             paciente.setFotocontenttype(file.getContentType());
+            paciente.setFecharegistro(LocalDateTime.now());
             pacienteRepository.save(paciente);
             return "redirect:/administrador/dashboard";
 
