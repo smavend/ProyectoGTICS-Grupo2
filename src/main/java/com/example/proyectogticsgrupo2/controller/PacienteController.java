@@ -115,11 +115,17 @@ public class PacienteController {
     }
 
     @GetMapping("/perfilDoctor")
-    public String verPerfilDoctor(Model model){
+    public String verPerfilDoctor(Model model,
+                                  @RequestParam("idDoctor") String idDoctor){
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
+        }
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
+        if(optionalDoctor.isPresent()){
+            Doctor doctor = optionalDoctor.get();
+            model.addAttribute("doctor", doctor);
         }
         return "paciente/doctorPerfil";
     }

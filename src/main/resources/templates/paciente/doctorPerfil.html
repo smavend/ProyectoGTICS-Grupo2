@@ -41,10 +41,10 @@
                     </div>
                     <!-- Información Doctor -->
                     <div class="col-md-7">
-                        <div class="perfilDoctorEspecialidad">
+                        <div class="perfilDoctorEspecialidad" th:text="${doctor.especialidad.nombre}">
                             Neurología
                         </div>
-                        <div class="perfilDoctorNombre">
+                        <div class="perfilDoctorNombre" th:text="${doctor.nombre}+' '+${doctor.apellidos}">
                             Juan Martinez Rondon
                         </div>
                         <div class="perfilDoctorInformacion">
