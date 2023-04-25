@@ -191,4 +191,14 @@ public class PacienteController {
         }
         return "paciente/consentimientos";
     }
+
+    @GetMapping("/mensajeria")
+    public String mensajeria(Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById("45978547");
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
+        return "paciente/mensajeria";
+    }
 }

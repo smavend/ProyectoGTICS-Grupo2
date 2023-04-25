@@ -42,7 +42,25 @@ font-family: "Nunito", sans-serif;
 padding: 20px 10px 15px 10px;
 transition: all 0.3s;
 }
+/*styles mensajeria*/
+.mensajeria{
+    font-family: 'Poppins', sans-serif;
+}
+.ellipsis{
+    white-space: nowrap; /* para evitar el salto de línea */
+    overflow: hidden; /* para ocultar el texto que no cabe en el contenedor */
+    text-overflow: ellipsis; /* para mostrar los tres puntos (...) al final del texto que no cabe */
+}
+.scrollable1{
+    max-height: 550px; /* Establece una altura máxima para el div */
+    overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
+}
+.scrollable2{
+    max-height: 450px; /* Establece una altura máxima para el div */
+    overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
+}
 
+/*End styles mensajeria*/
 @media (max-width: 1199px) {
     #main{
         padding: 15px;
