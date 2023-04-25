@@ -277,7 +277,7 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" th:href="@{/doctor/reporte}">
+                    <a class="nav-link collapsed" >
                         <i class="bi bi-card-text"></i>
                         <span>Reportes</span>
                     </a>
@@ -329,9 +329,8 @@
                                     <div  class="card-body pb-0">
                                         <h5 class="card-title">PRÓXIMAS CITAS<span>| Sede San Miguel</span></h5>
                                         <div class="container-fluid">
-                                            <form class="d-flex" role="search">
-                                                <input class="form-control me-2" type="search" placeholder="Buscar cita" aria-label="Search">
-                                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                                            <form method="post" th:action="@{/doctor/BuscarCita}">
+                                                <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar por nombre"/>
                                             </form>
                                         </div>
                                         <br>
@@ -366,15 +365,23 @@
                                                             </td>
 
                                                             <td style="font-size: 1rem;color: black">
-                                                                <h6 th:text="${ cita.estado==0 ? 'No' : 'Sí'}"></h6>
+                                                                <h6 th:if="${cita.estado == 0}" th:text="'Próxima cita'"></h6>
+                                                                <h6 th:if="${cita.estado == 1}" th:text="'Registrado en caja'"></h6>
+                                                                <h6 th:if="${cita.estado == 2}" th:text="'En espera'"></h6>
+                                                                <h6 th:if="${cita.estado == 3}" th:text="'En consulta'"></h6>
                                                             </td>
 
-                                                            <td>
+
+                                                            <td th:if="${cita.modalidad == 1}">
                                                                 <div style="width: min-content">
                                                                     <a th:href="@{'/doctor/reporte?id=' + ${cita.paciente.idPaciente}+ '&id2=' + ${cita.id_cita}}" type="button" class="btn btn-success">Iniciar cita</a>
                                                                     <button style="margin-top: 5px;width: max-content" type="button" class="btn btn-danger">Enviar cuestionario</button>
                                                                 </div>
                                                             </td>
+                                                            <td th:unless="${cita.modalidad == 1}">
+                                                                <!-- no se muestra nada si la modalidad es presencial -->
+                                                            </td>
+
                                                         </tr>
 
 
@@ -390,28 +397,6 @@
                             </div><!-- End Top Selling -->
 
                             <div class="card-body pb-0 col-4">
-                                <h5 class="card-title">Calendario <span>| Hoy</span></h5>
-
-                                <!-- Agregamos un div con el id "calendario" para mostrar el calendario -->
-                                <div id='calendar'></div>
-
-
-
-                            </div>
-
-
-                        </div>
-                    </div><!-- End Left side columns -->
-
-                    <!-- Right side columns -->
-
-                    <div style="width: auto" class="col-lg-7">
-                        <div class="row">
-
-
-
-                            <!-- Top Selling -->
-                            <div class="col-12">
                                 <div class="card top-selling overflow-auto container">
 
 
@@ -463,6 +448,25 @@
                                     </div>
 
                                 </div>
+
+
+
+                            </div>
+
+
+                        </div>
+                    </div><!-- End Left side columns -->
+
+                    <!-- Right side columns -->
+
+                    <div style="width: auto" class="col-lg-7">
+                        <div class="row">
+
+
+
+                            <!-- Top Selling -->
+                            <div class="col-12">
+
                             </div><!-- End Top Selling -->
 
 

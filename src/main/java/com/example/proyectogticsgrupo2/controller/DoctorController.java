@@ -135,6 +135,16 @@ public class DoctorController {
         return "redirect:/doctor/dashboard";
     }
 
+    @PostMapping("/BuscarCita")
+    public String BuscarCita(@RequestParam("searchField") String searchField,
+                                      Model model) {
+
+        List<Cita> citaList = citaRepository.buscadorProximasCitas(searchField);
+        model.addAttribute("listaCitas", citaList);
+
+        return "/doctor/DoctorDashboard";
+    }
+
     @GetMapping("/prueba")
     public String prueba(Model model){
 
