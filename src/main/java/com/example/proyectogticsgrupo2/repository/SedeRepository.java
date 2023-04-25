@@ -9,6 +9,4 @@ import java.util.List;
 
 @Repository
 public interface SedeRepository extends JpaRepository<Sede,Integer> {
-    @Query(nativeQuery = true, value = "SELECT * FROM proyectogtics.sede where clinica_id_clinica=?1")
-    List<Sede> listarSedes(int id);
 }
