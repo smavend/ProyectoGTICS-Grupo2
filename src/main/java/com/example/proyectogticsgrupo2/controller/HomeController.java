@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,6 +100,8 @@ public class HomeController {
     }
     @PostMapping("/general/registrar")
     public String registrarPaciente(Paciente paciente){
+        paciente.setFecharegistro(LocalDateTime.now());
+        paciente.setEstado(3);
         pacienteRepository.save(paciente);
         return "general/confirmacionregistro";
     }
