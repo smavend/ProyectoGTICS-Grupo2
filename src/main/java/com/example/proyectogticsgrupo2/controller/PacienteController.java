@@ -11,6 +11,7 @@ import com.example.proyectogticsgrupo2.repository.SedeRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -81,6 +82,11 @@ public class PacienteController {
             model.addAttribute("paciente", paciente);
             return "paciente/perfilEditar";
         }
+        return "redirect:Paciente/perfil";
+    }
+
+    @PostMapping("/perfil/guardar")
+    public String guardarPerfil(){
         return "redirect:Paciente/perfil";
     }
 
