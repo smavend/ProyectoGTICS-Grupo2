@@ -42,7 +42,7 @@ public class Cita {
     @JoinColumn(name = "sede_id_sede", nullable = false)
     private Sede sede;
 
-    private String tipo;
+    private String es_examen;
 
     @ManyToOne
     @JoinColumn(name = "id_cita_previa")
