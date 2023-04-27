@@ -305,18 +305,29 @@
           <div class="card top-selling overflow-auto ">
             <br>
             <h5 class="card-title text-center">Crear Nuevo Doctor</h5>
-            <form method="post" th:action="@{administrador/nuevoDoctor}">
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-danger" role="alert"></div>
+            <form method="post" th:action="@{/administrador/guardarDoctor}" enctype="multipart/form-data">
               <div class="row">
                 <div class="col-md-6">
+                  <div class="col-md-12 mb-3">
+                    <label for="dni">DNI</label>
+                    <input type="text" class="form-control" id="dni" name ="id_doctor" required>
+                  </div>
                   <div class="col-md-12 mb-3">
                     <label for="nombre">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name ="nombre" required>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="sexo">Especialidad</label>
-                    <select class="form-select" id="sexo" name ="especialidad" required>
+                    <label for="apellido">Apellido</label>
+                    <input type="text" class="form-control" id="apellido" name="apellidos" required>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="genero">Género</label>
+                    <label for="sexo">Sexo</label>
+                    <select class="form-select" id="genero" name="genero" required>
                       <option value="">Seleccionar</option>
-                      <option th:each="especialidad: ${listaEspecialidad}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" ></option>
+                      <option value="Masculino">Masculino</option>
+                      <option value="Femenino">Femenino</option>
                     </select>
                   </div>
                   <div class="col-md-12 mb-3">
@@ -326,24 +337,27 @@
                 </div>
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
-                    <label for="apellido">Apellido</label>
-                    <input type="text" class="form-control" id="apellido" name="apellidos" required>
+                    <label for="sexo">Especialidad</label>
+                    <select class="form-select" id="sexo" name ="especialidad" required>
+                      <option value="">Seleccionar</option>
+                      <option th:each="especialidad: ${listaEspecialidad}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" ></option>
+                    </select>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="sede">Sede</label>
-                    <select class="form-select" id="sede" name ="sede" required>
+                      <select class="form-select" id="sede" name ="sede" required>
                       <option value="">Seleccionar</option>
                       <option th:each="sede: ${listaSede}" th:value="${sede.idSede}" th:text="${sede.nombre}" ></option>
                     </select>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="foto" class="form-label">Subir foto</label>
-                    <input type="file" class="form-control" name="foto" id="foto">
+                    <label for="archivo" class="form-label">Subir foto</label>
+                    <input type="file" class="form-control" id="archivo" name="archivo">
                   </div>
                 </div>
               </div>
               <div class="col-md-12 mb-3">
-                <button class="btn btn-success" type="submit">Invitar Doctor</button>
+                <button class="btn btn-success" type="submit">Registrar Doctor</button>
                 <a class="btn btn-danger" type="button" th:href="@{/administrador/dashboard}">Cancelar</a>
               </div>
             </form>

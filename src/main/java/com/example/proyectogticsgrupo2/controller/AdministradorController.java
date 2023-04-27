@@ -2,12 +2,22 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/administrador")
@@ -40,8 +50,11 @@ public class AdministradorController {
     }
     @GetMapping("/finanzas")
     public String finanzas(){return "administrador/finanzas";}
+    @GetMapping("/perfil")
+    public String perfil(){return "administrador/perfil";}
     @GetMapping("/finanzas-recibos")
     public String finanzas_recibos(){return "administrador/finanzas-recibos";}
+    //###########################################################################
     @GetMapping("/crearPaciente")
     public String crearPaciente(Model model){
     List<Seguro> listaSeguro  = seguroRepository.findAll();
@@ -51,6 +64,32 @@ public class AdministradorController {
     model.addAttribute("listaDistrito",listaDistrito);
     model.addAttribute("listaAdministrativo",listaAdministrativo);
         return "administrador/crearPaciente";}
+    @PostMapping("/guardarPaciente")
+    public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
+                                  Paciente paciente, Model model){
+        if (file.isEmpty()) {
+            model.addAttribute("msg", "Debe subir un archivo");
+            return "redirect:/administrador/crearPaciente";
+        }
+        String fileName = file.getOriginalFilename();
+        if (fileName.contains("..")) {
+            model.addAttribute("msg", "No se permiten '..' en el archivo");
+            return "redirect:/administrador/crearPaciente";
+        }
+        try {
+            paciente.setFoto(file.getBytes());
+            paciente.setFotoname(fileName);
+            paciente.setFotocontenttype(file.getContentType());
+            paciente.setFecharegistro(LocalDateTime.now());
+            pacienteRepository.save(paciente);
+            return "redirect:/administrador/dashboard";
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("msg", "ocurrió un error al subir el archivo");
+            return "redirect:/administrador/crearPaciente";
+        }
+    }
+    //###########################################################################
     @GetMapping("/crearDoctor")
     public String crearDoctor(Model model){
         List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
@@ -58,12 +97,80 @@ public class AdministradorController {
         model.addAttribute("listaSede",listaSede);
         model.addAttribute("listaEspecialidad",listaEspecialidad);
         return "administrador/crearDoctor";}
+    @PostMapping("/guardarDoctor")
+    public String guardarDoctor(@RequestParam("archivo") MultipartFile file,
+                                 Doctor doctor, Model model){
+        if (file.isEmpty()) {
+            model.addAttribute("msg", "Debe subir un archivo");
+            return "redirect:/administrador/crearDoctor";
+        }
+        String fileName = file.getOriginalFilename();
+        if (fileName.contains("..")) {
+            model.addAttribute("msg", "No se permiten '..' en el archivo");
+            return "redirect:/administrador/crearDoctor";
+        }
+        try {
+            doctor.setFoto(file.getBytes());
+            doctor.setFotoname(fileName);
+            doctor.setFotocontenttype(file.getContentType());
+            doctor.setEstado(1);
+            doctorRepository.save(doctor);
+            return "redirect:/administrador/dashboard";
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("msg", "ocurrió un error al subir el archivo");
+            return "redirect:/administrador/crearDoctor";
+        }
+    }
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
     @GetMapping("/mensajeria")
     public String mensajeria(){return "administrador/mensajeria";}
     @GetMapping("/historialPaciente")
     public String historialPaciente(){return "administrador/historialPaciente";}
+
+    @GetMapping("/imagePaci/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String dni) {
+        Optional<Paciente> opt = pacienteRepository.findById(dni);
+
+        if (opt.isPresent()) {
+            Paciente p = opt.get();
+
+            byte[] imagenComoBytes = p.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(p.getFotocontenttype()));
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
+    @GetMapping("/imageDoc/{id}")
+    public ResponseEntity<byte[]> mostrarImagenDoc(@PathVariable("id") String dni) {
+        Optional<Doctor> opt = doctorRepository.findById(dni);
+
+        if (opt.isPresent()) {
+            Doctor doc = opt.get();
+
+            byte[] imagenComoBytes = doc.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(doc.getFotocontenttype()));
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
 
     //###############################3
 

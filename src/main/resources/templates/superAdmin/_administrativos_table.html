@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <table class="table table-striped" id="superadmin_administrativos_table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Sede</th>
+                <th scope="col">Especialidad</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Clinica</th>
+                <th scope="col">Accion</th>
+            </tr>
+        </thead>
+        <tbody id="tabla_contenido_administrativo">
+            <tr th:each="listaAdministrativo, info : ${listaAdministrativoDTO_superadmin}">
+                <td th:text="${info.index + 1}"></td>
+                <td th:text="${listaAdministrativo.idAdministrativo}"></td>
+                <td th:text="${listaAdministrativo.nombre}"></td>
+                <td th:text="${listaAdministrativo.apellidos}"></td>
+                <td th:text="${listaAdministrativo.estado}"></td>
+                <td th:text="${listaAdministrativo.sedeNombre}"></td>
+                <td th:text="${listaAdministrativo.especialidad}"><</td>
+                <!--                                     <td th:text="${listaAdminstrativo.administrativoId.getSedeId().nombre}"></td>-->
+                <!--                                        <td th:text="${listaAdminstrativo.getSedesAdministrativo().get(0).getSede().nombre}"></td>-->
+                <td th:text="${listaAdministrativo.correo}"></td>
+                <td th:text="${listaAdministrativo.clinica}"></td>
+                <td>
+                    <button type="button" class="btn btn-primary    " data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">Loguear
+                    </button>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(listaAdministrativoDTO_superadmin)}">
+                <td colspan="10" class="text-center" style="color: grey; font-weight: bold">Sin Resultados</td>
+            </tr>
+        </tbody>
+    </table>
+</html>

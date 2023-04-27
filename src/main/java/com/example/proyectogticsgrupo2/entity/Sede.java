@@ -17,4 +17,5 @@ public class Sede {
     @OneToOne
     @JoinColumn(name = "clinica_id_clinica", nullable = false)
     private Clinica clinica;
+    private String direccion;
 }

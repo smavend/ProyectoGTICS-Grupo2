@@ -303,9 +303,14 @@
           <div class="card top-selling overflow-auto ">
             <br>
             <h5 class="card-title text-center">Crear Nuevo Paciente</h5>
-            <form method="post" th:action="@{administrador/nuevoPaciente}">
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-danger" role="alert"></div>
+              <form method="post" th:action="@{/administrador/guardarPaciente}" enctype="multipart/form-data">
               <div class="row">
                 <div class="col-md-6">
+                  <div class="col-md-12 mb-3">
+                    <label for="nombre">DNI</label>
+                    <input type="text" class="form-control" id="dni" name ="idPaciente" required>
+                  </div>
                   <div class="col-md-12 mb-3">
                     <label for="nombre">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name ="nombre" required>
@@ -315,6 +320,15 @@
                     <input type="tel" class="form-control" id="telefono" name ="telefono" required>
                   </div>
                   <div class="col-md-12 mb-3">
+                    <label for="estado">Estado</label>
+                    <select class="form-select" id="estado" name ="estado" required>
+                      <option selected>Open this select menu</option>
+                      <option value="1">Activo</option>
+                      <option value="2">Inactivo</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-12 mb-3">
                     <label for="sexo">Nombre del Seguro</label>
                     <select class="form-select" id="sexo" name ="seguro" required>
                       <option value="">Seleccionar</option>
@@ -323,17 +337,20 @@
                     </select>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="sexo">Administrativo</label>
-                    <select class="form-select" id="sesfsfxo" name ="administrativo" required>
+                    <label for="genero">Género</label>
+                    <label for="sexo">Sexo</label>
+                    <select class="form-select" id="genero" name="genero" required>
                       <option value="">Seleccionar</option>
-                      <option th:each="administrativo:${listaAdministrativo}" th:value="${administrativo.idAdministrativo}" th:text="${administrativo.nombre}"></option>
-
+                      <option value="Masculino">Masculino</option>
+                      <option value="Femenino">Femenino</option>
                     </select>
                   </div>
+
                   <div class="col-md-12 mb-3">
                     <label for="email">Correo electrónico</label>
                     <input type="email" class="form-control" id="email" name="correo" required>
                   </div>
+
                 </div>
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
@@ -345,21 +362,25 @@
                     <input type="text" class="form-control" id="direccion" name="direccion" required>
                   </div>
                   <div class="col-md-12 mb-3">
+                    <label for="fecha">Fecha Nacimiento</label>
+                    <input type="date" class="form-control" id="fecha" name="fechanacimiento" required>
+                  </div>
+                  <div class="col-md-12 mb-3">
                     <label for="distrito">Distrito</label>
                     <select class="form-select" id="distrito" name="distrito" required>
                       <option value="">Seleccionar</option>
                       <option th:each="distrito:${listaDistrito}" th:value="${distrito.idDistrito}" th:text="${distrito.nombre}"></option>
-
                     </select>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="foto" class="form-label">Subir foto</label>
-                    <input type="file" class="form-control" name="foto" id="foto">
+                    <label for="archivo" class="form-label">Subir foto</label>
+                    <input type="file" class="form-control" id="archivo" name="archivo">
                   </div>
+
                 </div>
               </div>
               <div class="col-md-12 mb-3">
-                <button class="btn btn-success" type="submit">Invitar Paciente</button>
+                <button class="btn btn-success" type="submit">Registrar Paciente</button>
                 <a class="btn btn-danger" type="button" th:href="@{/administrador/dashboard}">Cancelar</a>
               </div>
             </form>

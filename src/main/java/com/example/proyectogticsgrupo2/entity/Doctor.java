@@ -28,25 +28,22 @@ public class Doctor {
     @JoinColumn(name = "sede_id_sede",nullable = false)
     private Sede sede;
 
-    @Column(nullable = false)
-    private float duracion_cita_horas;
+    @Column(name = "duracion_cita_horas")
+    private String duracion_cita_horas;
 
     @ManyToOne
-    @JoinColumn(name = "horario_id_horario",nullable = false)
+    @JoinColumn(name = "horario_id_horario")
     private Horario horario;
 
     @Column(nullable = false)
     private String correo;
 
-    private String precio;
-    @Lob
-    private byte[] foto;
-
     private String fotoname;
     private String fotocontenttype;
+    private byte[] foto;
+
+    private String precio;
     private String genero;
-
-
 
 
 }
