@@ -27,6 +27,7 @@ public class SuperAdminController {
     final SedeRepository sedeRepository;
     final EspecialidadRepository especialidadRepository;
     final SuperAdminService superAdminService;
+    final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
 
     public SuperAdminController(PacienteRepository pacienteRepository,
                                 AdministrativoRepository administrativoRepository,
@@ -35,7 +36,8 @@ public class SuperAdminController {
                                 ClinicaRepository clinicaRepository,
                                 SedeRepository sedeRepository,
                                 EspecialidadRepository especialidadRepository,
-                                SuperAdminService superAdminService) {
+                                SuperAdminService superAdminService,
+                                AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository) {
         this.pacienteRepository = pacienteRepository;
         this.administradorRepository = administradorRepository;
         this.administrativoRepository = administrativoRepository;
@@ -44,6 +46,7 @@ public class SuperAdminController {
         this.sedeRepository = sedeRepository;
         this.especialidadRepository = especialidadRepository;
         this.superAdminService = superAdminService;
+        this.administrativoPorEspecialidadPorSedeRepository = administrativoPorEspecialidadPorSedeRepository;
     }
     @GetMapping("")
     public String HomePageSuperAdmin(Model model) {
@@ -197,19 +200,31 @@ public class SuperAdminController {
             if (clinica.equals("otro")) {
                 clinicaRepository.insertarClinica(otraClinica);
                 Clinica clinicanueva = clinicaRepository.buscarClinicaPorNombre(otraClinica);
-                sedeRepository.insertarSede(otraSede, clinicanueva.getIdClinica());
-                Sede sedenueva_id = sedeRepository.buscarPorSedeId(String.valueOf(clinicanueva.getIdClinica()));
-                administradorRepository.insertarAdministrador(dni,nombres,apellidos,Integer.parseInt(sedenueva_id.getIdSede()));
+                    sedeRepository.insertarSede(otraSede, clinicanueva.getIdClinica());
+                Sede sedenueva_id = sedeRepository.buscarPorClinicaId(String.valueOf(clinicanueva.getIdClinica()));
+                administradorRepository.insertarAdministrador(dni,nombres,apellidos,sedenueva_id.getIdSede());
+
                 // Utiliza los valores de 'otraClinica' y 'otraSede'
             } else {
+                Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
+                Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede, clinica_enviar.getIdClinica());
+                administradorRepository.insertarAdministrador(dni,nombres,apellidos,sede_enviar.getIdSede());
                 // Utiliza el valor de 'clinica'
             }
             // ... (por ejemplo, guarda el usuario en la base de datos)
         } else if (selectUsuario.equals("administrativo")) {
+
             // Procesa los datos para un usuario administrativo
             if (clinica.equals("otro")) {
+                //
                 // Utiliza los valores de 'otraClinica' y 'otraSede'
             } else {
+                //el campo estado
+                administrativoRepository.insertarAdministrativo(dni,nombres,apellidos);
+                Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
+                Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede, clinica_enviar.getIdClinica());
+                //falta añadir el parámetro Especialidad ( se añadirá como uno por defecto pero se tiene que elegir )
+                administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(),dni);
                 // Utiliza el valor de 'clinica' y, si corresponde, el valor de 'sede'
             }
             // ... (por ejemplo, guarda el usuario en la base de datos)

@@ -45,20 +45,18 @@ $(document).ready(function() {
 
     setupTablePagination($('#superadmin_administrativos_table'), 5);
 
-    var firstName;
-    var lastName;
-    var id1;
-
     $('#staticBackdrop').on('show.bs.modal', function(event) {
         var button = event.relatedTarget;
-        var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
-        id1 = $row.find('.row-id').text();
-        firstName = $row.find('td:nth-child(2)').text();
-        lastName = $row.find('td:nth-child(3)').text();
+        var $row = $(button).closest('tr'); // Asegúrate de buscar solo filas visibles
+        var id1 = $row.find('.row-id').text();
+        var firstName = $row.find('td:nth-child(3)').text();
+        var apellidos = $row.find('td:nth-child(4)').text();
+        var primerApellido = apellidos.split(' ')[0];
+        var lastName = `${primerApellido}`;
         console.log(`firstName: ${firstName}, lastName: ${lastName}`);
         console.log(`ID: ${id1}`);
         $('#staticBackdropLabel').html(`Iniciar sesión`);
-        $('.modal-body').html(`¿Loguearse como ${firstName} ubicado en la fila ${id1}?` );
+        $('.modal-body').html(`¿Loguearse como ${firstName} ${lastName}?`);
     });
     /*
     setTimeout(function() {

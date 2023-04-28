@@ -14,7 +14,7 @@ public class Sede {
 
     @Id
     @Column(name = "id_sede", nullable = false)
-    private String idSede;
+    private int idSede;
 
     @Column(nullable = false)
     private String nombre;

@@ -1,7 +1,7 @@
 $(document).ready(function() {
     function showTableSegment(table, startIndex, endIndex) {
-        table.find('tbody tr').addClass('hidden-row')
-            .slice(startIndex, endIndex).removeClass('hidden-row');
+        table.find('tbody tr').hide()
+            .slice(startIndex, endIndex).show();
 
         $('#prev-btn3').prop('disabled', startIndex === 0);
         $('#next-btn3').prop('disabled', endIndex >= table.find('tbody tr').length);
@@ -45,21 +45,7 @@ $(document).ready(function() {
 
     setupTablePagination($('#superadmin_Doctores_table'), 5);
 
-    var firstName;
-    var lastName;
-    var id1;
 
-    $('#staticBackdrop').on('show.bs.modal', function(event) {
-        var button = event.relatedTarget;
-        var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
-        id1 = $row.find('.row-id').text();
-        firstName = $row.find('td:nth-child(2)').text();
-        lastName = $row.find('td:nth-child(3)').text();
-        console.log(`firstName: ${firstName}, lastName: ${lastName}`);
-        console.log(`ID: ${id1}`);
-        $('#staticBackdropLabel').html(`Iniciar sesión`);
-        $('.modal-body').html(`¿Loguearse como ${firstName} ubicado en la fila ${id1}?` );
-    });
     /*
     setTimeout(function() {
         $('#superadmin-table').css('display', '');

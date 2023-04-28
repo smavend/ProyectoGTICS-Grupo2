@@ -18,6 +18,8 @@ SedeRepository extends JpaRepository<Sede, Integer> {
     Sede buscarPorSedeId(String id);
 
     @Query(nativeQuery = true, value = "select * from sede where clinica_id_clinica = ?1")
+    Sede buscarPorClinicaId(String id);
+    @Query(nativeQuery = true, value = "select * from sede where clinica_id_clinica = ?1")
     List<Sede> EncontrarListaPorId(int clinicaId);
 
     @Transactional
@@ -26,6 +28,6 @@ SedeRepository extends JpaRepository<Sede, Integer> {
     void insertarSede(@Param("otraSede") String otraSede, @Param("clinica_id") int clinica_id);
 
 
-    @Query(nativeQuery = true, value = "select * from sede where nombre = ?1")
-    Sede buscarPorNombreDeSede(String otraSede);
+    @Query(nativeQuery = true, value = "select * from sede where nombre = ?1 and clinica_id_clinica =?2")
+    Sede buscarPorNombreDeSede(String otraSede, int clinica_id);
 }

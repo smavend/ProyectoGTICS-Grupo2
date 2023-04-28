@@ -1,5 +1,6 @@
 $(document).ready(function() {
     function showTableSegment(table, startIndex, endIndex) {
+
         table.find('tbody tr').hide()
             .slice(startIndex, endIndex).show();
 
@@ -9,8 +10,25 @@ $(document).ready(function() {
         var currentPage = startIndex / 5 + 1;
         $('#page-num1').text(currentPage);
     }
+    //
+    // function addEmptyRows(table, itemsPerPage) {
+    //     var numRows = table.find('tbody tr').length;
+    //     var numEmptyRows = itemsPerPage - (numRows % itemsPerPage);
+    //
+    //     if (numEmptyRows === itemsPerPage) return;
+    //
+    //     for (var i = 0; i < numEmptyRows; i++) {
+    //         var emptyRow = '<tr style="display:none">';
+    //         for (var j = 0; j < table.find('thead th').length; j++) {
+    //             emptyRow += '<td>&nbsp;</td>';
+    //         }
+    //         emptyRow += '</tr>';
+    //         table.find('tbody').append(emptyRow);
+    //     }
+    // }
 
     function setupTablePagination(table, itemsPerPage) {
+        // addEmptyRows(table, itemsPerPage);
         var startIndex = 0;
         var endIndex = itemsPerPage;
 
@@ -45,21 +63,7 @@ $(document).ready(function() {
 
     setupTablePagination($('#superadmin_administrador_table'), 5);
 
-    var firstName;
-    var lastName;
-    var id1;
 
-    $('#staticBackdrop').on('show.bs.modal', function(event) {
-        var button = event.relatedTarget;
-        var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
-        id1 = $row.find('.row-id').text();
-        firstName = $row.find('td:nth-child(2)').text();
-        lastName = $row.find('td:nth-child(3)').text();
-        console.log(`firstName: ${firstName}, lastName: ${lastName}`);
-        console.log(`ID: ${id1}`);
-        $('#staticBackdropLabel').html(`Iniciar sesión`);
-        $('.modal-body').html(`¿Loguearse como ${firstName} ubicado en la fila ${id1}?` );
-    });
     /*
     setTimeout(function() {
         $('#superadmin-table').css('display', '');
