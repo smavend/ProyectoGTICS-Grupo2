@@ -11,24 +11,26 @@ $(document).ready(function() {
         $('#page-num1').text(currentPage);
     }
 
-    function addEmptyRows(table, itemsPerPage) {
-        var numRows = table.find('tbody tr').length;
-        var numEmptyRows = itemsPerPage - (numRows % itemsPerPage);
-
-        if (numEmptyRows === itemsPerPage) return;
-
-        for (var i = 0; i < numEmptyRows; i++) {
-            var emptyRow = '<tr style="display:none">';
-            for (var j = 0; j < table.find('thead th').length; j++) {
-                emptyRow += '<td>&nbsp;</td>';
-            }
-            emptyRow += '</tr>';
-            table.find('tbody').append(emptyRow);
-        }
-    }
+    //
+    // function addEmptyRows(table, itemsPerPage) {
+    //     var numRows = table.find('tbody tr').length;
+    //     var numEmptyRows = itemsPerPage - (numRows % itemsPerPage);
+    //
+    //     if (numEmptyRows === itemsPerPage) return;
+    //
+    //     for (var i = 0; i < numEmptyRows; i++) {
+    //         var emptyRow = '<tr style="display:none">';
+    //         for (var j = 0; j < table.find('thead th').length; j++) {
+    //             emptyRow += '<td>&nbsp;</td>';
+    //         }
+    //         emptyRow += '</tr>';
+    //         table.find('tbody').append(emptyRow);
+    //     }
+    // }
 
     function setupTablePagination(table, itemsPerPage) {
-        addEmptyRows(table, itemsPerPage);
+        // addEmptyRows(table, itemsPerPage);
+
         var startIndex = 0;
         var endIndex = itemsPerPage;
 

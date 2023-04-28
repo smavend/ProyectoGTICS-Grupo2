@@ -40,7 +40,7 @@ public class Paciente {
     @Digits(integer = 9, fraction = 0, message = "El telefono debe ser un número tener 9 dígitos")
     private String telefono;
     @ManyToOne
-    @JoinColumn(name="administrativo_id_administrativo")
+    @JoinColumn(name="administrativo_id_administrativo",nullable = false)
     private Administrativo administrativo;
     @Column (nullable = false)
     @NotBlank(message = "Este campo no puede estar vacío")
@@ -49,6 +49,7 @@ public class Paciente {
     private String fotoname;
     private String fotocontenttype;
     private byte[] foto;
+
 
     @ManyToOne
     @JoinColumn(name = "distrito_id_distrito", nullable = false)
