@@ -9,9 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -56,7 +58,7 @@ public class AdministradorController {
     public String finanzas_recibos(){return "administrador/finanzas-recibos";}
     //###########################################################################
     @GetMapping("/crearPaciente")
-    public String crearPaciente(Model model){
+    public String crearPaciente( @ModelAttribute("paciente") Paciente paciente,  Model model){
     List<Seguro> listaSeguro  = seguroRepository.findAll();
     List<Distrito> listaDistrito = distritoRepository.findAll();
     List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
@@ -66,28 +68,42 @@ public class AdministradorController {
         return "administrador/crearPaciente";}
     @PostMapping("/guardarPaciente")
     public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
-                                  Paciente paciente, Model model){
-        if (file.isEmpty()) {
-            model.addAttribute("msg", "Debe subir un archivo");
-            return "redirect:/administrador/crearPaciente";
-        }
-        String fileName = file.getOriginalFilename();
-        if (fileName.contains("..")) {
-            model.addAttribute("msg", "No se permiten '..' en el archivo");
-            return "redirect:/administrador/crearPaciente";
-        }
-        try {
-            paciente.setFoto(file.getBytes());
-            paciente.setFotoname(fileName);
-            paciente.setFotocontenttype(file.getContentType());
-            paciente.setFecharegistro(LocalDateTime.now());
-            pacienteRepository.save(paciente);
-            return "redirect:/administrador/dashboard";
-        } catch (IOException e) {
-            e.printStackTrace();
-            model.addAttribute("msg", "ocurrió un error al subir el archivo");
-            return "redirect:/administrador/crearPaciente";
-        }
+                                  @ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult, Model model, RedirectAttributes attr){
+        if(bindingResult.hasErrors()){
+            List<Seguro> listaSeguro  = seguroRepository.findAll();
+            List<Distrito> listaDistrito = distritoRepository.findAll();
+            List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
+            model.addAttribute("listaSeguro",listaSeguro);
+            model.addAttribute("listaDistrito",listaDistrito);
+            model.addAttribute("listaAdministrativo",listaAdministrativo);
+            return "administrador/crearPaciente";
+        } else{
+            if (file.isEmpty()) {
+                model.addAttribute("msg", "Debe subir un archivo");
+                return "redirect:/administrador/crearPaciente";
+            }
+            String fileName = file.getOriginalFilename();
+            if (fileName.contains("..")) {
+                model.addAttribute("msg", "No se permiten '..' en el archivo");
+                return "redirect:/administrador/crearPaciente";
+            }
+            try {
+                paciente.setFoto(file.getBytes());
+                paciente.setFotoname(fileName);
+                paciente.setFotocontenttype(file.getContentType());
+                paciente.setEstado(1);
+                paciente.setFecharegistro(LocalDateTime.now());
+                pacienteRepository.save(paciente);
+                attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+                return "redirect:/administrador/dashboard";
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("msg", "ocurrió un error al subir el archivo");
+                return "redirect:/administrador/crearPaciente";
+            }
+    }
+
+
     }
     //###########################################################################
     @GetMapping("/crearDoctor")
@@ -99,7 +115,7 @@ public class AdministradorController {
         return "administrador/crearDoctor";}
     @PostMapping("/guardarDoctor")
     public String guardarDoctor(@RequestParam("archivo") MultipartFile file,
-                                 Doctor doctor, Model model){
+                                 Doctor doctor, Model model, RedirectAttributes attr){
         if (file.isEmpty()) {
             model.addAttribute("msg", "Debe subir un archivo");
             return "redirect:/administrador/crearDoctor";
@@ -115,6 +131,7 @@ public class AdministradorController {
             doctor.setFotocontenttype(file.getContentType());
             doctor.setEstado(1);
             doctorRepository.save(doctor);
+            attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
             return "redirect:/administrador/dashboard";
         } catch (IOException e) {
             e.printStackTrace();
