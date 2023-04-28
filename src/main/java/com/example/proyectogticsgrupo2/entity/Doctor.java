@@ -4,6 +4,7 @@ package com.example.proyectogticsgrupo2.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.validation.constraints.*;
 
 @Getter
 @Setter
@@ -12,9 +13,15 @@ import lombok.Setter;
 public class Doctor {
     @Id
     @Column(name = "id_doctor", nullable = false)
+    @NotBlank(message = "Este campo no puede estar vacío")
+    @Digits(integer = 8, fraction = 0, message = "En DNI debe ser un número y tener 8 dígitos")
     private String id_doctor;
     @Column(nullable = false)
+    @NotBlank(message = "Este campo no puede estar vacío")
+    @Size(max = 45, message = "El nombre no puede tener más de 45 caracteres")
     private String nombre;
+    @NotBlank(message = "Este campo no puede estar vacío")
+    @Size(max = 45, message = "El apellido no puede tener más de 45 caracteres")
     @Column(nullable = false)
     private String apellidos;
     @Column(nullable = false)
@@ -36,6 +43,8 @@ public class Doctor {
     private Horario horario;
 
     @Column(nullable = false)
+    @NotBlank(message = "Este campo no puede estar vacío")
+    @Email(message = "Ingrese una dirección de correo válida")
     private String correo;
 
     private String fotoname;
@@ -43,6 +52,7 @@ public class Doctor {
     private byte[] foto;
 
     private String precio;
+    @NotBlank(message = "Seleccione un género")
     private String genero;
 
 
