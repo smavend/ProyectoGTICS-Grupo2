@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/administrador")
@@ -107,7 +107,7 @@ public class AdministradorController {
     }
     //###########################################################################
     @GetMapping("/crearDoctor")
-    public String crearDoctor(Model model){
+    public String crearDoctor(@ModelAttribute("doctor") Doctor doctor,Model model){
         List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
         List<Sede> listaSede = sedeRepository.findAll();
         model.addAttribute("listaSede",listaSede);
@@ -115,29 +115,41 @@ public class AdministradorController {
         return "administrador/crearDoctor";}
     @PostMapping("/guardarDoctor")
     public String guardarDoctor(@RequestParam("archivo") MultipartFile file,
-                                 Doctor doctor, Model model, RedirectAttributes attr){
-        if (file.isEmpty()) {
-            model.addAttribute("msg", "Debe subir un archivo");
-            return "redirect:/administrador/crearDoctor";
+                                @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult,
+                                Model model, RedirectAttributes attr){
+        if(bindingResult.hasErrors()){
+            List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
+            List<Sede> listaSede = sedeRepository.findAll();
+            model.addAttribute("listaSede",listaSede);
+            model.addAttribute("listaEspecialidad",listaEspecialidad);
+            return "administrador/crearDoctor";
+        }else {
+            /*if (file.isEmpty()) {
+                model.addAttribute("msg", "Debe subir un archivo");
+                return "redirect:/administrador/crearDoctor";
+            }*/
+            String fileName = file.getOriginalFilename();
+            /*if (fileName.contains("..")) {
+                model.addAttribute("msg", "No se permiten '..' en el archivo");
+                return "redirect:/administrador/crearDoctor";
+            }*/
+
+            try {
+                doctor.setFoto(file.getBytes());
+                doctor.setFotoname(fileName);
+                doctor.setFotocontenttype(file.getContentType());
+                doctor.setEstado(1);
+                doctorRepository.save(doctor);
+                attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
+                return "redirect:/administrador/dashboard";
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("msg", "ocurrió un error al subir el archivo");
+                return "redirect:/administrador/crearDoctor";
+            }
         }
-        String fileName = file.getOriginalFilename();
-        if (fileName.contains("..")) {
-            model.addAttribute("msg", "No se permiten '..' en el archivo");
-            return "redirect:/administrador/crearDoctor";
-        }
-        try {
-            doctor.setFoto(file.getBytes());
-            doctor.setFotoname(fileName);
-            doctor.setFotocontenttype(file.getContentType());
-            doctor.setEstado(1);
-            doctorRepository.save(doctor);
-            attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
-            return "redirect:/administrador/dashboard";
-        } catch (IOException e) {
-            e.printStackTrace();
-            model.addAttribute("msg", "ocurrió un error al subir el archivo");
-            return "redirect:/administrador/crearDoctor";
-        }
+
+
     }
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
