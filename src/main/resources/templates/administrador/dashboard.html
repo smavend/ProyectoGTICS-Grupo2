@@ -322,6 +322,7 @@
                   <h5 class="card-title">DOCTORES <span>| Sede San Isidro</span></h5>
                   <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
                 </div>
+                <div th:if="${msgDoc != null}" th:text="${msgDoc}" class="alert alert-success" role="alert"></div>
                 <div class=" flex-column" >
                   <table class="table" id="datatable">
                     <thead>
@@ -362,10 +363,9 @@
               <div class="card-body pb-0">
                 <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title">PACIENTES <span>| Sede San Isidro</span></h5>
-
                   <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
-
                 </div>
+                <div th:if="${msgPaci != null}" th:text="${msgPaci}" class="alert alert-success" role="alert"></div>
                 <div class="d-flex flex-column" >
 
                   <table class="table table-hover" id="datatable2">
@@ -500,6 +500,10 @@
 <script>
   $(document).ready(function () {
     $('#datatable').DataTable({
+      lengthMenu: [
+        [5,10,20],
+        [5,10,20],
+      ],
       "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Ningún registro encontrado",
@@ -524,6 +528,10 @@
 <script>
   $(document).ready(function () {
     $('#datatable2').DataTable({
+      lengthMenu: [
+              [5,10,20],
+              [5,10,20],
+      ],
       "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Ningún registro encontrado",
