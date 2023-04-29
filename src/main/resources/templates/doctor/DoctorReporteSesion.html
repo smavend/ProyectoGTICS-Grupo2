@@ -33,7 +33,7 @@
         <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
 
         <!-- Template Main CSS File -->
-        <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+        <!--<link href="assets/css/style.css" rel="stylesheet"> -->
         <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
 
     </head>
@@ -54,8 +54,8 @@
 
             <div class="d-flex align-items-center justify-content-between">
                 <a href="index.html" class="logo d-flex align-items-center">
-                    <img th:src="@{/assets/img/logoClinica.png" alt="">
-                    <span class="d-none d-lg-block">Clinica</span>
+                    <img th:src="@{/assets/img/logo.png}" alt="">
+                    <span class="d-none d-lg-block">Clinica INTERPUCP</span>
                 </a>
                 <i class="bi bi-list toggle-sidebar-btn"></i>
             </div><!-- End Logo -->
@@ -164,10 +164,10 @@
 
                             <li class="message-item">
                                 <a href="#">
-                                    <img th:src="@{/assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                                    <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
                                     <div>
                                         <h4>Maria Hudson</h4>
-                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>Estimado administrador, quisiera solicitar su autorización para realizar una cirugía ...</p>
                                         <p>4 hrs. ago</p>
                                     </div>
                                 </a>
@@ -178,10 +178,10 @@
 
                             <li class="message-item">
                                 <a href="#">
-                                    <img th:src="@{/assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                                    <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
                                     <div>
                                         <h4>Anna Nelson</h4>
-                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>Hola, quisiera informarle que hay un problema en la plataforma que está impidiendo ...</p>
                                         <p>6 hrs. ago</p>
                                     </div>
                                 </a>
@@ -192,7 +192,7 @@
 
                             <li class="message-item">
                                 <a href="#">
-                                    <img th:src="@{/assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                                    <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
                                     <div>
                                         <h4>David Muldon</h4>
                                         <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -215,14 +215,14 @@
                     <li class="nav-item dropdown pe-3">
 
                         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                            <img th:src="@{/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                            <span class="d-none d-md-block dropdown-toggle ps-2">William E.</span>
+                            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
                         </a><!-- End Profile Iamge Icon -->
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6>William E.</h6>
-                                <span>Doctor</span>
+                                <h6>Jorge Dominguez</h6>
+                                <span>Administrador de sede</span>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -280,7 +280,7 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/doctor/reporte}">
+                    <a class="nav-link" >
                         <i class="bi bi-card-text"></i>
                         <span>Reportes</span>
                     </a>
@@ -313,72 +313,104 @@
 
 
             <section class="section dashboard">
-                <div class="row ">
+                <form method="post" th:action="@{/doctor/guardarReporte}" th:object="${cita}"  class="mt-2">
+                    <div class="row ">
 
-                    <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: 2rem;height: fit-content" class="container col-5">
-                        <div class="row" >
-                            <div >
-                                <h1 style="color: black;text-align: center;">Informe Médico</h1>
-                                <hr>
-                                <p style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;"><strong>Paciente:</strong> Juan Pérez García</p>
-                                <p style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;"><strong>DNI:</strong> 78524691</p>
-                                <p style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;"><strong>Edad:</strong> 45 años</p>
-                                <p style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;"><strong>Fecha:</strong> 11 de Abril de 2023</p>
-                                <hr style="border-top: 3px solid #ccc">
-                                <h2 style="color: black;text-align: center;" >Diagnóstico</h2>
-                                <p style="font-size: 1.2rem;line-height: 1.5;padding: 20px;">El paciente presenta una fractura de la tibia en la pierna derecha como resultado de un accidente de tráfico. Se observa una inflamación moderada en la zona afectada.</p>
-                                <h2 style="color: black;text-align: center;">Tratamiento Recomendado</h2>
-                                <p style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px">Se recomienda inmovilizar la pierna afectada mediante una férula para permitir la cicatrización de la fractura. Se prescriben medicamentos para reducir la inflamación y el dolor, y se indica al paciente que mantenga la pierna elevada para ayudar a reducir la hinchazón.</p>
+
+                            <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: 2rem;height: fit-content" class="container col-5">
+                                <div class="row" >
+                                    <div >
+
+
+                                            <input th:field="*{id_cita}" name="id_cita" type="hidden"/>
+                                            <input th:field="*{paciente.idPaciente}" name="paciente" type="hidden"/>
+                                            <input th:field="*{doctor.id_doctor}" name="doctor" type="hidden"/>
+                                            <input th:field="*{inicio}" name="inicio" type="hidden"/>
+                                            <input th:field="*{fin}" name="fin" type="hidden"/>
+                                            <input th:field="*{modalidad}" name="modalidad" type="hidden"/>
+                                            <input th:field="*{reporte}" name="reporte" type="hidden"/>
+                                            <input th:field="*{link_cita}" value="" name="link_cita" type="hidden"/>
+                                            <input th:field="*{estado}" name="estado" type="hidden"/>
+
+                                            <input th:field="*{sede.idSede}" name="sede" type="hidden"/>
+                                            <input th:field="*{es_examen}" name="es_examen" type="hidden"/>
+
+
+                                            <input name="cita_previa" value="" type="hidden" class="form-control d-inline">
+
+
+
+                                            <h1 style="color: black;text-align: center;">Informe Médico</h1>
+                                            <hr>
+                                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Paciente: </strong><span style="font-size: 1.2rem" th:text="${paciente.nombre+ ' ' + paciente.apellidos}" > </span>
+                                            <br>
+                                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">DNI: </strong><span style="font-size: 1.2rem" th:text="${paciente.idPaciente}" > </span>
+                                            <br>
+                                              <!-- DESPUES PONER EDAD -->
+                                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><input type="date"  name="fecha_emision" value="2023-01-01"  min="2023-01-01" max="2030-12-31">
+                                            <br>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <strong class="d-inline" style="font-size: 1.2rem; line-height: 1.5; margin-left: 20px;">Dirección:</strong>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input name="direccion"  type="text" class="form-control d-inline">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <hr style="border-top: 3px solid #ccc">
+
+                                            <h2 style="color: black;text-align: center;" >Diagnóstico y Tratamiento Recomendado</h2>
+                                            <div class="mb-3">
+                                                <textarea oninput="autoResizeTextarea(this)" style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;" type="text" name="receta" class="form-control"></textarea>
+                                            </div>
+
+
+                                    </div>
+
+                                </div>
                             </div>
 
-                        </div>
-                    </div>
+
+                            <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: -3rem" class="container col-5">
+                                <div class="row">
+                                    <div >
+                                        <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
+                                        <hr>
+                                        <img th:src="@{/assets/img/zoom.jpg}" style="width: 600px">
+                                        <div style="margin-top: 5px;text-align: center">
+                                            <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
+                                            <button type="button" class="btn btn-secondary">Resultados de cuestionario</button>
+                                        </div>
+
+                                        <div style="text-align: center">
+                                            <button type="button" style="margin-top: 5px" class="btn btn-danger">Finalizar llamada</button>
+                                        </div>
+                                        <hr style="border-top: 3px solid #ccc">
+                                        <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem" class="container card">
+
+                                            <h1 style="color: black;text-align: center;">Bitácora Personal</h1>
+                                            <div class="mb-3">
+                                                <textarea oninput="autoResizeTextarea(this)" style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;" type="text" name="bitacora" class="form-control"></textarea>
+                                            </div>
 
 
-                    <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: -3rem" class="container col-6">
-                        <div class="row">
-                            <div >
-                                <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
-                                <hr>
-                                <img th:src="@{/assets/img/zoom.jpg}" style="width: 600px">
-                                <div style="margin-top: 5px;text-align: center">
-                                    <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
-                                    <button type="button" class="btn btn-secondary">Resultados de cuestionario</button>
-                                </div>
 
-                                <div style="text-align: center">
-                                    <button type="button" style="margin-top: 5px" class="btn btn-danger">Finalizar llamada</button>
-                                </div>
-                                <hr style="border-top: 3px solid #ccc">
-                                <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem" class="container card">
 
-                                    <h1 style="color: black;text-align: center;">Bitácora Personal</h1>
-                                    <p style="font-size: 1.2rem;line-height: 1.5;margin-left: 40px;margin-right: 40px">
-
-                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-                                        لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-                                        لكرة القدم ، مرحبا ميسي بايرن لكرة
-                                        القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم
-                                        ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ميسي بايرن لكرة القدم
-                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-                                        مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن لكرة القدم ، مرحبا ميسي بايرن
-
-                                    </p>
-
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div  style="text-align: center;" class=" col-12">
+                                <button  type="submit" class="btn btn-primary">Finalizar Reporte</button>
+                            </div >
 
                     </div>
-
-
-                </div>
-
+                </form>
 
 
 
@@ -416,8 +448,17 @@
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        <script th:src="@{/assets/js/main.js}"></script>
+        <script th:src="@{/assets/js/jsDoctor.js}"></script>
+        <script>
+            function autoResizeTextarea(element) {
+                // Ajustar la altura del textarea en función del contenido
+                element.style.height = "auto";
+                element.style.height = element.scrollHeight + "px";
+            }
+
+        </script>
 
     </body>
+
 
 </html>

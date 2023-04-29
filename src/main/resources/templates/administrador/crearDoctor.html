@@ -306,46 +306,50 @@
             <br>
             <h5 class="card-title text-center">Crear Nuevo Doctor</h5>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-danger" role="alert"></div>
-            <form method="post" th:action="@{/administrador/guardarDoctor}" enctype="multipart/form-data">
+            <form method="post" th:action="@{/administrador/guardarDoctor}" th:object="${doctor}" enctype="multipart/form-data">
               <div class="row">
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
-                    <label for="dni">DNI</label>
-                    <input type="text" class="form-control" id="dni" name ="id_doctor" required>
+                    <label >DNI</label>
+                    <input type="text" class="form-control" th:field="*{id_doctor}" th:classappend="${#fields.hasErrors('id_doctor')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('id_doctor')}" th:errors="*{id_doctor}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name ="nombre" required>
+                    <label >Nombre</label>
+                    <input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="apellido">Apellido</label>
-                    <input type="text" class="form-control" id="apellido" name="apellidos" required>
+                    <label >Apellido</label>
+                    <input type="text" class="form-control" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="genero">Género</label>
-                    <label for="sexo">Sexo</label>
-                    <select class="form-select" id="genero" name="genero" required>
+                    <label >Género</label>
+                    <select class="form-select" th:field="*{genero}" th:classappend="${#fields.hasErrors('genero')? 'is-invalid':''}">
                       <option value="">Seleccionar</option>
                       <option value="Masculino">Masculino</option>
                       <option value="Femenino">Femenino</option>
                     </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="email">Correo electrónico</label>
-                    <input type="email" class="form-control" id="email" name="correo" required>
+                    <label >Correo electrónico</label>
+                    <input type="text" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" ></div>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
                     <label for="sexo">Especialidad</label>
-                    <select class="form-select" id="sexo" name ="especialidad" required>
+                    <select class="form-select" id="sexo" name ="especialidad" >
                       <option value="">Seleccionar</option>
                       <option th:each="especialidad: ${listaEspecialidad}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" ></option>
                     </select>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="sede">Sede</label>
-                      <select class="form-select" id="sede" name ="sede" required>
+                      <select class="form-select" id="sede" name ="sede" >
                       <option value="">Seleccionar</option>
                       <option th:each="sede: ${listaSede}" th:value="${sede.idSede}" th:text="${sede.nombre}" ></option>
                     </select>

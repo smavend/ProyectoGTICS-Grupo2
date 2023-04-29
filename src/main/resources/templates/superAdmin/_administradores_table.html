@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <table class="table table-striped" id="superadmin_administrador_table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellidos</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Correo</th>
+        <th scope="col">Sede</th>
+        <th scope="col">Clínica</th>
+        <th scope="col">Accion</th>
+      </tr>
+    </thead>
+    <tbody  id="tabla_contenido_administrador">
+      <tr th:each="listaAdministadores, info : ${listaAdministradoresDTO_superadmin}">
+        <td th:text="${info.index + 1}"></td>
+        <td th:text="${listaAdministadores.idAdministrador}"></td>
+        <td th:text="${listaAdministadores.nombre}"></td>
+        <td th:text="${listaAdministadores.apellidos}"></td>
+        <td th:text="${listaAdministadores.estado}"></td>
+        <td th:text="${listaAdministadores.correo}"></td>
+        <td th:text="${listaAdministadores.sedeNombre}"></td>
+        <td th:text="${listaAdministadores.clinica}"></td>
+        <td>
+          <button type="button" class="btn btn-primary    " data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop">Loguear
+          </button>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(listaAdministradoresDTO_superadmin)}">
+        <td colspan="10" class="text-center" style="color: grey; font-weight: bold">Sin Resultados</td>
+      </tr>
+    </tbody>
+  </table>
+</html>
