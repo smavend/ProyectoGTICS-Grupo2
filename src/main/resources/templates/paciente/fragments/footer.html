@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+    </head>
+    <body>
+        <footer class="footer" th:fragment="footer">
+            <div class="container">
+                <div class="row">
+                    <!--
+                        <div class="col-lg-3 col-md-6">
+                            <img style="height: 30px;" src="assets/img/logoClinicaPNG.png"
+                                 alt="Logo de la clínica">
+                            <span class="fw-bold">Clínica INTERPUCP</span>
+                            <strong>Teléfono:</strong> +1 5589 55488 55<br>
+                            <strong>Correo:</strong> info@example.com<br>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <h4>¿Necesitas ayuda personalizada?</h4>
+                            <p>Escríbenos por correo o envíanos tuyo para comunicarnos contigo.</p>
+                            <form action="" method="post">
+                                <input type="email" name="email"><input type="submit" value="Enviar">
+                            </form>
+                        </div>
+                    -->
+                    <div class="col-md-6 me-auto">
+                        <img style="height: 30px;" th:src="@{/assets/img/logoClinicaPNG.png}"
+                             alt="Logo de la clínica">
+                        <span class="fw-bold">Clínica INTERPUCP</span>
+                    </div>
+                    <div class="col-md-6 ms-auto">
+                        <i class="bi bi-telephone-fill me-2"></i>
+                        <span class="fw-bold">987-154-200</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

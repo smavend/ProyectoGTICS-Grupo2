@@ -13,5 +13,12 @@ import java.util.List;
 public interface CitaRepository extends JpaRepository<Cita, String> {
     @Query(value = "Select * FROM cita WHERE doctor_id_doctor = ?1",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
-    List<Cita> BuscarPorDoctor(Integer id);
+    List<Cita> BuscarPorDoctor(String id);
+
+    @Query(value = "SELECT * FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor='09568265' and lower(concat(p.nombre,' ',p.apellidos)) like %?1%",
+            nativeQuery = true)
+    List<Cita> buscadorProximasCitas(String nombre);
+
+
+
 }

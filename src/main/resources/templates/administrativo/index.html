@@ -10,8 +10,10 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
+
   <link th:href="@{/assets/img/favicon.png}" rel="icon">
   <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -123,7 +125,7 @@
                       <tr th:each="paciente,obj:${listaPacientes}">
                         <td th:text="${obj.index + 1 + listaTemp.size()}"></td>
                         <td th:text="${paciente.nombre+' '+paciente.apellidos}"></td>
-                        <td th:text="${paciente.fechaRegistro}"></td>
+                        <td th:text="${paciente.fecharegistro.toLocalDate()}"></td>
                         <td th:text="${paciente.correo}"></td>
                         <td th:switch="${paciente.estado}" class="centered">
                           <span th:case="1" class="badge bg-primary">Activo</span>
