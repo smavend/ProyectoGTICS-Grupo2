@@ -2,7 +2,6 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +29,8 @@ public class AdministradorController {
     final DistritoRepository distritoRepository;
     final EspecialidadRepository especialidadRepository;
     final SedeRepository sedeRepository;
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository) {
+    final AdministradorRepository administradorRepository;
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.seguroRepository = seguroRepository;
@@ -39,6 +38,7 @@ public class AdministradorController {
         this.distritoRepository = distritoRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
+        this.administradorRepository = administradorRepository;
     }
 
     //#####################################33
@@ -53,7 +53,11 @@ public class AdministradorController {
     @GetMapping("/finanzas")
     public String finanzas(){return "administrador/finanzas";}
     @GetMapping("/perfil")
-    public String perfil(){return "administrador/perfil";}
+    public String perfil(@RequestParam("id") String id, Model model){
+        Optional<Administrador> optAministrador = administradorRepository.findById(id);
+        Administrador administrador= optAministrador.get();
+        model.addAttribute("administrador", administrador);
+        return "administrador/perfil";}
     @GetMapping("/finanzas-recibos")
     public String finanzas_recibos(){return "administrador/finanzas-recibos";}
     //###########################################################################
@@ -101,9 +105,7 @@ public class AdministradorController {
                 model.addAttribute("msg", "ocurrió un error al subir el archivo");
                 return "redirect:/administrador/crearPaciente";
             }
-    }
-
-
+        }
     }
     //###########################################################################
     @GetMapping("/crearDoctor")
@@ -156,7 +158,17 @@ public class AdministradorController {
     @GetMapping("/mensajeria")
     public String mensajeria(){return "administrador/mensajeria";}
     @GetMapping("/historialPaciente")
-    public String historialPaciente(){return "administrador/historialPaciente";}
+    public String historialPaciente(@RequestParam("id") String id, Model model){
+        Optional<Paciente> optPaciente = pacienteRepository.findById(id);
+        if(optPaciente.isPresent()){
+            Paciente paciente = optPaciente.get();
+            model.addAttribute("paciente", paciente);
+            return "administrador/historialPaciente";
+        }else {
+            return "redirect:/administrador/dashboard";
+        }
+
+    }
 
     @GetMapping("/imagePaci/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String dni) {

@@ -4,6 +4,6 @@ import com.example.proyectogticsgrupo2.entity.Administrador;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
-public interface AdministradorRepository {
+@Repository
+public interface AdministradorRepository extends JpaRepository<Administrador,String> {
 }
