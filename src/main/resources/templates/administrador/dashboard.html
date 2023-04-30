@@ -224,7 +224,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil(id='70807016')}">
               <i class="bi bi-person"></i>
               <span>Mi Perfil</span>
             </a>
@@ -379,7 +379,7 @@
                       <tr th:each="paciente: ${listaPaciente}">
 
                       <td>
-                        <a th:href="@{/administrador/historialPaciente}">
+                        <a th:href="@{/administrador/historialPaciente(id=${paciente.idPaciente})}">
                         <div class="row">
                           <div class="col-lg-2 col-sm-3">
                             <img th:src="@{|/administrador/imagePaci/${paciente.idPaciente}|}" alt="#" width="70" height="70" class="rounded-circle"/>

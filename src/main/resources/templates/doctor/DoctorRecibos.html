@@ -33,7 +33,7 @@
         <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
 
         <!-- Template Main CSS File -->
-        <!--<link href="assets/css/style.css" rel="stylesheet"> -->
+        <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
         <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
 
     </head>
@@ -315,7 +315,7 @@
                     <h1>Recibos de pago</h1>
                 </div><!-- End Page Title -->
                 <div class="icon" >
-                    <a href="administrador-dashboard.html"><i class="bi bi-arrow-return-left"></i></a>
+                    <a th:href="@{/administrador-dashboard.html"><i class="bi bi-arrow-return-left"></i></a>
                 </div>
 
             </div>

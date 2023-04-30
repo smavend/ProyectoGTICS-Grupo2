@@ -40,7 +40,7 @@ public class SuperAdminService {
     }
     public AdministradorDTO_superadmin toAdministradorDTO_superadmin(Administrador administrador){
         AdministradorDTO_superadmin dto = new AdministradorDTO_superadmin();
-        dto.setIdAdministrador(administrador.getIdAdministrador());
+        dto.setIdAdministrador(administrador.getId_administrador());
         dto.setNombre(administrador.getNombre());
         dto.setApellidos(administrador.getApellidos());
         dto.setEstado(administrador.getEstado());
@@ -48,7 +48,7 @@ public class SuperAdminService {
         //Obtenemos la sede y clinica para los pacientes
 
         //devuelve la sede(int)  ubicada en la tabla administrador
-        int administradorxsedexclinica_sede = administrativoPorEspecialidadPorSedeRepository.obteneSedePorAdministradorId(administrador.getIdAdministrador());
+        int administradorxsedexclinica_sede = administrativoPorEspecialidadPorSedeRepository.obteneSedePorAdministradorId(administrador.getId_administrador());
         //busca la fila a la cual corresponde el valor de sede_id (valor único) en tabla sede
         Sede sedexadministrador = sedeRepository.buscarPorSedeId(String.valueOf(administradorxsedexclinica_sede));
 
