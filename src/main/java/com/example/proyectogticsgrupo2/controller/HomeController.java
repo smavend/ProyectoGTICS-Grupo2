@@ -30,6 +30,8 @@ public class HomeController {
     public String principal(){
         return "general/home";
     }
+    @GetMapping("/invitacion")
+    public String invitacion (){return "administrador/invitar";}
     @GetMapping("/sedes")
     public String mostrarSedes(){
         return "general/sedes";

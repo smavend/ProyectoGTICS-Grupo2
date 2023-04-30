@@ -191,6 +191,10 @@ public class AdministradorController {
             return null;
         }
     }
+    @GetMapping("/invitacion")
+    public String invitacion (){
+        return "administrador/invitar";
+    }
     @GetMapping("/imageDoc/{id}")
     public ResponseEntity<byte[]> mostrarImagenDoc(@PathVariable("id") String dni) {
         Optional<Doctor> opt = doctorRepository.findById(dni);
