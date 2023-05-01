@@ -2,6 +2,7 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -74,7 +76,8 @@ public class AdministradorController {
         return "administrador/crearPaciente";}
     @PostMapping("/guardarPaciente")
     public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
-                                  @ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult, Model model, RedirectAttributes attr){
+                                  @ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
+                                  Model model, RedirectAttributes attr){
         if(bindingResult.hasErrors()){
             List<Seguro> listaSeguro  = seguroRepository.findAll();
             List<Distrito> listaDistrito = distritoRepository.findAll();
@@ -85,28 +88,27 @@ public class AdministradorController {
             return "administrador/crearPaciente";
         } else{
             if (file.isEmpty()) {
-                model.addAttribute("msg", "Debe subir un archivo");
-                return "redirect:/administrador/crearPaciente";
-            }
-            String fileName = file.getOriginalFilename();
-            if (fileName.contains("..")) {
-                model.addAttribute("msg", "No se permiten '..' en el archivo");
-                return "redirect:/administrador/crearPaciente";
-            }
-            try {
-                paciente.setFoto(file.getBytes());
-                paciente.setFotoname(fileName);
-                paciente.setFotocontenttype(file.getContentType());
-                paciente.setEstado(1);
-                paciente.setFecharegistro(LocalDateTime.now());
-                pacienteRepository.save(paciente);
-                attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+
                 return "redirect:/administrador/dashboard";
-            } catch (IOException e) {
-                e.printStackTrace();
-                model.addAttribute("msg", "ocurrió un error al subir el archivo");
-                return "redirect:/administrador/crearPaciente";
+            }else {
+                String fileName = file.getOriginalFilename();
+                try {
+                    paciente.setFoto(file.getBytes());
+                    paciente.setFotoname(fileName);
+                    paciente.setFotocontenttype(file.getContentType());
+                    paciente.setEstado(1);
+                    paciente.setFecharegistro(LocalDateTime.now());
+                    pacienteRepository.save(paciente);
+                    attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+                    return "redirect:/administrador/dashboard";
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    model.addAttribute("msg", "ocurrió un error al subir el archivo");
+                    return "redirect:/administrador/crearPaciente";
+                }
+
             }
+
         }
     }
     //###########################################################################
