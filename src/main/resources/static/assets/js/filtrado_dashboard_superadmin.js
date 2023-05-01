@@ -258,6 +258,7 @@ $(document).ready(function () {
                 url: '/SuperAdminHomePage/filtrarPaciente', // Asegúrate de cambiar esta URL a la correcta
                 method: 'POST',
                 // data: {clinica: clinica, sede: sede, especialidad: especialidad, nombre: nombre},
+
                  data: {clinica: clinica, sede: sede, nombre: nombre},
 
                 success: function (result) {
@@ -281,7 +282,9 @@ $(document).ready(function () {
                 url: '/SuperAdminHomePage/filtrarPaciente', // Asegúrate de cambiar esta URL a la correcta
                 method: 'POST',
                 // data: {clinica: clinica, sede: sede, especialidad: especialidad, nombre: nombre},
+
                  data: {clinica: clinica, sede: sede, nombre: nombre},
+
                 success: function (result) {
                     // Actualizar la tabla con los pacientes filtrados
                     $('#superadmin_Pacientes_table').html(result);

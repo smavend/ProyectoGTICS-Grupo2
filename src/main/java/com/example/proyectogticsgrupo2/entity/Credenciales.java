@@ -1,20 +1,18 @@
 package com.example.proyectogticsgrupo2.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "distrito")
 @Getter
 @Setter
-
-public class Distrito {
+@Entity
+@Table(name = "credenciales")
+public class Credenciales {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_distrito", nullable = false)
-    private Integer idDistrito;
-    @Column(name = "nombre")
-    private String nombre;
+    private String id_credenciales;
+    private String correo;
+    @Column(name = "contrasena_hasheada")
+    private String contrasena;
 }

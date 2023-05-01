@@ -25,6 +25,7 @@ public class Cita {
     private String inicio;
     @Column(nullable = false)
     private String fin;
+    private String diagnostico;
     private String receta;
     private String bitacora;
     @Column(nullable = false)
@@ -43,9 +44,6 @@ public class Cita {
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)
     private Sede sede;
-
-    @Column(nullable = false)
-    private int es_examen;
 
     @ManyToOne
     @JoinColumn(name = "id_cita_previa")

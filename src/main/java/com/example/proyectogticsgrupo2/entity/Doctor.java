@@ -51,7 +51,6 @@ public class Doctor {
     private String fotocontenttype;
     private byte[] foto;
 
-    private String precio;
     @NotBlank(message = "Seleccione un género")
     private String genero;
 
