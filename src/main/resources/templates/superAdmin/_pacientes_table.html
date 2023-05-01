@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <table class="table table-striped" id="superadmin_Pacientes_table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Seguro</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Dirección</th>
+                <th scope="col">Distrito</th>
+                <th scope="col">Se atiende en</th>
+                <th scope="col">Sede</th>
+                <th scope="col">Administrador a Cargo</th>
+                <th scope="col">Accion</th>
+            </tr>
+        </thead>
+        <tbody id="tabla_contenido_pacientes">
+            <tr th:each="paciente, info : ${listaPacienteDTO_superadmin}">
+                <td th:text="${info.index + 1}"></td>
+                <td th:text="${paciente.idPaciente}"></td>
+                <td th:text="${paciente.nombre}"></td>
+                <td th:text="${paciente.apellidos}"></td>
+                <td th:text="${paciente.estado}"></td>
+                <td th:text="${paciente.seguro}"></td>
+                <td th:text="${paciente.telefono}"></td>
+                <td th:text="${paciente.correo}"></td>
+                <td th:text="${paciente.direccion}"></td>
+                <td th:text="${paciente.distrito}"></td>
+                <td th:text="${paciente.clinica}"></td>
+                <td th:text="${paciente.sede}"></td>
+                <td th:text="${paciente.administrador_in_Charge}"></td>
+                <td>
+                    <button type="button" class="btn btn-primary    " data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">Loguear
+                    </button>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(listaPacienteDTO_superadmin)}">
+                <td colspan="14" class="text-center" style="color: grey; font-weight: bold">Sin Resultados</td>
+            </tr>
+
+        </tbody>
+    </table>
+</html>

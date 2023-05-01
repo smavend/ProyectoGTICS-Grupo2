@@ -7,11 +7,12 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
+@Entity
 @Table(name = "clinica")
 public class Clinica {
+
     @Id
     @Column(name = "id_clinica", nullable = false)
     private int idClinica;
@@ -21,9 +22,13 @@ public class Clinica {
 
     @Column(nullable = false)
     private String color;
+
     @Column(nullable = false)
     private String tyc;
+
+    @Column(nullable = false)
     private String telefono;
+
     @Column(nullable = false)
     private String correo;
 }

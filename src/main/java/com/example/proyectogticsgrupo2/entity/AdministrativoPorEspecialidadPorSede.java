@@ -13,7 +13,7 @@ public class AdministrativoPorEspecialidadPorSede {
     private AdministrativoPorEspecialidadPorSedeId id;
 
     @MapsId("idAdministrativo")
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "administrativo_id_administrativo")
     private Administrativo administrativoId;
 

@@ -10,7 +10,7 @@
   <meta content="" name="keywords" >
 
   <!-- Favicons -->
-  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/logoClinicaPNG.png}" rel="icon">
   <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -37,6 +37,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
 </head>
 
 <body>
@@ -283,10 +284,17 @@
         <span>Calendario General</span>
       </a>
     </li><!-- End Profile Page Nav -->
+    <li>
     <a class="nav-link collapsed" th:href="@{/administrador/mensajeria}">
       <i class="bi bi-wechat"></i>
       <span>Mensajería</span>
     </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/administrador/registro}">
+        <i class="bi bi-wechat"></i>
+        <span>Registro Masivo</span>
+      </a>
     </li>
   </ul>
 
@@ -304,83 +312,85 @@
             <br>
             <h5 class="card-title text-center">Crear Nuevo Paciente</h5>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-danger" role="alert"></div>
-              <form method="post" th:action="@{/administrador/guardarPaciente}" enctype="multipart/form-data">
+              <form method="post" th:action="@{/administrador/guardarPaciente}" th:object="${paciente}" enctype="multipart/form-data">
               <div class="row">
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
-                    <label for="nombre">DNI</label>
-                    <input type="text" class="form-control" id="dni" name ="idPaciente" required>
+                    <label>DNI</label>
+                    <input type="text" class="form-control" th:field="*{idPaciente}" th:classappend="${#fields.hasErrors('idPaciente')? 'is-invalid':''}" >
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}" th:errors="*{idPaciente}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name ="nombre" required>
+                    <label >Nombre</label>
+                    <input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="telefono">Teléfono</label>
-                    <input type="tel" class="form-control" id="telefono" name ="telefono" required>
-                  </div>
-                  <div class="col-md-12 mb-3">
-                    <label for="estado">Estado</label>
-                    <select class="form-select" id="estado" name ="estado" required>
-                      <option selected>Open this select menu</option>
-                      <option value="1">Activo</option>
-                      <option value="2">Inactivo</option>
-                    </select>
+                    <label >Teléfono</label>
+                    <input type="text" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" ></div>
                   </div>
 
+
                   <div class="col-md-12 mb-3">
-                    <label for="sexo">Nombre del Seguro</label>
-                    <select class="form-select" id="sexo" name ="seguro" required>
+                    <label >Nombre del Seguro</label>
+                    <select class="form-select" th:field="*{seguro}" >
                       <option value="">Seleccionar</option>
                       <option th:each="seguro: ${listaSeguro}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}" ></option>
 
                     </select>
+
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="genero">Género</label>
-                    <label for="sexo">Sexo</label>
-                    <select class="form-select" id="genero" name="genero" required>
+                    <label >Género</label>
+                    <label >Sexo</label>
+                    <select class="form-select" th:field="*{genero}" th:classappend="${#fields.hasErrors('genero')? 'is-invalid':''}">
                       <option value="">Seleccionar</option>
                       <option value="Masculino">Masculino</option>
                       <option value="Femenino">Femenino</option>
                     </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}" ></div>
                   </div>
 
                   <div class="col-md-12 mb-3">
-                    <label for="email">Correo electrónico</label>
-                    <input type="email" class="form-control" id="email" name="correo" required>
+                    <label >Correo electrónico</label>
+                    <input type="text" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" ></div>
                   </div>
 
                 </div>
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
-                    <label for="apellido">Apellido</label>
-                    <input type="text" class="form-control" id="apellido" name="apellidos" required>
+                    <label >Apellido</label>
+                    <input type="text" class="form-control" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="direccion">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                    <label >Dirección</label>
+                    <input type="text" class="form-control" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="fecha">Fecha Nacimiento</label>
-                    <input type="date" class="form-control" id="fecha" name="fechanacimiento" required>
+                    <label >Fecha Nacimiento</label>
+                    <input type="date" class="form-control" th:field="*{fechanacimiento}" >
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="distrito">Distrito</label>
-                    <select class="form-select" id="distrito" name="distrito" required>
+                    <label>Distrito</label>
+                    <select class="form-select" th:field="*{distrito}" >
                       <option value="">Seleccionar</option>
                       <option th:each="distrito:${listaDistrito}" th:value="${distrito.idDistrito}" th:text="${distrito.nombre}"></option>
                     </select>
-                  </div>
 
+                  </div>
                   <div class="col-md-12 mb-3">
                     <label for="archivo" class="form-label">Subir foto</label>
-                    <input type="file" class="form-control-file" id="archivo" name="archivo">
+                    <input type="file" class="form-control" id="archivo" name="archivo">
                   </div>
+
                 </div>
               </div>
               <div class="col-md-12 mb-3">
-                <button class="btn btn-success" type="submit">Registrar Paciente</button>
+                <button class="btn btn-success" type="submit">Invitar Paciente</button>
                 <a class="btn btn-danger" type="button" th:href="@{/administrador/dashboard}">Cancelar</a>
               </div>
             </form>

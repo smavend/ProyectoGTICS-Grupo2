@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<table class="table table-striped" id="superadmin_Doctores_table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellidos</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Correo</th>
+        <th scope="col">Horario</th>
+        <th scope="col">Clínica</th>
+        <th scope="col">Sede</th>
+        <th scope="col">Especialidad</th>
+        <th scope="col">Accion</th>
+    </tr>
+    </thead>
+    <tbody id="tabla_contenido_Doctores">
+    <tr th:each="listaDoctores, info : ${listaDoctorDTO_superadmin}">
+        <td th:text="${info.index + 1}"></td>
+        <td th:text="${listaDoctores.idDoctor}"></td>
+        <td th:text="${listaDoctores.nombre}"></td>
+        <td th:text="${listaDoctores.apellidos}"></td>
+        <td th:text="${listaDoctores.estado}"></td>
+        <td th:text="${listaDoctores.correo}"></td>
+        <td th:text="${listaDoctores.horario}"></td>
+        <td th:text="${listaDoctores.clinica}"></td>
+        <td th:text="${listaDoctores.sede}"></td>
+        <td th:text="${listaDoctores.especialidad}"></td>
+        <td>
+            <button type="button" class="btn btn-primary    " data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">Loguear
+            </button>
+        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(listaDoctorDTO_superadmin)}">
+        <td colspan="10" class="text-center" style="color: grey; font-weight: bold">Sin Resultados</td>
+    </tr>
+    </tbody>
+</table>
+</html>

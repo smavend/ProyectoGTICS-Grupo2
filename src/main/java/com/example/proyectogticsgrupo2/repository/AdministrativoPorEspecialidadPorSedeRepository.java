@@ -2,12 +2,25 @@ package com.example.proyectogticsgrupo2.repository;
 
 import com.example.proyectogticsgrupo2.entity.AdministrativoPorEspecialidadPorSede;
 import com.example.proyectogticsgrupo2.entity.AdministrativoPorEspecialidadPorSedeId;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdministrativoPorEspecialidadPorSedeRepository extends JpaRepository<AdministrativoPorEspecialidadPorSede, AdministrativoPorEspecialidadPorSedeId> {
     @Query(nativeQuery = true, value = "select * from sede_x_especialidad_x_administrativo where administrativo_id_administrativo = ?1")
     AdministrativoPorEspecialidadPorSede buscarPorAdministrativoId(String id);
+    @Query(nativeQuery = true, value = "select * from sede_x_especialidad_x_administrativo where sede_id_sede = ?1")
+    AdministrativoPorEspecialidadPorSede buscarPorSedeId(String id);
+    @Query(nativeQuery = true, value = "select sede_id_sede from administrador where id_administrador = ?1")
+    int obteneSedePorAdministradorId(String id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO sede_x_especialidad_x_administrativo (sede_id_sede, especialidad_id_especialidad, administrativo_id_administrativo) VALUES (:idSede,1,:dni)", nativeQuery = true)
+    void insertarTablaAdministrativoXEspecialidadXSede(@Param("idSede")int idSede, @Param("dni") String dni);
+
 }

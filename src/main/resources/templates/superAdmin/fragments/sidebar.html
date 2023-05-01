@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar" th:fragment="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+        <li class="nav-item">
+            <a class="nav-link " th:href="@{/SuperAdminHomePage}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-journal-text"></i><span>Formularios</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/SuperAdminHomePage/verforms}">
+                        <i class="bi bi-circle"></i><span>Ver Formularios</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/SuperAdminHomePage/crearformulario}">
+                        <i class="bi bi-circle"></i><span>Crear Formulario</span>
+                    </a>
+                </li>
+                <!--                        <li>
+                                            <a href="forms-editors.html">
+                                                <i class="bi bi-circle"></i><span>Form Editors</span>
+                                            </a>
+                                        </li>-->
+                <!--    <li>
+                        <a href="forms-validation.html">
+                            <i class="bi bi-circle"></i><span>Form Validation</span>
+                        </a>
+                    </li>-->
+            </ul>
+        </li><!-- End Forms Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Reportes</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/SuperAdminHomePage/verReportes}">
+                        <i class="bi bi-circle"></i><span>Ver Reportes</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/SuperAdminHomePage/crearReporte}">
+                        <i class="bi bi-circle"></i><span>Crear Reportes</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Tables Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-bar-chart"></i><span>Gestionar UX/UI</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/SuperAdminHomePage/SelectClinica}">
+                        <i class="bi bi-circle"></i><span>Seleccionar Clínica</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Charts Nav -->
+
+
+            <a class="nav-link collapsed" th:href="@{/SuperAdminHomePage/CrearUsuario}">
+                <span class="badge bg-primary p-2 fs-5">Crear Usuario</span></i>
+            </a>
+
+
+        <!-- <li class="nav-heading">Pages</li>
+
+         <li class="nav-item">
+             <a class="nav-link collapsed" href="users-profile.html">
+                 <i class="bi bi-person"></i>
+                 <span>Profile</span>
+             </a>
+         </li>&lt;!&ndash; End Profile Page Nav &ndash;&gt;
+
+         <li class="nav-item">
+             <a class="nav-link collapsed" href="pages-faq.html">
+                 <i class="bi bi-question-circle"></i>
+                 <span>F.A.Q</span>
+             </a>
+         </li>&lt;!&ndash; End F.A.Q Page Nav &ndash;&gt;
+
+         <li class="nav-item">
+             <a class="nav-link collapsed" href="pages-contact.html">
+                 <i class="bi bi-envelope"></i>
+                 <span>Contact</span>
+             </a>
+         </li>&lt;!&ndash; End Contact Page Nav &ndash;&gt;
+
+         <li class="nav-item">
+             <a class="nav-link collapsed" href="pages-register.html">
+                 <i class="bi bi-card-list"></i>
+                 <span>Register</span>
+             </a>
+         </li>&lt;!&ndash; End Register Page Nav &ndash;&gt;
+
+         <li class="nav-item">
+             <a class="nav-link collapsed" href="pages-login.html">
+                 <i class="bi bi-box-arrow-in-right"></i>
+                 <span>Login</span>
+             </a>
+         </li>&lt;!&ndash; End Login Page Nav &ndash;&gt;
+
+         <li class="nav-item">
+             <a class="nav-link collapsed" href="pages-error-404.html">
+                 <i class="bi bi-dash-circle"></i>
+                 <span>Error 404</span>
+             </a>
+         </li>&lt;!&ndash; End Error 404 Page Nav &ndash;&gt;
+
+         <li class="nav-item">
+             <a class="nav-link collapsed" href="pages-blank.html">
+                 <i class="bi bi-file-earmark"></i>
+                 <span>Blank</span>
+             </a>
+         </li>&lt;!&ndash; End Blank Page Nav &ndash;&gt;-->
+
+    </ul>
+
+</aside><!-- End Sidebar-->
+
+</body>
+</html>

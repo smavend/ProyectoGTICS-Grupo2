@@ -200,7 +200,7 @@
           </li>
 
           <li class="dropdown-footer">
-            <a href="mensajeria}">Ver todos los mensajes</a>
+            <a th:href="@{/administrador/mensajeria}">Ver todos los mensajes</a>
           </li>
 
         </ul><!-- End Messages Dropdown Items -->
@@ -211,12 +211,12 @@
 
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
           <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
+          <span class="d-none d-md-block dropdown-toggle ps-2" >J. Dominguez</span>
         </a><!-- End Profile Iamge Icon -->
 
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li class="dropdown-header">
-            <h6>Jorge Dominguez</h6>
+            <h6 >Jorge Dominguez</h6>
             <span>Administrador de sede</span>
           </li>
           <li>
@@ -224,7 +224,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
+            <a class="dropdown-item d-flex align-items-center" href="#">
               <i class="bi bi-person"></i>
               <span>Mi Perfil</span>
             </a>
@@ -292,6 +292,12 @@
         <span>Mensajería</span>
       </a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/administrador/registro}">
+        <i class="bi bi-wechat"></i>
+        <span>Registro Masivo</span>
+      </a>
+    </li>
   </ul>
 
 </aside><!-- End Sidebar-->
@@ -322,6 +328,7 @@
                   <h5 class="card-title">DOCTORES <span>| Sede San Isidro</span></h5>
                   <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
                 </div>
+                <div th:if="${msgDoc != null}" th:text="${msgDoc}" class="alert alert-success" role="alert"></div>
                 <div class=" flex-column" >
                   <table class="table" id="datatable">
                     <thead>
@@ -362,10 +369,9 @@
               <div class="card-body pb-0">
                 <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title">PACIENTES <span>| Sede San Isidro</span></h5>
-
                   <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
-
                 </div>
+                <div th:if="${msgPaci != null}" th:text="${msgPaci}" class="alert alert-success" role="alert"></div>
                 <div class="d-flex flex-column" >
 
                   <table class="table table-hover" id="datatable2">
@@ -375,24 +381,27 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="paciente: ${listaPaciente}">
+
+                      <tr th:each="paciente: ${listaPaciente}">
+
                       <td>
+                        <a th:href="@{/administrador/historialPaciente(id=${paciente.idPaciente})}">
                         <div class="row">
                           <div class="col-lg-2 col-sm-3">
                             <img th:src="@{|/administrador/imagePaci/${paciente.idPaciente}|}" alt="#" width="70" height="70" class="rounded-circle"/>
                           </div>
                           <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
                             <div>
-                              <h5 th:text="${paciente.nombre}+' '+${paciente.apellidos}"><a th:href="@{/administrador/historialPaciente}" >
-                                Iker Osco Chavez</a> </h5>
+                              <h5 th:text="${paciente.nombre}+' '+${paciente.apellidos}"> </h5>
                               <p th:text="${paciente.correo}">okerosco@example.com</p>
                             </div>
-                            <span class="text-muted ms-2 float-end"><h6 th:text="${paciente.estado}">•Activo</h6></span>
+                            <span class="text-muted ms-2 float-end"><h6 th:if="${paciente.estado == 1}" th:text="Activo"></h6></span>
+
                           </div>
                         </div>
+                        </a>
                       </td>
                     </tr>
-
                     </tbody>
                   </table>
                   <br>
@@ -497,6 +506,10 @@
 <script>
   $(document).ready(function () {
     $('#datatable').DataTable({
+      lengthMenu: [
+        [5,10,20],
+        [5,10,20],
+      ],
       "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Ningún registro encontrado",
@@ -521,6 +534,10 @@
 <script>
   $(document).ready(function () {
     $('#datatable2').DataTable({
+      lengthMenu: [
+              [5,10,20],
+              [5,10,20],
+      ],
       "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Ningún registro encontrado",
