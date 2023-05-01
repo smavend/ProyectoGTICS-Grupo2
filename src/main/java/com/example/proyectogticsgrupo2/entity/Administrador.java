@@ -21,4 +21,8 @@ public class Administrador {
     @Column(nullable = false)
     private int estado; //activo: 1, no activo: 0, otros
 
+    //faltaba esta columna
+    @ManyToOne
+    @JoinColumn(name = "sede_id_sede", nullable = false)
+    private Sede sede;
 }

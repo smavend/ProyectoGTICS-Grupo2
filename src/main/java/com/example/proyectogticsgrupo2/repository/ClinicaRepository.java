@@ -18,9 +18,9 @@ public interface ClinicaRepository extends JpaRepository<Clinica, Integer> {
     @Query(nativeQuery = true, value = "select * from clinica where nombre = ?1")
     Clinica buscarClinicaPorNombre(String clinicaId);
 
-
-    @Transactional
-    @Modifying
-    @Query(value = "INSERT INTO clinica (nombre, color,tyc, telefono, correo) VALUES (:otraClinica, '#FFFFFF','terminosX', '0000000000', 'contacto@clinica.com')", nativeQuery = true)
-    void insertarClinica(@Param("otraClinica") String otraClinica);
+//
+//    @Transactional
+//    @Modifying
+//    @Query(value = "INSERT INTO clinica (nombre, color,tyc, telefono, correo) VALUES (:otraClinica, '#FFFFFF','terminosX', '0000000000', 'contacto@clinica.com')", nativeQuery = true)
+//    void insertarClinica(@Param("otraClinica") String otraClinica);
 }

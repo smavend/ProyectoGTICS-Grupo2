@@ -50,8 +50,8 @@ public class Doctor {
     private String fotoname;
     private String fotocontenttype;
     private byte[] foto;
-
-    private String precio;
+//  No hay la columna precio en doctor
+//    private String precio;
     @NotBlank(message = "Seleccione un género")
     private String genero;
 

@@ -114,6 +114,11 @@ public class SuperAdminService {
         }
         dto.setCorreo(doctor.getCorreo());
         dto.setClinica(doctor.getSede().getClinica().getNombre());
+//        if(doctor.getDuracion_cita_horas() == null){
+//            dto.setDuracion_cita_horas("Por Elegir");
+//        }else{
+//            dto.setDuracion_cita_horas(doctor.getDuracion_cita_horas());
+//        }
         return dto;
     }
 

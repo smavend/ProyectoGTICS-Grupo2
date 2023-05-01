@@ -22,6 +22,8 @@ public class Sede {
     @ManyToOne
     @JoinColumn(name="clinica_id_clinica", nullable = false)
     private Clinica clinica;
+
+    @Column
     private String direccion;
 
 }
