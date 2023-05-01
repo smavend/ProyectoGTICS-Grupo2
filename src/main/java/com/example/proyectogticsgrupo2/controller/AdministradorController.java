@@ -52,6 +52,8 @@ public class AdministradorController {
     }
     @GetMapping("/finanzas")
     public String finanzas(){return "administrador/finanzas";}
+    @GetMapping("/registro")
+    public String registro(){return "administrador/rptaForm";}
     @GetMapping("/perfil")
     public String perfil(@RequestParam("id") String id, Model model){
         Optional<Administrador> optAministrador = administradorRepository.findById(id);

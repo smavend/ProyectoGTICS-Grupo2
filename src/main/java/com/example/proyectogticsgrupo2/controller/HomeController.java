@@ -1,13 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
-import com.example.proyectogticsgrupo2.entity.Distrito;
-import com.example.proyectogticsgrupo2.entity.Doctor;
-import com.example.proyectogticsgrupo2.entity.Paciente;
-import com.example.proyectogticsgrupo2.entity.Seguro;
-import com.example.proyectogticsgrupo2.repository.DistritoRepository;
-import com.example.proyectogticsgrupo2.repository.DoctorRepository;
-import com.example.proyectogticsgrupo2.repository.PacienteRepository;
-import com.example.proyectogticsgrupo2.repository.SeguroRepository;
+import com.example.proyectogticsgrupo2.entity.*;
+import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -16,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,12 +24,16 @@ import java.util.Optional;
 public class HomeController {
     final PacienteRepository pacienteRepository;
     final DoctorRepository doctorRepository;
+    final AdministradorRepository administradorRepository;
+    final CredencialesRepository credencialesRepository;
     final DistritoRepository distritoRepository;
     final SeguroRepository seguroRepository;
 
-    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository) {
+    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
+        this.administradorRepository = administradorRepository;
+        this.credencialesRepository = credencialesRepository;
         this.distritoRepository = distritoRepository;
         this.seguroRepository = seguroRepository;
     }
@@ -67,6 +67,29 @@ public class HomeController {
     @GetMapping("/login/cambiarpassw/success")
     public String cambioPasswExitoso(){
         return "general/confirmacioncontrasenia";
+    }
+    @PostMapping("/login/credenciales")
+    public String credenciales(Model model, @RequestParam("username") String correo, @RequestParam("password") String password){
+
+        Optional<Credenciales> optCredenciales = credencialesRepository.findByCorreoAndContrasena(correo,password);
+        if(optCredenciales.isPresent()){
+            Credenciales credencial = optCredenciales.get();
+            Optional<Paciente> optionalPaciente = pacienteRepository.findById(credencial.getId_credenciales());
+            Optional<Administrador> optAdministrador = administradorRepository.findById(credencial.getId_credenciales());
+            if(optAdministrador.isPresent()){
+
+                return "redirect:/administrador/dashboard";
+            }else if (optionalPaciente.isPresent()){
+                Paciente paciente = optionalPaciente.get();
+                model.addAttribute("paciente",paciente);
+                return "paciente/index";
+            }else {
+                return "redirect:/login"; //continuara
+            }
+
+        }else {
+            return "redirect:/login";
+        }
     }
     @GetMapping("/signin")
     public String vistaRegistro(Model model){

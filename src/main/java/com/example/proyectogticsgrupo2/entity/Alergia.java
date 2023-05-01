@@ -15,8 +15,4 @@ public class Alergia {
 
     @Column(nullable = false)
     private String nombre;
-
-    @ManyToOne
-    @JoinColumn(name = "paciente_id_paciente")
-    private Paciente paciente;
 }
