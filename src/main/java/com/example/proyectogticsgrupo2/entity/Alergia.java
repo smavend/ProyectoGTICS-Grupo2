@@ -11,6 +11,7 @@ import lombok.Setter;
 public class Alergia {
     @Id
     @Column(name = "id_alergia", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAlergia;
 
     @Column(nullable = false)

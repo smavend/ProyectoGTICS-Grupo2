@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequestMapping("/Paciente")
 public class PacienteController {
 
-    String idPrueba = "24587452";
+    String idPrueba = "10203010";
 
     final PacienteRepository pacienteRepository;
     final SedeRepository sedeRepository;
@@ -100,7 +100,6 @@ public class PacienteController {
 
     @PostMapping("/perfil/guardarAlergia")
     public String guardarAlergia(Alergia alergia){
-        System.out.println(alergia.getNombre());
         alergiaRepository.save(alergia);
         return "redirect:/Paciente/perfil/editar?idPaciente="+alergia.getPaciente().getIdPaciente();
     }
