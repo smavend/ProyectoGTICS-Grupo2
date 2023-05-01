@@ -1655,6 +1655,19 @@ p{
     padding: 7px 15px;
 }
 
+.botonBuscarDoctor{
+    border-radius: 50px;
+    padding: 8px 30px;
+    background-color: rgb(10, 161, 221);
+    color: white;
+    font-weight: 600;
+}
+
+.botonBuscarDoctor:hover{
+    background-color: #197ce6;
+    color: white;
+}
+
 .cardDoctor{
     background-color: #83d6f7;
     border-radius: 20px;
