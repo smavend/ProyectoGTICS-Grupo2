@@ -11,8 +11,13 @@ import lombok.Setter;
 public class Alergia {
     @Id
     @Column(name = "id_alergia", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAlergia;
 
     @Column(nullable = false)
     private String nombre;
+
+    @ManyToOne
+    @JoinColumn(name = "paciente_id_paciente")
+    private Paciente paciente;
 }
