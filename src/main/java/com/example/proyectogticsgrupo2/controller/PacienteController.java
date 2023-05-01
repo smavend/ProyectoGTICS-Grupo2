@@ -98,12 +98,12 @@ public class PacienteController {
         return "redirect:Paciente/perfil";
     }
 
-    @PostMapping("/perfil/guardarAlergia")
-    public String guardarAlergia(Alergia alergia){
-        System.out.println(alergia.getNombre());
-        alergiaRepository.save(alergia);
-        return "redirect:/Paciente/perfil/editar?idPaciente="+alergia.getPaciente().getIdPaciente();
-    }
+//    @PostMapping("/perfil/guardarAlergia")
+//    public String guardarAlergia(Alergia alergia){
+//        System.out.println(alergia.getNombre());
+//        alergiaRepository.save(alergia);
+//        return "redirect:/Paciente/perfil/editar?idPaciente="+alergia.getPaciente().getIdPaciente();
+//    }
 
     @GetMapping("/perfil/borrarAlergia")
     public String borrarAlergia(@RequestParam(name = "idPaciente") String idPaciente,
