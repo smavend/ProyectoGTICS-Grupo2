@@ -34,10 +34,12 @@ function resetValues() {
     if (selectUsuario.value === "administrador"){
         clinicaContainer.style.display = "flex";
         sedeContainer.style.display = "none";
+        especialidadContainer.style.display = "none";
         selectClinica.querySelector('option[value="otro"]').style.display = "block";
     } else if (selectUsuario.value === "administrativo") {
         clinicaContainer.style.display = "flex";
         sedeContainer.style.display = "none";
+        especialidadContainer.style.display = "none";
         selectClinica.querySelector('option[value="otro"]').style.display = "none";
     } else {
         clinicaContainer.style.display = "none";
@@ -46,7 +48,7 @@ function resetValues() {
     }
     // Ocultar campos de nombre de la nueva clínica y sede
     otraClinica.style.display = "none";
-    especialidadContainer.style.display = "none";
+
 }
 
 // Evento para detectar el cambio en el select de usuario
@@ -69,6 +71,9 @@ selectClinica.addEventListener("change", function() {
         otraClinica.style.display = "none";
         sedeContainer.style.display = "flex";
         especialidadContainer.style.display = "flex";
+        if(selectUsuario.value === "administrador"){
+            especialidadContainer.style.display = "none";
+        }
         $.ajax({
             url: '/SuperAdminHomePage/getSedesByClinica',
             method: 'POST',
