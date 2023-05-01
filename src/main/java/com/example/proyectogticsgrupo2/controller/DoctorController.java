@@ -37,7 +37,7 @@ public class DoctorController {
 
     @GetMapping(value={"/dashboard","/",""})
     public String dashboard(Model model) {
-        List<Cita> optionalCita = citaRepository.BuscarPorDoctor("09568265");
+        List<Cita> optionalCita = citaRepository.BuscarPorDoctor("10304011");
 
         ArrayList<String> listaHorarios= new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class DoctorController {
 
 
 
-        model.addAttribute("listaCitas", citaRepository.BuscarPorDoctor("09568265"));//CAMBIAR POR ID SESION
+        model.addAttribute("listaCitas", citaRepository.BuscarPorDoctor("10304011"));//CAMBIAR POR ID SESION
         model.addAttribute("listaHorarios", listaHorarios);
 
         return "doctor/DoctorDashboard";
@@ -69,7 +69,7 @@ public class DoctorController {
 
     @GetMapping("/recibo")
     public String recibo(Model model) {
-        List<Cita> optionalCita = citaRepository.BuscarPorDoctor("09568265");
+        List<Cita> optionalCita = citaRepository.BuscarPorDoctor("10304011");
         ArrayList<String> listaHorarios= new ArrayList<>();
 
         for (int i = 0; i < optionalCita.size(); i++) {
@@ -124,7 +124,7 @@ public class DoctorController {
 
     @GetMapping("/mensajeria")
     public String mensajeria(Model model){
-        List<Cita> citaList=citaRepository.BuscarPorDoctor("09568265"); //CAMBIAR CON ID DE SESION
+        List<Cita> citaList=citaRepository.BuscarPorDoctor("10304011"); //CAMBIAR CON ID DE SESION
         model.addAttribute("listaCitas",citaList);
         return "doctor/DoctorMensajería";
     }
