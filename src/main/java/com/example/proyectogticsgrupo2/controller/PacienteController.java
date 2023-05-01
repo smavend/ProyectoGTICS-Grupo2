@@ -95,7 +95,7 @@ public class PacienteController {
             model.addAttribute("distritoList", distritoList);
             return "paciente/perfilEditar";
         }
-        return "redirect:Paciente/perfil";
+        return "redirect:/Paciente/perfil";
     }
 
     @PostMapping("/perfil/guardarAlergia")
