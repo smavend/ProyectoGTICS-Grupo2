@@ -2,12 +2,13 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +26,9 @@ public class PacienteController {
     final SeguroRepository seguroRepository;
     final DistritoRepository distritoRepository;
     final DoctorRepository doctorRepository;
+    final PacientePorConsentimientoRepository pacientePorConsentimientoRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
@@ -34,6 +36,7 @@ public class PacienteController {
         this.seguroRepository = seguroRepository;
         this.distritoRepository = distritoRepository;
         this.doctorRepository = doctorRepository;
+        this.pacientePorConsentimientoRepository = pacientePorConsentimientoRepository;
     }
 
     /* INICIO */
@@ -118,6 +121,23 @@ public class PacienteController {
     public String guardarPerfil(Paciente paciente){
         pacienteRepository.save(paciente);
         return "redirect:/Paciente/perfil";
+    }
+
+    @GetMapping("/fotoPerfil/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            byte[] imagenComoBytes = paciente.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(paciente.getFotocontenttype()));
+
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        }
+        else {
+            return null;
+        }
     }
 
     /* SECCIÓN DOCTORES */
@@ -255,16 +275,27 @@ public class PacienteController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
+            List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(idPrueba);
+
+            model.addAttribute("consentimientos", consentimientos);
             model.addAttribute("paciente", paciente);
         }
         return "paciente/consentimientos";
     }
+
+    @PostMapping("/consentimientos/actualizar")
+    public String actualizarConsentimientos(PacientePorConsentimiento pacientePorConsentimiento){
+        return "";
+    }
+
+    /* SECCIÓN MENSAJERÍA */
 
     @GetMapping("/mensajeria")
     public String mensajeria(Model model){
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
+
             model.addAttribute("paciente", paciente);
         }
         return "paciente/mensajeria";

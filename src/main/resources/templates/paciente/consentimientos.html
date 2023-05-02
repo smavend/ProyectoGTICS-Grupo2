@@ -35,40 +35,20 @@
             <h1 class="encabezado">Consentimientos dados</h1>
             <section class="seccionPrincipal">
 
-                <form>
+                <form method="post" th:action="@{/Paciente/consentimientos/actualizar}">
 
                     <div class="form-check consentimiento">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked disabled>
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" checked disabled>
+                        <label class="form-check-label">
                             <a href="#">Términos y condiciones</a> de Clínica INTERPUCP
                         </label>
                     </div>
 
-                    <div class="form-check consentimiento">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Consentimiento 2
-                        </label>
-                    </div>
-
-                    <div class="form-check consentimiento">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Consentimiento 3
-                        </label>
-                    </div>
-
-                    <div class="form-check consentimiento">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Consentimiento 4
-                        </label>
-                    </div>
-
-                    <div class="form-check consentimiento">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Consentimiento 5
+                    <div class="form-check consentimiento" th:each="consentimiento : ${consentimientos}">
+                        <input class="form-check-input" type="checkbox" name="" th:checked="${consentimiento.valor==1}">
+                        <label class="form-check-label"
+                               th:text="${consentimiento.consentimiento.consentimiento}">
+                            Consentimiento
                         </label>
                     </div>
 
@@ -81,7 +61,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5 tituloNavBar" id="actualizarModal">Confirmación</h1>
+                                    <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
                                 </div>
                                 <div class="modal-body">
                                     <span class="textoModal">¿Está seguro que desea actualizar sus consentimientos?</span>
