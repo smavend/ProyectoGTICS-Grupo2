@@ -64,7 +64,7 @@
                         <div class="cardDoctor" >
                             <div class="row">
                                 <div class="col-5">
-                                    <img class="fotoDoctor" th:src="@{/assets/img/messages-3.jpg}" alt="fotoDoctor">
+                                    <img class="fotoDoctor" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
                                 </div>
                                 <div class="col-7 informacionDoctor">
                                     <div class="nombreDoctor" th:text="${doctor.nombre} +' '+ ${doctor.apellidos}">Juan Martinez Rondon</div>

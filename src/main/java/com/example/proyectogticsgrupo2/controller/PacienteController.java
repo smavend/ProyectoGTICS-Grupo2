@@ -198,6 +198,24 @@ public class PacienteController {
         return "paciente/doctores";
     }
 
+    @GetMapping("/imageDoctor")
+    public ResponseEntity<byte[]> mostrarImagenSede(@RequestParam("idDoctor") String idDoctor) {
+        Optional<Doctor> optionalDoctor= doctorRepository.findById(idDoctor);
+
+        if (optionalDoctor.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            byte[] imagenComoBytes = doctor.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(doctor.getFotocontenttype()));
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
     @GetMapping("/perfilDoctor")
     public String verPerfilDoctor(Model model,
                                   @RequestParam("idDoctor") String idDoctor){
