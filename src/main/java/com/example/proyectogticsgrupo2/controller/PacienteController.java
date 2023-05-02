@@ -140,6 +140,24 @@ public class PacienteController {
         return "redirect:/Paciente/perfil";
     }
 
+    @GetMapping("/imagePaciente")
+    public ResponseEntity<byte[]> mostrarImagenPaciente(@RequestParam("idPaciente") String idPaciente) {
+        Optional<Paciente> optionalPaciente= pacienteRepository.findById(idPaciente);
+
+        if (optionalPaciente.isPresent()) {
+            Paciente paciente = optionalPaciente.get();
+            byte[] imagenComoBytes = paciente.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(paciente.getFotocontenttype()));
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
     public String verDoctores(@RequestParam("idSede") int idSede,
@@ -199,7 +217,7 @@ public class PacienteController {
     }
 
     @GetMapping("/imageDoctor")
-    public ResponseEntity<byte[]> mostrarImagenSede(@RequestParam("idDoctor") String idDoctor) {
+    public ResponseEntity<byte[]> mostrarImagenDoctor(@RequestParam("idDoctor") String idDoctor) {
         Optional<Doctor> optionalDoctor= doctorRepository.findById(idDoctor);
 
         if (optionalDoctor.isPresent()) {
