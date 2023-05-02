@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -84,29 +87,55 @@ public class AdministradorController {
             model.addAttribute("listaAdministrativo",listaAdministrativo);
             return "administrador/crearPaciente";
         } else{
+
+
             if (file.isEmpty()) {
-                model.addAttribute("msg", "Debe subir un archivo");
-                return "redirect:/administrador/crearPaciente";
+                try {
+                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.png");
+                    FileInputStream input = new FileInputStream(foto);
+                    ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = input.read(buffer)) !=-1){
+                        output.write(buffer,0,length);
+                    }
+                    input.close();;
+                    output.close();
+                    byte[] bytes = output.toByteArray();
+
+                    paciente.setFoto(bytes);
+                    paciente.setFotoname("userPorDefecto.png");
+                    paciente.setFotocontenttype("image/png");
+                    paciente.setEstado(1);
+                    paciente.setFecharegistro(LocalDateTime.now());
+                    pacienteRepository.save(paciente);
+                    attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+
+                    return "redirect:/administrador/dashboard";
+                }catch (IOException e){
+                    e.printStackTrace();
+                    return "redirect:/administrador/crearPaciente";
+                }
+
+            }else{
+                String fileName = file.getOriginalFilename();
+                try {
+                    paciente.setFoto(file.getBytes());
+                    paciente.setFotoname(fileName);
+                    paciente.setFotocontenttype(file.getContentType());
+                    paciente.setEstado(1);
+                    paciente.setFecharegistro(LocalDateTime.now());
+                    pacienteRepository.save(paciente);
+                    attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+                    return "redirect:/administrador/dashboard";
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    model.addAttribute("msg", "ocurrió un error al subir el archivo");
+                    return "redirect:/administrador/crearPaciente";
+                }
+
             }
-            String fileName = file.getOriginalFilename();
-            if (fileName.contains("..")) {
-                model.addAttribute("msg", "No se permiten '..' en el archivo");
-                return "redirect:/administrador/crearPaciente";
-            }
-            try {
-                paciente.setFoto(file.getBytes());
-                paciente.setFotoname(fileName);
-                paciente.setFotocontenttype(file.getContentType());
-                paciente.setEstado(1);
-                paciente.setFecharegistro(LocalDateTime.now());
-                pacienteRepository.save(paciente);
-                attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
-                return "redirect:/administrador/dashboard";
-            } catch (IOException e) {
-                e.printStackTrace();
-                model.addAttribute("msg", "ocurrió un error al subir el archivo");
-                return "redirect:/administrador/crearPaciente";
-            }
+
         }
     }
     //###########################################################################
