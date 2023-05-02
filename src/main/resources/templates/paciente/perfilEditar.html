@@ -36,22 +36,24 @@
             <div class="container-xl perfil">
                 <div class="row">
                     <!-- Foto y botones editar -->
+
+                    <!-- INICIO FORM PACIENTE -->
                     <div class="col-lg-4">
                         <div class="card mb-4">
                             <div class="card-body text-center">
                                 <img th:src="@{/assets/img/profile-img.jpg}" alt="avatar"
-                                     class="rounded-circle img-fluid" style="width: 150px;">
+                                     class="img-fluid" style="width: 200px; border-radius: 30px">
                                 <h5 class="mt-3 mb-1 fw-semibold" th:text="${paciente.getNombreYApellido()}">Juanchito
                                     Palacios</h5>
                                 <p class="text-muted mb-3">Paciente</p>
-                                <form enctype="multipart/form-data">
-                                    <div class="vstack gap-2 col-sm-7 col-md-5 col-lg-6 mx-auto mb-3">
-                                        <input id="subirFoto" class="form-control" type="file" name="archivo">
-                                        <button id="botonSubirFoto" type="submit" style="border-radius: 20px" class="btn btn-secondary">Subir
-                                            foto</button>
-                                        <a style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
-                                    </div>
-                                </form>
+                                <div class="vstack gap-2 col-sm-7 col-md-5 col-lg-7 mx-auto mb-3">
+                                    <input id="subirFoto" class="form-control" type="file" name="archivo">
+                                    <button id="botonSubirFoto" type="submit" style="border-radius: 20px"
+                                            class="btn btn-secondary">Subir
+                                        foto
+                                    </button>
+                                    <a style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -59,7 +61,7 @@
                     <div class="col-lg-8">
 
                         <!-- Información perfil -->
-                        <div class="card mb-4">
+                        <div style="margin-bottom: 0" class="card">
                             <div class="card-body">
                                 <form th:action="@{/Paciente/perfil/guardar}" method="post" th:object="${paciente}"
                                       id="formPaciente">
@@ -184,6 +186,7 @@
                         </div>
 
                     </div>
+                    <!-- FIN FORM PACIENTE -->
                 </div>
             </div>
 
@@ -194,7 +197,8 @@
                 integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
                 crossorigin="anonymous"></script>
         <!-- JQuery CDN -->
-        <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.4.js"
+                integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>

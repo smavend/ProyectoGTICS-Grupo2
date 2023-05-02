@@ -27,8 +27,9 @@ public class PacienteController {
     final DistritoRepository distritoRepository;
     final DoctorRepository doctorRepository;
     final PacientePorConsentimientoRepository pacientePorConsentimientoRepository;
+    final CitaRepository citaRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
@@ -37,6 +38,7 @@ public class PacienteController {
         this.distritoRepository = distritoRepository;
         this.doctorRepository = doctorRepository;
         this.pacientePorConsentimientoRepository = pacientePorConsentimientoRepository;
+        this.citaRepository = citaRepository;
     }
 
     /* INICIO */
@@ -222,6 +224,9 @@ public class PacienteController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
+            List<Cita> proximasCitas = citaRepository.buscarProximasCitas(idPrueba);
+
+            model.addAttribute("proximasCitas", proximasCitas);
             model.addAttribute("paciente", paciente);
         }
         return "paciente/citas";

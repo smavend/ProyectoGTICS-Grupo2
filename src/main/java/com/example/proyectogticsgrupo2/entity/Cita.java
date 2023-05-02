@@ -28,10 +28,11 @@ public class Cita {
     private String diagnostico;
     private String receta;
     private String bitacora;
-    @Column(nullable = false)
-    private int modalidad;
-    @Column(nullable = false)
 
+    @Column(nullable = false)
+    private int modalidad; // 0: Presencial , 1: Virtual
+
+    @Column(nullable = false)
     @Lob
     private byte[] reporte;
 
