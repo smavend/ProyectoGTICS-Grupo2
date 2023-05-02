@@ -1,3 +1,15 @@
+// $(document).ready(function() {
+//     $("#clinicaContainer").hide();
+//     $("#SedeContainer").hide();
+//     if (selectUsuario.value === "administrador"){
+//         $("#clinicaContainer").show();
+//         $("#SedeContainer").show();
+//     }else if(selectUsuario.value === "administrativo"){
+//         $("#clinicaContainer").show();
+//         $("#SedeContainer").show();
+//         $("#especialidad-lista-crearform").show();
+//     }
+// });
 // Obtener los elementos del DOM
 var selectUsuario = document.getElementById("Select Usuario");
 var inputDNI = document.getElementById("inputText");
@@ -15,6 +27,11 @@ var selectEspecialidad = document.getElementById("especialidad-lista-crearform")
 var correo_nueva_clinica = document.getElementById("correo_nueva_clinica");
 var correoUser = document.getElementById("correoUser")
 var telefono_nueva_clinica = document.getElementById( "telefono_nueva_clinica");
+var selectSede = document.getElementById("sede-lista-crearform");
+var otraSede = document.getElementById("otraSede");
+var otraSede4input = document.getElementById("otraSede4input");
+var sede_nueva4_direccion = document.getElementById("sede_nueva4_direccion");
+var sede_nueva_direccion =document.getElementById("sede_nueva_direccion");
 
 // Función para resetear los valores y ocultar la sección de Sede si es necesario
 function resetValues() {
@@ -23,12 +40,16 @@ function resetValues() {
     inputApellidos.value = "";
     selectClinica.selectedIndex = 0;
     selectEspecialidad.selectedIndex = 0;
+    selectSede.selectedIndex = 0;
     sede_lista_container.selectedIndex = 0;
+    especialidadContainer.selectedIndex = 0;
     otraClinicaInput.value = "";
     otraSedeInput.value = "";
     correoUser.value = "";
     correo_nueva_clinica.value = "";
     telefono_nueva_clinica.value = "";
+    otraSede4input.value = "";
+    sede_nueva4_direccion.value = "";
 
 
     if (selectUsuario.value === "administrador"){
@@ -36,6 +57,7 @@ function resetValues() {
         sedeContainer.style.display = "none";
         especialidadContainer.style.display = "none";
         selectClinica.querySelector('option[value="otro"]').style.display = "block";
+
     } else if (selectUsuario.value === "administrativo") {
         clinicaContainer.style.display = "flex";
         sedeContainer.style.display = "none";
@@ -48,6 +70,11 @@ function resetValues() {
     }
     // Ocultar campos de nombre de la nueva clínica y sede
     otraClinica.style.display = "none";
+    otraSede.style.display = "none";
+    especialidadContainer.style.display = "none";
+
+
+
 
 }
 
@@ -83,6 +110,22 @@ selectClinica.addEventListener("change", function() {
             success: function(result) {
                 // Actualizar la lista de sedes con los valores devueltos por el servidor
                 $('#sede-lista-crearform').html(result);
+                if(selectUsuario.value === "administrador"){
+                    $('#sede-lista-crearform option').each(function() {
+                        var option = $(this);
+                        if (option.data('admin')) {
+                            option.prop('disabled', true);
+                            option.css({
+                                'background-color': '#dcdcdc',
+                                'color': '#9a9a9a'
+                            });
+
+                        }
+                    });
+                }else if(selectUsuario.value === "administrativo"){
+                    selectSede.querySelector('option[value="otro"]').style.display = "none";
+                }
+
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log('Error al hacer la solicitud AJAX: ' + textStatus);
@@ -91,6 +134,16 @@ selectClinica.addEventListener("change", function() {
     }
 
 });
-
-
+selectSede.addEventListener("change", function() {
+    if (selectSede.value === "otro") {
+        otraSede4input.value = "";
+        otraSede.style.display = "flex";
+    }else if (selectSede.value === "Seleccionar Sede") {
+        otraSede4input.value = "";
+        otraSede.style.display = "none";
+    }else{
+        otraSede4input.value = "";
+        otraSede.style.display = "none";
+    }
+});
 

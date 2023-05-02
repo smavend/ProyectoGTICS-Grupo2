@@ -90,40 +90,61 @@
                     <div class="card-body">
                         <h5 class="card-title">Crear Usuario</h5>
                         <!-- Horizontal Form -->
-                        <form class="filter-form-crearusuario" method="POST" th:action="@{/SuperAdminHomePage/SaveUser}">
+                        <form class="filter-form-crearusuario" method="POST"
+                              th:action="@{/SuperAdminHomePage/SaveUser}">
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">Usuario</label>
                                 <div class="col-sm-10">
                                     <select id="Select Usuario" name="selectUsuario" class="form-select"
                                             aria-label="Default select example">
-                                        <option selected>Seleccionar Usuario</option>
-                                        <option value="administrador">Administrador</option>
-                                        <option value="administrativo">Administrativo</option>
+                                        <option th:selected="${selectUsuarioValue == null}" selected>Seleccionar
+                                            Usuario
+                                        </option>
+                                        <option value="administrador"
+                                                th:selected="${selectUsuarioValue == 'administrador'}">Administrador
+                                        </option>
+                                        <option value="administrativo"
+                                                th:selected="${selectUsuarioValue == 'administrativo'}">Administrativo
+                                        </option>
                                     </select>
+                                    <span th:if="${selectUsuarioError}" th:text="${selectUsuarioError}"
+                                          style="color: #FF0000;" class="error"></span>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputText" class="col-sm-2 col-form-label">DNI</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputText" name="dni">
+                                    <input type="text" class="form-control" id="inputText" name="dni"
+                                           th:value="${dniValue}">
+                                    <span th:if="${dniError}" th:text="${dniError}" style="color: #FF0000;"
+                                          class="error"></span>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputNombres" class="col-sm-2 col-form-label">Nombres</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputNombres" name="nombres">
+                                    <input type="text" class="form-control" id="inputNombres" name="nombres"
+                                           th:value="${nombresValue}">
+                                    <span th:if="${nombresError}" th:text="${nombresError}" style="color: #FF0000;"
+                                          class="error"></span>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputApellidos" class="col-sm-2 col-form-label">Apellidos</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputApellidos" name="apellidos">
+                                    <input type="text" class="form-control" id="inputApellidos" name="apellidos"
+                                           th:value="${apellidosValue}">
+                                    <span th:if="${apellidosError}" th:text="${apellidosError}" style="color: #FF0000;"
+                                          class="error"></span>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="correoUser" class="col-sm-2 col-form-label">Correo</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="correoUser" name="correoUser">
+                                    <input type="text" class="form-control" id="correoUser" name="correoUser"
+                                           th:value="${correoUserValue}">
+                                    <span th:if="${CorreoError}" th:text="${CorreoError}" style="color: #FF0000;"
+                                          class="error"></span>
                                 </div>
                             </div>
                             <div id="clinicaContainer" class="row mb-3" style="display: none;">
@@ -136,26 +157,40 @@
                                                 th:text="${Clinica.nombre}"></option>
                                         <option value="otro">Otra Clínica</option>
                                     </select>
-                                    <div class="form-group" id="otraClinica" style="display:none; flex-direction: column;">
+                                    <span th:if="${clinicaError}" th:text="${clinicaError}"
+                                          style="color: #FF0000;" class="error"></span>
+                                    <div class="form-group" id="otraClinica"
+                                         style="display:none; flex-direction: column;">
                                         <label for="otraClinicaInput">Nombre de la nueva Clínica:</label>
                                         <input type="text" class="form-control" id="otraClinicaInput"
-                                               name="otraClinica">
+                                               name="otraClinica" th:value="${otraClinicaValue}">
+                                        <span th:if="${otraClinicaError}" th:text="${otraClinicaError}" style="color: #FF0000;"
+                                              class="error"></span>
 
                                         <label for="correo_nueva_clinica">Correo de la nueva Clínica:</label>
                                         <input type="text" class="form-control" id="correo_nueva_clinica"
-                                               name="correo_nueva_clinica">
+                                               name="correo_nueva_clinica"  th:value="${correo_nueva_clinicaValue}">
+                                        <span th:if="${correo_nueva_clinicaError}" th:text="${correo_nueva_clinicaError}" style="color: #FF0000;"
+                                              class="error"></span>
 
                                         <label for="telefono_nueva_clinica">Teléfono de la nueva Clínica:</label>
                                         <input type="text" class="form-control" id="telefono_nueva_clinica"
-                                               name="telefono_nueva_clinica">
+                                               name="telefono_nueva_clinica" th:value="${telefono_nueva_clinicaValue}">
+                                        <span th:if="${telefono_nueva_clinicaValueError}" th:text="${telefono_nueva_clinicaValueError}" style="color: #FF0000;"
+                                              class="error"></span>
+
 
                                         <label for="OtraSedeInput">Nombre de la nueva Sede:</label>
                                         <input type="text" class="form-control" id="OtraSedeInput"
-                                               name="otraSede">
+                                               name="otraSede" th:value="${otraSedeValue}">
+                                        <span th:if="${otraSedeValueError}" th:text="${otraSedeValueError}" style="color: #FF0000;"
+                                              class="error"></span>
 
-                                        <label for="OtraSedeInput">Dirección de la nueva Sede:</label>
+                                        <label for="sede_nueva_direccion">Dirección de la nueva Sede:</label>
                                         <input type="text" class="form-control" id="sede_nueva_direccion"
-                                               name="sede_nueva_direccion">
+                                               name="sede_nueva_direccion" th:value="${sede_nueva_direccionValue}">
+                                        <span th:if="${sede_nueva_direccionError}" th:text="${sede_nueva_direccionError}" style="color: #FF0000;"
+                                              class="error"></span>
 
                                     </div>
                                 </div>
@@ -163,19 +198,39 @@
                             <div id="SedeContainer" class="row mb-3" style="display: none;">
                                 <label class="col-sm-2 col-form-label">Sede</label>
                                 <div class="col-sm-10">
-                                    <select id="sede-lista-crearform" class="form-select" aria-label="Default select example" name="sede">
+                                    <select id="sede-lista-crearform" class="form-select"
+                                            aria-label="Default select example" name="sede">
                                         <option selected>Seleccionar Sede</option>
                                     </select>
+                                    <span th:if="${sedeError}" th:text="${sedeError}"
+                                          style="color: #FF0000;" class="error"></span>
+                                    <div class="form-group" id="otraSede" style="display:none; flex-direction: column;">
+                                        <label for="otraSede4input">Nombre de la nueva Sede:</label>
+                                        <input type="text" class="form-control" id="otraSede4input"
+                                               name="otraSede4" th:value="${otraSede4Value}">
+                                        <span th:if="${otraSede4Error}" th:text="${otraSede4Error}" style="color: #FF0000;"
+                                              class="error"></span>
+                                        <label for="sede_nueva4_direccion">Dirección de la nueva Sede:</label>
+                                        <input type="text" class="form-control" id="sede_nueva4_direccion"
+                                               name="sede_nueva4_direccion" th:value="${sede_nueva4_direccionValue}">
+                                        <span th:if="${sede_nueva4_direccionError}" th:text="${sede_nueva4_direccionError}" style="color: #FF0000;"
+                                              class="error"></span>
+                                    </div>
                                 </div>
+
                             </div>
                             <div id="EspecialidadContainer" class="row mb-3" style="display: none;">
                                 <label class="col-sm-2 col-form-label">Especialidad</label>
                                 <div class="col-sm-10">
-                                    <select id="especialidad-lista-crearform" class="form-select" aria-label="Default select example" name="especialidad">
+                                    <select id="especialidad-lista-crearform" class="form-select"
+                                            aria-label="Default select example" name="especialidad">
                                         <option selected>Seleccionar Especialidad</option>
-                                        <option th:each="Especialidad : ${listaEspecialidades}" th:value="${Especialidad.nombre}"
+                                        <option th:each="Especialidad : ${listaEspecialidades}"
+                                                th:value="${Especialidad.nombre}"
                                                 th:text="${Especialidad.nombre}"></option>
                                     </select>
+                                    <span th:if="${especialidadError}" th:text="${especialidadError}"
+                                          style="color: #FF0000;" class="error"></span>
                                 </div>
                             </div>
                             <div class="text-center">
