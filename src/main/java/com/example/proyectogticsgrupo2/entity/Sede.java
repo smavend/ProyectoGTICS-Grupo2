@@ -24,4 +24,8 @@ public class Sede {
     private Clinica clinica;
     private String direccion;
 
+    private String fotoname;
+    private String fotocontenttype;
+    private byte[] foto;
+
 }
