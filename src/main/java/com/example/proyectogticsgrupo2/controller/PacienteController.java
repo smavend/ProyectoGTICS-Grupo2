@@ -144,6 +144,34 @@ public class PacienteController {
 
     }
 
+    @PostMapping("/doctoresFiltrado")
+    public String verDoctores(@RequestParam("idSedeFilter") int idSedeFilter,
+                              @RequestParam("idEspecialidadFilter") int idEspecialidadFilter,
+                              Model model){
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
+        List<Sede> sedeList =  sedeRepository.findAll();
+        List<Especialidad> especialidadList = especialidadRepository.findAll();
+        Optional<Sede> optionalSede = sedeRepository.findById(idSedeFilter);
+        if (optionalSede.isPresent()){
+            Sede sede = optionalSede.get();
+            model.addAttribute("sede", sede);
+        }
+        Optional<Especialidad> optionalEspecialidad = especialidadRepository.findById(idEspecialidadFilter);
+        if (optionalEspecialidad.isPresent()){
+            Especialidad especialidad = optionalEspecialidad.get();
+            model.addAttribute("especialidad", especialidad);
+        }
+        List<Doctor> listDoctorSede = doctorRepository.listDoctorSedeEspecialidad(idSedeFilter, idEspecialidadFilter);
+        model.addAttribute("doctorList", listDoctorSede);
+        model.addAttribute("sedeList", sedeList);
+        model.addAttribute("especialidadList", especialidadList);
+        return "paciente/doctores";
+    }
+
     @GetMapping("/perfilDoctor")
     public String verPerfilDoctor(Model model,
                                   @RequestParam("idDoctor") String idDoctor){
