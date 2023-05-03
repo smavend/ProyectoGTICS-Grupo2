@@ -47,8 +47,10 @@
                         <div class="col-lg-5 filtroDoctor d-flex justify-content-start">
                             <label class="labelFiltroDoctor">Especialidad</label>
                             <select class="selectFiltroDoctor" name="idEspecialidadFilter">
-                                <option value=0 th:if="${sinFiltrar}!=0">Todas las especialidades</option>
-                                <option th:each="especialidad: ${especialidadList}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}">Dermatología</option>
+                                <option th:if="${sinFiltrar}==0">Todas las especialidades</option>
+                                <option th:text="${especialidad.nombre}" th:if="${sinFiltrar}==1"></option>
+                                <option value=0>Todas las especialidades</option>
+                                <option th:each="especialidades: ${especialidadList}" th:value="${especialidades.idEspecialidad}" th:text="${especialidades.nombre}">Dermatología</option>
                             </select>
                         </div>
                         <div class="col-lg-auto filtroDoctor d-lg-flex justify-content-center">

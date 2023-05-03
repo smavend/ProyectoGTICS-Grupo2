@@ -206,15 +206,17 @@ public class PacienteController {
         if (idEspecialidadFilter==0){
             List<Doctor> doctorList = doctorRepository.listDoctorSede(idSedeFilter);
             model.addAttribute("doctorList", doctorList);
+            model.addAttribute("sinFiltrar",0);
         }else {
             List<Doctor> listDoctorSedeEspecialidad = doctorRepository.listDoctorSedeEspecialidad(idSedeFilter, idEspecialidadFilter);
             model.addAttribute("doctorList", listDoctorSedeEspecialidad);
-            Optional<Especialidad> optionalEspecialidad = especialidadRepository.findById(idEspecialidadFilter);
-            if (optionalEspecialidad.isPresent()){
-                Especialidad especialidad = optionalEspecialidad.get();
-                model.addAttribute("especialidad", especialidad);
-                model.addAttribute("sinFiltrar",0);
-            }
+        }
+        Optional<Especialidad> optionalEspecialidad = especialidadRepository.findById(idEspecialidadFilter);
+        if (optionalEspecialidad.isPresent()){
+            Especialidad especialidad = optionalEspecialidad.get();
+            model.addAttribute("especialidad", especialidad);
+            model.addAttribute("sinFiltrar",1);
+
         }
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
