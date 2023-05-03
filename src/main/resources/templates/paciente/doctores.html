@@ -35,25 +35,27 @@
             <h1 class="encabezado">Doctores</h1>
             <section class="seccionPrincipal">
                 <!-- Filtros -->
-                <div class="row filtrosDoctores">
-                    <div class="col-lg-4 filtroDoctor d-flex justify-content-start">
-                        <label class="labelFiltroDoctor">Sede</label>
-                        <select class="selectFiltroDoctor">
-                            <option th:text="${sede.nombre}"></option>
-                            <option th:each="sedes: ${sedeList}" th:value="${sedes.nombre}" th:text="${sedes.nombre}" th:if="${sedes.nombre} != ${sede.nombre}"></option>
-                        </select>
+                <form method="post" th:action="@{/Paciente/doctoresFiltrado}">
+                    <div class="row filtrosDoctores">
+                        <div class="col-lg-4 filtroDoctor d-flex justify-content-start">
+                            <label class="labelFiltroDoctor">Sede</label>
+                            <select class="selectFiltroDoctor" name="idSedeFilter">
+                                <option th:text="${sede.nombre}" th:value="${sede.idSede}"></option>
+                                <option th:each="sedes: ${sedeList}" th:value="${sedes.idSede}" th:text="${sedes.nombre}" th:if="${sedes.nombre} != ${sede.nombre}"></option>
+                            </select>
+                        </div>
+                        <div class="col-lg-5 filtroDoctor d-flex justify-content-start">
+                            <label class="labelFiltroDoctor">Especialidad</label>
+                            <select class="selectFiltroDoctor" name="idEspecialidadFilter">
+                                <option value=0 th:if="${sinFiltrar}!=0">Todas las especialidades</option>
+                                <option th:each="especialidad: ${especialidadList}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}">Dermatología</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-auto filtroDoctor d-lg-flex justify-content-center">
+                            <button class="btn botonBuscarDoctor" type="submit">Buscar</button>
+                        </div>
                     </div>
-                    <div class="col-lg-4 filtroDoctor d-flex justify-content-start">
-                        <label class="labelFiltroDoctor">Especialidad</label>
-                        <select class="selectFiltroDoctor">
-                            <option value="" selected>Todas las especialidades</option>
-                            <option th:each="especialidad: ${especialidadList}" th:value="${especialidad.nombre}" th:text="${especialidad.nombre}">Dermatología</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2 filtroDoctor d-lg-flex justify-content-center">
-                        <button class="btn botonBuscarDoctor">Buscar</button>
-                    </div>
-                </div>
+                </form>
                 <!-- Doctores -->
                 <div class="row">
                     <!-- Primera columna de doctores -->
@@ -62,7 +64,7 @@
                         <div class="cardDoctor" >
                             <div class="row">
                                 <div class="col-5">
-                                    <img class="fotoDoctor" th:src="@{/assets/img/messages-3.jpg}" alt="fotoDoctor">
+                                    <img class="fotoDoctor" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
                                 </div>
                                 <div class="col-7 informacionDoctor">
                                     <div class="nombreDoctor" th:text="${doctor.nombre} +' '+ ${doctor.apellidos}">Juan Martinez Rondon</div>
