@@ -7,6 +7,7 @@ import com.example.proyectogticsgrupo2.dto.PacienteDTO_superadmin;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
+import jakarta.validation.constraints.Size;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -185,7 +186,11 @@ public class SuperAdminController {
         Clinica clinicafound = clinicaRepository.buscarClinicaPorNombre(clinicaId);
         int clinica_id = clinicafound.getIdClinica();
         List<Sede> listaSedes = sedeRepository.EncontrarListaPorId(clinica_id);
+
+        List<Integer> sedesConAdministrador = administradorRepository.findSedesConAdministrador();
+
         model.addAttribute("listaSedes", listaSedes);
+        model.addAttribute("sedesConAdministrador", sedesConAdministrador);
         return "superAdmin/_sede_select_options";
     }
     @PostMapping("/SaveUser")
@@ -205,7 +210,103 @@ public class SuperAdminController {
                            //-------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                            @RequestParam(value = "otraSede", required = false) String otraSede,
                            @RequestParam(value = "sede", required = false) String sede,
-                           @RequestParam(value = "especialidad", required = false) String especialidad) {
+                           @RequestParam(value = "especialidad", required = false) String especialidad,
+                           @RequestParam(value = "otraSede4", required = false) String otraSede4,
+                           @RequestParam(value = "sede_nueva4_direccion", required = false) String sede_nueva4_direccion,
+                           Model model) {
+//
+//        boolean hasErrors = false;
+//
+//        if (selectUsuario == null || selectUsuario.isEmpty() || selectUsuario.equals("Seleccionar Usuario")) {
+//            model.addAttribute("selectUsuarioError", "*Debe seleccionar un usuario*");
+//            hasErrors = true;
+//        }
+//        if (dni.isEmpty() || !dni.matches("^[0-9]{8}$")) {
+//            model.addAttribute("dniError", "*El número de DNI debe tener 8 dígitos y ser numérico*");
+//            hasErrors = true;
+//        }
+//        if (nombres.isEmpty() || !nombres.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$")) {
+//            model.addAttribute("nombresError", "*El campo Nombres debe contener solo letras*");
+//            hasErrors = true;
+//        }
+//        if (apellidos.isEmpty() || !apellidos.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$")) {
+//            model.addAttribute("apellidosError", "*El campo Apellidos debe contener solo letras*");
+//            hasErrors = true;
+//        }
+//        if (correoUser.isEmpty() || !correoUser.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+//            model.addAttribute("CorreoError", "*El campo Correo debe contener una dirección de correo electrónico válida*");
+//            hasErrors = true;
+//        }
+//        if (clinica == null || clinica.isEmpty() || clinica.equals("Seleccionar Clínica")) {
+//            List<Clinica> listaClinicas = clinicaRepository.findAll();
+//            model.addAttribute("listaClinicas", listaClinicas);
+//            model.addAttribute("clinicaError", "*Debe seleccionar una clínica*");
+//            hasErrors = true;
+//        }
+//        if (otraClinica.isEmpty() || !otraClinica.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$")) {
+//            model.addAttribute("otraClinicaError", "*El campo Nombre de la nueva Clínica debe contener solo letras*");
+//            hasErrors = true;
+//        }
+//        if (correo_nueva_clinica.isEmpty() || !correo_nueva_clinica.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+//            model.addAttribute("correo_nueva_clinicaError", "*El campo Correo debe contener una dirección de correo electrónico válida*");
+//            hasErrors = true;
+//        }
+//        if (telefono_nueva_clinica.isEmpty() || !telefono_nueva_clinica.matches("^[0-9]{7}$")) {
+//            model.addAttribute("telefono_nueva_clinicaValueError", "*El número de Teléfono debe tener 9 dígitos y ser numérico*");
+//            hasErrors = true;
+//        }
+//        if (otraSede.isEmpty() || !otraSede.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$")) {
+//            model.addAttribute("otraSedeValueError", "*El campo Nueva Sede debe contener solo letras*");
+//            hasErrors = true;
+//        }
+//        if (sede_nueva_direccion.isEmpty() || !sede_nueva_direccion.matches("^[a-zA-Z0-9\\s°]*$")) {
+//            model.addAttribute("sede_nueva_direccionError", "*El campo Dirección de la nueva Sede debe contener solo letras, números o signos");
+//            hasErrors = true;
+//        }
+//        if (sede == null || sede.isEmpty() || sede.equals("Seleccionar Sede")) {
+//            List<Clinica> listaClinicas = clinicaRepository.findAll();
+//            model.addAttribute("listaClinicas", listaClinicas);
+//            model.addAttribute("clinicaError", "*Seleccione una clínica*");
+//            model.addAttribute("sedeError", "*Debe seleccionar una Sede*");
+//            hasErrors = true;
+//        }
+//        if (otraSede4.isEmpty() || !otraSede4.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$")) {
+//            model.addAttribute("otraSede4Error", "*El campo Nombre de la nueva Sede debe contener solo letras*");
+//            hasErrors = true;
+//        }
+//        if (sede_nueva4_direccion.isEmpty() || !sede_nueva4_direccion.matches("^[a-zA-Z0-9\\s°]*$")) {
+//            model.addAttribute("sede_nueva4_direccionError", "*El campo Dirección de la nueva Sede debe contener solo letras, números o signos");
+//            hasErrors = true;
+//        }
+//        if (especialidad == null || especialidad.isEmpty() || especialidad.equals("Seleccionar Especialidad")) {
+//            List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
+//            List<Clinica> listaClinicas = clinicaRepository.findAll();
+//            model.addAttribute("listaClinicas", listaClinicas);
+//            model.addAttribute("listaEspecialidades",listaEspecialidades);
+//            model.addAttribute("clinicaError", "*Seleccione una clínica*");
+//            model.addAttribute("sedeError", "*Debe seleccionar una Sede*");
+//            model.addAttribute("especialidadError", "*Debe seleccionar una Especialidad*");
+//            hasErrors = true;
+//        }
+//
+//        if(hasErrors){
+//            model.addAttribute("selectUsuarioValue", selectUsuario);
+//            model.addAttribute("dniValue", dni);
+//            model.addAttribute("nombresValue", nombres);
+//            model.addAttribute("apellidosValue", apellidos);
+//            model.addAttribute("correoUserValue", correoUser);
+//            model.addAttribute("otraClinicaValue", otraClinica);
+//            model.addAttribute("correo_nueva_clinicaValue", correo_nueva_clinica);
+//            model.addAttribute("telefono_nueva_clinicaValue", telefono_nueva_clinica);
+//            model.addAttribute("sede_nueva_direccionValue", sede_nueva_direccion);
+//            model.addAttribute("otraSedeValue", otraSede);
+//            ////
+//            model.addAttribute("sedeValue", sede);
+//            model.addAttribute("especialidadValue", especialidad);
+//            model.addAttribute("otraSede4Value", otraSede4);
+//            model.addAttribute("sede_nueva4_direccionValue", sede_nueva4_direccion);
+//            return "superAdmin/Crear_Usuario";
+//        }
         if (selectUsuario.equals("administrador")) {
             // Procesa los datos para un usuario administrador
             // ... (por ejemplo, guarda el usuario en la base de datos)
@@ -244,10 +345,22 @@ public class SuperAdminController {
                 administradorRepository.save(administradorNuevo);
                 // Utiliza los valores de 'otraClinica' y 'otraSede'
             } else {
-                Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
-                Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede, clinica_enviar.getIdClinica());
-                administradorRepository.insertarAdministrador(dni,nombres,apellidos,sede_enviar.getIdSede());
-                // Utiliza el valor de 'clinica'
+                if (sede.equals("otro")) {
+                    Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
+                    Sede sedeNueva = new Sede();
+                    sedeNueva.setNombre(otraSede4);
+                    sedeNueva.setClinica(clinica_enviar);
+                    sedeNueva.setDireccion(sede_nueva4_direccion);
+                    sedeRepository.save(sedeNueva);
+                    Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(otraSede4, clinica_enviar.getIdClinica());
+                    administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(),correoUser);
+
+                } else{
+                    Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
+                    Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede, clinica_enviar.getIdClinica());
+                    administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(),correoUser);
+                    // Utiliza el valor de 'clinica'
+                }
             }
         } else if (selectUsuario.equals("administrativo")) {
 
