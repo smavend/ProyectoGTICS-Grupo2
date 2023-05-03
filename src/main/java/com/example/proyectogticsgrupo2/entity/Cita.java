@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -41,7 +42,7 @@ public class Cita {
     private String direccion;
     @Column(nullable = false)
     private int estado;
-    private String fecha_emision;
+    private LocalDate fecha_emision;
 
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)
