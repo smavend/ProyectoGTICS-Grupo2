@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -22,9 +24,9 @@ public class Cita {
     private Doctor doctor;
 
     @Column(nullable = false)
-    private String inicio;
+    private LocalDateTime inicio;
     @Column(nullable = false)
-    private String fin;
+    private LocalDateTime fin;
     private String diagnostico;
     private String receta;
     private String bitacora;

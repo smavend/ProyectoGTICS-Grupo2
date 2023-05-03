@@ -346,7 +346,7 @@
                                             <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">DNI: </strong><span style="font-size: 1.2rem" th:text="${paciente.idPaciente}" > </span>
                                             <br>
                                               <!-- DESPUES PONER EDAD -->
-                                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><input type="date"  name="fecha_emision" value="2023-01-01"  min="2023-01-01" max="2030-12-31">
+                                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><input type="date"  name="fecha_emision" th:value="${fecha}"  min="2023-01-01" max="2030-12-31">
                                             <br>
                                             <div>
                                                 <div class="row">

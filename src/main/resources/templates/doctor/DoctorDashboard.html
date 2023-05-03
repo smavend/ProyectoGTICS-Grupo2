@@ -331,7 +331,7 @@
                                     <div class="card-body pb-0">
                                         <h5 class="card-title">PRÓXIMAS CITAS<span>| Sede San Miguel</span></h5>
                                         <div class="container-fluid">
-                                            <form method="post" th:action="@{/doctor/BuscarCita}">
+                                            <form method="post" th:action="@{/doctor/BuscarProxCita}">
                                                 <input name="searchField" class="form-control mb-3" type="text"
                                                        placeholder="Buscar por nombre"/>
                                             </form>
@@ -358,7 +358,7 @@
 
 
                                                             <td style="font-size: 1rem"
-                                                                th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}">
+                                                                th:text="${cita.getNombre() + ' ' + cita.getApellidos()}">
 
                                                             </td>
 
@@ -386,7 +386,7 @@
 
                                                             <td th:if="${cita.modalidad == 1}">
                                                                 <div style="width: min-content">
-                                                                    <a th:href="@{'/doctor/reporte?id=' + ${cita.paciente.idPaciente}+ '&id2=' + ${cita.id_cita}}"
+                                                                    <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
                                                                        type="button" class="btn btn-success">Iniciar
                                                                         cita</a>
                                                                     <button style="margin-top: 5px;width: max-content"
@@ -534,11 +534,9 @@
                                             <div class="card-body pb-0">
                                                 <h5 class="card-title">PACIENTES<span>| Sede San Miguel</span></h5>
                                                 <div class="container-fluid">
-                                                    <form class="d-flex" role="search">
-                                                        <input class="form-control me-2" type="search"
-                                                               placeholder="Buscar paciente" aria-label="Search">
-                                                        <button class="btn btn-outline-success" type="submit">Buscar
-                                                        </button>
+                                                    <form method="post" th:action="@{/doctor/BuscarPaciente}">
+                                                        <input name="searchField" class="form-control mb-3" type="text"
+                                                               placeholder="Buscar por nombre"/>
                                                     </form>
                                                 </div>
                                                 <br>
@@ -553,15 +551,15 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr th:each="cita,obj: ${listaCitas}">
+                                                                <tr th:each="paciente,obj: ${listaPacientes}">
                                                                     <td>
                                                                         <img style="border-radius: 50%;border: 2px solid #000"
-                                                                             th:src="@{'/usuario/foto/'+${cita.paciente.idPaciente}}"
+                                                                             th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}"
                                                                              height="70" width="70" alt="Profile">
                                                                     </td>
                                                                     <td style="font-size: 1rem; color: black">
                                                                         <a th:href="@{/doctor/dashboard}"
-                                                                           th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}"></a>
+                                                                           th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
 
 
                                                                     </td>

@@ -326,6 +326,8 @@
                     <div  class="col-lg-10 container">
                         <div class="row">
 
+
+
                             <!-- Top Selling -->
                             <div class="col-12">
                                 <div class="card top-selling overflow-auto container">
@@ -362,7 +364,7 @@
 
                                                             </td>
 
-                                                            <td style="font-size: 1rem" th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}">
+                                                            <td style="font-size: 1rem" th:text="${cita.getNombre() + ' ' + cita.getApellidos()}">
 
                                                             </td>
 
