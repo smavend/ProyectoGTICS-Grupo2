@@ -63,10 +63,26 @@ public class DoctorController {
 
     @GetMapping("/recibo")
     public String recibo(Model model) {
-        List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos("10304011",2);
-
+        List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos("10304011");
 
         model.addAttribute("listaRecibos", optionalCita);//CAMBIAR POR ID SESION
+
+        return "doctor/DoctorRecibos";
+    }
+
+    @PostMapping("/buscarRecibo")
+    public String buscarRecibo(@RequestParam("searchField") String searchField,
+                             Model model) {
+
+        try {
+            float floatSearchField = Float.parseFloat(searchField);
+            // La variable es de tipo float
+        } catch (NumberFormatException e) {
+            // La variable no es de tipo float
+            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibos("10304011",searchField);
+            model.addAttribute("listaRecibos", optionalCita);
+        }
+
 
         return "doctor/DoctorRecibos";
     }
@@ -129,7 +145,7 @@ public class DoctorController {
     }
 
     @PostMapping("/BuscarProxCita")
-    public String BuscarCita(@RequestParam("searchField") String searchField,
+    public String buscarCita(@RequestParam("searchField") String searchField,
                                       Model model) {
 
         List<ListaBuscadorDoctor> optionalCita = citaRepository.buscadorProximasCitas("10304011",searchField);
@@ -159,7 +175,7 @@ public class DoctorController {
     }
 
     @PostMapping("/BuscarPaciente")
-    public String BuscarPaciente(@RequestParam("searchField") String searchField,
+    public String buscarPaciente(@RequestParam("searchField") String searchField,
                              Model model) {
 
         List<ListaBuscadorDoctor> optionalCita = citaRepository.buscadorPaciente("10304011",searchField);
