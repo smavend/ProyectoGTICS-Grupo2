@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.repository;
 
 import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
+import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
 import com.example.proyectogticsgrupo2.entity.Cita;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,8 @@ public interface CitaRepository extends JpaRepository<Cita, String> {
 
     @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos,c.modalidad,c.inicio,c.fin,c.estado FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor= ?1 and lower(concat(p.nombre,' ',p.apellidos)) like %?2%", nativeQuery = true)
     List<ListaBuscadorDoctor> buscadorPaciente(String id,String nombre);
+
+    @Query(value = "SELECT DATE(c.inicio) as fecha , concat(p.nombre,' ',p.apellidos) as nombres, ROUND((sea.precio_cita*seg.doctor),2) as pago_doctor, c.id_cita, p.id_paciente,d.id_doctor, seg.doctor FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join sede s on (c.sede_id_sede = s.id_sede) inner join sede_x_especialidad_x_administrativo sea on (sea.sede_id_sede=s.id_sede) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) inner join seguro seg  where c.doctor_id_doctor= ?1 and sea.especialidad_id_especialidad=?2 and seg.id_seguro=p.seguro_id_seguro", nativeQuery = true)
+    List<ListaRecibosDTO> listarRecibos(String id_doctor, int id_especialidad);
 
 }

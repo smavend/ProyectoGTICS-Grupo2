@@ -377,13 +377,14 @@
 
                             <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;margin-left: -3rem" class="container col-5">
                                 <div class="row">
-                                    <div >
+                                    <div>
                                         <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
                                         <hr>
                                         <img th:src="@{/assets/img/zoom.jpg}" style="width: 600px">
                                         <div style="margin-top: 5px;text-align: center">
                                             <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
-                                            <button type="button" class="btn btn-secondary">Resultados de cuestionario</button>
+                                            <a th:href="@{'/doctor/verCuestionario?id=' + ${paciente.getIdPaciente()}}" type="button" class="btn btn-secondary" target="_blank">Resultados de cuestionario</a>
+
                                         </div>
 
                                         <div style="text-align: center">

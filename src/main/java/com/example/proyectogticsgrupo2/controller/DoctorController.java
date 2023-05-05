@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
+import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
 import com.example.proyectogticsgrupo2.entity.Cita;
 import com.example.proyectogticsgrupo2.entity.Paciente;
 import com.example.proyectogticsgrupo2.repository.CitaRepository;
@@ -62,20 +63,10 @@ public class DoctorController {
 
     @GetMapping("/recibo")
     public String recibo(Model model) {
-        List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas("10304011");
-        ArrayList<String> listaHorarios= new ArrayList<>();
-
-        // Transformar LocalDateTime a LocalDate
-        optionalCita.forEach(cita -> {
-            LocalDateTime fechaHora = cita.getInicio(); // Obtener LocalDateTime
-            String fecha = fechaHora.toLocalDate().toString();
+        List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos("10304011",2);
 
 
-            listaHorarios.add(fecha);
-        });
-
-        model.addAttribute("listaHorarios", listaHorarios);
-        model.addAttribute("listaCitas", optionalCita);//CAMBIAR POR ID SESION
+        model.addAttribute("listaRecibos", optionalCita);//CAMBIAR POR ID SESION
 
         return "doctor/DoctorRecibos";
     }
@@ -113,6 +104,14 @@ public class DoctorController {
         } else {
             return "redirect:/doctor/Dashboard";
         }
+
+    }
+
+    @GetMapping("/verCuestionario")
+    public String verCuestionario(@RequestParam("id") String id){
+
+        return "doctor/DoctorVerCuestionario";
+
 
     }
 
