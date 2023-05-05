@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,6 +124,12 @@ public class PacienteController {
         return "redirect:/Paciente/perfil";
     }
 
+    @PostMapping("/perfil/guardar")
+    public String guardarPerfil(Paciente paciente){
+        pacienteRepository.save(paciente);
+        return "redirect:/Paciente/perfil";
+    }
+
     @PostMapping("/perfil/guardarAlergia")
     public String guardarAlergia(Alergia alergia){
         alergiaRepository.save(alergia);
@@ -138,10 +146,34 @@ public class PacienteController {
         return "redirect:/Paciente/perfil/editar?idPaciente="+idPaciente;
     }
 
-    @PostMapping("/perfil/guardar")
-    public String guardarPerfil(Paciente paciente){
-        pacienteRepository.save(paciente);
-        return "redirect:/Paciente/perfil";
+    @PostMapping("/perfil/guardarFoto")
+    public String guardarFoto(Paciente paciente,
+                              @RequestParam(name = "archivo")MultipartFile file,
+                              Model model){
+        if (file.isEmpty()){
+            // MENSAJE DE ERROR EN CASO NO SE HAYA INCLUIDO UNA IMAGEN
+            return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
+        }
+
+        String fileName = file.getOriginalFilename();
+
+        if (fileName.contains("..")){
+            // MENSAJE DE ERROR EN CASO EL ARCHIVO CONTENGA CARACTERES EXTRAÑOS
+            return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
+        }
+
+        try {
+            paciente.setFoto(file.getBytes());
+            paciente.setFotoname(fileName);
+            paciente.setFotocontenttype(file.getContentType());
+            pacienteRepository.save(paciente);
+            return "redirect:/Paciente/perfil";
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            // MENSAJE EN DE ERROR EN CASO HAYA ERROR AL SUBIR ARCHIVO
+            return "redirect:/Paciente/perfil";
+        }
     }
 
     @GetMapping("/imagePaciente")
