@@ -29,6 +29,9 @@ public interface CitaRepository extends JpaRepository<Cita, String> {
     List<ListaRecibosDTO> listarRecibos(String id_doctor);
 
     @Query(value = "SELECT DATE(c.inicio) as fecha , concat(p.nombre,' ',p.apellidos) as nombres, ROUND((sea.precio_cita*seg.doctor),2) as pago_doctor, c.id_cita, p.id_paciente,d.id_doctor, seg.doctor FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join sede s on (c.sede_id_sede = s.id_sede) inner join sede_x_especialidad_x_administrativo sea on (sea.sede_id_sede=s.id_sede) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) inner join seguro seg  inner join especialidad esp on (esp.id_especialidad=d.especialidad_id_especialidad) where c.doctor_id_doctor= ?1 and sea.especialidad_id_especialidad=esp.id_especialidad and seg.id_seguro=p.seguro_id_seguro and (lower(concat(p.nombre,' ',p.apellidos)) LIKE CONCAT('%',LOWER(?2),'%'))", nativeQuery = true)
-    List<ListaRecibosDTO> buscarRecibos(String id_doctor,String searchfield);
+    List<ListaRecibosDTO> buscarRecibosNombre(String id_doctor,String searchfield);
+
+    @Query(value = "SELECT DATE(c.inicio) as fecha , concat(p.nombre,' ',p.apellidos) as nombres, ROUND((sea.precio_cita*seg.doctor),2) as pago_doctor, c.id_cita, p.id_paciente,d.id_doctor, seg.doctor FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join sede s on (c.sede_id_sede = s.id_sede) inner join sede_x_especialidad_x_administrativo sea on (sea.sede_id_sede=s.id_sede) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) inner join seguro seg  inner join especialidad esp on (esp.id_especialidad=d.especialidad_id_especialidad) where c.doctor_id_doctor= ?1 and sea.especialidad_id_especialidad=esp.id_especialidad and seg.id_seguro=p.seguro_id_seguro and (sea.precio_cita*seg.doctor) LIKE %?2%", nativeQuery = true)
+    List<ListaRecibosDTO> buscarRecibosPago(String id_doctor,String searchfield);
 
 }

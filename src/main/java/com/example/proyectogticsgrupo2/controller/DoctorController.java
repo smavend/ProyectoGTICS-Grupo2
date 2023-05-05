@@ -76,10 +76,14 @@ public class DoctorController {
 
         try {
             float floatSearchField = Float.parseFloat(searchField);
+            System.out.println(Float.valueOf(floatSearchField).intValue());
+            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosPago("10304011", Float.toString(floatSearchField));
+            model.addAttribute("listaRecibos", optionalCita);
+
             // La variable es de tipo float
         } catch (NumberFormatException e) {
             // La variable no es de tipo float
-            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibos("10304011",searchField);
+            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosNombre("10304011",searchField);
             model.addAttribute("listaRecibos", optionalCita);
         }
 
