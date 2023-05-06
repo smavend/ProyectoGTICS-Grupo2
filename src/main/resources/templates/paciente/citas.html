@@ -54,8 +54,8 @@
                         <tbody>
                             <tr th:each="cita : ${proximasCitas}">
                                 <td th:text="${cita.doctor.especialidad.nombre}">Psicología</td>
-                                <td th:text="${cita.inicio.split(' ')[0]}">10/05/23</td>
-                                <td th:text="${cita.inicio.split(' ')[1]}">13:00 Hrs.</td>
+                                <td th:text="${cita.inicio}">10/05/23</td>
+                                <td th:text="${cita.inicio}">13:00 Hrs.</td>
                                 <td th:text="${cita.modalidad == 1? 'Virtual':'Presencial'}">Presencial</td>
                                 <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
                                 <td>

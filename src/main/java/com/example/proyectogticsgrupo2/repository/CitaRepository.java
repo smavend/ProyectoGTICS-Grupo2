@@ -28,7 +28,7 @@ public interface CitaRepository extends JpaRepository<Cita, String> {
     List<ListaBuscadorDoctor> buscadorPaciente(String id,String nombre);
 
     @Query(nativeQuery = true, value = "select c.* from cita c \n" +
-            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente)\n" +
+            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
             "where NOW() <= c.inicio and p.id_paciente = ?1")
     List<Cita> buscarProximasCitas (String idPaciente);
 }

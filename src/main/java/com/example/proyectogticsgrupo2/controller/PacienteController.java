@@ -11,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -181,6 +184,42 @@ public class PacienteController {
         }
         return "redirect:/Paciente/perfil";
 
+    }
+
+    @GetMapping("/perfil/quitarFoto")
+    public String quitarFoto(@RequestParam(name = "id") String idPaciente){
+
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            try{
+                File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+                FileInputStream input = new FileInputStream(foto);
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = input.read(buffer)) !=-1){
+                    output.write(buffer,0,length);
+                }
+                input.close();
+                output.close();
+                byte[] bytes = output.toByteArray();
+
+                paciente.setFoto(bytes);
+                paciente.setFotoname("userPorDefecto.jpg");
+                paciente.setFotocontenttype("image/jpg");
+
+                pacienteRepository.save(paciente);
+                return "redirect:/Paciente/perfil";
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                // MENSAJE EN DE ERROR EN CASO HAYA ERROR AL SUBIR ARCHIVO
+                return "redirect:/Paciente/perfil";
+            }
+        }
+
+        return "redirect:/Paciente/perfil";
     }
 
     @GetMapping("/imagePaciente")

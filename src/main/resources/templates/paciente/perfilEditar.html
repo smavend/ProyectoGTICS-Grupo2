@@ -53,7 +53,7 @@
                                         <button id="botonSubirFoto" type="submit" style="border-radius: 20px"
                                                 class="btn btn-secondary">Actualizar foto
                                         </button>
-                                        <a  style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
+                                        <a th:href="@{'/Paciente/perfil/quitarFoto?id='+${paciente.idPaciente}}" style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
                                     </div>
                                 </form>
                             </div>
