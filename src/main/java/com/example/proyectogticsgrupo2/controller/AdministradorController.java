@@ -102,41 +102,28 @@ public class AdministradorController {
                     input.close();;
                     output.close();
                     byte[] bytes = output.toByteArray();
-
                     paciente.setFoto(bytes);
                     paciente.setFotoname("userPorDefecto.jpg");
                     paciente.setFotocontenttype("image/jpg");
-                    paciente.setEstado(1);
-                    paciente.setFecharegistro(LocalDateTime.now());
-                    pacienteRepository.save(paciente);
-                    attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
-
-                    return "redirect:/administrador/dashboard";
                 }catch (IOException e){
                     e.printStackTrace();
-                    return "redirect:/administrador/crearPaciente";
                 }
-
             }else{
-
                 String fileName = file.getOriginalFilename();
                 try {
                     paciente.setFoto(file.getBytes());
                     paciente.setFotoname(fileName);
                     paciente.setFotocontenttype(file.getContentType());
-                    paciente.setEstado(1);
-                    paciente.setFecharegistro(LocalDateTime.now());
-                    pacienteRepository.save(paciente);
-                    attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
-                    return "redirect:/administrador/dashboard";
                 } catch (IOException e) {
                     e.printStackTrace();
-                    model.addAttribute("msg", "ocurrió un error al subir el archivo");
-                    return "redirect:/administrador/crearPaciente";
                 }
 
             }
-
+            paciente.setEstado(1);
+            paciente.setFecharegistro(LocalDateTime.now());
+            pacienteRepository.save(paciente);
+            attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+            return "redirect:/administrador/dashboard";
         }
     }
     //###########################################################################
