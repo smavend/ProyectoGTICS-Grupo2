@@ -45,7 +45,6 @@ public class AdministradorController {
         this.sedeRepository = sedeRepository;
         this.administradorRepository = administradorRepository;
     }
-
     //#####################################33
     @GetMapping("/dashboard")
     public String dashboard (Model model){
@@ -90,8 +89,6 @@ public class AdministradorController {
             model.addAttribute("listaAdministrativo",listaAdministrativo);
             return "administrador/crearPaciente";
         } else{
-
-
             if (file.isEmpty()) {
                 try {
                     File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
@@ -178,13 +175,9 @@ public class AdministradorController {
                     doctor.setFoto(bytes);
                     doctor.setFotoname("userPorDefecto.jpg");
                     doctor.setFotocontenttype("image/jpg");
-                    doctor.setEstado(1);
-                    doctorRepository.save(doctor);
-                    attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
-                    return "redirect:/administrador/dashboard";
+
                 }catch (IOException e){
                     e.printStackTrace();
-                    return "redirect:/administrador/crearDoctor";
                 }
             }else {
                 String fileName = file.getOriginalFilename();
@@ -192,16 +185,14 @@ public class AdministradorController {
                     doctor.setFoto(file.getBytes());
                     doctor.setFotoname(fileName);
                     doctor.setFotocontenttype(file.getContentType());
-                    doctor.setEstado(1);
-                    doctorRepository.save(doctor);
-                    attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
-                    return "redirect:/administrador/dashboard";
                 } catch (IOException e) {
                     e.printStackTrace();
-                    model.addAttribute("msg", "ocurrió un error al subir el archivo");
-                    return "redirect:/administrador/crearDoctor";
                 }
             }
+            doctor.setEstado(1);
+            doctorRepository.save(doctor);
+            attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
+            return "redirect:/administrador/dashboard";
         }
     }
     @GetMapping("/calendario")
