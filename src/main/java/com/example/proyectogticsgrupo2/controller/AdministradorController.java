@@ -91,7 +91,7 @@ public class AdministradorController {
 
             if (file.isEmpty()) {
                 try {
-                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.png");
+                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
                     FileInputStream input = new FileInputStream(foto);
                     ByteArrayOutputStream output = new ByteArrayOutputStream();
                     byte[] buffer = new byte[1024];
@@ -104,8 +104,8 @@ public class AdministradorController {
                     byte[] bytes = output.toByteArray();
 
                     paciente.setFoto(bytes);
-                    paciente.setFotoname("userPorDefecto.png");
-                    paciente.setFotocontenttype("image/png");
+                    paciente.setFotoname("userPorDefecto.jpg");
+                    paciente.setFotocontenttype("image/jpg");
                     paciente.setEstado(1);
                     paciente.setFecharegistro(LocalDateTime.now());
                     pacienteRepository.save(paciente);
@@ -159,7 +159,7 @@ public class AdministradorController {
         }else {
             if(file.isEmpty()){
                 try {
-                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.png");
+                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
                     FileInputStream input = new FileInputStream(foto);
                     ByteArrayOutputStream output = new ByteArrayOutputStream();
                     byte[] buffer = new byte[1024];
@@ -172,8 +172,8 @@ public class AdministradorController {
                     byte[] bytes = output.toByteArray();
 
                     doctor.setFoto(bytes);
-                    doctor.setFotoname("userPorDefecto.png");
-                    doctor.setFotocontenttype("image/png");
+                    doctor.setFotoname("userPorDefecto.jpg");
+                    doctor.setFotocontenttype("image/jpg");
                     doctor.setEstado(1);
                     doctorRepository.save(doctor);
                     attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
