@@ -109,7 +109,7 @@ public class HomeController {
     public void showUsuarioImage(@PathVariable String id,
                                  HttpServletResponse response) throws IOException {
         response.setContentType("image/jpeg");
-
+        response.setContentType("image/png");
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
         Optional<Doctor> optDoctor = doctorRepository.findById(id);
 

@@ -14,9 +14,12 @@ public class Especialidad {
 
     @Id
     @Column(name = "id_especialidad", nullable = false)
-    private Integer idEspecialidad;
+    private int idEspecialidad;
 
     @Column(nullable = false)
     private String nombre;
+
+    @Column(nullable = false)
+    private int es_examen;
 
 }

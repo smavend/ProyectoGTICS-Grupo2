@@ -20,7 +20,7 @@ public interface AdministrativoPorEspecialidadPorSedeRepository extends JpaRepos
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO sede_x_especialidad_x_administrativo (sede_id_sede, especialidad_id_especialidad, administrativo_id_administrativo) VALUES (:idSede,1,:dni)", nativeQuery = true)
-    void insertarTablaAdministrativoXEspecialidadXSede(@Param("idSede")int idSede, @Param("dni") String dni);
+    @Query(value = "INSERT INTO sede_x_especialidad_x_administrativo (sede_id_sede, especialidad_id_especialidad, administrativo_id_administrativo, torre_piso, precio_cita) VALUES (:idSede,:especialidad,:dni,:torrepiso,0.0)", nativeQuery = true)
+    void insertarTablaAdministrativoXEspecialidadXSede(@Param("idSede")int idSede, @Param("dni") String dni, @Param("especialidad") String especialidad, @Param("torrepiso") String torrepiso);
 
 }

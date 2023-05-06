@@ -1,55 +1,470 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Calendario</title>
-        <link rel="stylesheet" href="/webjars/fullcalendar/5.10.1/main.min.css" />
 
+    <head>
+        <style>
+            .mi-div:hover {
+                background-color: #f2f2f2;
+            }
+        </style>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+        <title>Calendario - Doctor</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+
+        <!-- Favicons -->
+
+        <link th:href="@{/assets/img/favicon.png}" rel="icon">
+        <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.gstatic.com}" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+        <!-- Vendor CSS Files -->
+        <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+        <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
+
+        <!-- Template Main CSS File -->
+        <!--<link href="assets/css/style.css" rel="stylesheet"> -->
+        <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
 
     </head>
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Mar 09 2023 with Bootstrap v5.2.3
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+    </head>
+
     <body>
-        <h1>Calendario</h1>
 
-        <!-- Agrega un elemento div con un id específico donde se mostrará el calendario -->
-        <div id="calendario" style="height: 500px;"></div>
+        <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top d-flex align-items-center">
 
-
-        <!-- Agrega el código para configurar y mostrar el calendario -->
-        <!-- jQuery -->
-        <script src="/webjars/fullcalendar/5.10.1/main.min.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var calendarEl = document.getElementById('calendario');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'month',
-                    headerToolbar: {
-                        start: 'prev,next today',
-                        center: 'title',
-                        end: 'dayGridMonth,timeGridWeek,timeGridDay'
-                    },
-                    events: [
-                        {
-                            title: 'Evento 1',
-                            start: '2023-05-01T10:00:00',
-                            end: '2023-05-01T12:00:00'
-                        },
-                        {
-                            title: 'Evento 2',
-                            start: '2023-05-03T14:00:00',
-                            end: '2023-05-03T16:00:00'
-                        },
-                        {
-                            title: 'Evento 3',
-                            start: '2023-05-05T09:00:00',
-                            end: '2023-05-05T11:00:00'
-                        }
-                    ]
-                });
-                calendar.render();
-            });
-        </script>
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <img th:src="@{/assets/img/logo.png}" alt="">
+                    <span class="d-none d-lg-block">Clinica INTERPUCP</span>
+                </a>
+                <i class="bi bi-list toggle-sidebar-btn"></i>
+            </div><!-- End Logo -->
 
 
+
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+
+                    <li class="nav-item d-block d-lg-none">
+                        <a class="nav-link nav-icon search-bar-toggle " href="#">
+                            <i class="bi bi-search"></i>
+                        </a>
+                    </li><!-- End Search Icon-->
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-primary badge-number">4</span>
+                        </a><!-- End Notification Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                            <li class="dropdown-header">
+                                You have 4 new notifications
+                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="notification-item">
+                                <i class="bi bi-exclamation-circle text-warning"></i>
+                                <div>
+                                    <h4>Lorem Ipsum</h4>
+                                    <p>Quae dolorem earum veritatis oditseno</p>
+                                    <p>30 min. ago</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="notification-item">
+                                <i class="bi bi-x-circle text-danger"></i>
+                                <div>
+                                    <h4>Atque rerum nesciunt</h4>
+                                    <p>Quae dolorem earum veritatis oditseno</p>
+                                    <p>1 hr. ago</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="notification-item">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <div>
+                                    <h4>Sit rerum fuga</h4>
+                                    <p>Quae dolorem earum veritatis oditseno</p>
+                                    <p>2 hrs. ago</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="notification-item">
+                                <i class="bi bi-info-circle text-primary"></i>
+                                <div>
+                                    <h4>Dicta reprehenderit</h4>
+                                    <p>Quae dolorem earum veritatis oditseno</p>
+                                    <p>4 hrs. ago</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="dropdown-footer">
+                                <a href="#">Show all notifications</a>
+                            </li>
+
+                        </ul><!-- End Notification Dropdown Items -->
+
+                    </li><!-- End Notification Nav -->
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-chat-left-text"></i>
+                            <span class="badge bg-success badge-number">3</span>
+                        </a><!-- End Messages Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                            <li class="dropdown-header">
+                                You have 3 new messages
+                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>Maria Hudson</h4>
+                                        <p>Estimado administrador, quisiera solicitar su autorización para realizar una cirugía ...</p>
+                                        <p>4 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>Anna Nelson</h4>
+                                        <p>Hola, quisiera informarle que hay un problema en la plataforma que está impidiendo ...</p>
+                                        <p>6 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>David Muldon</h4>
+                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>8 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="dropdown-footer">
+                                <a href="#">Show all messages</a>
+                            </li>
+
+                        </ul><!-- End Messages Dropdown Items -->
+
+                    </li><!-- End Messages Nav -->
+
+                    <li class="nav-item dropdown pe-3">
+
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
+                        </a><!-- End Profile Iamge Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6>Jorge Dominguez</h6>
+                                <span>Administrador de sede</span>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                    <i class="bi bi-person"></i>
+                                    <span>Mi Perfil</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Configuraciones</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Cerrar Sesión</span>
+                                </a>
+                            </li>
+
+                        </ul><!-- End Profile Dropdown Items -->
+                    </li><!-- End Profile Nav -->
+
+                </ul>
+            </nav><!-- End Icons Navigation -->
+
+        </header><!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <aside id="sidebar" class="sidebar">
+
+            <ul class="sidebar-nav" id="sidebar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/dashboard}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed">
+                        <i class="bi bi-card-text"></i>
+                        <span>Reportes</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor/calendario}">
+                        <i class="bi bi-calendar"></i>
+                        <span>Calendario General</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/recibo}">
+                        <i class="bi bi-currency-exchange"></i>
+                        <span>Recibos</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/mensajeria}">
+                        <i class="bi bi-chat-quote"></i>
+                        <span>Mensajería</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+            </ul>
+
+        </aside><!-- End Sidebar-->
+
+        <main id="main" class="main">
+
+
+            <section class="section dashboard">
+                <div class="row">
+
+                    <!-- Left side columns -->
+                    <div class="col-lg-11 container">
+                        <div class="row">
+
+                            <div class="col-12">
+
+
+                                <!--Calendario-->
+
+
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <br>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div class="d-flex align-items-center">
+                                                <button class="btn btn-primary">Hoy</button>
+                                                <a><i class="bi bi-caret-left-fill me-2"></i></a>
+                                                <a><i class="bi bi-caret-right-fill" ></i></a>
+                                                <p class="mb-0">Mar - Abr de 2023</p>
+                                            </div>
+
+                                            <div class="form-group mb-0">
+                                                <select class="form-select">
+                                                    <option value="week">Semana</option>
+                                                    <option value="month">Mes</option>
+                                                    <option value="day">Día</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table">
+                                        <thead class="table-dark">
+                                            <tr class="fw-light border-bottom">
+                                                <th>Lun</th>
+                                                <th>Mar</th>
+                                                <th>Mié</th>
+                                                <th>Jue</th>
+                                                <th>Vie</th>
+                                                <th>Sáb</th>
+                                                <th>Dom</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr >
+                                                <td style="padding: 40px 0" class="fw-bold">28</td>
+                                                <td style="padding: 40px 0" class="fw-bold">29</td>
+                                                <td style="padding: 40px 0" class="fw-bold">30</td>
+                                                <td style="padding: 40px 0">31</td>
+                                                <td style="padding: 40px 0">1</td>
+                                                <td style="padding: 40px 0">2</td>
+                                                <td style="padding: 40px 0">3</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 40px 0">4</td>
+                                                <td style="padding: 40px 0">5</td>
+                                                <td style="padding: 40px 0">6</td>
+                                                <td style="padding: 40px 0">7</td>
+                                                <td style="padding: 40px 0">8</td>
+                                                <td style="padding: 40px 0">9</td>
+                                                <td style="padding: 40px 0">10</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 40px 0">11</td>
+                                                <td style="padding: 40px 0">12</td>
+                                                <td style="padding: 40px 0">13</td>
+                                                <td style="padding: 40px 0">14</td>
+                                                <td style="padding: 40px 0">15</td>
+                                                <td style="padding: 40px 0">16</td>
+                                                <td style="padding: 40px 0">17</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 40px 0">18</td>
+                                                <td style="padding: 40px 0">19</td>
+                                                <td style="padding: 40px 0">20</td>
+                                                <td style="padding: 40px 0">21</td>
+                                                <td style="padding: 40px 0">22</td>
+                                                <td style="padding: 40px 0">23</td>
+                                                <td style="padding: 40px 0">24</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 40px 0">25</td>
+                                                <td style="padding: 40px 0">26</td>
+                                                <td style="padding: 40px 0">27</td>
+                                                <td style="padding: 40px 0">28</td>
+                                                <td style="padding: 40px 0">29</td>
+                                                <td style="padding: 40px 0">30</td>
+                                                <td style="padding: 40px 0">1</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+
+                                <!--end Calendario-->
+
+                            </div><!-- End Top Selling -->
+
+
+
+
+
+
+
+
+
+                        </div>
+                    </div><!-- End Left side columns -->
+
+                    <!-- Right side columns -->
+
+
+
+                </div>
+            </section>
+
+        </main><!-- End #main -->
+
+        <!-- ======= Footer ======= -->
+        <footer id="footer" class="footer">
+
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+
+            </div>
+        </footer><!-- End Footer -->
+
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+        <!-- Vendor JS Files -->
+        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+        <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
+
+
+        <!-- Template Main JS File -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script th:src="@{/assets/js/jsDoctor.js}"></script>
 
     </body>
+
 </html>

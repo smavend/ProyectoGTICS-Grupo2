@@ -8,14 +8,15 @@
         <title>Dashboard - Doctor</title>
         <meta content="" name="description">
         <meta content="" name="keywords">
-        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet'/>
         <!-- Favicons -->
         <link th:href="@{/assets/img/logo.png}" rel="icon">
         <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
 
         <!-- Vendor CSS Files -->
         <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -56,7 +57,6 @@
                 </a>
                 <i class="bi bi-list toggle-sidebar-btn"></i>
             </div><!-- End Logo -->
-
 
 
             <nav class="header-nav ms-auto">
@@ -164,7 +164,8 @@
                                     <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
                                     <div>
                                         <h4>Maria Hudson</h4>
-                                        <p>Estimado administrador, quisiera solicitar su autorización para realizar una cirugía ...</p>
+                                        <p>Estimado administrador, quisiera solicitar su autorización para realizar una
+                                            cirugía ...</p>
                                         <p>4 hrs. ago</p>
                                     </div>
                                 </a>
@@ -178,7 +179,8 @@
                                     <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
                                     <div>
                                         <h4>Anna Nelson</h4>
-                                        <p>Hola, quisiera informarle que hay un problema en la plataforma que está impidiendo ...</p>
+                                        <p>Hola, quisiera informarle que hay un problema en la plataforma que está
+                                            impidiendo ...</p>
                                         <p>6 hrs. ago</p>
                                     </div>
                                 </a>
@@ -211,7 +213,8 @@
 
                     <li class="nav-item dropdown pe-3">
 
-                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                           data-bs-toggle="dropdown">
                             <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
                             <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
                         </a><!-- End Profile Iamge Icon -->
@@ -277,7 +280,7 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" >
+                    <a class="nav-link collapsed">
                         <i class="bi bi-card-text"></i>
                         <span>Reportes</span>
                     </a>
@@ -309,7 +312,7 @@
         <main id="main" class="main">
 
             <div style="margin-left: 30px" class="pagetitle">
-                <h1 >Dashboard</h1>
+                <h1>Dashboard</h1>
 
             </div><!-- End Page Title -->
 
@@ -325,57 +328,71 @@
                                 <div class="card top-selling overflow-auto container">
 
 
-
-                                    <div  class="card-body pb-0">
+                                    <div class="card-body pb-0">
                                         <h5 class="card-title">PRÓXIMAS CITAS<span>| Sede San Miguel</span></h5>
                                         <div class="container-fluid">
-                                            <form method="post" th:action="@{/doctor/BuscarCita}">
-                                                <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar por nombre"/>
+                                            <form method="post" th:action="@{/doctor/BuscarProxCita}">
+                                                <input name="searchField" class="form-control mb-3" type="text"
+                                                       placeholder="Buscar por nombre"/>
                                             </form>
                                         </div>
                                         <br>
 
-                                        <div class="d-flex flex-column" style="height: 485px; overflow: auto;width: max-content">
+                                        <div class="d-flex flex-column"
+                                             style="height: 485px; overflow: auto;width: max-content">
                                             <div class="table-responsive">
-                                                <table  class="table">
+                                                <table class="table">
                                                     <thead style="text-align: center">
-                                                        <tr >
+                                                        <tr>
                                                             <th scope="col">Nombre</th>
                                                             <th scope="col">Tipo de cita</th>
                                                             <th scope="col">Horario</th>
-                                                            <th style="width: 108px"  scope="col">Pendiente de exámenes</th>
+                                                            <th style="width: 108px" scope="col">Pendiente de exámenes
+                                                            </th>
                                                             <th scope="col"></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody style="text-align: center">
-                                                        <tr th:each="cita,obj: ${listaCitas}" th:with="horario=${listaHorarios[obj.index]}">
+                                                        <tr th:each="cita,obj: ${listaCitas}"
+                                                            th:with="horario=${listaHorarios[obj.index]}">
 
 
-                                                            <td style="font-size: 1rem" th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}">
+                                                            <td style="font-size: 1rem"
+                                                                th:text="${cita.getNombre() + ' ' + cita.getApellidos()}">
 
                                                             </td>
 
-                                                            <td style="font-size: 1rem" >
+                                                            <td style="font-size: 1rem">
                                                                 <h6 th:text="${ cita.modalidad==0 ? 'Presencial' : 'Virtual'}"></h6>
                                                             </td>
 
 
-                                                            <td style="font-size: 1rem;color: black" th:text="${horario}">
+                                                            <td style="font-size: 1rem;color: black"
+                                                                th:text="${horario}">
 
                                                             </td>
 
                                                             <td style="font-size: 1rem;color: black">
-                                                                <h6 th:if="${cita.estado == 0}" th:text="'Próxima cita'"></h6>
-                                                                <h6 th:if="${cita.estado == 1}" th:text="'Registrado en caja'"></h6>
-                                                                <h6 th:if="${cita.estado == 2}" th:text="'En espera'"></h6>
-                                                                <h6 th:if="${cita.estado == 3}" th:text="'En consulta'"></h6>
+                                                                <h6 th:if="${cita.estado == 0}"
+                                                                    th:text="'Próxima cita'"></h6>
+                                                                <h6 th:if="${cita.estado == 1}"
+                                                                    th:text="'Registrado en caja'"></h6>
+                                                                <h6 th:if="${cita.estado == 2}"
+                                                                    th:text="'En espera'"></h6>
+                                                                <h6 th:if="${cita.estado == 3}"
+                                                                    th:text="'En consulta'"></h6>
                                                             </td>
 
 
                                                             <td th:if="${cita.modalidad == 1}">
                                                                 <div style="width: min-content">
-                                                                    <a th:href="@{'/doctor/reporte?id=' + ${cita.paciente.idPaciente}+ '&id2=' + ${cita.id_cita}}" type="button" class="btn btn-success">Iniciar cita</a>
-                                                                    <button style="margin-top: 5px;width: max-content" type="button" class="btn btn-danger">Enviar cuestionario</button>
+                                                                    <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
+                                                                       type="button" class="btn btn-success">Iniciar
+                                                                        cita</a>
+                                                                    <button style="margin-top: 5px;width: max-content"
+                                                                            type="button" class="btn btn-danger">Enviar
+                                                                        cuestionario
+                                                                    </button>
                                                                 </div>
                                                             </td>
                                                             <td th:unless="${cita.modalidad == 1}">
@@ -385,7 +402,6 @@
                                                         </tr>
 
 
-
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -395,100 +411,187 @@
 
                                 </div>
                             </div><!-- End Top Selling -->
-
-                            <div class="card-body pb-0 col-4">
-                                <div class="card top-selling overflow-auto container">
-
-
-
+                            <div class="col-5">
+                                <div class="card top-selling overflow-auto container"
+                                     style="height: 625px; overflow: auto;">
                                     <div class="card-body pb-0">
-                                        <h5 class="card-title">PACIENTES<span>| Sede San Miguel</span></h5>
-                                        <div class="container-fluid">
-                                            <form class="d-flex" role="search">
-                                                <input class="form-control me-2" type="search" placeholder="Buscar paciente" aria-label="Search">
-                                                <button class="btn btn-outline-success" type="submit">Buscar</button>
-                                            </form>
-                                        </div>
-                                        <br>
+                                        <h5 class="card-title">CALENDARIO</h5>
+                                        <section class="section dashboard">
+                                            <div class="row bg-white p-3">
+                                                <script>
 
-                                        <div class="d-flex flex-column" style="height: 485px; overflow: auto;">
-                                            <div class="table">
-                                                <table   class="table table-striped">
-                                                    <thead >
-                                                        <tr style="text-align: center">
-                                                            <th ></th>
-                                                            <th >Nombres</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody >
-                                                        <tr th:each="cita,obj: ${listaCitas}">
-                                                            <td>
-                                                                <img style="border-radius: 50%;border: 2px solid #000" th:src="@{'/usuario/foto/'+${cita.paciente.idPaciente}}"
-                                                                     height="70" width="70" alt="Profile">
-                                                            </td>
-                                                            <td style="font-size: 1rem; color: black">
-                                                                <a th:href="@{/doctor/dashboard}" th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellidos}"></a>
+                                                    document.addEventListener('DOMContentLoaded', function () {
+                                                        var calendarEl = document.getElementById('calendar');
 
+                                                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                                                            headerToolbar: {
+                                                                left: 'prev,next today',
+                                                                center: 'title',
+                                                                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                                                            },
+                                                            initialDate: '2023-01-12',
+                                                            navLinks: true, // can click day/week names to navigate views
+                                                            selectable: true,
+                                                            selectMirror: true,
+                                                            select: function (arg) {
+                                                                var title = prompt('Event Title:');
+                                                                if (title) {
+                                                                    calendar.addEvent({
+                                                                        title: title,
+                                                                        start: arg.start,
+                                                                        end: arg.end,
+                                                                        allDay: arg.allDay
+                                                                    })
+                                                                }
+                                                                calendar.unselect()
+                                                            },
+                                                            eventClick: function (arg) {
+                                                                if (confirm('¿Estás seguro que deseas eliminar este evento?')) {
+                                                                    arg.event.remove()
+                                                                }
+                                                            },
+                                                            editable: true,
+                                                            dayMaxEvents: true, // allow "more" link when too many events
+                                                            events: [
+                                                                {
+                                                                    title: 'All Day Event',
+                                                                    start: '2023-01-01'
+                                                                },
+                                                                {
+                                                                    title: 'Long Event',
+                                                                    start: '2023-01-07',
+                                                                    end: '2023-01-10'
+                                                                },
+                                                                {
+                                                                    groupId: 999,
+                                                                    title: 'Repeating Event',
+                                                                    start: '2023-01-09T16:00:00'
+                                                                },
+                                                                {
+                                                                    groupId: 999,
+                                                                    title: 'Repeating Event',
+                                                                    start: '2023-01-16T16:00:00'
+                                                                },
+                                                                {
+                                                                    title: 'Conference',
+                                                                    start: '2023-01-11',
+                                                                    end: '2023-01-13'
+                                                                },
+                                                                {
+                                                                    title: 'Meeting',
+                                                                    start: '2023-01-12T10:30:00',
+                                                                    end: '2023-01-12T12:30:00'
+                                                                },
+                                                                {
+                                                                    title: 'Lunch',
+                                                                    start: '2023-01-12T12:00:00'
+                                                                },
+                                                                {
+                                                                    title: 'Meeting',
+                                                                    start: '2023-01-12T14:30:00'
+                                                                },
+                                                                {
+                                                                    title: 'Happy Hour',
+                                                                    start: '2023-01-12T17:30:00'
+                                                                },
+                                                                {
+                                                                    title: 'Dinner',
+                                                                    start: '2023-01-12T20:00:00'
+                                                                },
+                                                                {
+                                                                    title: 'Birthday Party',
+                                                                    start: '2023-01-13T07:00:00'
+                                                                },
+                                                                {
+                                                                    title: 'Click for Google',
+                                                                    url: 'http://google.com/',
+                                                                    start: '2023-01-28'
+                                                                }
+                                                            ]
+                                                        });
 
-                                                            </td>
+                                                        calendar.render();
+                                                    });
 
-                                                        </tr>
+                                                </script>
+                                                <div id='calendar'></div>
 
-
-
-
-
-
-
-                                                    </tbody>
-                                                </table>
                                             </div>
-                                        </div>
 
+                                        </section>
                                     </div>
-
                                 </div>
-
 
 
                             </div>
+                            <div style="margin-left: -20px" class="col-6">
 
 
-                        </div>
-                    </div><!-- End Left side columns -->
-
-                    <!-- Right side columns -->
-
-                    <div style="width: auto" class="col-lg-7">
-                        <div class="row">
+                                    <div class="card-body pb-0">
+                                        <div class="card top-selling overflow-auto container">
 
 
+                                            <div class="card-body pb-0">
+                                                <h5 class="card-title">PACIENTES<span>| Sede San Miguel</span></h5>
+                                                <div class="container-fluid">
+                                                    <form method="post" th:action="@{/doctor/BuscarPaciente}">
+                                                        <input name="searchField" class="form-control mb-3" type="text"
+                                                               placeholder="Buscar por nombre"/>
+                                                    </form>
+                                                </div>
+                                                <br>
 
-                            <!-- Top Selling -->
-                            <div class="col-12">
+                                                <div class="d-flex flex-column" style="height: 485px; overflow: auto;">
+                                                    <div class="table">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr >
+                                                                    <th></th>
+                                                                    <th style="text-align: center">Nombres</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr th:each="paciente,obj: ${listaPacientes}">
+                                                                    <td>
+                                                                        <img style="border-radius: 50%;border: 2px solid #000"
+                                                                             th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}"
+                                                                             height="70" width="70" alt="Profile">
+                                                                    </td>
+                                                                    <td style="font-size: 1rem; color: black">
+                                                                        <a th:href="@{/doctor/dashboard}"
+                                                                           th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
 
-                            </div><!-- End Top Selling -->
+
+                                                                    </td>
+
+                                                                </tr>
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
 
 
 
+                            </div><!-- End Left side columns -->
+                        </div><!-- End Left side columns -->
+
+                        <!-- Right side columns -->
 
 
 
-                        </div>
-                    </div><!-- End Left side columns -->
-
-                </div>
-
-
-
-
-
-
-
+                    </div>
 
 
                 </div><!-- End Website Traffic -->
-
 
 
                 </div><!-- End Right side columns -->
@@ -510,7 +613,8 @@
             </div>
         </footer><!-- End Footer -->
 
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a>
 
         <!-- Vendor JS Files -->
         <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
@@ -527,49 +631,52 @@
         <!-- Template Main JS File -->
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
 
-    <!-- Scripts Calendario -->
+        <!-- Scripts Calendario -->
 
 
         <!-- Agregar la biblioteca FullCalendar -->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+        <script th:src="@{/assets/js/index.js}"></script>
+        <script th:src="@{/assets/js/datatables.js}"></script>
+        <script th:src="@{/assets/js/moment.js}"></script>
         <script>// Obtener una referencia al elemento HTML donde se mostrará el calendario
-            var calendarEl = document.getElementById('calendar');
+        var calendarEl = document.getElementById('calendar');
 
-            // Configurar las opciones del calendario
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        // Configurar las opciones del calendario
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: [
+                {
+                    title: 'Evento 1',
+                    start: '2023-04-25'
                 },
-                events: [
-                    {
-                        title: 'Evento 1',
-                        start: '2023-04-25'
-                    },
-                    {
-                        title: 'Evento 2',
-                        start: '2023-04-26T12:30:00',
-                        end: '2023-04-26T14:30:00'
-                    },
-                    {
-                        title: 'Evento 3',
-                        start: '2023-04-27T12:00:00',
-                        end: '2023-04-27T16:00:00'
-                    }
-                ]
-            });
+                {
+                    title: 'Evento 2',
+                    start: '2023-04-26T12:30:00',
+                    end: '2023-04-26T14:30:00'
+                },
+                {
+                    title: 'Evento 3',
+                    start: '2023-04-27T12:00:00',
+                    end: '2023-04-27T16:00:00'
+                }
+            ]
+        });
 
-            // Mostrar el calendario
-            calendar.render();
+        // Mostrar el calendario
+        calendar.render();
         </script>
-
-
 
 
     </body>

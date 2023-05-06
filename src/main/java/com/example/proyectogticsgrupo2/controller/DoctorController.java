@@ -1,23 +1,17 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
 import com.example.proyectogticsgrupo2.entity.Cita;
-import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Paciente;
 import com.example.proyectogticsgrupo2.repository.CitaRepository;
 import com.example.proyectogticsgrupo2.repository.DoctorRepository;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.annotations.Parameter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,48 +31,48 @@ public class DoctorController {
 
     @GetMapping(value={"/dashboard","/",""})
     public String dashboard(Model model) {
-        List<Cita> optionalCita = citaRepository.BuscarPorDoctor("09568265");
-
+        List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas("10304011"); //CAMBIAR POR ID SESION
+        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes("10304011"); //CAMBIAR POR ID SESION
         ArrayList<String> listaHorarios= new ArrayList<>();
 
-        for (int i = 0; i < optionalCita.size(); i++) {
-            String tiempoInicio = optionalCita.get(i).getInicio();
-            String[] partesInicio = tiempoInicio.split(" ");
-            String horaCompletaInicio = partesInicio[1];
-            String[] partes2Inicio = horaCompletaInicio.split(":");
-            String horaInicio = partes2Inicio[0] + ":" + partes2Inicio[1];
+        // Transformar LocalDateTime a LocalDate
+        optionalCita.forEach(cita -> {
+            LocalDateTime fechaHora = cita.getInicio(); // Obtener LocalDateTime
+            String hora1 = fechaHora.toLocalTime().toString();
 
-            String tiempoFin = optionalCita.get(i).getFin();
-            String[] partesFin = tiempoFin.split(" ");
-            String horaCompletaFin = partesFin[1];
-            String[] partes2Fin = horaCompletaFin.split(":");
-            String horaFin = partes2Fin[0] + ":" + partes2Fin[1];
+            LocalDateTime fechaHora2 = cita.getFin();
+            String hora2 = fechaHora2.toLocalTime().toString();
+            // Transformar a LocalDate
+             // Actualizar objeto ListaBuscadorDoctor con la fecha
 
-            String horario = horaInicio + " - " + horaFin;
-            System.out.println(horario);
-            listaHorarios.add(horario);
-        }
+            String horaFinal=hora1+" - "+hora2;
+            listaHorarios.add(horaFinal);
+        });
 
 
 
-        model.addAttribute("listaCitas", citaRepository.BuscarPorDoctor("09568265"));//CAMBIAR POR ID SESION
+
         model.addAttribute("listaHorarios", listaHorarios);
+        model.addAttribute("listaCitas", optionalCita);
+        model.addAttribute("listaPacientes", optionalCita2);
+
 
         return "doctor/DoctorDashboard";
     }
 
     @GetMapping("/recibo")
     public String recibo(Model model) {
-        List<Cita> optionalCita = citaRepository.BuscarPorDoctor("09568265");
+        List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas("10304011");
         ArrayList<String> listaHorarios= new ArrayList<>();
 
-        for (int i = 0; i < optionalCita.size(); i++) {
-            String tiempoInicio = optionalCita.get(i).getInicio();
-            String[] partesInicio = tiempoInicio.split(" ");
-            String fechaCompletaInicio = partesInicio[0];
+        // Transformar LocalDateTime a LocalDate
+        optionalCita.forEach(cita -> {
+            LocalDateTime fechaHora = cita.getInicio(); // Obtener LocalDateTime
+            String fecha = fechaHora.toLocalDate().toString();
 
-            listaHorarios.add(fechaCompletaInicio);
-        }
+
+            listaHorarios.add(fecha);
+        });
 
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", optionalCita);//CAMBIAR POR ID SESION
@@ -107,7 +101,7 @@ public class DoctorController {
         if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
-            String fechaHora =cita.getInicio();
+            String fechaHora =cita.getInicio().toString();
             String[] partes = fechaHora.split(" ");
             String fecha = partes[0];
 
@@ -124,7 +118,7 @@ public class DoctorController {
 
     @GetMapping("/mensajeria")
     public String mensajeria(Model model){
-        List<Cita> citaList=citaRepository.BuscarPorDoctor("09568265"); //CAMBIAR CON ID DE SESION
+        List<ListaBuscadorDoctor> citaList=citaRepository.listarPorDoctorProxCitas("10304011"); //CAMBIAR CON ID DE SESION
         model.addAttribute("listaCitas",citaList);
         return "doctor/DoctorMensajería";
     }
@@ -135,14 +129,64 @@ public class DoctorController {
         return "redirect:/doctor/dashboard";
     }
 
-    @PostMapping("/BuscarCita")
+    @PostMapping("/BuscarProxCita")
     public String BuscarCita(@RequestParam("searchField") String searchField,
                                       Model model) {
 
-        List<Cita> citaList = citaRepository.buscadorProximasCitas(searchField);
-        model.addAttribute("listaCitas", citaList);
+        List<ListaBuscadorDoctor> optionalCita = citaRepository.buscadorProximasCitas("10304011",searchField);
+        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes("10304011"); //CAMBIAR POR ID SESION
 
-        return "/doctor/DoctorDashboard";
+        ArrayList<String> listaHorarios= new ArrayList<>();
+
+        // Transformar LocalDateTime a LocalDate
+        optionalCita.forEach(cita -> {
+            LocalDateTime fechaHora = cita.getInicio(); // Obtener LocalDateTime
+            String hora1 = fechaHora.toLocalTime().toString();
+
+            LocalDateTime fechaHora2 = cita.getFin();
+            String hora2 = fechaHora2.toLocalTime().toString();
+            // Transformar a LocalDate
+            // Actualizar objeto ListaBuscadorDoctor con la fecha
+
+            String horaFinal=hora1+" - "+hora2;
+            listaHorarios.add(horaFinal);
+        });
+
+        model.addAttribute("listaHorarios", listaHorarios);
+        model.addAttribute("listaCitas", optionalCita);//CAMBIAR POR ID SESION
+        model.addAttribute("listaPacientes", optionalCita2);//CAMBIAR POR ID SESION
+
+        return "doctor/DoctorDashboard";
+    }
+
+    @PostMapping("/BuscarPaciente")
+    public String BuscarPaciente(@RequestParam("searchField") String searchField,
+                             Model model) {
+
+        List<ListaBuscadorDoctor> optionalCita = citaRepository.buscadorPaciente("10304011",searchField);
+        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorProxCitas("10304011"); //CAMBIAR POR ID SESION
+
+        ArrayList<String> listaHorarios= new ArrayList<>();
+
+        // Transformar LocalDateTime a LocalDate
+        optionalCita2.forEach(cita -> {
+            LocalDateTime fechaHora = cita.getInicio(); // Obtener LocalDateTime
+            String hora1 = fechaHora.toLocalTime().toString();
+
+            LocalDateTime fechaHora2 = cita.getFin();
+            String hora2 = fechaHora2.toLocalTime().toString();
+            // Transformar a LocalDate
+            // Actualizar objeto ListaBuscadorDoctor con la fecha
+
+            String horaFinal=hora1+" - "+hora2;
+            listaHorarios.add(horaFinal);
+        });
+
+        model.addAttribute("listaHorarios", listaHorarios);
+        model.addAttribute("listaCitas", optionalCita2);//CAMBIAR POR ID SESION
+        model.addAttribute("listaPacientes", optionalCita);//CAMBIAR POR ID SESION
+
+        return "doctor/DoctorDashboard";
     }
 
     @GetMapping("/prueba")

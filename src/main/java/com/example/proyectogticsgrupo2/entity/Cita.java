@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.entity;
-
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,9 +23,11 @@ public class Cita {
     private Doctor doctor;
 
     @Column(nullable = false)
-    private String inicio;
+    private LocalDateTime inicio;
+
     @Column(nullable = false)
-    private String fin;
+    private LocalDateTime fin;
+
     private String diagnostico;
     private String receta;
     private String bitacora;
@@ -40,7 +43,8 @@ public class Cita {
     private String direccion;
     @Column(nullable = false)
     private int estado;
-    private String fecha_emision;
+
+    private LocalDate fecha_emision;
 
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)
@@ -49,6 +53,5 @@ public class Cita {
     @ManyToOne
     @JoinColumn(name = "id_cita_previa")
     private Cita cita_previa;
-
 
 }

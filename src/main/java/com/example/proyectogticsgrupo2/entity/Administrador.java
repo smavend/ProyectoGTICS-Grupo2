@@ -12,14 +12,19 @@ import lombok.Setter;
 @Table(name = "administrador")
 public class Administrador {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id_administrador;
+    @Column(name="id_administrador", nullable = false)
+    private String idAdministrador;
+    @Column(nullable = false)
     private String nombre;
+    @Column(nullable = false)
     private String apellidos;
-    private int estado;
-    private String correo;
+    @Column(nullable = false)
+    private String correo ;
+    @Column(nullable = false)
+    private int estado; //activo: 1, no activo: 0, otros
 
-    @Column(name = "sede_id_sede")
-    private int id_sede;
-
+    //faltaba esta columna
+    @ManyToOne
+    @JoinColumn(name = "sede_id_sede", nullable = false)
+    private Sede sede;
 }

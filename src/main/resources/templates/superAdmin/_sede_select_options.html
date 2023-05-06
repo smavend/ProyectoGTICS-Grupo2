@@ -6,7 +6,8 @@
     <div class="col-sm-10">
         <select id="sede-lista-crearform" class="form-select" aria-label="Default select example" name="sede">
             <option value="" selected>Seleccionar Sede</option>
-            <option th:each="Sede : ${listaSedes}" th:value="${Sede.nombre}" th:text="${Sede.nombre}"></option>
+            <option th:each="sede : ${listaSedes}" th:value="${sede.nombre}" th:text="${sede.nombre}" th:data-admin="${sedesConAdministrador.contains(sede.idSede)}"></option>
+            <option value="otro">Otra Sede</option>
         </select>
     </div>
 </div>
