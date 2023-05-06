@@ -147,33 +147,40 @@ public class PacienteController {
     }
 
     @PostMapping("/perfil/guardarFoto")
-    public String guardarFoto(Paciente paciente,
+    public String guardarFoto(@RequestParam(name = "id") String idPaciente,
                               @RequestParam(name = "archivo")MultipartFile file,
                               Model model){
-        if (file.isEmpty()){
-            // MENSAJE DE ERROR EN CASO NO SE HAYA INCLUIDO UNA IMAGEN
-            return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
-        }
 
-        String fileName = file.getOriginalFilename();
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
+        if (optionalPaciente.isPresent()){
+            Paciente paciente = optionalPaciente.get();
+            if (file.isEmpty()){
+                // MENSAJE DE ERROR EN CASO NO SE HAYA INCLUIDO UNA IMAGEN
+                return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
+            }
 
-        if (fileName.contains("..")){
-            // MENSAJE DE ERROR EN CASO EL ARCHIVO CONTENGA CARACTERES EXTRAÑOS
-            return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
-        }
+            String fileName = file.getOriginalFilename();
 
-        try {
-            paciente.setFoto(file.getBytes());
-            paciente.setFotoname(fileName);
-            paciente.setFotocontenttype(file.getContentType());
-            pacienteRepository.save(paciente);
-            return "redirect:/Paciente/perfil";
+            if (fileName.contains("..")){
+                // MENSAJE DE ERROR EN CASO EL ARCHIVO CONTENGA CARACTERES EXTRAÑOS
+                return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
+            }
+
+            try {
+                paciente.setFoto(file.getBytes());
+                paciente.setFotoname(fileName);
+                paciente.setFotocontenttype(file.getContentType());
+                pacienteRepository.save(paciente);
+                return "redirect:/Paciente/perfil";
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                // MENSAJE EN DE ERROR EN CASO HAYA ERROR AL SUBIR ARCHIVO
+                return "redirect:/Paciente/perfil";
+            }
         }
-        catch (IOException e){
-            e.printStackTrace();
-            // MENSAJE EN DE ERROR EN CASO HAYA ERROR AL SUBIR ARCHIVO
-            return "redirect:/Paciente/perfil";
-        }
+        return "redirect:/Paciente/perfil";
+
     }
 
     @GetMapping("/imagePaciente")

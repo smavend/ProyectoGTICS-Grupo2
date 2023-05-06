@@ -37,37 +37,23 @@
                 <div class="row">
                     <!-- Foto y botones editar -->
 
-                    <div class="col-lg-4 pb-4">
-                        <div style="100%" class="card mb-4">
+                    <div class="col-lg-4">
+                        <div style="height: 100%" class="card mb-4">
                             <div class="card-body text-center mt-4">
                                 <img th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="avatar"
                                      class="img-fluid" style="width: 200px; border-radius: 60px">
                                 <h5 class="mt-3 mb-1 fw-semibold" th:text="${paciente.getNombreYApellido()}">Juanchito
                                     Palacios</h5>
                                 <p class="text-muted mb-3">Paciente</p>
-                                <form method="post" th:action="@{/Paciente/perfil/guardarFoto}" th:object="${paciente}" enctype="multipart/form-data">
+                                <form method="post" th:action="@{/Paciente/perfil/guardarFoto}" enctype="multipart/form-data">
                                     <!-- Inputs para data binding -->
-                                    <div>
-                                        <input type="hidden" th:field="*{idPaciente}">
-                                        <input type="hidden" th:field="*{nombre}">
-                                        <input type="hidden" th:field="*{apellidos}">
-                                        <input type="hidden" th:field="*{estado}">
-                                        <input type="hidden" name="seguro" th:value="${paciente.seguro.idSeguro}">
-                                        <input type="hidden" th:field="*{telefono}">
-                                        <input type="hidden" th:field="*{correo}">
-                                        <input type="hidden" th:field="*{direccion}">
-                                        <input type="hidden" name="distrito" th:value="${paciente.distrito.idDistrito}">
-                                        <input type="hidden" th:field="*{fechanacimiento}">
-                                        <input type="hidden" th:field="*{genero}">
-                                        <input type="hidden" th:field="*{fecharegistro}">
-
-                                    </div>
+                                    <input type="hidden" name="id" th:value="${paciente.idPaciente}">
                                     <input id="subirFoto" class="form-control" type="file" name="archivo">
-                                    <div class="vstack gap-2 col-sm-7 col-md-5 col-lg-7 mx-auto mb-xl-4 mb-3 mt-4">
+                                    <div class="vstack gap-2 col-sm-7 col-md-6 col-lg-7 mx-auto mb-xl-4 mb-3 mt-4">
                                         <button id="botonSubirFoto" type="submit" style="border-radius: 20px"
                                                 class="btn btn-secondary">Actualizar foto
                                         </button>
-                                        <a style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
+                                        <a  style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
                                     </div>
                                 </form>
                             </div>

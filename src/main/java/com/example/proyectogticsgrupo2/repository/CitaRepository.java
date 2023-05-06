@@ -24,5 +24,4 @@ public interface CitaRepository extends JpaRepository<Cita, String> {
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente)\n" +
             "where NOW() <= c.inicio and p.id_paciente = ?1")
     List<Cita> buscarProximasCitas (String idPaciente);
-
 }
