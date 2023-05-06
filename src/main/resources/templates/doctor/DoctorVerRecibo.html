@@ -313,7 +313,7 @@
                 <section style="margin: 30px">
                     <div class="row encabezadoRecibo">
                         <div class="col-10">
-                            <h2 class="subEncabezado">Recibo - 13/12/2022</h2>
+                            <h2 th:text="'Recibo - '+${cita.getFecha()}" class="subEncabezado"></h2>
                         </div>
                         <div class="col-2">
                             <button class="btn btn-secondary botonImprimir">Imprimir</button>
@@ -336,14 +336,14 @@
                     <!-- Informacion recibo y pago -->
                     <div class="row informacionRecibo">
                         <div class="col-6">
-                            <strong>Abonado:<span style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato">William Espinoza</span></strong>
+                            <strong>Abonado:<span th:text="${doctor.getNombre() + ' ' + doctor.getApellidos()}" style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato"></span></strong>
                             <br>
                             <strong>Estado:<span style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato">Cancelado</span></strong>
                             <br>
-                            <strong>Fecha emitida:<span style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato">13/12/2022</span></strong>
+                            <strong>Fecha emitida:<span th:text="${cita.getFecha()}" style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato"></span></strong>
                         </div>
                         <div class="col-6">
-                            <strong>Fecha cancelada:<span style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato">13/12/2022</span></strong>
+                            <strong>Fecha cancelada:<span th:text="${cita.getFecha()}" style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato"></span></strong>
                             <br>
                             <strong>Tipo de pago:<span style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato">Visa ***1234</span></strong>
                         </div>
@@ -365,8 +365,8 @@
                                 <tr>
                                     <td>Revisión médica</td>
                                     <td>1</td>
-                                    <td>S/ 500.00</td>
-                                    <td>S/ 500.00</td>
+                                    <td th:text="${'S/.'+cita.getPago_doctor()}"></td>
+                                    <td th:text="${'S/.'+cita.getPago_doctor()}"></td>
                                 </tr>
                             </tbody>
                         </table>

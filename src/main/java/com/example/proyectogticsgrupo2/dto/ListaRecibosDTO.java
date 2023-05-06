@@ -3,7 +3,7 @@ package com.example.proyectogticsgrupo2.dto;
 import java.time.LocalDate;
 
 public interface ListaRecibosDTO {
-    LocalDate getFecha();
+    String getFecha();
     String getNombres();
     float getPago_doctor();
     int getId_cita();

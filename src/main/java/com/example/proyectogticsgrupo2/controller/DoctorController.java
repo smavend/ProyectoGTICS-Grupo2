@@ -3,6 +3,7 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
 import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
 import com.example.proyectogticsgrupo2.entity.Cita;
+import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Paciente;
 import com.example.proyectogticsgrupo2.repository.CitaRepository;
 import com.example.proyectogticsgrupo2.repository.DoctorRepository;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.print.Doc;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,26 @@ public class DoctorController {
         return "doctor/DoctorRecibos";
     }
 
+    @GetMapping("/verRecibo")
+    public String verRecibo(Model model, @RequestParam("id") int id_cita,@RequestParam("id2") String id_doctor) {
+
+        Optional<ListaRecibosDTO> optionalListaRecibosDTO=citaRepository.buscarRecibosPorIdCitaIdDoctor(id_doctor,id_cita);
+        Optional<Doctor> optionalDoctor=doctorRepository.findById(id_doctor);
+
+        if (optionalDoctor.isPresent() & optionalListaRecibosDTO.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            ListaRecibosDTO listaRecibosDTO=optionalListaRecibosDTO.get();
+            model.addAttribute("doctor",doctor);
+            model.addAttribute("cita",listaRecibosDTO);
+
+            return "doctor/DoctorVerRecibo";
+        } else {
+            return "redirect:/doctor/recibo";
+        }
+
+
+    }
+
     @PostMapping("/buscarRecibo")
     public String buscarRecibo(@RequestParam("searchField") String searchField,
                              Model model) {
@@ -91,12 +113,7 @@ public class DoctorController {
         return "doctor/DoctorRecibos";
     }
 
-    @GetMapping("/verRecibo")
-    public String verRecibo(Model model) {
 
-
-        return "doctor/DoctorVerRecibo";
-    }
 
     @GetMapping("/calendario")
     public String reportes(Model model){
@@ -106,7 +123,7 @@ public class DoctorController {
     }
 
     @GetMapping("/reporte")
-    public String reporte(Model model, @RequestParam("id") String id,@RequestParam("id2") String id2){
+    public String reporte(Model model, @RequestParam("id") String id,@RequestParam("id2") int id2){
         Optional<Cita> optionalCita= citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
@@ -122,17 +139,16 @@ public class DoctorController {
 
             return "doctor/DoctorReporteSesion";
         } else {
-            return "redirect:/doctor/Dashboard";
+            return "redirect:/doctor/dashboard";
         }
 
     }
 
     @GetMapping("/verCuestionario")
-    public String verCuestionario(@RequestParam("id") String id){
+    public String verCuestionario(Model model, @RequestParam("id") String id){
+
 
         return "doctor/DoctorVerCuestionario";
-
-
     }
 
     @GetMapping("/mensajeria")

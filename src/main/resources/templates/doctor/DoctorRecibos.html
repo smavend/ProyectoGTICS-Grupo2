@@ -377,7 +377,7 @@
                                                             </td>
 
                                                             <td>
-                                                                <a th:href="@{'/doctor/verRecibo'}" type="button" class="btn btn-success">
+                                                                <a th:href="@{'/doctor/verRecibo?id=' + ${recibo.getId_cita()}+ '&id2=' + ${recibo.getId_doctor()}}" type="button" class="btn btn-success">
                                                                     Ver Recibo</a>
                                                             </td>
                                                         </tr>

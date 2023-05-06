@@ -389,10 +389,8 @@
                                                                     <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
                                                                        type="button" class="btn btn-success">Iniciar
                                                                         cita</a>
-                                                                    <button style="margin-top: 5px;width: max-content"
-                                                                            type="button" class="btn btn-danger">Enviar
-                                                                        cuestionario
-                                                                    </button>
+                                                                    <button id="enviar-btn" style="margin-top: 5px;width: max-content" type="button" class="btn btn-danger">Enviar cuestionario</button>
+
                                                                 </div>
                                                             </td>
                                                             <td th:unless="${cita.modalidad == 1}">
@@ -697,6 +695,18 @@
 
         // Mostrar el calendario
         calendar.render();
+        </script>
+        <script>
+            const enviarBtn = document.getElementById("enviar-btn");
+
+            enviarBtn.addEventListener("click", function() {
+                enviarBtn.classList.add("btn-disabled");
+                enviarBtn.disabled = true;
+            });
+
+
+
+
         </script>
 
 
