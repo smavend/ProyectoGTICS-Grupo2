@@ -16,6 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -87,10 +90,38 @@ public class AdministradorController {
             model.addAttribute("listaAdministrativo",listaAdministrativo);
             return "administrador/crearPaciente";
         } else{
-            if (file.isEmpty()) {
 
-                return "redirect:/administrador/dashboard";
-            }else {
+
+            if (file.isEmpty()) {
+                try {
+                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+                    FileInputStream input = new FileInputStream(foto);
+                    ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = input.read(buffer)) !=-1){
+                        output.write(buffer,0,length);
+                    }
+                    input.close();;
+                    output.close();
+                    byte[] bytes = output.toByteArray();
+
+                    paciente.setFoto(bytes);
+                    paciente.setFotoname("userPorDefecto.jpg");
+                    paciente.setFotocontenttype("image/jpg");
+                    paciente.setEstado(1);
+                    paciente.setFecharegistro(LocalDateTime.now());
+                    pacienteRepository.save(paciente);
+                    attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+
+                    return "redirect:/administrador/dashboard";
+                }catch (IOException e){
+                    e.printStackTrace();
+                    return "redirect:/administrador/crearPaciente";
+                }
+
+            }else{
+
                 String fileName = file.getOriginalFilename();
                 try {
                     paciente.setFoto(file.getBytes());
@@ -130,32 +161,48 @@ public class AdministradorController {
             model.addAttribute("listaEspecialidad",listaEspecialidad);
             return "administrador/crearDoctor";
         }else {
-            /*if (file.isEmpty()) {
-                model.addAttribute("msg", "Debe subir un archivo");
-                return "redirect:/administrador/crearDoctor";
-            }*/
-            String fileName = file.getOriginalFilename();
-            /*if (fileName.contains("..")) {
-                model.addAttribute("msg", "No se permiten '..' en el archivo");
-                return "redirect:/administrador/crearDoctor";
-            }*/
+            if(file.isEmpty()){
+                try {
+                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+                    FileInputStream input = new FileInputStream(foto);
+                    ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = input.read(buffer)) !=-1){
+                        output.write(buffer,0,length);
+                    }
+                    input.close();;
+                    output.close();
+                    byte[] bytes = output.toByteArray();
 
-            try {
-                doctor.setFoto(file.getBytes());
-                doctor.setFotoname(fileName);
-                doctor.setFotocontenttype(file.getContentType());
-                doctor.setEstado(1);
-                doctorRepository.save(doctor);
-                attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
-                return "redirect:/administrador/dashboard";
-            } catch (IOException e) {
-                e.printStackTrace();
-                model.addAttribute("msg", "ocurrió un error al subir el archivo");
-                return "redirect:/administrador/crearDoctor";
+                    doctor.setFoto(bytes);
+                    doctor.setFotoname("userPorDefecto.jpg");
+                    doctor.setFotocontenttype("image/jpg");
+                    doctor.setEstado(1);
+                    doctorRepository.save(doctor);
+                    attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
+                    return "redirect:/administrador/dashboard";
+                }catch (IOException e){
+                    e.printStackTrace();
+                    return "redirect:/administrador/crearDoctor";
+                }
+            }else {
+                String fileName = file.getOriginalFilename();
+                try {
+                    doctor.setFoto(file.getBytes());
+                    doctor.setFotoname(fileName);
+                    doctor.setFotocontenttype(file.getContentType());
+                    doctor.setEstado(1);
+                    doctorRepository.save(doctor);
+                    attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
+                    return "redirect:/administrador/dashboard";
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    model.addAttribute("msg", "ocurrió un error al subir el archivo");
+                    return "redirect:/administrador/crearDoctor";
+                }
             }
         }
-
-
     }
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
