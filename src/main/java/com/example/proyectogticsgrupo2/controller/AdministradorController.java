@@ -35,7 +35,8 @@ public class AdministradorController {
     final SedeRepository sedeRepository;
     final AdministradorRepository administradorRepository;
     final CredencialesRepository credencialesRepository;
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository) {
+    final TemporalRepository temporalRepository;
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.seguroRepository = seguroRepository;
@@ -45,6 +46,7 @@ public class AdministradorController {
         this.sedeRepository = sedeRepository;
         this.administradorRepository = administradorRepository;
         this.credencialesRepository = credencialesRepository;
+        this.temporalRepository = temporalRepository;
     }
     //#####################################33
     @GetMapping("/dashboard")
@@ -58,7 +60,20 @@ public class AdministradorController {
     @GetMapping("/finanzas")
     public String finanzas(){return "administrador/finanzas";}
     @GetMapping("/registro")
-    public String registro(){return "administrador/rptaForm";}
+    public String registro(Model model){
+        List<Temporal> listaTemporal = temporalRepository.findAll();
+        model.addAttribute("listaTemporal",listaTemporal);
+        return "administrador/rptaForm";}
+    @PostMapping("/guardarTemporales")
+    public String guardarTemporales(@RequestParam("usuarios") List<Integer> ids){
+        List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
+            for (Temporal paciente : pacientesTemp){
+                System.out.println(paciente.getNombre());
+            }
+
+
+        return "redirect:/administrador/dashboard";
+    }
     @GetMapping("/perfil")
     public String perfil(@RequestParam("id") String id, Model model){
         Optional<Administrador> optAministrador = administradorRepository.findById(id);
