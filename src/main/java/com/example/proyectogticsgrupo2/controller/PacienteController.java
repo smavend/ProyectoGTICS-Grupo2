@@ -98,6 +98,15 @@ public class PacienteController {
         return "paciente/reservar";
     }
 
+    @PostMapping("/confirmarReserva")
+    public String confirmarReserva(@RequestParam("idPaciente") int idPaciente,
+                                   @RequestParam("idDoctor") String idDoctor,
+                                   @RequestParam("modalidad") int modalidad) {
+        int idSede = doctorRepository.buscarIdSedeDoctor(idDoctor);
+        citaRepository.reservarCita(idPaciente,idDoctor,modalidad,idSede);
+        return "redirect:/Paciente/confirmacion";
+    }
+
     /* PERFIL */
     @GetMapping("/perfil")
     public String perfil(Model model){
