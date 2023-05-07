@@ -5,8 +5,10 @@ import com.example.proyectogticsgrupo2.entity.Cita;
 import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,4 +33,9 @@ public interface CitaRepository extends JpaRepository<Cita, String> {
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
             "where NOW() <= c.inicio and p.id_paciente = ?1")
     List<Cita> buscarProximasCitas (String idPaciente);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`) VALUES (?1, ?2, '2023-05-21 12:30:00', '2023-05-21 12:45:00', ?3, '0', ?4)")
+    void reservarCita(int idPaciente, String idDoctor, int modalidad, int idSede);
 }
