@@ -65,14 +65,44 @@ public class AdministradorController {
         model.addAttribute("listaTemporal",listaTemporal);
         return "administrador/rptaForm";}
     @PostMapping("/guardarTemporales")
-    public String guardarTemporales(@RequestParam("usuarios") List<Integer> ids){
+    public String guardarTemporales(@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr){
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
-            for (Temporal paciente : pacientesTemp){
-                System.out.println(paciente.getNombre());
+        try {
+            File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+            FileInputStream input = new FileInputStream(foto);
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = input.read(buffer)) !=-1){
+                output.write(buffer,0,length);
             }
-
-
-        return "redirect:/administrador/dashboard";
+            input.close();;
+            output.close();
+            byte[] bytes = output.toByteArray();
+            for (Temporal pacitemp : pacientesTemp){
+                paciente.setIdPaciente(pacitemp.getDni());
+                paciente.setNombre(pacitemp.getNombre());
+                paciente.setApellidos(pacitemp.getApellidos());
+                paciente.setTelefono(pacitemp.getTelefono());
+                paciente.setDireccion("Av Calle 124");
+                paciente.setFechanacimiento(pacitemp.getFecha_nacimiento());
+                paciente.setSeguro(pacitemp.getSeguro());
+                paciente.setDistrito(pacitemp.getDistrito());
+                paciente.setGenero("Masculino");
+                paciente.setCorreo(pacitemp.getCorreo());
+                paciente.setEstado(1);
+                paciente.setFecharegistro(LocalDateTime.now());
+                paciente.setFoto(bytes);
+                paciente.setFotoname("userPorDefecto.jpg");
+                paciente.setFotocontenttype("image/jpg");
+                attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
+                pacienteRepository.save(paciente);
+            }
+            return "redirect:/administrador/dashboard";
+        }catch (IOException e){
+            e.printStackTrace();
+            return "redirect:/administrador/registro";
+        }
     }
     @GetMapping("/perfil")
     public String perfil(@RequestParam("id") String id, Model model){
