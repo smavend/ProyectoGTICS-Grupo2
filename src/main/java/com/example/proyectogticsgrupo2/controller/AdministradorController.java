@@ -97,6 +97,7 @@ public class AdministradorController {
                 paciente.setFotocontenttype("image/jpg");
                 attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
                 pacienteRepository.save(paciente);
+                temporalRepository.deleteById(pacitemp.getId_temporal());
             }
             return "redirect:/administrador/dashboard";
         }catch (IOException e){
