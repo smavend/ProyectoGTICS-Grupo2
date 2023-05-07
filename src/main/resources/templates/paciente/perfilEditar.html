@@ -35,157 +35,161 @@
 
             <div class="container-xl perfil">
                 <div class="row">
-                    <!-- Foto y botones editar -->
 
-                    <div class="col-lg-4">
-                        <div style="height: 100%" class="card mb-4">
-                            <div class="card-body text-center mt-4">
-                                <img th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="avatar"
-                                     class="img-fluid" style="width: 200px; border-radius: 60px">
-                                <h5 class="mt-3 mb-1 fw-semibold" th:text="${paciente.getNombreYApellido()}">Juanchito
-                                    Palacios</h5>
-                                <p class="text-muted mb-3">Paciente</p>
-                                <form method="post" th:action="@{/Paciente/perfil/guardarFoto}" enctype="multipart/form-data">
-                                    <!-- Inputs para data binding -->
-                                    <input type="hidden" name="id" th:value="${paciente.idPaciente}">
-                                    <input id="subirFoto" class="form-control" type="file" name="archivo">
-                                    <div class="vstack gap-2 col-sm-7 col-md-6 col-lg-7 mx-auto mb-xl-4 mb-3 mt-4">
-                                        <button id="botonSubirFoto" type="submit" style="border-radius: 20px"
-                                                class="btn btn-secondary">Actualizar foto
-                                        </button>
-                                        <a th:href="@{'/Paciente/perfil/quitarFoto?id='+${paciente.idPaciente}}" style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Editar información del perfil y alergias -->
-                    <div class="col-lg-8">
+                    <div style="margin-bottom: 0" class="card">
+                        <div class="card-body">
 
-                        <!-- Información perfil -->
-                        <div style="margin-bottom: 0" class="card">
-                            <div class="card-body">
-                                <form th:action="@{/Paciente/perfil/guardar}" method="post" th:object="${paciente}"
-                                      id="formPaciente">
-                                    <input type="hidden" th:field="*{idPaciente}">
-                                    <input type="hidden" th:field="*{estado}">
-                                    <input type="hidden" th:field="*{fechanacimiento}">
-                                    <input type="hidden" th:field="*{genero}">
-                                    <input type="hidden" th:field="*{fecharegistro}">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Nombres</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input class="form-control mb-0" type="text"
-                                                   th:field="*{nombre}">
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Apellidos</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input class="form-control mb-0" type="text"
-                                                   th:field="*{apellidos}">
+                            <form th:action="@{/Paciente/perfil/guardar}" method="post" th:object="${paciente}"
+                                  id="formPaciente" enctype="multipart/form-data">
+
+                                <div class="row">
+                                    <!-- Editar foto perfil -->
+                                    <div class="col-lg-12 text-center">
+                                        <img th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}"
+                                             alt="avatar"
+                                             class="img-fluid" style="width: 200px; border-radius: 60px">
+                                        <h5 class="mt-3 mb-1 fw-semibold" th:text="${paciente.getNombreYApellido()}">
+                                            Juanchito Palacios</h5>
+                                        <p class="text-muted mb-3">Paciente</p>
+
+                                        <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
+                                            <input class="form-control" type="file" name="archivo">
+                                            <a th:href="@{'/Paciente/perfil/quitarFoto?id='+${paciente.idPaciente}}"
+                                               style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Distrito</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <select class="form-select" name="distrito" id="distrito">
-                                                <option th:each="distrito: ${distritoList}"
-                                                        th:value="${distrito.idDistrito}"
-                                                        th:text="${distrito.nombre}"
-                                                        th:selected="${paciente.distrito.nombre == distrito.nombre}"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Seguro</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <select class="form-select" name="seguro" id="seguro">
-                                                <option th:each="seguro: ${seguroList}"
-                                                        th:value="${seguro.idSeguro}"
-                                                        th:text="${seguro.nombre}"
-                                                        th:selected="${paciente.seguro.nombre == seguro.nombre}"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Correo</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input class="form-control mb-0" type="text" value="juanpc@gmail.com"
-                                                   th:field="*{correo}">
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Teléfono</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input class="form-control mb-0" type="text" value="965-790-551"
-                                                   th:field="*{telefono}">
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Dirección</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input class="form-control mb-0" type="text"
-                                                   value="Av. Las Nuevas Lomas, Lima" th:field="*{direccion}">
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>
+
+                                <input type="hidden" th:field="*{idPaciente}">
+                                <input type="hidden" th:field="*{estado}">
+                                <input type="hidden" th:field="*{fechanacimiento}">
+                                <input type="hidden" th:field="*{genero}">
+                                <input type="hidden" th:field="*{fecharegistro}">
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Alergias</p>
+                                        <p class="mb-0">Nombres</p>
                                     </div>
                                     <div class="col-sm-9">
-                                        <form method="post" th:action="@{/Paciente/perfil/guardarAlergia}"
-                                              id="formAlergias">
-                                            <div class="hstack gap-2">
-                                                <input type="hidden" name="paciente" th:value="${paciente.idPaciente}">
-                                                <input type="text" class="form-control mb-0" placeholder="Nueva alergia"
-                                                       name="nombre">
-                                                <button type="submit" class="btn botonAgregarAlergia"
-                                                        form="formAlergias">Agregar
-                                                </button>
-                                            </div>
-                                        </form>
-                                        <!-- Use esa estructura rara y el th:inline para no sobreescribir los botones de X -->
-                                        <p class="mb-2 mb-lg-0 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
-                                           th:inline="text">[[${alergia.nombre}]]
-                                            <a th:href="@{'/Paciente/perfil/borrarAlergia?idPaciente='+${paciente.idPaciente}+'&idAlergia='+${alergia.idAlergia}}"
-                                               class="ms-2" style="color: red"><i class="bi bi-x-circle ms-2"></i></a>
-                                        </p>
+                                        <input class="form-control mb-0" type="text" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
+                                             th:errors="*{nombre}"></div>
                                     </div>
                                 </div>
-                                <button type="submit" style="margin: 40px 0 0 0;"
-                                        class="btn btn-primary botonActualizarConsentimientos" form="formPaciente">
-                                    Actualizar
-                                </button>
-                                <a style="margin: 40px 10px 0 10px;" th:href="@{/Paciente/perfil}"
-                                   class="btn btn-danger botonCancelar">Cancelar
-                                </a>
-                            </div>
-                        </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Apellidos</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
+                                             th:errors="*{apellidos}"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Distrito</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <select class="form-select" name="distrito" id="distrito">
+                                            <option th:each="distrito: ${distritoList}"
+                                                    th:value="${distrito.idDistrito}"
+                                                    th:text="${distrito.nombre}"
+                                                    th:selected="${paciente.distrito.nombre == distrito.nombre}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Seguro</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <select class="form-select" name="seguro" id="seguro">
+                                            <option th:each="seguro: ${seguroList}"
+                                                    th:value="${seguro.idSeguro}"
+                                                    th:text="${seguro.nombre}"
+                                                    th:selected="${paciente.seguro.nombre == seguro.nombre}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Correo</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" value="juanpc@gmail.com"
+                                               th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
+                                             th:errors="*{correo}"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Teléfono</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" value="965-790-551"
+                                               th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}"
+                                             th:errors="*{telefono}"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Dirección</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" value="Av. Las Nuevas Lomas, Lima"
+                                               th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}"
+                                             th:errors="*{direccion}"></div>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Alergias</p>
+                                </div>
+                                <div class="col-sm-9">
 
+                                    <!-- Form de alergias -->
+                                    <form method="post" th:action="@{/Paciente/perfil/guardarAlergia}"
+                                          id="formAlergias">
+                                        <div class="hstack gap-2">
+                                            <input type="hidden" name="paciente" th:value="${paciente.idPaciente}">
+                                            <input type="text" class="form-control mb-0" placeholder="Nueva alergia"
+                                                   name="nombre">
+                                            <button type="submit" class="btn botonAgregarAlergia"
+                                                    form="formAlergias">Agregar
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <p class="mb-2 mb-lg-0 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
+                                       th:inline="text">[[${alergia.nombre}]]
+                                        <a th:href="@{'/Paciente/perfil/borrarAlergia?idPaciente='+${paciente.idPaciente}+'&idAlergia='+${alergia.idAlergia}}"
+                                           class="ms-2" style="color: red"><i class="bi bi-x-circle ms-2"></i></a>
+                                    </p>
+                                </div>
+                            </div>
+                            <button type="submit" style="margin: 40px 0 0 0;"
+                                    class="btn btn-primary botonActualizarConsentimientos" form="formPaciente">
+                                Actualizar
+                            </button>
+                            <a style="margin: 40px 10px 0 10px;" th:href="@{/Paciente/perfil}"
+                               class="btn btn-danger botonCancelar">Cancelar
+                            </a>
+                        </div>
                     </div>
+
                 </div>
             </div>
 

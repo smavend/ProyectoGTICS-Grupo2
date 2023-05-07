@@ -2,14 +2,17 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -111,18 +114,21 @@ public class PacienteController {
         if (optionalPaciente.isPresent()){
             Paciente paciente = optionalPaciente.get();
             List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPrueba);
+            List<Cita> historialCitas = citaRepository.buscarHistorialDeCitas(idPrueba);
             model.addAttribute("alergiasPaciente", alergiasPaciente);
             model.addAttribute("paciente", paciente);
+            model.addAttribute("historialCitas", historialCitas);
         }
         return "paciente/perfil";
     }
 
     @GetMapping("/perfil/editar")
-    public String editarPerfil(Model model,
-                               @RequestParam(name = "idPaciente") String idPaciente){
+    public String editarPerfil(@ModelAttribute("paciente") Paciente paciente,
+                               @RequestParam(name = "idPaciente") String idPaciente,
+                               Model model){
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()){
-            Paciente paciente = optionalPaciente.get();
+            paciente = optionalPaciente.get();
             List<Seguro> seguroList = seguroRepository.findAll();
             List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPrueba);
             List<Distrito> distritoList = distritoRepository.findAll();
@@ -137,9 +143,52 @@ public class PacienteController {
     }
 
     @PostMapping("/perfil/guardar")
-    public String guardarPerfil(Paciente paciente){
-        pacienteRepository.save(paciente);
-        return "redirect:/Paciente/perfil";
+    public String guardarPerfil(@ModelAttribute("paciente") @Valid Paciente paciente,
+                                BindingResult bindingResult,
+                                @RequestParam(name = "archivo") MultipartFile file,
+                                RedirectAttributes attr,
+                                Model model){
+
+        String fileName = file.getOriginalFilename();
+
+        if (fileName.contains("..") || fileName.contains(" ")){
+            attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
+            return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
+        }
+
+        if (bindingResult.hasErrors()){
+            model.addAttribute("seguroList", seguroRepository.findAll());
+            model.addAttribute("alergiasPaciente", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
+            model.addAttribute("distritoList", distritoRepository.findAll());
+            return "paciente/perfilEditar";
+        }
+        else{
+            try {
+                if (file.isEmpty()){
+                    Optional<Paciente> optionalPaciente = pacienteRepository.findById(paciente.getIdPaciente());
+                    Paciente p = optionalPaciente.get();
+                    paciente.setFoto(p.getFoto());
+                    paciente.setFotoname(p.getFotoname());
+                    paciente.setFotocontenttype(p.getFotocontenttype());
+                }
+                else {
+                    paciente.setFoto(file.getBytes());
+                    paciente.setFotoname(fileName);
+                    paciente.setFotocontenttype(file.getContentType());
+                }
+                pacienteRepository.save(paciente);
+                attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
+                return "redirect:/Paciente/perfil";
+
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
+                // MENSAJE EN DE ERROR EN CASO HAYA ERROR AL SUBIR ARCHIVO
+                return "redirect:/Paciente/perfil";
+            }
+
+        }
     }
 
     @PostMapping("/perfil/guardarAlergia")
@@ -156,43 +205,6 @@ public class PacienteController {
             alergiaRepository.deleteById(idAlergia);
         }
         return "redirect:/Paciente/perfil/editar?idPaciente="+idPaciente;
-    }
-
-    @PostMapping("/perfil/guardarFoto")
-    public String guardarFoto(@RequestParam(name = "id") String idPaciente,
-                              @RequestParam(name = "archivo")MultipartFile file,
-                              Model model){
-
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
-        if (optionalPaciente.isPresent()){
-            Paciente paciente = optionalPaciente.get();
-            if (file.isEmpty()){
-                // MENSAJE DE ERROR EN CASO NO SE HAYA INCLUIDO UNA IMAGEN
-                return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
-            }
-
-            String fileName = file.getOriginalFilename();
-
-            if (fileName.contains("..")){
-                // MENSAJE DE ERROR EN CASO EL ARCHIVO CONTENGA CARACTERES EXTRAÑOS
-                return "redirect:/Paciente/perfil/editar?idPaciente="+paciente.getIdPaciente();
-            }
-
-            try {
-                paciente.setFoto(file.getBytes());
-                paciente.setFotoname(fileName);
-                paciente.setFotocontenttype(file.getContentType());
-                pacienteRepository.save(paciente);
-                return "redirect:/Paciente/perfil";
-            }
-            catch (IOException e){
-                e.printStackTrace();
-                // MENSAJE EN DE ERROR EN CASO HAYA ERROR AL SUBIR ARCHIVO
-                return "redirect:/Paciente/perfil";
-            }
-        }
-        return "redirect:/Paciente/perfil";
-
     }
 
     @GetMapping("/perfil/quitarFoto")
@@ -453,8 +465,16 @@ public class PacienteController {
     }
 
     @PostMapping("/consentimientos/actualizar")
-    public String actualizarConsentimientos(PacientePorConsentimiento pacientePorConsentimiento){
-        return "";
+    public String actualizarConsentimientos(@RequestParam("consentimiento1") String consentimiento1,
+                                            @RequestParam("consentimiento2") String consentimiento2,
+                                            @RequestParam("consentimiento3") String consentimiento3,
+                                            @RequestParam("consentimiento4") String consentimiento4,
+                                            @RequestParam("consentimiento5") String consentimiento5){
+
+        System.out.println(consentimiento1);
+        System.out.println(consentimiento2);
+
+        return "redirect:/Paciente/consentimientos";
     }
 
     /* SECCIÓN MENSAJERÍA */

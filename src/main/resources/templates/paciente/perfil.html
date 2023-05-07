@@ -43,13 +43,17 @@
                                 <img th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="avatar" class="img-fluid" style="width: 200px; border-radius: 60px">
                                 <h5 class="mt-3 mb-1 fw-semibold" th:text="${paciente.getNombreYApellido()}">Juanchito Palacios</h5>
                                 <p class="text-muted mb-3">Paciente</p>
-                                <div class="vstack gap-2 col-sm-7 col-md-6 col-lg-7 mx-auto mb-xl-4 mb-3 mt-4">
+                                <div class="vstack gap-2 col-sm-6 col-md-5 col-lg-8 mx-auto mb-xl-4 mb-3 mt-4">
                                     <a th:href="@{'/Paciente/perfil/editar?idPaciente='+${paciente.idPaciente}}" class="btn btn-primary botonEditar">Editar perfil</a>
                                     <a class="btn btn-primary botonEditar">Cambiar contraseña</a>
-                                </div>
+                                    <a href="#HistorialDeCitas" class="btn btn-primary botonEditar">Historial de citas</a>
+                                    </div>
+                                <div style="border-radius: 30px" class="alert alert-success" role="alert" th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"></div>
+                                <div style="border-radius: 30px" class="alert alert-danger" role="alert" th:if="${msgError != null}" th:text="${msgError}"></div>
                             </div>
                         </div>
                     </div>
+
                     <!-- Información perfil -->
                     <div class="col-lg-8">
                         <div class="card mb-4">
@@ -184,12 +188,12 @@
                                                    data-bs-target="#cita">Ver más</a>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>Psicología</td>
-                                            <td>María Godoy</td>
-                                            <td>04/01/21</td>
-                                            <td>18:30 Hrs.</td>
-                                            <td>Virtual</td>
+                                        <tr th:each="cita: ${historialCitas}">
+                                            <td th:text="${cita.doctor.especialidad.nombre}">Psicología</td>
+                                            <td th:text="${cita.doctor.nombre}">María Godoy</td>
+                                            <td th:text="${cita.inicio}">04/01/21</td>
+                                            <td th:text="${cita.inicio}">18:30 Hrs.</td>
+                                            <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Virtual</td>
                                             <td>
                                                 <a class="botonVerMasPerfil">Ver más</a>
                                             </td>

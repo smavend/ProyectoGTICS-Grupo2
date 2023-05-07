@@ -56,7 +56,7 @@
                                 <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
                                 <td th:text="${cita.inicio}">10/05/23</td>
                                 <td th:text="${cita.inicio}">13:00 Hrs.</td>
-                                <td th:text="${cita.modalidad == 1? 'Virtual':'Presencial'}">Presencial</td>
+                                <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</td>
                                 <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
                                 <td>
                                     <a class="botonVerMas" data-bs-toggle="modal"
@@ -111,7 +111,7 @@
                                                               th:text="${cita.doctor.especialidad.nombre}">Cardiología</span>
                                         </p>
                                         <p>Tipo de cita:<span class="informacionModalDato"
-                                                              th:text="${cita.modalidad == 1? 'Virtual':'Presencial'}">Presencial</span>
+                                                              th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
                                         </p>
                                         <p>Torre:<span class="informacionModalDato">B (Falta)</span></p>
                                     </div>
@@ -178,7 +178,7 @@
                                                               th:text="${cita.doctor.especialidad.nombre}">Psicología</span>
                                         </p>
                                         <p>Tipo de cita:<span class="informacionModalDato"
-                                                              th:text="${cita.modalidad == 1? 'Virtual':'Presencial'}">Virtual</span>
+                                                              th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Virtual</span>
                                         </p>
                                         <p>Estado de cita:<span
                                                 class="informacionModalDato"

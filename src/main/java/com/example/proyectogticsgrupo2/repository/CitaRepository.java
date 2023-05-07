@@ -34,6 +34,12 @@ public interface CitaRepository extends JpaRepository<Cita, String> {
             "where NOW() <= c.inicio and p.id_paciente = ?1")
     List<Cita> buscarProximasCitas (String idPaciente);
 
+    @Query(nativeQuery = true, value = "select c.* from cita c \n" +
+            "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) \n" +
+            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
+            "where p.id_paciente = ?1 and NOW() >= c.inicio;")
+    List<Cita> buscarHistorialDeCitas(String idPaciente);
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`) VALUES (?1, ?2, '2023-05-21 12:30:00', '2023-05-21 12:45:00', ?3, '0', ?4)")
