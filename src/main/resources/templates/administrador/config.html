@@ -305,7 +305,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link  collapsed" th:href="@{/administrador/config}">
+      <a class="nav-link  " th:href="@{/administrador/config}">
         <i class="bi bi-gear"></i>
         <span>Configuraciones</span>
       </a>
@@ -317,48 +317,92 @@
 
 <main id="main" class="main ">
 
-  <section  >
-    <div class="row d-flex justify-content ">
-      <div  class = "bg-white col-md-12 p-5 ">
-        <h3 class=" m-3">PACIENTES POR REGISTRAR</h3>
+  <div class=" row bg-white container-fluid  " id="cam">
 
-          <form method="POST" th:action="@{/administrador/guardarTemporales}">
-            <table class="table table-striped" id="datatable">
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Correo</th>
-                <th scope="col">DNI Administrativo</th>
-                <th scope="col">Seleccionar</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="usuario, index : ${listaTemporal}">
-                <th scope="row" th:text="${index.index + 1}"></th>
-                <td th:text="${usuario.nombre}"></td>
-                <td th:text="${usuario.apellidos}"></td>
-                <td th:text="${usuario.correo}"></td>
-                <td th:text="${usuario.administrativo.idAdministrativo}"></td>
-                <td>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="usuarios" th:value="${usuario.id_temporal}" id="usuario-${usuario.id}">
-                  </div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <div class="my-4">
-              <button type="submit" class="btn btn-primary">Guardar usuarios</button>
-            </div>
-          </form>
 
-        <br>
+
+    <h1 class="m-3 text-center">Configuración</h1>
+
+    <!-- Formulario de configuración -->
+    <form action="/guardar-configuracion" method="POST">
+      <!-- Sección de medios de pago -->
+
+      <!-- Sección de notificaciones -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">Notificaciones</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="notificaciones" id="notificaciones">
+            <label class="form-check-label" for="notificaciones">
+              Permitir notificaciones por correo electrónico
+            </label>
+          </div>
+        </div>
       </div>
 
-    </div>
-  </section>
+      <!-- Sección de tema -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">Tema</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" name="tema" id="tema-switch">
+            <label class="form-check-label" for="tema-switch">
+              Modo Oscuro
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">Medios de Pago</h2>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">Tipo</th>
+              <th scope="col">Número</th>
+              <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Tarjeta de crédito</td>
+              <td>**** **** **** 1234</td>
+              <td><button type="button" class="btn btn-sm btn-danger">Eliminar</button></td>
+            </tr>
+            <tr>
+              <td>Cuenta bancaria</td>
+              <td>12345678901234567890</td>
+              <td><button type="button" class="btn btn-sm btn-danger">Eliminar</button></td>
+            </tr>
+            <tr>
+              <td>
+                <select class="form-select form-select-sm" aria-label="Tipo de medio de pago">
+                  <option selected>Tipo</option>
+                  <option value="creditCard">Tarjeta de crédito</option>
+                  <option value="bankAccount">Cuenta bancaria</option>
+                </select>
+              </td>
+              <td><input type="text" class="form-control form-control-sm" placeholder="Número"></td>
+              <td><button type="button" class="btn btn-sm btn-primary">Agregar</button></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Botón de guardar cambios -->
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-lg">Guardar cambios</button>
+      </div>
+      <br>
+    </form>
+
+  </div>
 
 </main><!-- End #main -->
 
@@ -384,32 +428,7 @@
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/jsAdministrador.js}"></script>
 
-<script>
-  $(document).ready(function () {
-    $('#datatable').DataTable({
 
-      "language": {
-        "lengthMenu": "Mostrar _MENU_ registros por página",
-        "zeroRecords": "Ningún registro encontrado",
-        "info": "Página _PAGE_ de _PAGES_",
-        "infoEmpty": "No hay registros disponibles",
-        "infoFiltered": "(filtrado de _MAX_ registros)",
-        "search": "Buscar:",
-        "loadingRecords": "Cargando...",
-        "paginate":{
-          "first": "Primero",
-          "last": "Último",
-          "next": "Siguiente",
-          "previous": "Anterior",
-        }
-      },
-
-      "columnDefs": [
-        {"margin-bottom": "10px"}
-      ]
-    });
-  });
-</script>
 
 </body>
 

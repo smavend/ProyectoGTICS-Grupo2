@@ -59,6 +59,8 @@ public class AdministradorController {
     }
     @GetMapping("/finanzas")
     public String finanzas(){return "administrador/finanzas";}
+    @GetMapping("/config")
+    public String config(){return "administrador/config";}
     @GetMapping("/registro")
     public String registro(Model model){
         List<Temporal> listaTemporal = temporalRepository.findAll();
@@ -234,7 +236,9 @@ public class AdministradorController {
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
     @GetMapping("/mensajeria")
-    public String mensajeria(){return "administrador/mensajeria";}
+    public String mensajeria(){
+            //En onstruccion
+        return "administrador/mensajeria";}
     @GetMapping("/historialPaciente")
     public String historialPaciente(@RequestParam("id") String id, Model model){
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
