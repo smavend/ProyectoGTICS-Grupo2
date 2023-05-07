@@ -6,7 +6,7 @@ $(document).ready(function() {
         $('#prev-btn7').prop('disabled', startIndex === 0);
         $('#next-btn7').prop('disabled', endIndex >= table.find('tbody tr').length);
 
-        var currentPage = startIndex / 2 + 1;
+        var currentPage = startIndex / 5 + 1;
         $('#page-num7').text(currentPage);
     }
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
 
     }
 
-    setupTablePagination($('#Doctores_Recibos_table'), 2);
+    setupTablePagination($('#Doctores_Recibos_table'), 5);
 
 
     /*

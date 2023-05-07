@@ -6,7 +6,7 @@ $(document).ready(function() {
         $('#prev-btn5').prop('disabled', startIndex === 0);
         $('#next-btn5').prop('disabled', endIndex >= table.find('tbody tr').length);
 
-        var currentPage = startIndex / 2+ 1;
+        var currentPage = startIndex / 5+ 1;
         $('#page-num5').text(currentPage);
     }
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
 
     }
 
-    setupTablePagination($('#Doctores_Citas_table'), 2);
+    setupTablePagination($('#Doctores_Citas_table'), 5);
 
 
     /*
