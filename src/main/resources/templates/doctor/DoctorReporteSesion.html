@@ -345,7 +345,9 @@
                                             <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">DNI: </strong><span style="font-size: 1.2rem" th:text="${paciente.idPaciente}" > </span>
                                             <br>
                                               <!-- DESPUES PONER EDAD -->
-                                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><input type="date"  name="fecha_emision" th:value="${fecha}"  min="2023-01-01" max="2030-12-31">
+                                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><input type="date"  th:field="*{fecha_emision}" th:value="${fecha}" th:classappend="${#fields.hasErrors('fecha_emision')?'is-invalid':''}" >
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha_emision')}"
+                                                 th:errors="*{fecha_emision}" ></div>
                                             <br>
                                             <div>
                                                 <div class="row">
@@ -353,7 +355,9 @@
                                                         <strong class="d-inline" style="font-size: 1.2rem; line-height: 1.5; margin-left: 20px;">Dirección:</strong>
                                                     </div>
                                                     <div class="col-md-9">
-                                                        <input name="direccion"  type="text" class="form-control d-inline">
+                                                        <input type="text" class="form-control d-inline" required  maxlength="45" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}">
+                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}"
+                                                             th:errors="*{direccion}" ></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -362,10 +366,19 @@
 
                                             <hr style="border-top: 3px solid #ccc">
 
-                                            <h2 style="color: black;text-align: center;" >Diagnóstico y Tratamiento Recomendado</h2>
+                                            <h2 style="color: black;text-align: center;" >Diagnóstico e Indicaciones de Tratamiento</h2>
                                             <div class="mb-3">
-                                                <textarea oninput="autoResizeTextarea(this)" style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;" type="text" name="receta" class="form-control"></textarea>
+                                                <textarea oninput="autoResizeTextarea(this)" style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;" type="text" maxlength="500" th:field="*{diagnostico}" th:classappend="${#fields.hasErrors('diagnostico')?'is-invalid':''}" class="form-control"></textarea>
                                             </div>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('diagnostico')}"
+                                                 th:errors="*{diagnostico}" ></div>
+
+                                            <h2 style="color: black;text-align: center;" >Medicamentos</h2>
+                                            <div class="mb-3">
+                                                <textarea oninput="autoResizeTextarea(this)" style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;" type="text" maxlength="500" th:field="*{receta}" th:classappend="${#fields.hasErrors('receta')?'is-invalid':''}" class="form-control"></textarea>
+                                            </div>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('receta')}"
+                                                 th:errors="*{receta}" ></div>
 
 
                                     </div>
@@ -394,7 +407,7 @@
 
                                             <h1 style="color: black;text-align: center;">Bitácora Personal</h1>
                                             <div class="mb-3">
-                                                <textarea oninput="autoResizeTextarea(this)" style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;" type="text" name="bitacora" class="form-control"></textarea>
+                                                <textarea oninput="autoResizeTextarea(this)" style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;" maxlength="500" type="text" name="bitacora" class="form-control"></textarea>
                                             </div>
 
 

@@ -8,8 +8,10 @@ import com.example.proyectogticsgrupo2.entity.Paciente;
 import com.example.proyectogticsgrupo2.repository.CitaRepository;
 import com.example.proyectogticsgrupo2.repository.DoctorRepository;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,6 +28,9 @@ public class DoctorController {
     final PacienteRepository pacienteRepository;
     final CitaRepository citaRepository;
 
+    private String idPaciente;
+    private int idCita;
+    private String fecha;
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
@@ -125,6 +130,8 @@ public class DoctorController {
 
     @GetMapping("/reporte")
     public String reporte(Model model, @RequestParam("id") String id,@RequestParam("id2") int id2){
+        setIdPaciente(id);
+        setIdCita(id2);
         Optional<Cita> optionalCita= citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
@@ -133,6 +140,8 @@ public class DoctorController {
             String fechaHora =cita.getInicio().toString();
             String[] partes = fechaHora.split(" ");
             String fecha = partes[0];
+
+            setFecha(fecha);
 
             model.addAttribute("paciente",paciente);
             model.addAttribute("fecha",fecha);
@@ -160,9 +169,24 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarReporte")
-    public String guardarReporte(Cita cita, RedirectAttributes attr) {
-        citaRepository.save(cita);
-        return "redirect:/doctor/dashboard";
+    public String guardarReporte(Model model,@Valid Cita cita, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()){
+
+            Optional<Cita> optionalCita= citaRepository.findById(getIdCita());
+            Optional<Paciente> optionalPaciente = pacienteRepository.findById(getIdPaciente());
+            Paciente paciente = optionalPaciente.get();
+            Cita cita1 = optionalCita.get();
+
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("fecha", getFecha());
+            model.addAttribute("cita", cita1);
+            return "doctor/DoctorReporteSesion";
+        }else{
+
+            citaRepository.save(cita);
+            return "redirect:/doctor/dashboard";
+        }
     }
 
     @PostMapping("/BuscarProxCita")
@@ -235,5 +259,29 @@ public class DoctorController {
     public String prueba(Model model){
 
         return "doctor/prueba";
+    }
+
+    public String getIdPaciente() {
+        return idPaciente;
+    }
+
+    public void setIdPaciente(String idPaciente) {
+        this.idPaciente = idPaciente;
+    }
+
+    public int getIdCita() {
+        return idCita;
+    }
+
+    public void setIdCita(int idCita) {
+        this.idCita = idCita;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 }
