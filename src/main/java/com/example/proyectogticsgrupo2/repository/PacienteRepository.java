@@ -34,4 +34,5 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
     @Query(nativeQuery = true, value = "UPDATE paciente SET correo = ?1, direccion = ?2, distrito_id_distrito = ?3 WHERE (id_paciente = ?4)")
     void actualizarPaciente(String correo, String direccion, int idDistrito, String idPaciente);
 
+
 }
