@@ -72,6 +72,7 @@ public class DoctorController {
         return "doctor/DoctorRecibos";
     }
 
+
     @GetMapping("/verRecibo")
     public String verRecibo(Model model, @RequestParam("id") int id_cita,@RequestParam("id2") String id_doctor) {
 
@@ -223,6 +224,12 @@ public class DoctorController {
 
         return "doctor/DoctorDashboard";
     }
+    @GetMapping("/historialClinico")
+    public String hClinico(Model model) {
+
+        return "doctor/DoctorHistorialClinico";
+    }
+
 
     @GetMapping("/prueba")
     public String prueba(Model model){
