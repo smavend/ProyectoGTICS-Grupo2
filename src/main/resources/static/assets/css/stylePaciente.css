@@ -1541,7 +1541,13 @@ p{
     margin: 0 25px;
 }
 
-.filtroNoSeleccionado,
+.filtro{
+    font-weight: 500;
+    color: black;
+    background-color: rgb(230, 230, 230);
+}
+
+.filtro,
 .filtroSeleccionado{
     font-size: .8rem;
     border-radius: 50px;
@@ -1551,7 +1557,7 @@ p{
     padding: 8px 20px;
 }
 
-.filtroNoSeleccionado:hover,
+.filtro:hover,
 .filtroSeleccionado:hover{
     background-color: #7ce494;
     color: black;
@@ -1561,12 +1567,6 @@ p{
     background-color: #a7ebb7;
     color: black;
     font-weight: 600;
-}
-
-.filtroNoSeleccionado{
-    font-weight: 500;
-    color: black;
-    background-color: rgb(230, 230, 230);
 }
 
 .botonEntrarCita{
