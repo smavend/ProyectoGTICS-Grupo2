@@ -346,7 +346,7 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-scrollable" aria-labelledby="dropdownMenuButton">
                 <div class="scrollspy-example">
-                  <li><button class="dropdown-item nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Alergias</button></li>
+                  <li><button class="dropdown-item nav-link active" data-bs-toggle="tab" data-bs-target="#alergias">Alergias</button></li>
                   <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#consentimientos">Consentimientos</button></li>
                   <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#mensajes">Mensajes</button></li>
                   <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#cuestionarios">Cuestionarios</button></li>
@@ -364,259 +364,103 @@
 
           <div class="tab-content pt-2">
 
-            <div class="tab-pane fade show active profile-overview"
-                 id="profile-overview">
+            <div class="tab-pane fade show active alergias"
+                 id="alergias">
 
               <h5 class="card-title">Detalles del Perfil</h5>
-
-
               <div class="row">
-                <div class="col-lg-3 col-md-4 label ">Código</div>
-                <div class="col-lg-9 col-md-8"><%=userAdmin.getCodigoPucp()%>
+                <div class="col-lg-9 col-md-8">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Alergia</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Iterar sobre las alergias del paciente -->
+                    <tr th:each="alergia, i : ${paciente.alergias}">
+                      <th scope="row" th:text="${i.index + 1}"></th>
+                      <td th:text="${alergia.nombre}"></td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-
-              <div class="row">
-                <div class="col-lg-3 col-md-4 label ">Nombres</div>
-                <div class="col-lg-9 col-md-8"><%=userAdmin.getNombres()%>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-3 col-md-4 label ">Apellidos</div>
-                <div class="col-lg-9 col-md-8"><%=userAdmin.getApellidos()%>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-3 col-md-4 label">Correo</div>
-                <div class="col-lg-9 col-md-8"><%=userAdmin.getCorreoPucp()%>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-3 col-md-4 label">DNI</div>
-                <div class="col-lg-9 col-md-8"><%=userAdmin.getDni()%>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-3 col-md-4 label">Celular</div>
-                <div class="col-lg-9 col-md-8"><%=userAdmin.getCelular()%>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-3 col-md-4 label">Categoría</div>
-                <div class="col-lg-9 col-md-8"><%=userAdmin.getCategorias()%>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-3 col-md-4 label">Rol</div>
-                <div class="col-lg-9 col-md-8"><%=userAdmin.getRol()%>
-                </div>
-              </div>
-
             </div>
 
-            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+            <div class="tab-pane fade consentimientos pt-3" id="consentmientos">
+              <h5 class="card-title">Consentimientos</h5>
+              <!-- Documentos de consentimiento -->
+            </div>
 
-              <!-- Profile Edit Form -->
-              <form class="needs-validation" method="post"
-                    action="<%=request.getContextPath()%>/Admin?action=CambiarDatos"
-                    novalidate enctype="multipart/form-data">
-                <input class="form-control" id="idUsuario" type="hidden"
-                       name="id" value="<%=userAdmin.getIdUsuarios()%>">
-
-                <div class="row mb-3">
-                  <label for="profileImage"
-                         class="col-md-4 col-lg-3 col-form-label">Imagen de
-                    Perfil</label>
-                  <div class="col-md-8 col-lg-9">
-
-                    <div style="display: inline-block; position: relative; width: 150px; height: 150px; overflow: hidden; border-radius: 50%;">
-                      <% DaoUsuarios daoUsersRegistro2 = new DaoUsuarios();%>
-                      <%AdminServlet serv2 = new AdminServlet();%>
-                      <%ArrayList<Usuarios> lista_Usuarios2 = daoUsersRegistro2.obtenerlistaFotoNull();%>
-                      <%boolean validacion2 = serv2.Admin_tiene_foto_null(lista_Usuarios2, userAdmin.getIdUsuarios());%>
-                      <%if (validacion2) {%>
-                      <img src="assets/img/fotosPerfil/perfilDefault.png"
-                           height="150" width="150" alt="Profile"
-                           style="width: auto; height: 100%; margin-left: -10px;">
-                      <%} else {%>
-                      <img height="150" width="150" alt="Profile"
-                           id="profileImage"
-                           src="<%=request.getContextPath()%>/Image?action=lista_imagen_perfil_sql&id=<%=userAdmin.getIdUsuarios()%>"
-                           style="width: auto; height: 100%; margin-left: -10px;"/>
-                      <%}%>
-                    </div>
-                    <div class="pt-2">
-                      <input style="display: none;" type="file"
-                             id="foto_subida" name="foto_subida"
-                             accept="image/*">
-                      <label for="foto_subida"
-                             class="btn btn-primary btn-sm"><i
-                              class="bi bi-upload"></i></label>
-                      <button type="submit" class="btn btn-danger btn-sm"
-                              formaction="<%=request.getContextPath()%>/Admin?action=Borrar_Foto_Perfil"
-                              title="Remove my profile image"><i
-                              class="bi bi-trash"></i></button>
+            <div class="tab-pane fade mensajes pt-3" id="mensajes">
+              <h5 class="card-title">Mensajes</h5>
+              <!-- seccion mensajes -->
+            </div>
+            <div class="tab-pane fade cuestionarios pt-3" id="cuestionarios">
+              <h5 class="card-title">Cuestionarios</h5>
+              <!-- seccion cuestionarios -->
+            </div>
+            <div class="tab-pane fade formularios pt-3" id="formularios">
+              <h5 class="card-title">Formularios</h5>
+              <!-- seccion formularios -->
+            </div>
+            <div class="tab-pane fade tratamiento pt-3" id="tratamiento">
+              <h5 class="card-title">Tratamiento</h5>
+              <!-- seccion tratamiento -->
+            </div>
+            <div class="tab-pane fade documentos-anexados pt-3" id="documentos-anexados">
+              <h5 class="card-title">Documentos Anexados</h5>
+              <!-- seccion doc anexados -->
+            </div>
+            <div class="tab-pane fade informacion-personal pt-3" id="informacion-personal">
+              <div class="row">
+                <div class="col-lg-3 col-md-4 font-weight-bold">Información personal</div>
+                <div class="col-lg-9 col-md-8">
+                  <div class="row mb-3">
+                    <div class="col-md-3"><img src="ruta-de-la-imagen" alt="Foto del paciente" class="img-fluid"></div>
+                    <div class="col-md-9">
+                      <h4 th:text="${paciente.nombre} +' '+ ${paciente.apellido}"></h4>
+                      <div><strong>Seguro médico:</strong> <span th:text="${paciente.seguroMedico}"></span></div>
+                      <div><strong>Teléfono:</strong> <span th:text="${paciente.telefono}"></span></div>
+                      <div><strong>Correo:</strong> <span th:text="${paciente.correo}"></span></div>
+                      <div><strong>Dirección:</strong> <span th:text="${paciente.direccion}"></span></div>
+                      <div><strong>Distrito:</strong> <span th:text="${paciente.distrito}"></span></div>
+                      <div><strong>Fecha de nacimiento:</strong> <span th:text="${paciente.fechaNacimiento}"></span></div>
+                      <div><strong>Género:</strong> <span th:text="${paciente.genero}"></span></div>
                     </div>
                   </div>
                 </div>
-
-                <input name="ID Usuario" type="hidden" class="form-control"
-                       id="ID Usuario" value="<%=userAdmin.getIdUsuarios()%>">
-
-                <div class="row mb-3">
-                  <label for="Codigo"
-                         class="col-md-4 col-lg-3 col-form-label">Código</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input minlength="8" maxlength="8" required
-                           name="Codigo"
-                           type="number" class="form-control" id="Codigo"
-                           value="<%=userAdmin.getCodigoPucp()%>">
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <label for="Nombres"
-                         class="col-md-4 col-lg-3 col-form-label">Nombres</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input required name="Nombres" type="text"
-                           class="form-control" id="Nombres"
-                           value="<%=userAdmin.getNombres()%>">
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <label for="Apellidos"
-                         class="col-md-4 col-lg-3 col-form-label">Apellidos</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input required name="Apellidos" type="text"
-                           class="form-control" id="Apellidos"
-                           value="<%=userAdmin.getApellidos()%>">
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <label for="Correo"
-                         class="col-md-4 col-lg-3 col-form-label">Correo</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input required name="Correo PUCP" type="text"
-                           class="form-control" id="Correo"
-                           value="<%=userAdmin.getCorreoPucp()%>">
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <label for="DNI"
-                         class="col-md-4 col-lg-3 col-form-label">DNI</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input required name="DNI" type="number"
-                           class="form-control" id="DNI"
-                           value="<%=userAdmin.getDni()%>">
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <label for="Celular"
-                         class="col-md-4 col-lg-3 col-form-label">Celular</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input required min="1" max="999999999999"
-                           name="Celular"
-                           type="number" class="form-control" id="Celular"
-                           value="<%=userAdmin.getCelular()%>">
-                  </div>
-                </div>
-
-                <input name="Rol" type="hidden" class="form-control" id="Rol"
-                       value="<%=userAdmin.getRol()%>">
-
-                <div class="row mb-3">
-                  <label for="Categoría"
-                         class="col-md-4 col-lg-3 col-form-label">Categoría</label>
-                  <div class="col-md-8 col-lg-9">
-                    <select disabled class="form-select"
-                            name="Categoría">
-                      <%for (String categoria : categorias) {%>
-                      <option value="<%=categoria%>" <%=categoria.equals(userAdmin.getCategorias()) ? "selected" : ""%>><%=categoria%>
-                      </option>
-                      <%}%>
-                    </select>
-                  </div>
-
-                  <%//NO BORRAR, NO ES DUPLICADO%>
-                  <div class="col-md-8 col-lg-9">
-                    <select hidden class="form-select" id="Categoría"
-                            name="Categoría">
-                      <option value="">
-                      </option>
-
-                    </select>
-                  </div>
-
-                </div>
-
-                <div class="text-center">
-                  <button type="submit"
-                          class="btn btn-primary"
-                          formaction="<%=request.getContextPath()%>/Admin?action=CambiarDatos"
-                  >Guardar
-                  </button>
-                </div>
-              </form><!-- End Profile Edit Form -->
+              </div>
             </div>
-
-            <div class="tab-pane fade pt-3" id="profile-change-password">
-              <!-- Change Password Form -->
-
-              <form class="needs-validation" method="post"
-                    action="<%=request.getContextPath()%>/Admin?action=actualizarPassword"
-                    novalidate>
-
-                <div class="row mb-3">
-                  <label for="currentPassword"
-                         class="col-md-4 col-lg-3 col-form-label">Contraseña
-                    actual</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input required name="password" type="password"
-                           class="form-control" id="currentPassword">
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <label for="newPassword"
-                         class="col-md-4 col-lg-3 col-form-label">Nueva
-                    contraseña</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input required name="nuevaPassword1" type="password"
-                           class="form-control" id="newPassword">
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <label for="renewPassword"
-                         class="col-md-4 col-lg-3 col-form-label">Confirmar
-                    nueva contraseña</label>
-                  <div class="col-md-8 col-lg-9">
-                    <input required name="nuevaPassword2" type="password"
-                           class="form-control" id="renewPassword">
-                  </div>
-                </div>
-
-                <%if (session.getAttribute("msgError") != null) {%>
-                <p class="text-danger"><%=session.getAttribute("msgError")%>
-                </p>
-                <%
-                session.removeAttribute("msgError");
-                }
-                %>
-
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Cambiar
-                    contraseña
-                  </button>
-                </div>
-              </form><!-- End Change Password Form -->
-
+            <div class="tab-pane fade status-del-paciente pt-3" id="status-del-paciente">
+              <h5 class="card-title">Status del pacientes</h5>
+              <!-- seccion status del paciente -->
             </div>
-
+            <div class="tab-pane fade pt-3" id="proximas-citas">
+              <h5 class="card-title">Próximas citas</h5>
+              <div class="row">
+                <div class="col-lg-9 col-md-8">
+                  <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th>Tipo de cita</th>
+                      <th>Horario</th>
+                      <th>Estado de consulta</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cita : ${citas}">
+                      <td th:text="${cita.tipo}"></td>
+                      <td th:text="${cita.horario}"></td>
+                      <td th:text="${cita.estado}"></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div><!-- End Bordered Tabs -->
 
         </div>
