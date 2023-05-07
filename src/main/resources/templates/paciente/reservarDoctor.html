@@ -34,75 +34,62 @@
             <h1 class="encabezado">Reservar Cita</h1>
             <section class="seccionPrincipal">
 
-                <div class="row" style="margin-top: 20px">
-                    <div class="col-6">
-                        <p><span class="fw-bold">Paciente:</span><span style="margin-left: 13px">Juanchito Palacios Castro</span>
-                        </p>
-                        <p><span class="fw-bold">Edad:</span><span style="margin-left: 20px">25 años</span></p>
-                        <p><span class="fw-bold">Correo:</span><span style="margin-left: 13px">juanpc98@gmail.com</span>
-                        </p>
-
+                <form method="post" th:action="@{/Paciente/confirmarReserva}">
+                    <div class="row" style="margin-top: 40px;margin-left: 20px">
+                        <div class="col-6">
+                            <p class="mb-2"><span class="fw-bold">Paciente:</span><span style="margin-left: 13px" th:text="${paciente.nombre}+' '+${paciente.apellidos}">Juanchito Palacios Castro</span></p>
+                            <p class="mb-2"><span class="fw-bold">Edad:</span><span style="margin-left: 20px" >25 años</span></p>
+                            <p class="mb-2"><span class="fw-bold">Correo:</span><span style="margin-left: 13px" th:text="${paciente.correo}">juanpc98@gmail.com</span></p>
+                            <input type="hidden" name="idPaciente" th:value="${paciente.idPaciente}">
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-2"><span class="fw-bold">Dirección:</span><span style="margin-left: 13px" th:text="${paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
+                            </p>
+                            <p class="mb-2"><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px" th:text="${paciente.telefono}">934-250-488</span>
+                            </p>
+                            <p class="mb-2"><span class="fw-bold">Seguro:</span><span style="margin-left: 13px">
+                            <select style="border-radius: 8px; padding-left: 13px; font-size: 15px">
+                                <option th:text="${paciente.seguro.nombre}"></option>
+                                <option th:each="seguro: ${seguroList}" th:value="${seguro.nombre}" th:text="${seguro.nombre}" th:if="${seguro.nombre} != ${paciente.seguro.nombre}"></option>
+                            </select>
+                        </span>
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <p><span class="fw-bold">Dirección:</span><span style="margin-left: 13px">Av. Las Nuevas Lomas, Lima</span>
-                        </p>
-                        <p><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px">934-250-488</span></p>
-                        <p><span class="fw-bold">Seguro:</span><span style="margin-left: 13px">
-                    <select style="border-radius: 8px; padding-left: 13px; font-size: 15px">
-                        <option value="">Pacifico EPS</option>
-                        <option value="">Rimac EPS</option>
-                        <option value="">Rimas seguros</option>
-                        <option value="">Pacifico seguros</option>
-                        <option value="">Mapfre</option>
-                        <option value="">Plan Salud</option>
-                        <option value="">Sin Seguro</option>
-                    </select></span>
-                        </p>
+
+                    <div class="row" style="margin-top: 20px;margin-left: 20px">
+                        <div class="col-6">
+                            <p class="mb-2"><span class="fw-bold">Doctor:</span><span style="margin-left: 13px" th:text="${doctor.nombre}+' '+${doctor.apellidos}"></span></p>
+                            <input type="hidden" name="idDoctor" th:value="${doctor.id_doctor}">
+                            <p style="margin-top: 15px"><span class="fw-bold">DNI:</span><span class="fw-bold" style="color: red">*</span>
+                            </p>
+                            <input class="form-control" style="border-radius: 8px; margin-top: 3px; width: 70%; height: 25px; font-size: 13px; border-color: #6c757d" type="text" placeholder="Ingrese su DNI" >
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-2"><span class="fw-bold">Especialidad:</span><span style="margin-left: 13px" th:text="${doctor.especialidad.nombre}"></span></p>
+                            </p>
+                            <p style="margin-top: 15px"><span class="fw-bold">Tipo de cita:</span><span class="fw-bold" style="color: red">*</span></p>
+                            <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px" name="modalidad">
+                                <option value="">--Seleccione tipo de cita--</option>
+                                <option value=0>Presencial</option>
+                                <option value=1>Virtual</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="row" style="margin-top: 20px">
-                    <div class="col-6">
-                        <p><span class="fw-bold">Especialidad:</span><span th:text="${doctor.especialidad.nombre}" style="margin-left: 13px">Cardiología</span>
-                        </p>
+                    <div class="row" style="margin-top: 20px;margin-left: 20px">
+                        <div class="col-6">
+                            <p><span class="fw-bold">Fecha:</span><span class="fw-bold" style="color: red">*</span></p>
+                            <input type="date" class="form-control"
+                                   style="border-radius: 8px; margin-top: 3px; width: 70%; height: 25px; font-size: 15px; border-color: #6c757d">
 
-                        <p style="margin-top: 15px"><span class="fw-bold">DNI:</span><span class="fw-bold"
-                                                                                           style="color: red">*</span>
-                        </p>
-                        <input class="form-control"
-                               style="border-radius: 8px; margin-top: 3px; width: 70%; height: 25px; font-size: 13px; border-color: #6c757d"
-                               type="text" placeholder="Ingrese su DNI">
-
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <p><span class="fw-bold">Doctor:</span><span
-                                style="margin-left: 13px" th:text="${doctor.nombre}+' '+${doctor.apellidos}">Juan Martinez Rondon</span></p>
-
-                        <p style="margin-top: 15px"><span class="fw-bold">Tipo de cita:</span><span class="fw-bold"
-                                                                                                    style="color: red">*</span>
-                        </p>
-                        <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px">
-                            <option value="">--Seleccione tipo de cita--</option>
-                            <option value="">Presencial</option>
-                            <option value="">Virtual</option>
-                        </select>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="botonActualizarConsentimientos">Reservar</button>
                     </div>
-                </div>
 
-                <div class="row" style="margin-top: 20px">
-                    <div class="col-6">
-                        <p><span class="fw-bold">Fecha:</span><span class="fw-bold" style="color: red">*</span></p>
-                        <input type="date" class="form-control"
-                               style="border-radius: 8px; margin-top: 3px; width: 70%; height: 25px; font-size: 15px; border-color: #6c757d">
-
-                    </div>
-                    <div class="col-6">
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <a th:href="@{/Paciente/confirmacion}" class="botonActualizarConsentimientos">Reservar</a>
-                </div>
-
+                </form>
             </section>
         </main>
 

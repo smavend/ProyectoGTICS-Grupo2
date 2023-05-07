@@ -37,5 +37,5 @@ public interface CitaRepository extends JpaRepository<Cita, String> {
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`) VALUES (?1, ?2, '2023-05-21 12:30:00', '2023-05-21 12:45:00', ?3, '0', ?4)")
-    void reservarCita(int idPaciente, String idDoctor, int modalidad, int idSede);
+    void reservarCita(String idPaciente, String idDoctor, int modalidad, int idSede);
 }

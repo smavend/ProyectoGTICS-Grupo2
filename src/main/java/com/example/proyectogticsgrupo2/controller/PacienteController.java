@@ -96,7 +96,7 @@ public class PacienteController {
     }
 
     @PostMapping("/confirmarReserva")
-    public String confirmarReserva(@RequestParam("idPaciente") int idPaciente,
+    public String confirmarReserva(@RequestParam("idPaciente") String idPaciente,
                                    @RequestParam("idDoctor") String idDoctor,
                                    @RequestParam("modalidad") int modalidad) {
         int idSede = doctorRepository.buscarIdSedeDoctor(idDoctor);
@@ -357,6 +357,8 @@ public class PacienteController {
             Doctor doctor = optionalDoctor.get();
             model.addAttribute("doctor",doctor);
         }
+        List<Seguro> seguroList = seguroRepository.findAll();
+        model.addAttribute("seguroList", seguroList);
         return "paciente/reservarDoctor";
     }
 
