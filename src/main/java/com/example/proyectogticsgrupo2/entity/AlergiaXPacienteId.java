@@ -16,12 +16,11 @@ import java.util.Objects;
 @Embeddable
 public class AlergiaXPacienteId implements Serializable {
     private static final long serialVersionUID = 4647823628345253333L;
-    @NotNull
+
     @Column(name = "alergias_id_alergia", nullable = false)
     private Integer alergiasIdAlergia;
 
     @Size(max = 8)
-    @NotNull
     @Column(name = "paciente_id_paciente", nullable = false, length = 8)
     private String pacienteIdPaciente;
 

@@ -9,16 +9,15 @@ import lombok.Setter;
 @Entity
 @Table(name = "alergia_x_paciente")
 public class AlergiaXPaciente {
-    @EmbeddedId
-    private AlergiaXPacienteId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @MapsId("alergiasIdAlergia")
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "alergias_id_alergia", nullable = false)
     private Alergia alergiasIdAlergia;
 
-    @MapsId("pacienteIdPaciente")
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "paciente_id_paciente", nullable = false)
     private Paciente pacienteIdPaciente;
 

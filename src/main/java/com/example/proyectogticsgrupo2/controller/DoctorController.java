@@ -254,7 +254,7 @@ public class DoctorController {
     }
     @GetMapping("/historialClinico")
     public String hClinico(Model model, @RequestParam("id") String id) {
-        List<AlergiaXPacienteId> alergiaList= alergiaPacienteRepository.findByPacienteIdPaciente(id);
+        List<AlergiaXPacienteId> alergiaList= alergiaPacienteRepository.listarAlergiasPaciente(id);
         List<TratamientoDTO> tratamientoList=citaRepository.listarTratamientos(id);
         Optional<Paciente> optionalPaciente=pacienteRepository.findById(id);
         List<ListaBuscadorDoctor> listProxCita=citaRepository.listarPorPacienteProxCitas(id);
