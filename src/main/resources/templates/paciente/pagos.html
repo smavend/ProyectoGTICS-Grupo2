@@ -60,7 +60,7 @@
                             <td>-</td>
                             <td>Pendiente</td>
                             <td>
-                                <a class="botonPagar">Pagar</a>
+                                <button type="button" class="botonPagar" data-bs-toggle="modal" data-bs-target="#modal-pago">Pagar</button>
                             </td>
                         </tr>
                         <tr>
@@ -121,6 +121,66 @@
             <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
 
+            <!-- Modal -->
+            <div class="modal fade" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto" style="background-color: gainsboro">
+                            <p>
+                                <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con tarjeta</h5>
+                                <img th:src="@{/assets/img/cards.png}" style="height: 50px" class="col-lg-4">
+                                <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </p>
+
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre del titular de la tarjeta</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-person-fill"></i></i></span>
+                                        </div>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Número de la tarjeta</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control">
+                                    </div>
+
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Fecha de expiración</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Código de seguridad</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Pagar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main><!-- End #main -->
 
 
@@ -131,5 +191,10 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-DRC0ZmUBHbCwVPmKj7V/btg9QWdx7VqfS2yz/7+T34G8WssZ/wiA4GL4g25O4Nc6"
+                crossorigin="anonymous"></script>
+
     </body>
 </html>
