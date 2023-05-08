@@ -379,9 +379,9 @@
                     </thead>
                     <tbody>
                     <!-- Iterar sobre las alergias del paciente -->
-                    <tr th:each="alergia, i : ${paciente.alergias}">
+                    <tr th:each="alergia, i : ${alergiaList}">
                       <th scope="row" th:text="${i.index + 1}"></th>
-                      <td th:text="${alergia.nombre}"></td>
+                      <td th:text="${alergia.getNombre()}"></td>
                     </tr>
                     </tbody>
                   </table>
@@ -408,8 +408,30 @@
             </div>
             <div class="tab-pane fade tratamiento pt-3" id="tratamiento">
               <h5 class="card-title">Tratamiento</h5>
-              <!-- seccion tratamiento -->
+              <div class="row">
+                <div class="col-lg-9 col-md-8">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Diagnóstico-Tratamiento</th>
+                      <th>Receta</th>
+                      <th>Fecha de emisión</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tratamiento, i : ${ListaTratamiento}">
+                      <td th:text="${i.index + 1}"></td>
+                      <td th:text="${tratamiento.getDiagnostico()}"></td>
+                      <td th:text="${tratamiento.getReceta()}"></td>
+                      <td th:text="${tratamiento.getFin()}"></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
+
             <div class="tab-pane fade documentos-anexados pt-3" id="documentos-anexados">
               <h5 class="card-title">Documentos Anexados</h5>
               <!-- seccion doc anexados -->
@@ -421,14 +443,14 @@
                   <div class="row mb-3">
                     <div class="col-md-3"><img src="ruta-de-la-imagen" alt="Foto del paciente" class="img-fluid"></div>
                     <div class="col-md-9">
-                      <h4 th:text="${paciente.nombre} +' '+ ${paciente.apellido}"></h4>
-                      <div><strong>Seguro médico:</strong> <span th:text="${paciente.seguroMedico}"></span></div>
-                      <div><strong>Teléfono:</strong> <span th:text="${paciente.telefono}"></span></div>
-                      <div><strong>Correo:</strong> <span th:text="${paciente.correo}"></span></div>
-                      <div><strong>Dirección:</strong> <span th:text="${paciente.direccion}"></span></div>
-                      <div><strong>Distrito:</strong> <span th:text="${paciente.distrito}"></span></div>
-                      <div><strong>Fecha de nacimiento:</strong> <span th:text="${paciente.fechaNacimiento}"></span></div>
-                      <div><strong>Género:</strong> <span th:text="${paciente.genero}"></span></div>
+                      <h4 th:text="${paciente.getNombre()} +' '+ ${paciente.getApellidos()}"></h4>
+                      <div><strong>Seguro médico:</strong> <span th:text="${paciente.seguro.getNombre()}"></span></div>
+                      <div><strong>Teléfono:</strong> <span th:text="${paciente.getTelefono()}"></span></div>
+                      <div><strong>Correo:</strong> <span th:text="${paciente.getCorreo()}"></span></div>
+                      <div><strong>Dirección:</strong> <span th:text="${paciente.getDireccion()}"></span></div>
+                      <div><strong>Distrito:</strong> <span th:text="${paciente.getDistrito()}"></span></div>
+                      <div><strong>Fecha de nacimiento:</strong> <span th:text="${paciente.getFechanacimiento()}"></span></div>
+                      <div><strong>Género:</strong> <span th:text="${paciente.getGenero()}"></span></div>
                     </div>
                   </div>
                 </div>
@@ -451,10 +473,21 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="cita : ${citas}">
-                      <td th:text="${cita.tipo}"></td>
-                      <td th:text="${cita.horario}"></td>
-                      <td th:text="${cita.estado}"></td>
+                    <tr th:each="cita : ${lisProxCitas}">
+                      <td style="font-size: 1rem">
+                        <h6 th:text="${ cita.modalidad==0 ? 'Presencial' : 'Virtual'}"></h6>
+                      </td>
+                      <td th:text="${cita.getInicio()}"></td>
+                      <td style="font-size: 1rem;color: black">
+                        <h6 th:if="${cita.estado == 0}"
+                            th:text="'Próxima cita'"></h6>
+                        <h6 th:if="${cita.estado == 1}"
+                            th:text="'Registrado en caja'"></h6>
+                        <h6 th:if="${cita.estado == 2}"
+                            th:text="'En espera'"></h6>
+                        <h6 th:if="${cita.estado == 3}"
+                            th:text="'En consulta'"></h6>
+                      </td>
                     </tr>
                     </tbody>
                   </table>

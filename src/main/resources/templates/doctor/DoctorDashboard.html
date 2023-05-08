@@ -566,7 +566,7 @@
                                                                              height="70" width="70" alt="Profile">
                                                                     </td>
                                                                     <td style="font-size: 1rem; color: black">
-                                                                        <a th:href="@{/doctor/dashboard}"
+                                                                        <a th:href="@{'/doctor/historialClinico' + '?id=' + ${paciente.id_paciente}}"
                                                                            th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
 
 

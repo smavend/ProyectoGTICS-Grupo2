@@ -2,9 +2,12 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
 import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
+import com.example.proyectogticsgrupo2.dto.TratamientoDTO;
+import com.example.proyectogticsgrupo2.entity.Alergia;
 import com.example.proyectogticsgrupo2.entity.Cita;
 import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Paciente;
+import com.example.proyectogticsgrupo2.repository.AlergiaRepository;
 import com.example.proyectogticsgrupo2.repository.CitaRepository;
 import com.example.proyectogticsgrupo2.repository.DoctorRepository;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
@@ -31,10 +34,14 @@ public class DoctorController {
     private String idPaciente;
     private int idCita;
     private String fecha;
-    public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository) {
+    private final AlergiaRepository alergiaRepository;
+
+    public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
+                            AlergiaRepository alergiaRepository) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
+        this.alergiaRepository = alergiaRepository;
     }
 
     @GetMapping(value={"/dashboard","/",""})
@@ -249,9 +256,22 @@ public class DoctorController {
         return "doctor/DoctorDashboard";
     }
     @GetMapping("/historialClinico")
-    public String hClinico(Model model) {
+    public String hClinico(Model model, @RequestParam("id") String id) {
+        List<Alergia> alergiaList= alergiaRepository.buscarPorPacienteId(id);
+        List<TratamientoDTO> tratamientoList=citaRepository.listarTratamientos(id);
+        Optional<Paciente> optionalPaciente=pacienteRepository.findById(id);
+        List<ListaBuscadorDoctor> listProxCita=citaRepository.listarPorPacienteProxCitas(id);
 
-        return "doctor/DoctorHistorialClinico";
+        if (optionalPaciente.isPresent()) {
+            Paciente paciente=optionalPaciente.get();
+            model.addAttribute("paciente",paciente);
+            model.addAttribute("alergiaList", alergiaList);
+            model.addAttribute("ListaTratamiento", tratamientoList);
+            model.addAttribute("lisProxCitas", listProxCita);
+            return "doctor/DoctorHistorialClinico";
+        } else {
+            return "redirect:/";
+        }
     }
 
 
