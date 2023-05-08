@@ -72,12 +72,8 @@
                                     <div class="nombreDoctor" th:text="${doctor.nombre} +' '+ ${doctor.apellidos}">Juan Martinez Rondon</div>
                                     <div class="disponibilidadDoctor">
                                         Disponibilidad
-                                        <div class="disponibilidadDoctorDato">
-                                            MARTES: 13:00 - 18:00
-                                        </div>
-                                        <div class="disponibilidadDoctorDato">
-                                            JUEVES: 08:00 - 12:00
-                                        </div>
+                                        <div class="disponibilidadDoctorDato" th:text="'MARTES: '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+' - '+${doctor.horario.disponibilidad_fin.substring(0,5)}"></div>
+                                        <div class="disponibilidadDoctorDato" th:text="'JUEVES: '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+' - '+${doctor.horario.disponibilidad_fin.substring(0,5)}"></div>
                                     </div>
                                     <div class="d-flex justify-content-center align-items-center py-3">
                                         <a class="botonVerMasDoctor" th:href="@{/Paciente/perfilDoctor(idDoctor=${doctor.id_doctor})}">Ver Más</a>
