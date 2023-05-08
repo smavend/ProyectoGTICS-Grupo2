@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.dto.AlergiasPacienteDTO;
 import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
 import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
 import com.example.proyectogticsgrupo2.dto.TratamientoDTO;
@@ -254,7 +255,7 @@ public class DoctorController {
     }
     @GetMapping("/historialClinico")
     public String hClinico(Model model, @RequestParam("id") String id) {
-        List<AlergiaXPacienteId> alergiaList= alergiaPacienteRepository.listarAlergiasPaciente(id);
+        List<AlergiasPacienteDTO> alergiaList= alergiaRepository.listarAlergiasPaciente(id);
         List<TratamientoDTO> tratamientoList=citaRepository.listarTratamientos(id);
         Optional<Paciente> optionalPaciente=pacienteRepository.findById(id);
         List<ListaBuscadorDoctor> listProxCita=citaRepository.listarPorPacienteProxCitas(id);

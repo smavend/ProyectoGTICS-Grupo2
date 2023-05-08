@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.repository;
 
+import com.example.proyectogticsgrupo2.dto.AlergiasPacienteDTO;
 import com.example.proyectogticsgrupo2.dto.TratamientoDTO;
 import com.example.proyectogticsgrupo2.entity.Alergia;
 import com.example.proyectogticsgrupo2.entity.AlergiaXPaciente;
@@ -12,7 +13,5 @@ import java.util.List;
 
 @Repository
 public interface AlergiaPacienteRepository extends JpaRepository<AlergiaXPaciente, Long> {
-    @Query(value = "SELECT * FROM proyectogtics.alergias a inner join proyectogtics.alergia_x_paciente axp on (a.id_alergia=axp.alergias_id_alergia) where axp.paciente_id_paciente=?1",
-            nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
-    List<AlergiaXPacienteId> listarAlergiasPaciente(String id);
+
 }
