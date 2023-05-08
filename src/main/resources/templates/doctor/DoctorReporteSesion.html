@@ -10,7 +10,7 @@
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        <title>Plantilla - Doctor</title>
+        <title>Sesión - Doctor</title>
         <meta content="" name="description">
         <meta content="" name="keywords">
 
@@ -215,13 +215,13 @@
 
                         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                             <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                            <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
+                            <span th:text="${doctor.nombre+' '+doctor.apellidos}" class="d-none d-md-block dropdown-toggle ps-2"></span>
                         </a><!-- End Profile Iamge Icon -->
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6>Jorge Dominguez</h6>
-                                <span>Administrador de sede</span>
+                                <h6 th:text="${doctor.nombre+' '+doctor.apellidos}"></h6>
+                                <span>Doctor de sede "X"</span>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -238,7 +238,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <a class="dropdown-item d-flex align-items-center" th:href="@{/doctor/configuracion}">
                                     <i class="bi bi-gear"></i>
                                     <span>Configuraciones</span>
                                 </a>

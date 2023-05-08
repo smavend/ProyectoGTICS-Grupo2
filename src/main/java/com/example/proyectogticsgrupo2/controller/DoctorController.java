@@ -32,6 +32,7 @@ public class DoctorController {
     private final AlergiaRepository alergiaRepository;
     private final AlergiaPacienteRepository alergiaPacienteRepository;
 
+
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
                             AlergiaRepository alergiaRepository,
                             AlergiaPacienteRepository alergiaPacienteRepository) {
@@ -47,6 +48,9 @@ public class DoctorController {
         List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas("10304011"); //CAMBIAR POR ID SESION
         List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes("10304011"); //CAMBIAR POR ID SESION
         ArrayList<String> listaHorarios= new ArrayList<>();
+        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Doctor doctor= doctorOptional.get();
+
 
         // Transformar LocalDateTime a LocalDate
         optionalCita.forEach(cita -> {
@@ -64,7 +68,7 @@ public class DoctorController {
 
 
 
-
+        model.addAttribute("doctor", doctor);
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", optionalCita);
         model.addAttribute("listaPacientes", optionalCita2);
@@ -77,6 +81,9 @@ public class DoctorController {
     public String recibo(Model model) {
         List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos("10304011");
 
+        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Doctor doctor= doctorOptional.get();
+        model.addAttribute("doctor", doctor);
         model.addAttribute("listaRecibos", optionalCita);//CAMBIAR POR ID SESION
 
         return "doctor/DoctorRecibos";
@@ -111,12 +118,22 @@ public class DoctorController {
             float floatSearchField = Float.parseFloat(searchField);
             System.out.println(Float.valueOf(floatSearchField).intValue());
             List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosPago("10304011", Float.toString(floatSearchField));
+
+            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Doctor doctor= doctorOptional.get();
+
+            model.addAttribute("doctor", doctor);
             model.addAttribute("listaRecibos", optionalCita);
 
             // La variable es de tipo float
         } catch (NumberFormatException e) {
             // La variable no es de tipo float
             List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosNombre("10304011",searchField);
+
+            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Doctor doctor= doctorOptional.get();
+
+            model.addAttribute("doctor", doctor);
             model.addAttribute("listaRecibos", optionalCita);
         }
 
@@ -129,6 +146,10 @@ public class DoctorController {
     @GetMapping("/calendario")
     public String reportes(Model model){
 
+        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Doctor doctor= doctorOptional.get();
+
+        model.addAttribute("doctor", doctor);
 
         return "doctor/DoctorCalendario";
     }
@@ -148,6 +169,9 @@ public class DoctorController {
 
             setFecha(fecha);
 
+            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Doctor doctor= doctorOptional.get();
+            model.addAttribute("doctor", doctor);
             model.addAttribute("paciente",paciente);
             model.addAttribute("fecha",fecha);
             model.addAttribute("cita",cita);
@@ -161,14 +185,19 @@ public class DoctorController {
 
     @GetMapping("/verCuestionario")
     public String verCuestionario(Model model, @RequestParam("id") String id){
+        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
 
-
+        Doctor doctor= doctorOptional.get();
+        model.addAttribute("doctor", doctor);
         return "doctor/DoctorVerCuestionario";
     }
 
     @GetMapping("/mensajeria")
     public String mensajeria(Model model){
         List<ListaBuscadorDoctor> citaList=citaRepository.listarPorDoctorProxCitas("10304011"); //CAMBIAR CON ID DE SESION
+        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Doctor doctor= doctorOptional.get();
+        model.addAttribute("doctor", doctor);
         model.addAttribute("listaCitas",citaList);
         return "doctor/DoctorMensajería";
     }
@@ -217,6 +246,11 @@ public class DoctorController {
             listaHorarios.add(horaFinal);
         });
 
+        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Doctor doctor= doctorOptional.get();
+
+        model.addAttribute("doctor", doctor);
+
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", optionalCita);//CAMBIAR POR ID SESION
         model.addAttribute("listaPacientes", optionalCita2);//CAMBIAR POR ID SESION
@@ -247,6 +281,11 @@ public class DoctorController {
             listaHorarios.add(horaFinal);
         });
 
+        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Doctor doctor= doctorOptional.get();
+
+        model.addAttribute("doctor", doctor);
+
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", optionalCita2);//CAMBIAR POR ID SESION
         model.addAttribute("listaPacientes", optionalCita);//CAMBIAR POR ID SESION
@@ -260,8 +299,13 @@ public class DoctorController {
         Optional<Paciente> optionalPaciente=pacienteRepository.findById(id);
         List<ListaBuscadorDoctor> listProxCita=citaRepository.listarPorPacienteProxCitas(id);
 
+
+
         if (optionalPaciente.isPresent()) {
+            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Doctor doctor= doctorOptional.get();
             Paciente paciente=optionalPaciente.get();
+            model.addAttribute("doctor", doctor);
             model.addAttribute("paciente",paciente);
             model.addAttribute("alergiaList", alergiaList);
             model.addAttribute("ListaTratamiento", tratamientoList);
@@ -272,12 +316,19 @@ public class DoctorController {
         }
     }
 
+    @GetMapping("/configuracion")
+    public String configuracion(Model model) {
 
-    @GetMapping("/prueba")
-    public String prueba(Model model){
+        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Doctor doctor= doctorOptional.get();
 
-        return "doctor/prueba";
+        model.addAttribute("doctor", doctor);
+        return "doctor/DoctorConfiguracion";
+
     }
+
+
+
 
     public String getIdPaciente() {
         return idPaciente;
