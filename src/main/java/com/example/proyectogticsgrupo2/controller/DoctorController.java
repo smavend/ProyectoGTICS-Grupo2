@@ -3,14 +3,8 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
 import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
 import com.example.proyectogticsgrupo2.dto.TratamientoDTO;
-import com.example.proyectogticsgrupo2.entity.Alergia;
-import com.example.proyectogticsgrupo2.entity.Cita;
-import com.example.proyectogticsgrupo2.entity.Doctor;
-import com.example.proyectogticsgrupo2.entity.Paciente;
-import com.example.proyectogticsgrupo2.repository.AlergiaRepository;
-import com.example.proyectogticsgrupo2.repository.CitaRepository;
-import com.example.proyectogticsgrupo2.repository.DoctorRepository;
-import com.example.proyectogticsgrupo2.repository.PacienteRepository;
+import com.example.proyectogticsgrupo2.entity.*;
+import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,13 +29,16 @@ public class DoctorController {
     private int idCita;
     private String fecha;
     private final AlergiaRepository alergiaRepository;
+    private final AlergiaPacienteRepository alergiaPacienteRepository;
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
-                            AlergiaRepository alergiaRepository) {
+                            AlergiaRepository alergiaRepository,
+                            AlergiaPacienteRepository alergiaPacienteRepository) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
         this.alergiaRepository = alergiaRepository;
+        this.alergiaPacienteRepository = alergiaPacienteRepository;
     }
 
     @GetMapping(value={"/dashboard","/",""})
@@ -257,7 +254,7 @@ public class DoctorController {
     }
     @GetMapping("/historialClinico")
     public String hClinico(Model model, @RequestParam("id") String id) {
-        List<Alergia> alergiaList= alergiaRepository.buscarPorPacienteId(id);
+        List<AlergiaXPacienteId> alergiaList= alergiaPacienteRepository.findByPacienteIdPaciente(id);
         List<TratamientoDTO> tratamientoList=citaRepository.listarTratamientos(id);
         Optional<Paciente> optionalPaciente=pacienteRepository.findById(id);
         List<ListaBuscadorDoctor> listProxCita=citaRepository.listarPorPacienteProxCitas(id);
