@@ -342,10 +342,12 @@ public class SuperAdminController {
                 AdministrativoPorEspecialidadPorSede administrativoPorEspecialidadPorSede = new AdministrativoPorEspecialidadPorSede();
                 administrativoPorEspecialidadPorSede.setSedeId(sede_enviar);
                 administrativoPorEspecialidadPorSede.setAdministrativoId(administrativonuevo);
+
                 administrativoPorEspecialidadPorSede.setTorre("Por Asignar");
                 administrativoPorEspecialidadPorSede.setPiso("Por Asignar");
                 String torre = "N.D";
                 String piso = "N.D";
+
                 Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
                 administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
                 administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);

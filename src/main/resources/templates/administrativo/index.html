@@ -50,26 +50,8 @@
   <!-- End Header -->
 
   <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link " th:href="@{/administrativo}">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" th:href="@{/administrativo/mensajeria}">
-          <i class="bi bi-people"></i>
-          <span>Mensajería</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-
-    </ul>
-
-  </aside><!-- End Sidebar-->
+  <aside th:replace="~{administrativo/fragments/header.html :: aside (active='dashboard')}"></aside>
+  <!-- End Sidebar-->
 
   <main id="main" class="main">
 
@@ -115,12 +97,12 @@
                       <tr th:each="temp,obj:${listaTemp}" >
                         <td th:text="${obj.index+1}"></td>
                         <td th:text="${temp.nombre+' '+temp.apellidos}"></td>
-                        <td th:each="dia: ${dias}" th:if="${temp.idTemporal==dia.getId_usuario_temporal()}">
+                        <td th:each="dia: ${dias}" th:if="${temp.id_temporal==dia.getId_usuario_temporal()}">
                           <span th:text="|Hace ${dia.getDias()} días|"></span>
                         </td>
                         <td th:text="${temp.correo}"></td>
                         <td class="centered"><span class="badge bg-secondary">Invitado</span></td>
-                        <td><a th:href="@{'/administrativo/editar/invitado?id=' + ${temp.idTemporal}}"><i class="bi bi-pen"></i></a></td>
+                        <td><a th:href="@{'/administrativo/editar/invitado?id=' + ${temp.id_temporal}}"><i class="bi bi-pen"></i></a></td>
                       </tr>
                       <tr th:each="paciente,obj:${listaPacientes}">
                         <td th:text="${obj.index + 1 + listaTemp.size()}"></td>
@@ -215,7 +197,7 @@
         ],
         "language": {
           "lengthMenu": "Mostrar _MENU_ registros por página",
-          "zeroRecords": "Ningún registro encontrado",
+          "zeroRecords": "Ningún paciente encontrado",
           "info": "Página _PAGE_ de _PAGES_",
           "infoEmpty": "No hay registros disponibles",
           "infoFiltered": "(filtrado de _MAX_ registros)",

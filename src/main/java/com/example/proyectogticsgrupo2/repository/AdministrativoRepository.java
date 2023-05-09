@@ -16,5 +16,5 @@ public interface AdministrativoRepository extends JpaRepository<Administrativo, 
     @Query(value = "INSERT INTO administrativo (id_administrativo, nombre, apellidos, estado, correo) VALUES (:dni,:nombres,:apellidos,0, 'administrativoX@clinica.com')", nativeQuery = true)
     void insertarAdministrativo(@Param("dni") String dni, @Param("nombres") String nombres, @Param("apellidos") String apellidos);
 
-
+    public Administrativo findByCorreo(String correo);
 }

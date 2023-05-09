@@ -92,17 +92,18 @@
 
               <!-- General Form Elements -->
               <form method="post" th:action="@{/administrativo/guardar/invitado}" class="row g-3" th:object="${temporal}">
-                <input type="hidden" name="idTemporal" th:value="*{idTemporal}">
+                <input type="hidden" name="id_temporal" th:value="*{id_temporal}">
+                <input type="hidden" name="dni" th:value="*{dni}">
                 <div class="col-md-6">
-                  <label for="nombre" class="form-label">Nombre</label>
+                  <label class="form-label">Nombre</label>
                   <input type="text" class="form-control" th:field="*{nombre}">
                 </div>
                 <div class="col-md-6">
-                  <label for="apellidos" class="form-label">Apellidos</label>
+                  <label class="form-label">Apellidos</label>
                   <input type="text" class="form-control" th:field="*{apellidos}">
                 </div>
                 <div class="col-md-6">
-                  <label for="correo" class="form-label">Correo</label>
+                  <label class="form-label">Correo</label>
                   <input type="email" class="form-control" th:field="*{correo}">
                 </div>
                 <div class="text-center">
