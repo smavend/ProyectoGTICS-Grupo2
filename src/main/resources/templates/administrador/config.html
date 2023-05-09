@@ -29,7 +29,7 @@
 
   <!-- Template Main CSS File -->
   <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
-  <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
+  <link th:href="@{/assets/css/styleadministradorDark.css}" rel="stylesheet">
 
 
   <link href="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.css" rel="stylesheet"/>
@@ -314,23 +314,38 @@
   </ul>
 
 </aside><!-- End Sidebar-->
-
 <main id="main" class="main ">
 
   <div class="container my-5">
-    <h1>Cambio de Tema con Bootstrap 5</h1>
-    <p>Este es un ejemplo de cómo cambiar el tema de una página utilizando Bootstrap 5 y JavaScript.</p>
-    <div class="form-check form-switch mb-3">
-      <input class="form-check-input" type="checkbox" id="darkModeSwitch">
-      <label class="form-check-label" for="darkModeSwitch">Modo Oscuro</label>
-    </div>
     <div class="card">
       <div class="card-header">
-        Ejemplo de Tema
+        <h1 class="card-title">Configuraciones</h1>
       </div>
-      <div class="card-body">
-        <p>Este es un ejemplo de texto en la página.</p>
-        <button class="btn btn-primary">Botón de Ejemplo</button>
+      <div class="card-body p-3">
+        <form>
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+            <label class="form-check-label" for="darkModeSwitch">Modo Oscuro</label>
+          </div>
+          <hr>
+          <div class="form-group">
+            <label for="language-select">Idioma</label>
+            <select class="form-select" id="language-select">
+              <option value="es">Español</option>
+              <option value="en">Inglés</option>
+            </select>
+          </div>
+          <hr>
+          <div class="form-group">
+            <label for="notification-checkbox">Notificaciones</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="notification-checkbox">
+              <label class="form-check-label" for="notification-checkbox">Habilitar notificaciones por correo electrónico</label>
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-primary">Guardar configuraciones</button>
+        </form>
       </div>
     </div>
   </div>
@@ -339,8 +354,6 @@
 
 <!-- ======= Footer ======= -->
 
-
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
