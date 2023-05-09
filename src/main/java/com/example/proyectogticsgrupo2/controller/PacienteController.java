@@ -37,8 +37,9 @@ public class PacienteController {
     final PacientePorConsentimientoRepository pacientePorConsentimientoRepository;
     final CitaRepository citaRepository;
     final CitaTemporalRepository citaTemporalRepository;
+    final PagoRepository pagoRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, CitaTemporalRepository citaTemporalRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
@@ -49,6 +50,7 @@ public class PacienteController {
         this.pacientePorConsentimientoRepository = pacientePorConsentimientoRepository;
         this.citaRepository = citaRepository;
         this.citaTemporalRepository = citaTemporalRepository;
+        this.pagoRepository = pagoRepository;
     }
 
     /* INICIO */
@@ -438,15 +440,23 @@ public class PacienteController {
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
         }
+        List<Pago> pagoList = pagoRepository.findAll();
+        model.addAttribute("pagoList", pagoList);
         return "paciente/pagos";
     }
 
     @GetMapping("/recibo")
-    public String verReciboPago(Model model) {
+    public String verReciboPago(@RequestParam("idPago") int idPago,
+                                Model model) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
+        }
+        Optional<Pago> optionalPago = pagoRepository.findById(idPago);
+        if (optionalPago.isPresent()) {
+            Pago pago = optionalPago.get();
+            model.addAttribute("pago", pago);
         }
         return "paciente/recibo";
     }

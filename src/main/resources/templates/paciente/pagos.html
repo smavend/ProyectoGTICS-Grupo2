@@ -54,7 +54,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Lorem ipsum dol amet consectetur</td>
+                            <td>Psicología</td>
                             <td>-</td>
                             <td>S/ 130.00</td>
                             <td>-</td>
@@ -63,46 +63,17 @@
                                 <button type="button" class="botonPagar" data-bs-toggle="modal" data-bs-target="#modal-pago">Pagar</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>Facere ullam ratione qui</td>
-                            <td>13/12/2022</td>
+                        <tr th:each="pago: ${pagoList}">
+                            <td th:text="${pago.cita.doctor.especialidad.nombre}">Facere ullam ratione qui</td>
+                            <td th:text="${pago.fechaCancelada.substring(0,10)}">13/12/2022</td>
                             <td>S/ 250.00</td>
-                            <td>Visa ***1234</td>
-                            <td>Cancelado</td>
+                            <td th:text="${pago.tipoPago}">Visa ***1234</td>
+                            <td th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
                             <td>
-                                <a class="botonVerRecibo" th:href="@{/Paciente/recibo}">Ver recibo</a>
+                                <a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a>
                             </td>
                         </tr>
-                        <tr>
-                            <td>Ipsum dolor, sit amet cere ea</td>
-                            <td>15/04/2021</td>
-                            <td>S/ 30.00</td>
-                            <td>Efectivo</td>
-                            <td>Cancelado</td>
-                            <td>
-                                <a class="botonVerRecibo" href="#">Ver recibo</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Aspsum dolor, siters ametc cere ea</td>
-                            <td>25/02/2021</td>
-                            <td>S/ 200.00</td>
-                            <td>Crédito ***1234</td>
-                            <td>Cancelado</td>
-                            <td>
-                                <a class="botonVerRecibo" href="#">Ver recibo</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Consequatur culpa deserunt minima tenetur dolorem</td>
-                            <td>03/09/2020</td>
-                            <td>S/ 60.00</td>
-                            <td>Efectivo</td>
-                            <td>Cancelado</td>
-                            <td>
-                                <a class="botonVerRecibo" href="#">Ver recibo</a>
-                            </td>
-                        </tr>
+
                     </tbody>
                 </table>
 
