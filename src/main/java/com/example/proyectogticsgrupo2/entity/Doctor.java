@@ -3,6 +3,7 @@ package com.example.proyectogticsgrupo2.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import jakarta.validation.constraints.*;
 
@@ -30,6 +31,7 @@ public class Doctor {
 
     @ManyToOne
     @JoinColumn(name = "especialidad_id_especialidad",nullable = false)
+
     private Especialidad especialidad;
 
     @ManyToOne

@@ -1,6 +1,8 @@
 package com.example.proyectogticsgrupo2.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +16,7 @@ public class Sede {
 
     @Id
     @Column(name = "id_sede", nullable = false)
+    @Min(value = 1, message = "error")
     private int idSede;
 
     @Column(nullable = false)
