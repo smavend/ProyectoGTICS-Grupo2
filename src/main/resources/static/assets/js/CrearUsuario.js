@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 sede_nueva4_direccion.value = "->Ingrese una direccion válida<-";
                 otraSedeInput.value = "->Ingrese una nombre de Sede válido<-";
                 sede_nueva_direccion.value = "->Ingrese una dirección de Sede válido<-";
-                telefono_nueva_clinica.value = "0000000";
+                telefono_nueva_clinica.value = "00000000";
                 correo_nueva_clinica.value = "Correo@ClinicaCambiar.com";
                 otraClinicaInput.value = "->Ingrese una nombre de Clínica válido<-";
 

@@ -6,6 +6,7 @@ import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/SuperAdminHomePage")
@@ -227,6 +229,7 @@ public class SuperAdminController {
         String selectUsuario = userform.getSelectUsuario();
         String clinica = userform.getClinica();
         String sede = userform.getSede();
+        String otraClinica = userform.getOtraClinica();
 
         // Validación personalizada para el campo 'sede'
         if (selectUsuario.equals("administrador") && clinica.equals("otro")) {
@@ -236,6 +239,11 @@ public class SuperAdminController {
                 result.rejectValue("sede", "", "El campo Sede no puede estar vacío.");
             }
         }
+        Clinica existingClinica = clinicaRepository.buscarClinicaPorNombre(otraClinica);
+        if (existingClinica != null) {
+            result.rejectValue("otraClinica", "", "Nombre de Clínica ya utilizada, cambie.");
+        }
+
         if (result.hasErrors()) {
             List<Clinica> listaClinicas = clinicaRepository.findAll();
             List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
@@ -249,7 +257,6 @@ public class SuperAdminController {
         String nombres = userform.getNombres();
         String apellidos = userform.getApellidos();
         String correoUser = userform.getCorreoUser();
-        String otraClinica = userform.getOtraClinica();
         String correo_nueva_clinica = userform.getCorreo_nueva_clinica();
         String telefono_nueva_clinica = userform.getTelefono_nueva_clinica();
         String otraSede = userform.getOtraSede();
@@ -337,8 +344,8 @@ public class SuperAdminController {
                 administrativoPorEspecialidadPorSede.setAdministrativoId(administrativonuevo);
                 administrativoPorEspecialidadPorSede.setTorre("Por Asignar");
                 administrativoPorEspecialidadPorSede.setPiso("Por Asignar");
-                String torre = "Por Asignar";
-                String piso = "Por Asignar";
+                String torre = "N.D";
+                String piso = "N.D";
                 Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
                 administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
                 administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
