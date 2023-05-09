@@ -30,17 +30,15 @@ public class DoctorController {
     private int idCita;
     private String fecha;
     private final AlergiaRepository alergiaRepository;
-    private final AlergiaPacienteRepository alergiaPacienteRepository;
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
-                            AlergiaRepository alergiaRepository,
-                            AlergiaPacienteRepository alergiaPacienteRepository) {
+                            AlergiaRepository alergiaRepository
+                            ) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
         this.alergiaRepository = alergiaRepository;
-        this.alergiaPacienteRepository = alergiaPacienteRepository;
     }
 
     @GetMapping(value={"/dashboard","/",""})
@@ -289,7 +287,7 @@ public class DoctorController {
     }
     @GetMapping("/historialClinico")
     public String hClinico(Model model, @RequestParam("id") String id) {
-        List<AlergiasPacienteDTO> alergiaList= alergiaRepository.listarAlergiasPaciente(id);
+        List<Alergia> alergiaList= alergiaRepository.buscarPorPacienteId(id);
         List<TratamientoDTO> tratamientoList=citaRepository.listarTratamientos(id);
         Optional<Paciente> optionalPaciente=pacienteRepository.findById(id);
         List<ListaBuscadorDoctor> listProxCita=citaRepository.listarPorPacienteProxCitas(id);
