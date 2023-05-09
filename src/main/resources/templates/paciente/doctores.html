@@ -40,8 +40,7 @@
                         <div class="col-lg-4 filtroDoctor d-flex justify-content-start">
                             <label class="labelFiltroDoctor">Sede</label>
                             <select class="selectFiltroDoctor" name="idSedeFilter">
-                                <option th:text="${sede.nombre}" th:value="${sede.idSede}"></option>
-                                <option th:each="sedes: ${sedeList}" th:value="${sedes.idSede}" th:text="${sedes.nombre}" th:if="${sedes.nombre} != ${sede.nombre}"></option>
+                                <option th:each="s : ${sedeList}" th:value="${s.idSede}" th:text="${s.nombre}" th:selected="${s.idSede == sede.idSede}"></option>
                             </select>
                         </div>
                         <div class="col-lg-5 filtroDoctor d-flex justify-content-start">
@@ -70,6 +69,7 @@
                                 </div>
                                 <div class="col-7 informacionDoctor">
                                     <div class="nombreDoctor" th:text="${doctor.nombre} +' '+ ${doctor.apellidos}">Juan Martinez Rondon</div>
+                                    <div style="color: black" class="fw-semibold text-center fs-5" th:text="${doctor.especialidad.nombre}"></div>
                                     <div class="disponibilidadDoctor">
                                         Disponibilidad
                                         <div class="disponibilidadDoctorDato" th:text="'MARTES: '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+' - '+${doctor.horario.disponibilidad_fin.substring(0,5)}"></div>

@@ -30,6 +30,7 @@ public class Cita {
 
     private String diagnostico;
     private String receta;
+    private String tratamiento;
     private String bitacora;
 
     @Column(nullable = false)
@@ -39,12 +40,8 @@ public class Cita {
     @Lob
     private byte[] reporte;
 
-    private String link_cita;
-    private String direccion;
     @Column(nullable = false)
     private int estado;
-
-    private LocalDate fecha_emision;
 
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)

@@ -37,12 +37,12 @@
             <section class="seccionPrincipal">
 
                 <a class="btn filtro filtroSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
-                <a class="btn filtro botonExamenes" onclick="buscarExamenes()">Exámenes pendientes</a>
+                <a class="btn filtro botonExamenes" onclick="buscarExamenes()">Próximos exámenes</a>
 
                 <div class="table-responsive-xl">
                     <table class="table">
                         <thead>
-                            <tr style="text-align: center">
+                            <tr>
                                 <th>Especialidad</th>
                                 <th>Fecha</th>
                                 <th>Hora</th>
@@ -52,9 +52,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="cita : ${proximasCitas}" class="filaCita" style="text-align: center">
+                            <tr th:each="cita : ${proximasCitas}" class="filaCita">
                                 <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
-                                <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
+                                <td th:text="${#temporals.format(cita.inicio, 'dd/MM/yyyy')}">10/05/23</td>
                                 <td th:text="${#temporals.format(cita.inicio, 'HH:mm')}">13:00 Hrs.</td>
                                 <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</td>
                                 <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
@@ -86,7 +86,7 @@
                                 <div class="row informacionModal">
                                     <div class="col-6">
                                         <p>Nombres y apellidos:<span class="informacionModalDato"
-                                                                     th:text="${cita.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
+                                                                     th:text="${cita.paciente.nombre}+' '+${cita.paciente.apellidos}">Juanchito Palacios Castro</span>
                                         </p>
                                         <p>Seguro:<span class="informacionModalDato"
                                                         th:text="${cita.paciente.seguro.nombre}">Pacífico EPS</span></p>
@@ -95,7 +95,7 @@
                                     </div>
                                     <div class="col-6">
                                         <p>Fecha de nacimiento:<span class="informacionModalDato"
-                                                                     th:text="${cita.paciente.fechanacimiento}">25 años</span>
+                                                                     th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span>
                                         </p>
                                         <p>Dirección:<span
                                                 class="informacionModalDato" th:text="${cita.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
@@ -119,7 +119,7 @@
                                         <p>Doctor:<span class="informacionModalDato" th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
                                         </p>
                                         <p>Sede:<span
-                                                class="informacionModalDato" th:text="${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
+                                                class="informacionModalDato" th:text="${cita.sede.nombre}+' '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
                                         </p>
                                         <p>Piso:<span class="informacionModalDato">2 (Falta)</span></p>
                                     </div>

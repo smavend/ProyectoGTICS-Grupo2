@@ -37,7 +37,7 @@
                 <div style="margin-bottom: 50px;" class="row">
                     <!-- Foto Doctor -->
                     <div class="col-md-5 d-md-flex justify-content-end align-items-center">
-                        <img class="perfilDoctorFoto" th:src="@{/assets/img/messages-3.jpg}" alt="fotoDoctor">
+                        <img class="fotoDoctor" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
                     </div>
                     <!-- Información Doctor -->
                     <div class="col-md-7">
