@@ -117,10 +117,12 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" th:href="@{/}">
-                                    <i class="bi bi-box-arrow-right"></i>
-                                    <span>Cerrar sesión</span>
-                                </a>
+                                <form th:action="@{/logout}" method="post">
+                                    <button type="submit" class="dropdown-item d-flex align-items-center">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        <span>Cerrar sesión</span>
+                                    </button>
+                                </form>
                             </li>
 
                         </ul><!-- End Profile Dropdown Items -->

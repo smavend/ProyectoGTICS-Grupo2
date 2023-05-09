@@ -1,5 +1,7 @@
 package com.example.proyectogticsgrupo2.config;
 
+import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,9 +21,19 @@ import javax.sql.DataSource;
 public class SecurityConfig {
 
     final DataSource dataSource;
+    final PacienteRepository pacienteRepository;
+    final DoctorRepository doctorRepository;
+    final AdministradorRepository administradorRepository;
+    final AdministrativoRepository administrativoRepository;
+    final SuperAdminRepository superAdminRepository;
 
-    public SecurityConfig(DataSource dataSource) {
+    public SecurityConfig(DataSource dataSource, PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, AdministrativoRepository administrativoRepository, SuperAdminRepository superAdminRepository) {
         this.dataSource = dataSource;
+        this.pacienteRepository = pacienteRepository;
+        this.doctorRepository = doctorRepository;
+        this.administradorRepository = administradorRepository;
+        this.administrativoRepository = administrativoRepository;
+        this.superAdminRepository = superAdminRepository;
     }
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -65,6 +77,9 @@ public class SecurityConfig {
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
                 .requestMatchers("/administrador","/administrador/***").hasAuthority("administrador")
                 .anyRequest().permitAll();
+
+        http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
         return http.build();
     }
     @Bean
