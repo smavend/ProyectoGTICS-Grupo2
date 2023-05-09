@@ -66,12 +66,12 @@
                     <div class="col-6">
                         <p>Paciente:<span class="informacionReciboDato" th:text="${paciente.getNombreYApellido()}">Juanchito Palacios Castro</span></p>
                         <p>Seguro:<span class="informacionReciboDato" th:text="${paciente.seguro.nombre}">Pacífico EPS</span></p>
-                        <p>Estado:<span class="informacionReciboDato">Cancelado</span></p>
+                        <p>Estado:<span class="informacionReciboDato" th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</span></p>
                     </div>
                     <div class="col-6">
-                        <p>Fecha emitida:<span class="informacionReciboDato">13/12/2022</span></p>
-                        <p>Fecha cancelada:<span class="informacionReciboDato">13/12/2022</span></p>
-                        <p>Tipo de pago:<span class="informacionReciboDato">Visa ***1234</span></p>
+                        <p>Fecha emitida:<span class="informacionReciboDato" th:text="${pago.fechaEmitida}">13/12/2022</span></p>
+                        <p>Fecha cancelada:<span class="informacionReciboDato"th:text="${pago.fechaCancelada}">13/12/2022</span></p>
+                        <p>Tipo de pago:<span class="informacionReciboDato" th:text="${pago.tipoPago}">Visa ***1234</span></p>
                     </div>
                 </div>
 
@@ -88,7 +88,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Lorem ipsum dol amet consectetur</td>
+                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur</td>
                                 <td>1</td>
                                 <td>S/ 1300.00</td>
                                 <td>S/ 1300.00</td>
