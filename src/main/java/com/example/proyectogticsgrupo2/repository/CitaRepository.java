@@ -17,14 +17,14 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorProxCitas(String id);
 
-    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos,c.modalidad,c.inicio,c.fin,c.estado FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor=?1",
+    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos,c.modalidad,c.inicio,c.fin,c.estado FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor=?1 group by id_paciente",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorListaPacientes(String id);
 
     @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos,c.modalidad,c.inicio,c.fin,c.estado FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor= ?1 and lower(concat(p.nombre,' ',p.apellidos)) like %?2%", nativeQuery = true)
     List<ListaBuscadorDoctor> buscadorProximasCitas(String id,String nombre);
 
-    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos,c.modalidad,c.inicio,c.fin,c.estado FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor= ?1 and lower(concat(p.nombre,' ',p.apellidos)) like %?2%", nativeQuery = true)
+    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos,c.modalidad,c.inicio,c.fin,c.estado FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor= ?1 and lower(concat(p.nombre,' ',p.apellidos)) like %?2% group by id_paciente", nativeQuery = true)
     List<ListaBuscadorDoctor> buscadorPaciente(String id,String nombre);
 
     @Query(value = "SELECT DATE_FORMAT(c.inicio, '%d/%m/%Y') as fecha , concat(p.nombre,' ',p.apellidos) as nombres, ROUND((sea.precio_cita*seg.doctor),2) as pago_doctor, c.id_cita, p.id_paciente,d.id_doctor, seg.doctor FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join sede s on (c.sede_id_sede = s.id_sede) inner join sede_x_especialidad_x_administrativo sea on (sea.sede_id_sede=s.id_sede) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) inner join seguro seg  inner join especialidad esp on (esp.id_especialidad=d.especialidad_id_especialidad) where c.doctor_id_doctor=?1 and sea.especialidad_id_especialidad=esp.id_especialidad and seg.id_seguro=p.seguro_id_seguro", nativeQuery = true)

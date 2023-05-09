@@ -163,17 +163,12 @@ public class DoctorController {
         if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
-            String fechaHora =cita.getInicio().toString();
-            String[] partes = fechaHora.split(" ");
-            String fecha = partes[0];
 
-            setFecha(fecha);
 
             Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
             Doctor doctor= doctorOptional.get();
             model.addAttribute("doctor", doctor);
             model.addAttribute("paciente",paciente);
-            model.addAttribute("fecha",fecha);
             model.addAttribute("cita",cita);
 
             return "doctor/DoctorReporteSesion";
