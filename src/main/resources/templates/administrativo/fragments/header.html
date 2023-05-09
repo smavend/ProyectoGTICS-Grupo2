@@ -130,5 +130,26 @@
             </nav><!-- End Icons Navigation -->
 
         </header>
+
+        <aside id="sidebar" class="sidebar" th:fragment="aside (active)">
+
+            <ul class="sidebar-nav" id="sidebar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link " th:classappend="${active == 'dashboard'?'':'collapsed'}"  th:href="@{/administrativo}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${active == 'mensajeria'?'':'collapsed'}" th:href="@{/administrativo/mensajeria}">
+                        <i class="bi bi-people"></i>
+                        <span>Mensajería</span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+
+            </ul>
+
+        </aside>
     </body>
 </html>
