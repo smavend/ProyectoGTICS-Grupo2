@@ -17,4 +17,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyectogtics.doctor where sede_id_sede=?1")
     List<Doctor> listDoctorSede(int idSede);
+
+    public Doctor findByCorreo(String correo);
 }

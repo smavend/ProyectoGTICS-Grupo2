@@ -86,29 +86,45 @@
     <section class="section">
       <div class="row align-items-center">
         <div class="col-lg-10 container">
-
+          <div th:if="${msg!=null}" th:text="${msg}" class="alert alert-warning" role="alert">
+            A simple warning alert—check it out!
+          </div>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Formulario de invitación</h5>
 
               <!-- General Form Elements -->
-              <form method="post" th:action="@{/administrativo/invitar}">
+              <form method="post" th:action="@{/administrativo/invitar}" th:object="${temporal}">
                 <div class="row mb-3">
-                  <label for="nombre" class="col-sm-2 col-form-label">Nombres</label>
+                  <label class="col-sm-2 col-form-label">DNI</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="nombre" name="nombre">
+                    <input type="number" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}"
+                         th:errors="*{dni}" ></div>
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <label for="apellidos" class="col-sm-2 col-form-label">Apellidos</label>
+                  <label class="col-sm-2 col-form-label">Nombres</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="apellidos" name="apellidos">
+                    <input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
+                         th:errors="*{nombre}" ></div>
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <label for="correo" class="col-sm-2 col-form-label">Correo</label>
+                  <label class="col-sm-2 col-form-label">Apellidos</label>
                   <div class="col-sm-10">
-                    <input type="email" class="form-control" id="correo" name="correo">
+                    <input type="text" class="form-control" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
+                         th:errors="*{apellidos}" ></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">Correo</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
+                         th:errors="*{correo}" ></div>
                   </div>
                 </div>
 
