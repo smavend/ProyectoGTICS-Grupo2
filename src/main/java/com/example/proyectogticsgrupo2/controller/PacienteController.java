@@ -97,7 +97,6 @@ public class PacienteController {
         }
         return "redirect:/Paciente/perfil";
     }
-
     @PostMapping("/perfil/guardarAlergia")
     public String guardarAlergia(Alergia alergia){
         alergiaRepository.save(alergia);

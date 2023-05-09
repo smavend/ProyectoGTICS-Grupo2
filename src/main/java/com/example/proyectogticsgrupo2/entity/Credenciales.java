@@ -12,7 +12,9 @@ public class Credenciales {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id_credenciales;
+
     private String correo;
+
     @Column(name = "contrasena_hasheada")
     private String contrasena;
 }

@@ -28,8 +28,12 @@ public class AdministrativoPorEspecialidadPorSede {
     private Especialidad especialidadId;
 
     @Column(name="precio_cita")
-    private float precio_cita;
-    @Column(name="torre_piso")
-    private String torre_piso;
+    private Float precio_cita;
+
+    @Column(name="torre")
+    private String torre;
+
+    @Column(name = "piso")
+    private String piso;
 
 }
