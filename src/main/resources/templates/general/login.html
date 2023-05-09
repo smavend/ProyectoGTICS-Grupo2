@@ -76,17 +76,17 @@
                   <form class="row g-3 needs-validation" method="post" th:action="@{/login/credenciales}" novalidate>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Correo electrónico</label>
+                      <label for="username" class="form-label">Correo electrónico</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
+                        <input type="text" name="username" class="form-control" id="username" required>
                         <div class="invalid-feedback">Por favor ingrese su correo.</div>
                       </div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label">Contraseña</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <label for="password" class="form-label">Contraseña</label>
+                      <input type="password" name="password" class="form-control" id="password" required>
                       <div class="invalid-feedback">Por favor, ingrese la contraseña</div>
                       <a class="small mb-0" th:href="@{/login/olvidepassw}">¿Olvidaste tu contraseña?</a>
                     </div>

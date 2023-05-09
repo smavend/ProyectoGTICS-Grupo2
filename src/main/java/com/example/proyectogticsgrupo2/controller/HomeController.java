@@ -68,6 +68,7 @@ public class HomeController {
     public String cambioPasswExitoso(){
         return "general/confirmacioncontrasenia";
     }
+    /*
     @PostMapping("/login/credenciales")
     public String credenciales(Model model, @RequestParam("username") String correo, @RequestParam("password") String password){
 
@@ -91,6 +92,7 @@ public class HomeController {
             return "redirect:/login";
         }
     }
+     */
     @GetMapping("/signin")
     public String vistaRegistro(Model model){
         List<Distrito> list = distritoRepository.findAll();
