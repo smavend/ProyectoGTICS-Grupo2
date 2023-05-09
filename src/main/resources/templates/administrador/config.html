@@ -317,91 +317,22 @@
 
 <main id="main" class="main ">
 
-  <div class=" row bg-white container-fluid  " id="cam">
-
-
-
-    <h1 class="m-3 text-center">Configuración</h1>
-
-    <!-- Formulario de configuración -->
-    <form action="/guardar-configuracion" method="POST">
-      <!-- Sección de medios de pago -->
-
-      <!-- Sección de notificaciones -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h2 class="mb-0">Notificaciones</h2>
-        </div>
-        <div class="card-body">
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" name="notificaciones" id="notificaciones">
-            <label class="form-check-label" for="notificaciones">
-              Permitir notificaciones por correo electrónico
-            </label>
-          </div>
-        </div>
+  <div class="container my-5">
+    <h1>Cambio de Tema con Bootstrap 5</h1>
+    <p>Este es un ejemplo de cómo cambiar el tema de una página utilizando Bootstrap 5 y JavaScript.</p>
+    <div class="form-check form-switch mb-3">
+      <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+      <label class="form-check-label" for="darkModeSwitch">Modo Oscuro</label>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        Ejemplo de Tema
       </div>
-
-      <!-- Sección de tema -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h2 class="mb-0">Tema</h2>
-        </div>
-        <div class="card-body">
-          <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" name="tema" id="tema-switch">
-            <label class="form-check-label" for="tema-switch">
-              Modo Oscuro
-            </label>
-          </div>
-        </div>
+      <div class="card-body">
+        <p>Este es un ejemplo de texto en la página.</p>
+        <button class="btn btn-primary">Botón de Ejemplo</button>
       </div>
-      <div class="card mb-4">
-        <div class="card-header">
-          <h2 class="mb-0">Medios de Pago</h2>
-        </div>
-        <div class="card-body">
-          <table class="table">
-            <thead>
-            <tr>
-              <th scope="col">Tipo</th>
-              <th scope="col">Número</th>
-              <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>Tarjeta de crédito</td>
-              <td>**** **** **** 1234</td>
-              <td><button type="button" class="btn btn-sm btn-danger">Eliminar</button></td>
-            </tr>
-            <tr>
-              <td>Cuenta bancaria</td>
-              <td>12345678901234567890</td>
-              <td><button type="button" class="btn btn-sm btn-danger">Eliminar</button></td>
-            </tr>
-            <tr>
-              <td>
-                <select class="form-select form-select-sm" aria-label="Tipo de medio de pago">
-                  <option selected>Tipo</option>
-                  <option value="creditCard">Tarjeta de crédito</option>
-                  <option value="bankAccount">Cuenta bancaria</option>
-                </select>
-              </td>
-              <td><input type="text" class="form-control form-control-sm" placeholder="Número"></td>
-              <td><button type="button" class="btn btn-sm btn-primary">Agregar</button></td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!-- Botón de guardar cambios -->
-      <div class="text-center">
-        <button type="submit" class="btn btn-primary btn-lg">Guardar cambios</button>
-      </div>
-      <br>
-    </form>
-
+    </div>
   </div>
 
 </main><!-- End #main -->
@@ -426,9 +357,8 @@
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
 <!-- Template Main JS File -->
+<script th:src="@{/assets/js/theme-switcher.js}"></script>
 <script th:src="@{/assets/js/jsAdministrador.js}"></script>
-
-
 
 </body>
 
