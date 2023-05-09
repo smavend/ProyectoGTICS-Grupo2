@@ -9,6 +9,10 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+body.dark {
+    background-color: #333;
+    color: #fff;
+}
 /*styles mensajeria*/
 .mensajeria{
     font-family: 'Poppins', sans-serif;

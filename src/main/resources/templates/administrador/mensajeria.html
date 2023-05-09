@@ -294,12 +294,18 @@
                 <span>Mensajería</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/administrador/registro}">
-                <i class="bi bi-ui-checks"></i>
+       <li class="nav-item">
+      <a class="nav-link collapsed " th:href="@{/administrador/registro}">
+        <i class="bi bi-ui-checks"></i>
         <span>Registro Masivo</span>
-            </a>
-        </li>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link  collapsed" th:href="@{/administrador/config}">
+        <i class="bi bi-gear"></i>
+        <span>Configuraciones</span>
+      </a>
+    </li>
 
     </ul>
 
@@ -333,57 +339,6 @@
                             <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
                         </div>
                     </button>
-                    <button class="list-group-item fondo list-group-item-action d-flex  justify-content p-3 mb-2 rounded border" data-bs-toggle="tab" data-bs-target="#sms3" >
-                        <img th:src="@{/assets/img/p4.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
-                        <div class="overflow-hidden">
-                            <div class = "d-flex justify-content-between mb-0">
-                                <span class="fw-bold">Jorge Juan Velazquez Torres</span>
-                                <small>09:55 am</small>
-                            </div>
-                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
-                        </div>
-                    </button>
-                    <button class="list-group-item fondo list-group-item-action d-flex  justify-content p-3 mb-2 rounded border" data-bs-toggle="tab" data-bs-target="#sms2" >
-                        <img th:src="@{/assets/img/p3.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
-                        <div class="overflow-hidden">
-                            <div class = "d-flex justify-content-between mb-0">
-                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
-                                <small>09:55 am</small>
-                            </div>
-                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
-                        </div>
-                    </button>
-                    <button class="list-group-item fondo list-group-item-action d-flex  justify-content p-3 mb-2 rounded border" data-bs-toggle="tab" data-bs-target="#sms3" >
-                        <img th:src="@{/assets/img/p4.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
-                        <div class="overflow-hidden">
-                            <div class = "d-flex justify-content-between mb-0">
-                                <span class="fw-bold">Jorge Juan Velazquez Torres</span>
-                                <small>09:55 am</small>
-                            </div>
-                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
-                        </div>
-                    </button>
-                    <button class="list-group-item fondo list-group-item-action d-flex  justify-content p-3 mb-2 rounded border" data-bs-toggle="tab" data-bs-target="#sms2" >
-                        <img th:src="@{/assets/img/p3.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
-                        <div class="overflow-hidden">
-                            <div class = "d-flex justify-content-between mb-0">
-                                <span class="fw-bold">Diego Juan Velazquez Torres</span>
-                                <small>09:55 am</small>
-                            </div>
-                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
-                        </div>
-                    </button>
-                    <button class="list-group-item fondo list-group-item-action d-flex  justify-content p-3 mb-2 rounded border" data-bs-toggle="tab" data-bs-target="#sms3" >
-                        <img th:src="@{/assets/img/p4.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
-                        <div class="overflow-hidden">
-                            <div class = "d-flex justify-content-between mb-0">
-                                <span class="fw-bold">Jorge Juan Velazquez Torres</span>
-                                <small>09:55 am</small>
-                            </div>
-                            <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
-                        </div>
-                    </button>
-
                 </div>
                 <br>
 
@@ -544,83 +499,7 @@
                             <button type="button" class="btn btn-primary">Enviar</button>
                         </div>
                     </div>
-                    <div class="tab-pane fade  " id="sms3">
-                        <div class=" d-flex  justify-content p-4 px-5 mb-2  border-bottom"  >
-                            <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-3"/>
-                            <div class="overflow-hidden">
-                                <div class = "d-flex justify-content-between mb-0">
-                                    <span class="fw-bold">Diego Juan Velazquez Torres</span>
-                                </div>
-                                <p>En línea</p>
-                            </div>
-                        </div>
-                        <div class = "scrollable2 px-5"  >
-                            <div class="d-flex mb-4">
 
-                                <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
-                                    <div class="bg-white p-2 ms-2 rounded">
-                                        <p class="mb-1 fw-bold">Diego Velazquez</p>
-                                        <small class=" ">
-                                            El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                        </small>
-                                    </div>
-                                    <div>
-                                        <small class=" ms-2">09:55 am</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row-reverse mb-4">
-
-                                <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
-                                    <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                                        <p class="mb-1 fw-bold">Alexandra Manrique</p>
-                                        <small class=" ">
-                                            El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                        </small>
-                                    </div>
-                                    <div class ="text-end">
-                                        <small class="ms-2">09:55 am</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex mb-4">
-
-                                <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
-                                    <div class="bg-white p-2 ms-2 rounded">
-                                        <p class="mb-1 fw-bold">Diego Velazquez</p>
-                                        <small class=" ">
-                                            El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                        </small>
-                                    </div>
-                                    <div>
-                                        <small class=" ms-2">09:55 am</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row-reverse mb-4">
-
-                                <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
-                                    <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                                        <p class="mb-1 fw-bold">Alexandra Manrique</p>
-                                        <small class=" ">
-                                            El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                        </small>
-                                    </div>
-                                    <div class ="text-end">
-                                        <small class="ms-2">09:55 am</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-3  d-flex align-items-center">
-                            <input type="text" class="form-control me-2  border-0" placeholder="Escribe tu mensaje...">
-                            <button type="button" class="btn btn-primary">Enviar</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

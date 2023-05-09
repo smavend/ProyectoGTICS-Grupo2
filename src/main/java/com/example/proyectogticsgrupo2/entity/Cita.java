@@ -1,5 +1,12 @@
 package com.example.proyectogticsgrupo2.entity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -28,9 +35,19 @@ public class Cita {
     @Column(nullable = false)
     private LocalDateTime fin;
 
+    @NotBlank(message = "El campo no puede estar vacío")
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String diagnostico;
+
+    @NotBlank(message = "El campo no puede estar vacío")
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String receta;
+
+    @NotBlank(message = "El campo no puede estar vacío")
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String tratamiento;
+
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String bitacora;
 
     @Column(nullable = false)
