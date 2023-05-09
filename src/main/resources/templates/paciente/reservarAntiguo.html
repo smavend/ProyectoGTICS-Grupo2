@@ -37,7 +37,7 @@
             <h1 class="encabezado" style="color: #435067">Reservar cita</h1>
 
             <section class="seccionPrincipal">
-                <form method="post" th:action="@{/Paciente/reservarEspecialidad}">
+                <form method="post" th:action="@{/Paciente/confirmarReserva}">
 
                     <div class="row" style="margin-top: 40px;margin-left: 20px">
                         <div class="col-6">
@@ -60,36 +60,76 @@
                             <p class="mb-2"><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px"
                                                                                         th:text="${paciente.telefono}">934-250-488</span>
                             </p>
-                            <p class="mb-2"><span class="fw-bold">Seguro:</span><span style="margin-left: 13px"
-                                                                                        th:text="${paciente.seguro.nombre}">Seguro</span>
+                            <p class="mb-2"><span class="fw-bold">Seguro:</span>
+                                <span style="margin-left: 13px">
+                                <select style="border-radius: 8px; padding-left: 13px; font-size: 15px">
+                                <option th:text="${paciente.seguro.nombre}"></option>
+                                <option th:each="seguro: ${seguroList}" th:value="${seguro.nombre}"
+                                        th:text="${seguro.nombre}"
+                                        th:if="${seguro.nombre} != ${paciente.seguro.nombre}"></option>
+                            </select></span>
                             </p>
                         </div>
                     </div>
 
                     <div class="row" style="margin-top: 20px;margin-left: 20px">
                         <div class="col-6">
-                            <p><span class="fw-bold">Modalidad:</span><span class="fw-bold" style="color: red">*</span></p>
+                            <p><span class="fw-bold">Doctor:</span><span class="fw-bold" style="color: red">*</span></p>
+                            <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
+                                    name="idDoctor">
+                                <option value="" selected>--Seleccione una doctor--</option>
+                                <option th:each="doctor: ${doctorList}" th:value="${doctor.id_doctor}"
+                                        th:text="${doctor.nombre}+' '+${doctor.apellidos}"></option>
+                            </select>
+                            <p style="margin-top: 15px"><span class="fw-bold">DNI:</span><span class="fw-bold"
+                                                                                               style="color: red">*</span>
+                            </p>
+                            <input class="form-control"
+                                   style="border-radius: 8px; margin-top: 3px; width: 70%; height: 25px; font-size: 13px; border-color: #6c757d"
+                                   type="text" placeholder="Ingrese su DNI">
+                        </div>
+                        <div class="col-6">
+                            <p><span class="fw-bold">Especialidad:</span><span class="fw-bold"
+                                                                               style="color: red">*</span>
+                            </p>
+                            <select style="border-radius: 8px; padding-left: 13px; font-size: 15px; margin-top: 5px; padding-right: 20px">
+                                <option value="" selected>--Seleccione una especialidad--</option>
+                                <option th:each="especialidad: ${especialidadList}" th:value="${especialidad.nombre}"
+                                        th:text="${especialidad.nombre}">Dermatología
+                                </option>
+                            </select>
+                            <p style="margin-top: 15px"><span class="fw-bold">Tipo de cita:</span><span class="fw-bold"
+                                                                                                        style="color: red">*</span>
+                            </p>
                             <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
                                     name="modalidad">
                                 <option value="">--Seleccione tipo de cita--</option>
-                                <option value="0">Presencial</option>
-                                <option value="1">Virtual</option>
-                            </select>
-
-                        </div>
-                        <div class="col-6">
-                            <p><span class="fw-bold">Sede:</span><span class="fw-bold"
-                                                                                    style="color: red">*</span></p>
-                            <select name="idSede" style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px">
-                                <option value="">--Seleccione una sede--</option>
-                                <option th:each="sede:${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}">Sede</option>
+                                <option value=0>Presencial</option>
+                                <option value=1>Virtual</option>
                             </select>
                         </div>
                     </div>
 
+                    <div class="row" style="margin-top: 20px;margin-left: 20px">
+                        <div class="col-6">
+                            <p><span class="fw-bold">Fecha:</span><span class="fw-bold" style="color: red">*</span></p>
+                            <input type="date" class="form-control"
+                                   style="border-radius: 8px; margin-top: 3px; width: 70%; height: 25px; font-size: 15px; border-color: #6c757d">
+
+                        </div>
+                        <div class="col-6">
+                            <p><span class="fw-bold">Horas disponibles:</span><span class="fw-bold"
+                                                                                    style="color: red">*</span></p>
+                            <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px">
+                                <option value="">--Seleccione una hora--</option>
+                                <option value="">15:00 - 16:00 Hrs.</option>
+                                <option value="">17:30 - 18:30 Hrs.</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="row justify-content-end"
                          style="margin-top: 70px; margin-right: 80px; margin-bottom: 20px">
-                        <button type="submit" class="btn botonActualizarConsentimientos ms-3 col-2">Continuar</button>
+                        <button type="submit" class="btn botonActualizarConsentimientos ms-3 col-2">Reservar</button>
                     </div>
                 </form>
             </section>
