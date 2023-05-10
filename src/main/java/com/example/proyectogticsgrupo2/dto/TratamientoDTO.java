@@ -8,5 +8,6 @@ public interface TratamientoDTO {
     LocalDateTime getFin();
     String getDiagnostico();
     String getReceta();
+    String getTratamiento();
 
 }

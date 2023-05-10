@@ -407,14 +407,15 @@
               <!-- seccion formularios -->
             </div>
             <div class="tab-pane fade tratamiento pt-3" id="tratamiento">
-              <h5 class="card-title">Tratamiento</h5>
+              <h5 class="card-title">Información de consultas</h5>
               <div class="row">
                 <div class="col-lg-9 col-md-8">
                   <table class="table">
                     <thead>
                     <tr>
                       <th>#</th>
-                      <th>Diagnóstico-Tratamiento</th>
+                      <th>Diagnóstico</th>
+                      <th>Tratamiento</th>
                       <th>Receta</th>
                       <th>Fecha de emisión</th>
                     </tr>
@@ -423,8 +424,9 @@
                     <tr th:each="tratamiento, i : ${ListaTratamiento}">
                       <td th:text="${i.index + 1}"></td>
                       <td th:text="${tratamiento.getDiagnostico()}"></td>
+                      <td th:text="${tratamiento.getTratamiento()}"></td>
                       <td th:text="${tratamiento.getReceta()}"></td>
-                      <td th:text="${tratamiento.getFin()}"></td>
+                      <td th:text="${#temporals.format(tratamiento.getFin(), 'dd/MM/yyy')}"></td>
                     </tr>
                     </tbody>
                   </table>
@@ -438,10 +440,10 @@
             </div>
             <div class="tab-pane fade informacion-personal pt-3" id="informacion-personal">
               <div class="row">
-                <div class="col-lg-3 col-md-4 font-weight-bold">Información personal</div>
+                <h5 class="card-title">Informacion Personal</h5>
                 <div class="col-lg-9 col-md-8">
                   <div class="row mb-3">
-                    <div class="col-md-3"><img src="ruta-de-la-imagen" alt="Foto del paciente" class="img-fluid"></div>
+                    <div class="col-md-3"><img th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="Foto del paciente" class="img-fluid"></div>
                     <div class="col-md-9">
                       <h4 th:text="${paciente.getNombre()} +' '+ ${paciente.getApellidos()}"></h4>
                       <div><strong>Seguro médico:</strong> <span th:text="${paciente.seguro.getNombre()}"></span></div>
@@ -480,13 +482,13 @@
                       <td th:text="${cita.getInicio()}"></td>
                       <td style="font-size: 1rem;color: black">
                         <h6 th:if="${cita.estado == 0}"
-                            th:text="'Próxima cita'"></h6>
+                            th:text="'En cita'"></h6>
                         <h6 th:if="${cita.estado == 1}"
-                            th:text="'Registrado en caja'"></h6>
-                        <h6 th:if="${cita.estado == 2}"
                             th:text="'En espera'"></h6>
+                        <h6 th:if="${cita.estado == 2}"
+                            th:text="'Finalizado'"></h6>
                         <h6 th:if="${cita.estado == 3}"
-                            th:text="'En consulta'"></h6>
+                            th:text="'Cancelado'"></h6>
                       </td>
                     </tr>
                     </tbody>
