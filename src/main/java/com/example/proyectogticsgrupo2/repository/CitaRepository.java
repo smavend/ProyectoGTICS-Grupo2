@@ -50,7 +50,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     List<ListaBuscadorDoctor> listarPorPacienteProxCitas(String id);
     @Query(value = "SELECT diagnostico, receta, tratamiento\n" +
             "            FROM proyectogtics.cita \n" +
-            "            WHERE paciente_id_paciente = ?1;",
+            "            WHERE paciente_id_paciente = ?1",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<TratamientoDTO> listarTratamientos(String id);
 

@@ -43,15 +43,15 @@ public class Cita {
     private String receta;
 
     @NotBlank(message = "El campo no puede estar vacío")
-    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
+    @Size(max=100,message = "El campo no puede tener más de 100 caracteres")
     private String tratamiento;
 
     @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String bitacora;
     @Column(nullable = false)
     private int modalidad;
-    @Column(nullable = false)
 
+    @Column(nullable = false)
     @Lob
     private byte[] reporte;
 

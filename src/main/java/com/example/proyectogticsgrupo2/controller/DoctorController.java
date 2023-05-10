@@ -205,6 +205,10 @@ public class DoctorController {
             Paciente paciente = optionalPaciente.get();
             Cita cita1 = optionalCita.get();
 
+            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Doctor doctor= doctorOptional.get();
+            model.addAttribute("doctor", doctor);
+
             model.addAttribute("paciente", paciente);
             model.addAttribute("fecha", getFecha());
             model.addAttribute("cita", cita1);
