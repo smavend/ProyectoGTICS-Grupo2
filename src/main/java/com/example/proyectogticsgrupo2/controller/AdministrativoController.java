@@ -41,9 +41,10 @@ public class AdministrativoController {
     @GetMapping("/administrativo")
     public String dashboard(Model model){
         List<Paciente> lista = pacienteRepository.buscarPorIdAdministrativo(idAdministrativo);
-        List<Temporal> listaTemp = temporalRepository.findAll();
+        List<Temporal> listaTemp = temporalRepository.findByAdministrativo_IdAdministrativo(idAdministrativo);
         List<TemporalDiasDto> listaDias = temporalRepository.obtenerDias();
         AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
+
         model.addAttribute("datos", aes);
         model.addAttribute("listaPacientes", lista);
         model.addAttribute("listaTemp", listaTemp);
@@ -131,11 +132,17 @@ public class AdministrativoController {
                 if(p.getIdPaciente().equals(temporal.getDni())){
                     exist = true;
                     break;
+                }else if (p.getCorreo().equals(temporal.getCorreo())){
+                    exist = true;
+                    break;
                 }
             }
             List<Temporal> temp = temporalRepository.findAll();
             for (Temporal t: temp){
                 if(t.getDni().equals(temporal.getDni())){
+                    existTemp = true;
+                    break;
+                } else if(t.getCorreo().equals(temporal.getCorreo())){
                     existTemp = true;
                     break;
                 }
@@ -147,7 +154,7 @@ public class AdministrativoController {
                 temporalRepository.save(temporal);
                 return "redirect:/administrativo";
             }else {
-                attr.addFlashAttribute("msg","Ingrese un DNI diferente, ya se encuentra invitado o registrado");
+                attr.addFlashAttribute("msg","Ingrese un DNI o correo diferente, ya se encuentra invitado o registrado");
                 AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
                 model.addAttribute("datos", aes);
                 model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
