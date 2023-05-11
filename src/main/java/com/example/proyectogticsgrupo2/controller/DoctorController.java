@@ -90,8 +90,10 @@ public class DoctorController {
 
     @GetMapping("/verRecibo")
     public String verRecibo(Model model, @RequestParam("id") int id_cita,@RequestParam("id2") String id_doctor) {
+        System.out.println("hasta aca funciona");
 
         Optional<ListaRecibosDTO> optionalListaRecibosDTO=citaRepository.buscarRecibosPorIdCitaIdDoctor(id_doctor,id_cita);
+
         Optional<Doctor> optionalDoctor=doctorRepository.findById(id_doctor);
 
         if (optionalDoctor.isPresent() & optionalListaRecibosDTO.isPresent()) {
