@@ -31,6 +31,11 @@
         <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
         <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- CSS PAGINACION -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css"
+              rel="stylesheet">
+        <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+        <!-- FIN CSS PAGINACION -->
 
 
         <!--Links para mensajeria-->
@@ -331,18 +336,12 @@
 
                                     <div class="card-body pb-0" id="citasTable">
                                         <h5 class="card-title">PRÓXIMAS CITAS<span>| Sede San Miguel</span></h5>
-                                        <div class="container-fluid">
-                                            <form method="post" th:action="@{/doctor/BuscarProxCita}">
-                                                <input name="searchField" class="form-control mb-3" type="text"
-                                                       placeholder="Buscar por nombre"/>
-                                            </form>
-                                        </div>
                                         <br>
 
                                         <div class="d-flex flex-column"
-                                             style="height: 485px; overflow: auto;width: max-content">
+                                             style="height: 550px; overflow: auto;width: max-content">
                                             <div class="table-responsive">
-                                                <table class="table" id="Doctores_Citas_table">
+                                                <table id="example" class="table" >
                                                     <thead style="text-align: center">
                                                         <tr>
                                                             <th scope="col">Nombre</th>
@@ -388,9 +387,13 @@
                                                             <td th:if="${cita.modalidad == 1}">
                                                                 <div style="width: min-content">
                                                                     <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
-                                                                       type="button" class="btn btn-success">Iniciar
-                                                                        cita</a>
-                                                                    <button id="enviar-btn" style="margin-top: 5px;width: max-content" type="button" class="btn btn-danger">Enviar cuestionario</button>
+                                                                       type="button" class="btn btn-success">
+                                                                        <i style="color: #D891F5" class="bi-play-fill"></i>
+                                                                    </a>
+
+                                                                    <a id="enviar-btn" style="margin-top: 5px;width: max-content" type="button" class="btn btn-warning">
+                                                                        <i class="bi-file-text-fill"></i>
+                                                                    </a>
 
                                                                 </div>
                                                             </td>
@@ -401,16 +404,6 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                            </div>
-                                            <!-- End Table with stripped rows -->
-                                            <div id="pagination_Citas" class="d-flex justify-content-center align-items-center my-3">
-                                                <button type="button" class="btn btn-primary me-2" id="prev-btn5">
-                                                    <i class="bi bi-chevron-left fc"></i>
-                                                </button>
-                                                <span class="mx-3">Página <span id="page-num5">1</span></span>
-                                                <button type="button" class="btn btn-primary ms-2" id="next-btn5">
-                                                    <i class="bi bi-chevron-right"></i>
-                                                </button>
                                             </div>
 
                                         </div>
@@ -541,17 +534,11 @@
 
                                             <div class="card-body pb-0" id="PacientesTable2">
                                                 <h5 class="card-title">PACIENTES<span>| Sede San Miguel</span></h5>
-                                                <div class="container-fluid">
-                                                    <form method="post" th:action="@{/doctor/BuscarPaciente}">
-                                                        <input name="searchField" class="form-control mb-3" type="text"
-                                                               placeholder="Buscar por nombre"/>
-                                                    </form>
-                                                </div>
                                                 <br>
 
-                                                <div class="d-flex flex-column" style="height: 485px; overflow: auto;">
-                                                    <div class="table">
-                                                        <table class="table table-striped" id="Doctores_Pacientes_table">
+                                                <div class="d-flex flex-column" style="height: 550px; overflow: auto;">
+                                                    <div class="table-responsive">
+                                                        <table style="text-align: center" id="example2" class="table table-striped" >
                                                             <thead>
                                                                 <tr >
                                                                     <th></th>
@@ -559,13 +546,13 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr th:each="paciente,obj: ${listaPacientes}">
+                                                                <tr style="height: fit-content" th:each="paciente,obj: ${listaPacientes}">
                                                                     <td>
                                                                         <img style="border-radius: 50%;border: 2px solid #000"
                                                                              th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}"
                                                                              height="70" width="70" alt="Profile">
                                                                     </td>
-                                                                    <td style="font-size: 1rem; color: black">
+                                                                    <td style="font-size: 1.2rem; color: black">
                                                                         <a th:href="@{'/doctor/historialClinico' + '?id=' + ${paciente.id_paciente}}"
                                                                            th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
 
@@ -577,15 +564,6 @@
 
                                                             </tbody>
                                                         </table>
-                                                    </div>
-                                                    <div id="pagination_Pacientes" class="d-flex justify-content-center align-items-center my-3">
-                                                        <button type="button" class="btn btn-primary me-2" id="prev-btn6">
-                                                            <i class="bi bi-chevron-left fc"></i>
-                                                        </button>
-                                                        <span class="mx-3">Página <span id="page-num6">1</span></span>
-                                                        <button type="button" class="btn btn-primary ms-2" id="next-btn6">
-                                                            <i class="bi bi-chevron-right"></i>
-                                                        </button>
                                                     </div>
 
                                                 </div>
@@ -654,10 +632,6 @@
                 crossorigin="anonymous"></script>
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
 
-        <!-- Scripts Calendario -->
-        <!-- Scripts paginacion-->
-        <script th:src="@{/assets/js/paginacion_pacientes_doctor.js}"></script>
-        <script th:src="@{/assets/js/paginacion_proximasCitas_doctor.js}"></script>
 
         <!-- Agregar la biblioteca FullCalendar -->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
@@ -665,6 +639,21 @@
         <script th:src="@{/assets/js/index.js}"></script>
         <script th:src="@{/assets/js/datatables.js}"></script>
         <script th:src="@{/assets/js/moment.js}"></script>
+        <!-- PAGINACION -->
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script th:src="@{/assets/js/jsPaginarDoctorNueva.js}"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <!--  FIN PAGINACION  -->
+        <script>
+            $(document).ready(function () {
+                $('#example').DataTable();
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#example2').DataTable();
+            });
+        </script>
         <script>// Obtener una referencia al elemento HTML donde se mostrará el calendario
         var calendarEl = document.getElementById('calendar');
 
