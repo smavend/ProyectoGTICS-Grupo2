@@ -13,7 +13,7 @@ if (isDarkMode) {
     body.classList.add('text-light');
     main.classList.add('bg-darks');
     main.classList.add('text-light');
-    aside.style.backgroundColor = 'var(--bs-secondary-bg)';
+    aside.classList.add('bg-success bg-opacity-75');
     aside.classList.add('text-light');
     cardbody.classList.add('bg-dark');
     cardbody.classList.add('text-light');
@@ -27,7 +27,7 @@ darkModeSwitch.addEventListener('change', () => {
         body.classList.add('text-light');
         main.classList.add('bg-dark');
         main.classList.add('text-light');
-        aside.style.backgroundColor = 'var(--bs-secondary-bg)';
+        aside.classList.add('bg-success bg-opacity-75');
         aside.classList.add('text-light');
         cardbody.classList.add('bg-dark');
         cardbody.classList.add('text-light');
@@ -38,7 +38,7 @@ darkModeSwitch.addEventListener('change', () => {
         body.classList.remove('text-light');
         main.classList.remove('bg-dark');
         main.classList.remove('text-light');
-        aside.style.backgroundColor = ''; // remove the custom background color
+        aside.classList.remove('bg-success bg-opacity-75');
         aside.classList.remove('text-light');
         cardbody.classList.remove('bg-dark');
         cardbody.classList.remove('text-light');
