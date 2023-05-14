@@ -260,6 +260,35 @@ public class AdministradorController {
             Paciente p = opt.get();
 
             byte[] imagenComoBytes = p.getFoto();
+            //agregue desde aca
+            if(imagenComoBytes==null){
+                try {
+                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+                    FileInputStream input = new FileInputStream(foto);
+                    ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = input.read(buffer)) !=-1){
+                        output.write(buffer,0,length);
+                    }
+                    input.close();;
+                    output.close();
+                    byte[] bytes = output.toByteArray();
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    httpHeaders.setContentType(
+                            MediaType.parseMediaType("image/jpg"));
+
+                    return new ResponseEntity<>(
+                            bytes,
+                            httpHeaders,
+                            HttpStatus.OK);
+
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }else {
+
+            } //agregue hasta aca
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
@@ -301,7 +330,7 @@ public class AdministradorController {
                     byte[] bytes = output.toByteArray();
                     HttpHeaders httpHeaders = new HttpHeaders();
                     httpHeaders.setContentType(
-                            MediaType.parseMediaType(doc.getFotocontenttype()));
+                            MediaType.parseMediaType("image/jpg"));
 
                     return new ResponseEntity<>(
                             bytes,
