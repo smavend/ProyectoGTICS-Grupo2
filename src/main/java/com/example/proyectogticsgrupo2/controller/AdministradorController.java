@@ -69,18 +69,7 @@ public class AdministradorController {
     @PostMapping("/guardarTemporales")
     public String guardarTemporales(@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr){
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
-        try {
-            File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-            FileInputStream input = new FileInputStream(foto);
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = input.read(buffer)) !=-1){
-                output.write(buffer,0,length);
-            }
-            input.close();;
-            output.close();
-            byte[] bytes = output.toByteArray();
+
             for (Temporal pacitemp : pacientesTemp){
                 paciente.setIdPaciente(pacitemp.getDni());
                 paciente.setNombre(pacitemp.getNombre());
@@ -94,18 +83,15 @@ public class AdministradorController {
                 paciente.setCorreo(pacitemp.getCorreo());
                 paciente.setEstado(1);
                 paciente.setFecharegistro(LocalDateTime.now());
-                paciente.setFoto(bytes);
-                paciente.setFotoname("userPorDefecto.jpg");
-                paciente.setFotocontenttype("image/jpg");
+                paciente.setFoto(null);
+                paciente.setFotoname(null);
+                paciente.setFotocontenttype(null);
                 attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
             }
             return "redirect:/administrador/dashboard";
-        }catch (IOException e){
-            e.printStackTrace();
-            return "redirect:/administrador/registro";
-        }
+
     }
     @GetMapping("/perfil")
     public String perfil(@RequestParam("id") String id, Model model){
@@ -118,12 +104,12 @@ public class AdministradorController {
     //###########################################################################
     @GetMapping("/crearPaciente")
     public String crearPaciente( @ModelAttribute("paciente") Paciente paciente,  Model model){
-    List<Seguro> listaSeguro  = seguroRepository.findAll();
-    List<Distrito> listaDistrito = distritoRepository.findAll();
-    List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
-    model.addAttribute("listaSeguro",listaSeguro);
-    model.addAttribute("listaDistrito",listaDistrito);
-    model.addAttribute("listaAdministrativo",listaAdministrativo);
+        List<Seguro> listaSeguro  = seguroRepository.findAll();
+        List<Distrito> listaDistrito = distritoRepository.findAll();
+        List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
+        model.addAttribute("listaSeguro",listaSeguro);
+        model.addAttribute("listaDistrito",listaDistrito);
+        model.addAttribute("listaAdministrativo",listaAdministrativo);
         return "administrador/crearPaciente";}
     @PostMapping("/guardarPaciente")
     public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
@@ -139,24 +125,10 @@ public class AdministradorController {
             return "administrador/crearPaciente";
         } else{
             if (file.isEmpty()) {
-                try {
-                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-                    FileInputStream input = new FileInputStream(foto);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) !=-1){
-                        output.write(buffer,0,length);
-                    }
-                    input.close();;
-                    output.close();
-                    byte[] bytes = output.toByteArray();
-                    paciente.setFoto(bytes);
-                    paciente.setFotoname("userPorDefecto.jpg");
-                    paciente.setFotocontenttype("image/jpg");
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
+                    paciente.setFoto(null);
+                    paciente.setFotoname(null);
+                    paciente.setFotocontenttype(null);
+
             }else{
                 String fileName = file.getOriginalFilename();
                 try {
@@ -196,26 +168,10 @@ public class AdministradorController {
             return "administrador/crearDoctor";
         }else {
             if(file.isEmpty()){
-                try {
-                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-                    FileInputStream input = new FileInputStream(foto);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) !=-1){
-                        output.write(buffer,0,length);
-                    }
-                    input.close();;
-                    output.close();
-                    byte[] bytes = output.toByteArray();
+                    doctor.setFoto(null);
+                    doctor.setFotoname(null);
+                    doctor.setFotocontenttype(null);
 
-                    doctor.setFoto(bytes);
-                    doctor.setFotoname("userPorDefecto.jpg");
-                    doctor.setFotocontenttype("image/jpg");
-
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
             }else {
                 String fileName = file.getOriginalFilename();
                 try {
@@ -237,7 +193,7 @@ public class AdministradorController {
     public String calendario(){return "administrador/calendario";}
     @GetMapping("/mensajeria")
     public String mensajeria(){
-            //En onstruccion
+        //En onstruccion
         return "administrador/mensajeria";}
     @GetMapping("/historialPaciente")
     public String historialPaciente(@RequestParam("id") String id, Model model){
