@@ -149,7 +149,7 @@ public class AdministradorController {
             pacienteRepository.save(paciente);
             credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),paciente.getNombre());
             CorreoService correoService = new CorreoService();
-            correoService.props(paciente.getCorreo());
+            correoService.props(paciente.getCorreo(),paciente.getNombre());
             attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
@@ -191,7 +191,7 @@ public class AdministradorController {
             doctorRepository.save(doctor);
             credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),doctor.getNombre());
             CorreoService correoService = new CorreoService();
-            correoService.props(doctor.getCorreo());
+            correoService.props(doctor.getCorreo(),doctor.getNombre());
             attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
