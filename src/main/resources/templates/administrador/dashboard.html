@@ -327,17 +327,14 @@
 
           <!-- Top Selling -->
           <div class="col-12">
-            <div class="card top-selling overflow-auto container">
 
-
-
-              <div class="card-body pb-0">
+            <div class="card top-selling container px-4" style="min-height:653px">
                 <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title">DOCTORES <span>| Sede San Isidro</span></h5>
                   <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
                 </div>
                 <div th:if="${msgDoc != null}" th:text="${msgDoc}" class="alert alert-success" role="alert"></div>
-                <div class=" flex-column" >
+
                   <table class="table" id="datatable">
                     <thead>
                     <tr>
@@ -365,22 +362,22 @@
                     </tbody>
                   </table>
                   <br>
-                </div>
+
 
               </div>
 
-            </div>
+
           </div><!-- End Top Selling -->
 
           <div class="col-12">
-            <div class="card top-selling overflow-auto container">
-              <div class="card-body pb-0">
+
+            <div class="card top-selling container px-4" style="min-height:653px">
                 <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title">PACIENTES <span>| Sede San Isidro</span></h5>
                   <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
                 </div>
                 <div th:if="${msgPaci != null}" th:text="${msgPaci}" class="alert alert-success" role="alert"></div>
-                <div class="d-flex flex-column" >
+
 
                   <table class="table table-hover" id="datatable2">
                     <thead>
@@ -413,9 +410,8 @@
                     </tbody>
                   </table>
                   <br>
-                </div>
+
               </div>
-            </div>
           </div>
         </div>
       </div><!-- End Left side columns -->
@@ -533,6 +529,7 @@
           "previous": "Anterior",
         }
       },
+      "pageLength": 5,
       "columnDefs": [
         {"margin-bottom": "10px"}
       ]

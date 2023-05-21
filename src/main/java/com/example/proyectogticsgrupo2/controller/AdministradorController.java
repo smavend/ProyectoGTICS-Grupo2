@@ -2,6 +2,7 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -26,6 +30,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/administrador")
 public class AdministradorController {
+
     final PacienteRepository pacienteRepository;
     final DoctorRepository doctorRepository;
     final SeguroRepository seguroRepository;
@@ -138,12 +143,13 @@ public class AdministradorController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
             paciente.setEstado(1);
             paciente.setFecharegistro(LocalDateTime.now());
             pacienteRepository.save(paciente);
             credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),paciente.getNombre());
+            CorreoService correoService = new CorreoService();
+            correoService.props(paciente.getCorreo());
             attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
@@ -171,7 +177,6 @@ public class AdministradorController {
                     doctor.setFoto(null);
                     doctor.setFotoname(null);
                     doctor.setFotocontenttype(null);
-
             }else {
                 String fileName = file.getOriginalFilename();
                 try {
@@ -185,6 +190,8 @@ public class AdministradorController {
             doctor.setEstado(1);
             doctorRepository.save(doctor);
             credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),doctor.getNombre());
+            CorreoService correoService = new CorreoService();
+            correoService.props(doctor.getCorreo());
             attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
