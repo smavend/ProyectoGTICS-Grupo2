@@ -16,10 +16,11 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
     void guardarDoctor (String dni, String nombre, String apellido, String estado, int especialidad, int sede, String correo);
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyectogtics.doctor where sede_id_sede=?1")
-    List<Doctor> listDoctorSede(int idSede);
+    List<Doctor> buscarDoctorSede(int idSede);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM proyectogtics.doctor where sede_id_sede=?1 and especialidad_id_especialidad=?2")
-    List<Doctor> listDoctorSedeEspecialidad(int idSede, int idEspecialidad);
+    @Query(nativeQuery = true, value = "select * from doctor d \n" +
+            "where sede_id_sede = ?1 and especialidad_id_especialidad = ?2")
+    List<Doctor> buscarDoctorSedeEspecialidad(int idSede, int idEspecialidad);
 
     @Query(nativeQuery = true, value = "SELECT sede_id_sede FROM proyectogtics.doctor where id_doctor=?1")
     int buscarIdSedeDoctor(String idDoctor);

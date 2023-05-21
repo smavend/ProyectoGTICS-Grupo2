@@ -45,7 +45,7 @@
             <section id="Sedes">
                 <div class="row align-items-start contenedor mx-0">
                     <div class="col-md-4" th:each="sede:${sedeList}">
-                        <a th:href="@{/Paciente/doctores(idSede=${sede.idSede})}">
+                        <a th:href="@{/Paciente/doctores(idSe=${sede.idSede}, idEs=0)}">
                             <figure>
                                 <img class="sedeImg" th:src="@{/Paciente/imageSede(idSede=${sede.idSede})}">
                                 <div class="capa">

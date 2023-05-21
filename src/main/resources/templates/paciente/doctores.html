@@ -35,21 +35,25 @@
             <h1 class="encabezado">Doctores</h1>
             <section class="seccionPrincipal">
                 <!-- Filtros -->
-                <form method="post" th:action="@{/Paciente/doctoresFiltrado}">
+                <form method="get" th:action="@{/Paciente/doctores}">
                     <div class="row filtrosDoctores">
                         <div class="col-lg-4 filtroDoctor d-flex justify-content-start">
                             <label class="labelFiltroDoctor">Sede</label>
-                            <select class="selectFiltroDoctor" name="idSedeFilter">
-                                <option th:each="s : ${sedeList}" th:value="${s.idSede}" th:text="${s.nombre}" th:selected="${s.idSede == sede.idSede}"></option>
+                            <select class="selectFiltroDoctor" name="idSe">
+                                <option th:each="sede: ${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}" th:selected="${sede.idSede == idSede}"></option>
                             </select>
                         </div>
                         <div class="col-lg-5 filtroDoctor d-flex justify-content-start">
                             <label class="labelFiltroDoctor">Especialidad</label>
-                            <select class="selectFiltroDoctor" name="idEspecialidadFilter">
+                            <select class="selectFiltroDoctor" name="idEs">
+                                <option value="0" th:selected="${idEspecialidad == 0}">Todas las especialidades</option>
+                                <option th:each="especialidad : ${especialidadList}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" th:selected="${especialidad.idEspecialidad == idEspecialidad}"></option>
+                                <!--
                                 <option th:if="${sinFiltrar}==0">Todas las especialidades</option>
                                 <option th:text="${especialidad.nombre}" th:if="${sinFiltrar}==1"></option>
                                 <option value=0>Todas las especialidades</option>
                                 <option th:each="especialidades: ${especialidadList}" th:value="${especialidades.idEspecialidad}" th:text="${especialidades.nombre}">Dermatología</option>
+                                -->
                             </select>
                         </div>
                         <div class="col-lg-auto filtroDoctor d-lg-flex justify-content-center">

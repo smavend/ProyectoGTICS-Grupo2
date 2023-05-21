@@ -681,7 +681,7 @@ left: 15px;
 bottom: 15px;
 z-index: 996;
 transition: all 0.3s;
-padding: 20px 35px 20px 20px;
+padding: 20px 45px 20px 20px;
 overflow-y: auto;
 scrollbar-width: thin;
 scrollbar-color: #aab7cf transparent;
@@ -709,7 +709,7 @@ background-color: #aab7cf;
 
 #main,
 #footer {
-    margin-left: 255px;
+    margin-left: 265px;
 }
 }
 
@@ -1330,7 +1330,7 @@ p{
 
 @media (max-width: 1199px) {
     .encabezado{
-        font-size: 2.1rem;
+        font-size: 2.3rem;
         width: auto;
         margin: 0 20px;
     }

@@ -18,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -288,27 +289,34 @@ public class PacienteController {
 
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
-    public String verDoctores(@RequestParam("idSede") int idSede,
+    public String verDoctores(@RequestParam("idSe") int idSede,
+                              @RequestParam("idEs") int idEspecialidad,
                               Model model) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
         }
+
+        List<Doctor> doctorList = null;
+        if (idEspecialidad == 0){
+            doctorList = doctorRepository.buscarDoctorSede(idSede);
+        }
+        else {
+            doctorList = doctorRepository.buscarDoctorSedeEspecialidad(idSede, idEspecialidad);
+        }
         List<Sede> sedeList = sedeRepository.findAll();
         List<Especialidad> especialidadList = especialidadRepository.findAll();
-        Optional<Sede> optionalSede = sedeRepository.findById(idSede);
-        Sede sede = optionalSede.get();
-        List<Doctor> listDoctorSede = doctorRepository.listDoctorSede(idSede);
 
-        model.addAttribute("sede", sede);
-        model.addAttribute("doctorList", listDoctorSede);
+        model.addAttribute("idSede", idSede);
+        model.addAttribute("idEspecialidad", idEspecialidad);
+        model.addAttribute("doctorList", doctorList);
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
 
     }
-
+/*
     @PostMapping("/doctoresFiltrado")
     public String verDoctores(@RequestParam("idSedeFilter") int idSedeFilter,
                               @RequestParam("idEspecialidadFilter") int idEspecialidadFilter,
@@ -344,7 +352,7 @@ public class PacienteController {
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
     }
-
+*/
     @GetMapping("/imageDoctor")
     public ResponseEntity<byte[]> mostrarImagenDoctor(@RequestParam("idDoctor") String idDoctor) {
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
