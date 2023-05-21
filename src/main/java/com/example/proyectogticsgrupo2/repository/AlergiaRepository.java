@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.repository;
 
+import com.example.proyectogticsgrupo2.dto.AlergiasPacienteDTO;
 import com.example.proyectogticsgrupo2.entity.Alergia;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -2,7 +2,6 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,7 +34,9 @@ public class AdministradorController {
     final EspecialidadRepository especialidadRepository;
     final SedeRepository sedeRepository;
     final AdministradorRepository administradorRepository;
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository) {
+    final CredencialesRepository credencialesRepository;
+    final TemporalRepository temporalRepository;
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.seguroRepository = seguroRepository;
@@ -44,8 +45,9 @@ public class AdministradorController {
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
         this.administradorRepository = administradorRepository;
+        this.credencialesRepository = credencialesRepository;
+        this.temporalRepository = temporalRepository;
     }
-
     //#####################################33
     @GetMapping("/dashboard")
     public String dashboard (Model model){
@@ -57,8 +59,40 @@ public class AdministradorController {
     }
     @GetMapping("/finanzas")
     public String finanzas(){return "administrador/finanzas";}
+    @GetMapping("/config")
+    public String config(){return "administrador/config";}
     @GetMapping("/registro")
-    public String registro(){return "administrador/rptaForm";}
+    public String registro(Model model){
+        List<Temporal> listaTemporal = temporalRepository.findAll();
+        model.addAttribute("listaTemporal",listaTemporal);
+        return "administrador/rptaForm";}
+    @PostMapping("/guardarTemporales")
+    public String guardarTemporales(@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr){
+        List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
+
+            for (Temporal pacitemp : pacientesTemp){
+                paciente.setIdPaciente(pacitemp.getDni());
+                paciente.setNombre(pacitemp.getNombre());
+                paciente.setApellidos(pacitemp.getApellidos());
+                paciente.setTelefono(pacitemp.getTelefono());
+                paciente.setDireccion("Av Calle 124");
+                paciente.setFechanacimiento(pacitemp.getFecha_nacimiento());
+                paciente.setSeguro(pacitemp.getSeguro());
+                paciente.setDistrito(pacitemp.getDistrito());
+                paciente.setGenero("Masculino");
+                paciente.setCorreo(pacitemp.getCorreo());
+                paciente.setEstado(1);
+                paciente.setFecharegistro(LocalDateTime.now());
+                paciente.setFoto(null);
+                paciente.setFotoname(null);
+                paciente.setFotocontenttype(null);
+                attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
+                pacienteRepository.save(paciente);
+                temporalRepository.deleteById(pacitemp.getId_temporal());
+            }
+            return "redirect:/administrador/dashboard";
+
+    }
     @GetMapping("/perfil")
     public String perfil(@RequestParam("id") String id, Model model){
         Optional<Administrador> optAministrador = administradorRepository.findById(id);
@@ -70,12 +104,12 @@ public class AdministradorController {
     //###########################################################################
     @GetMapping("/crearPaciente")
     public String crearPaciente( @ModelAttribute("paciente") Paciente paciente,  Model model){
-    List<Seguro> listaSeguro  = seguroRepository.findAll();
-    List<Distrito> listaDistrito = distritoRepository.findAll();
-    List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
-    model.addAttribute("listaSeguro",listaSeguro);
-    model.addAttribute("listaDistrito",listaDistrito);
-    model.addAttribute("listaAdministrativo",listaAdministrativo);
+        List<Seguro> listaSeguro  = seguroRepository.findAll();
+        List<Distrito> listaDistrito = distritoRepository.findAll();
+        List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
+        model.addAttribute("listaSeguro",listaSeguro);
+        model.addAttribute("listaDistrito",listaDistrito);
+        model.addAttribute("listaAdministrativo",listaAdministrativo);
         return "administrador/crearPaciente";}
     @PostMapping("/guardarPaciente")
     public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
@@ -90,56 +124,28 @@ public class AdministradorController {
             model.addAttribute("listaAdministrativo",listaAdministrativo);
             return "administrador/crearPaciente";
         } else{
-
-
             if (file.isEmpty()) {
-                try {
-                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-                    FileInputStream input = new FileInputStream(foto);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) !=-1){
-                        output.write(buffer,0,length);
-                    }
-                    input.close();;
-                    output.close();
-                    byte[] bytes = output.toByteArray();
-
-                    paciente.setFoto(bytes);
-                    paciente.setFotoname("userPorDefecto.jpg");
-                    paciente.setFotocontenttype("image/jpg");
-                    paciente.setEstado(1);
-                    paciente.setFecharegistro(LocalDateTime.now());
-                    pacienteRepository.save(paciente);
-                    attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
-
-                    return "redirect:/administrador/dashboard";
-                }catch (IOException e){
-                    e.printStackTrace();
-                    return "redirect:/administrador/crearPaciente";
-                }
+                    paciente.setFoto(null);
+                    paciente.setFotoname(null);
+                    paciente.setFotocontenttype(null);
 
             }else{
-
                 String fileName = file.getOriginalFilename();
                 try {
                     paciente.setFoto(file.getBytes());
                     paciente.setFotoname(fileName);
                     paciente.setFotocontenttype(file.getContentType());
-                    paciente.setEstado(1);
-                    paciente.setFecharegistro(LocalDateTime.now());
-                    pacienteRepository.save(paciente);
-                    attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
-                    return "redirect:/administrador/dashboard";
                 } catch (IOException e) {
                     e.printStackTrace();
-                    model.addAttribute("msg", "ocurrió un error al subir el archivo");
-                    return "redirect:/administrador/crearPaciente";
                 }
 
             }
-
+            paciente.setEstado(1);
+            paciente.setFecharegistro(LocalDateTime.now());
+            pacienteRepository.save(paciente);
+            credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),paciente.getNombre());
+            attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+            return "redirect:/administrador/dashboard";
         }
     }
     //###########################################################################
@@ -162,52 +168,33 @@ public class AdministradorController {
             return "administrador/crearDoctor";
         }else {
             if(file.isEmpty()){
-                try {
-                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-                    FileInputStream input = new FileInputStream(foto);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) !=-1){
-                        output.write(buffer,0,length);
-                    }
-                    input.close();;
-                    output.close();
-                    byte[] bytes = output.toByteArray();
+                    doctor.setFoto(null);
+                    doctor.setFotoname(null);
+                    doctor.setFotocontenttype(null);
 
-                    doctor.setFoto(bytes);
-                    doctor.setFotoname("userPorDefecto.jpg");
-                    doctor.setFotocontenttype("image/jpg");
-                    doctor.setEstado(1);
-                    doctorRepository.save(doctor);
-                    attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
-                    return "redirect:/administrador/dashboard";
-                }catch (IOException e){
-                    e.printStackTrace();
-                    return "redirect:/administrador/crearDoctor";
-                }
             }else {
                 String fileName = file.getOriginalFilename();
                 try {
                     doctor.setFoto(file.getBytes());
                     doctor.setFotoname(fileName);
                     doctor.setFotocontenttype(file.getContentType());
-                    doctor.setEstado(1);
-                    doctorRepository.save(doctor);
-                    attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
-                    return "redirect:/administrador/dashboard";
                 } catch (IOException e) {
                     e.printStackTrace();
-                    model.addAttribute("msg", "ocurrió un error al subir el archivo");
-                    return "redirect:/administrador/crearDoctor";
                 }
             }
+            doctor.setEstado(1);
+            doctorRepository.save(doctor);
+            credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),doctor.getNombre());
+            attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
+            return "redirect:/administrador/dashboard";
         }
     }
     @GetMapping("/calendario")
     public String calendario(){return "administrador/calendario";}
     @GetMapping("/mensajeria")
-    public String mensajeria(){return "administrador/mensajeria";}
+    public String mensajeria(){
+        //En onstruccion
+        return "administrador/mensajeria";}
     @GetMapping("/historialPaciente")
     public String historialPaciente(@RequestParam("id") String id, Model model){
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
@@ -229,6 +216,35 @@ public class AdministradorController {
             Paciente p = opt.get();
 
             byte[] imagenComoBytes = p.getFoto();
+            //agregue desde aca
+            if(imagenComoBytes==null){
+                try {
+                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+                    FileInputStream input = new FileInputStream(foto);
+                    ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = input.read(buffer)) !=-1){
+                        output.write(buffer,0,length);
+                    }
+                    input.close();;
+                    output.close();
+                    byte[] bytes = output.toByteArray();
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    httpHeaders.setContentType(
+                            MediaType.parseMediaType("image/jpg"));
+
+                    return new ResponseEntity<>(
+                            bytes,
+                            httpHeaders,
+                            HttpStatus.OK);
+
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }else {
+
+            } //agregue hasta aca
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
@@ -254,6 +270,35 @@ public class AdministradorController {
             Doctor doc = opt.get();
 
             byte[] imagenComoBytes = doc.getFoto();
+            //agregue desde aca
+            if(imagenComoBytes==null){
+                try {
+                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+                    FileInputStream input = new FileInputStream(foto);
+                    ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = input.read(buffer)) !=-1){
+                        output.write(buffer,0,length);
+                    }
+                    input.close();;
+                    output.close();
+                    byte[] bytes = output.toByteArray();
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    httpHeaders.setContentType(
+                            MediaType.parseMediaType("image/jpg"));
+
+                    return new ResponseEntity<>(
+                            bytes,
+                            httpHeaders,
+                            HttpStatus.OK);
+
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }else {
+
+            } //agregue hasta aca
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(

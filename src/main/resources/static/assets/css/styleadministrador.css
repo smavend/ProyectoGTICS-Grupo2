@@ -9,6 +9,7 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+
 /*styles mensajeria*/
 .mensajeria{
     font-family: 'Poppins', sans-serif;
@@ -35,12 +36,16 @@
     text-decoration: none;
     background-color: #F2F2F2;
     border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+
+
 }
 
 /*End styles mensajeria*/
-:root {
-    scroll-behavior: smooth;
+:root, [data-bs-theme=dark] {
+    color-scheme: dark;
+
 }
+
 /*icono*/
 #sidebar {
     border-radius: 35px;

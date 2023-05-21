@@ -1,9 +1,16 @@
 package com.example.proyectogticsgrupo2.entity;
+
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,24 +31,36 @@ public class Cita {
 
     @Column(nullable = false)
     private LocalDateTime inicio;
-
     @Column(nullable = false)
     private LocalDateTime fin;
 
+    @NotBlank(message = "El campo no puede estar vacío")
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String diagnostico;
-    private String receta;
-    private String tratamiento;
-    private String bitacora;
 
+    @NotBlank(message = "El campo no puede estar vacío")
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
+    private String receta;
+
+    @NotBlank(message = "El campo no puede estar vacío")
+    @Size(max=100,message = "El campo no puede tener más de 100 caracteres")
+    private String tratamiento;
+
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
+    private String bitacora;
     @Column(nullable = false)
-    private int modalidad; // 0: Presencial , 1: Virtual
+    private int modalidad;
 
     @Column(nullable = false)
     @Lob
     private byte[] reporte;
 
+
     @Column(nullable = false)
     private int estado;
+
+
+
 
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)
@@ -50,5 +69,6 @@ public class Cita {
     @ManyToOne
     @JoinColumn(name = "id_cita_previa")
     private Cita cita_previa;
+
 
 }

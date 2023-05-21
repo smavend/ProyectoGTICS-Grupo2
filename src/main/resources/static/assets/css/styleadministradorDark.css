@@ -9,107 +9,11 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
-#sidebar {
-    border-radius: 35px;
-}
 
-body::-webkit-scrollbar {
-    width: 10px;
-    height: 5px;
+/*styles mensajeria*/
+.mensajeria{
+    font-family: 'Poppins', sans-serif;
 }
-
-body::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
-
-body::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-div::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
-
-div::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
-
-div::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-textarea::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
-
-textarea::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
-
-textarea::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-.btn-disabled {
-    background-color: #ccc;
-    pointer-events: none;
-}
-
-encabezado{
-    font-size: 2.5rem;
-    font-weight: 700;
-    width: 50%;
-    margin: 0 50px;
-    color: #435067;
-}
-
-@media (max-width: 1199px) {
-    .encabezado{
-        font-size: 2.1rem;
-        width: auto;
-        margin: 0 20px;
-    }
-}
-
-.subEncabezado{
-    font-size: 1.9rem;
-    font-weight: 600;
-}
-
-.seccionPrincipal{
-    margin: 20px auto 0 auto;
-    width: 100%;
-    border-radius: 15px;
-    padding: 10px 50px;
-    background-color: white;
-    box-shadow: 0 2px 20px rgba(0, 13, 35, 0.1);
-    overflow-x: auto;
-    overflow-y: auto;
-}
-
-.seccionPrincipal th{
-    font-size: 1rem;
-    padding: 15px 0 15px 20px;
-}
-
-.seccionPrincipal td{
-    padding: 20px 0 20px 20px;
-}
-
-@media (max-width: 1199px) {
-    .seccionPrincipal{
-        padding: 10px 15px;
-    }
-}
-.seccionCuestionario{
-    margin-top: 30px;
-}
-
 .ellipsis{
     white-space: nowrap; /* para evitar el salto de línea */
     overflow: hidden; /* para ocultar el texto que no cabe en el contenedor */
@@ -123,16 +27,135 @@ encabezado{
     max-height: 450px; /* Establece una altura máxima para el div */
     overflow: auto; /* Crea un scrollbar si el contenido excede el tamaño máximo */
 }
-:root {
-    scroll-behavior: smooth;
+
+.fondo {
+    position: relative;
+    display: block;
+    padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+    color: var(--bs-list-group-color);
+    text-decoration: none;
+    background-color: #F2F2F2;
+    border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+
+
 }
+
+/*End styles mensajeria*/
+:root, [data-bs-theme=dark] {
+    color-scheme: dark;
+    --bs-body-color: #adb5bd;
+    --bs-body-color-rgb: 173, 181, 189;
+    --bs-body-bg: #212529;
+    --bs-body-bg-rgb: 33, 37, 41;
+    --bs-emphasis-color: #fff;
+    --bs-emphasis-color-rgb: 255, 255, 255;
+    --bs-secondary-color: rgba(173, 181, 189, 0.75);
+    --bs-secondary-color-rgb: 173, 181, 189;
+    --bs-secondary-bg: #343a40;
+    --bs-secondary-bg-rgb: 52, 58, 64;
+    --bs-tertiary-color: rgba(173, 181, 189, 0.5);
+    --bs-tertiary-color-rgb: 173, 181, 189;
+    --bs-tertiary-bg: #2b3035;
+    --bs-tertiary-bg-rgb: 43, 48, 53;
+    --bs-primary-text-emphasis: #6ea8fe;
+    --bs-secondary-text-emphasis: #a7acb1;
+    --bs-success-text-emphasis: #75b798;
+    --bs-info-text-emphasis: #6edff6;
+    --bs-warning-text-emphasis: #ffda6a;
+    --bs-danger-text-emphasis: #ea868f;
+    --bs-light-text-emphasis: #f8f9fa;
+    --bs-dark-text-emphasis: #dee2e6;
+    --bs-primary-bg-subtle: #031633;
+    --bs-secondary-bg-subtle: #161719;
+    --bs-success-bg-subtle: #051b11;
+    --bs-info-bg-subtle: #032830;
+    --bs-warning-bg-subtle: #332701;
+    --bs-danger-bg-subtle: #2c0b0e;
+    --bs-light-bg-subtle: #343a40;
+    --bs-dark-bg-subtle: #1a1d20;
+    --bs-primary-border-subtle: #084298;
+    --bs-secondary-border-subtle: #41464b;
+    --bs-success-border-subtle: #0f5132;
+    --bs-info-border-subtle: #087990;
+    --bs-warning-border-subtle: #997404;
+    --bs-danger-border-subtle: #842029;
+    --bs-light-border-subtle: #495057;
+    --bs-dark-border-subtle: #343a40;
+    --bs-link-color: #6ea8fe;
+    --bs-link-hover-color: #8bb9fe;
+    --bs-link-color-rgb: 110, 168, 254;
+    --bs-link-hover-color-rgb: 139, 185, 254;
+    --bs-code-color: #e685b5;
+    --bs-border-color: #495057;
+    --bs-border-color-translucent: rgba(255, 255, 255, 0.15);
+    --bs-form-valid-color: #75b798;
+    --bs-form-valid-border-color: #75b798;
+    --bs-form-invalid-color: #ea868f;
+    --bs-form-invalid-border-color: #ea868f;
+}
+
+/*icono*/
+#sidebar {
+    border-radius: 35px;
+}
+#recibo {
+    border-radius: 35px;
+}
+
+/*fin icono*/
 /* Styles calendario*/
+.calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.month {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.weekdays {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.days {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.day {
+    width: calc(100% / 7);
+    height: calc(100% / 5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.today {
+    background-color: #007bff;
+    color: #fff;
+}
 
 /*End styles calendario*/
 body {
     font-family: "Open Sans", sans-serif;
     background: #f6f9ff;
     color: #444444;
+
 }
 
 a {
@@ -158,11 +181,9 @@ h6 {
 # Main
 --------------------------------------------------------------*/
 #main {
-    margin-top: 80px;
-
+    margin-top: 60px;
+    padding: 20px 30px;
     transition: all 0.3s;
-    width: auto;
-
 }
 
 @media (max-width: 1199px) {
@@ -476,7 +497,8 @@ h6 {
 --------------------------------------------------------------*/
 #header {
     /* Agrega aquí los estilos que deseas aplicar al header */
-    background-color: #162b4e;
+    background-color: #a2985d;
+
 
 }
 .logo {
@@ -737,15 +759,16 @@ table a:hover {
     top: 60px;
     left: 0;
     bottom: 0;
-    width: 200px;
+    width: 300px;
     z-index: 996;
     transition: all 0.3s;
     padding: 20px;
-    overflow-y: auto;
+    overflow-y: hidden;
     scrollbar-width: thin;
     scrollbar-color: #aab7cf transparent;
     box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
     background-color: #fff;
+
 }
 
 @media (max-width: 1199px) {
@@ -768,7 +791,7 @@ table a:hover {
 
     #main,
     #footer {
-        margin-left: 210px;
+        margin-left: 300px;
     }
 }
 
@@ -782,8 +805,7 @@ table a:hover {
 
     .toggle-sidebar #main,
     .toggle-sidebar #footer {
-        margin-left: 10px;
-        margin-right: 0px;
+        margin-left: 0;
     }
 
     .toggle-sidebar .sidebar {
@@ -905,7 +927,7 @@ table a:hover {
 
 .dashboard .filter .icon {
     color: #aab7cf;
-    padding-right: 10px;
+    padding-right: 20px;
     padding-bottom: 5px;
     transition: 0.3s;
     font-size: 16px;
@@ -1366,46 +1388,4 @@ table a:hover {
     text-align: center;
     font-size: 13px;
     color: #012970;
-}
-
-.message-box {
-    max-height: 450px;
-    overflow-y: auto;
-    margin-top: 20px;
-}
-.message-box .media {
-    margin-bottom: 10px;
-}
-.message-box .media-body {
-    background-color: #e2e2e2;
-    border-radius: 15px;
-    padding: 10px;
-    max-width: 60%;
-}
-.message-box .media-body.right {
-    float: right;
-    background-color: #dcf8c6;
-}
-.message-box .media-body.left {
-    float: left;
-}
-.message-box .media-body.left .time {
-    text-align: left;
-}
-.message-box .media-body.right .time {
-    text-align: right;
-}
-.message-box .media-body p {
-    font-size: 16px;
-    margin: 0;
-}
-.message-box .time {
-    font-size: 12px;
-    color: #999999;
-}
-.person1 {
-    background-color: #dcf8c6;
-}
-.person2 {
-    background-color: #e2e2e2;
 }

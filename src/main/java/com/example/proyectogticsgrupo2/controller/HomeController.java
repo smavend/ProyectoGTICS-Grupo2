@@ -68,29 +68,8 @@ public class HomeController {
     public String cambioPasswExitoso(){
         return "general/confirmacioncontrasenia";
     }
-    @PostMapping("/login/credenciales")
-    public String credenciales(Model model, @RequestParam("username") String correo, @RequestParam("password") String password){
 
-        Optional<Credenciales> optCredenciales = credencialesRepository.findByCorreoAndContrasena(correo,password);
-        if(optCredenciales.isPresent()){
-            Credenciales credencial = optCredenciales.get();
-            Optional<Paciente> optionalPaciente = pacienteRepository.findById(credencial.getId_credenciales());
-            Optional<Administrador> optAdministrador = administradorRepository.findById(credencial.getId_credenciales());
-            if(optAdministrador.isPresent()){
 
-                return "redirect:/administrador/dashboard";
-            }else if (optionalPaciente.isPresent()){
-                Paciente paciente = optionalPaciente.get();
-                model.addAttribute("paciente",paciente);
-                return "paciente/index";
-            }else {
-                return "redirect:/login"; //continuara
-            }
-
-        }else {
-            return "redirect:/login";
-        }
-    }
     @GetMapping("/signin")
     public String vistaRegistro(Model model){
         List<Distrito> list = distritoRepository.findAll();
