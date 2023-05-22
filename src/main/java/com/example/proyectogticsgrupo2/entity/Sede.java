@@ -6,13 +6,14 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "sede")
-public class Sede {
+public class Sede implements Serializable {
 
     @Id
     @Column(name = "id_sede", nullable = false)

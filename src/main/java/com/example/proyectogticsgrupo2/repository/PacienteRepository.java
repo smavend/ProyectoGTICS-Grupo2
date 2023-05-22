@@ -35,7 +35,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
     void actualizarPaciente(String correo, String direccion, int idDistrito, String idPaciente);
     List<Paciente> findByIdPaciente(Integer id);
 
-    public Paciente findByCorreo(String correo);
+    Paciente findByCorreo(String correo);
 
 
 }

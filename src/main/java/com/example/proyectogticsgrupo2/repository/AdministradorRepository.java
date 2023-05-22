@@ -31,5 +31,5 @@ public interface AdministradorRepository extends JpaRepository<Administrador, St
     @Query("SELECT a.sede.idSede FROM Administrador a")
     List<Integer> findSedesConAdministrador();
 
-    public Administrador findByCorreo(String correo);
+    Administrador findByCorreo(String correo);
 }

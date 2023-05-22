@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 
 
 @Getter
 @Setter
 @Entity
 @Table(name = "administrador")
-public class Administrador {
+public class Administrador implements Serializable {
     @Id
     @Column(name="id_administrador", nullable = false)
     private String idAdministrador;

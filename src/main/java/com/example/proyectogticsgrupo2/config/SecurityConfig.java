@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.config;
 
+import com.example.proyectogticsgrupo2.entity.SuperAdmin;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
@@ -52,20 +53,32 @@ public class SecurityConfig {
                         redirectStrategy.sendRedirect(request, response, targetURL);
                     } else {
                         String rol = "";
+                        HttpSession session = request.getSession();
                         for (GrantedAuthority role : authentication.getAuthorities()) {
                             rol = role.getAuthority();
                             break;
                         }
-                        if (rol.equals("paciente")) {
-                            response.sendRedirect("/Paciente");
-                        } else if (rol.equals("doctor")) {
-                            response.sendRedirect("/doctor");
-                        } else if (rol.equals("administrador")) {
-                            response.sendRedirect("/administrador/dashboard");
-                        } else if (rol.equals("administrativo")) {
-                            response.sendRedirect("/administrativo");
-                        } else{
-                            response.sendRedirect("/SuperAdminHomePage");
+                        switch (rol) {
+                            case "paciente" -> {
+                                session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/Paciente");
+                            }
+                            case "doctor" -> {
+                                session.setAttribute("doctor", doctorRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/doctor");
+                            }
+                            case "administrador" -> {
+                                session.setAttribute("administrador", administradorRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/administrador/dashboard");
+                            }
+                            case "administrativo" -> {
+                                session.setAttribute("administrativo", administrativoRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/administrativo");
+                            }
+                            case "superadmin" -> {
+                                session.setAttribute("superadmin", superAdminRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/SuperAdminHomePage");
+                            }
                         }
                     }
                 });

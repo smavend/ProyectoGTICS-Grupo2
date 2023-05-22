@@ -4,17 +4,17 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "administrativo")
-public class Administrativo {
+public class Administrativo implements Serializable {
 
     @Id
     @Column(name = "id_administrativo", nullable = false)
