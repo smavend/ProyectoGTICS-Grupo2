@@ -4,7 +4,7 @@
 
 body {
     font-family: "Open Sans", sans-serif;
-    background: rgb(230, 230, 230);
+    background: #f5f5f5;
     color: #444444;
     min-height: 91vh;
 }
@@ -33,7 +33,7 @@ font-family: "Nunito", sans-serif;
 #main {
     position: relative;
     top: 110px;
-    background: rgb(230, 230, 230);
+    background: #f5f5f5;
     
     overflow-y: auto;
     scrollbar-width: thin;
@@ -681,7 +681,7 @@ left: 15px;
 bottom: 15px;
 z-index: 996;
 transition: all 0.3s;
-padding: 20px 45px 20px 20px;
+padding: 20px 20px 20px 20px;
 overflow-y: auto;
 scrollbar-width: thin;
 scrollbar-color: #aab7cf transparent;
@@ -689,7 +689,7 @@ box-shadow: 0 0 20px rgba(1, 41, 112, 0.1);
 background-color: #fff;
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1270px) {
 .sidebar {
     left: -300px;
 }
@@ -705,7 +705,7 @@ background-color: #fff;
 background-color: #aab7cf;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1270px) {
 
 #main,
 #footer {
@@ -762,9 +762,9 @@ font-size: 15px;
 font-weight: 600;
 color: white;
 transition: all 0.3s;
-background: #34bef5;
-padding: 10px 15px;
-border-radius: 20px;
+    background: #0AA1DD;
+    padding: 10px 40px 10px 15px;
+    border-radius: 15px;
 }
 
 .sidebar-nav .nav-link i {
@@ -774,7 +774,7 @@ color: white;
 }
 
 .sidebar-nav .nav-link.collapsed {
-color: #012970;
+color: #526a91;
 background: #fff;
 }
 
@@ -784,7 +784,7 @@ color: #899bbd;
 
 .sidebar-nav .nav-link:hover {
 color: white;
-background: #12a8e4;
+background: #0AA1DD;
 }
 
 .sidebar-nav .nav-link:hover i {
@@ -1323,7 +1323,7 @@ p{
 .encabezado{
     font-size: 2.5rem;
     font-weight: 700;
-    width: 50%;
+    width: 80%;
     margin: 0 50px;
     color: #435067;
 }
@@ -1391,23 +1391,34 @@ p{
     height: 60px;
 }
 
-@media(min-width: 1200px){
+@media(min-width: 1270px){
     .botonToggle{
         display: none;
     }
 }
 
-.botonReservarCita{
-    background-color: #0AA1DD;
-    border-radius: 50px;
-    border: 0;
+.botonNavBar{
     padding: 14px 17px;
     font-weight: 600;
+    border-radius: 20px;
+    border: 0;
+    transition: all 0.3s;
+}
+
+.botonReservarCita{
+    background-color: #0AA1DD;
+    color: white;
 }
 
 .botonReservarCita:hover{
     background-color: #197ce6;
     color: white;
+}
+
+.fotoNavBar{
+    height: 36px;
+    width: 36px;
+    object-fit: cover;
 }
 
 /* Sección Pagos */
@@ -1541,14 +1552,14 @@ p{
     margin: 0 25px;
 }
 
-.filtro{
+botonTipo{
     font-weight: 500;
     color: black;
     background-color: rgb(230, 230, 230);
 }
 
-.filtro,
-.filtroSeleccionado{
+.botonTipo,
+.botonTipoSeleccionado{
     font-size: .8rem;
     border-radius: 50px;
     border: none;
@@ -1557,13 +1568,13 @@ p{
     padding: 8px 20px;
 }
 
-.filtro:hover,
-.filtroSeleccionado:hover{
+.botonTipo:hover,
+.botonTipoSeleccionado:hover{
     background-color: #7ce494;
     color: black;
 }
 
-.filtroSeleccionado{
+.botonTipoSeleccionado{
     background-color: #a7ebb7;
     color: black;
     font-weight: 600;
@@ -1620,29 +1631,21 @@ p{
 
 /* Doctores */
 
-.filtrosDoctores{
-    padding: 30px 0 50px 0;
+.filtroNav{
+    padding: 30px 5px 50px 5px;
 }
 
 .ReservarCita{
     font-family: 'Schibsted Grotesk', sans-serif;
 }
 
-@media(max-width: 992px){
-    .filtroDoctor{
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-}
-
-.labelFiltroDoctor{
+.labelFiltro{
     text-align: center;
     margin-right: 10px;
 
     font-size: 1rem;
-    border-radius: 50px;
-    padding: 8px 0;
-    width: 135px;
+    border-radius: 15px;
+    padding: 10px 17px;
 
     font-weight: 500;
     color: black;
@@ -1650,76 +1653,133 @@ p{
     border: none;
 }
 
-.selectFiltroDoctor{
+.botonFiltro{
     border-radius: 15px;
-    padding: 7px 15px;
-}
-
-.botonBuscarDoctor{
-    border-radius: 50px;
-    padding: 8px 30px;
+    border: none;
+    padding: 10px 25px;
     background-color: rgb(10, 161, 221);
     color: white;
     font-weight: 600;
 }
 
-.botonBuscarDoctor:hover{
-    background-color: #197ce6;
+.botonFiltro:hover{
+    background-color: #0AA1DD;
     color: white;
+}
+
+@media(max-width: 768px){
+    .filtro{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .botonFiltro{
+        margin-top: 10px;
+    }
 }
 
 .cardDoctor{
-    background-color: #83d6f7;
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 10px;
-    margin-bottom: 20px;
+    box-shadow: 0px 0px 15px -5px rgba(0,0,0,0.45);
+    margin: 0 auto 30px auto;
+}
+
+@media(max-width: 768px){
+    .cardDoctor{
+        width: 280px;
+    }
+    .fotoDoctor2{
+        height: 140px;
+        width: 140px;
+    }
+}
+
+@media(min-width: 769px ) and (max-width: 991px){
+    .cardDoctor{
+        width: 320px;
+        margin-bottom: 50px;
+    }
+}
+
+@media(min-width: 992px) and (max-width: 1200px){
+    .cardDoctor{
+        width: 285px;
+    }
+}
+
+.seccionFoto{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
 }
 
 .fotoDoctor{
-    width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 2px 20px rgba(1, 41, 112, 0.2);
+    border-radius: 200px;
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
 }
 
-.informacionDoctor{
-    padding-left: 0;
-    padding-right: 10px;
-}
-
-.nombreDoctor{
-    font-size: 1.2rem;
-    font-weight: 700;
+.seccionDescripcion{
     text-align: center;
-    color: #012970;
+    padding-bottom: 10px;
 }
 
-.disponibilidadDoctor{
-    background-color: #e6f7fe;
-    border-radius: 20px;
-    margin-top: 10px;
-    padding: 10px 15px;
+.seccionNombre{
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #343434;
+}
+
+.seccionEspecialidad{
+    font-weight: 700;
+    font-size: 1rem;
+    color: #767c9c;
+}
+
+.seccionDisponibilidad{
+    background-color: #f3f8fe;
+    border-radius: 15px;
+    box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.1);
+    padding: 15px 0;
+    margin-bottom: 10px;
+}
+
+.seccionHorario{
     font-weight: 600;
-    box-shadow: 0 2px 20px rgba(1, 41, 112, 0.1);
-}
-
-.disponibilidadDoctorDato{
-    font-weight: 500;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    font-size: .9rem;
+    color: #575757;
+    margin: 5px 0;
+    text-align: center;
 }
 
 .botonVerMasDoctor{
-    border-radius: 20px;
-    padding: 8px 35px;
-    color: white;
+    text-align: center;
+    border-radius: 15px;
+    padding: 10px;
+    color: #767c9c;
     font-weight: 600;
-    background-color:#0078a8;
+    font-size: .9rem;
     transition: all 0.3s;
 }
 
 .botonVerMasDoctor:hover{
     color: white;
-    background-color: #0359b4;
+    background-color: #0AA1DD;
+}
+
+.fotoDoctorPerfil{
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+}
+
+@media(min-width: 768px){
+    .fotoDoctorPerfil{
+        margin-right: 40px;
+    }
 }
 
 /* Cuestionarios */
@@ -1882,16 +1942,18 @@ p{
     border: none;
 }
 
-.botonEditar{
+.botonPerfil{
     border: none;
-    border-radius: 50px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    border-radius: 15px;
+    color: white;
+    padding: 11px 0;
     background-color: #12a8e4;
+    transition: all 0.3s;
 }
 
-.botonEditar:hover{
+.botonPerfil:hover{
     background-color: #0b5ed7;
+    color: white;
 }
 
 .table th{

@@ -28,7 +28,7 @@
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('citas')}"></div>
         <!-- End Sidebar-->
 
         <main id="main" class="main">
@@ -36,8 +36,8 @@
             <h1 class="encabezado">Citas agendadas</h1>
             <section class="seccionPrincipal">
 
-                <a class="btn filtro filtroSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
-                <a class="btn filtro botonExamenes" onclick="buscarExamenes()">Próximos exámenes</a>
+                <a class="btn botonTipo botonTipoSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
+                <a class="btn botonTipo botonExamenes" onclick="buscarExamenes()">Próximos exámenes</a>
 
                 <div class="table-responsive-xl">
                     <table class="table">

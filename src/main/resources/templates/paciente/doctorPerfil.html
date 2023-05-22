@@ -28,7 +28,7 @@
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
         <!-- End Sidebar-->
 
         <main style="padding-top: 0;" id="main" class="main">
@@ -36,8 +36,8 @@
                 <!-- Perfil doctor -->
                 <div style="margin-bottom: 50px;" class="row">
                     <!-- Foto Doctor -->
-                    <div class="col-md-5 d-md-flex justify-content-end align-items-center">
-                        <img class="fotoDoctor" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
+                    <div class="col-md-5 d-flex justify-content-center justify-content-md-end align-items-center py-5 py-md-0">
+                        <img class="fotoDoctorPerfil rounded-circle" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
                     </div>
                     <!-- Información Doctor -->
                     <div class="col-md-7">

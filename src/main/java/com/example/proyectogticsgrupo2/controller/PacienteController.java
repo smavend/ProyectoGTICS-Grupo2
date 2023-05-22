@@ -289,8 +289,8 @@ public class PacienteController {
 
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
-    public String verDoctores(@RequestParam("idSe") int idSede,
-                              @RequestParam("idEs") int idEspecialidad,
+    public String verDoctores(@RequestParam("sede") int idSede,
+                              @RequestParam("esp") int idEspecialidad,
                               Model model) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()) {
@@ -298,7 +298,7 @@ public class PacienteController {
             model.addAttribute("paciente", paciente);
         }
 
-        List<Doctor> doctorList = null;
+        List<Doctor> doctorList;
         if (idEspecialidad == 0){
             doctorList = doctorRepository.buscarDoctorSede(idSede);
         }
@@ -316,43 +316,7 @@ public class PacienteController {
         return "paciente/doctores";
 
     }
-/*
-    @PostMapping("/doctoresFiltrado")
-    public String verDoctores(@RequestParam("idSedeFilter") int idSedeFilter,
-                              @RequestParam("idEspecialidadFilter") int idEspecialidadFilter,
-                              Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
-        List<Sede> sedeList = sedeRepository.findAll();
-        List<Especialidad> especialidadList = especialidadRepository.findAll();
-        Optional<Sede> optionalSede = sedeRepository.findById(idSedeFilter);
-        if (optionalSede.isPresent()) {
-            Sede sede = optionalSede.get();
-            model.addAttribute("sede", sede);
-        }
-        if (idEspecialidadFilter == 0) {
-            List<Doctor> doctorList = doctorRepository.listDoctorSede(idSedeFilter);
-            model.addAttribute("doctorList", doctorList);
-            model.addAttribute("sinFiltrar", 0);
-        } else {
-            List<Doctor> listDoctorSedeEspecialidad = doctorRepository.listDoctorSedeEspecialidad(idSedeFilter, idEspecialidadFilter);
-            model.addAttribute("doctorList", listDoctorSedeEspecialidad);
-        }
-        Optional<Especialidad> optionalEspecialidad = especialidadRepository.findById(idEspecialidadFilter);
-        if (optionalEspecialidad.isPresent()) {
-            Especialidad especialidad = optionalEspecialidad.get();
-            model.addAttribute("especialidad", especialidad);
-            model.addAttribute("sinFiltrar", 1);
 
-        }
-        model.addAttribute("sedeList", sedeList);
-        model.addAttribute("especialidadList", especialidadList);
-        return "paciente/doctores";
-    }
-*/
     @GetMapping("/imageDoctor")
     public ResponseEntity<byte[]> mostrarImagenDoctor(@RequestParam("idDoctor") String idDoctor) {
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
