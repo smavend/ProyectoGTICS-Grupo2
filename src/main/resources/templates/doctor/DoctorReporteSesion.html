@@ -387,7 +387,7 @@
                                         <img th:src="@{/assets/img/zoom.jpg}" style="width: 600px">
                                         <div style="margin-top: 5px;text-align: center">
                                             <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
-                                            <a th:href="@{'/doctor/verCuestionario?id=' + ${paciente.getIdPaciente()}}" type="button" class="btn btn-secondary" target="_blank">Resultados de cuestionario</a>
+                                            <a th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}" type="button" class="btn btn-secondary" target="_blank">Resultados de cuestionario</a>
 
                                         </div>
 

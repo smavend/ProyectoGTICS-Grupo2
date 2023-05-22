@@ -342,7 +342,7 @@
                                              style="height: 550px; overflow: auto;width: max-content">
                                             <div class="table-responsive">
                                                 <table id="example" class="table" >
-                                                    <thead style="text-align: center">
+                                                    <thead style="text-align: left">
                                                         <tr>
                                                             <th scope="col">Nombre</th>
                                                             <th scope="col">Tipo de cita</th>
@@ -352,7 +352,7 @@
                                                             <th scope="col"></th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody style="text-align: center">
+                                                    <tbody style="text-align: left">
                                                         <tr th:each="cita,obj: ${listaCitas}"
                                                             th:with="horario=${listaHorarios[obj.index]}">
 
@@ -538,11 +538,11 @@
 
                                                 <div class="d-flex flex-column" style="height: 550px; overflow: auto;">
                                                     <div class="table-responsive">
-                                                        <table style="text-align: center" id="example2" class="table table-striped" >
+                                                        <table style="text-align: left" id="example2" class="table table-striped" >
                                                             <thead>
                                                                 <tr >
                                                                     <th></th>
-                                                                    <th style="text-align: center">Nombres</th>
+                                                                    <th style="text-align: left">Nombres</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
