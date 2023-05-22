@@ -547,10 +547,12 @@
                                                             </thead>
                                                             <tbody>
                                                                 <tr style="height: fit-content" th:each="paciente,obj: ${listaPacientes}">
-                                                                    <td>
-                                                                        <img style="border-radius: 50%;border: 2px solid #000"
-                                                                             th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}"
-                                                                             height="70" width="70" alt="Profile">
+                                                                    <td style="text-align: center;">
+                                                                        <div style="display: inline-block; border-radius: 50%; border: none; overflow: hidden;">
+                                                                            <img th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}"
+                                                                                 style="width: 70px; height: 70px; object-fit: cover;"
+                                                                                 alt="Foto del paciente">
+                                                                        </div>
                                                                     </td>
                                                                     <td style="font-size: 1.2rem; color: black">
                                                                         <a th:href="@{'/doctor/historialClinico' + '?id=' + ${paciente.id_paciente}}"
