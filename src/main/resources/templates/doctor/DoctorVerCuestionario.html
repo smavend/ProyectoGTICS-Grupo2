@@ -428,31 +428,11 @@
                         </div>
                     </div>
 
-                    <a style="margin-top: 10px" href="#" class="btn btn-primary botonActualizarConsentimientos" data-bs-toggle="modal"
-                       data-bs-target="#actualizarModal">Enviar</a>
+                    <a style="margin-top: 10px" th:href="@{/doctor/dashboard}" class="btn btn-primary botonActualizarConsentimientos" data-bs-toggle="modal"
+                       >Regresar al Dashboard</a>
 
                     <!-- Modal Actualizar-->
-                    <div class="modal fade" id="actualizarModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5 tituloNavBar" id="actualizarModal">Confirmación</h1>
-                                </div>
-                                <div class="modal-body">
-                                    <span class="textoModal">¿Está seguro que desea enviar el cuestionario?</span>
-                                </div>
 
-                                <div class="modal-footer mx-auto">
-                                    <button type="submit" style="margin: 0 10px 0 0;" href="#"
-                                            class="btn btn-primary botonActualizarConsentimientos">Enviar
-                                    </button>
-                                    <a style="margin: 0 0 0 10px;" href="#" class="btn btn-danger botonCancelar"
-                                       data-bs-dismiss="modal">Cancelar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
 
             </section>
