@@ -168,6 +168,7 @@
 
       </li><!-- End Messages Nav -->
 
+      <h6 th:text="'Sede: '+${session.doctor.sede.nombre}" style="color: white;margin-right: 15px;margin-top: 10px"></h6>
       <li class="nav-item dropdown pe-3">
 
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
@@ -178,8 +179,7 @@
 
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li  class="dropdown-header">
-            <h6 th:text="${doctor.nombre+' '+doctor.apellidos}"></h6>
-            <span>Doctor de se "X"</span>
+            <h6 th:text="${session.doctor.nombre}+' '+${session.doctor.apellidos}"></h6>
           </li>
           <li>
             <hr class="dropdown-divider">
