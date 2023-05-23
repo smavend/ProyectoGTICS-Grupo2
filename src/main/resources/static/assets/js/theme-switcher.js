@@ -2,47 +2,84 @@ const darkModeSwitch = document.querySelector('#darkModeSwitch');
 const body = document.body;
 const main = document.querySelector('main');
 const aside = document.querySelector('aside');
-const  cardbody = document.querySelector('.card-body');
+const cards = document.querySelectorAll('.card');
+const navLinks = document.querySelectorAll('.sidebar-nav .nav-link.collapsed');
+const tables = document.querySelectorAll('.table');
+const tableHeaders = document.querySelectorAll('.dashboard .top-selling .table thead');
+
 // Verificar si el modo oscuro está habilitado en el almacenamiento local
 const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
-// Si el modo oscuro está habilitado, activa el interruptor y establece las clases de fondo y texto oscuro en el cuerpo, el contenido principal y el contenido lateral
+// Función para aplicar el estilo oscuro a los elementos
+function applyDarkMode() {
+    body.style.backgroundColor = 'var(--bs-gray-dark)';
+    body.classList.add('text-light');
+    main.style.backgroundColor = 'var(--bs-secondary-bg)';
+    main.classList.add('text-light');
+    aside.classList.add('bg-dark');
+    aside.classList.add('text-light');
+
+    cards.forEach((card) => {
+        card.classList.add('bg-dark');
+        card.classList.add('text-light');
+    });
+
+    navLinks.forEach((link) => {
+        link.style.backgroundColor = 'var(--bs-gray-700)';
+        link.style.color = 'var(--bs-white)';
+    });
+    tables.forEach((table) => {
+        table.classList.add('text-light');
+    });
+    tableHeaders.forEach((header) => {
+        header.style.backgroundColor = 'var(--bs-gray-dark)';
+    });
+
+    localStorage.setItem('darkMode', 'true');
+}
+
+// Función para desactivar el modo oscuro y restaurar los estilos originales
+function disableDarkMode() {
+    body.style.backgroundColor = '';
+    body.classList.remove('text-light');
+    main.style.backgroundColor = '';
+    main.classList.remove('text-light');
+    aside.classList.remove('bg-dark');
+    aside.classList.remove('text-light');
+
+    cards.forEach((card) => {
+        card.classList.remove('bg-dark');
+        card.classList.remove('text-light');
+    });
+
+    navLinks.forEach((link) => {
+        link.style.backgroundColor = '';
+        link.style.color = '';
+
+    });
+    tables.forEach((table) => {
+        table.classList.remove('text-light');
+    });
+    tableHeaders.forEach((header) => {
+        header.style.backgroundColor = '';
+    });
+
+    localStorage.setItem('darkMode', 'false');
+}
+
+// Si el modo oscuro está habilitado, activa el interruptor y aplica los estilos oscuros
 if (isDarkMode) {
     darkModeSwitch.checked = true;
-    body.classList.add('bg-dark');
-    body.classList.add('text-light');
-    main.classList.add('bg-darks');
-    main.classList.add('text-light');
-    aside.classList.add('bg-success bg-opacity-75');
-    aside.classList.add('text-light');
-    cardbody.classList.add('bg-dark');
-    cardbody.classList.add('text-light');
+    applyDarkMode();
 }
 
 // Agregar un evento de escucha al interruptor
 darkModeSwitch.addEventListener('change', () => {
     if (darkModeSwitch.checked) {
-        // Si el interruptor está activado, habilita el modo oscuro y establece las clases de fondo y texto oscuro en el cuerpo, el contenido principal y el contenido lateral
-        body.classList.add('bg-dark');
-        body.classList.add('text-light');
-        main.classList.add('bg-dark');
-        main.classList.add('text-light');
-        aside.classList.add('bg-success bg-opacity-75');
-        aside.classList.add('text-light');
-        cardbody.classList.add('bg-dark');
-        cardbody.classList.add('text-light');
-        localStorage.setItem('darkMode', 'true');
+        // Si el interruptor está activado, habilita el modo oscuro
+        applyDarkMode();
     } else {
-        // Si el interruptor está desactivado, desactiva el modo oscuro y elimina las clases de fondo y texto oscuro del cuerpo, el contenido principal y el contenido lateral
-        body.classList.remove('bg-dark');
-        body.classList.remove('text-light');
-        main.classList.remove('bg-dark');
-        main.classList.remove('text-light');
-        aside.classList.remove('bg-success bg-opacity-75');
-        aside.classList.remove('text-light');
-        cardbody.classList.remove('bg-dark');
-        cardbody.classList.remove('text-light');
-        localStorage.setItem('darkMode', 'false');
+        // Si el interruptor está desactivado, desactiva el modo oscuro
+        disableDarkMode();
     }
 });
-		
