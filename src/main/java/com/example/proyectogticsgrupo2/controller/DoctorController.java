@@ -338,6 +338,15 @@ public class DoctorController {
         return "doctor/DoctorConfiguracion";
 
     }
+    @GetMapping("/perfil")
+    public String perfilDoctor(Model model, @RequestParam("id") String id) {
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        if (optionalDoctor.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            model.addAttribute("doctor", doctor);
+        }
+        return "doctor/DoctorPerfil";
+    }
 
 
 
