@@ -3,11 +3,17 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoService;
+import com.example.proyectogticsgrupo2.service.CorreoServiceSuperAdmin;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +35,9 @@ public class SuperAdminController {
     final EspecialidadRepository especialidadRepository;
     final SuperAdminService superAdminService;
     final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
+    final SecurityConfig securityConfig;
+    final CredencialesRepository credencialesRepository;
+
 
     public SuperAdminController(PacienteRepository pacienteRepository,
                                 AdministrativoRepository administrativoRepository,
@@ -38,7 +47,9 @@ public class SuperAdminController {
                                 SedeRepository sedeRepository,
                                 EspecialidadRepository especialidadRepository,
                                 SuperAdminService superAdminService,
-                                AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository) {
+                                AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository,
+                                SecurityConfig securityConfig,
+                                CredencialesRepository credencialesRepository) {
         this.pacienteRepository = pacienteRepository;
         this.administradorRepository = administradorRepository;
         this.administrativoRepository = administrativoRepository;
@@ -48,6 +59,9 @@ public class SuperAdminController {
         this.especialidadRepository = especialidadRepository;
         this.superAdminService = superAdminService;
         this.administrativoPorEspecialidadPorSedeRepository = administrativoPorEspecialidadPorSedeRepository;
+        this.securityConfig = securityConfig;
+        this.credencialesRepository = credencialesRepository;
+
     }
 
     @GetMapping("")
@@ -237,7 +251,8 @@ public class SuperAdminController {
         }
 
         Sede existingSede = sedeRepository.buscarPorNombreDeSede(sede);
-        if (existingSede != null && selectUsuario.equals("administrador")) {
+        AdministrativoPorEspecialidadPorSede existingSede2 = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeId(String.valueOf(existingSede.getIdSede()));
+        if (existingSede2 != null && selectUsuario.equals("administrador")) {
             result.rejectValue("sede", "", "Ya existe un administrador para esta sede, cambie.");
         }
 
@@ -286,18 +301,30 @@ public class SuperAdminController {
         }
 
 
+
         if (selectUsuario.equals("administrador")) {
             //Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
             Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
             administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
+            Optional<Administrador> administrador = administradorRepository.findById(dni);
+            String passRandom= securityConfig.generateRandomPassword();
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(passRandom);
+            credencialesRepository.crearCredenciales(administrador.get().getIdAdministrador(),administrador.get().getCorreo(),encodedPassword);
+            CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
+            correoService.props(administrador.get().getCorreo(),passRandom);
+
+
         }else if (selectUsuario.equals("administrativo")) {
             Administrativo administrativonuevo = new Administrativo();
             administrativonuevo.setIdAdministrativo(dni);
             administrativonuevo.setNombre(nombres);
             administrativonuevo.setApellidos(apellidos);
             administrativonuevo.setCorreo(correoUser);
+            administrativonuevo.setEstado(1);
             administrativoRepository.save(administrativonuevo);
-//            Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
+//          Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
             Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
             AdministrativoPorEspecialidadPorSede administrativoPorEspecialidadPorSede = new AdministrativoPorEspecialidadPorSede();
             administrativoPorEspecialidadPorSede.setSedeId(sede_enviar);
@@ -309,6 +336,15 @@ public class SuperAdminController {
             Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
             administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
             administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
+
+            String passRandom= securityConfig.generateRandomPassword();
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(passRandom);
+            credencialesRepository.crearCredenciales(administrativonuevo.getIdAdministrativo(),administrativonuevo.getCorreo(),encodedPassword);
+            CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
+            correoService.props(administrativonuevo.getCorreo(),passRandom);
+
 
         }
             // ... (por ejemplo, guarda el usuario en la base de datos)

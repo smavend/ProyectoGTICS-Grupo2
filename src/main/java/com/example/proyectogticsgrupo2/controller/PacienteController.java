@@ -1,8 +1,13 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.dto.HorariosDisponiblesDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,8 +23,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/Paciente")
@@ -38,8 +47,9 @@ public class PacienteController {
     final CitaRepository citaRepository;
     final CitaTemporalRepository citaTemporalRepository;
     final PagoRepository pagoRepository;
+    final HorarioRepository horarioRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
@@ -51,18 +61,17 @@ public class PacienteController {
         this.citaRepository = citaRepository;
         this.citaTemporalRepository = citaTemporalRepository;
         this.pagoRepository = pagoRepository;
+        this.horarioRepository = horarioRepository;
     }
 
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
+        Paciente paciente = pacienteRepository.findById(idPrueba).get();
+        model.addAttribute("paciente", paciente);
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
+
         return "paciente/index";
     }
 
@@ -86,7 +95,7 @@ public class PacienteController {
     }
 
     /* RESERVAR CITA */
-    @GetMapping("/reservar")
+    @GetMapping("/reservarCita")
     public String reservarCita(Model model) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()) {
@@ -95,43 +104,67 @@ public class PacienteController {
         }
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
-        return "paciente/reservar";
+        return "paciente/reservarCita";
     }
 
     @PostMapping("/reservarEspecialidad")
-    public String reservarEspecialidad(@RequestParam(name = "modalidad") int modalidad,
-                                       @RequestParam(name = "idSede") int idSede,
-                                       Model model){
+    public String reservarEspecialidad(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                       Model model) {
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            citaTemporalRepository.guardarSede(paciente.getIdPaciente(), modalidad, idSede);
-            List<Especialidad> especialidadList = especialidadRepository.findByIdEspecialidad(idSede);
-            model.addAttribute("especialidadList", especialidadList);
-            model.addAttribute("paciente", paciente);
+        Paciente paciente = optionalPaciente.get();
+        //citaTemporalRepository.guardarSede(paciente.getIdPaciente(), modalidad, idSede);
+        List<Especialidad> especialidadesDisponibles;
+        if (citaTemporal.getModalidad() == 0) {
+            especialidadesDisponibles = especialidadRepository.buscarPorSede(citaTemporal.getIdSede());
+        } else {
+            especialidadesDisponibles = especialidadRepository.buscarVirtualesPorSede(citaTemporal.getIdSede());
         }
+        model.addAttribute("especialidadesDisponibles", especialidadesDisponibles);
+        model.addAttribute("paciente", paciente);
 
         return "paciente/reservarEspecialidad";
     }
 
     @PostMapping("/reservarDoctor")
-    public String reservarDoctor(@RequestParam(name = "idEspecialidad") int idEspecialidad){
+    public String reservarDoctor(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                 Model model) {
 
-        return "";
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        Paciente paciente = optionalPaciente.get();
+
+        //citaTemporalRepository.guardarEspecialidad(...)
+        List<Doctor> doctoresDisponibles = doctorRepository.findBySede_IdSedeAndEspecialidad_IdEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
+
+        model.addAttribute("doctoresDisponibles", doctoresDisponibles);
+        model.addAttribute("paciente", paciente);
+
+        return "paciente/reservarDoctor";
     }
 
-    @PostMapping("/ reservarHorario")
-    public String reservarHorario(){
-        return "";
+    @PostMapping("/reservarHorario")
+    public String reservarHorario(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                  Model model) {
+
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        Paciente paciente = optionalPaciente.get();
+        HorariosDisponiblesDTO horariosDisponibles = horarioRepository.buscarHorariosDisponibles(citaTemporal.getIdDoctor());
+
+        model.addAttribute("paciente", paciente);
+        model.addAttribute("horariosDisponibles", horariosDisponibles);
+
+        return "paciente/reservarHorario";
     }
 
-    @PostMapping("/confirmarReserva")
-    public String confirmarReserva(@RequestParam("idPaciente") String idPaciente,
-                                   @RequestParam("idDoctor") String idDoctor,
-                                   @RequestParam("modalidad") int modalidad) {
-        int idSede = doctorRepository.buscarIdSedeDoctor(idDoctor);
-        citaRepository.reservarCita(idPaciente, idDoctor, modalidad, idSede);
+    @PostMapping("/reservar")
+    public String reservar(@ModelAttribute("citaTempora") CitaTemporal citaTemporal) {
+
+        String inicioString = citaTemporal.getFecha().toString()+' '+citaTemporal.getHora().toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
+        LocalDateTime fin = inicio.plusHours(1);
+
+        citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede());
         return "redirect:/Paciente/confirmacion";
     }
 
@@ -288,61 +321,49 @@ public class PacienteController {
 
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
-    public String verDoctores(@RequestParam("idSede") int idSede,
+    public String verDoctores(@RequestParam("sede") int idSede,
+                              @RequestParam("esp") int idEspecialidad,
+                              @RequestParam("pag") int pagina,
                               Model model) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             model.addAttribute("paciente", paciente);
         }
-        List<Sede> sedeList = sedeRepository.findAll();
-        List<Especialidad> especialidadList = especialidadRepository.findAll();
-        Optional<Sede> optionalSede = sedeRepository.findById(idSede);
-        Sede sede = optionalSede.get();
-        List<Doctor> listDoctorSede = doctorRepository.listDoctorSede(idSede);
 
-        model.addAttribute("sede", sede);
-        model.addAttribute("doctorList", listDoctorSede);
-        model.addAttribute("sedeList", sedeList);
-        model.addAttribute("especialidadList", especialidadList);
-        return "paciente/doctores";
+        List<Doctor> doctorList;
+        int totalPaginas;
+        int numDoctores;
 
-    }
-
-    @PostMapping("/doctoresFiltrado")
-    public String verDoctores(@RequestParam("idSedeFilter") int idSedeFilter,
-                              @RequestParam("idEspecialidadFilter") int idEspecialidadFilter,
-                              Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
-        List<Sede> sedeList = sedeRepository.findAll();
-        List<Especialidad> especialidadList = especialidadRepository.findAll();
-        Optional<Sede> optionalSede = sedeRepository.findById(idSedeFilter);
-        if (optionalSede.isPresent()) {
-            Sede sede = optionalSede.get();
-            model.addAttribute("sede", sede);
-        }
-        if (idEspecialidadFilter == 0) {
-            List<Doctor> doctorList = doctorRepository.listDoctorSede(idSedeFilter);
-            model.addAttribute("doctorList", doctorList);
-            model.addAttribute("sinFiltrar", 0);
+        if (idEspecialidad == 0) {
+            doctorList = doctorRepository.buscarDoctorSedePaginado(idSede, pagina-1, 8);
+            numDoctores = doctorRepository.numDoctoresSede(idSede);
         } else {
-            List<Doctor> listDoctorSedeEspecialidad = doctorRepository.listDoctorSedeEspecialidad(idSedeFilter, idEspecialidadFilter);
-            model.addAttribute("doctorList", listDoctorSedeEspecialidad);
+            doctorList = doctorRepository.buscarDoctorSedeEspecialidadPaginado(idSede, idEspecialidad, pagina-1, 8);
+            numDoctores = doctorRepository.numDoctoresSedeEspecialidad(idSede, idEspecialidad);
         }
-        Optional<Especialidad> optionalEspecialidad = especialidadRepository.findById(idEspecialidadFilter);
-        if (optionalEspecialidad.isPresent()) {
-            Especialidad especialidad = optionalEspecialidad.get();
-            model.addAttribute("especialidad", especialidad);
-            model.addAttribute("sinFiltrar", 1);
 
+        totalPaginas = (int) Math.ceil(numDoctores/8.0);
+
+        List<Sede> sedeList = sedeRepository.findAll();
+        List<Especialidad> especialidadList = especialidadRepository.findAll();
+
+        if (totalPaginas > 0){
+            List<Integer> paginas = IntStream.rangeClosed(1, totalPaginas).boxed().toList();
+            model.addAttribute("paginas", paginas);
+            model.addAttribute("paginaActual", pagina);
+            model.addAttribute("paginaPrevia", pagina-1);
+            model.addAttribute("paginaSiguiente", pagina+1);
+            model.addAttribute("totalPaginas", totalPaginas);
         }
+
+        model.addAttribute("idSede", idSede);
+        model.addAttribute("idEspecialidad", idEspecialidad);
+        model.addAttribute("doctorList", doctorList);
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
         return "paciente/doctores";
+
     }
 
     @GetMapping("/imageDoctor")
@@ -380,7 +401,7 @@ public class PacienteController {
         return "paciente/doctorPerfil";
     }
 
-    @GetMapping("/reservarDoctor")
+    @GetMapping("/reservarDoctor2")
     public String reservarCitaDoctor(Model model,
                                      @RequestParam("idDoctor") String idDoctor) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
@@ -443,6 +464,25 @@ public class PacienteController {
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("pagoList", pagoList);
         return "paciente/pagos";
+    }
+
+    @GetMapping("/filtrarPagos")
+    public String filtrarPagos(@RequestParam("filtro") int filtro, Model model) {
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        if (optionalPaciente.isPresent()) {
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
+        List<Pago> pagoList = pagoRepository.findAll();
+        model.addAttribute("pagoList", pagoList);
+        model.addAttribute("filtro",filtro);
+        return "paciente/pagos";
+    }
+
+    @PostMapping("/guardarPago")
+    public String guardarPago(@RequestParam("idPago") int idPago) {
+        pagoRepository.guardarPago(idPago);
+        return "redirect:/Paciente/pagos";
     }
 
     @GetMapping("/recibo")

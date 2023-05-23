@@ -33,7 +33,6 @@ public class Doctor implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "especialidad_id_especialidad",nullable = false)
-
     private Especialidad especialidad;
 
     @ManyToOne
@@ -44,12 +43,16 @@ public class Doctor implements Serializable {
     private String duracion_cita_horas;
 
     @Column(name = "pregrado")
+    @Size(max = 100, message = "El pregrado no puede tener más de 100 caracteres")
     private String pregrado;
 
     @Column(name = "posgrado")
+    @Size(max = 100, message = "El posgrado no puede tener más de 100 caracteres")
     private String posgrado;
 
-    @Column(name = "colegiatura")
+    @Column(nullable = false)
+    @NotBlank(message = "Este campo no puede estar vacío")
+    @Size(max = 10, message = "La colegiatura no puede tener más de 10 caracteres")
     private String colegiatura;
     @ManyToOne
     @JoinColumn(name = "horario_id_horario")
@@ -66,6 +69,12 @@ public class Doctor implements Serializable {
 
     @NotBlank(message = "Seleccione un género")
     private String genero;
+
+    public String getNombreYApellido(){
+        String[] nombres = this.getNombre().split(" ");
+        String[] apellidos = this.getApellidos().split(" ");
+        return nombres[0] + " " + apellidos[0];
+    }
 
 
 }
