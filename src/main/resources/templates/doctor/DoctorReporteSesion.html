@@ -6,6 +6,16 @@
             .mi-div:hover {
                 background-color: #f2f2f2;
             }
+            .message {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
         </style>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -394,17 +404,23 @@
                                 <div style="display: flex; justify-content: center; align-items: center;">
                                     <img th:src="@{/assets/img/zoom.jpg}" style="width: 80%">
                                 </div>
-
                                 <div style="margin-top: 5px;text-align: center">
-                                    <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
-                                    <a th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}" type="button"
-                                       class="btn btn-secondary" target="_blank">Resultados de cuestionario</a>
+                                    <button type="button" data-message="Enviar cuestionario" class="btn btn-warning myButton">
+                                        <i style="color: black" class="bi-file-text-fill"></i>
+                                    </button>
+
+
+                                    <a data-message="Ver resultados de cuestionario"  th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}" type="button"
+                                       class="btn btn-success myButton" target="_blank">
+                                        <i class="bi bi-card-checklist"></i>
+                                    </a>
+
 
                                 </div>
 
-                                <div style="text-align: center">
-                                    <button type="button"  class="btn btn-danger">
-                                        Finalizar llamada
+                                <div style="text-align: center;margin-top: 2px">
+                                    <button id="myButton2" type="button"  class="btn btn-danger">
+                                        <i style="color: black" class="bi bi-telephone-x-fill"></i>
                                     </button>
                                 </div>
                                 <hr style="border-top: 3px solid #ccc">
@@ -478,6 +494,40 @@
             }
 
         </script>
+
+        <script>
+            var messageBox = null;
+
+            var buttons = document.getElementsByClassName("myButton");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("mousemove", function(event) {
+                    var message = event.target.getAttribute("data-message");
+
+                    if (message) {
+                        if (!messageBox) {
+                            messageBox = document.createElement("div");
+                            messageBox.className = "message";
+                            document.body.appendChild(messageBox);
+                        }
+
+                        // Posiciona el mensaje arriba del botón
+                        messageBox.style.top = (event.target.offsetTop - messageBox.offsetHeight - 10) + "px";
+                        messageBox.style.left = (event.target.offsetLeft + (event.target.offsetWidth / 2) - (messageBox.offsetWidth / 2)) + "px";
+                        messageBox.innerHTML = message;
+                        messageBox.style.display = "block";
+                    }
+                });
+
+                buttons[i].addEventListener("mouseleave", function() {
+                    if (messageBox) {
+                        messageBox.style.display = "none";
+                    }
+                });
+            }
+        </script>
+        </script>
+
+
 
     </body>
 
