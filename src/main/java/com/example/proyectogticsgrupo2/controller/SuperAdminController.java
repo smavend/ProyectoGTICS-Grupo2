@@ -287,96 +287,6 @@ public class SuperAdminController {
 
 
         if (selectUsuario.equals("administrador")) {
-<<<<<<< HEAD
-            // Procesa los datos para un usuario administrador
-            // ... (por ejemplo, guarda el usuario en la base de datos)
-            if (clinica.equals("otro")) {
-                /*clinicaRepository.insertarClinica(otraClinica);
-                Clinica clinicanueva = clinicaRepository.buscarClinicaPorNombre(otraClinica);
-                sedeRepository.insertarSede(otraSede, clinicanueva.getIdClinica());
-                Sede sedenueva_id = sedeRepository.buscarPorClinicaId(String.valueOf(clinicanueva.getIdClinica()));
-                administradorRepository.insertarAdministrador(dni,nombres,apellidos,sedenueva_id.getIdSede());*/
-                Clinica clinicanueva = new Clinica();
-                //Parámetros que sí obtengo mediante el post
-                clinicanueva.setNombre(otraClinica);
-                clinicanueva.setCorreo(correo_nueva_clinica);
-                clinicanueva.setTelefono(telefono_nueva_clinica);
-                clinicanueva.setTyc("TerminosX");
-                clinicanueva.setColor("#FFFFFF");
-                clinicaRepository.save(clinicanueva);
-                //Buscando clinica nueva
-                Clinica clinicaEncontrada = clinicaRepository.buscarClinicaPorNombre(clinicanueva.getNombre());
-                Sede sedeNueva = new Sede();
-                sedeNueva.setNombre(otraSede);
-                sedeNueva.setClinica(clinicaEncontrada);
-                sedeNueva.setDireccion(sede_nueva_direccion);
-                sedeRepository.save(sedeNueva);
-                Sede sedeEncontrada = sedeRepository.buscarPorNombreDeSede(otraSede, clinicaEncontrada.getIdClinica());
-                System.out.println(sedeEncontrada.getIdSede());
-                System.out.println(sedeEncontrada.getNombre());
-                System.out.println("hola!!!!");
-                Administrador administradorNuevo = new Administrador();
-                administradorNuevo.setIdAdministrador(dni);
-                administradorNuevo.setNombre(nombres);
-                administradorNuevo.setApellidos(apellidos);
-                administradorNuevo.setEstado(0);
-                administradorNuevo.setCorreo(correoUser);
-                administradorNuevo.setSede(sedeEncontrada);
-                administradorRepository.save(administradorNuevo);
-                // Utiliza los valores de 'otraClinica' y 'otraSede'
-            } else {
-                if (sede.equals("otro")) {
-                    Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
-                    Sede sedeNueva = new Sede();
-                    sedeNueva.setNombre(otraSede4);
-                    sedeNueva.setClinica(clinica_enviar);
-                    sedeNueva.setDireccion(sede_nueva4_direccion);
-                    sedeRepository.save(sedeNueva);
-                    Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(otraSede4, clinica_enviar.getIdClinica());
-                    administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
-
-                } else {
-                    Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
-                    Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede, clinica_enviar.getIdClinica());
-                    administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
-                    // Utiliza el valor de 'clinica'
-                }
-            }
-        } else if (selectUsuario.equals("administrativo")) {
-
-            // Procesa los datos para un usuario administrativo
-            if (clinica.equals("otro")) {
-                //
-                // Utiliza los valores de 'otraClinica' y 'otraSede'
-            } else {
-                //el campo estado
-//                administrativoRepository.insertarAdministrativo(dni,nombres,apellidos);
-                Administrativo administrativonuevo = new Administrativo();
-                administrativonuevo.setIdAdministrativo(dni);
-                administrativonuevo.setNombre(nombres);
-                administrativonuevo.setApellidos(apellidos);
-                administrativonuevo.setCorreo(correoUser);
-                administrativoRepository.save(administrativonuevo);
-                Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
-                Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede, clinica_enviar.getIdClinica());
-                //falta añadir el parámetro Especialidad ( se añadirá como uno por defecto pero se tiene que elegir )
-                AdministrativoPorEspecialidadPorSede administrativoPorEspecialidadPorSede = new AdministrativoPorEspecialidadPorSede();
-                administrativoPorEspecialidadPorSede.setSedeId(sede_enviar);
-                administrativoPorEspecialidadPorSede.setAdministrativoId(administrativonuevo);
-
-                administrativoPorEspecialidadPorSede.setTorre("Por Asignar");
-                administrativoPorEspecialidadPorSede.setPiso("Por Asignar");
-                String torre = "N.D";
-                String piso = "N.D";
-
-                Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
-                administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
-                administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
-//                administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(),dni);
-                // Utiliza el valor de 'clinica' y, si corresponde, el valor de 'sede'
-            }
-            // ... (por ejemplo, guarda el usuario en la base de datos)
-=======
             //Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
             Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
             administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
@@ -399,7 +309,7 @@ public class SuperAdminController {
             Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
             administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
             administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
->>>>>>> superadmin
+
         }
             // ... (por ejemplo, guarda el usuario en la base de datos)
         return "redirect:/SuperAdminHomePage";
