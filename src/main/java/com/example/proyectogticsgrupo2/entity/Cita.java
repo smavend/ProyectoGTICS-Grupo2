@@ -59,8 +59,11 @@ public class Cita {
     @Column(nullable = false)
     private int estado;
 
-
-
+    /* estado == 0 ---> Próxima cita
+       estado == 1 ---> Registrado en caja
+       estado == 2 ---> En espera
+       estado == 3 ---> En consulta
+       estado == 4 ---> Consulta finalizada */
 
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)

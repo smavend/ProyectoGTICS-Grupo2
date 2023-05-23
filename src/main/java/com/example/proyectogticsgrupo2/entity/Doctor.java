@@ -43,6 +43,14 @@ public class Doctor implements Serializable {
     @Column(name = "duracion_cita_horas")
     private String duracion_cita_horas;
 
+    @Column(name = "pregrado")
+    private String pregrado;
+
+    @Column(name = "posgrado")
+    private String posgrado;
+
+    @Column(name = "colegiatura")
+    private String colegiatura;
     @ManyToOne
     @JoinColumn(name = "horario_id_horario")
     private Horario horario;

@@ -1,9 +1,6 @@
 package com.example.proyectogticsgrupo2.controller;
 
-import com.example.proyectogticsgrupo2.dto.AlergiasPacienteDTO;
-import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
-import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
-import com.example.proyectogticsgrupo2.dto.TratamientoDTO;
+import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.validation.Valid;
@@ -161,6 +158,7 @@ public class DoctorController {
         setIdCita(id2);
         Optional<Cita> optionalCita= citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
+
         if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
@@ -168,6 +166,7 @@ public class DoctorController {
 
             Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
             Doctor doctor= doctorOptional.get();
+
             model.addAttribute("doctor", doctor);
             model.addAttribute("paciente",paciente);
             model.addAttribute("cita",cita);
@@ -180,12 +179,25 @@ public class DoctorController {
     }
 
     @GetMapping("/verCuestionario")
-    public String verCuestionario(Model model, @RequestParam("id") String id){
+    public String verCuestionario(Model model, @RequestParam("id") int id){
         Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Optional<CuestionarioxDoctorDTO> cuestionarioxDoctorDTOS=citaRepository.verCuestionario(id);
 
-        Doctor doctor= doctorOptional.get();
-        model.addAttribute("doctor", doctor);
-        return "doctor/DoctorVerCuestionario";
+
+
+        if (doctorOptional.isPresent() && cuestionarioxDoctorDTOS.isPresent()  ) {
+            CuestionarioxDoctorDTO lista1 = cuestionarioxDoctorDTOS.orElse(null);
+            Doctor doctor= doctorOptional.get();
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("cuestionario", lista1);
+
+            return "doctor/DoctorVerCuestionario";
+        } else {
+            return "redirect:/doctor/dashboard";
+        }
+
+
+
     }
 
     @GetMapping("/mensajeria")
@@ -217,7 +229,7 @@ public class DoctorController {
             model.addAttribute("cita", cita1);
             return "doctor/DoctorReporteSesion";
         }else{
-
+            cita.setEstado(4);
             citaRepository.save(cita);
             return "redirect:/doctor/dashboard";
         }
@@ -325,6 +337,15 @@ public class DoctorController {
         model.addAttribute("doctor", doctor);
         return "doctor/DoctorConfiguracion";
 
+    }
+    @GetMapping("/perfil")
+    public String perfilDoctor(Model model, @RequestParam("id") String id) {
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        if (optionalDoctor.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            model.addAttribute("doctor", doctor);
+        }
+        return "doctor/DoctorPerfil";
     }
 
 

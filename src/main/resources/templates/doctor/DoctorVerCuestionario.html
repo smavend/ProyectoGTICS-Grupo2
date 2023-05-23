@@ -6,7 +6,12 @@
             .mi-div:hover {
                 background-color: #f2f2f2;
             }
+            input[readonly] {
+                background-color: #f1f1f1; /* Cambia el color de fondo */
+                cursor: not-allowed; /* Cambia el cursor a no permitido */
+            }
         </style>
+
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
@@ -312,121 +317,123 @@
         <main id="main" class="main">
 
 
-            <strong style="font-size: 2.5rem" >Cuestionario Cardiología</strong>
+            <strong th:text="${'Cuestionario de '+doctor.especialidad.getNombre()}" style="font-size: 2.5rem" >Cuestionario Cardiología</strong>
             <section class="seccionPrincipal">
 
-                <form>
+
+                    <strong style="font-size: 1.5rem">1. Antecedentes médicos:</strong>
 
                     <div class="seccionCuestionario">
                         <div class="textoCuestionario">
-                            ¿Ha presentado dolor abdominal en los últimos 5 días?
+                            <h6 th:text="${cuestionario.getP1()}"></h6>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Sí
-                            </label>
+                            <h6 th:text="${cuestionario.getR1()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
+                        </div>
+                    </div>
+
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario">
+                            <h6 th:text="${cuestionario.getP2()}"></h6>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault">
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                No
-                            </label>
+                            <h6 th:text="${cuestionario.getR2()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
                         </div>
                     </div>
 
                     <div class="seccionCuestionario">
                         <div class="textoCuestionario">
-                            Pregunta médica número 2:
+                            <h6 th:text="${cuestionario.getP3()}"></h6>
                         </div>
-                        <div class="respuestaCuestionario">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                                <label class="form-check-label">Opción 1</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                                <label class="form-check-label">Opción 2</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                                <label class="form-check-label">Opción 3</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                                <label class="form-check-label">Opción 4</label>
-                            </div>
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR3()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
                         </div>
                     </div>
 
                     <div class="seccionCuestionario">
                         <div class="textoCuestionario">
-                            Pregunta médica número 3:
+                            <h6 th:text="${cuestionario.getP4()}"></h6>
                         </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text">
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR4()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
+                        </div>
+                    </div>
+                    <br>
+
+                    <strong style="font-size: 1.5rem">2. Historial familiar:</strong>
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario">
+                            <h6 th:text="${cuestionario.getP5()}"></h6>
+                        </div>
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR5()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
                         </div>
                     </div>
 
                     <div class="seccionCuestionario">
                         <div class="textoCuestionario">
-                            Pregunta médica número 4:
+                            <h6 th:text="${cuestionario.getP6()}"></h6>
                         </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text">
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR6()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
+                        </div>
+                    </div>
+                    <br>
+
+                    <strong style="font-size: 1.5rem">3. Historial de vacunación:</strong>
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario">
+                            <h6 th:text="${cuestionario.getP7()}"></h6>
+                        </div>
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR7()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
                         </div>
                     </div>
 
                     <div class="seccionCuestionario">
                         <div class="textoCuestionario">
-                            Pregunta médica número 5:
+                            <h6 th:text="${cuestionario.getP8()}"></h6>
                         </div>
-                        <div class="respuestaCuestionario">
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>Selecciona una opción</option>
-                                <option value="1">Opción 1</option>
-                                <option value="2">Opción 2</option>
-                                <option value="3">Opción 3</option>
-                            </select>
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR8()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
+                        </div>
+                    </div>
+                    <br>
+
+                    <strong style="font-size: 1.5rem">4. Hábitos de salud:</strong>
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario">
+                            <h6 th:text="${cuestionario.getP9()}"></h6>
+                        </div>
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR9()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
                         </div>
                     </div>
 
                     <div class="seccionCuestionario">
                         <div class="textoCuestionario">
-                            Describa los síntomas adicionales que haya sentido la última semana:
+                            <h6 th:text="${cuestionario.getP10()}"></h6>
                         </div>
-                        <div class="respuestaCuestionario">
-                            <textarea class="form-control" cols="80" rows="3"></textarea>
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR10()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
                         </div>
                     </div>
 
-                    <a style="margin-top: 10px" href="#" class="btn btn-primary botonActualizarConsentimientos" data-bs-toggle="modal"
-                       data-bs-target="#actualizarModal">Enviar</a>
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario">
+                            <h6 th:text="${cuestionario.getP11()}"></h6>
+                        </div>
+                        <div class="form-check">
+                            <h6 th:text="${cuestionario.getR11()}" style="width: 50%;background-color: #E7E5E7;border: 1px solid; overflow-wrap: break-word;padding:5px;border-radius: 5px"></h6>
+                        </div>
+                    </div>
+
+                    <a style="margin-top: 10px" th:href="@{/doctor/dashboard}" class="btn btn-primary botonActualizarConsentimientos" data-bs-toggle="modal"
+                       >Regresar al Dashboard</a>
 
                     <!-- Modal Actualizar-->
-                    <div class="modal fade" id="actualizarModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5 tituloNavBar" id="actualizarModal">Confirmación</h1>
-                                </div>
-                                <div class="modal-body">
-                                    <span class="textoModal">¿Está seguro que desea enviar el cuestionario?</span>
-                                </div>
 
-                                <div class="modal-footer mx-auto">
-                                    <button type="submit" style="margin: 0 10px 0 0;" href="#"
-                                            class="btn btn-primary botonActualizarConsentimientos">Enviar
-                                    </button>
-                                    <a style="margin: 0 0 0 10px;" href="#" class="btn btn-danger botonCancelar"
-                                       data-bs-dismiss="modal">Cancelar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                </form>
 
             </section>
 
