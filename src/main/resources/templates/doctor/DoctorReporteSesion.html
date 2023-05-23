@@ -386,35 +386,32 @@
                         </div>
 
 
-                        <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem"
-                             class="container col-5">
+                        <div style="background-color: #fff;margin-top: 1rem" class="container col-5">
 
-                            <div>
-                                <div style="height: 500px">
-                                    <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
-                                    <hr>
+                            <div style="height: auto">
+                                <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
+                                <hr>
+                                <div style="display: flex; justify-content: center; align-items: center;">
                                     <img th:src="@{/assets/img/zoom.jpg}" style="width: 80%">
-                                    <div style="margin-top: 5px;text-align: center">
-                                        <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
-                                        <a th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}" type="button"
-                                           class="btn btn-secondary" target="_blank">Resultados de cuestionario</a>
-
-                                    </div>
                                 </div>
 
+                                <div style="margin-top: 5px;text-align: center">
+                                    <button type="button" class="btn btn-success">Iniciar Cuestionario</button>
+                                    <a th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}" type="button"
+                                       class="btn btn-secondary" target="_blank">Resultados de cuestionario</a>
 
+                                </div>
 
                                 <div style="text-align: center">
-                                    <button type="button" style="margin-top: 5px" class="btn btn-danger">Finalizar
-                                        llamada
+                                    <button type="button"  class="btn btn-danger">
+                                        Finalizar llamada
                                     </button>
                                 </div>
                                 <hr style="border-top: 3px solid #ccc">
-                                <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem"
-                                     class="container card">
+                                <div style="margin-top: 1rem;margin-bottom: 2rem">
 
                                     <h1 style="color: black;text-align: center;">Bitácora Personal</h1>
-                                    <div class="mb-3">
+                                    <div >
                                         <textarea oninput="autoResizeTextarea(this)"
                                                   style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
                                                   maxlength="500" type="text" name="bitacora"
@@ -428,6 +425,7 @@
                         </div>
 
                     </div>
+                    <br>
                     <div style="text-align: center;" class=" col-12">
                         <button type="submit" class="btn btn-primary">Finalizar Reporte</button>
                     </div>
