@@ -209,7 +209,7 @@
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                     <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2">J. Dominguez</span>
+                    <span class="d-none d-md-block dropdown-toggle ps-2"th:text="'Admin, '+${session.administrador.nombre}">J. Dominguez</span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -222,7 +222,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile}">
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
                             <i class="bi bi-person"></i>
                             <span>Mi Perfil</span>
                         </a>
@@ -232,7 +232,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile}">
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
                             <i class="bi bi-gear"></i>
                             <span>Configuraciones</span>
                         </a>

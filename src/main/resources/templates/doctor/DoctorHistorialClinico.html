@@ -70,266 +70,10 @@
 
 <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="header fixed-top d-flex align-items-center">
-
-  <div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
-      <img th:src="@{/assets/img/logo.png}" alt="">
-      <span class="d-none d-lg-block">Clinica INTERPUCP</span>
-    </a>
-    <i class="bi bi-list toggle-sidebar-btn"></i>
-  </div><!-- End Logo -->
-
-
-
-  <nav class="header-nav ms-auto">
-    <ul class="d-flex align-items-center">
-
-      <li class="nav-item dropdown">
-			<div class="form-check form-switch">
-			<input class="form-check-input" type="checkbox" id="darkModeSwitch">
-			<label class="form-check-label" for="darkModeSwitch"></label>
-			</div>
-
-		</li>
-      <li class="nav-item dropdown">
-
-        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-          <i class="bi bi-bell"></i>
-          <span class="badge bg-primary badge-number">4</span>
-        </a><!-- End Notification Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-          <li class="dropdown-header">
-            You have 4 new notifications
-            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-exclamation-circle text-warning"></i>
-            <div>
-              <h4>Lorem Ipsum</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>30 min. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-x-circle text-danger"></i>
-            <div>
-              <h4>Atque rerum nesciunt</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>1 hr. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-check-circle text-success"></i>
-            <div>
-              <h4>Sit rerum fuga</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>2 hrs. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-info-circle text-primary"></i>
-            <div>
-              <h4>Dicta reprehenderit</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>4 hrs. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li class="dropdown-footer">
-            <a href="#">Show all notifications</a>
-          </li>
-
-        </ul><!-- End Notification Dropdown Items -->
-
-      </li><!-- End Notification Nav -->
-
-      <li class="nav-item dropdown">
-
-        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-          <i class="bi bi-chat-left-text"></i>
-          <span class="badge bg-success badge-number">3</span>
-        </a><!-- End Messages Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-          <li class="dropdown-header">
-            You have 3 new messages
-            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="message-item">
-            <a href="#">
-              <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
-              <div>
-                <h4>Maria Hudson</h4>
-                <p>Estimado administrador, quisiera solicitar su autorización para realizar una cirugía ...</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="message-item">
-            <a href="#">
-              <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
-              <div>
-                <h4>Anna Nelson</h4>
-                <p>Hola, quisiera informarle que hay un problema en la plataforma que está impidiendo ...</p>
-                <p>6 hrs. ago</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="message-item">
-            <a href="#">
-              <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
-              <div>
-                <h4>David Muldon</h4>
-                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                <p>8 hrs. ago</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="dropdown-footer">
-            <a href="#">Show all messages</a>
-          </li>
-
-        </ul><!-- End Messages Dropdown Items -->
-
-      </li><!-- End Messages Nav -->
-
-      <li class="nav-item dropdown pe-3">
-
-        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-          <span th:text="${doctor.nombre+' '+doctor.apellidos}" class="d-none d-md-block dropdown-toggle ps-2"></span>
-        </a><!-- End Profile Iamge Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-          <li class="dropdown-header">
-            <h6 th:text="${doctor.nombre+' '+doctor.apellidos}"></h6>
-            <span>Doctor de sede "X"</span>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-              <i class="bi bi-person"></i>
-              <span>Mi Perfil</span>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{/doctor/configuracion}">
-              <i class="bi bi-gear"></i>
-              <span>Configuraciones</span>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Cerrar Sesión</span>
-            </a>
-          </li>
-
-        </ul><!-- End Profile Dropdown Items -->
-      </li><!-- End Profile Nav -->
-
-    </ul>
-  </nav><!-- End Icons Navigation -->
-
-</header><!-- End Header -->
+<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
 
 <!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar">
-
-  <ul class="sidebar-nav" id="sidebar-nav">
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/doctor/dashboard}">
-        <i class="bi bi-grid"></i>
-        <span>Dashboard</span>
-      </a>
-    </li><!-- End Dashboard Nav -->
-    <li class="nav-item">
-      <a class="nav-link" >
-        <i class="bi bi-card-text"></i>
-        <span>Reportes</span>
-      </a>
-    </li><!-- End Profile Page Nav -->
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/doctor/calendario}">
-        <i class="bi bi-calendar"></i>
-        <span>Calendario General</span>
-      </a>
-    </li><!-- End Profile Page Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/doctor/recibo}">
-        <i class="bi bi-currency-exchange"></i>
-        <span>Recibos</span>
-      </a>
-    </li><!-- End Profile Page Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/doctor/mensajeria}">
-        <i class="bi bi-chat-quote"></i>
-        <span>Mensajería</span>
-      </a>
-    </li><!-- End Profile Page Nav -->
-  </ul>
-
-</aside><!-- End Sidebar-->
+<div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
 
 <main id="main" class="main">
 
@@ -341,24 +85,36 @@
         <div class="card-body pt-3">
           <!-- Bordered Tabs -->
           <ul class="nav nav-tabs nav-tabs-bordered">
-            <li class="nav-item dropdown">
-              <button class="nav-link dropdown-toggle active" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                Seleccionar tipo de información
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab"
+                      data-bs-target="#alergias">Alergias
               </button>
-              <ul class="dropdown-menu dropdown-menu-scrollable" aria-labelledby="dropdownMenuButton">
-                <div class="scrollspy-example">
-                  <li><button class="dropdown-item nav-link active" data-bs-toggle="tab" data-bs-target="#alergias">Alergias</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#consentimientos">Consentimientos</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#mensajes">Mensajes</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#cuestionarios">Cuestionarios</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#formularios">Formularios</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#tratamiento">Tratamiento</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#documentos-anexados">Documentos Anexados</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#informacion-personal">Información Personal</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#status-del-paciente">Status del Paciente</button></li>
-                  <li><button class="dropdown-item nav-link" data-bs-toggle="tab" data-bs-target="#proximas-citas">Próximas citas</button></li>
-                </div>
-              </ul>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab"
+                      data-bs-target="#tratamiento">Tratamiento
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab"
+                      data-bs-target="#documentos-anexados">Documentos Anexados
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab"
+                      data-bs-target="#encuesta">Encuesta
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab"
+                      data-bs-target="#informacion-personal">Información Personal
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab"
+                      data-bs-target="#proximas-citas">Próximas citas
+              </button>
             </li>
           </ul>
 
@@ -368,7 +124,7 @@
             <div class="tab-pane fade show active alergias"
                  id="alergias">
 
-              <h5 class="card-title">Detalles del Perfil</h5>
+              <h5 class="card-title">Lista de alergias</h5>
               <div class="row">
                 <div class="col-lg-9 col-md-8">
                   <table class="table">
@@ -390,23 +146,11 @@
               </div>
             </div>
 
-            <div class="tab-pane fade consentimientos pt-3" id="consentmientos">
-              <h5 class="card-title">Consentimientos</h5>
+            <div class="tab-pane fade encuesta pt-3" id="encuesta">
+              <h5 class="card-title">Formularios y cuestionario</h5>
               <!-- Documentos de consentimiento -->
             </div>
 
-            <div class="tab-pane fade mensajes pt-3" id="mensajes">
-              <h5 class="card-title">Mensajes</h5>
-              <!-- seccion mensajes -->
-            </div>
-            <div class="tab-pane fade cuestionarios pt-3" id="cuestionarios">
-              <h5 class="card-title">Cuestionarios</h5>
-              <!-- seccion cuestionarios -->
-            </div>
-            <div class="tab-pane fade formularios pt-3" id="formularios">
-              <h5 class="card-title">Formularios</h5>
-              <!-- seccion formularios -->
-            </div>
             <div class="tab-pane fade tratamiento pt-3" id="tratamiento">
               <h5 class="card-title">Información de consultas</h5>
               <div class="row">
@@ -436,32 +180,27 @@
             </div>
 
             <div class="tab-pane fade documentos-anexados pt-3" id="documentos-anexados">
-              <h5 class="card-title">Documentos Anexados</h5>
+              <h5 class="card-title">Documentos del Paciente</h5>
               <!-- seccion doc anexados -->
             </div>
             <div class="tab-pane fade informacion-personal pt-3" id="informacion-personal">
               <div class="row">
-                <h5 class="card-title">Informacion Personal</h5>
+                <h5 class="card-title">Información Personal</h5>
+                <div class="col-lg-3 col-md-4 d-flex align-items-center justify-content-center">
+                  <img th:src="@{'/usuario/foto/'+${paciente.getIdPaciente()}}" alt="Foto del paciente" class="img-fluid mx-auto d-block" style="max-width: 207px; max-height: 276px;">
+                </div>
+
                 <div class="col-lg-9 col-md-8">
-                  <div class="row mb-3">
-                    <div class="col-md-3"><img th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="Foto del paciente" class="img-fluid"></div>
-                    <div class="col-md-9">
-                      <h4 th:text="${paciente.getNombre()} +' '+ ${paciente.getApellidos()}"></h4>
-                      <div><strong>Seguro médico:</strong> <span th:text="${paciente.seguro.getNombre()}"></span></div>
-                      <div><strong>Teléfono:</strong> <span th:text="${paciente.getTelefono()}"></span></div>
-                      <div><strong>Correo:</strong> <span th:text="${paciente.getCorreo()}"></span></div>
-                      <div><strong>Dirección:</strong> <span th:text="${paciente.getDireccion()}"></span></div>
-                      <div><strong>Distrito:</strong> <span th:text="${paciente.getDistrito()}"></span></div>
-                      <div><strong>Fecha de nacimiento:</strong> <span th:text="${paciente.getFechanacimiento()}"></span></div>
-                      <div><strong>Género:</strong> <span th:text="${paciente.getGenero()}"></span></div>
-                    </div>
-                  </div>
+                  <h4 th:text="${paciente.getNombre()} +' '+ ${paciente.getApellidos()}"></h4>
+                  <div><strong>Seguro médico:</strong> <span th:text="${paciente.seguro.getNombre()}"></span></div>
+                  <div><strong>Teléfono:</strong> <span th:text="${paciente.getTelefono()}"></span></div>
+                  <div><strong>Correo:</strong> <span th:text="${paciente.getCorreo()}"></span></div>
+                  <div><strong>Dirección:</strong> <span th:text="${paciente.getDireccion()}"></span></div>
+                  <div><strong>Distrito:</strong> <span th:text="${paciente.getDistrito().getNombre()}"></span></div>
+                  <div><strong>Fecha de nacimiento:</strong> <span th:text="${paciente.getFechanacimiento()}"></span></div>
+                  <div><strong>Género:</strong> <span th:text="${paciente.getGenero()}"></span></div>
                 </div>
               </div>
-            </div>
-            <div class="tab-pane fade status-del-paciente pt-3" id="status-del-paciente">
-              <h5 class="card-title">Status del pacientes</h5>
-              <!-- seccion status del paciente -->
             </div>
             <div class="tab-pane fade pt-3" id="proximas-citas">
               <h5 class="card-title">Próximas citas</h5>
