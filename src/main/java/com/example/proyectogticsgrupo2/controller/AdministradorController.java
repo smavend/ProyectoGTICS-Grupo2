@@ -74,7 +74,8 @@ public class AdministradorController {
     @PostMapping("/guardarTemporales")
     public String guardarTemporales(@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr){
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
-
+            //Cuanto funcione perfectamente los temporales, entonces los filtro por llenado 1
+            // y usare el datablindig
             for (Temporal pacitemp : pacientesTemp){
                 paciente.setIdPaciente(pacitemp.getDni());
                 paciente.setNombre(pacitemp.getNombre());
@@ -91,9 +92,13 @@ public class AdministradorController {
                 paciente.setFoto(null);
                 paciente.setFotoname(null);
                 paciente.setFotocontenttype(null);
-                attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
+
+                CorreoService correoService= new CorreoService();
+                correoService.props(paciente.getCorreo(),paciente.getNombre());
+                attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
+
             }
             return "redirect:/administrador/dashboard";
 
