@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface AdministrativoRepository extends JpaRepository<Administrativo, String> {
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO administrativo (id_administrativo, nombre, apellidos, estado, correo) VALUES (:dni,:nombres,:apellidos,0, 'administrativoX@clinica.com')", nativeQuery = true)
+    @Query(value = "INSERT INTO administrativo (id_administrativo, nombre, apellidos, estado, correo) VALUES (:dni,:nombres,:apellidos,1, 'administrativoX@clinica.com')", nativeQuery = true)
     void insertarAdministrativo(@Param("dni") String dni, @Param("nombres") String nombres, @Param("apellidos") String apellidos);
 
     Administrativo findByCorreo(String correo);
