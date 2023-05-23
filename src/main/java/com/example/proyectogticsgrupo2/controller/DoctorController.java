@@ -3,6 +3,9 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,6 +41,7 @@ public class DoctorController {
     private final AlergiaRepository alergiaRepository;
     private final EspecialidadRepository especialidadRepository;
 
+    private Doctor doctor_session_info;
 
 
 
@@ -52,11 +56,15 @@ public class DoctorController {
     }
 
     @GetMapping(value={"/dashboard","/",""})
-    public String dashboard(Model model) {
-        List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas("10304011"); //CAMBIAR POR ID SESION
-        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes("10304011"); //CAMBIAR POR ID SESION
+    public String dashboard(Model model, HttpServletRequest request) {
+
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+
+        List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
+        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
         ArrayList<String> listaHorarios= new ArrayList<>();
-        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
         Doctor doctor= doctorOptional.get();
 
 
@@ -86,10 +94,12 @@ public class DoctorController {
     }
 
     @GetMapping("/recibo")
-    public String recibo(Model model) {
-        List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos("10304011");
+    public String recibo(Model model, HttpServletRequest request) {
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
 
-        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos(doctor_session.getId_doctor());
+        Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
         Doctor doctor= doctorOptional.get();
         model.addAttribute("doctor", doctor);
         model.addAttribute("listaRecibos", optionalCita);//CAMBIAR POR ID SESION
@@ -100,10 +110,8 @@ public class DoctorController {
 
     @GetMapping("/verRecibo")
     public String verRecibo(Model model, @RequestParam("id") int id_cita,@RequestParam("id2") String id_doctor) {
-        System.out.println("hasta aca funciona");
 
         Optional<ListaRecibosDTO> optionalListaRecibosDTO=citaRepository.buscarRecibosPorIdCitaIdDoctor(id_doctor,id_cita);
-
         Optional<Doctor> optionalDoctor=doctorRepository.findById(id_doctor);
 
         if (optionalDoctor.isPresent() & optionalListaRecibosDTO.isPresent()) {
@@ -122,14 +130,16 @@ public class DoctorController {
 
     @PostMapping("/buscarRecibo")
     public String buscarRecibo(@RequestParam("searchField") String searchField,
-                             Model model) {
+                             Model model, HttpServletRequest request) {
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
 
         try {
             float floatSearchField = Float.parseFloat(searchField);
             System.out.println(Float.valueOf(floatSearchField).intValue());
-            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosPago("10304011", Float.toString(floatSearchField));
+            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosPago(doctor_session.getId_doctor(), Float.toString(floatSearchField));
 
-            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
             Doctor doctor= doctorOptional.get();
 
             model.addAttribute("doctor", doctor);
@@ -138,9 +148,9 @@ public class DoctorController {
             // La variable es de tipo float
         } catch (NumberFormatException e) {
             // La variable no es de tipo float
-            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosNombre("10304011",searchField);
+            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosNombre(doctor_session.getId_doctor(),searchField);
 
-            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
             Doctor doctor= doctorOptional.get();
 
             model.addAttribute("doctor", doctor);
@@ -154,9 +164,11 @@ public class DoctorController {
 
 
     @GetMapping("/calendario")
-    public String calendario(Model model){
+    public String calendario(Model model, HttpServletRequest request){
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
 
-        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
         Doctor doctor= doctorOptional.get();
 
         model.addAttribute("doctor", doctor);
@@ -165,9 +177,12 @@ public class DoctorController {
     }
 
     @GetMapping("/reporte")
-    public String reporte(Model model, @RequestParam("id") String id,@RequestParam("id2") int id2){
+    public String reporte(Model model, @RequestParam("id") String id,@RequestParam("id2") int id2, HttpServletRequest request){
         setIdPaciente(id);
         setIdCita(id2);
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+
         Optional<Cita> optionalCita= citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<Alergia> alergiaList= alergiaRepository.buscarPorPacienteId(id);
@@ -194,7 +209,7 @@ public class DoctorController {
             System.out.println(alergias);
 
 
-            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
             Doctor doctor= doctorOptional.get();
 
             model.addAttribute("doctor", doctor);
@@ -210,8 +225,11 @@ public class DoctorController {
     }
 
     @GetMapping("/verCuestionario")
-    public String verCuestionario(Model model, @RequestParam("id") int id){
-        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+    public String verCuestionario(Model model, @RequestParam("id") int id, HttpServletRequest request){
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+
+        Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
         Optional<CuestionarioxDoctorDTO> cuestionarioxDoctorDTOS=citaRepository.verCuestionario(id);
 
 
@@ -232,9 +250,12 @@ public class DoctorController {
     }
 
     @GetMapping("/mensajeria")
-    public String mensajeria(Model model){
-        List<ListaBuscadorDoctor> citaList=citaRepository.listarPorDoctorProxCitas("10304011"); //CAMBIAR CON ID DE SESION
-        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+    public String mensajeria(Model model, HttpServletRequest request){
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+
+        List<ListaBuscadorDoctor> citaList=citaRepository.listarPorDoctorProxCitas(doctor_session.getId_doctor()); //CAMBIAR CON ID DE SESION
+        Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
         Doctor doctor= doctorOptional.get();
         model.addAttribute("doctor", doctor);
         model.addAttribute("listaCitas",citaList);
@@ -242,7 +263,9 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarReporte")
-    public String guardarReporte(Model model,@Valid Cita cita, BindingResult bindingResult) {
+    public String guardarReporte(HttpServletRequest request,Model model,@Valid Cita cita, BindingResult bindingResult) {
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
 
         if(bindingResult.hasErrors()){
 
@@ -251,7 +274,7 @@ public class DoctorController {
             Paciente paciente = optionalPaciente.get();
             Cita cita1 = optionalCita.get();
 
-            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
             Doctor doctor= doctorOptional.get();
             model.addAttribute("doctor", doctor);
 
@@ -268,10 +291,13 @@ public class DoctorController {
 
     @PostMapping("/BuscarProxCita")
     public String buscarCita(@RequestParam("searchField") String searchField,
-                                      Model model) {
+                                      Model model, HttpServletRequest request) {
 
-        List<ListaBuscadorDoctor> optionalCita = citaRepository.buscadorProximasCitas("10304011",searchField);
-        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes("10304011"); //CAMBIAR POR ID SESION
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+
+        List<ListaBuscadorDoctor> optionalCita = citaRepository.buscadorProximasCitas(doctor_session.getId_doctor(),searchField);
+        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
 
         ArrayList<String> listaHorarios= new ArrayList<>();
 
@@ -289,7 +315,7 @@ public class DoctorController {
             listaHorarios.add(horaFinal);
         });
 
-        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
         Doctor doctor= doctorOptional.get();
 
         model.addAttribute("doctor", doctor);
@@ -300,7 +326,7 @@ public class DoctorController {
 
         return "doctor/DoctorDashboard";
     }
-
+    /*
     @PostMapping("/BuscarPaciente")
     public String buscarPaciente(@RequestParam("searchField") String searchField,
                              Model model) {
@@ -335,8 +361,12 @@ public class DoctorController {
 
         return "doctor/DoctorDashboard";
     }
+    */
     @GetMapping("/historialClinico")
-    public String hClinico(Model model, @RequestParam("id") String id) {
+    public String hClinico(Model model, @RequestParam("id") String id, HttpServletRequest request) {
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+
         List<Alergia> alergiaList= alergiaRepository.buscarPorPacienteId(id);
         List<TratamientoDTO> tratamientoList=citaRepository.listarTratamientos(id);
         Optional<Paciente> optionalPaciente=pacienteRepository.findById(id);
@@ -345,7 +375,7 @@ public class DoctorController {
 
 
         if (optionalPaciente.isPresent()) {
-            Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+            Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
             Doctor doctor= doctorOptional.get();
             Paciente paciente=optionalPaciente.get();
             model.addAttribute("doctor", doctor);
@@ -360,9 +390,12 @@ public class DoctorController {
     }
 
     @GetMapping("/configuracion")
-    public String configuracion(Model model) {
+    public String configuracion(Model model, HttpServletRequest request) {
 
-        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+
+        Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
         Doctor doctor= doctorOptional.get();
 
         model.addAttribute("doctor", doctor);
@@ -515,5 +548,13 @@ public class DoctorController {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public Doctor getDoctor_session_info() {
+        return doctor_session_info;
+    }
+
+    public void setDoctor_session_info(Doctor doctor_session_info) {
+        this.doctor_session_info = doctor_session_info;
     }
 }
