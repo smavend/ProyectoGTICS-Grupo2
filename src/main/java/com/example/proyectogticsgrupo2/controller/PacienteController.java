@@ -3,8 +3,10 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +24,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/Paciente")
@@ -58,14 +62,11 @@ public class PacienteController {
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Paciente paciente = (Paciente) session.getAttribute("paciente");
+        Paciente paciente = pacienteRepository.findById(idPrueba).get();
         model.addAttribute("paciente", paciente);
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
-        System.out.println("id: "+paciente.getIdPaciente());
-        System.out.println("nom: "+paciente.getNombre());
         return "paciente/index";
     }
 
@@ -142,7 +143,7 @@ public class PacienteController {
         Paciente paciente = optionalPaciente.get();
 
         //citaTemporalRepository.guardarEspecialidad(...)
-        List<Doctor> doctoresDisponibles = doctorRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
+        List<Doctor> doctoresDisponibles = doctorRepository.findBySede_IdSedeAndEspecialidad_IdEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
 
         model.addAttribute("doctoresDisponibles", doctoresDisponibles);
         model.addAttribute("paciente", paciente);
@@ -319,6 +320,7 @@ public class PacienteController {
     @GetMapping("/doctores")
     public String verDoctores(@RequestParam("sede") int idSede,
                               @RequestParam("esp") int idEspecialidad,
+                              @RequestParam("pag") int pagina,
                               Model model) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         if (optionalPaciente.isPresent()) {
@@ -327,13 +329,34 @@ public class PacienteController {
         }
 
         List<Doctor> doctorList;
+        int totalPaginas;
+        int numDoctores;
+
         if (idEspecialidad == 0) {
-            doctorList = doctorRepository.buscarDoctorSede(idSede);
+            doctorList = doctorRepository.buscarDoctorSedePaginado(idSede, pagina-1, 8);
+            numDoctores = doctorRepository.numDoctoresSede(idSede);
         } else {
-            doctorList = doctorRepository.buscarDoctorSedeEspecialidad(idSede, idEspecialidad);
+            doctorList = doctorRepository.buscarDoctorSedeEspecialidadPaginado(idSede, idEspecialidad, pagina-1, 8);
+            numDoctores = doctorRepository.numDoctoresSedeEspecialidad(idSede, idEspecialidad);
         }
+
+        totalPaginas = (int) Math.ceil(numDoctores/8.0);
+
         List<Sede> sedeList = sedeRepository.findAll();
         List<Especialidad> especialidadList = especialidadRepository.findAll();
+
+        /*
+        Pageable pageable = PageRequest.of(pagina-1, 8);
+        Page<Doctor> doctorPage = doctorRepository.findAll(pageable);
+
+        int totalPaginas = doctorPage.getTotalPages();
+        doctorList = doctorPage.getContent();
+         */
+
+        if (totalPaginas > 0){
+            List<Integer> paginas = IntStream.rangeClosed(1, totalPaginas).boxed().toList();
+            model.addAttribute("paginas", paginas);
+        }
 
         model.addAttribute("idSede", idSede);
         model.addAttribute("idEspecialidad", idEspecialidad);
