@@ -39,6 +39,8 @@ public class DoctorController {
     private final EspecialidadRepository especialidadRepository;
 
 
+
+
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
                             AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository) {
