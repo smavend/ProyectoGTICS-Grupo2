@@ -152,7 +152,7 @@ public class DoctorController {
 
 
     @GetMapping("/calendario")
-    public String reportes(Model model){
+    public String calendario(Model model){
 
         Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
         Doctor doctor= doctorOptional.get();
@@ -168,10 +168,28 @@ public class DoctorController {
         setIdCita(id2);
         Optional<Cita> optionalCita= citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
+        List<Alergia> alergiaList= alergiaRepository.buscarPorPacienteId(id);
+
+
 
         if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
+
+
+            String alergias="";
+
+            for (int i = 0; i < alergiaList.size(); i++) {
+                if (i == alergiaList.size() - 1) {
+                    Alergia alergiaIterador = alergiaList.get(i);
+                    alergias = alergias +" "+alergiaIterador.getNombre();
+                } else {
+                    Alergia alergiaIterador = alergiaList.get(i);
+                    alergias = alergias +" "+ alergiaIterador.getNombre() + ",";
+                }
+            }
+
+            System.out.println(alergias);
 
 
             Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
@@ -180,6 +198,7 @@ public class DoctorController {
             model.addAttribute("doctor", doctor);
             model.addAttribute("paciente",paciente);
             model.addAttribute("cita",cita);
+            model.addAttribute("alergias",alergias);
 
             return "doctor/DoctorReporteSesion";
         } else {
