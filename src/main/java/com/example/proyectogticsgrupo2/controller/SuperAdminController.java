@@ -3,10 +3,17 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoService;
+import com.example.proyectogticsgrupo2.service.CorreoServiceSuperAdmin;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.example.proyectogticsgrupo2.config.SecurityConfig;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +35,9 @@ public class SuperAdminController {
     final EspecialidadRepository especialidadRepository;
     final SuperAdminService superAdminService;
     final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
+    final SecurityConfig securityConfig;
+    final CredencialesRepository credencialesRepository;
+
 
     public SuperAdminController(PacienteRepository pacienteRepository,
                                 AdministrativoRepository administrativoRepository,
@@ -37,7 +47,9 @@ public class SuperAdminController {
                                 SedeRepository sedeRepository,
                                 EspecialidadRepository especialidadRepository,
                                 SuperAdminService superAdminService,
-                                AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository) {
+                                AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository,
+                                SecurityConfig securityConfig,
+                                CredencialesRepository credencialesRepository) {
         this.pacienteRepository = pacienteRepository;
         this.administradorRepository = administradorRepository;
         this.administrativoRepository = administrativoRepository;
@@ -47,6 +59,9 @@ public class SuperAdminController {
         this.especialidadRepository = especialidadRepository;
         this.superAdminService = superAdminService;
         this.administrativoPorEspecialidadPorSedeRepository = administrativoPorEspecialidadPorSedeRepository;
+        this.securityConfig = securityConfig;
+        this.credencialesRepository = credencialesRepository;
+
     }
 
     @GetMapping("")
@@ -180,10 +195,9 @@ public class SuperAdminController {
     public String CrearUsuario(Model model) {
         userform_superadmin userform = new userform_superadmin();
         model.addAttribute("userform_superadmin", userform);
-
-        List<Clinica> listaClinicas = clinicaRepository.findAll();
+        List<Sede> listaSedes = sedeRepository.findAll();
         List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
-        model.addAttribute("listaClinicas", listaClinicas);
+        model.addAttribute("listaSedes", listaSedes);
         model.addAttribute("listaEspecialidades", listaEspecialidades);
         return "superAdmin/Crear_Usuario";
     }
@@ -201,161 +215,138 @@ public class SuperAdminController {
         return "superAdmin/_sede_select_options";
     }
 
-    //    public String saveUser(@RequestParam("selectUsuario") String selectUsuario,
-//                           @RequestParam("dni") String dni,
-//                           @RequestParam("nombres") String nombres,
-//                           @RequestParam("apellidos") String apellidos,
-//                           @RequestParam("clinica") String clinica,
-//                           //falta llenar este campo CorreoUser
-//                           @RequestParam("correoUser") String correoUser,
-//                           //----------------------->>>>>>>>>>>>>
-//                           @RequestParam(value = "otraClinica", required = false) String otraClinica,
-//                           //faltan estos 2 parámetros en el html ------>>>>>>>>
-//                           @RequestParam(value = "correo_nueva_clinica", required = false) String correo_nueva_clinica,
-//                           @RequestParam(value = "telefono_nueva_clinica", required = false) String telefono_nueva_clinica,
-//                           @RequestParam(value = "sede_nueva_direccion", required = false) String sede_nueva_direccion,
-//                           //-------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//                           @RequestParam(value = "otraSede", required = false) String otraSede,
-//                           @RequestParam(value = "sede", required = false) String sede,
-//                           @RequestParam(value = "especialidad", required = false) String especialidad,
-//                           @RequestParam(value = "otraSede4", required = false) String otraSede4,
-//                           @RequestParam(value = "sede_nueva4_direccion", required = false) String sede_nueva4_direccion,
-//                           Model model) {
     @PostMapping("/SaveUser")
     public String saveUser(@ModelAttribute("userform_superadmin") @Valid userform_superadmin userform, BindingResult result, Model model,
                            RedirectAttributes redirectAttributes) {
+        model.addAttribute("submitAttempted", true);
 
+        Clinica clinica = clinicaRepository.findAll().stream().findFirst().orElse(null);
 
         String selectUsuario = userform.getSelectUsuario();
-        String clinica = userform.getClinica();
         String sede = userform.getSede();
-        String otraClinica = userform.getOtraClinica();
+        String dni = userform.getDni();
+        String nombres = userform.getNombres();
+        String apellidos = userform.getApellidos();
+        String correoUser = userform.getCorreoUser();
+        String especialidad = userform.getEspecialidad();
 
-        // Validación personalizada para el campo 'sede'
-        if (selectUsuario.equals("administrador") && clinica.equals("otro")) {
-            // En este caso, permitir que el campo 'sede' esté vacío
-        } else {
-            if (sede == "" || sede.trim().isEmpty()) {
-                result.rejectValue("sede", "", "El campo Sede no puede estar vacío.");
+
+        // Valida que los nombres solo contengan caracteres alfabéticos
+        if (nombres != null && !nombres.trim().isEmpty() && !nombres.matches("^[a-zA-Z]+(\\s+[a-zA-Z]+)*$")) {
+            result.rejectValue("nombres", "", "El campo nombres solo puede contener caracteres alfabéticos.");
+        }
+
+        // Valida que los apellidos solo contengan caracteres alfabéticos
+        if (apellidos != null && !apellidos.trim().isEmpty() && !apellidos.matches("^[a-zA-Z]+(\\s+[a-zA-Z]+)*$")) {
+            result.rejectValue("apellidos", "", "El campo apellidos solo puede contener caracteres alfabéticos.");
+        }
+
+        // Valida el tamaño del DNI
+        if (dni != null && !dni.trim().isEmpty() && dni.length() != 8) {
+            result.rejectValue("dni", "", "DNI debe contener 8 dígitos.");
+        }
+        // Valida que el DNI solo contenga dígitos
+        else if (dni != null && !dni.trim().isEmpty() && !dni.matches("\\d+")) {
+            result.rejectValue("dni", "", "DNI debe contener sólo dígitos.");
+        }
+
+        Sede existingSede = sedeRepository.buscarPorNombreDeSede(sede);
+        AdministrativoPorEspecialidadPorSede existingSede2 = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeId(String.valueOf(existingSede.getIdSede()));
+        if (existingSede2 != null && selectUsuario.equals("administrador")) {
+            result.rejectValue("sede", "", "Ya existe un administrador para esta sede, cambie.");
+        }
+
+
+        List<Administrador> listaAdministrador = administradorRepository.findAll();
+        for (Administrador administrador : listaAdministrador) {
+            String existingCorreo = administrador.getCorreo();
+            String existingDni = administrador.getIdAdministrador(); // Asegúrate de tener este método en tu clase Administrador
+
+            if (correoUser.contains(existingCorreo) && selectUsuario.equals("administrador")) {
+                // El correo está duplicado, realiza la acción necesaria
+                // Por ejemplo, puedes lanzar una excepción, mostrar un mensaje de error, etc.
+                result.rejectValue("correoUser", "", "El correo está duplicado.");
+            }
+            if (dni.equals(existingDni) && selectUsuario.equals("administrador")) {
+                // El DNI está duplicado, realiza la acción necesaria
+                result.rejectValue("dni", "", "El DNI está duplicado.");
             }
         }
-        Clinica existingClinica = clinicaRepository.buscarClinicaPorNombre(otraClinica);
-        if (existingClinica != null) {
-            result.rejectValue("otraClinica", "", "Nombre de Clínica ya utilizada, cambie.");
+        List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
+        for (Administrativo administrativo : listaAdministrativo) {
+            String existingCorreo = administrativo.getCorreo();
+            String existingDni = administrativo.getIdAdministrativo(); // Asegúrate de tener este método en tu clase Administrador
+
+            if (correoUser.contains(existingCorreo) && selectUsuario.equals("administrativo")) {
+                // El correo está duplicado, realiza la acción necesaria
+                // Por ejemplo, puedes lanzar una excepción, mostrar un mensaje de error, etc.
+                result.rejectValue("correoUser", "", "El correo está duplicado.");
+            }
+            if (dni.equals(existingDni) && selectUsuario.equals("administrativo")) {
+                // El DNI está duplicado, realiza la acción necesaria
+                result.rejectValue("dni", "", "El DNI está duplicado.");
+            }
         }
 
+
+
+
         if (result.hasErrors()) {
-            List<Clinica> listaClinicas = clinicaRepository.findAll();
+            List<Sede> listaSedes = sedeRepository.findAll();
             List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
-            model.addAttribute("listaClinicas", listaClinicas);
+            model.addAttribute("listaSedes", listaSedes);
             model.addAttribute("listaEspecialidades", listaEspecialidades);
             // Si hay errores de validación, volver a mostrar el formulario con los mensajes de error
             return "SuperAdmin/Crear_Usuario";
         }
 
-        String dni = userform.getDni();
-        String nombres = userform.getNombres();
-        String apellidos = userform.getApellidos();
-        String correoUser = userform.getCorreoUser();
-        String correo_nueva_clinica = userform.getCorreo_nueva_clinica();
-        String telefono_nueva_clinica = userform.getTelefono_nueva_clinica();
-        String otraSede = userform.getOtraSede();
-        String sede_nueva_direccion = userform.getSede_nueva_direccion();
-        String otraSede4 = userform.getOtraSede4();
-        String sede_nueva4_direccion = userform.getSede_nueva4_direccion();
-        String especialidad = userform.getEspecialidad();
 
 
         if (selectUsuario.equals("administrador")) {
-            // Procesa los datos para un usuario administrador
-            // ... (por ejemplo, guarda el usuario en la base de datos)
-            if (clinica.equals("otro")) {
-                /*clinicaRepository.insertarClinica(otraClinica);
-                Clinica clinicanueva = clinicaRepository.buscarClinicaPorNombre(otraClinica);
-                sedeRepository.insertarSede(otraSede, clinicanueva.getIdClinica());
-                Sede sedenueva_id = sedeRepository.buscarPorClinicaId(String.valueOf(clinicanueva.getIdClinica()));
-                administradorRepository.insertarAdministrador(dni,nombres,apellidos,sedenueva_id.getIdSede());*/
-                Clinica clinicanueva = new Clinica();
-                //Parámetros que sí obtengo mediante el post
-                clinicanueva.setNombre(otraClinica);
-                clinicanueva.setCorreo(correo_nueva_clinica);
-                clinicanueva.setTelefono(telefono_nueva_clinica);
-                clinicanueva.setTyc("TerminosX");
-                clinicanueva.setColor("#FFFFFF");
-                clinicaRepository.save(clinicanueva);
-                //Buscando clinica nueva
-                Clinica clinicaEncontrada = clinicaRepository.buscarClinicaPorNombre(clinicanueva.getNombre());
-                Sede sedeNueva = new Sede();
-                sedeNueva.setNombre(otraSede);
-                sedeNueva.setClinica(clinicaEncontrada);
-                sedeNueva.setDireccion(sede_nueva_direccion);
-                sedeRepository.save(sedeNueva);
-                Sede sedeEncontrada = sedeRepository.buscarPorNombreDeSede(otraSede, clinicaEncontrada.getIdClinica());
-                System.out.println(sedeEncontrada.getIdSede());
-                System.out.println(sedeEncontrada.getNombre());
-                System.out.println("hola!!!!");
-                Administrador administradorNuevo = new Administrador();
-                administradorNuevo.setIdAdministrador(dni);
-                administradorNuevo.setNombre(nombres);
-                administradorNuevo.setApellidos(apellidos);
-                administradorNuevo.setEstado(0);
-                administradorNuevo.setCorreo(correoUser);
-                administradorNuevo.setSede(sedeEncontrada);
-                administradorRepository.save(administradorNuevo);
-                // Utiliza los valores de 'otraClinica' y 'otraSede'
-            } else {
-                if (sede.equals("otro")) {
-                    Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
-                    Sede sedeNueva = new Sede();
-                    sedeNueva.setNombre(otraSede4);
-                    sedeNueva.setClinica(clinica_enviar);
-                    sedeNueva.setDireccion(sede_nueva4_direccion);
-                    sedeRepository.save(sedeNueva);
-                    Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(otraSede4, clinica_enviar.getIdClinica());
-                    administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
+            //Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
+            Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
+            administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
+            Optional<Administrador> administrador = administradorRepository.findById(dni);
+            String passRandom= securityConfig.generateRandomPassword();
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(passRandom);
+            credencialesRepository.crearCredenciales(administrador.get().getIdAdministrador(),administrador.get().getCorreo(),encodedPassword);
+            CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
+            correoService.props(administrador.get().getCorreo(),passRandom);
 
-                } else {
-                    Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
-                    Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede, clinica_enviar.getIdClinica());
-                    administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
-                    // Utiliza el valor de 'clinica'
-                }
-            }
-        } else if (selectUsuario.equals("administrativo")) {
 
-            // Procesa los datos para un usuario administrativo
-            if (clinica.equals("otro")) {
-                //
-                // Utiliza los valores de 'otraClinica' y 'otraSede'
-            } else {
-                //el campo estado
-//                administrativoRepository.insertarAdministrativo(dni,nombres,apellidos);
-                Administrativo administrativonuevo = new Administrativo();
-                administrativonuevo.setIdAdministrativo(dni);
-                administrativonuevo.setNombre(nombres);
-                administrativonuevo.setApellidos(apellidos);
-                administrativonuevo.setCorreo(correoUser);
-                administrativoRepository.save(administrativonuevo);
-                Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica);
-                Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede, clinica_enviar.getIdClinica());
-                //falta añadir el parámetro Especialidad ( se añadirá como uno por defecto pero se tiene que elegir )
-                AdministrativoPorEspecialidadPorSede administrativoPorEspecialidadPorSede = new AdministrativoPorEspecialidadPorSede();
-                administrativoPorEspecialidadPorSede.setSedeId(sede_enviar);
-                administrativoPorEspecialidadPorSede.setAdministrativoId(administrativonuevo);
+        }else if (selectUsuario.equals("administrativo")) {
+            Administrativo administrativonuevo = new Administrativo();
+            administrativonuevo.setIdAdministrativo(dni);
+            administrativonuevo.setNombre(nombres);
+            administrativonuevo.setApellidos(apellidos);
+            administrativonuevo.setCorreo(correoUser);
+            administrativoRepository.save(administrativonuevo);
+//          Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
+            Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
+            AdministrativoPorEspecialidadPorSede administrativoPorEspecialidadPorSede = new AdministrativoPorEspecialidadPorSede();
+            administrativoPorEspecialidadPorSede.setSedeId(sede_enviar);
+            administrativoPorEspecialidadPorSede.setAdministrativoId(administrativonuevo);
+            administrativoPorEspecialidadPorSede.setTorre("Por Asignar");
+            administrativoPorEspecialidadPorSede.setPiso("Por Asignar");
+            String torre = "N.D";
+            String piso = "N.D";
+            Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
+            administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
+            administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
 
-                administrativoPorEspecialidadPorSede.setTorre("Por Asignar");
-                administrativoPorEspecialidadPorSede.setPiso("Por Asignar");
-                String torre = "N.D";
-                String piso = "N.D";
+            String passRandom= securityConfig.generateRandomPassword();
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(passRandom);
+            credencialesRepository.crearCredenciales(administrativonuevo.getIdAdministrativo(),administrativonuevo.getCorreo(),encodedPassword);
+            CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
+            correoService.props(administrativonuevo.getCorreo(),passRandom);
 
-                Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
-                administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
-                administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
-//                administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(),dni);
-                // Utiliza el valor de 'clinica' y, si corresponde, el valor de 'sede'
-            }
-            // ... (por ejemplo, guarda el usuario en la base de datos)
+
         }
+            // ... (por ejemplo, guarda el usuario en la base de datos)
         return "redirect:/SuperAdminHomePage";
 
     }
