@@ -2,6 +2,8 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -55,14 +57,15 @@ public class PacienteController {
 
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
-    public String index(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
+    public String index(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Paciente paciente = (Paciente) session.getAttribute("paciente");
+        model.addAttribute("paciente", paciente);
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
+
+        System.out.println("id: "+paciente.getIdPaciente());
+        System.out.println("nom: "+paciente.getNombre());
         return "paciente/index";
     }
 
@@ -103,11 +106,11 @@ public class PacienteController {
                                        Model model) {
 
         System.out.println("Comprobacion:----");
-        System.out.println("modal: "+citaTemporal.getModalidad());
-        System.out.println("sede: "+citaTemporal.getIdSede());
-        System.out.println("pac: "+citaTemporal.getIdPaciente());
-        System.out.println("esp: "+citaTemporal.getIdEspecialidad());
-        System.out.println("doc: "+citaTemporal.getIdDoctor());
+        System.out.println("modal: " + citaTemporal.getModalidad());
+        System.out.println("sede: " + citaTemporal.getIdSede());
+        System.out.println("pac: " + citaTemporal.getIdPaciente());
+        System.out.println("esp: " + citaTemporal.getIdEspecialidad());
+        System.out.println("doc: " + citaTemporal.getIdDoctor());
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         Paciente paciente = optionalPaciente.get();
@@ -129,11 +132,11 @@ public class PacienteController {
                                  Model model) {
 
         System.out.println("Revisón Model Atribute----------");
-        System.out.println("modal: "+citaTemporal.getModalidad());
-        System.out.println("sede: "+citaTemporal.getIdSede());
-        System.out.println("pac: "+citaTemporal.getIdPaciente());
-        System.out.println("esp: "+citaTemporal.getIdEspecialidad());
-        System.out.println("doc: "+citaTemporal.getIdDoctor());
+        System.out.println("modal: " + citaTemporal.getModalidad());
+        System.out.println("sede: " + citaTemporal.getIdSede());
+        System.out.println("pac: " + citaTemporal.getIdPaciente());
+        System.out.println("esp: " + citaTemporal.getIdEspecialidad());
+        System.out.println("doc: " + citaTemporal.getIdDoctor());
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         Paciente paciente = optionalPaciente.get();
