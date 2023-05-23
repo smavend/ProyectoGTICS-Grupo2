@@ -4,13 +4,22 @@ import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.print.Doc;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +36,17 @@ public class DoctorController {
     private int idCita;
     private String fecha;
     private final AlergiaRepository alergiaRepository;
-
+    private final EspecialidadRepository especialidadRepository;
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
-                            AlergiaRepository alergiaRepository
-                            ) {
+                            AlergiaRepository alergiaRepository,
+                            EspecialidadRepository especialidadRepository) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
         this.alergiaRepository = alergiaRepository;
+        this.especialidadRepository = especialidadRepository;
     }
 
     @GetMapping(value={"/dashboard","/",""})
@@ -347,7 +357,118 @@ public class DoctorController {
         }
         return "doctor/DoctorPerfil";
     }
+    @GetMapping("/perfil/editar")
+    public String editarPerfilDoctor(@ModelAttribute("doctor") Doctor doctor,
+                               @RequestParam(name = "id") String id,
+                               Model model) {
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        if (optionalDoctor.isPresent()) {
+            doctor = optionalDoctor.get();
+            List<Especialidad> especialidadList=especialidadRepository.findAll();
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("especialidadList", especialidadList);
+            return "doctor/DoctorPerfilEdit";
+        }
+        return "redirect:/doctor/perfil";
+    }
+    @PostMapping("/perfil/guardar")
+    public String guardarPerfilDoctor(@ModelAttribute("doctor") @Valid Doctor doctor,
+                                BindingResult bindingResult,
+                                @RequestParam(name = "archivo") MultipartFile file,
+                                RedirectAttributes attr,
+                                Model model) {
 
+        String fileName = file.getOriginalFilename();
+
+        if (fileName.contains("..") || fileName.contains(" ")) {
+            attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
+            return "redirect:/doctor/perfil/editar?id=" + doctor.getId_doctor();
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("especialidadList", especialidadRepository.findAll());
+            return "doctor/DoctorPerfilEdit";
+        } else {
+            try {
+                if (file.isEmpty()) {
+                    Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId_doctor());
+                    Doctor d = optionalDoctor.get();
+                    doctor.setFoto(d.getFoto());
+                    doctor.setFotoname(d.getFotoname());
+                    doctor.setFotocontenttype(d.getFotocontenttype());
+                } else {
+                    doctor.setFoto(file.getBytes());
+                    doctor.setFotoname(fileName);
+                    doctor.setFotocontenttype(file.getContentType());
+                }
+                doctorRepository.save(doctor);
+                attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
+                return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
+                return "redirect:/doctor/perfil"+ doctor.getId_doctor();
+            }
+
+        }
+    }
+    @GetMapping("/imageDoctor")
+    public ResponseEntity<byte[]> mostrarImagenDoctor(@RequestParam("idDoctor") String id) {
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+
+        if (optionalDoctor.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            byte[] imagenComoBytes = doctor.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(doctor.getFotocontenttype()));
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
+
+    @GetMapping("/perfil/quitarFoto")
+    public String quitarFotoDoctor(@RequestParam(name = "idDocF") String id,
+                             RedirectAttributes attr) {
+
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        if (optionalDoctor.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            try {
+                File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+                FileInputStream input = new FileInputStream(foto);
+                byte[] bytes;
+                try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = input.read(buffer)) != -1) {
+                        output.write(buffer, 0, length);
+                    }
+                    input.close();
+                    output.close();
+                    bytes = output.toByteArray();
+                }
+
+                doctor.setFoto(bytes);
+                doctor.setFotoname("userPorDefecto.jpg");
+                doctor.setFotocontenttype("image/jpg");
+
+                doctorRepository.save(doctor);
+                return "redirect:/doctor/perfil";
+            } catch (IOException e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
+                return "redirect:/doctor/perfil";
+            }
+        }
+
+        return "redirect:/doctor/perfil";
+    }
 
 
 
