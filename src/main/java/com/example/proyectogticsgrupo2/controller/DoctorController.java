@@ -32,6 +32,7 @@ public class DoctorController {
     private final AlergiaRepository alergiaRepository;
 
 
+
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
                             AlergiaRepository alergiaRepository
                             ) {

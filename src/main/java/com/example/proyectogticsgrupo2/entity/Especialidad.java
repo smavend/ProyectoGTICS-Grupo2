@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "especialidad")
-public class Especialidad {
+public class Especialidad implements Serializable {
 
     @Id
     @Column(name = "id_especialidad", nullable = false)

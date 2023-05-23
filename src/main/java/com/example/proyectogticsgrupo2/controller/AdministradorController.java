@@ -1,11 +1,14 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,10 +25,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
 @Controller
 @RequestMapping("/administrador")
 public class AdministradorController {
+
     final PacienteRepository pacienteRepository;
     final DoctorRepository doctorRepository;
     final SeguroRepository seguroRepository;
@@ -36,7 +39,8 @@ public class AdministradorController {
     final AdministradorRepository administradorRepository;
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository) {
+    final SecurityConfig securityConfig;
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.seguroRepository = seguroRepository;
@@ -47,6 +51,7 @@ public class AdministradorController {
         this.administradorRepository = administradorRepository;
         this.credencialesRepository = credencialesRepository;
         this.temporalRepository = temporalRepository;
+        this.securityConfig = securityConfig;
     }
     //#####################################33
     @GetMapping("/dashboard")
@@ -69,7 +74,8 @@ public class AdministradorController {
     @PostMapping("/guardarTemporales")
     public String guardarTemporales(@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr){
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
-
+            //Cuanto funcione perfectamente los temporales, entonces los filtro por llenado 1
+            // y usare el datablindig
             for (Temporal pacitemp : pacientesTemp){
                 paciente.setIdPaciente(pacitemp.getDni());
                 paciente.setNombre(pacitemp.getNombre());
@@ -86,9 +92,13 @@ public class AdministradorController {
                 paciente.setFoto(null);
                 paciente.setFotoname(null);
                 paciente.setFotocontenttype(null);
-                attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
+
+                CorreoService correoService= new CorreoService();
+                correoService.props(paciente.getCorreo(),paciente.getNombre());
+                attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
+
             }
             return "redirect:/administrador/dashboard";
 
@@ -138,12 +148,19 @@ public class AdministradorController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
             paciente.setEstado(1);
             paciente.setFecharegistro(LocalDateTime.now());
             pacienteRepository.save(paciente);
-            credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),paciente.getNombre());
+
+            String passRandom= securityConfig.generateRandomPassword();
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(passRandom);
+
+            credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
+            CorreoService correoService = new CorreoService();
+            correoService.props(paciente.getCorreo(),passRandom);
             attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
@@ -171,7 +188,6 @@ public class AdministradorController {
                     doctor.setFoto(null);
                     doctor.setFotoname(null);
                     doctor.setFotocontenttype(null);
-
             }else {
                 String fileName = file.getOriginalFilename();
                 try {
@@ -182,9 +198,18 @@ public class AdministradorController {
                     e.printStackTrace();
                 }
             }
+
             doctor.setEstado(1);
             doctorRepository.save(doctor);
-            credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),doctor.getNombre());
+
+            String passRandom= securityConfig.generateRandomPassword();
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(passRandom);
+
+            credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),encodedPassword);
+            CorreoService correoService = new CorreoService();
+            correoService.props(doctor.getCorreo(),passRandom);
             attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
             return "redirect:/administrador/dashboard";
         }

@@ -391,11 +391,7 @@
 
                     <!-- Top Selling -->
                     <div class="col-12">
-                        <div class="card top-selling overflow-auto container">
-
-
-
-                            <div class="card-body pb-0">
+                        <div class="card top-selling container px-4" style="min-height:500px">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
@@ -410,10 +406,6 @@
                                         </a>
                                     </div>
                                 </div>
-
-
-
-                                <div class="d-flex flex-column" >
 
                                     <table class="table " id="datatable">
                                         <thead>
@@ -494,17 +486,16 @@
                                         </tbody>
                                     </table>
                                     <br>
-                                </div>
 
                             </div>
 
-                        </div>
+
                     </div><!-- End Top Selling -->
 
 
                     <div class="col-12">
-                        <div class="card top-selling overflow-auto container">
-                            <div class="card-body pb-0">
+
+                        <div class="card top-selling container px-4" style="min-height:550px">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">EGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
@@ -519,7 +510,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-column" >
+
 
                                     <table class="table table-striped " id="datatable2">
                                         <thead>
@@ -592,10 +583,9 @@
                                         </tbody>
                                     </table>
                                     <br>
-                                </div>
 
                             </div>
-                        </div>
+
                     </div>
 
 
@@ -645,6 +635,10 @@
 <script>
     $(document).ready(function () {
         $('#datatable').DataTable({
+            lengthMenu: [
+                [5,10,20],
+                [5,10,20],
+            ],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "Ningún registro encontrado",
@@ -660,6 +654,7 @@
                     "previous": "Anterior",
                 }
             },
+            "pageLength": 5,
             "columnDefs": [
                 {"margin-bottom": "10px"}
             ]
@@ -669,6 +664,10 @@
 <script>
     $(document).ready(function () {
         $('#datatable2').DataTable({
+            lengthMenu: [
+                [5,10,20],
+                [5,10,20],
+            ],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "Ningún registro encontrado",

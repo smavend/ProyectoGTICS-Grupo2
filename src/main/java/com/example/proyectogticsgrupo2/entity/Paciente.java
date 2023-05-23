@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.*;
@@ -15,7 +16,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "paciente")
-public class Paciente {
+public class Paciente implements Serializable {
 
     @Id
     @Column(name="id_paciente")

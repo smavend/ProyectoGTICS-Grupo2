@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SuperAdminRepository extends JpaRepository<SuperAdmin, String> {
-    public SuperAdmin findByCorreo(String correo);
+    SuperAdmin findByCorreo(String correo);
 }

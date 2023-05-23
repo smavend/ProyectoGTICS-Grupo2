@@ -1,11 +1,13 @@
 package com.example.proyectogticsgrupo2.repository;
 
 import com.example.proyectogticsgrupo2.entity.Doctor;
+import com.example.proyectogticsgrupo2.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, String> {
@@ -26,4 +28,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
 
     @Query(nativeQuery = true, value = "select * from doctor where sede_id_sede = ?1 and especialidad_id_especialidad = ?2")
     List<Doctor> buscarPorSedeYEspecialidad(int idSede, int idEspecialidad);
+
+    Doctor findByCorreo(String correo);
 }

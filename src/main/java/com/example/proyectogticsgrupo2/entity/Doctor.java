@@ -7,11 +7,13 @@ import lombok.NonNull;
 import lombok.Setter;
 import jakarta.validation.constraints.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @Table(name="doctor")
-public class Doctor {
+public class Doctor implements Serializable {
     @Id
     @Column(name = "id_doctor", nullable = false)
     @NotBlank(message = "Este campo no puede estar vacío")

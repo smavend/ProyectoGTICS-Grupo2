@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.config;
 
+import com.example.proyectogticsgrupo2.entity.SuperAdmin;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,8 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.security.SecureRandom;
 
 import javax.sql.DataSource;
 
@@ -27,6 +30,7 @@ public class SecurityConfig {
     final AdministrativoRepository administrativoRepository;
     final SuperAdminRepository superAdminRepository;
 
+
     public SecurityConfig(DataSource dataSource, PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, AdministrativoRepository administrativoRepository, SuperAdminRepository superAdminRepository) {
         this.dataSource = dataSource;
         this.pacienteRepository = pacienteRepository;
@@ -36,6 +40,23 @@ public class SecurityConfig {
         this.superAdminRepository = superAdminRepository;
     }
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+    public String generateRandomPassword() {
+        int length = 10; // Longitud de la contraseña deseada
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; // Caracteres disponibles para la contraseña (solo letras mayúsculas, minúsculas y números)
+        SecureRandom random = new SecureRandom();
+
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+
+        return sb.toString();
+    }
+
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,20 +73,32 @@ public class SecurityConfig {
                         redirectStrategy.sendRedirect(request, response, targetURL);
                     } else {
                         String rol = "";
+                        HttpSession session = request.getSession();
                         for (GrantedAuthority role : authentication.getAuthorities()) {
                             rol = role.getAuthority();
                             break;
                         }
-                        if (rol.equals("paciente")) {
-                            response.sendRedirect("/Paciente");
-                        } else if (rol.equals("doctor")) {
-                            response.sendRedirect("/doctor");
-                        } else if (rol.equals("administrador")) {
-                            response.sendRedirect("/administrador/dashboard");
-                        } else if (rol.equals("administrativo")) {
-                            response.sendRedirect("/administrativo");
-                        } else{
-                            response.sendRedirect("/SuperAdminHomePage");
+                        switch (rol) {
+                            case "paciente" -> {
+                                session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/Paciente");
+                            }
+                            case "doctor" -> {
+                                session.setAttribute("doctor", doctorRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/doctor");
+                            }
+                            case "administrador" -> {
+                                session.setAttribute("administrador", administradorRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/administrador/dashboard");
+                            }
+                            case "administrativo" -> {
+                                session.setAttribute("administrativo", administrativoRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/administrativo");
+                            }
+                            case "superadmin" -> {
+                                session.setAttribute("superadmin", superAdminRepository.findByCorreo(authentication.getName()));
+                                response.sendRedirect("/SuperAdminHomePage");
+                            }
                         }
                     }
                 });
