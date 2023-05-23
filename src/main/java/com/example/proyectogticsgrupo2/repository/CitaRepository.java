@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,8 +45,8 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`) VALUES (?1, ?2, '2023-05-21 12:30:00', '2023-05-21 12:45:00', ?3, '0', ?4)")
-    void reservarCita(String idPaciente, String idDoctor, int modalidad, int idSede);
+    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`) VALUES (?1, ?2, ?3, ?4, ?5, 0, ?6)")
+    void reservarCita(String idPaciente, String idDoctor, LocalDateTime inicio, LocalDateTime fin, int modalidad, int idSede);
 
     @Query(value = "SELECT DATE_FORMAT(c.inicio, '%d/%m/%Y') as fecha , concat(p.nombre,' ',p.apellidos) as nombres, ROUND((sea.precio_cita*seg.doctor),2) as pago_doctor, c.id_cita, p.id_paciente,d.id_doctor, seg.doctor FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join sede s on (c.sede_id_sede = s.id_sede) inner join sede_x_especialidad_x_administrativo sea on (sea.sede_id_sede=s.id_sede) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) inner join seguro seg  inner join especialidad esp on (esp.id_especialidad=d.especialidad_id_especialidad) where c.doctor_id_doctor=?1 and sea.especialidad_id_especialidad=esp.id_especialidad and seg.id_seguro=p.seguro_id_seguro", nativeQuery = true)
     List<ListaRecibosDTO> listarRecibos(String id_doctor);

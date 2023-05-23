@@ -3,8 +3,10 @@ package com.example.proyectogticsgrupo2.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -27,8 +29,11 @@ public class CitaTemporal {
     @Column(name = "doctor_id_doctor")
     private String idDoctor;
 
-    private LocalDateTime inicio;
-    private LocalDateTime fin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
+
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private LocalTime hora;
 
     @Column(name = "id_cita_previa")
     private Integer idCitaPrevia;

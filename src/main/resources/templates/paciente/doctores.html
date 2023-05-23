@@ -78,21 +78,16 @@
                     </div>
                 </div>
 
-                <!--
                 <nav class="mt-2">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-                -->
-                <nav class="mt-2">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item" th:each="pagina: ${paginas}">
+                        <li class="page-item" th:classappend="${paginaPrevia == 0? 'disabled': ''}">
+                            <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaPrevia}}">Anterior</a>
+                        </li>
+                        <li class="page-item" th:each="pagina: ${paginas}" th:classappend="${paginaActual == pagina? 'active': ''}">
                             <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${pagina}}" th:text="${pagina}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${paginaActual == totalPaginas? 'disabled':''}">
+                            <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaSiguiente}}">Siguiente</a>
                         </li>
                     </ul>
                 </nav>
