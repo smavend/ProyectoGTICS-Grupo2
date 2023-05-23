@@ -1441,12 +1441,13 @@ p{
 }
 
 .botonPagar{
-    padding: 10px 30px;
+    padding: 10px 15px;
     font-weight: 700;
     color: black;
     background-color: #ffe26f;
     border-radius: 20px;
     border: none;
+    box-shadow: 0 0 5px rgb(105, 105, 105);
     transition: all 0.3s;
 }
 

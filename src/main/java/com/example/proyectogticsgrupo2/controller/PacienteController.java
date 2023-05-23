@@ -466,6 +466,25 @@ public class PacienteController {
         return "paciente/pagos";
     }
 
+    @GetMapping("/filtrarPagos")
+    public String filtrarPagos(@RequestParam("filtro") int filtro, Model model) {
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        if (optionalPaciente.isPresent()) {
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
+        List<Pago> pagoList = pagoRepository.findAll();
+        model.addAttribute("pagoList", pagoList);
+        model.addAttribute("filtro",filtro);
+        return "paciente/pagos";
+    }
+
+    @PostMapping("/guardarPago")
+    public String guardarPago(@RequestParam("idPago") int idPago) {
+        pagoRepository.guardarPago(idPago);
+        return "redirect:/Paciente/pagos";
+    }
+
     @GetMapping("/recibo")
     public String verReciboPago(@RequestParam("idPago") int idPago,
                                 Model model) {
