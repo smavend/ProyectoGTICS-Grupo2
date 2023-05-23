@@ -79,7 +79,7 @@
                             <td>MARTES</td>
                             <td th:text="${doctor.horario.disponibilidad_inicio.substring(0,5)}+' - '+${doctor.horario.disponibilidad_fin.substring(0,5)}">13:00 - 18:00</td>
                             <td>
-                                <a class="botonReservarCitaHorario" th:href="@{/Paciente/reservarDoctor(idDoctor=${doctor.id_doctor})}">Reservar en este
+                                <a class="botonReservarCitaHorario" th:href="@{/Paciente/reservarDoctor2(idDoctor=${doctor.id_doctor})}">Reservar en este
                                     horario</a>
                             </td>
                         </tr>
