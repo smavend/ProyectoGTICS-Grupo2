@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,9 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,7 +24,6 @@ import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 
 @Controller
 @RequestMapping("/administrador")
@@ -41,7 +39,8 @@ public class AdministradorController {
     final AdministradorRepository administradorRepository;
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository) {
+    final SecurityConfig securityConfig;
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.seguroRepository = seguroRepository;
@@ -52,6 +51,7 @@ public class AdministradorController {
         this.administradorRepository = administradorRepository;
         this.credencialesRepository = credencialesRepository;
         this.temporalRepository = temporalRepository;
+        this.securityConfig = securityConfig;
     }
     //#####################################33
     @GetMapping("/dashboard")
@@ -192,11 +192,18 @@ public class AdministradorController {
                     e.printStackTrace();
                 }
             }
+
             doctor.setEstado(1);
             doctorRepository.save(doctor);
-            credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),doctor.getNombre());
+
+            String passRandom= securityConfig.generateRandomPassword();
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(passRandom);
+
+            credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),encodedPassword);
             CorreoService correoService = new CorreoService();
-            correoService.props(doctor.getCorreo(),doctor.getNombre());
+            correoService.props(doctor.getCorreo(),passRandom);
             attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
             return "redirect:/administrador/dashboard";
         }

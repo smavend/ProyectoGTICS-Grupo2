@@ -15,6 +15,8 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.security.SecureRandom;
 
 import javax.sql.DataSource;
 
@@ -28,6 +30,7 @@ public class SecurityConfig {
     final AdministrativoRepository administrativoRepository;
     final SuperAdminRepository superAdminRepository;
 
+
     public SecurityConfig(DataSource dataSource, PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, AdministrativoRepository administrativoRepository, SuperAdminRepository superAdminRepository) {
         this.dataSource = dataSource;
         this.pacienteRepository = pacienteRepository;
@@ -37,6 +40,22 @@ public class SecurityConfig {
         this.superAdminRepository = superAdminRepository;
     }
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+    public  String generateRandomPassword() {
+        int length = 10; // Longitud de la contraseña deseada
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?"; // Caracteres disponibles para la contraseña
+        SecureRandom random = new SecureRandom();
+
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+
+        return sb.toString();
+    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
