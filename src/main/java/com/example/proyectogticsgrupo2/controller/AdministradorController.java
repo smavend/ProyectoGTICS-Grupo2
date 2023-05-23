@@ -152,9 +152,15 @@ public class AdministradorController {
             paciente.setEstado(1);
             paciente.setFecharegistro(LocalDateTime.now());
             pacienteRepository.save(paciente);
-            credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),paciente.getNombre());
+
+            String passRandom= securityConfig.generateRandomPassword();
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(passRandom);
+
+            credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
             CorreoService correoService = new CorreoService();
-            correoService.props(paciente.getCorreo(),paciente.getNombre());
+            correoService.props(paciente.getCorreo(),passRandom);
             attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
             return "redirect:/administrador/dashboard";
         }

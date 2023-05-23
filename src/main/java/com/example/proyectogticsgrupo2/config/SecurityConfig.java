@@ -41,9 +41,9 @@ public class SecurityConfig {
     }
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-    public  String generateRandomPassword() {
+    public String generateRandomPassword() {
         int length = 10; // Longitud de la contraseña deseada
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?"; // Caracteres disponibles para la contraseña
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; // Caracteres disponibles para la contraseña (solo letras mayúsculas, minúsculas y números)
         SecureRandom random = new SecureRandom();
 
         StringBuilder sb = new StringBuilder(length);
@@ -55,6 +55,7 @@ public class SecurityConfig {
 
         return sb.toString();
     }
+
 
 
     @Bean
