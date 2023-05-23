@@ -5,6 +5,7 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
@@ -180,10 +181,9 @@ public class SuperAdminController {
     public String CrearUsuario(Model model) {
         userform_superadmin userform = new userform_superadmin();
         model.addAttribute("userform_superadmin", userform);
-
-        List<Clinica> listaClinicas = clinicaRepository.findAll();
+        List<Sede> listaSedes = sedeRepository.findAll();
         List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
-        model.addAttribute("listaClinicas", listaClinicas);
+        model.addAttribute("listaSedes", listaSedes);
         model.addAttribute("listaEspecialidades", listaEspecialidades);
         return "superAdmin/Crear_Usuario";
     }
@@ -201,72 +201,93 @@ public class SuperAdminController {
         return "superAdmin/_sede_select_options";
     }
 
-    //    public String saveUser(@RequestParam("selectUsuario") String selectUsuario,
-//                           @RequestParam("dni") String dni,
-//                           @RequestParam("nombres") String nombres,
-//                           @RequestParam("apellidos") String apellidos,
-//                           @RequestParam("clinica") String clinica,
-//                           //falta llenar este campo CorreoUser
-//                           @RequestParam("correoUser") String correoUser,
-//                           //----------------------->>>>>>>>>>>>>
-//                           @RequestParam(value = "otraClinica", required = false) String otraClinica,
-//                           //faltan estos 2 parámetros en el html ------>>>>>>>>
-//                           @RequestParam(value = "correo_nueva_clinica", required = false) String correo_nueva_clinica,
-//                           @RequestParam(value = "telefono_nueva_clinica", required = false) String telefono_nueva_clinica,
-//                           @RequestParam(value = "sede_nueva_direccion", required = false) String sede_nueva_direccion,
-//                           //-------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//                           @RequestParam(value = "otraSede", required = false) String otraSede,
-//                           @RequestParam(value = "sede", required = false) String sede,
-//                           @RequestParam(value = "especialidad", required = false) String especialidad,
-//                           @RequestParam(value = "otraSede4", required = false) String otraSede4,
-//                           @RequestParam(value = "sede_nueva4_direccion", required = false) String sede_nueva4_direccion,
-//                           Model model) {
     @PostMapping("/SaveUser")
     public String saveUser(@ModelAttribute("userform_superadmin") @Valid userform_superadmin userform, BindingResult result, Model model,
                            RedirectAttributes redirectAttributes) {
+        model.addAttribute("submitAttempted", true);
 
+        Clinica clinica = clinicaRepository.findAll().stream().findFirst().orElse(null);
 
         String selectUsuario = userform.getSelectUsuario();
-        String clinica = userform.getClinica();
         String sede = userform.getSede();
-        String otraClinica = userform.getOtraClinica();
+        String dni = userform.getDni();
+        String nombres = userform.getNombres();
+        String apellidos = userform.getApellidos();
+        String correoUser = userform.getCorreoUser();
+        String especialidad = userform.getEspecialidad();
 
-        // Validación personalizada para el campo 'sede'
-        if (selectUsuario.equals("administrador") && clinica.equals("otro")) {
-            // En este caso, permitir que el campo 'sede' esté vacío
-        } else {
-            if (sede == "" || sede.trim().isEmpty()) {
-                result.rejectValue("sede", "", "El campo Sede no puede estar vacío.");
+
+        // Valida que los nombres solo contengan caracteres alfabéticos
+        if (nombres != null && !nombres.trim().isEmpty() && !nombres.matches("^[a-zA-Z]+(\\s+[a-zA-Z]+)*$")) {
+            result.rejectValue("nombres", "", "El campo nombres solo puede contener caracteres alfabéticos.");
+        }
+
+        // Valida que los apellidos solo contengan caracteres alfabéticos
+        if (apellidos != null && !apellidos.trim().isEmpty() && !apellidos.matches("^[a-zA-Z]+(\\s+[a-zA-Z]+)*$")) {
+            result.rejectValue("apellidos", "", "El campo apellidos solo puede contener caracteres alfabéticos.");
+        }
+
+        // Valida el tamaño del DNI
+        if (dni != null && !dni.trim().isEmpty() && dni.length() != 8) {
+            result.rejectValue("dni", "", "DNI debe contener 8 dígitos.");
+        }
+        // Valida que el DNI solo contenga dígitos
+        else if (dni != null && !dni.trim().isEmpty() && !dni.matches("\\d+")) {
+            result.rejectValue("dni", "", "DNI debe contener sólo dígitos.");
+        }
+
+        Sede existingSede = sedeRepository.buscarPorNombreDeSede(sede);
+        if (existingSede != null && selectUsuario.equals("administrador")) {
+            result.rejectValue("sede", "", "Ya existe un administrador para esta sede, cambie.");
+        }
+
+
+        List<Administrador> listaAdministrador = administradorRepository.findAll();
+        for (Administrador administrador : listaAdministrador) {
+            String existingCorreo = administrador.getCorreo();
+            String existingDni = administrador.getIdAdministrador(); // Asegúrate de tener este método en tu clase Administrador
+
+            if (correoUser.contains(existingCorreo) && selectUsuario.equals("administrador")) {
+                // El correo está duplicado, realiza la acción necesaria
+                // Por ejemplo, puedes lanzar una excepción, mostrar un mensaje de error, etc.
+                result.rejectValue("correoUser", "", "El correo está duplicado.");
+            }
+            if (dni.equals(existingDni) && selectUsuario.equals("administrador")) {
+                // El DNI está duplicado, realiza la acción necesaria
+                result.rejectValue("dni", "", "El DNI está duplicado.");
             }
         }
-        Clinica existingClinica = clinicaRepository.buscarClinicaPorNombre(otraClinica);
-        if (existingClinica != null) {
-            result.rejectValue("otraClinica", "", "Nombre de Clínica ya utilizada, cambie.");
+        List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
+        for (Administrativo administrativo : listaAdministrativo) {
+            String existingCorreo = administrativo.getCorreo();
+            String existingDni = administrativo.getIdAdministrativo(); // Asegúrate de tener este método en tu clase Administrador
+
+            if (correoUser.contains(existingCorreo) && selectUsuario.equals("administrativo")) {
+                // El correo está duplicado, realiza la acción necesaria
+                // Por ejemplo, puedes lanzar una excepción, mostrar un mensaje de error, etc.
+                result.rejectValue("correoUser", "", "El correo está duplicado.");
+            }
+            if (dni.equals(existingDni) && selectUsuario.equals("administrativo")) {
+                // El DNI está duplicado, realiza la acción necesaria
+                result.rejectValue("dni", "", "El DNI está duplicado.");
+            }
         }
 
+
+
+
         if (result.hasErrors()) {
-            List<Clinica> listaClinicas = clinicaRepository.findAll();
+            List<Sede> listaSedes = sedeRepository.findAll();
             List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
-            model.addAttribute("listaClinicas", listaClinicas);
+            model.addAttribute("listaSedes", listaSedes);
             model.addAttribute("listaEspecialidades", listaEspecialidades);
             // Si hay errores de validación, volver a mostrar el formulario con los mensajes de error
             return "SuperAdmin/Crear_Usuario";
         }
 
-        String dni = userform.getDni();
-        String nombres = userform.getNombres();
-        String apellidos = userform.getApellidos();
-        String correoUser = userform.getCorreoUser();
-        String correo_nueva_clinica = userform.getCorreo_nueva_clinica();
-        String telefono_nueva_clinica = userform.getTelefono_nueva_clinica();
-        String otraSede = userform.getOtraSede();
-        String sede_nueva_direccion = userform.getSede_nueva_direccion();
-        String otraSede4 = userform.getOtraSede4();
-        String sede_nueva4_direccion = userform.getSede_nueva4_direccion();
-        String especialidad = userform.getEspecialidad();
-
 
         if (selectUsuario.equals("administrador")) {
+<<<<<<< HEAD
             // Procesa los datos para un usuario administrador
             // ... (por ejemplo, guarda el usuario en la base de datos)
             if (clinica.equals("otro")) {
@@ -355,7 +376,32 @@ public class SuperAdminController {
                 // Utiliza el valor de 'clinica' y, si corresponde, el valor de 'sede'
             }
             // ... (por ejemplo, guarda el usuario en la base de datos)
+=======
+            //Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
+            Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
+            administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
+        }else if (selectUsuario.equals("administrativo")) {
+            Administrativo administrativonuevo = new Administrativo();
+            administrativonuevo.setIdAdministrativo(dni);
+            administrativonuevo.setNombre(nombres);
+            administrativonuevo.setApellidos(apellidos);
+            administrativonuevo.setCorreo(correoUser);
+            administrativoRepository.save(administrativonuevo);
+//            Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
+            Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
+            AdministrativoPorEspecialidadPorSede administrativoPorEspecialidadPorSede = new AdministrativoPorEspecialidadPorSede();
+            administrativoPorEspecialidadPorSede.setSedeId(sede_enviar);
+            administrativoPorEspecialidadPorSede.setAdministrativoId(administrativonuevo);
+            administrativoPorEspecialidadPorSede.setTorre("Por Asignar");
+            administrativoPorEspecialidadPorSede.setPiso("Por Asignar");
+            String torre = "N.D";
+            String piso = "N.D";
+            Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
+            administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
+            administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
+>>>>>>> superadmin
         }
+            // ... (por ejemplo, guarda el usuario en la base de datos)
         return "redirect:/SuperAdminHomePage";
 
     }
