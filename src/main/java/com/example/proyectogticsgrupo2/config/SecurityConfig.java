@@ -5,8 +5,11 @@ import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -14,8 +17,11 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import java.security.SecureRandom;
 
 import javax.sql.DataSource;
@@ -109,10 +115,44 @@ public class SecurityConfig {
                 .requestMatchers("/administrativo","/administrativo/***").hasAuthority("administrativo")
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
                 .requestMatchers("/administrador","/administrador/***").hasAuthority("administrador")
+                .requestMatchers("/","/login","/login/**","/signin","/signin/**").anonymous()
                 .anyRequest().permitAll();
 
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
+
+        http.exceptionHandling()
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    String rol = auth.getAuthorities().iterator().next().getAuthority();
+                    switch (rol) {
+                        case "paciente":
+                            response.sendRedirect("/Paciente");
+                            break;
+                        case "doctor":
+                            response.sendRedirect("/doctor");
+                            break;
+                        case "administrativo":
+                            response.sendRedirect("/administrativo");
+                            break;
+                        case "administrador":
+                            response.sendRedirect("/administrador/dashboard");
+                            break;
+                        case "superadmin":
+                            response.sendRedirect("/SuperAdminHomePage");
+                            break;
+                        default:
+                            response.sendRedirect("/login");
+                            break;
+                    }
+                })
+                /*
+                .defaultAuthenticationEntryPointFor(
+                new HttpStatusEntryPoint(HttpStatus.NOT_FOUND),
+                new AntPathRequestMatcher("/**"))
+                */
+        ;
+
         return http.build();
     }
     @Bean
