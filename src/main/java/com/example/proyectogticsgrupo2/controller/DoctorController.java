@@ -76,7 +76,7 @@ public class DoctorController {
             LocalDateTime fechaHora2 = cita.getFin();
             String hora2 = fechaHora2.toLocalTime().toString();
             // Transformar a LocalDate
-             // Actualizar objeto ListaBuscadorDoctor con la fecha
+            // Actualizar objeto ListaBuscadorDoctor con la fecha
 
             String horaFinal=hora1+" - "+hora2;
             listaHorarios.add(horaFinal);
