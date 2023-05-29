@@ -69,14 +69,14 @@
                     <input type="hidden" name="idDoctor" th:value="${doctor.id_doctor}">
                     <input type="hidden" name="idSede" th:value="${doctor.sede.idSede}">
                     <input type="hidden" name="idEspecialidad" th:value="${doctor.especialidad.idEspecialidad}">
-                    <input type="hidden" name="hora" th:value="">
+                    <input type="hidden" name="hora" th:value="${doctor.horario.disponibilidad_inicio}">
                 </form>
 
                 <form method="post" th:action="@{/Paciente/reservarDoctor}" id="formDia2">
                     <input type="hidden" name="idDoctor" th:value="${doctor.id_doctor}">
                     <input type="hidden" name="idSede" th:value="${doctor.sede.idSede}">
                     <input type="hidden" name="idEspecialidad" th:value="${doctor.especialidad.idEspecialidad}">
-                    <input type="hidden" name="hora" th:value="">
+                    <input type="hidden" name="hora" th:value="${doctor.horario.disponibilidad_inicio}">
                 </form>
 
                 <h3 style="text-align: center; font-weight: 600;">Disponibilidad</h3>

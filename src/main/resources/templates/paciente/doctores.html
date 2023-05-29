@@ -72,7 +72,7 @@
                                 <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#temporals.dayOfWeekName(dia2)}+' '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+'  -  '+${doctor.horario.disponibilidad_fin.substring(0,5)}]]</div>
                             </div>
                             <div class="d-grid">
-                                <a th:href="@{/Paciente/perfilDoctor(idDoctor=${doctor.id_doctor})}" class="botonVerMasDoctor">Ver más</a>
+                                <a th:href="@{/Paciente/perfilDoctor(doc=${doctor.id_doctor})}" class="botonVerMasDoctor">Ver más</a>
                             </div>
                         </div>
                     </div>

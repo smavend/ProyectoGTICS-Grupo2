@@ -64,6 +64,10 @@ public class PacienteController {
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model) {
+
+        Paciente paciente = pacienteRepository.findById(idPrueba).get();
+        model.addAttribute("paciente", paciente);
+
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
@@ -393,7 +397,7 @@ public class PacienteController {
 
     @GetMapping("/perfilDoctor")
     public String verPerfilDoctor(Model model,
-                                  @RequestParam("idDoctor") String idDoctor) {
+                                  @RequestParam("doc") String idDoctor) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         Paciente paciente = optionalPaciente.get();
         model.addAttribute("paciente", paciente);
@@ -409,22 +413,39 @@ public class PacienteController {
     }
 
     @PostMapping("/reservarDoctor")
-    public String reservarCitaDoctor(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+    public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                                      Model model) {
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         Paciente paciente = optionalPaciente.get();
         model.addAttribute("paciente", paciente);
 
-        Optional<Doctor> optionalDoctor = doctorRepository.findById("0");
-        if (optionalDoctor.isPresent()) {
-            Doctor doctor = optionalDoctor.get();
-            model.addAttribute("doctor", doctor);
-        }
-        List<Seguro> seguroList = seguroRepository.findAll();
-        model.addAttribute("seguroList", seguroList);
+        return "paciente/reservarDoctor1";
+    }
 
-        return "reservar2";
+    @PostMapping("/reservarDoctor2")
+    public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
+                                  Model model){
+
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        Paciente paciente = optionalPaciente.get();
+        model.addAttribute("paciente", paciente);
+
+        if (bindingResult.hasErrors()){
+            return "paciente/reservarDoctor1";
+        }
+        else {
+
+            String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
+            LocalDateTime fin = inicio.plusHours(1);
+
+            citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede());
+
+            return "redirect:/Paciente/confirmacion";
+        }
+
     }
 
     @GetMapping("/confirmacion")

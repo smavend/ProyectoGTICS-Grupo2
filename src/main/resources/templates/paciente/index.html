@@ -26,7 +26,8 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente=${session.paciente})}">
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}">
+
         </div>
         <!-- End Header -->
 
@@ -36,7 +37,7 @@
 
         <main id="main" class="main">
 
-            <h1 class="encabezado" th:text="'Bienvenido, ' +${session.paciente.getNombreYApellido()}"></h1>
+            <h1 class="encabezado" th:text="'Bienvenido, ' +${paciente.getNombreYApellido()}"></h1>
             <p class="text-center fw-medium mt-4" style="font-size: 1.2rem">Seleccione la sede de su preferencia para
                 acceder a nuestros
                 servicios</p>
