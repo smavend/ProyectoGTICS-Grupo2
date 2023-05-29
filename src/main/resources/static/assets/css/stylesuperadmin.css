@@ -1216,10 +1216,10 @@ h6 {
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: #ADD8E6;
 }
-#header {
-    /* Agrega aquí los estilos que deseas aplicar al header */
-    background-color: #b19cd9;
-}
+/*#header {*/
+/*    !* Agrega aquí los estilos que deseas aplicar al header *!*/
+/*    background-color: #157347;*/
+/*}*/
 body {
     font-family: "Open Sans", sans-serif;
     background: #f6f9ff;

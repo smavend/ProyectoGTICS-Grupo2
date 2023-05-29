@@ -100,8 +100,7 @@
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Sede</th>
-                                            <th scope="col">Logo</th>
+                                            <th scope="col">Usuario</th>
                                             <th scope="col">Header</th>
                                             <th scope="col">SiderBar</th>
                                             <th scope="col">Background</th>
@@ -109,15 +108,13 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="ListaSedes, info : ${listaAdministradoresDTO_superadmin}">
+                                            listadmin
+                                        <tr th:each="listaStyle, info : ${listaStylevistas}">
                                             <td th:text="${info.index + 1}"></td>
-                                            <td th:text="${listaAdministadores.idAdministrador}"></td>
-                                            <td th:text="${listaAdministadores.nombre}"></td>
-                                            <td th:text="${listaAdministadores.apellidos}"></td>
-                                            <td th:text="${listaAdministadores.estado}"></td>
-                                            <td th:text="${listaAdministadores.correo}"></td>
-                                            <td th:text="${listaAdministadores.sedeNombre}"></td>
-                                            <td th:text="${listaAdministadores.clinica}"></td>
+                                            <td th:text="${listaStyle.getUser()}"></td>
+                                            <td th:text="${listaStyle.getHeader()}"></td>
+                                            <td th:text="${listaStyle.getFooter()}"></td>
+                                            <td th:text="${listaStyle.getBackground()}"></td>
                                             <td>
                                                 <button type="button" class="btn btn-primary    "
                                                         data-bs-toggle="modal"
@@ -128,6 +125,28 @@
 
                                         </tbody>
                                     </table>
+
+
+                                    <table class="table table-striped" id="listitaxd">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Usuario</th>
+                                                <th scope="col">id</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            listadmin
+                                            <tr th:each="listadmin2, info : ${listadmin}">
+                                                <td th:text="${info.index + 1}"></td>
+                                                <td th:text="${listadmin2.nombre}"></td>
+                                                <td th:text="${listadmin2.idAdministrador}"></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+
                                     <br>
                                 </div>
                             </div>
