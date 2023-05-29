@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -127,6 +128,7 @@ public class PacienteController {
             model.addAttribute("sedeList", sedeRepository.findAll());
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "paciente/reservar1";
+
         } else {
             System.out.println("buscando doctores");
             doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
@@ -174,7 +176,7 @@ public class PacienteController {
         return "redirect:/Paciente/confirmacion";
     }
 
-    /* PERFIL */
+    /* SECCIÓN PERFIL */
     @GetMapping("/perfil")
     public String perfil(Model model) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
@@ -242,7 +244,7 @@ public class PacienteController {
                     paciente.setFotocontenttype(file.getContentType());
                 }
                 pacienteRepository.save(paciente);
-                attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
+                attr.addFlashAttribute("msgActualizacion", "Su perfil se ha actualizado correctamente");
                 return "redirect:/Paciente/perfil";
 
             } catch (IOException e) {
@@ -542,14 +544,22 @@ public class PacienteController {
     }
 
     @PostMapping("/consentimientos/actualizar")
-    public String actualizarConsentimientos(@RequestParam("consentimiento1") String consentimiento1,
-                                            @RequestParam("consentimiento2") String consentimiento2,
-                                            @RequestParam("consentimiento3") String consentimiento3,
-                                            @RequestParam("consentimiento4") String consentimiento4,
-                                            @RequestParam("consentimiento5") String consentimiento5) {
+    public String actualizarConsentimientos(@RequestParam Map<String, Boolean> consentimientos,
+                                            Model model,
+                                            RedirectAttributes attr) {
 
-        System.out.println(consentimiento1);
-        System.out.println(consentimiento2);
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        Paciente paciente = optionalPaciente.get();
+
+        pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(idPrueba);
+        for (String key : consentimientos.keySet()) {
+            if (key.length() == 1) {
+                pacientePorConsentimientoRepository.actualizarConsentimientoAPositivo(idPrueba, key);
+            }
+        }
+
+        attr.addFlashAttribute("msgActualizacion", "Consentimientos actualizados correctamente");
+        model.addAttribute("paciente", paciente);
 
         return "redirect:/Paciente/consentimientos";
     }

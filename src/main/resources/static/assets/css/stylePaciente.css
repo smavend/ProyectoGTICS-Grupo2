@@ -1594,6 +1594,38 @@ botonTipo{
     color: white;
 }
 
+/**/
+
+.botonAceptar{
+    background-color: #0AA1DD;
+    border-radius: 15px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s;
+}
+
+.botonAceptar:hover{
+    background-color: #197ce6;
+    color: white;
+}
+
+.botonCancelar{
+    border-radius: 15px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    background-color: #dc3545;
+    color: white;
+    transition: all 0.3s;
+}
+
+.botonCancelar:hover{
+    color: white;
+    background-color: #c0202e;
+}
+
 /* Consentimientos */
 
 .consentimiento:first-of-type{
@@ -1602,32 +1634,6 @@ botonTipo{
 
 .consentimiento{
     margin-top: 25px;
-}
-
-.botonActualizarConsentimientos{
-    margin-top: 45px;
-    margin-bottom: 30px;
-    background-color: #0AA1DD;
-    border-radius: 50px;
-    border: 0;
-    padding: 10px 20px;
-    font-weight: 600;
-    color: white;
-    transition: all 0.3s;
-}
-
-.botonActualizarConsentimientos:hover{
-    background-color: #197ce6;
-    color: white;
-}
-
-.botonCancelar{
-    margin-top: 45px;
-    margin-bottom: 30px;
-    border-radius: 50px;
-    border: 0;
-    padding: 10px 20px;
-    font-weight: 600;   
 }
 
 /* Doctores */

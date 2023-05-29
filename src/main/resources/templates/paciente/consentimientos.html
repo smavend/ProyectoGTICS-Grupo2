@@ -37,22 +37,17 @@
 
                 <form method="post" th:action="@{/Paciente/consentimientos/actualizar}">
 
-                    <div class="form-check consentimiento">
-                        <input class="form-check-input" type="checkbox" checked disabled>
-                        <label class="form-check-label">
-                            <a href="#">Términos y condiciones</a> de Clínica INTERPUCP
-                        </label>
-                    </div>
+                    <div th:if="${msgActualizacion != null}" th:text="${msgActualizacion}" class="alert alert-success mt-3" role="alert"></div>
 
                     <div class="form-check consentimiento" th:each="consentimiento : ${consentimientos}">
-                        <input class="form-check-input" type="checkbox" th:name="consentimiento+${consentimiento.consentimiento.id_consentimiento}" th:checked="${consentimiento.valor==1}">
-                        <label class="form-check-label"
+                        <input class="form-check-input" type="checkbox" th:id="${consentimiento.consentimiento.id_consentimiento}" th:name="${consentimiento.consentimiento.id_consentimiento}" th:checked="${consentimiento.valor==1}">
+                        <label class="form-check-label" th:for="${consentimiento.consentimiento.id_consentimiento}"
                                th:text="${consentimiento.consentimiento.consentimiento}">
                             Consentimiento
                         </label>
                     </div>
 
-                    <a href="#" class="btn btn-primary botonActualizarConsentimientos" data-bs-toggle="modal"
+                    <a href="#" class="botonAceptar btn mt-4 mb-4" data-bs-toggle="modal"
                        data-bs-target="#actualizarModal">Actualizar</a>
 
                     <!-- Modal Actualizar-->
@@ -68,9 +63,9 @@
                                 </div>
                                 <div class="modal-footer mx-auto">
                                     <button type="submit" style="margin: 0 10px 0 0;"
-                                            class="btn btn-primary botonActualizarConsentimientos">Actualizar
+                                            class="botonAceptar">Actualizar
                                     </button>
-                                    <a style="margin: 0 0 0 10px;" href="#" class="btn btn-danger botonCancelar"
+                                    <a href="#" class="botonCancelar ms-2"
                                        data-bs-dismiss="modal">Cancelar</a>
                                 </div>
                             </div>
