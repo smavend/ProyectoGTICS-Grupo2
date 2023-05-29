@@ -60,7 +60,7 @@ textarea::-webkit-scrollbar-track {
     pointer-events: none;
 }
 
-encabezado{
+.encabezado{
     font-size: 2.5rem;
     font-weight: 700;
     width: 50%;
@@ -1407,3 +1407,79 @@ table a:hover {
 .person2 {
     background-color: #e2e2e2;
 }
+/* Sección configuracion */
+
+.sedeImg{
+    border-radius: 10px;
+}
+
+/* -----------------------------
+#Sedes
+-------------------------------*/
+.contenedor{
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: auto;
+}
+.contenedor figure{
+    position:relative;
+    height: 450px;
+    cursor: pointer;
+    width: auto;
+    overflow: hidden;
+}
+.contenedor figure img{
+    width: 100%;
+    height: 100%;
+    transition: all 400ms ease-out;
+    will-change: transform;
+}
+.contenedor figure .capa{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,103,123,0.7);
+    transition: all 400ms ease-out;
+    opacity: 0;
+    visibility: hidden;
+    text-align: start;
+    padding-left: 30px;
+}
+.contenedor figure:hover > .capa {
+    opacity: 1;
+    visibility: visible;
+}
+.contenedor figure:hover > .capa h3{
+    margin-top: 70px;
+    margin-bottom: 15px;
+}
+.contenedor figure:hover > img{
+    transform: scale(1.3);
+}
+.contenedor figure .capa h6{
+    color: white;
+    font-size: 10px;
+    font-weight: 50;
+    margin-bottom: 100px;
+    transition: all 400ms ease-out;
+    margin-top: 35px;
+}
+.contenedor figure .capa p{
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.5;
+    width: 100%;
+    max-width: 220px;
+    margin-bottom: 150px;
+}
+.contenedor figure .capa span {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 400ms ease-out;
+    margin-right: 8px;
+}
+/*-----------------------------------------*/

@@ -42,17 +42,19 @@ public class DoctorController {
     private final EspecialidadRepository especialidadRepository;
 
     private Doctor doctor_session_info;
-
+    private final SedeRepository sedeRepository;
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
                             AlergiaRepository alergiaRepository,
-                            EspecialidadRepository especialidadRepository) {
+                            EspecialidadRepository especialidadRepository,
+                            SedeRepository sedeRepository) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
         this.alergiaRepository = alergiaRepository;
         this.especialidadRepository = especialidadRepository;
+        this.sedeRepository = sedeRepository;
     }
 
     @GetMapping(value={"/dashboard","/",""})
@@ -396,11 +398,32 @@ public class DoctorController {
         Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
 
         Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
-        Doctor doctor= doctorOptional.get();
-
-        model.addAttribute("doctor", doctor);
+        if (doctorOptional.isPresent()) {
+            Doctor doctor= doctorOptional.get();
+            model.addAttribute("doctor", doctor);
+        }
+        List<Sede> sedeList = sedeRepository.findAll();
+        model.addAttribute("sedeList", sedeList);
         return "doctor/DoctorConfiguracion";
 
+    }
+    @GetMapping("/imageSede")
+    public ResponseEntity<byte[]> mostrarImagenSede(@RequestParam("idSede") int idSede) {
+        Optional<Sede> optionalSede = sedeRepository.findById(idSede);
+
+        if (optionalSede.isPresent()) {
+            Sede sede = optionalSede.get();
+            byte[] imagenComoBytes = sede.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(sede.getFotocontenttype()));
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
     }
     @GetMapping("/perfil")
     public String perfilDoctor(Model model, @RequestParam("id") String id) {
