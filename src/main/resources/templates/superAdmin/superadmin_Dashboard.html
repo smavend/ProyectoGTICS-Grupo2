@@ -47,6 +47,7 @@
     </head>
 
     <body>
+
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
              aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -88,7 +89,55 @@
             <section class="section dashboard">
                 <section class="section">
                     <div class="col-lg-12">
+
+
                         <div class="card">
+                            <div class="card-body pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">Tabla de Administradores</h5>
+                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
+                                </div>
+                                <div class=" flex-column" >
+                                    <table class="table table-striped" id="AdministradorTable">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">DNI</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Apellidos</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">Correo</th>
+                                            <th scope="col">Sede</th>
+                                            <th scope="col">Clínica</th>
+                                            <th scope="col">Accion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="listaAdministadores, info : ${listaAdministradoresDTO_superadmin}">
+                                            <td th:text="${info.index + 1}"></td>
+                                            <td th:text="${listaAdministadores.idAdministrador}"></td>
+                                            <td th:text="${listaAdministadores.nombre}"></td>
+                                            <td th:text="${listaAdministadores.apellidos}"></td>
+                                            <td th:text="${listaAdministadores.estado}"></td>
+                                            <td th:text="${listaAdministadores.correo}"></td>
+                                            <td th:text="${listaAdministadores.sedeNombre}"></td>
+                                            <td th:text="${listaAdministadores.clinica}"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary    "
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#staticBackdrop">Loguear
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+
+                     <!--   <div class="card">
                             <div class="card-body" id="AdministradorTable" style="display:none">
                                 <h5 class="card-title">Tabla de Administradores</h5>
                                 <div class="container">
@@ -117,7 +166,7 @@
                                                     <option value="todos">Todos</option>
                                                     <option th:each="Sedes : ${listaSedes}" th:value="${Sedes.nombre}"
                                                             th:text="${Sedes.nombre}"></option>
-                                                    <!-- Las opciones de sedes se actualizarán dinámicamente -->
+                                                    &lt;!&ndash; Las opciones de sedes se actualizarán dinámicamente &ndash;&gt;
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
@@ -138,7 +187,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <!-- Table with stripped rows -->
+                                &lt;!&ndash; Table with stripped rows &ndash;&gt;
                                 <div class="table-responsive">
                                     <table class="table table-striped" id="superadmin_administrador_table">
                                         <thead>
@@ -174,366 +223,177 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- End Table with stripped rows -->
+                                &lt;!&ndash; End Table with stripped rows &ndash;&gt;
                                 <div id="pagination_Administrador" style="width: 100%; text-align: center">
-                                    <!--display: none;">-->
+                                    &lt;!&ndash;display: none;">&ndash;&gt;
                                     <button type="button" class="btn btn-primary" id="prev-btn1"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;font-size: 16px">
+                                            style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">
                                         <
                                     </button>
                                     <span id="page-num1">1</span>
                                     <button type="button" class="btn btn-primary " id="next-btn1"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;font-size: 16px">
+                                            style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">
                                         >
                                     </button>
                                 </div>
 
+                            </div>
+                        </div>-->
+                        <div class="card">
+                            <div class="card-body pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">Tabla de Administrativos</h5>
+                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
+                                </div>
+                                <div class=" flex-column" >
+                                    <table class="table table-striped" id="AdministrativoTable">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">DNI</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Apellidos</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">Sede</th>
+                                            <th scope="col">Especialidad</th>
+                                            <th scope="col">Correo</th>
+                                            <th scope="col">Clinica</th>
+                                            <th scope="col">Accion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="listaAdministrativo, info : ${listaAdministrativoDTO_superadmin}">
+                                            <td class="row-id" th:text="${info.index + 1}"></td>
+                                            <td th:text="${listaAdministrativo.idAdministrativo}"></td>
+                                            <td th:text="${listaAdministrativo.nombre}"></td>
+                                            <td th:text="${listaAdministrativo.apellidos}"></td>
+                                            <td th:text="${listaAdministrativo.estado}"></td>
+                                            <td th:text="${listaAdministrativo.sedeNombre}"></td>
+                                            <td th:text="${listaAdministrativo.especialidad}"><</td>
+                                            <!--                                     <td th:text="${listaAdminstrativo.administrativoId.getSedeId().nombre}"></td>-->
+                                            <!--                                        <td th:text="${listaAdminstrativo.getSedesAdministrativo().get(0).getSede().nombre}"></td>-->
+                                            <td th:text="${listaAdministrativo.correo}"></td>
+                                            <td th:text="${listaAdministrativo.clinica}"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#staticBackdrop">Loguear
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                </div>
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-body" id="AdministrativoTable" style="display:none">
-                                <h5 class="card-title">Tabla de Administrativos</h5>
-                                <div class="container">
-                                    <p class="text-primary fw-bold mb-2">Filtrar por:</p>
-                                    <form class="filter-form" method="POST" th:action="@{/SuperAdminHomePage/filtrar}">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label for="clinica-filter"
-                                                           class="form-label small">Clínica: </label>
-                                                    <select id="clinica-filter" name="clinica"
-                                                            class="form-select form-select-sm">
-                                                        <option value="todos">Todos</option>
-                                                        <option th:each="clinica : ${listaClinicas}"
-                                                                th:value="${clinica.nombre}"
-                                                                th:text="${clinica.nombre}"></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="sede-filter" class="form-label small">Sede: </label>
-                                                <select id="sede-filter" name="sede" class="form-select form-select-sm">
-                                                    <option value="todos">Todos</option>
-                                                    <option th:each="Sedes : ${listaSedes}" th:value="${Sedes.nombre}"
-                                                            th:text="${Sedes.nombre}"></option>
-                                                    <!-- Las opciones de sedes se actualizarán dinámicamente -->
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="especialidad-filter"
-                                                       class="form-label small">Especialidad: </label>
-                                                <select id="especialidad-filter" name="especialidad"
-                                                        class="form-select form-select-sm">
-                                                    <option value="todos">Todos</option>
-                                                    <option th:each="Especialidad : ${listaEspecialidad}"
-                                                            th:value="${Especialidad.nombre}"
-                                                            th:text="${Especialidad.nombre}"></option>
-
-                                                    <!-- Las opciones de sedes se actualizarán dinámicamente -->
-                                                </select>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <label for="nombre-filter" class="form-label small">Nombre: </label>
-                                                <input type="text" id="nombre-filter" name="nombre"
-                                                       class="form-control form-control-sm">
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <br>
-                                                <button type="submit" data-action="filter" class="btn btn-primary"
-                                                        style="margin-right: 20px">Filtrar
-                                                </button>
-                                                <button type="submit" data-action="clear" id="clear-filters-btn"
-                                                        class="btn btn-secondary">Limpiar filtros
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
+                            <div class="card-body pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">Tabla de Pacientes</h5>
+                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
                                 </div>
-                                <!-- Table with stripped rows -->
-                                <div class="table-responsive" id="table-administrative_jquery">
-                                    <table class="table table-striped" id="superadmin_administrativos_table">
+                                <div class=" flex-column" >
+                                    <table class="table table-striped" id="PacientesTable">
                                         <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">DNI</th>
-                                                <th scope="col">Nombre</th>
-                                                <th scope="col">Apellidos</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Sede</th>
-                                                <th scope="col">Especialidad</th>
-                                                <th scope="col">Correo</th>
-                                                <th scope="col">Clinica</th>
-                                                <th scope="col">Accion</th>
-                                            </tr>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">DNI</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Apellidos</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">Seguro</th>
+                                            <th scope="col">Telefono</th>
+                                            <th scope="col">Correo</th>
+                                            <th scope="col">Dirección</th>
+                                            <th scope="col">Distrito</th>
+                                            <th scope="col">Se atiende en</th>
+                                            <th scope="col">Sede</th>
+                                            <th scope="col">Administrador a Cargo</th>
+                                            <th scope="col">Accion</th>
+                                        </tr>
                                         </thead>
-                                        <tbody id="tabla_contenido_administrativo">
-                                            <tr th:each="listaAdministrativo, info : ${listaAdministrativoDTO_superadmin}">
-                                                <td class="row-id" th:text="${info.index + 1}"></td>
-                                                <td th:text="${listaAdministrativo.idAdministrativo}"></td>
-                                                <td th:text="${listaAdministrativo.nombre}"></td>
-                                                <td th:text="${listaAdministrativo.apellidos}"></td>
-                                                <td th:text="${listaAdministrativo.estado}"></td>
-                                                <td th:text="${listaAdministrativo.sedeNombre}"></td>
-                                                <td th:text="${listaAdministrativo.especialidad}"><</td>
-                                                <!--                                     <td th:text="${listaAdminstrativo.administrativoId.getSedeId().nombre}"></td>-->
-                                                <!--                                        <td th:text="${listaAdminstrativo.getSedesAdministrativo().get(0).getSede().nombre}"></td>-->
-                                                <td th:text="${listaAdministrativo.correo}"></td>
-                                                <td th:text="${listaAdministrativo.clinica}"></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#staticBackdrop">Loguear
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                        <tbody>
+                                        <tr th:each="paciente, info : ${listaPacienteDTO_superadmin}">
+                                            <td th:text="${info.index + 1}"></td>
+                                            <td th:text="${paciente.idPaciente}"></td>
+                                            <td th:text="${paciente.nombre}"></td>
+                                            <td th:text="${paciente.apellidos}"></td>
+                                            <td th:text="${paciente.estado}"></td>
+                                            <td th:text="${paciente.seguro}"></td>
+                                            <td th:text="${paciente.telefono}"></td>
+                                            <td th:text="${paciente.correo}"></td>
+                                            <td th:text="${paciente.direccion}"></td>
+                                            <td th:text="${paciente.distrito}"></td>
+                                            <td th:text="${paciente.clinica}"></td>
+                                            <td th:text="${paciente.sede}"></td>
+                                            <td th:text="${paciente.administrador_in_Charge}"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary    "
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#staticBackdrop">Loguear
+                                                </button>
+                                            </td>
+                                        </tr>
+
                                         </tbody>
                                     </table>
+                                    <br>
                                 </div>
-                                <!-- End Table with stripped rows -->
-                                <div id="pagination_administrativos" style="width: 100%; text-align: center">
-                                    <!--display: none;">-->
-                                    <button type="button" class="btn btn-primary" id="prev-btn2"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;font-size: 16px">
-                                        <
-                                    </button>
-                                    <span id="page-num2">1</span>
-                                    <button type="button" class="btn btn-primary " id="next-btn2"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;font-size: 16px">
-                                        >
-                                    </button>
-                                </div>
-
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-body" id="PacientesTable" style="display:none">
-                                <h5 class="card-title">Tabla de Pacientes</h5>
-                                <div class="container">
-                                    <p class="text-primary fw-bold mb-2">Filtrar por:</p>
-                                    <form class="filter-form" method="POST"
-                                          th:action="@{/SuperAdminHomePage/filtrarPaciente}">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label for="clinica-filter-paciente" class="form-label small">Clínica: </label>
-                                                    <select id="clinica-filter-paciente" name="clinica"
-                                                            class="form-select form-select-sm">
-                                                        <option value="todos">Todos</option>
-                                                        <option th:each="clinica : ${listaClinicas}"
-                                                                th:value="${clinica.nombre}"
-                                                                th:text="${clinica.nombre}"></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="sede-filter-paciente"
-                                                       class="form-label small">Sede: </label>
-                                                <select id="sede-filter-paciente" name="sede"
-                                                        class="form-select form-select-sm">
-                                                    <option value="todos">Todos</option>
-                                                    <option th:each="Sedes : ${listaSedes}" th:value="${Sedes.nombre}"
-                                                            th:text="${Sedes.nombre}"></option>
-                                                    <!-- Las opciones de sedes se actualizarán dinámicamente -->
-                                                </select>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <label for="nombre-filter-paciente"
-                                                       class="form-label small">Nombre: </label>
-                                                <input type="text" id="nombre-filter-paciente" name="nombre"
-                                                       class="form-control form-control-sm">
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <br>
-                                                <button type="submit" data-action="filter-paciente"
-                                                        class="btn btn-primary" style="margin-right: 20px">Filtrar
-                                                </button>
-                                                <button type="submit" data-action="clear-paciente"
-                                                        id="clear-filters-btn2" class="btn btn-secondary">Limpiar
-                                                    filtros
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
+                            <div class="card-body pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">Tabla de Doctores</h5>
+                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
                                 </div>
-                                <!-- Table with stripped rows -->
-                                <div class="table-responsive">
-                                    <table class="table table-striped" id="superadmin_Pacientes_table">
+                                <div class=" flex-column" >
+                                    <table class="table table-striped" id="DoctoresTable">
                                         <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">DNI</th>
-                                                <th scope="col">Nombre</th>
-                                                <th scope="col">Apellidos</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Seguro</th>
-                                                <th scope="col">Telefono</th>
-                                                <th scope="col">Correo</th>
-                                                <th scope="col">Dirección</th>
-                                                <th scope="col">Distrito</th>
-                                                <th scope="col">Se atiende en</th>
-                                                <th scope="col">Sede</th>
-                                                <th scope="col">Administrador a Cargo</th>
-                                                <th scope="col">Accion</th>
-                                            </tr>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">DNI</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Apellidos</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">Correo</th>
+                                            <th scope="col">Horario</th>
+                                            <th scope="col">Clínica</th>
+                                            <th scope="col">Sede</th>
+                                            <th scope="col">Especialidad</th>
+                                            <th scope="col">Accion</th>
+                                        </tr>
                                         </thead>
-                                        <tbody id="tabla_contenido_pacientes">
-                                            <tr th:each="paciente, info : ${listaPacienteDTO_superadmin}">
-                                                <td th:text="${info.index + 1}"></td>
-                                                <td th:text="${paciente.idPaciente}"></td>
-                                                <td th:text="${paciente.nombre}"></td>
-                                                <td th:text="${paciente.apellidos}"></td>
-                                                <td th:text="${paciente.estado}"></td>
-                                                <td th:text="${paciente.seguro}"></td>
-                                                <td th:text="${paciente.telefono}"></td>
-                                                <td th:text="${paciente.correo}"></td>
-                                                <td th:text="${paciente.direccion}"></td>
-                                                <td th:text="${paciente.distrito}"></td>
-                                                <td th:text="${paciente.clinica}"></td>
-                                                <td th:text="${paciente.sede}"></td>
-                                                <td th:text="${paciente.administrador_in_Charge}"></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary    "
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#staticBackdrop">Loguear
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                        <tbody>
+                                        <tr th:each="listaDoctores, info : ${listaDoctorDTO_superadmin}">
+                                            <td th:text="${info.index + 1}"></td>
+                                            <td th:text="${listaDoctores.idDoctor}"></td>
+                                            <td th:text="${listaDoctores.nombre}"></td>
+                                            <td th:text="${listaDoctores.apellidos}"></td>
+                                            <td th:text="${listaDoctores.estado}"></td>
+                                            <td th:text="${listaDoctores.correo}"></td>
+                                            <td th:text="${listaDoctores.horario}"></td>
+                                            <td th:text="${listaDoctores.clinica}"></td>
+                                            <td th:text="${listaDoctores.sede}"></td>
+                                            <td th:text="${listaDoctores.especialidad}"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary    "
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#staticBackdrop">Loguear
+                                                </button>
+                                            </td>
+                                        </tr>
+
                                         </tbody>
                                     </table>
+                                    <br>
                                 </div>
-                                <!-- End Table with stripped rows -->
-                                <div id="pagination_Pacientes" style="width: 100%; text-align: center">
-                                    <!--display: none;">-->
-                                    <button type="button" class="btn btn-primary" id="prev-btn4"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;font-size: 16px">
-                                        <
-                                    </button>
-                                    <span id="page-num4">1</span>
-                                    <button type="button" class="btn btn-primary " id="next-btn4"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;font-size: 16px">
-                                        >
-                                    </button>
-                                </div>
-
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body" id="DoctoresTable" style="display:none">
-                                <h5 class="card-title">Tabla de Doctores</h5>
-                                <div class="container">
-                                    <p class="text-primary fw-bold mb-2">Filtrar por:</p>
-                                    <form class="filter-form" method="POST"
-                                          th:action="@{/SuperAdminHomePage/filtrarDoctores}">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label for="clinica-filter-doctores" class="form-label small">Clínica: </label>
-                                                    <select id="clinica-filter-doctores" name="clinica"
-                                                            class="form-select form-select-sm">
-                                                        <option value="todos">Todos</option>
-                                                        <option th:each="clinica : ${listaClinicas}"
-                                                                th:value="${clinica.nombre}"
-                                                                th:text="${clinica.nombre}"></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="sede-filter-doctores"
-                                                       class="form-label small">Sede: </label>
-                                                <select id="sede-filter-doctores" name="sede"
-                                                        class="form-select form-select-sm">
-                                                    <option value="todos">Todos</option>
-                                                    <option th:each="Sedes : ${listaSedes}" th:value="${Sedes.nombre}"
-                                                            th:text="${Sedes.nombre}"></option>
-                                                    <!-- Las opciones de sedes se actualizarán dinámicamente -->
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="especialidad-filter-doctores" class="form-label small">Especialidad: </label>
-                                                <select id="especialidad-filter-doctores" name="especialidad"
-                                                        class="form-select form-select-sm">
-                                                    <option value="todos">Todos</option>
-                                                    <option th:each="Especialidad : ${listaEspecialidad}"
-                                                            th:value="${Especialidad.nombre}"
-                                                            th:text="${Especialidad.nombre}"></option>
 
-                                                    <!-- Las opciones de sedes se actualizarán dinámicamente -->
-                                                </select>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <label for="nombre-filter-doctores"
-                                                       class="form-label small">Nombre: </label>
-                                                <input type="text" id="nombre-filter-doctores" name="nombre"
-                                                       class="form-control form-control-sm">
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <br>
-                                                <button type="submit" data-action="filter-doctores"
-                                                        class="btn btn-primary" style="margin-right: 20px">Filtrar
-                                                </button>
-                                                <button type="submit" data-action="clear-doctores"
-                                                        id="clear-filters-btn-1" class="btn btn-secondary">Limpiar
-                                                    filtros
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- Table with stripped rows -->
-                                <div class="table-responsive">
-                                    <table class="table table-striped" id="superadmin_Doctores_table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">DNI</th>
-                                                <th scope="col">Nombre</th>
-                                                <th scope="col">Apellidos</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Correo</th>
-                                                <th scope="col">Horario</th>
-                                                <th scope="col">Clínica</th>
-                                                <th scope="col">Sede</th>
-                                                <th scope="col">Especialidad</th>
-                                                <th scope="col">Accion</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tabla_contenido_Doctores">
-                                            <tr th:each="listaDoctores, info : ${listaDoctorDTO_superadmin}">
-                                                <td th:text="${info.index + 1}"></td>
-                                                <td th:text="${listaDoctores.idDoctor}"></td>
-                                                <td th:text="${listaDoctores.nombre}"></td>
-                                                <td th:text="${listaDoctores.apellidos}"></td>
-                                                <td th:text="${listaDoctores.estado}"></td>
-                                                <td th:text="${listaDoctores.correo}"></td>
-                                                <td th:text="${listaDoctores.horario}"></td>
-                                                <td th:text="${listaDoctores.clinica}"></td>
-                                                <td th:text="${listaDoctores.sede}"></td>
-                                                <td th:text="${listaDoctores.especialidad}"></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary    "
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#staticBackdrop">Loguear
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- End Table with stripped rows -->
-                                <div id="pagination_Doctores" style="width: 100%; text-align: center">
-                                    <!--display: none;">-->
-                                    <button type="button" class="btn btn-primary" id="prev-btn3"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;font-size: 16px">
-                                        <
-                                    </button>
-                                    <span id="page-num3">1</span>
-                                    <button type="button" class="btn btn-primary " id="next-btn3"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;font-size: 16px">
-                                        >
-                                    </button>
-                                </div>
 
-                            </div>
-                        </div>
+
 
                     </div>
                 </section>
@@ -576,6 +436,125 @@
         <script th:src="@{/assets/js/paginacion_doctor_superadmin.js}"></script>
         <script th:src="@{/assets/js/paginacion_paciente_superadmin.js}"></script>
         <script th:src="@{/assets/js/filtrado_dashboard_superadmin.js}"></script>
+        <script th:src="@{/assets/js/darkmode.js}"></script>
+
+
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <!-- Template Main JS File -->
+        <!-- DataTables activate -->
+        <script>
+            $(document).ready(function () {
+                $('#AdministradorTable').DataTable({
+                    lengthMenu: [
+                        [5,10],
+                        [5,10],
+                    ],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ registros por página",
+                        "zeroRecords": "Ningún registro encontrado",
+                        "info": "Página _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "(filtrado de _MAX_ registros)",
+                        "search": "Buscar:",
+                        "loadingRecords": "Cargando...",
+                        "paginate":{
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior",
+                        }
+                    },
+                    "columnDefs": [
+                        {"margin-bottom": "10px"}
+                    ]
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#PacientesTable').DataTable({
+                    lengthMenu: [
+                        [5,10],
+                        [5,10],
+                    ],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ registros por página",
+                        "zeroRecords": "Ningún registro encontrado",
+                        "info": "Página _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "(filtrado de _MAX_ registros)",
+                        "search": "Buscar:",
+                        "loadingRecords": "Cargando...",
+                        "paginate":{
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior",
+                        }
+                    },
+                    "columnDefs": [
+                        {"margin-bottom": "10px"}
+                    ]
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#AdministrativoTable').DataTable({
+                    lengthMenu: [
+                        [5,10],
+                        [5,10],
+                    ],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ registros por página",
+                        "zeroRecords": "Ningún registro encontrado",
+                        "info": "Página _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "(filtrado de _MAX_ registros)",
+                        "search": "Buscar:",
+                        "loadingRecords": "Cargando...",
+                        "paginate":{
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior",
+                        }
+                    },
+                    "columnDefs": [
+                        {"margin-bottom": "10px"}
+                    ]
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#DoctoresTable').DataTable({
+                    lengthMenu: [
+                        [5,10],
+                        [5,10],
+                    ],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ registros por página",
+                        "zeroRecords": "Ningún registro encontrado",
+                        "info": "Página _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "(filtrado de _MAX_ registros)",
+                        "search": "Buscar:",
+                        "loadingRecords": "Cargando...",
+                        "paginate":{
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior",
+                        }
+                    },
+                    "columnDefs": [
+                        {"margin-bottom": "10px"}
+                    ]
+                });
+            });
+        </script>
 
 
     </body>

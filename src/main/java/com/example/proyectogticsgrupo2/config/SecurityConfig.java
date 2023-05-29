@@ -5,8 +5,11 @@ import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -14,8 +17,11 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import java.security.SecureRandom;
 
 import javax.sql.DataSource;
@@ -109,17 +115,73 @@ public class SecurityConfig {
                 .requestMatchers("/administrativo","/administrativo/***").hasAuthority("administrativo")
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
                 .requestMatchers("/administrador","/administrador/***").hasAuthority("administrador")
+                .requestMatchers("/","/login","/login/**","/signin","/signin/**").anonymous()
                 .anyRequest().permitAll();
 
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
+
+        http.exceptionHandling()
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    String rol = auth.getAuthorities().iterator().next().getAuthority();
+                    switch (rol) {
+                        case "paciente":
+                            response.sendRedirect("/Paciente");
+                            break;
+                        case "doctor":
+                            response.sendRedirect("/doctor");
+                            break;
+                        case "administrativo":
+                            response.sendRedirect("/administrativo");
+                            break;
+                        case "administrador":
+                            response.sendRedirect("/administrador/dashboard");
+                            break;
+                        case "superadmin":
+                            response.sendRedirect("/SuperAdminHomePage");
+                            break;
+                        default:
+                            response.sendRedirect("/login");
+                            break;
+                    }
+                })
+                /*
+                .defaultAuthenticationEntryPointFor(
+                new HttpStatusEntryPoint(HttpStatus.NOT_FOUND),
+                new AntPathRequestMatcher("/**"))
+                */
+        ;
+
         return http.build();
     }
     @Bean
     public UserDetailsManager users(DataSource dataSource){
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        String sql1 = "call credencial_estado(?)";
-        String sql2 = "call correo_rol(?)";
+        String sql1 = "SELECT\n" +
+                "    c.correo,\n" +
+                "    c.contrasena_hasheada,\n" +
+                "    CASE \n" +
+                "\t\tWHEN exists(select estado from paciente where id_paciente=id_credenciales and estado!=0 and estado!=3) THEN 1\n" +
+                "\t\tWHEN exists(select estado from doctor where id_doctor=id_credenciales and estado!=0) THEN 1\n" +
+                "\t\tWHEN exists(select estado from administrativo where id_administrativo=id_credenciales and estado!=0) THEN 1\n" +
+                "\t\tWHEN exists(select estado from administrador where id_administrador=id_credenciales and estado!=0) THEN 1\n" +
+                "\t\tWHEN exists(select * from superadmin where id_superadmin=id_credenciales) THEN 1\n" +
+                "        ELSE 0\n" +
+                "\tEND AS estado\n" +
+                "\tFROM credenciales c\n" +
+                "    WHERE c.correo = ?";
+        String sql2 = "SELECT\n" +
+                "    c.correo,\n" +
+                "    CASE \n" +
+                "\t\tWHEN exists(select * from paciente where id_paciente=id_credenciales) THEN 'paciente'\n" +
+                "\t\tWHEN exists(select * from doctor where id_doctor=id_credenciales) THEN 'doctor'\n" +
+                "\t\tWHEN exists(select * from administrativo where id_administrativo=id_credenciales) THEN 'administrativo'\n" +
+                "\t\tWHEN exists(select * from administrador where id_administrador=id_credenciales) THEN 'administrador'\n" +
+                "\t\tWHEN exists(select * from superadmin where id_superadmin=id_credenciales) THEN 'superadmin'\n" +
+                "\tEND AS rol\n" +
+                "\tFROM credenciales c\n" +
+                "    WHERE c.correo = ?";
 
         users.setUsersByUsernameQuery(sql1);
         users.setAuthoritiesByUsernameQuery(sql2);

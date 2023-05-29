@@ -27,7 +27,7 @@ public interface SedeRepository extends JpaRepository<Sede, Integer> {
     void insertarSede(@Param("otraSede") String otraSede, @Param("clinica_id") int clinica_id);
 
 
-    @Query(nativeQuery = true, value = "select * from sede where nombre = ?1 and clinica_id_clinica =?2")
-    Sede buscarPorNombreDeSede(String otraSede, int clinica_id);
+    @Query(nativeQuery = true, value = "select * from sede where nombre = ?1")
+    Sede buscarPorNombreDeSede(String otraSede);
 
 }

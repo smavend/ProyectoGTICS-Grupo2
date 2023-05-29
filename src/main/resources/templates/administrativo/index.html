@@ -190,32 +190,52 @@
   <!-- DataTables activate -->
   <script>
     $(document).ready(function () {
+      //var selectedLength;
       $('#datatable').DataTable({
         lengthMenu: [
-                [10,25,50,100,-1],
-                [10,25,50,100,'Todos'],
+          [1,10,25,50,100,-1],
+          [1,10,25,50,100,'Todos'],
         ],
-        "language": {
-          "lengthMenu": "Mostrar _MENU_ registros por página",
-          "zeroRecords": "Ningún paciente encontrado",
-          "info": "Página _PAGE_ de _PAGES_",
-          "infoEmpty": "No hay registros disponibles",
-          "infoFiltered": "(filtrado de _MAX_ registros)",
-          "search": "Buscar:",
-          "loadingRecords": "Cargando...",
-          "paginate":{
-            "first": "Primero",
-            "last": "Último",
-            "next": "Siguiente",
-            "previous": "Anterior",
+        language: {
+          lengthMenu: 'Mostrar _MENU_ registros por página',
+          zeroRecords: 'Ningún paciente encontrado',
+          info: 'Página _PAGE_ de _PAGES_',
+          infoEmpty: 'No hay registros disponibles',
+          infoFiltered: '(filtrado de _MAX_ registros)',
+          search: 'Buscar:',
+          loadingRecords: 'Cargando...',
+          paginate: {
+            first: 'Primero',
+            last: 'Último',
+            next: 'Siguiente',
+            previous: 'Anterior'
           }
+        },/*
+        lengthMenuCallback: function (settings, options) {
+          selectedLength = options[0]; // Almacenar la opción seleccionada
         },
-        "columnDefs": [
-          {"margin-bottom": "10px"}
-        ]
-      }); 
+        initComplete: function() {
+          $('#datatable tbody').css('height',50*selectedLength+'px');
+          $('#datatable tbody tr').css('height','50px !important');
+        }*/
+
+      });/*
+      $('#datatable_length select').on('change', function () {
+        var newOption = $(this).val(); // Obtener la nueva opción seleccionada
+        selectedLength = newOption; // Actualizar la variable con la nueva opción
+        $('#datatable tbody').css('height',50*selectedLength+'px');
+        $('#datatable tbody tr').css('height','50px !important');
+      });*/
     });
   </script>
+
+
+
+
+
+
+
+
 </body>
 
 </html>

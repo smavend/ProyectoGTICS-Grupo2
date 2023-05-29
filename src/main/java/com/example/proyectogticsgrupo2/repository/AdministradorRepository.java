@@ -17,7 +17,7 @@ import java.util.List;
 public interface AdministradorRepository extends JpaRepository<Administrador, String> {
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO administrador (id_administrador, nombre, apellidos, estado, sede_id_sede, correo) VALUES (:dni, :nombres, :apellidos, 0, :sedenuevaId, :correoUser)", nativeQuery = true)
+    @Query(value = "INSERT INTO administrador (id_administrador, nombre, apellidos, estado, sede_id_sede, correo) VALUES (:dni, :nombres, :apellidos, 1, :sedenuevaId, :correoUser)", nativeQuery = true)
     void insertarAdministrador(@Param("dni") String dni, @Param("nombres") String nombres, @Param("apellidos") String apellidos, @Param("sedenuevaId") int sedenuevaId, @Param("correoUser") String correoUser);
     @Query(nativeQuery = true, value = "select * from sede_x_especialidad_x_administrativo where administrativo_id_administrativo = ?1")
     AdministrativoPorEspecialidadPorSede buscarPorAdministrativoId(String id);

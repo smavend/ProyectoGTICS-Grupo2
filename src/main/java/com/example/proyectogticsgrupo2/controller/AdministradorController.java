@@ -4,6 +4,8 @@ import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -104,9 +106,9 @@ public class AdministradorController {
 
     }
     @GetMapping("/perfil")
-    public String perfil(@RequestParam("id") String id, Model model){
-        Optional<Administrador> optAministrador = administradorRepository.findById(id);
-        Administrador administrador= optAministrador.get();
+    public String perfil(Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Administrador administrador = (Administrador) session.getAttribute("administrador");
         model.addAttribute("administrador", administrador);
         return "administrador/perfil";}
     @GetMapping("/finanzas-recibos")
