@@ -92,31 +92,12 @@
                         <!-- Horizontal Form -->
                         <form class="filter-form-crearusuario" method="POST"
                               th:action="@{/SuperAdminHomePage/SaveUser}">
-                            <!--   <div class="row mb-3">
-                                   <label class="col-sm-2 col-form-label">Usuario</label>
-                                   <div class="col-sm-10">
-                                       <select id="Select Usuario" name="selectUsuario" class="form-select"
-                                               aria-label="Default select example">
-                                           <option th:selected="${selectUsuarioValue == null}" selected>Seleccionar
-                                               Usuario
-                                           </option>
-                                           <option value="administrador"
-                                                   th:selected="${selectUsuarioValue == 'administrador'}">Administrador
-                                           </option>
-                                           <option value="administrativo"
-                                                   th:selected="${selectUsuarioValue == 'administrativo'}">Administrativo
-                                           </option>
-                                       </select>
-                                       <span th:if="${selectUsuarioError}" th:text="${selectUsuarioError}"
-                                             style="color: #FF0000;" class="error"></span>
-                                   </div>
-                               </div>-->
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">Usuario</label>
                                 <div class="col-sm-10">
                                     <select id="SelectUsuario" th:field="*{userform_superadmin.selectUsuario}"
                                             class="form-select"
-                                            th:classappend="${#fields.hasErrors('userform_superadmin.selectUsuario')} ? 'is-invalid' : ''"
+                                            th:classappend="${submitAttempted} ? (${#fields.hasErrors('userform_superadmin.selectUsuario')} ? 'is-invalid' : 'is-valid'):''"
                                             aria-label="Default select example">
                                         <option value="" th:selected="${userform_superadmin.selectUsuario == null}"
                                                 selected>
@@ -141,7 +122,7 @@
                                 <label class="col-sm-2 col-form-label">DNI</label>
                                 <div class="col-sm-10">
                                     <input th:field="*{userform_superadmin.dni}" type="text" class="form-control" id="inputText"
-                                           th:classappend="${#fields.hasErrors('userform_superadmin.dni')} ? 'is-invalid' : ''"
+                                           th:classappend="${submitAttempted} ? (${#fields.hasErrors('userform_superadmin.dni')} ? 'is-invalid' : 'is-valid'):''"
                                            placeholder="Escriba su DNI"/>
                                     <div class="invalid-feedback"
                                          th:if="${#fields.hasErrors('userform_superadmin.dni')}"
@@ -153,7 +134,7 @@
                                 <label class="col-sm-2 col-form-label">Nombres</label>
                                 <div class="col-sm-10">
                                     <input th:field="*{userform_superadmin.nombres}" type="text" class="form-control" id="inputNombres"
-                                           th:classappend="${#fields.hasErrors('userform_superadmin.nombres')} ? 'is-invalid' : ''"
+                                           th:classappend="${submitAttempted} ? (${#fields.hasErrors('userform_superadmin.nombres')} ? 'is-invalid' : 'is-valid'):''"
                                            placeholder="Escriba su nombre">
                                     <div class="invalid-feedback"
                                          th:if="${#fields.hasErrors('userform_superadmin.nombres')}"
@@ -165,7 +146,7 @@
                                 <label class="col-sm-2 col-form-label">Apellidos</label>
                                 <div class="col-sm-10">
                                     <input th:field="*{userform_superadmin.apellidos}" type="text" class="form-control" id="inputApellidos"
-                                           th:classappend="${#fields.hasErrors('userform_superadmin.apellidos')} ? 'is-invalid' : ''"
+                                           th:classappend="${submitAttempted} ? (${#fields.hasErrors('userform_superadmin.apellidos')} ? 'is-invalid' : 'is-valid'):''"
                                            placeholder="Escriba su Apellido">
                                     <div class="invalid-feedback"
                                          th:if="${#fields.hasErrors('userform_superadmin.apellidos')}"
@@ -176,7 +157,7 @@
                                 <label class="col-sm-2 col-form-label">Correo</label>
                                 <div class="col-sm-10">
                                     <input th:field="*{userform_superadmin.correoUser}" type="text" class="form-control" id="correoUser"
-                                           th:classappend="${#fields.hasErrors('userform_superadmin.correoUser')} ? 'is-invalid' : ''"
+                                           th:classappend="${submitAttempted} ? (${#fields.hasErrors('userform_superadmin.correoUser')} ? 'is-invalid' : 'is-valid'):''"
                                            placeholder="Escriba su Correo">
                                     <div class="invalid-feedback"
                                          th:if="${#fields.hasErrors('userform_superadmin.correoUser')}"
@@ -184,124 +165,33 @@
                                 </div>
                             </div>
 
-                            <div id="clinicaContainer" class="row mb-3" style="display: none;">
-                                <label class="col-sm-2 col-form-label">Clínica</label>
-                                <div class="col-sm-10">
-
-                                    <select id="clinica-lista-crearform"
-                                            th:field="*{userform_superadmin.clinica}"
-                                            name="clinica" class="form-select"
-                                            th:classappend="${#fields.hasErrors('userform_superadmin.clinica')} ? 'is-invalid' : ''"
-                                            aria-label="Default select example">
-                                        <option value="" th:selected="${userform_superadmin.clinica == null}" selected>
-                                            Seleccionar Clínica
-                                        </option>
-                                        <option th:selected="${userform_superadmin.clinica == Clinica.nombre}"
-                                                th:each="Clinica : ${listaClinicas}" th:value="${Clinica.nombre}"
-                                                th:text="${Clinica.nombre}"></option>
-                                        <option value="otro">Otra Clínica</option>
-                                    </select>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('userform_superadmin.clinica')}"
-                                         th:errors="*{userform_superadmin.clinica}"></div>
-
-
-                                    <div class="form-group" id="otraClinica"
-                                         style="display:none; flex-direction: column;">
-                                        <label>Nombre de la nueva Clínica:</label>
-                                        <input th:field="*{userform_superadmin.otraClinica}" type="text"
-                                               class="form-control" id="otraClinicaInput"
-                                               th:classappend="${#fields.hasErrors('userform_superadmin.otraClinica')} ? 'is-invalid' : ''"
-                                               placeholder="Escriba el nobmre de la nueva Clínica">
-                                        <div class="invalid-feedback"
-                                             th:if="${#fields.hasErrors('userform_superadmin.otraClinica')}"
-                                             th:errors="*{userform_superadmin.otraClinica}"></div>
-
-
-                                        <label>Correo de la nueva Clínica:</label>
-                                        <input th:field="*{userform_superadmin.correo_nueva_clinica}" type="text"
-                                               class="form-control" id="correo_nueva_clinica"
-                                               th:classappend="${#fields.hasErrors('userform_superadmin.correo_nueva_clinica')} ? 'is-invalid' : ''"
-                                               placeholder="Escriba el correo de la nueva Clínica">
-                                        <div class="invalid-feedback"
-                                             th:if="${#fields.hasErrors('userform_superadmin.correo_nueva_clinica')}"
-                                             th:errors="*{userform_superadmin.correo_nueva_clinica}"></div>
-
-
-                                        <label>Teléfono de la nueva Clínica:</label>
-                                        <input th:field="*{userform_superadmin.telefono_nueva_clinica}" type="text"
-                                               class="form-control" id="telefono_nueva_clinica"
-                                               th:classappend="${#fields.hasErrors('userform_superadmin.telefono_nueva_clinica')} ? 'is-invalid' : ''"
-                                               placeholder="Escriba el teléfono de la nueva Clínica">
-                                        <div class="invalid-feedback"
-                                             th:if="${#fields.hasErrors('userform_superadmin.telefono_nueva_clinica')}"
-                                             th:errors="*{userform_superadmin.telefono_nueva_clinica}"></div>
-
-                                        <label>Nombre de la nueva Sede:</label>
-                                        <input th:field="*{userform_superadmin.otraSede}" type="text"
-                                               class="form-control" id="OtraSedeInput"
-                                               th:classappend="${#fields.hasErrors('userform_superadmin.otraSede')} ? 'is-invalid' : ''"
-                                               placeholder="Escriba el nombre de la nueva Sede">
-                                        <div class="invalid-feedback"
-                                             th:if="${#fields.hasErrors('userform_superadmin.otraSede')}"
-                                             th:errors="*{userform_superadmin.otraSede}"></div>
-
-                                        <label for="sede_nueva_direccion">Dirección de la nueva Sede:</label>
-                                        <input th:field="*{userform_superadmin.sede_nueva_direccion}" type="text"
-                                               class="form-control" id="sede_nueva_direccion"
-                                               th:classappend="${#fields.hasErrors('userform_superadmin.sede_nueva_direccion')} ? 'is-invalid' : ''"
-                                               placeholder="Escriba la dirección de la nueva Sede">
-                                        <div class="invalid-feedback"
-                                             th:if="${#fields.hasErrors('userform_superadmin.sede_nueva_direccion')}"
-                                             th:errors="*{userform_superadmin.sede_nueva_direccion}"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-
                             <div id="SedeContainer" class="row mb-3" style="display: none;">
                                 <label class="col-sm-2 col-form-label">Sede</label>
                                 <div class="col-sm-10">
-                                    <select id="sede-lista-crearform"
+                                    <select id="sede-lista-crearform" class="form-select"
                                             th:field="*{userform_superadmin.sede}"
-                                            class="form-select"
-                                            th:classappend="${#fields.hasErrors('userform_superadmin.sede')} ? 'is-invalid' : ''"
-                                            aria-label="Default select example" >
-                                        <option value="" th:selected="${userform_superadmin.sede == null}">Seleccionar Sede</option>
+                                            th:classappend="${submitAttempted} ? (${#fields.hasErrors('userform_superadmin.sede')} ? 'is-invalid' : 'is-valid'):''"
+                                            aria-label="Default select example" name="sede">
+                                        <option value="" th:selected="${userform_superadmin.sede == null}">Seleccionar
+                                            Sede
+                                        </option>
+                                        <option th:selected="${userform_superadmin.sede == Sede.nombre}"
+                                                th:each="Sede : ${listaSedes}"
+                                                th:value="${Sede.nombre}"
+                                                th:text="${Sede.nombre}"></option>
                                     </select>
                                     <div class="invalid-feedback"
                                          th:if="${#fields.hasErrors('userform_superadmin.sede')}"
                                          th:errors="*{userform_superadmin.sede}"></div>
-
-                                    <div class="form-group" id="otraSede" style="display:none; flex-direction: column;">
-                                        <label for="otraSede4input">Nombre de la nueva Sede:</label>
-                                        <input  th:field="*{userform_superadmin.otraSede4}" type="text"
-                                                class="form-control" id="otraSede4input"
-                                                th:classappend="${#fields.hasErrors('userform_superadmin.otraSede4')} ? 'is-invalid' : ''"
-                                                placeholder="Escriba el Nombre de la nueva Sede">
-                                        <div class="invalid-feedback"
-                                             th:if="${#fields.hasErrors('userform_superadmin.otraSede4')}"
-                                             th:errors="*{userform_superadmin.otraSede4}"></div>
-
-                                        <label for="sede_nueva4_direccion">Dirección de la nueva Sede:</label>
-                                        <input  th:field="*{userform_superadmin.sede_nueva4_direccion}" type="text"
-                                                class="form-control" id="sede_nueva4_direccion"
-                                                th:classappend="${#fields.hasErrors('userform_superadmin.sede_nueva4_direccion')} ? 'is-invalid' : ''"
-                                                placeholder="Escriba el Nombre de la nueva dirección">
-                                        <div class="invalid-feedback"
-                                             th:if="${#fields.hasErrors('userform_superadmin.sede_nueva4_direccion')}"
-                                             th:errors="*{userform_superadmin.sede_nueva4_direccion}"></div>
-                                    </div>
                                 </div>
 
                             </div>
-
                             <div id="EspecialidadContainer" class="row mb-3" style="display: none;">
                                 <label class="col-sm-2 col-form-label">Especialidad</label>
                                 <div class="col-sm-10">
                                     <select id="especialidad-lista-crearform" class="form-select"
                                             th:field="*{userform_superadmin.especialidad}"
-                                            th:classappend="${#fields.hasErrors('userform_superadmin.especialidad')} ? 'is-invalid' : ''"
+                                            th:classappend="${submitAttempted} ? (${#fields.hasErrors('userform_superadmin.especialidad')} ? 'is-invalid' : 'is-valid'):''"
                                             aria-label="Default select example" name="especialidad">
                                         <option value="" th:selected="${userform_superadmin.especialidad == null}">Seleccionar Especialidad</option>
                                         <option th:selected="${userform_superadmin.especialidad == Especialidad.nombre}"
@@ -365,6 +255,8 @@
 <script th:src="@{/assets/js/paginacion_doctor_superadmin.js}"></script>
 <script th:src="@{/assets/js/paginacion_paciente_superadmin.js}"></script>
 <script th:src="@{/assets/js/CrearUsuario.js}"></script>
+<script th:src="@{/assets/js/darkmode.js}"></script>
+
 
 
 </body>

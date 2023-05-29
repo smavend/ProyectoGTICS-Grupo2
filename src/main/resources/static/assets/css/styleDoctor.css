@@ -89,7 +89,6 @@ encabezado{
     background-color: white;
     box-shadow: 0 2px 20px rgba(0, 13, 35, 0.1);
     overflow-x: auto;
-    overflow-y: auto;
 }
 
 .seccionPrincipal th{
@@ -1091,7 +1090,6 @@ table a:hover {
 
 .dashboard .top-selling img {
     border-radius: 5px;
-    max-width: 60px;
 }
 
 /*--------------------------------------------------------------

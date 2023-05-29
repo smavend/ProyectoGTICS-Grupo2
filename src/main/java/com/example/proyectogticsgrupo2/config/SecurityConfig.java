@@ -118,8 +118,30 @@ public class SecurityConfig {
     @Bean
     public UserDetailsManager users(DataSource dataSource){
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        String sql1 = "call credencial_estado(?)";
-        String sql2 = "call correo_rol(?)";
+        String sql1 = "SELECT\n" +
+                "    c.correo,\n" +
+                "    c.contrasena_hasheada,\n" +
+                "    CASE \n" +
+                "\t\tWHEN exists(select estado from paciente where id_paciente=id_credenciales and estado!=0 and estado!=3) THEN 1\n" +
+                "\t\tWHEN exists(select estado from doctor where id_doctor=id_credenciales and estado!=0) THEN 1\n" +
+                "\t\tWHEN exists(select estado from administrativo where id_administrativo=id_credenciales and estado!=0) THEN 1\n" +
+                "\t\tWHEN exists(select estado from administrador where id_administrador=id_credenciales and estado!=0) THEN 1\n" +
+                "\t\tWHEN exists(select * from superadmin where id_superadmin=id_credenciales) THEN 1\n" +
+                "        ELSE 0\n" +
+                "\tEND AS estado\n" +
+                "\tFROM credenciales c\n" +
+                "    WHERE c.correo = ?";
+        String sql2 = "SELECT\n" +
+                "    c.correo,\n" +
+                "    CASE \n" +
+                "\t\tWHEN exists(select * from paciente where id_paciente=id_credenciales) THEN 'paciente'\n" +
+                "\t\tWHEN exists(select * from doctor where id_doctor=id_credenciales) THEN 'doctor'\n" +
+                "\t\tWHEN exists(select * from administrativo where id_administrativo=id_credenciales) THEN 'administrativo'\n" +
+                "\t\tWHEN exists(select * from administrador where id_administrador=id_credenciales) THEN 'administrador'\n" +
+                "\t\tWHEN exists(select * from superadmin where id_superadmin=id_credenciales) THEN 'superadmin'\n" +
+                "\tEND AS rol\n" +
+                "\tFROM credenciales c\n" +
+                "    WHERE c.correo = ?";
 
         users.setUsersByUsernameQuery(sql1);
         users.setAuthoritiesByUsernameQuery(sql2);
