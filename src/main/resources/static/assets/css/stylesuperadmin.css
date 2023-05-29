@@ -1282,10 +1282,10 @@ body.dark-mode {
 body.dark-mode .card, body.dark-mode .table {
     background-color: #363537; /* Color de fondo de las tarjetas y tablas en modo oscuro */
 }
-
 body.dark-mode .breadcrumb, body.dark-mode .dropdown-menu {
     color: #f0f0f0; /* Color de texto en modo oscuro */
 }
+
 /* Modo claro */
 body.light-mode .pagetitle h1 {
     color: #012970;  /* Color de texto en modo claro para .pagetitle h1 */
@@ -1295,6 +1295,10 @@ body.light-mode .pagetitle h1 {
 body.dark-mode .pagetitle h1 {
     color: #8ca66f; /* Color de texto en modo oscuro para .pagetitle h1 */
 }
+
+body.dark-mode .container1 .d-flex i {
+    color: white; /* Color blanco en modo oscuro */
+}
 /* Modo claro */
 body.light-mode .card-title {
     color: #444444; /* Color de texto en modo claro para .card-title */
@@ -1303,8 +1307,13 @@ body.light-mode .card-title {
 body.light-mode .logo span {
     color: #444444; /* Color de texto en modo claro para .logo span */
 }
-
+body.light-mode .dropdown-item .bi i {
+    color: #f0f0f0; /* Color de texto en modo claro para .logo span */
+}
 /* Modo oscuro */
+body.dark-mode .dropdown-item .bi i {
+    color: #444444; /* Color de texto en modo claro para .logo span */
+}
 body.dark-mode .card-title {
     color: #f0f0f0; /* Color de texto en modo oscuro para .card-title */
 }
@@ -1312,7 +1321,6 @@ body.dark-mode .card-title {
 body.dark-mode .logo span {
     color: #8ca66f; /* Color de texto en modo oscuro para .logo span */
 }
-
 
 body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
     background-color: #363636;
@@ -1339,14 +1347,41 @@ body.dark-mode span.dropdown-toggle {
     color: #6f8d59; /* Cambiar el color a verde en modo oscuro */
 }
 
+/* Modo claro */
+body.light-mode .footer {
+    border-top: 1px solid #cddfff;
+}
+body.light-mode .footer .credits {
+    padding-top: 5px;
+    text-align: center;
+    font-size: 13px;
+    color: #012970;
+}
+body.light-mode .footer .copyright {
+    color: #012970; /* Color de texto en modo claro para .footer .copyright */
+}
+
+/* Modo oscuro */
+body.dark-mode .footer {
+    border-top: 1px solid #cddfff;
+}
+body.dark-mode .footer .credits {
+    padding-top: 5px;
+    text-align: center;
+    font-size: 13px;
+    color: #f0f0f0;
+}
+body.dark-mode .footer .copyright {
+    color: #f0f0f0; /* Color de texto en modo oscuro para .footer .copyright */
+}
 
 
 
 
 
-
-
-
+.container_superadmin_1 .dropdown-toggle::after {
+    display: none;
+}
 
 
 
