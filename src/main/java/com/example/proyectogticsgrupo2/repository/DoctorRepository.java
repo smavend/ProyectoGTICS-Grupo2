@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,4 +28,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
     int buscarIdSedeDoctor(String idDoctor);
 
     Doctor findByCorreo(String correo);
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "UPDATE proyectogtics.doctor SET sede_id_sede = ?1 WHERE (id_doctor = ?2)")
+    void actualizarSede(int idSede,String idDoctor);
 }

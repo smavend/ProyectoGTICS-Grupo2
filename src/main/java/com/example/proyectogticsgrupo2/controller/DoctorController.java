@@ -401,9 +401,9 @@ public class DoctorController {
         if (doctorOptional.isPresent()) {
             Doctor doctor= doctorOptional.get();
             model.addAttribute("doctor", doctor);
+            List<Sede> sedeList = sedeRepository.findAll();
+            model.addAttribute("sedeList", sedeList);
         }
-        List<Sede> sedeList = sedeRepository.findAll();
-        model.addAttribute("sedeList", sedeList);
         return "doctor/DoctorConfiguracion";
 
     }
@@ -545,6 +545,16 @@ public class DoctorController {
         }
 
         return "redirect:/doctor/perfil";
+    }
+    @GetMapping("/config/actualizarSede")
+    public String guardarSedeDoctor(@RequestParam("idDoctor") String idDoctor, @RequestParam("sedeSeleccionada") int sedeId,RedirectAttributes attr) {
+
+        Optional<Sede> optionalSede = sedeRepository.findById(sedeId);
+        if (optionalSede.isPresent()) {
+            doctorRepository.actualizarSede(sedeId,idDoctor);
+        }
+        attr.addFlashAttribute("msgActualizacion", "Sede actualizada correctamente");
+        return "redirect:/doctor/configuracion?success";
     }
 
 

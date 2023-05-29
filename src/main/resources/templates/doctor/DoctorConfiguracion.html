@@ -46,6 +46,13 @@
         * Author: BootstrapMade.com
         * License: https://bootstrapmade.com/license/
         ======================================================== -->
+        <script>
+            function guardarSede(event) {
+                var sedeId = event.target.dataset.sedeId;
+                document.querySelector('input.sedeRadio[value="' + sedeId + '"]').checked = true;
+                document.getElementById('btnGuardar').click();
+            }
+        </script>
     </head>
 
     <body>
@@ -54,12 +61,42 @@
 
     <div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
     <main id="main" class="main">
-        <h1 class="encabezado" th:text="'Dr.' +${doctor.getNombreYApellido()}"></h1>
-
-        <p class="text-center fw-medium mt-4" style="font-size: 1.2rem">Elija la sede que considere más adecuada para su práctica médica</p>
+        <h1 class="encabezado" th:text="'Cambio de Sede'"></h1>
+        <div style="border-radius: 30px" class="alert alert-success" role="alert" th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"></div>
+        <p class="text-center fw-medium mt-4" style="font-size: 1.2rem">Acontinuación se muestran las sedes dispoibles para su traslado de sede</p>
         <p class="text-center fw-semibold my-3 fs-4" style="color: #0d6efd">Sedes</p>
 
+
+
         <section id="Sedes">
+            <div class="row align-items-start contenedor mx-0">
+                <div class="col-md-4" th:each="sede:${sedeList}">
+                    <a th:href="@{'/doctor/config/actualizarSede?idDoctor='+${doctor.id_doctor}+'&sedeSeleccionada='+${sede.idSede}}">
+                        <figure>
+                            <img class="sedeImg" th:src="@{/doctor/imageSede(idSede=${sede.getIdSede()})}" alt="Imagen Sede">
+                            <div class="capa">
+                                <h6>CLINICAS</h6>
+                                <h2 class="fw-bold" style="color: darkblue" th:text="${sede.getNombre()}">San Isidro</h2>
+                                <p th:text="${sede.getDireccion()}">Av. Javier Prado Este 1066, Lima.</p>
+
+                                <div class="d-flex align-items-center justify-content-end"
+                                     style="margin-right: 30px">
+                                    <span>Seleccionar Sede</span>
+                                    <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
+                                       style="color: darkgray"></i>
+                                </div>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+
+
+            </div>
+        </section>
+
+
+
+        <!--<section id="Sedes">
             <div class="row align-items-start contenedor mx-0">
                 <div class="col-md-4" th:each="sede:${sedeList}">
                     <a href="">
@@ -83,7 +120,7 @@
                 </div>
 
             </div>
-        </section>
+        </section>-->
 
     </main>
 
