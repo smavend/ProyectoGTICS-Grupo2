@@ -322,6 +322,7 @@ public class SuperAdminController {
             administrativonuevo.setNombre(nombres);
             administrativonuevo.setApellidos(apellidos);
             administrativonuevo.setCorreo(correoUser);
+            administrativonuevo.setEstado(1);
             administrativoRepository.save(administrativonuevo);
 //          Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
             Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);

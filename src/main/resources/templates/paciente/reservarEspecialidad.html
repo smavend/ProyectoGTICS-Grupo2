@@ -29,7 +29,7 @@
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
         <!-- End Sidebar-->
 
         <main id="main" class="main">
@@ -66,21 +66,23 @@
                         </div>
                     </div>
 
+                    <input type="hidden" name="modalidad" th:value="${citaTemporal.modalidad}">
+                    <input type="hidden" name="idSede" th:value="${citaTemporal.idSede}">
+
                     <div class="row" style="margin-top: 20px;margin-left: 20px">
                         <div class="col-6">
-                            <p><span class="fw-bold">Especialidad:</span><span class="fw-bold" style="color: red">*</span></p>
+                            <p><span class="fw-bold">Especialidades disponibles:</span><span class="fw-bold" style="color: red">*</span></p>
                             <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
                                     name="idEspecialidad">
                                 <option value="">--Seleccione una especialidad--</option>
-                                <option th:each="especialidad:${especialidadList}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}">A</option>
+                                <option th:each="especialidad: ${especialidadesDisponibles}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
                             </select>
-
                         </div>
                     </div>
 
                     <div class="row justify-content-end"
                          style="margin-top: 70px; margin-right: 80px; margin-bottom: 20px">
-                        <a type="submit" class="btn botonActualizarConsentimientos ms-3 col-2">Continuar</a>
+                        <button type="submit" class="btn botonActualizarConsentimientos ms-3 col-2">Siguiente</button>
                     </div>
                 </form>
             </section>

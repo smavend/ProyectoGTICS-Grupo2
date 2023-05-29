@@ -14,6 +14,14 @@ public interface EspecialidadRepository extends JpaRepository<Especialidad, Inte
 
     @Query(nativeQuery = true, value = "select * from especialidad where nombre = ?1")
     Especialidad findByNombre(String especialidad);
-    List<Especialidad> findByIdEspecialidad(int idEspecialidad);
-}
 
+    @Query(nativeQuery = true, value = "select esp.* from especialidad esp \n" +
+            "inner join sede_x_especialidad_x_administrativo m on (esp.id_especialidad = m.especialidad_id_especialidad) \n" +
+            "where m.sede_id_sede = ?1")
+    List<Especialidad> buscarPorSede(int idSede);
+
+    @Query(nativeQuery = true, value = "select esp.* from especialidad esp \n" +
+            "inner join sede_x_especialidad_x_administrativo m on (esp.id_especialidad = m.especialidad_id_especialidad) \n" +
+            "where m.sede_id_sede = ?1 and esp.es_examen = 0;")
+    List<Especialidad> buscarVirtualesPorSede(int idSede);
+}
