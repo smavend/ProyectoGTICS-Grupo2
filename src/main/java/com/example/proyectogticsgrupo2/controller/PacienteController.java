@@ -64,8 +64,6 @@ public class PacienteController {
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model) {
-        Paciente paciente = pacienteRepository.findById(idPrueba).get();
-        model.addAttribute("paciente", paciente);
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
@@ -418,7 +416,7 @@ public class PacienteController {
         Paciente paciente = optionalPaciente.get();
         model.addAttribute("paciente", paciente);
 
-        Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
+        Optional<Doctor> optionalDoctor = doctorRepository.findById("0");
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             model.addAttribute("doctor", doctor);
