@@ -14,6 +14,6 @@ import java.util.List;
 public interface CitaTemporalRepository extends JpaRepository<CitaTemporal, Integer> {
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita_temporal` (`paciente_id_paciente`, `modalidad`, `sede_id_sede`) VALUES (?1, ?2, ?3);")
-    void guardarSede(String idPaciente, int modalidad, int especialidad);
+    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita_temporal` (`paciente_id_paciente`, `modalidad`, `sede_id_sede`, `especialidad_id_especialidad`) VALUES (?1, ?2, ?3, ?4);")
+    void guardarModalidadSedeEspecialidad(String idPaciente, int modalidad, int idSede, int idEspecialidad);
 }

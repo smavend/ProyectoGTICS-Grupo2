@@ -67,6 +67,7 @@
                 <form method="post" th:action="@{/Paciente/reservar1}" th:object="${citaTemporal}">
 
                     <input type="hidden" name="idPaciente" th:value="${paciente.idPaciente}">
+                    <input type="hidden" name="idDoctor" value="0">
 
                     <div class="row" style="margin-top: 20px;margin-left: 20px">
                         <div class="col-6">
@@ -108,9 +109,10 @@
                         </div>
                     </div>
 
-                    <div class="row justify-content-end"
+                    <div class="d-flex justify-content-end"
                          style="margin-top: 70px; margin-right: 80px; margin-bottom: 20px">
-                        <button type="submit" class="btn botonActualizarConsentimientos ms-3 col-2">Siguiente</button>
+                        <a th:href="@{/Paciente}" class="botonCancelar">Cancelar</a>
+                        <button type="submit" class="btn botonAceptar ms-3">Siguiente</button>
                     </div>
                 </form>
             </section>

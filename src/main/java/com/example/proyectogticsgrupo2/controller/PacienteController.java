@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -113,24 +114,16 @@ public class PacienteController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         model.addAttribute("paciente", optionalPaciente.get());
 
-        System.out.println("-----------------------------------");
-        System.out.println("modal: " + citaTemporal.getModalidad());
-        System.out.println("sede: " + citaTemporal.getIdSede());
-        System.out.println("esp: " + citaTemporal.getIdEspecialidad());
-        System.out.println("doc: " + citaTemporal.getIdDoctor());
-        System.out.println("fech: " + citaTemporal.getFecha());
-        System.out.println("hora: " + citaTemporal.getHora());
-
         List<Doctor> doctoresDisponibles;
 
         if (bindingResult.hasFieldErrors("modalidad") || bindingResult.hasFieldErrors("idSede") || bindingResult.hasFieldErrors("idEspecialidad")) {
-            System.out.println(bindingResult.getAllErrors());
+
             model.addAttribute("sedeList", sedeRepository.findAll());
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "paciente/reservar1";
 
         } else {
-            System.out.println("buscando doctores");
+
             doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
             model.addAttribute("doctoresDisponibles", doctoresDisponibles);
 
@@ -145,8 +138,9 @@ public class PacienteController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         model.addAttribute("paciente", optionalPaciente.get());
 
-        // Se recibe el doctor seleccionado
         if (bindingResult.hasErrors()) {
+
+            System.out.println("Ha ocurrido un error");
             List<Doctor> doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
             model.addAttribute("doctoresDisponibles", doctoresDisponibles);
 
@@ -155,6 +149,7 @@ public class PacienteController {
         } else if (buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).size() == 0) {
             // * Validar lo que ocurre si no hay doctores disponibles para ciertos casos
             return "paciente/reservar2";
+
         } else {
 
             HorariosDisponiblesDTO horariosDisponibles = horarioRepository.buscarHorariosDisponibles(citaTemporal.getIdDoctor());
@@ -370,6 +365,11 @@ public class PacienteController {
         model.addAttribute("doctorList", doctorList);
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
+
+        model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
+        model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
+
+
         return "paciente/doctores";
 
     }
@@ -404,18 +404,20 @@ public class PacienteController {
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             model.addAttribute("doctor", doctor);
+            model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
+            model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
         }
         return "paciente/doctorPerfil";
     }
 
-    @GetMapping("/reservarDoctor2")
-    public String reservarCitaDoctor(Model model,
-                                     @RequestParam("idDoctor") String idDoctor) {
+    @PostMapping("/reservarDoctor")
+    public String reservarCitaDoctor(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                     Model model) {
+
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
+        Paciente paciente = optionalPaciente.get();
+        model.addAttribute("paciente", paciente);
+
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
@@ -423,6 +425,7 @@ public class PacienteController {
         }
         List<Seguro> seguroList = seguroRepository.findAll();
         model.addAttribute("seguroList", seguroList);
+
         return "reservar2";
     }
 
