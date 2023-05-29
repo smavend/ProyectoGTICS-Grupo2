@@ -7,10 +7,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
@@ -71,7 +68,7 @@ public class HomeController {
 
 
     @GetMapping("/signin")
-    public String vistaRegistro(Model model){
+    public String vistaRegistro(Model model, @ModelAttribute("paciente") Paciente paciente){
         List<Distrito> list = distritoRepository.findAll();
         List<Seguro> list1 = seguroRepository.findAll();
         model.addAttribute("distritos", list);

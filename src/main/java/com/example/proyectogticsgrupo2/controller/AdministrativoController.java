@@ -129,7 +129,8 @@ public class AdministrativoController {
     }
 
     @PostMapping("administrativo/invitar")
-    public String invitarPaciente(HttpServletRequest request, Model model,@ModelAttribute("temporal") @Valid Temporal temporal,
+    public String invitarPaciente(HttpServletRequest request, Model model,
+                                  @ModelAttribute("temporal") @Valid Temporal temporal,
                                   BindingResult bindingResult,
                                   RedirectAttributes attr){
         HttpSession session = request.getSession();
@@ -141,37 +142,37 @@ public class AdministrativoController {
             model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             return "administrativo/invitar";
         }
-        else {
+        else{
             List<Paciente> list = pacienteRepository.findAll();
             boolean exist = false;
             boolean existTemp = false;
-            for(Paciente p: list){
-                if(p.getIdPaciente().equals(temporal.getDni())){
+            for (Paciente p : list) {
+                if (p.getIdPaciente().equals(temporal.getDni())) {
                     exist = true;
                     break;
-                }else if (p.getCorreo().equals(temporal.getCorreo())){
+                } else if (p.getCorreo().equals(temporal.getCorreo())) {
                     exist = true;
                     break;
                 }
             }
             List<Temporal> temp = temporalRepository.findAll();
-            for (Temporal t: temp){
-                if(t.getDni().equals(temporal.getDni())){
+            for (Temporal t : temp) {
+                if (t.getDni().equals(temporal.getDni())) {
                     existTemp = true;
                     break;
-                } else if(t.getCorreo().equals(temporal.getCorreo())){
+                } else if (t.getCorreo().equals(temporal.getCorreo())) {
                     existTemp = true;
                     break;
                 }
             }
-            if(!exist & !existTemp){
+            if (!exist & !existTemp) {
                 temporal.setFechainvitado(LocalDateTime.now());
                 Optional<Administrativo> optAdministrativo = administrativoRepository.findById(idAdmi);
                 temporal.setAdministrativo(optAdministrativo.get());
                 temporalRepository.save(temporal);
                 return "redirect:/administrativo";
-            }else {
-                attr.addFlashAttribute("msg","Ingrese un DNI o correo diferente, ya se encuentra invitado o registrado");
+            } else {
+                attr.addFlashAttribute("msg", "Ingrese un DNI o correo diferente, ya se encuentra invitado o registrado");
                 return "redirect:/administrativo/invitar";
             }
         }
