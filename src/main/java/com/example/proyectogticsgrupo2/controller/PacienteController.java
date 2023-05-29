@@ -4,6 +4,7 @@ import com.example.proyectogticsgrupo2.dto.HorariosDisponiblesDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -67,8 +68,10 @@ public class PacienteController {
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model) {
+
         Paciente paciente = pacienteRepository.findById(idPrueba).get();
         model.addAttribute("paciente", paciente);
+
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
