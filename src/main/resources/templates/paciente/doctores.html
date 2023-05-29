@@ -64,7 +64,7 @@
                                 <img class="fotoDoctor rounded-circle" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
                             </div>
                             <div class="seccionDescripcion">
-                                <div class="seccionNombre" th:text="${doctor.nombre} +' '+ ${doctor.apellidos}">Ronald Richard</div>
+                                <div class="seccionNombre" th:text="'Dr. '+ ${doctor.nombre} +' '+ ${doctor.apellidos}">Ronald Richard</div>
                                 <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
                             </div>
                             <div class="seccionDisponibilidad">

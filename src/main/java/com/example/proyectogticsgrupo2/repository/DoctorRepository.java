@@ -17,6 +17,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
             "values (?1, ?2, ?3, ?4, ?5, ?6, ?7)")
     void guardarDoctor (String dni, String nombre, String apellido, String estado, int especialidad, int sede, String correo);
 
+    // Flujo paciente -----------------------------------------
     @Query(nativeQuery = true, value = "SELECT * FROM doctor where sede_id_sede=?1 limit ?2, ?3")
     List<Doctor> buscarDoctorSedePaginado(int idSede, int paginas, int cantidad);
 
@@ -30,10 +31,17 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
     @Query(nativeQuery = true, value = "select count(doctor.id_doctor) from doctor where sede_id_sede = ?1 and especialidad_id_especialidad = ?2")
     int numDoctoresSedeEspecialidad(int idSede, int idEspecialidad);
 
+    List<Doctor> findBySede_IdSedeAndEspecialidad_IdEspecialidad(int idSede, int idEspecialidad);
+
+    @Query(nativeQuery = true, value = "select d.* from doctor d \n" +
+            "inner join especialidad e on (d.especialidad_id_especialidad = e.id_especialidad) \n" +
+            "where d.especialidad_id_especialidad = ?1 and d.sede_id_sede = ?2 and e.es_examen = 0")
+    List<Doctor> buscarVirtualesPorSedeYEspecialidad(int idSede, int idEspecialidad);
+
+    // ---------------------------------------------------------
+
     @Query(nativeQuery = true, value = "SELECT sede_id_sede FROM proyectogtics.doctor where id_doctor=?1")
     int buscarIdSedeDoctor(String idDoctor);
-
-    List<Doctor> findBySede_IdSedeAndEspecialidad_IdEspecialidad(int idSede, int idEspecialidad);
 
     Doctor findByCorreo(String correo);
 }

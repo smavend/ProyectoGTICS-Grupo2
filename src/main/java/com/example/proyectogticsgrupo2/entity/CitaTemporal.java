@@ -1,6 +1,8 @@
 package com.example.proyectogticsgrupo2.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,11 +23,14 @@ public class CitaTemporal {
     @Column(name = "paciente_id_paciente")
     private String idPaciente;
 
+    @NotNull(message = "Seleccione una de las modalidades disponibles")
     private Integer modalidad;
 
+    @NotNull(message = "Seleccione una de las sedes disponible")
     @Column(name = "sede_id_sede")
     private Integer idSede;
 
+    @NotBlank(message = "Seleccione uno de los doctores disponibles")
     @Column(name = "doctor_id_doctor")
     private String idDoctor;
 
@@ -38,6 +43,7 @@ public class CitaTemporal {
     @Column(name = "id_cita_previa")
     private Integer idCitaPrevia;
 
+    @NotNull(message = "Seleccione una de las especialidades disponibles")
     @Column(name = "id_especialidad")
     private Integer idEspecialidad;
 }
