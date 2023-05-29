@@ -183,7 +183,11 @@ public class AdministradorController {
     public String guardarDoctor(@RequestParam("archivo") MultipartFile file,
                                 @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult,
                                 Model model, RedirectAttributes attr){
-        if(bindingResult.hasErrors()){
+        Optional<Doctor> opt = doctorRepository.findById(doctor.getId_doctor());
+        if(bindingResult.hasErrors() || opt.isPresent()){
+            if(opt.isPresent()){
+                bindingResult.rejectValue("id_doctor","error.id_doctor.existente","El DNI ya existe");
+            }
             List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
             List<Sede> listaSede = sedeRepository.findAll();
             model.addAttribute("listaSede",listaSede);
