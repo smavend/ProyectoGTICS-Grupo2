@@ -131,7 +131,17 @@ public class AdministradorController {
     public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
                                   @ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
                                   Model model, RedirectAttributes attr){
-        if(bindingResult.hasErrors()){
+        Optional<Paciente> opt = pacienteRepository.findById(paciente.getIdPaciente());
+        Paciente pacienteCorreoExist = pacienteRepository.findByCorreo(paciente.getCorreo());
+        if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null){
+            if(opt.isPresent() && pacienteCorreoExist!=null){
+                bindingResult.rejectValue("idPaciente","errorPaciente","Este DNI ya se encuentra registrado");
+                bindingResult.rejectValue("correo","errorCorreoPaci","Este correo ya se encuentra registrado");
+            } else if (pacienteCorreoExist!=null) {
+                bindingResult.rejectValue("correo","errorCorreoPaci","Este correo ya se encuentra registrado");
+            } else if (opt.isPresent()) {
+                bindingResult.rejectValue("idPaciente","errorPaciente","Este DNI ya se encuentra registrado");
+            }
             List<Seguro> listaSeguro  = seguroRepository.findAll();
             List<Distrito> listaDistrito = distritoRepository.findAll();
             List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
@@ -158,12 +168,10 @@ public class AdministradorController {
             paciente.setEstado(1);
             paciente.setFecharegistro(LocalDateTime.now());
             pacienteRepository.save(paciente);
-
             String passRandom= securityConfig.generateRandomPassword();
             PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
             // Ahora puedes usar el passwordEncoder para codificar una contraseña
             String encodedPassword = passwordEncoder.encode(passRandom);
-
             credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
             CorreoService correoService = new CorreoService();
             correoService.props(paciente.getCorreo(),passRandom);
@@ -184,9 +192,15 @@ public class AdministradorController {
                                 @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult,
                                 Model model, RedirectAttributes attr){
         Optional<Doctor> opt = doctorRepository.findById(doctor.getId_doctor());
-        if(bindingResult.hasErrors() || opt.isPresent()){
-            if(opt.isPresent()){
-                bindingResult.rejectValue("id_doctor","error.id_doctor.existente","El DNI ya existe");
+        Doctor doctorCorreoExist = doctorRepository.findByCorreo(doctor.getCorreo());
+        if(bindingResult.hasErrors() || opt.isPresent() || doctorCorreoExist!=null){
+            if(opt.isPresent() && doctorCorreoExist!=null){
+                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
+                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+            } else if (doctorCorreoExist!=null) {
+                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+            } else if (opt.isPresent()) {
+                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
             }
             List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
             List<Sede> listaSede = sedeRepository.findAll();
