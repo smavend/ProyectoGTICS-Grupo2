@@ -64,6 +64,7 @@ public class DoctorController {
         Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
 
         List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
+        System.out.println("SI ENTRA");
         List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
         ArrayList<String> listaHorarios= new ArrayList<>();
         Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
@@ -583,11 +584,5 @@ public class DoctorController {
         this.fecha = fecha;
     }
 
-    public Doctor getDoctor_session_info() {
-        return doctor_session_info;
-    }
 
-    public void setDoctor_session_info(Doctor doctor_session_info) {
-        this.doctor_session_info = doctor_session_info;
-    }
 }
