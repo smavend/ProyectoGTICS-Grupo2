@@ -64,7 +64,6 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .loginProcessingUrl("/login/credenciales")
                 .successHandler((request, response, authentication) -> {
-
                     DefaultSavedRequest defaultSavedRequest =
                             (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 

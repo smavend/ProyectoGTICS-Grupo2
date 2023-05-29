@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
+import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
@@ -65,7 +66,10 @@ public class AdministradorController {
         return "administrador/dashboard";
     }
     @GetMapping("/finanzas")
-    public String finanzas(){return "administrador/finanzas";}
+    public String finanzas(Model model){
+        List<AdministradorIngresos> listaIngresos = administradorRepository.obtenerIgresos();
+        model.addAttribute("listaIngresos",listaIngresos);
+        return "administrador/finanzas";}
     @GetMapping("/config")
     public String config(){return "administrador/config";}
     @GetMapping("/registro")
@@ -187,9 +191,9 @@ public class AdministradorController {
             return "administrador/crearDoctor";
         }else {
             if(file.isEmpty()){
-                    doctor.setFoto(null);
-                    doctor.setFotoname(null);
-                    doctor.setFotocontenttype(null);
+                doctor.setFoto(null);
+                doctor.setFotoname(null);
+                doctor.setFotocontenttype(null);
             }else {
                 String fileName = file.getOriginalFilename();
                 try {
