@@ -3,25 +3,26 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import com.example.proyectogticsgrupo2.service.CorreoService;
 import com.example.proyectogticsgrupo2.service.CorreoServiceSuperAdmin;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Size;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/SuperAdminHomePage")
@@ -37,7 +38,7 @@ public class SuperAdminController {
     final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
     final SecurityConfig securityConfig;
     final CredencialesRepository credencialesRepository;
-
+    final StylevistasRepository stylevistasRepository;
 
     public SuperAdminController(PacienteRepository pacienteRepository,
                                 AdministrativoRepository administrativoRepository,
@@ -49,7 +50,7 @@ public class SuperAdminController {
                                 SuperAdminService superAdminService,
                                 AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository,
                                 SecurityConfig securityConfig,
-                                CredencialesRepository credencialesRepository) {
+                                CredencialesRepository credencialesRepository, StylevistasRepository stylevistasRepository) {
         this.pacienteRepository = pacienteRepository;
         this.administradorRepository = administradorRepository;
         this.administrativoRepository = administrativoRepository;
@@ -61,26 +62,36 @@ public class SuperAdminController {
         this.administrativoPorEspecialidadPorSedeRepository = administrativoPorEspecialidadPorSedeRepository;
         this.securityConfig = securityConfig;
         this.credencialesRepository = credencialesRepository;
-
+        this.stylevistasRepository = stylevistasRepository;
     }
 
-    @GetMapping("")
-    public String HomePageSuperAdmin(Model model) {
-        List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
-        List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
-        List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
-        List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
-        List<Clinica> listaClinicas = clinicaRepository.findAll();
-        List<Sede> listaSedes = sedeRepository.findAll();
-        List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
-        model.addAttribute("listaClinicas", listaClinicas);
-        model.addAttribute("listaSedes", listaSedes);
-        model.addAttribute("listaEspecialidad", listaEspecialidad);
-        model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
-        model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
-        model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
-        model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
-        return "superAdmin/superadmin_Dashboard";
+        @GetMapping("")
+        public String HomePageSuperAdmin(Model model) throws IOException {
+            List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
+            List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
+            List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
+            List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
+            List<Clinica> listaClinicas = clinicaRepository.findAll();
+            List<Sede> listaSedes = sedeRepository.findAll();
+            List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
+            model.addAttribute("listaClinicas", listaClinicas);
+            model.addAttribute("listaSedes", listaSedes);
+            model.addAttribute("listaEspecialidad", listaEspecialidad);
+            model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
+            model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
+            model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
+            model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
+
+            Optional<Stylevistas> style = stylevistasRepository.findById(1);
+            if (style.isPresent()) {
+                Stylevistas styleActual = style.get();
+                System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+                model.addAttribute("headerColor", styleActual.getHeader());
+            } else {
+                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+                System.out.println("No se encontró stylevistas con el id proporcionado");
+            }
+            return "superAdmin/superadmin_Dashboard";
     }
 
     @PostMapping("/filtrar")
@@ -167,9 +178,22 @@ public class SuperAdminController {
     }
 
     @GetMapping("/selectClinica")
-    public String GestionarUIUX() {
+    public String GestionarUIUX(Model model) {
+        List<Stylevistas> listaStylevistas = stylevistasRepository.findAll();
+        List<Administrador> listaAdministradores = administradorRepository.findAll();
+        if(listaStylevistas.isEmpty()) {
+            System.out.println("La lista de Stylevistas está vacía.");
+            System.out.println("hola");
+        } else {
+            System.out.println("La lista de Stylevistas contiene elementos. Primer elemento: " + listaStylevistas.get(0));
+            System.out.println("chau");
+        }
+        model.addAttribute("listadmin", listaAdministradores);
+        model.addAttribute("listaStylevistas", listaStylevistas);
         return "superAdmin/Gestionar_UIUX";
     }
+
+
 
     @GetMapping("/perfil")
     public String profile() {
