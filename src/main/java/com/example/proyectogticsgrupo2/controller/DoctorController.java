@@ -3,7 +3,6 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -18,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.print.Doc;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,21 +40,21 @@ public class DoctorController {
     private String fecha;
     private final AlergiaRepository alergiaRepository;
     private final EspecialidadRepository especialidadRepository;
-
-    private Doctor doctor_session_info;
     private final SedeRepository sedeRepository;
+    private final HorarioRepository horarioRepository;
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
                             AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository,
-                            SedeRepository sedeRepository) {
+                            SedeRepository sedeRepository, HorarioRepository horarioRepository) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
         this.alergiaRepository = alergiaRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
+        this.horarioRepository = horarioRepository;
     }
 
     @GetMapping(value={"/dashboard","/",""})
@@ -178,6 +178,34 @@ public class DoctorController {
         return "doctor/DoctorCalendario";
     }
 
+    @PostMapping("/guardarHorario")
+    public String guardarHorario(HttpServletRequest request,Model model, BindingResult bindingResult, Doctor doctor1) {
+        //Poner @valid
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+        if(bindingResult.hasErrors()){
+
+            Optional<Cita> optionalCita= citaRepository.findById(getIdCita());
+            Optional<Paciente> optionalPaciente = pacienteRepository.findById(getIdPaciente());
+            Paciente paciente = optionalPaciente.get();
+            Cita cita1 = optionalCita.get();
+
+            Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
+            Doctor doctor= doctorOptional.get();
+            model.addAttribute("doctor", doctor);
+
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("fecha", getFecha());
+            model.addAttribute("cita", cita1);
+            return "doctor/DoctorCalendario";
+        }else{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            doctorRepository.save(doctor1);
+
+            return "redirect:/doctor/calendario";
+        }
+    }
     @GetMapping("/reporte")
     public String reporte(Model model, @RequestParam("id") String id,@RequestParam("id2") int id2, HttpServletRequest request){
         setIdPaciente(id);
@@ -290,6 +318,7 @@ public class DoctorController {
             return "redirect:/doctor/dashboard";
         }
     }
+
 
     @PostMapping("/BuscarProxCita")
     public String buscarCita(@RequestParam("searchField") String searchField,

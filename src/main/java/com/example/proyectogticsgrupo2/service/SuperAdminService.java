@@ -108,7 +108,7 @@ public class SuperAdminService {
         dto.setEspecialidad(doctor.getEspecialidad().getNombre());
         dto.setSede(doctor.getSede().getNombre());
         if(doctor.getHorario()==null){
-            dto.setHorario("Por Elegir");
+            dto.setHorario(0);
         }else{
             dto.setHorario(doctor.getHorario().getId_horario());
         }
