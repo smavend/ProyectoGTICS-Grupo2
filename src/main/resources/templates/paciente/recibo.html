@@ -28,7 +28,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -64,8 +64,8 @@
                 <!-- Informacion recibo y pago -->
                 <div class="row informacionRecibo">
                     <div class="col-6">
-                        <p>Paciente:<span class="informacionReciboDato" th:text="${paciente.getNombreYApellido()}">Juanchito Palacios Castro</span></p>
-                        <p>Seguro:<span class="informacionReciboDato" th:text="${paciente.seguro.nombre}">Pacífico EPS</span></p>
+                        <p>Paciente:<span class="informacionReciboDato" th:text="${session.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span></p>
+                        <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span></p>
                         <p>Estado:<span class="informacionReciboDato" th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</span></p>
                     </div>
                     <div class="col-6">

@@ -23,7 +23,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -39,26 +39,26 @@
                     <div class="row" style="margin-top: 40px;margin-left: 20px">
                         <div class="col-6">
                             <p class="mb-2"><span class="fw-bold">Paciente:</span><span style="margin-left: 13px"
-                                                                                        th:text="${paciente.nombre}+' '+${paciente.apellidos}">Juanchito Palacios Castro</span>
+                                                                                        th:text="${session.paciente.nombre}+' '+${session.paciente.apellidos}">Juanchito Palacios Castro</span>
                             </p>
                             <p class="mb-2"><span class="fw-bold">Fecha de nacimiento:</span><span
                                     style="margin-left: 20px"
-                                    th:text="${#temporals.format(paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span>
+                                    th:text="${#temporals.format(session.paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span>
                             </p>
                             <p class="mb-2"><span class="fw-bold">Correo:</span><span style="margin-left: 13px"
-                                                                                      th:text="${paciente.correo}">juanpc98@gmail.com</span>
+                                                                                      th:text="${session.paciente.correo}">juanpc98@gmail.com</span>
                             </p>
-                            <input type="hidden" name="idPaciente" th:value="${paciente.idPaciente}">
+                            <input type="hidden" name="idPaciente" th:value="${session.paciente.idPaciente}">
                         </div>
                         <div class="col-6">
                             <p class="mb-2"><span class="fw-bold">Dirección:</span><span style="margin-left: 13px"
-                                                                                         th:text="${paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
+                                                                                         th:text="${session.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
                             </p>
                             <p class="mb-2"><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px"
-                                                                                        th:text="${paciente.telefono}">934-250-488</span>
+                                                                                        th:text="${session.paciente.telefono}">934-250-488</span>
                             </p>
                             <p class="mb-2"><span class="fw-bold">Seguro:</span><span style="margin-left: 13px"
-                                                                                      th:text="${paciente.seguro.nombre}">Seguro</span>
+                                                                                      th:text="${session.paciente.seguro.nombre}">Seguro</span>
                             </p>
                         </div>
                     </div>

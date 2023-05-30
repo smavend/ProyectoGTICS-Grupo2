@@ -4,6 +4,7 @@ import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.HorariosDisponiblesDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -182,12 +183,14 @@ public class PacienteController {
 
     /* SECCIÓN PERFIL */
     @GetMapping("/perfil")
-    public String perfil(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+    public String perfil(Model model, HttpSession session) {
+        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        String idPacienteLog = pacienteLog.getIdPaciente();
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
-            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPrueba);
-            List<Cita> historialCitas = citaRepository.buscarHistorialDeCitas(idPrueba);
+            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPacienteLog);
+            List<Cita> historialCitas = citaRepository.buscarHistorialDeCitas(idPacienteLog);
             model.addAttribute("alergiasPaciente", alergiasPaciente);
             model.addAttribute("paciente", paciente);
             model.addAttribute("historialCitas", historialCitas);
@@ -198,12 +201,14 @@ public class PacienteController {
     @GetMapping("/perfil/editar")
     public String editarPerfil(@ModelAttribute("paciente") Paciente paciente,
                                @RequestParam(name = "id") String idPaciente,
-                               Model model) {
+                               Model model, HttpSession session) {
+        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        String idPacienteLog = pacienteLog.getIdPaciente();
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()) {
             paciente = optionalPaciente.get();
             List<Seguro> seguroList = seguroRepository.findAll();
-            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPrueba);
+            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPacienteLog);
             List<Distrito> distritoList = distritoRepository.findAll();
 
             model.addAttribute("seguroList", seguroList);
@@ -330,14 +335,16 @@ public class PacienteController {
     public String guardarContrasena(@RequestParam("actual") String actual,
                                     @RequestParam("nueva1") String nueva1,
                                     @RequestParam("nueva2") String nueva2,
-                                    RedirectAttributes attr) {
+                                    RedirectAttributes attr, HttpSession session) {
 
+        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        String idPacienteLog = pacienteLog.getIdPaciente();
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
         String contrasenaHasheada = passwordEncoder.encode(actual);
         Credenciales credenciales = credencialesRepository.findByContrasena(contrasenaHasheada);
 
         if (credenciales != null && nueva1.equals(nueva2)) {
-            credencialesRepository.actualizarContrasena(idPrueba, passwordEncoder.encode(nueva1));
+            credencialesRepository.actualizarContrasena(idPacienteLog, passwordEncoder.encode(nueva1));
             attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
         }
 
@@ -509,11 +516,13 @@ public class PacienteController {
 
     /* SECCIÓN CITAS */
     @GetMapping("citas")
-    public String verCitas(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+    public String verCitas(Model model, HttpSession session) {
+        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        String idPacienteLog = pacienteLog.getIdPaciente();
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
-            List<Cita> proximasCitas = citaRepository.buscarProximasCitas(idPrueba);
+            List<Cita> proximasCitas = citaRepository.buscarProximasCitas(idPacienteLog);
 
             model.addAttribute("proximasCitas", proximasCitas);
             model.addAttribute("paciente", paciente);
@@ -592,11 +601,13 @@ public class PacienteController {
 
     /* SECCIÓN CONSENTIMIENTOS */
     @GetMapping("/consentimientos")
-    public String consentimientos(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+    public String consentimientos(Model model, HttpSession session) {
+        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        String idPacienteLog = pacienteLog.getIdPaciente();
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
-            List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(idPrueba);
+            List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(idPacienteLog);
 
             model.addAttribute("consentimientos", consentimientos);
             model.addAttribute("paciente", paciente);
@@ -607,15 +618,17 @@ public class PacienteController {
     @PostMapping("/consentimientos/actualizar")
     public String actualizarConsentimientos(@RequestParam Map<String, Boolean> consentimientos,
                                             Model model,
-                                            RedirectAttributes attr) {
+                                            RedirectAttributes attr, HttpSession session) {
 
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        String idPacienteLog = pacienteLog.getIdPaciente();
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         Paciente paciente = optionalPaciente.get();
 
-        pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(idPrueba);
+        pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(idPacienteLog);
         for (String key : consentimientos.keySet()) {
             if (key.length() == 1) {
-                pacientePorConsentimientoRepository.actualizarConsentimientoAPositivo(idPrueba, key);
+                pacientePorConsentimientoRepository.actualizarConsentimientoAPositivo(idPacienteLog, key);
             }
         }
 
