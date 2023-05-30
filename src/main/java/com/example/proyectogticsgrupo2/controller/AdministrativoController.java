@@ -3,7 +3,6 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.TemporalDiasDto;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -29,7 +28,7 @@ public class AdministrativoController {
     final TemporalRepository temporalRepository;
     final AdministrativoRepository administrativoRepository;
 
-    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, HttpSession session, HttpServletRequest request) {
+    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository) {
         this.pacienteRepository = pacienteRepository;
         this.aesRepository = aesRepository;
         this.alergiaRepository = alergiaRepository;
@@ -39,8 +38,7 @@ public class AdministrativoController {
         this.administrativoRepository = administrativoRepository;
     }
     @GetMapping("/administrativo")
-    public String dashboard(Model model, HttpServletRequest request){
-        HttpSession session = request.getSession();
+    public String dashboard(Model model, HttpSession session){
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
@@ -61,8 +59,7 @@ public class AdministrativoController {
     }
 
     @GetMapping("/administrativo/invitar")
-    public String vistaInvitar(HttpServletRequest request, Model model, @ModelAttribute("temporal") Temporal temporal){
-        HttpSession session = request.getSession();
+    public String vistaInvitar(HttpSession session, Model model, @ModelAttribute("temporal") Temporal temporal){
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
@@ -72,14 +69,13 @@ public class AdministrativoController {
     }
 
     @GetMapping("/administrativo/editar")
-    public String vistaEditar(HttpServletRequest request, @RequestParam(name = "id") String id,
+    public String vistaEditar(HttpSession session, @RequestParam(name = "id") String id,
                               Model model){
 
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
         if(optPaciente.isPresent()){
             Paciente paciente = optPaciente.get();
             if(paciente.getAdministrativo()!=null) {
-                HttpSession session = request.getSession();
                 Administrativo admi = (Administrativo) session.getAttribute("administrativo");
                 String idAdmi = admi.getIdAdministrativo();
 
@@ -98,14 +94,13 @@ public class AdministrativoController {
     }
 
     @GetMapping("/administrativo/editar/invitado")
-    public String vistaEditarInvitado(HttpServletRequest request,
+    public String vistaEditarInvitado(HttpSession session,
                                       @RequestParam(name = "id") Integer id,
                                       Model model){
 
         Optional<Temporal> optTemp = temporalRepository.findById(id);
         if(optTemp.isPresent()){
             Temporal temp = optTemp.get();
-            HttpSession session = request.getSession();
             Administrativo admi = (Administrativo) session.getAttribute("administrativo");
             String idAdmi = admi.getIdAdministrativo();
             if(temp.getAdministrativo().getIdAdministrativo().equals(idAdmi)) {
@@ -118,8 +113,7 @@ public class AdministrativoController {
         return "redirect:/administrativo";
     }
     @GetMapping("/administrativo/mensajeria")
-    public String mostrarMensajeria(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession();
+    public String mostrarMensajeria(HttpSession session, Model model){
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
@@ -129,11 +123,10 @@ public class AdministrativoController {
     }
 
     @PostMapping("administrativo/invitar")
-    public String invitarPaciente(HttpServletRequest request, Model model,
+    public String invitarPaciente(HttpSession session, Model model,
                                   @ModelAttribute("temporal") @Valid Temporal temporal,
                                   BindingResult bindingResult,
                                   RedirectAttributes attr){
-        HttpSession session = request.getSession();
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
@@ -179,11 +172,10 @@ public class AdministrativoController {
     }
 
     @PostMapping("/administrativo/guardar/invitado")
-    public String actualizarInvitado(HttpServletRequest request,
+    public String actualizarInvitado(HttpSession session,
                                      Model model,
                                      @ModelAttribute("temporal") @Valid Temporal temporal,
                                      BindingResult bindingResult){
-        HttpSession session = request.getSession();
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
