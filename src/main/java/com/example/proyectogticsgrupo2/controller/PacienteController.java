@@ -479,7 +479,7 @@ public class PacienteController {
     }
 
     /* SECCIÓN CITAS */
-    @GetMapping("citas")
+    @GetMapping("/citas")
     public String verCitas(Model model, HttpSession session) {
         Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
         String idPacienteLog = pacienteLog.getIdPaciente();

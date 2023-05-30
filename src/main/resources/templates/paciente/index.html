@@ -45,7 +45,7 @@
 
             <section id="Sedes">
                 <div class="row align-items-start contenedor mx-0">
-                    <div class="col-md-4" th:each="sede:${sedeList}">
+                    <div class="col-md-4" th:each="sede, iterStat : ${sedeList}" th:if="${iterStat.index} &lt; 3">
                         <a th:href="@{/Paciente/doctores(sede=${sede.idSede}, esp=0, pag=1)}">
                             <figure>
                                 <img class="sedeImg" th:src="@{/Paciente/imageSede(idSede=${sede.idSede})}">
@@ -53,14 +53,10 @@
                                     <h6>CLINICAS</h6>
                                     <h2 class="fw-bold" style="color: darkblue" th:text="${sede.nombre}">San Isidro</h2>
                                     <p th:text="${sede.direccion}">Av. Javier Prado Este 1066, Lima.</p>
-
-                                    <div class="d-flex align-items-center justify-content-end"
-                                         style="margin-right: 30px">
+                                    <div class="d-flex align-items-center justify-content-end" style="margin-right: 30px">
                                         <span>Conoce la sede</span>
-                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
-                                           style="color: darkgray"></i>
+                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill" style="color: darkgray"></i>
                                     </div>
-
                                 </div>
                             </figure>
                         </a>
