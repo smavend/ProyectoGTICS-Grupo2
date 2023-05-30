@@ -4,6 +4,7 @@ import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.HorariosDisponiblesDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -319,10 +320,7 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/cambiarContrasena")
-    public String cambiarContrasena(@RequestParam("id") String idPaciente,
-                                    Model model) {
-        Paciente paciente = pacienteRepository.findById(idPrueba).get();
-        model.addAttribute("paciente", paciente);
+    public String cambiarContrasena() {
         return "paciente/perfilContrasena";
     }
 
@@ -335,6 +333,10 @@ public class PacienteController {
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
         String contrasenaHasheada = passwordEncoder.encode(actual);
         Credenciales credenciales = credencialesRepository.findByContrasena(contrasenaHasheada);
+
+        System.out.println("c1: "+nueva1);
+        System.out.println("c2: "+nueva2);
+        System.out.println("h: "+contrasenaHasheada);
 
         if (credenciales != null && nueva1.equals(nueva2)) {
             credencialesRepository.actualizarContrasena(idPrueba, passwordEncoder.encode(nueva1));
