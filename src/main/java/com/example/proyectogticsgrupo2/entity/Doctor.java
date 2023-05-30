@@ -39,8 +39,8 @@ public class Doctor implements Serializable {
     @JoinColumn(name = "sede_id_sede",nullable = false)
     private Sede sede;
 
-    @Column(name = "duracion_cita_horas")
-    private String duracion_cita_horas;
+    @Column(name = "duracion_cita_minutos")
+    private Integer duracion_cita_minutos;
 
     @Column(name = "pregrado")
     @Size(max = 100, message = "El pregrado no puede tener más de 100 caracteres")
