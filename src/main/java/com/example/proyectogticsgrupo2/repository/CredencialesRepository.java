@@ -18,4 +18,10 @@ public interface CredencialesRepository extends JpaRepository<Credenciales,Strin
     @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`credenciales` (`id_credenciales`, `correo`, `contrasena_hasheada`) VALUES (?1,?2,?3);\n")
     void crearCredenciales(String id, String correo, String password);
 
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE credenciales SET correo = ?2 WHERE (id_credenciales = ?1)")
+    void actualizarCorreo(String idPaciente, String correo);
+
 }

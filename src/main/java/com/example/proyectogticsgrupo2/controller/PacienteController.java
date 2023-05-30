@@ -19,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -45,8 +44,9 @@ public class PacienteController {
     final CitaTemporalRepository citaTemporalRepository;
     final PagoRepository pagoRepository;
     final HorarioRepository horarioRepository;
+    final CredencialesRepository credencialesRepository;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
@@ -59,6 +59,7 @@ public class PacienteController {
         this.citaTemporalRepository = citaTemporalRepository;
         this.pagoRepository = pagoRepository;
         this.horarioRepository = horarioRepository;
+        this.credencialesRepository = credencialesRepository;
     }
 
     /* INICIO */
@@ -170,6 +171,8 @@ public class PacienteController {
         LocalDateTime fin = inicio.plusHours(1);
 
         citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede());
+        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
+
         return "redirect:/Paciente/confirmacion";
     }
 
@@ -190,7 +193,7 @@ public class PacienteController {
 
     @GetMapping("/perfil/editar")
     public String editarPerfil(@ModelAttribute("paciente") Paciente paciente,
-                               @RequestParam(name = "idPaciente") String idPaciente,
+                               @RequestParam(name = "id") String idPaciente,
                                Model model) {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()) {
@@ -215,6 +218,9 @@ public class PacienteController {
                                 RedirectAttributes attr,
                                 Model model) {
 
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(paciente.getIdPaciente());
+        Paciente p = optionalPaciente.get();
+
         String fileName = file.getOriginalFilename();
 
         if (fileName.contains("..") || fileName.contains(" ")) {
@@ -230,8 +236,6 @@ public class PacienteController {
         } else {
             try {
                 if (file.isEmpty()) {
-                    Optional<Paciente> optionalPaciente = pacienteRepository.findById(paciente.getIdPaciente());
-                    Paciente p = optionalPaciente.get();
                     paciente.setFoto(p.getFoto());
                     paciente.setFotoname(p.getFotoname());
                     paciente.setFotocontenttype(p.getFotocontenttype());
@@ -240,7 +244,12 @@ public class PacienteController {
                     paciente.setFotoname(fileName);
                     paciente.setFotocontenttype(file.getContentType());
                 }
+
+                if (!p.getCorreo().equals(paciente.getCorreo())){
+                    credencialesRepository.actualizarCorreo(paciente.getIdPaciente(), paciente.getCorreo());
+                }
                 pacienteRepository.save(paciente);
+
                 attr.addFlashAttribute("msgActualizacion", "Su perfil se ha actualizado correctamente");
                 return "redirect:/Paciente/perfil";
 
@@ -303,6 +312,14 @@ public class PacienteController {
         }
 
         return "redirect:/Paciente/perfil";
+    }
+
+    @GetMapping("/perfil/cambiarContrasena")
+    public String cambiarContrasena(@RequestParam("id") String idPaciente,
+                                    Model model){
+        Paciente paciente = pacienteRepository.findById(idPrueba).get();
+        model.addAttribute("paciente", paciente);
+        return "paciente/cambiarContrasena";
     }
 
     @GetMapping("/imagePaciente")
@@ -442,6 +459,7 @@ public class PacienteController {
             LocalDateTime fin = inicio.plusHours(1);
 
             citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede());
+            pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
 
             return "redirect:/Paciente/confirmacion";
         }

@@ -54,6 +54,9 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`) VALUES (?1, ?2, ?3, ?4, ?5, 0, ?6)")
     void reservarCita(String idPaciente, String idDoctor, LocalDateTime inicio, LocalDateTime fin, int modalidad, int idSede);
 
+    @Query(nativeQuery = true, value = "SELECT LAST_INSERT_ID() FROM cita")
+    int obtenerUltimoId();
+
     @Query(value = "SELECT DATE_FORMAT(c.inicio, '%d/%m/%Y') as fecha , concat(p.nombre,' ',p.apellidos) as nombres, ROUND((sea.precio_cita*seg.doctor),2) as pago_doctor, c.id_cita, p.id_paciente,d.id_doctor, seg.doctor   from cita c inner join sede s on (s.id_sede=c.sede_id_sede) inner join sede_x_especialidad_x_administrativo sea on (s.id_sede=sea.sede_id_sede) inner join paciente p on(p.id_paciente=c.paciente_id_paciente) inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join seguro seg on(seg.id_seguro=p.seguro_id_seguro) where c.doctor_id_doctor=?1 group by id_cita", nativeQuery = true)
     List<ListaRecibosDTO> listarRecibos(String id_doctor);
 

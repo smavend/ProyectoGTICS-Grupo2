@@ -69,5 +69,4 @@ public class Cita {
     @JoinColumn(name = "id_cita_previa")
     private Cita cita_previa;
 
-
 }
