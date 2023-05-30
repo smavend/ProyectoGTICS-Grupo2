@@ -2,6 +2,8 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.google.zxing.WriterException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -16,7 +18,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +37,7 @@ public class HomeController {
     final TemporalRepository temporalRepository;
     final AlergiaRepository alergiaRepository;
 
+
     public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
@@ -44,7 +50,27 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String principal(){
+    public String principal(Model model, HttpServletRequest request) throws UnknownHostException {
+        InetAddress localhost = InetAddress.getLocalHost();
+        String ipAddress = localhost.getHostAddress();
+        String link = ipAddress+":"+request.getLocalPort()+"/signin";
+
+        byte[] image = new byte[0];
+        try {
+
+            // Generate and Return Qr Code in Byte Array
+            image = QRCodeGenerator.getQRCodeImage(link,300,300);
+
+            // Generate and Save Qr Code Image in static/image folder
+            //QRCodeGenerator.generateQRCodeImage(link,250,250,QR_CODE_IMAGE_PATH);
+
+        } catch (WriterException | IOException e) {
+            e.printStackTrace();
+        }
+        // Convert Byte Array into Base64 Encode String
+        String qrcode = Base64.getEncoder().encodeToString(image);
+
+        model.addAttribute("qrcode",qrcode);
         return "general/home";
     }
     @GetMapping("/invitacion")
