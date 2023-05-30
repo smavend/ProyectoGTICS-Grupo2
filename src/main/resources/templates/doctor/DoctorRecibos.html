@@ -85,7 +85,7 @@
 
 
                                 <div class="card-body pb-0" id="RecibosTable">
-                                    <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
+                                    <h5 class="card-title">INGRESOS</h5>
 
                                     <br>
 
@@ -97,6 +97,7 @@
                                                         <th>Fecha</th>
                                                         <th>Paciente</th>
                                                         <th>Concepto</th>
+                                                        <th>Sede</th>
                                                         <th>Monto</th>
                                                         <th>Recibo</th>
                                                     </tr>
@@ -115,6 +116,10 @@
 
                                                         <td style="font-size: 1rem;color: black">
                                                             <h6>Consulta médica</h6>
+                                                        </td>
+
+                                                        <td style="font-size: 1rem" th:text="${recibo.getSede()}">
+
                                                         </td>
 
                                                         <td style="font-size: 1rem"

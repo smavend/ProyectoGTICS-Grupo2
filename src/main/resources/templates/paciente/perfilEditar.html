@@ -40,7 +40,7 @@
                     <div style="margin-bottom: 0" class="card">
                         <div class="card-body">
 
-                            <form th:action="@{/Paciente/perfil/guardar}" method="post" th:object="${session.paciente}"
+                            <form th:action="@{/Paciente/perfil/guardar}" method="post" th:object="${paciente}"
                                   id="formPaciente" enctype="multipart/form-data">
 
                                 <div class="row">
@@ -98,7 +98,7 @@
                                             <option th:each="distrito: ${distritoList}"
                                                     th:value="${distrito.idDistrito}"
                                                     th:text="${distrito.nombre}"
-                                                    th:selected="${session.paciente.distrito.nombre == distrito.nombre}"></option>
+                                                    th:selected="${paciente.distrito.nombre == distrito.nombre}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -112,7 +112,7 @@
                                             <option th:each="seguro: ${seguroList}"
                                                     th:value="${seguro.idSeguro}"
                                                     th:text="${seguro.nombre}"
-                                                    th:selected="${session.paciente.seguro.nombre == seguro.nombre}"></option>
+                                                    th:selected="${paciente.seguro.nombre == seguro.nombre}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -175,7 +175,7 @@
 
                                     <p class="mb-2 mb-lg-0 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
                                        th:inline="text">[[${alergia.nombre}]]
-                                        <a th:href="@{'/Paciente/perfil/borrarAlergia?idPaciente='+${session.paciente.idPaciente}+'&idAlergia='+${alergia.idAlergia}}"
+                                        <a th:href="@{'/Paciente/perfil/borrarAlergia?idPaciente='+${paciente.idPaciente}+'&idAlergia='+${alergia.idAlergia}}"
                                            class="ms-2" style="color: red"><i class="bi bi-x-circle ms-2"></i></a>
                                     </p>
                                 </div>

@@ -44,26 +44,7 @@
         ======================================================== -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
-
     <body>
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title" id="staticBackdropLabel"></div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Loguearse</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- ======= Header ======= -->
         <div th:replace="~{superAdmin/fragments/header.html :: header}"></div>
         <!-- End Header -->
@@ -83,233 +64,53 @@
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
-            <section calss="section dashboard">
+            <section class="section dashboard">
                 aqui ira la seleccion de clinicas para los UIUX
+                <section class="section">
+                    <div class="col-lg-12">
+
+
+                        <div class="card">
+                            <div class="card-body pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">Panel de Sedes - UI/UX</h5>
+                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
+                                </div>
+                                <div class=" flex-column" >
+                                    <table class="table table-striped" id="Sedes_uiux">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Usuario</th>
+                                            <th scope="col">Header</th>
+                                            <th scope="col">SiderBar</th>
+                                            <th scope="col">Background</th>
+                                            <th scope="col">Accion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="listaStyle, info : ${listaStylevistas}">
+                                            <td th:text="${info.index + 1}"></td>
+                                            <td th:text="${listaStyle.getUser()}"></td>
+                                            <td th:text="${listaStyle.getHeader()}"></td>
+                                            <td th:text="${listaStyle.getFooter()}"></td>
+                                            <td th:text="${listaStyle.getBackground()}"></td>
+                                            <td>
+                                                <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/EditarEstilo/{id}(id=${listaStyle.id})}">Cambiar</a>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </section>
 
-            <!--    <section class="section dashboard">-->
 
-            <!--        <section class="section">-->
-            <!--            <div class="col-lg-12">-->
-            <!--                <div class="card">-->
-            <!--                    <div class="card-body" id="AdministrativoTable" style="display:none">-->
-            <!--                        <h5 class="card-title">Tabla de Administrativos</h5>-->
-            <!--                        &lt;!&ndash; Table with stripped rows &ndash;&gt;-->
-            <!--                        <div class="table-responsive">-->
-            <!--                            <table class="table table-striped" id="superadmin_administrativos_table">-->
-            <!--                                <thead>-->
-            <!--                                <tr>-->
-            <!--                                    <th scope="col">#</th>-->
-            <!--                                    <th scope="col">DNI</th>-->
-            <!--                                    <th scope="col">Nombre</th>-->
-            <!--                                    <th scope="col">Apellidos</th>-->
-            <!--                                    <th scope="col">Estado</th>-->
-            <!--                                    <th scope="col">Sede</th>-->
-            <!--                                    <th scope="col">Correo</th>-->
-            <!--                                    <th scope="col">Accion</th>-->
-            <!--                                </tr>-->
-            <!--                                </thead>-->
-            <!--                                <tbody>-->
-            <!--                                <tr th:each="listaAdminstrativo, info : ${listaAdministrativo}">-->
-            <!--                                    <td th:text="${info.index + 1}"></td>-->
-            <!--                                    <td th:text="${listaAdminstrativo.idAdministrativo}"></td>-->
-            <!--                                    <td th:text="${listaAdminstrativo.nombre}"></td>-->
-            <!--                                    <td th:text="${listaAdminstrativo.apellidos}"></td>-->
-            <!--                                    <td th:text="${listaAdminstrativo.estado}"></td>-->
-            <!--                                    <td th:text="${listaAdminstrativo.getSedesAdministrativo().get(0).getSede().nombre}"></td>-->
-            <!--                                    <td th:text="${listaAdminstrativo.correo}"></td>-->
-            <!--                                    <td>-->
-            <!--                                        <button type="button" class="btn btn-primary    " data-bs-toggle="modal"-->
-            <!--                                                data-bs-target="#staticBackdrop">Loguear-->
-            <!--                                        </button>-->
-            <!--                                    </td>-->
-            <!--                                </tr>-->
-            <!--                                </tbody>-->
-            <!--                            </table>-->
-            <!--                        </div>-->
-            <!--                        &lt;!&ndash; End Table with stripped rows &ndash;&gt;-->
-            <!--                        <div id="pagination_administrativos" style="width: 100%; text-align: center"> &lt;!&ndash;display: none;">&ndash;&gt;-->
-            <!--                            <button type="button" class="btn btn-primary" id="prev-btn2"-->
-            <!--                                    style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">-->
-            <!--                                <-->
-            <!--                            </button>-->
-            <!--                            <span id="page-num2">1</span>-->
-            <!--                            <button type="button" class="btn btn-primary " id="next-btn2"-->
-            <!--                                    style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">-->
-            <!--                                >-->
-            <!--                            </button>-->
-            <!--                        </div>-->
-
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--                <div class="card">-->
-            <!--                    <div class="card-body" id="PacientesTable" style="display:none">-->
-            <!--                        <h5 class="card-title">Tabla de Pacientes</h5>-->
-            <!--                        &lt;!&ndash; Table with stripped rows &ndash;&gt;-->
-            <!--                        <div class="table-responsive">-->
-            <!--                            <table class="table table-striped" id="superadmin_Pacientes_table">-->
-            <!--                                <thead>-->
-            <!--                                <tr>-->
-            <!--                                    <th scope="col">#</th>-->
-            <!--                                    <th scope="col">DNI</th>-->
-            <!--                                    <th scope="col">Nombre</th>-->
-            <!--                                    <th scope="col">Apellidos</th>-->
-            <!--                                    <th scope="col">Estado</th>-->
-            <!--                                    <th scope="col">Seguro</th>-->
-            <!--                                    <th scope="col">Administrador a Cargo</th>-->
-            <!--                                    <th scope="col">Telefono</th>-->
-            <!--                                    <th scope="col">Correo</th>-->
-            <!--                                    <th scope="col">Dirección</th>-->
-            <!--                                    <th scope="col">Distrito</th>-->
-            <!--                                    <th scope="col">Sede</th>-->
-            <!--                                    <th scope="col">Accion</th>-->
-            <!--                                </tr>-->
-            <!--                                </thead>-->
-            <!--                                <tbody>-->
-            <!--                                <tr th:each="paciente, info : ${listaPaciente}">-->
-            <!--                                    <td th:text="${info.index + 1}"></td>-->
-            <!--                                    <td th:text="${paciente.idPaciente}"></td>-->
-            <!--                                    <td th:text="${paciente.nombre}"></td>-->
-            <!--                                    <td th:text="${paciente.apellidos}"></td>-->
-            <!--                                    <td th:text="${paciente.estado}"></td>-->
-            <!--                                    <td th:text="${paciente.seguro.nombre}"></td>-->
-            <!--                                    <td th:text="${paciente.administrativo.nombre}"></td>-->
-            <!--                                    <td th:text="${paciente.telefono}"></td>-->
-            <!--                                    <td th:text="${paciente.correo}"></td>-->
-            <!--                                    <td th:text="${paciente.direccion}"></td>-->
-            <!--                                    <td th:text="${paciente.distrito.nombre_distrito}"></td>-->
-            <!--                                    <td th:text="${paciente.obtenerSede()}"></td>-->
-            <!--                                    <td>-->
-            <!--                                        <button type="button" class="btn btn-primary    " data-bs-toggle="modal"-->
-            <!--                                                data-bs-target="#staticBackdrop">Loguear-->
-            <!--                                        </button>-->
-            <!--                                    </td>-->
-            <!--                                </tr>-->
-            <!--                                </tbody>-->
-            <!--                            </table>-->
-            <!--                        </div>-->
-            <!--                        &lt;!&ndash; End Table with stripped rows &ndash;&gt;-->
-            <!--                        <div id="pagination_Pacientes" style="width: 100%; text-align: center"> &lt;!&ndash;display: none;">&ndash;&gt;-->
-            <!--                            <button type="button" class="btn btn-primary" id="prev-btn4"-->
-            <!--                                    style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">-->
-            <!--                                <-->
-            <!--                            </button>-->
-            <!--                            <span id="page-num4">1</span>-->
-            <!--                            <button type="button" class="btn btn-primary " id="next-btn4"-->
-            <!--                                    style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">-->
-            <!--                                >-->
-            <!--                            </button>-->
-            <!--                        </div>-->
-
-            <!--                    </div>-->
-            <!--                </div>-->
-
-            <!--                <div class="card">-->
-            <!--                    <div class="card-body" id="AdministradorTable" style="display:none">-->
-            <!--                        <h5 class="card-title">Tabla de Administradores</h5>-->
-            <!--                        &lt;!&ndash; Table with stripped rows &ndash;&gt;-->
-            <!--                        <div class="table-responsive">-->
-            <!--                            <table class="table table-striped" id="superadmin_administrador_table">-->
-            <!--                                <thead>-->
-            <!--                                <tr>-->
-            <!--                                    <th scope="col">#</th>-->
-            <!--                                    <th scope="col">DNI</th>-->
-            <!--                                    <th scope="col">Nombre</th>-->
-            <!--                                    <th scope="col">Apellidos</th>-->
-            <!--                                    <th scope="col">Estado</th>-->
-            <!--                                    <th scope="col">Sede</th>-->
-            <!--                                    <th scope="col">Correo</th>-->
-            <!--                                    <th scope="col">Accion</th>-->
-            <!--                                </tr>-->
-            <!--                                </thead>-->
-            <!--                                <tbody>-->
-            <!--                                <tr th:each="listaAdministadores, info : ${listaAdministradores}">-->
-            <!--                                    <td th:text="${info.index + 1}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.idAdmin}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.nombre}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.apellidos}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.estado}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.correo}"></td>-->
-            <!--                                    <td>-->
-            <!--                                        <button type="button" class="btn btn-primary    " data-bs-toggle="modal"-->
-            <!--                                                data-bs-target="#staticBackdrop">Loguear-->
-            <!--                                        </button>-->
-            <!--                                    </td>-->
-            <!--                                </tr>-->
-            <!--                                </tbody>-->
-            <!--                            </table>-->
-            <!--                        </div>-->
-            <!--                        &lt;!&ndash; End Table with stripped rows &ndash;&gt;-->
-            <!--                        <div id="pagination_Administrador" style="width: 100%; text-align: center"> &lt;!&ndash;display: none;">&ndash;&gt;-->
-            <!--                            <button type="button" class="btn btn-primary" id="prev-btn1"-->
-            <!--                                    style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">-->
-            <!--                                <-->
-            <!--                            </button>-->
-            <!--                            <span id="page-num1">1</span>-->
-            <!--                            <button type="button" class="btn btn-primary " id="next-btn1"-->
-            <!--                                    style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">-->
-            <!--                                >-->
-            <!--                            </button>-->
-            <!--                        </div>-->
-
-            <!--                    </div>-->
-            <!--                </div>-->
-
-            <!--                <div class="card">-->
-            <!--                    <div class="card-body" id="DoctoresTable" style="display:none">-->
-            <!--                        <h5 class="card-title">Tabla de Doctores</h5>-->
-            <!--                        &lt;!&ndash; Table with stripped rows &ndash;&gt;-->
-            <!--                        <div class="table-responsive">-->
-            <!--                            <table class="table table-striped" id="superadmin_Doctores_table">-->
-            <!--                                <thead>-->
-            <!--                                <tr>-->
-            <!--                                    <th scope="col">#</th>-->
-            <!--                                    <th scope="col">DNI</th>-->
-            <!--                                    <th scope="col">Nombre</th>-->
-            <!--                                    <th scope="col">Apellidos</th>-->
-            <!--                                    <th scope="col">Estado</th>-->
-            <!--                                    <th scope="col">Especialidad</th>-->
-            <!--                                    <th scope="col">Sede</th>-->
-            <!--                                    <th scope="col">Correo</th>-->
-            <!--                                    <th scope="col">Accion</th>-->
-            <!--                                </tr>-->
-            <!--                                </thead>-->
-            <!--                                <tbody>-->
-            <!--                                <tr th:each="listaAdministadores, info : ${listaAdministradores}">-->
-            <!--                                    <td th:text="${info.index + 1}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.nombre}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.apellidos}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.estado}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.sede_id.nombre}"></td>-->
-            <!--                                    <td th:text="${listaAdministadores.correo}"></td>-->
-            <!--                                    <td>-->
-            <!--                                        <button type="button" class="btn btn-primary    " data-bs-toggle="modal"-->
-            <!--                                                data-bs-target="#staticBackdrop">Loguear-->
-            <!--                                        </button>-->
-            <!--                                    </td>-->
-            <!--                                </tr>-->
-            <!--                                </tbody>-->
-            <!--                            </table>-->
-            <!--                        </div>-->
-            <!--                        &lt;!&ndash; End Table with stripped rows &ndash;&gt;-->
-            <!--                        <div id="pagination_Doctores" style="width: 100%; text-align: center"> &lt;!&ndash;display: none;">&ndash;&gt;-->
-            <!--                            <button type="button" class="btn btn-primary" id="prev-btn3"-->
-            <!--                                    style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">-->
-            <!--                                <-->
-            <!--                            </button>-->
-            <!--                            <span id="page-num3">1</span>-->
-            <!--                            <button type="button" class="btn btn-primary " id="next-btn3"-->
-            <!--                                    style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">-->
-            <!--                                >-->
-            <!--                            </button>-->
-            <!--                        </div>-->
-
-            <!--                    </div>-->
-            <!--                </div>-->
-
-            <!--            </div>-->
-            <!--        </section>-->
-            <!--    </section>-->
 
         </main><!-- End #main -->
 
