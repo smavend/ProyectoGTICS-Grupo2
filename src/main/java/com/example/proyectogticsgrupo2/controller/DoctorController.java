@@ -58,10 +58,9 @@ public class DoctorController {
     }
 
     @GetMapping(value={"/dashboard","/",""})
-    public String dashboard(Model model, HttpServletRequest request) {
+    public String dashboard(Model model, HttpSession session) {
 
-        HttpSession httpSession=request.getSession();
-        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+        Doctor doctor_session =(Doctor) session.getAttribute("doctor");
 
         List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
         System.out.println("SI ENTRA");

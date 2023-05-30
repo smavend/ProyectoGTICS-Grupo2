@@ -19,7 +19,14 @@ import java.util.Optional;
 
 @Repository
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
-    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos,c.modalidad,c.inicio,c.fin,c.estado FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor=?1 and c.estado <> 4 order by c.id_cita ASC",
+    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado \n" +
+            "FROM cita c \n" +
+            "INNER JOIN doctor d ON d.id_doctor = c.doctor_id_doctor \n" +
+            "INNER JOIN paciente p ON p.id_paciente = c.paciente_id_paciente \n" +
+            "WHERE c.doctor_id_doctor = ?1" +
+            "  AND c.estado <> 4 \n" +
+            "  AND c.sede_id_sede = d.sede_id_sede \n" +
+            "ORDER BY c.id_cita ASC\n",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorProxCitas(String id);
 
