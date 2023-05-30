@@ -223,6 +223,7 @@ public class AdministradorController {
                 }
             }
 
+
             doctor.setEstado(1);
             doctorRepository.save(doctor);
 

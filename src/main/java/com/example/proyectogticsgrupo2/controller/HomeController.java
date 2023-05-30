@@ -167,6 +167,8 @@ public class HomeController {
     public String confirmacionRegistro(HttpSession session){
         String id = (String) session.getAttribute("registro");
         if(id!=null){
+            session.removeAttribute("registro");
+            session.invalidate();
             return "general/confirmacionregistro";
         }else {
             return "redirect:/";
