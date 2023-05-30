@@ -21,10 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
             sedeContainer.style.display = "flex";
             especialidadContainer.style.display = "none";
         } else if (selectUsuario.value === "administrativo") {
+            selectEspecialidad.selectedIndex = "0";
             sedeContainer.style.display = "flex";
             especialidadContainer.style.display = "flex";
         } else {
-            selectEspecialidad.selectedIndex = "0";
             sedeContainer.style.display = "none";
             especialidadContainer.style.display = "none";
 
@@ -32,13 +32,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
     function resetValues() {
-
+        console.log(selectUsuario.value);
         if (selectUsuario.value === "administrador") {
             especialidadContainer.style.display = "none";
         } else if (selectUsuario.value === "administrativo") {
             especialidadContainer.style.display = "flex";
         } else {
-            sedeContainer.style.display = "none";
+            sedeContainer.style.display = "none"
+            console.log("esta en flex el sedecontainer")
+            console.log(selectSede.selectedIndex)
+
         }
         // Ocultar campos de nombre de la nueva clínica y sede
     }

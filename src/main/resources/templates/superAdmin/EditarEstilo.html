@@ -184,6 +184,56 @@
 <script th:src="@{/assets/js/darkmode.js}"></script>
 
 
+<script>
+    var headerColor = "[[${headerColor}]]";
+    console.log(headerColor);
+    localStorage.setItem('headerColor', headerColor);
+    var darkmode = localStorage.getItem('dark-mode');
+    console.log(darkmode);
+</script>
+<script>
+    window.addEventListener('load', (event) => {
+        var darkmode = localStorage.getItem('dark-mode');
+        var headerColor = localStorage.getItem('headerColor');
+
+        if (darkmode === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('dark-mode-button').checked = true;
+            updateHeaderColor("#363537", true); // Llamar directamente con color en modo oscuro
+        } else {
+            document.body.classList.add('light-mode');
+            updateHeaderColor(headerColor, false); // Llamar con color en modo claro
+        }
+
+        console.log(headerColor);
+    });
+
+    document.getElementById('dark-mode-button').addEventListener('change', function () {
+        if (this.checked) {
+            localStorage.setItem('dark-mode', 'true');
+            document.body.classList.remove('light-mode');
+            document.body.classList.add('dark-mode');
+            updateHeaderColor("#363537", true);
+        } else {
+            localStorage.setItem('dark-mode', 'false');
+            document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+            var headerColor = localStorage.getItem('headerColor');
+            updateHeaderColor(headerColor, false);
+        }
+    });
+
+    function updateHeaderColor(color, isDarkMode) {
+        if (isDarkMode) {
+            $('#header').css('background-color', '#363537');
+            console.log('saludo');
+        } else {
+            $('#header').css('background-color', color);
+            console.log('despedida');
+        }
+    }
+</script>
+
 </body>
 
 </html>
