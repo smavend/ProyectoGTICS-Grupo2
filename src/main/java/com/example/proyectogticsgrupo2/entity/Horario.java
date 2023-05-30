@@ -14,8 +14,9 @@ import java.time.LocalTime;
 public class Horario implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_horario", nullable = false)
-    private int id_horario;
+    private Integer id_horario;
     private LocalTime comida_inicio;
     private LocalTime disponibilidad_inicio;
     private LocalTime disponibilidad_fin;

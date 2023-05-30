@@ -129,40 +129,6 @@ public class DoctorController {
 
     }
 
-    @PostMapping("/buscarRecibo")
-    public String buscarRecibo(@RequestParam("searchField") String searchField,
-                               Model model, HttpServletRequest request) {
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
-
-        try {
-            float floatSearchField = Float.parseFloat(searchField);
-            System.out.println(Float.valueOf(floatSearchField).intValue());
-            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosPago(doctor_session.getId_doctor(), Float.toString(floatSearchField));
-
-            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-            Doctor doctor = doctorOptional.get();
-
-            model.addAttribute("doctor", doctor);
-            model.addAttribute("listaRecibos", optionalCita);
-
-            // La variable es de tipo float
-        } catch (NumberFormatException e) {
-            // La variable no es de tipo float
-            List<ListaRecibosDTO> optionalCita = citaRepository.buscarRecibosNombre(doctor_session.getId_doctor(), searchField);
-
-            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-            Doctor doctor = doctorOptional.get();
-
-            model.addAttribute("doctor", doctor);
-            model.addAttribute("listaRecibos", optionalCita);
-        }
-
-
-        return "doctor/DoctorRecibos";
-    }
-
-
     @GetMapping("/calendario")
     public String calendario(Model model, HttpServletRequest request) {
         HttpSession httpSession = request.getSession();
@@ -184,12 +150,15 @@ public class DoctorController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        horario.setId_horario(Integer.parseInt(request.getParameter("id_horario")));
         horario.setDisponibilidad_inicio(LocalTime.parse(request.getParameter("disponibilidad_inicio"), formatter));
         horario.setDisponibilidad_fin(LocalTime.parse(request.getParameter("disponibilidad_fin"), formatter));
         horario.setComida_inicio(LocalTime.parse(request.getParameter("comida_inicio"), formatter));
+
+        // Guardar el objeto Horario antes de asignarlo al Doctor
+        Horario horarioGuardado = horarioRepository.save(horario);
+
         doctor_session.setDuracion_cita_minutos(Integer.parseInt(request.getParameter("duracion_cita_minutos")));
-        doctor_session.setHorario(horario);
+        doctor_session.setHorario(horarioGuardado);
 
         doctorRepository.save(doctor_session);
 
@@ -307,82 +276,6 @@ public class DoctorController {
             return "redirect:/doctor/dashboard";
         }
     }
-
-
-    @PostMapping("/BuscarProxCita")
-    public String buscarCita(@RequestParam("searchField") String searchField,
-                             Model model, HttpServletRequest request) {
-
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
-
-        List<ListaBuscadorDoctor> optionalCita = citaRepository.buscadorProximasCitas(doctor_session.getId_doctor(), searchField);
-        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
-
-        ArrayList<String> listaHorarios = new ArrayList<>();
-
-        // Transformar LocalDateTime a LocalDate
-        optionalCita.forEach(cita -> {
-            LocalDateTime fechaHora = cita.getInicio(); // Obtener LocalDateTime
-            String hora1 = fechaHora.toLocalTime().toString();
-
-            LocalDateTime fechaHora2 = cita.getFin();
-            String hora2 = fechaHora2.toLocalTime().toString();
-            // Transformar a LocalDate
-            // Actualizar objeto ListaBuscadorDoctor con la fecha
-
-            String horaFinal = hora1 + " - " + hora2;
-            listaHorarios.add(horaFinal);
-        });
-
-        Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-        Doctor doctor = doctorOptional.get();
-
-        model.addAttribute("doctor", doctor);
-
-        model.addAttribute("listaHorarios", listaHorarios);
-        model.addAttribute("listaCitas", optionalCita);//CAMBIAR POR ID SESION
-        model.addAttribute("listaPacientes", optionalCita2);//CAMBIAR POR ID SESION
-
-        return "doctor/DoctorDashboard";
-    }
-
-    /*
-    @PostMapping("/BuscarPaciente")
-    public String buscarPaciente(@RequestParam("searchField") String searchField,
-                             Model model) {
-
-        List<ListaBuscadorDoctor> optionalCita = citaRepository.buscadorPaciente("10304011",searchField);
-        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorProxCitas("10304011"); //CAMBIAR POR ID SESION
-
-        ArrayList<String> listaHorarios= new ArrayList<>();
-
-        // Transformar LocalDateTime a LocalDate
-        optionalCita2.forEach(cita -> {
-            LocalDateTime fechaHora = cita.getInicio(); // Obtener LocalDateTime
-            String hora1 = fechaHora.toLocalTime().toString();
-
-            LocalDateTime fechaHora2 = cita.getFin();
-            String hora2 = fechaHora2.toLocalTime().toString();
-            // Transformar a LocalDate
-            // Actualizar objeto ListaBuscadorDoctor con la fecha
-
-            String horaFinal=hora1+" - "+hora2;
-            listaHorarios.add(horaFinal);
-        });
-
-        Optional<Doctor> doctorOptional=doctorRepository.findById("10304011");
-        Doctor doctor= doctorOptional.get();
-
-        model.addAttribute("doctor", doctor);
-
-        model.addAttribute("listaHorarios", listaHorarios);
-        model.addAttribute("listaCitas", optionalCita2);//CAMBIAR POR ID SESION
-        model.addAttribute("listaPacientes", optionalCita);//CAMBIAR POR ID SESION
-
-        return "doctor/DoctorDashboard";
-    }
-    */
     @GetMapping("/historialClinico")
     public String hClinico(Model model, @RequestParam("id") String id, HttpServletRequest request) {
         HttpSession httpSession = request.getSession();
