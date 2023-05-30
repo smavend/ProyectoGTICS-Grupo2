@@ -1986,3 +1986,7 @@ botonTipo{
     box-shadow: none; 
     cursor: pointer; 
 }
+
+.dataTables_wrapper .dataTables_paginate {
+    text-align: center;
+}
