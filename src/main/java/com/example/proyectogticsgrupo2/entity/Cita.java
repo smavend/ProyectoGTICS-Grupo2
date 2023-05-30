@@ -69,4 +69,7 @@ public class Cita {
     @JoinColumn(name = "id_cita_previa")
     private Cita cita_previa;
 
+    @Column(name = "seguro_id_seguro")
+    private String idSeguro;
+
 }

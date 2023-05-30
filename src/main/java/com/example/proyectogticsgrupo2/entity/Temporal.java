@@ -1,10 +1,7 @@
 package com.example.proyectogticsgrupo2.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Controller;
@@ -23,22 +20,20 @@ public class Temporal {
     private int id_temporal;
 
     @Column(nullable = false)
-    @NotBlank(message = "Debe ingresar el DNI")
-    @Digits(integer = 8, fraction = 0, message = "El DNI debe ser un número")
-    @Size(max=8,message = "El DNI debe tener solo 8 dígitos")
+    @Size(min = 8, max = 8, message = "Debe ingresar un número de 8 dígitos")
+    @Digits(integer = 8, fraction = 0)
     private String dni;
 
     @Column(nullable = false)
-    @NotBlank(message = "Debe ingresar un nombre")
+    @Size(min = 2,max = 45, message = "Debe ingresar un nombre entre 2 y 45 caracteres")
     private String nombre;
 
     @Column(nullable = false)
-    @NotBlank(message = "Debe ingresar los apellidos")
+    @Size(min = 2, max = 45,message = "Debe ingresar los apellidos entre 2 y 45 caracteres")
     private String apellidos;
 
     @Column(nullable = false)
-    @NotBlank(message = "Debe ingresar un correo")
-    @Email(message = "debe ingresar un correo válido")
+    @Email(message = "Debe ingresar un correo válido")
     private String correo;
 
     private String telefono;

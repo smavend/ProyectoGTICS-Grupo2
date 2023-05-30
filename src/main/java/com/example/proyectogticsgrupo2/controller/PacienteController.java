@@ -151,14 +151,16 @@ public class PacienteController {
     }
 
     @PostMapping("/reservar3")
-    public String reservar(@ModelAttribute("citaTempora") CitaTemporal citaTemporal) {
+    public String reservar(@ModelAttribute("citaTempora") CitaTemporal citaTemporal, HttpSession session) {
+
+        Paciente paciente = (Paciente) session.getAttribute("paciente");
 
         String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
         LocalDateTime fin = inicio.plusHours(1);
 
-        citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede());
+        citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
 
         return "redirect:/Paciente/confirmacion";
@@ -184,22 +186,24 @@ public class PacienteController {
     @GetMapping("/perfil/editar")
     public String editarPerfil(@ModelAttribute("paciente") Paciente paciente,
                                @RequestParam(name = "id") String idPaciente,
-                               Model model, HttpSession session) {
-        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        String idPacienteLog = pacienteLog.getIdPaciente();
+                               Model model) {
+
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
-        if (optionalPaciente.isPresent()) {
+
+        if (optionalPaciente.isPresent()){
             paciente = optionalPaciente.get();
             List<Seguro> seguroList = seguroRepository.findAll();
-            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPacienteLog);
+            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPaciente);
             List<Distrito> distritoList = distritoRepository.findAll();
 
             model.addAttribute("seguroList", seguroList);
             model.addAttribute("alergiasPaciente", alergiasPaciente);
-            model.addAttribute("paciente", paciente);
             model.addAttribute("distritoList", distritoList);
+            model.addAttribute("paciente", paciente);
+
             return "paciente/perfilEditar";
         }
+
         return "redirect:/Paciente/perfil";
     }
 
@@ -211,7 +215,7 @@ public class PacienteController {
                                 Model model,
                                 HttpSession session) {
 
-        Paciente p = (Paciente) session.getAttribute("paciente");
+        Paciente p = pacienteRepository.findById(paciente.getIdPaciente()).get();
         String fileName = file.getOriginalFilename();
 
         if (fileName.contains("..") || fileName.contains(" ")) {
@@ -444,18 +448,20 @@ public class PacienteController {
     }
 
     @PostMapping("/reservarDoctor2")
-    public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult) {
+    public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult, HttpSession session) {
 
         if (bindingResult.hasErrors()) {
             return "paciente/reservarDoctor1";
         } else {
+
+            Paciente paciente = (Paciente) session.getAttribute("paciente");
 
             String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
             LocalDateTime fin = inicio.plusHours(1);
 
-            citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede());
+            citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
             pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
 
             return "redirect:/Paciente/confirmacion";

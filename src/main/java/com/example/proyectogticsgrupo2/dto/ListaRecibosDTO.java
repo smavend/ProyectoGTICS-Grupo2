@@ -10,4 +10,5 @@ public interface ListaRecibosDTO {
     String getId_paciente();
     String getId_doctor();
     float getSeguro_doctor();
+    String getSede();
 }

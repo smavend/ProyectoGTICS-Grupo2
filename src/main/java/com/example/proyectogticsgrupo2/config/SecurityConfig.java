@@ -70,7 +70,6 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .loginProcessingUrl("/login/credenciales")
                 .successHandler((request, response, authentication) -> {
-
                     DefaultSavedRequest defaultSavedRequest =
                             (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 
@@ -100,6 +99,7 @@ public class SecurityConfig {
                             }
                             case "administrativo" -> {
                                 session.setAttribute("administrativo", administrativoRepository.findByCorreo(authentication.getName()));
+
                                 response.sendRedirect("/administrativo");
                             }
                             case "superadmin" -> {

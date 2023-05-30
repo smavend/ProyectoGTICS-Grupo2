@@ -67,6 +67,7 @@
                 <form method="post" th:action="@{/Paciente/reservar1}" th:object="${citaTemporal}">
 
                     <input type="hidden" name="idPaciente" th:value="${session.paciente.idPaciente}">
+                    <input type="hidden" name="idSeguro">
                     <input type="hidden" name="idDoctor" value="0">
 
                     <div class="row" style="margin-top: 20px;margin-left: 20px">
