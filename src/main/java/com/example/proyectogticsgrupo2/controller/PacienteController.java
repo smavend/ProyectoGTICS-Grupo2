@@ -403,7 +403,6 @@ public class PacienteController {
         model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
         model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
 
-
         return "paciente/doctores";
 
     }

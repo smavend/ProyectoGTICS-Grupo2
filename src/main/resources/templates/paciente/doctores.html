@@ -68,8 +68,8 @@
                                 <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
                             </div>
                             <div class="seccionDisponibilidad">
-                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#temporals.dayOfWeekName(dia1)}+' '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+'  -  '+${doctor.horario.disponibilidad_fin.substring(0,5)}]]</div>
-                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#temporals.dayOfWeekName(dia2)}+' '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+'  -  '+${doctor.horario.disponibilidad_fin.substring(0,5)}]]</div>
+                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#temporals.dayOfWeekName(dia1)}+': '+${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+'  -  '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}]]</div>
+                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#temporals.dayOfWeekName(dia2)}+': '+${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+'  -  '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}]]</div>
                             </div>
                             <div class="d-grid">
                                 <a th:href="@{/Paciente/perfilDoctor(doc=${doctor.id_doctor})}" class="botonVerMasDoctor">Ver más</a>
