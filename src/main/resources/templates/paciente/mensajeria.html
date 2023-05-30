@@ -24,7 +24,7 @@
 <body>
 
 <!-- ======= Header ======= -->
-<div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
+<div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
 <!-- End Header -->
 
 <!-- ======= Sidebar ======= -->
@@ -154,7 +154,7 @@
             <img th:src="@{/assets/img/profile-img.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
             <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
               <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                <p class="mb-1 fw-bold" th:text="${paciente.getNombreYApellido()}">Alexandra Manrique</p>
+                <p class="mb-1 fw-bold" th:text="${session.paciente.getNombreYApellido()}">Alexandra Manrique</p>
                 <small class=" ">
                   El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
                 </small>
@@ -184,7 +184,7 @@
             <img th:src="@{/assets/img/profile-img.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
             <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
               <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                <p class="mb-1 fw-bold" th:text="${paciente.getNombreYApellido()}">Alexandra Manrique</p>
+                <p class="mb-1 fw-bold" th:text="${session.paciente.getNombreYApellido()}">Alexandra Manrique</p>
                 <small class=" ">
                   El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
                 </small>

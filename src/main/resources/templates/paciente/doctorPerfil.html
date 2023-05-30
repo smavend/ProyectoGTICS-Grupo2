@@ -24,7 +24,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -65,6 +65,20 @@
                 </div>
 
                 <!-- Reservar Cita -->
+                <form method="post" th:action="@{/Paciente/reservarDoctor}" id="formDia1">
+                    <input type="hidden" name="idDoctor" th:value="${doctor.id_doctor}">
+                    <input type="hidden" name="idSede" th:value="${doctor.sede.idSede}">
+                    <input type="hidden" name="idEspecialidad" th:value="${doctor.especialidad.idEspecialidad}">
+                    <input type="hidden" name="hora" th:value="${doctor.horario.disponibilidad_inicio}">
+                </form>
+
+                <form method="post" th:action="@{/Paciente/reservarDoctor}" id="formDia2">
+                    <input type="hidden" name="idDoctor" th:value="${doctor.id_doctor}">
+                    <input type="hidden" name="idSede" th:value="${doctor.sede.idSede}">
+                    <input type="hidden" name="idEspecialidad" th:value="${doctor.especialidad.idEspecialidad}">
+                    <input type="hidden" name="hora" th:value="${doctor.horario.disponibilidad_inicio}">
+                </form>
+
                 <h3 style="text-align: center; font-weight: 600;">Disponibilidad</h3>
                 <table class="table tablaDisponibilidad">
                     <thead>
@@ -76,18 +90,18 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>MARTES</td>
-                            <td th:text="${doctor.horario.disponibilidad_inicio.substring(0,5)}+' - '+${doctor.horario.disponibilidad_fin.substring(0,5)}">13:00 - 18:00</td>
+                            <td th:text="${#temporals.dayOfWeekName(dia1)}">MARTES</td>
+                            <td th:text="${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+' - '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}">13:00 - 18:00</td>
                             <td>
-                                <a class="botonReservarCitaHorario" th:href="@{/Paciente/reservarDoctor2(idDoctor=${doctor.id_doctor})}">Reservar en este
-                                    horario</a>
+                                <button type="submit" form="formDia1" class="botonAceptar">Reservar en este
+                                    horario</button>
                             </td>
                         </tr>
                         <tr>
-                            <td>JUEVES</td>
-                            <td th:text="${doctor.horario.disponibilidad_inicio.substring(0,5)}+' - '+${doctor.horario.disponibilidad_fin.substring(0,5)}">08:00 - 12:00</td>
+                            <td th:text="${#temporals.dayOfWeekName(dia2)}">JUEVES</td>
+                            <td th:text="${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+' - '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}">08:00 - 12:00</td>
                             <td>
-                                <a class="botonReservarCitaHorario" href="#">Reservar en este horario</a>
+                                <button type="submit" form="formDia2" class="botonAceptar">Reservar en este horario</button>
                             </td>
                         </tr>
                     </tbody>

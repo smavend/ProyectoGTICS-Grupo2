@@ -6,6 +6,23 @@
             .mi-div:hover {
                 background-color: #f2f2f2;
             }
+
+            .animated-div {
+                display: none;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .animated-div.show {
+                display: block;
+                opacity: 1;
+            }
+            #miDiv {
+                height: 0;
+                overflow: hidden;
+                transition: height 0.3s;
+            }
+
         </style>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -61,6 +78,36 @@
                 <div>
                     <div th:if="${doctor.duracion_cita_minutos != null and doctor.horario != null}"
                          class="row bg-white p-3">
+
+                        <div style="margin-left: 3%" class="col-6">
+                            <button style="width: auto" onclick="toggleDiv()" class="btn btn-light"><i
+                                    class="bi bi-caret-down-fill"></i>Modificar disponibilidad de horario
+                            </button>
+                            <div id="miDiv" class="animated-div card top-selling container">
+                                <form method="post" th:action="@{'/doctor/guardarHorario'}"  class="mt-2">
+
+                                    <h5 class="card-title">Establecer inicio de disponibilidad:</h5>
+                                    <div class="mb-3">
+                                        <input th:value="${doctor.horario.disponibilidad_inicio}" name="disponibilidad_inicio" type="time" class="form-control">
+                                    </div>
+                                    <h5 class="card-title">Establecer fin de disponibilidad:</h5>
+                                    <div class="mb-3">
+                                        <input th:value="${doctor.horario.disponibilidad_fin}" name="disponibilidad_fin" type="time" class="form-control">
+                                    </div>
+                                    <h5 class="card-title">Establecer horario de comida:</h5>
+                                    <div class="mb-3">
+                                        <input th:value="${doctor.horario.comida_inicio}" name="comida_inicio" type="time" class="form-control">
+                                    </div>
+                                    <h5 class="card-title">Establecer duración de citas en minutos:</h5>
+                                    <div class="mb-3">
+                                        <input th:value="${doctor.duracion_cita_minutos}" name="duracion_cita_minutos" type="number" class="form-control">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+
+                                </form>
+                            </div>
+                        </div>
                         <script>
 
                             document.addEventListener('DOMContentLoaded', function () {
@@ -159,6 +206,7 @@
                         </script>
                         <div id='calendar'></div>
 
+
                     </div>
 
 
@@ -190,11 +238,10 @@
                                         <div class="mb-3">
                                             <input name="comida_inicio" type="time" class="form-control">
                                         </div>
-                                        <h5 class="card-title">Establecer duración de citas:</h5>
+                                        <h5 class="card-title">Establecer duración de citas en minutos:</h5>
                                         <div class="mb-3">
                                             <input name="duracion_cita_minutos" type="number" class="form-control">
                                         </div>
-
 
 
                                         <a th:href="@{'/doctor/calendario'}" class="btn btn-danger">Cancelar</a>
@@ -265,6 +312,18 @@
         <script th:src="@{/assets/js/index.js}"></script>
         <script th:src="@{/assets/js/datatables.js}"></script>
         <script th:src="@{/assets/js/moment.js}"></script>
+        <script>
+            function toggleDiv() {
+                var div = document.getElementById("miDiv");
+                div.classList.toggle("show");
+
+                if (!div.classList.contains("show")) {
+                    div.style.height = "0";
+                } else {
+                    div.style.height = "auto";
+                }
+            }
+        </script>
 
     </body>
 

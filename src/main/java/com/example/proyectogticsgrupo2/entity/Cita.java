@@ -2,14 +2,10 @@ package com.example.proyectogticsgrupo2.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -73,5 +69,7 @@ public class Cita {
     @JoinColumn(name = "id_cita_previa")
     private Cita cita_previa;
 
+    @Column(name = "seguro_id_seguro")
+    private String idSeguro;
 
 }

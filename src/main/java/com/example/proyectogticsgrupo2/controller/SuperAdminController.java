@@ -186,6 +186,16 @@ public class SuperAdminController {
             System.out.println("La lista de Stylevistas contiene elementos. Primer elemento: " + listaStylevistas.get(0));
         }
         model.addAttribute("listaStylevistas", listaStylevistas);
+
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+            model.addAttribute("headerColor", styleActual   .getHeader());
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
         return "superAdmin/Gestionar_UIUX";
     }
 
@@ -211,6 +221,16 @@ public class SuperAdminController {
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Stylevistas stylevistas = stylevistasRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid style ID:" + id));
         model.addAttribute("stylevistas", stylevistas);
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+            model.addAttribute("headerColor", styleActual   .getHeader());
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
+
         return "superAdmin/EditarEstilo";
     }
 
@@ -230,6 +250,15 @@ public class SuperAdminController {
         List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
         model.addAttribute("listaSedes", listaSedes);
         model.addAttribute("listaEspecialidades", listaEspecialidades);
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+            model.addAttribute("headerColor", styleActual   .getHeader());
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
         return "superAdmin/Crear_Usuario";
     }
 
@@ -261,6 +290,17 @@ public class SuperAdminController {
         String correoUser = userform.getCorreoUser();
         String especialidad = userform.getEspecialidad();
 
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+            model.addAttribute("headerColor", styleActual   .getHeader());
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
+
+
 
         // Valida que los nombres solo contengan caracteres alfabéticos
         if (nombres != null && !nombres.trim().isEmpty() && !nombres.matches("^[a-zA-Z]+(\\s+[a-zA-Z]+)*$")) {
@@ -280,19 +320,34 @@ public class SuperAdminController {
         else if (dni != null && !dni.trim().isEmpty() && !dni.matches("\\d+")) {
             result.rejectValue("dni", "", "DNI debe contener sólo dígitos.");
         }
+        System.out.println("el valor de sede a buscar es : "+sede);
 
-        Sede existingSede = sedeRepository.buscarPorNombreDeSede(sede);
-        AdministrativoPorEspecialidadPorSede existingSede2 = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeId(String.valueOf(existingSede.getIdSede()));
-        if (existingSede2 != null && selectUsuario.equals("administrador")) {
-            result.rejectValue("sede", "", "Ya existe un administrador para esta sede, cambie.");
+        List<Administrador> listaAdministrador2 = administradorRepository.findAll();
+        boolean sedeIsNull = false;
+        for (Administrador administrador : listaAdministrador2) {
+            int existingSede2 = administrador.getSede().getIdSede();
+            Sede existingSede = sedeRepository.buscarPorNombreDeSede(sede);
+            if(existingSede == null){
+                sedeIsNull = true;
+                break;
+            } else {
+                if((existingSede.getIdSede() == existingSede2) && selectUsuario.equals("administrador")){
+                    result.rejectValue("sede", "", "Ya existe administrador para esta sede.");
+                    break;
+                }
+            }
         }
-
-
+        List<Credenciales> listaCredenciales = credencialesRepository.findAll();
+        for (Credenciales credencial : listaCredenciales){
+            String existingDni2 = credencial.getId_credenciales();
+            if(dni.equals(existingDni2)){
+                result.rejectValue("dni", "", "Ya existe un usuario con esta credencial.");
+            }
+        }
         List<Administrador> listaAdministrador = administradorRepository.findAll();
         for (Administrador administrador : listaAdministrador) {
             String existingCorreo = administrador.getCorreo();
             String existingDni = administrador.getIdAdministrador(); // Asegúrate de tener este método en tu clase Administrador
-
             if (correoUser.contains(existingCorreo) && selectUsuario.equals("administrador")) {
                 // El correo está duplicado, realiza la acción necesaria
                 // Por ejemplo, puedes lanzar una excepción, mostrar un mensaje de error, etc.
