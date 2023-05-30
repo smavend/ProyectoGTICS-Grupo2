@@ -3,6 +3,7 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -73,7 +75,7 @@ public class HomeController {
     }
 
 
-    @GetMapping("/signin")
+    @GetMapping(value = {"/signin","/signin/save"})
     public String vistaRegistro(Model model, @ModelAttribute("paciente") Paciente paciente){
         List<Distrito> list = distritoRepository.findAll();
         List<Seguro> list1 = seguroRepository.findAll();
@@ -83,7 +85,8 @@ public class HomeController {
     }
 
     @PostMapping("/signin/save")
-    public String guardarRegistro (@RequestParam ("radios") String radio,
+    public String guardarRegistro (HttpSession session,
+                                   @RequestParam ("radios") String radio,
                                    @RequestParam ("alergias") String alergias,
                                    Model model,
                                    RedirectAttributes attr,
@@ -91,85 +94,83 @@ public class HomeController {
                                    BindingResult bindingResult){
         List<Distrito> list = distritoRepository.findAll();
         List<Seguro> list1 = seguroRepository.findAll();
-        if(bindingResult.hasErrors()){
+        List<Paciente> pacientes = pacienteRepository.findAll();
+        boolean existDni = false;
+        boolean existCorreo = false;
+        boolean existDni1 = false;
+        boolean existCorreo1 = false;
+        paciente.setCorreo(paciente.getCorreo().toLowerCase());
+        for (Paciente p : pacientes) {
+            if (p.getIdPaciente().equals(paciente.getIdPaciente())) {
+                existDni = true;
+                break;
+            } else if (p.getCorreo().equals(paciente.getCorreo())) {
+                existCorreo = true;
+                break;
+            }
+        }
+        List<Temporal> temp = temporalRepository.findAll();
+        for (Temporal t : temp) {
+            if (t.getDni().equals(paciente.getIdPaciente())) {
+                existDni1 = true;
+                break;
+            } else if (t.getCorreo().equals(paciente.getCorreo())) {
+                existCorreo1 = true;
+                break;
+            }
+        }
+        if(bindingResult.hasErrors() || (!paciente.getGenero().equals("M") && !paciente.getGenero().equals("F")) || existCorreo1 || existDni1 || existCorreo || existDni){
+            if(existDni || existDni1){
+                bindingResult.rejectValue("idPaciente", "errorDni", "El DNI ya se encuentra registrado.");
+            }
+            if(existCorreo || existCorreo1){
+                bindingResult.rejectValue("correo","errorCorreo", "El correo ya se encuentra registrado.");
+            }
+            if(!paciente.getGenero().equals("M") && !paciente.getGenero().equals("F")){
+                bindingResult.rejectValue("genero", "errorGenero", "Debe seleccionar uno de los géneros listados");
+            }
             model.addAttribute("distritos", list);
             model.addAttribute("seguros", list1);
             return "general/registro";
         }else{
-            List<Paciente> pacientes = pacienteRepository.findAll();
-            boolean exist = false;
-            boolean existTemp = false;
-            String msgDni = "";
-            String msgEmail = "";
-            for (Paciente p : pacientes) {
-                if (p.getIdPaciente().equals(paciente.getIdPaciente())) {
-                    exist = true;
-                    msgDni = "Este DNI ya se encuentra registrado";
-                    break;
-                } else if (p.getCorreo().equals(paciente.getCorreo())) {
-                    exist = true;
-                    msgEmail = "Este correo ya se encuentra registrado";
-                    break;
-                }
+            if(paciente.getGenero().equals("M")){
+                paciente.setGenero("Masculino");
+            } else{
+                paciente.setGenero("Femenino");
             }
-            List<Temporal> temp = temporalRepository.findAll();
-            for (Temporal t : temp) {
-                if (t.getDni().equals(paciente.getIdPaciente())) {
-                    existTemp = true;
-                    msgDni = "Este DNI ya se encuentra registrado";
-                    break;
-                } else if (t.getCorreo().equals(paciente.getCorreo())) {
-                    existTemp = true;
-                    msgEmail = "Este correo ya se encuentra registrado";
-                    break;
-                }
-            }
-            if (!exist & !existTemp) {
-                String msgGen = "";
-                if(paciente.getGenero().equals("M")){
-                    paciente.setGenero("Masculino");
-                } else if (paciente.getGenero().equals("F")) {
-                    paciente.setGenero("Femenino");
-                }else{
-                    msgGen = "Debe seleccionar uno de los géneros listados";
-                    attr.addFlashAttribute("msgGen", msgGen);
-                    model.addAttribute("distritos", list);
-                    model.addAttribute("seguros", list1);
-                    return "general/registro";
-                }
-                paciente.setEstado(3);
-                paciente.setFecharegistro(LocalDateTime.now());
+            paciente.setEstado(3);
+            paciente.setFecharegistro(LocalDateTime.now());
 
-                pacienteRepository.save(paciente);
-                if(radio.equals("1")){
-                    String[] alergiasArray = alergias.split(",");
-                    String alergia = "";
-                    Alergia alergia1 = null;
-                    for(int i = 0; i<alergiasArray.length; i++){
-                        alergia = alergiasArray[i].trim();
-                        alergia = alergia.replaceAll(" +"," ");
-                        if(!alergia.equals(" ") && !alergia.equals("")){
-                             alergia1 = new Alergia();
-                             alergia1.setNombre(alergia);
-                             alergia1.setPaciente(paciente);
-                             alergiaRepository.save(alergia1);
-                        }
+            pacienteRepository.save(paciente);
+            if(radio.equals("1")){
+                String[] alergiasArray = alergias.split(",");
+                String alergia = "";
+                Alergia alergia1 = null;
+                for(int i = 0; i<alergiasArray.length; i++){
+                    alergia = alergiasArray[i].trim();
+                    alergia = alergia.replaceAll(" +"," ");
+                    if(!alergia.equals(" ") && !alergia.equals("")){
+                        alergia = alergia.substring(0,1).toUpperCase() + alergia.substring(1).toLowerCase();
+                        alergia1 = new Alergia();
+                        alergia1.setNombre(alergia);
+                        alergia1.setPaciente(paciente);
+                        alergiaRepository.save(alergia1);
                     }
                 }
-                return "redirect:/signin/confirmacion";
-            } else {
-                attr.addFlashAttribute("msgDni", msgDni);
-                attr.addFlashAttribute("msgEmail", msgEmail);
-                model.addAttribute("distritos", list);
-                model.addAttribute("seguros", list1);
-                return "general/registro";
             }
+            session.setAttribute("registro", paciente.getIdPaciente());
+            return "redirect:/signin/confirmacion";
         }
     }
 
     @GetMapping("/signin/confirmacion")
-    public String confirmacionRegistro(){
-        return "general/confirmacionregistro";
+    public String confirmacionRegistro(HttpSession session){
+        String id = (String) session.getAttribute("registro");
+        if(id!=null){
+            return "general/confirmacionregistro";
+        }else {
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/usuario/foto/{id}")
