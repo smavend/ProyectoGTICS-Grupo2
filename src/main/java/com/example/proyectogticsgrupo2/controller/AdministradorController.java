@@ -95,6 +95,7 @@ public class AdministradorController {
                 paciente.setCorreo(pacitemp.getCorreo());
                 paciente.setEstado(1);
                 paciente.setFecharegistro(LocalDateTime.now());
+                paciente.setFechainvitado(pacitemp.getFechainvitado());
                 paciente.setFoto(null);
                 paciente.setFotoname(null);
                 paciente.setFotocontenttype(null);

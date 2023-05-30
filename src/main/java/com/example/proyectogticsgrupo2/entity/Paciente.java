@@ -80,6 +80,9 @@ public class Paciente implements Serializable {
     @Column (nullable = false)
     private LocalDateTime fecharegistro;
 
+
+    private LocalDateTime fechainvitado;
+
     public String getNombreYApellido(){
         String[] nombres = this.getNombre().split(" ");
         String[] apellidos = this.getApellidos().split(" ");
