@@ -23,7 +23,6 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -36,9 +35,10 @@ public class HomeController {
     final SeguroRepository seguroRepository;
     final TemporalRepository temporalRepository;
     final AlergiaRepository alergiaRepository;
+    final TareaRepository tareaRepository;
 
 
-    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository) {
+    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.administradorRepository = administradorRepository;
@@ -47,6 +47,7 @@ public class HomeController {
         this.seguroRepository = seguroRepository;
         this.temporalRepository = temporalRepository;
         this.alergiaRepository = alergiaRepository;
+        this.tareaRepository = tareaRepository;
     }
 
     @GetMapping("/")
@@ -168,6 +169,14 @@ public class HomeController {
             paciente.setFecharegistro(LocalDateTime.now());
 
             pacienteRepository.save(paciente);
+
+            Tarea tarea = new Tarea();
+            tarea.setFecha(LocalDateTime.now());
+            tarea.setPaciente(paciente);
+            tarea.setEstado(1);
+            tarea.setTipo(1);
+            tareaRepository.save(tarea);
+
             if(radio.equals("1")){
                 String[] alergiasArray = alergias.split(",");
                 String alergia = "";

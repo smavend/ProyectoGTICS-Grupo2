@@ -146,7 +146,7 @@
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Fecha de nacimiento<span style="color:red;">*</span></label>
-                        <input type="date" class="form-control" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')?'is-invalid':''}">
+                        <input type="date" class="form-control" placeholder="dd/mm/yyyy" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('fechanacimiento')}"
                              th:errors="*{fechanacimiento}"></div>
                       </div>
