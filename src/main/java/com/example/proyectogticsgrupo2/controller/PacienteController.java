@@ -280,7 +280,7 @@ public class PacienteController {
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             try {
-                File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
+                File foto = new File("source/userPorDefecto.jpg");
                 FileInputStream input = new FileInputStream(foto);
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 byte[] buffer = new byte[1024];
