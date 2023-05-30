@@ -3,6 +3,7 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.TemporalDiasDto;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,6 @@ import java.util.Optional;
 
 @Controller
 public class AdministrativoController {
-    String idAdministrativo = "15648912";
     final PacienteRepository pacienteRepository;
     final AdministrativoPorEspecialidadPorSedeRepository aesRepository;
     final AlergiaRepository alergiaRepository;
@@ -37,49 +37,55 @@ public class AdministrativoController {
         this.temporalRepository = temporalRepository;
         this.administrativoRepository = administrativoRepository;
     }
-
     @GetMapping("/administrativo")
-    public String dashboard(Model model){
-        List<Paciente> lista = pacienteRepository.buscarPorIdAdministrativo(idAdministrativo);
-        List<Temporal> listaTemp = temporalRepository.findByAdministrativo_IdAdministrativo(idAdministrativo);
-        List<TemporalDiasDto> listaDias = temporalRepository.obtenerDias();
-        AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
+    public String dashboard(Model model, HttpSession session){
+        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+        String idAdmi = admi.getIdAdministrativo();
 
+        AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
         model.addAttribute("datos", aes);
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
+
+        List<Paciente> lista = pacienteRepository.buscarPorIdAdministrativo(idAdmi);
+        List<Temporal> listaTemp = temporalRepository.findByAdministrativo_IdAdministrativo(idAdmi);
+        List<TemporalDiasDto> listaDias = temporalRepository.obtenerDias();
+
         model.addAttribute("listaPacientes", lista);
         model.addAttribute("listaTemp", listaTemp);
         model.addAttribute("dias",listaDias);
-        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
-        model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdministrativo));
+
         return "administrativo/index";
     }
 
     @GetMapping("/administrativo/invitar")
-    public String vistaInvitar(Model model, @ModelAttribute("temporal") Temporal temporal){
-        AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
-        model.addAttribute("datos", aes);
-        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
-        model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdministrativo));
+    public String vistaInvitar(HttpSession session, Model model, @ModelAttribute("temporal") Temporal temporal){
+        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+        String idAdmi = admi.getIdAdministrativo();
+
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
         return "administrativo/invitar";
     }
 
     @GetMapping("/administrativo/editar")
-    public String vistaEditar(@RequestParam(name = "id") String id,
+    public String vistaEditar(HttpSession session, @RequestParam(name = "id") String id,
                               Model model){
+
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
         if(optPaciente.isPresent()){
             Paciente paciente = optPaciente.get();
             if(paciente.getAdministrativo()!=null) {
-                if (paciente.getAdministrativo().getIdAdministrativo().equals(idAdministrativo)) {
+                Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+                String idAdmi = admi.getIdAdministrativo();
+
+                if (paciente.getAdministrativo().getIdAdministrativo().equals(idAdmi)) {
                     model.addAttribute("paciente", paciente);
                     model.addAttribute("alergias", alergiaRepository.buscarPorPacienteId(id));
                     model.addAttribute("listaDistritos", distritoRepository.findAll());
 
-
-                    AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
-                    model.addAttribute("datos", aes);
-                    model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
-                    model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdministrativo));
+                    model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+                    model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
                     return "administrativo/editar";
                 }
             }
@@ -88,92 +94,94 @@ public class AdministrativoController {
     }
 
     @GetMapping("/administrativo/editar/invitado")
-    public String vistaEditarInvitado(@RequestParam(name = "id") Integer id,
+    public String vistaEditarInvitado(HttpSession session,
+                                      @RequestParam(name = "id") Integer id,
                                       Model model){
+
         Optional<Temporal> optTemp = temporalRepository.findById(id);
         if(optTemp.isPresent()){
             Temporal temp = optTemp.get();
-            if(temp.getAdministrativo().getIdAdministrativo().equals(idAdministrativo)) {
+            Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+            String idAdmi = admi.getIdAdministrativo();
+            if(temp.getAdministrativo().getIdAdministrativo().equals(idAdmi)) {
                 model.addAttribute("temporal", temp);
-
-                AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
-                model.addAttribute("datos", aes);
-                model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
-                model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdministrativo));
+                model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+                model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
                 return "administrativo/editarTemp";
             }
         }
         return "redirect:/administrativo";
     }
     @GetMapping("/administrativo/mensajeria")
-    public String mostrarMensajeria(Model model){
-        AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
-        model.addAttribute("datos", aes);
-        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
-        model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdministrativo));
+    public String mostrarMensajeria(HttpSession session, Model model){
+        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+        String idAdmi = admi.getIdAdministrativo();
+
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
         return "administrativo/mensajeria";
     }
+
     @PostMapping("administrativo/invitar")
-    public String invitarPaciente(Model model,@ModelAttribute("temporal") @Valid Temporal temporal,
+    public String invitarPaciente(HttpSession session, Model model,
+                                  @ModelAttribute("temporal") @Valid Temporal temporal,
                                   BindingResult bindingResult,
                                   RedirectAttributes attr){
+        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+        String idAdmi = admi.getIdAdministrativo();
+
         if(bindingResult.hasErrors()){
-            AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
-            model.addAttribute("datos", aes);
-            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
-            model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdministrativo));
+            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+            model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             return "administrativo/invitar";
         }
-        else {
+        else{
             List<Paciente> list = pacienteRepository.findAll();
             boolean exist = false;
             boolean existTemp = false;
-            for(Paciente p: list){
-                if(p.getIdPaciente().equals(temporal.getDni())){
+            for (Paciente p : list) {
+                if (p.getIdPaciente().equals(temporal.getDni())) {
                     exist = true;
                     break;
-                }else if (p.getCorreo().equals(temporal.getCorreo())){
+                } else if (p.getCorreo().equals(temporal.getCorreo())) {
                     exist = true;
                     break;
                 }
             }
             List<Temporal> temp = temporalRepository.findAll();
-            for (Temporal t: temp){
-                if(t.getDni().equals(temporal.getDni())){
+            for (Temporal t : temp) {
+                if (t.getDni().equals(temporal.getDni())) {
                     existTemp = true;
                     break;
-                } else if(t.getCorreo().equals(temporal.getCorreo())){
+                } else if (t.getCorreo().equals(temporal.getCorreo())) {
                     existTemp = true;
                     break;
                 }
             }
-            if(!exist & !existTemp){
+            if (!exist & !existTemp) {
                 temporal.setFechainvitado(LocalDateTime.now());
-                Optional<Administrativo> optAdministrativo = administrativoRepository.findById(idAdministrativo);
+                Optional<Administrativo> optAdministrativo = administrativoRepository.findById(idAdmi);
                 temporal.setAdministrativo(optAdministrativo.get());
                 temporalRepository.save(temporal);
                 return "redirect:/administrativo";
-            }else {
-                attr.addFlashAttribute("msg","Ingrese un DNI o correo diferente, ya se encuentra invitado o registrado");
-                AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
-                model.addAttribute("datos", aes);
-                model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
-                model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdministrativo));
+            } else {
+                attr.addFlashAttribute("msg", "Ingrese un DNI o correo diferente, ya se encuentra invitado o registrado");
                 return "redirect:/administrativo/invitar";
             }
         }
     }
 
     @PostMapping("/administrativo/guardar/invitado")
-    public String actualizarInvitado(Model model,
+    public String actualizarInvitado(HttpSession session,
+                                     Model model,
                                      @ModelAttribute("temporal") @Valid Temporal temporal,
                                      BindingResult bindingResult){
+        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+        String idAdmi = admi.getIdAdministrativo();
+
         if(bindingResult.hasErrors()){
-            System.out.println(bindingResult.getAllErrors());
-            AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdministrativo);
-            model.addAttribute("datos", aes);
-            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdministrativo));
-            model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdministrativo));
+            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+            model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             return "administrativo/editarTemp";
         }else {
             temporalRepository.actualizarInvitado(temporal.getNombre(), temporal.getApellidos(), temporal.getCorreo(), temporal.getId_temporal());

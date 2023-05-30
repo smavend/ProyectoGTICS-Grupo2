@@ -1,9 +1,12 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
+import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -63,7 +66,10 @@ public class AdministradorController {
         return "administrador/dashboard";
     }
     @GetMapping("/finanzas")
-    public String finanzas(){return "administrador/finanzas";}
+    public String finanzas(Model model){
+        List<AdministradorIngresos> listaIngresos = administradorRepository.obtenerIgresos();
+        model.addAttribute("listaIngresos",listaIngresos);
+        return "administrador/finanzas";}
     @GetMapping("/config")
     public String config(){return "administrador/config";}
     @GetMapping("/registro")
@@ -104,9 +110,9 @@ public class AdministradorController {
 
     }
     @GetMapping("/perfil")
-    public String perfil(@RequestParam("id") String id, Model model){
-        Optional<Administrador> optAministrador = administradorRepository.findById(id);
-        Administrador administrador= optAministrador.get();
+    public String perfil(Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Administrador administrador = (Administrador) session.getAttribute("administrador");
         model.addAttribute("administrador", administrador);
         return "administrador/perfil";}
     @GetMapping("/finanzas-recibos")
@@ -125,7 +131,17 @@ public class AdministradorController {
     public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
                                   @ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
                                   Model model, RedirectAttributes attr){
-        if(bindingResult.hasErrors()){
+        Optional<Paciente> opt = pacienteRepository.findById(paciente.getIdPaciente());
+        Paciente pacienteCorreoExist = pacienteRepository.findByCorreo(paciente.getCorreo());
+        if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null){
+            if(opt.isPresent() && pacienteCorreoExist!=null){
+                bindingResult.rejectValue("idPaciente","errorPaciente","Este DNI ya se encuentra registrado");
+                bindingResult.rejectValue("correo","errorCorreoPaci","Este correo ya se encuentra registrado");
+            } else if (pacienteCorreoExist!=null) {
+                bindingResult.rejectValue("correo","errorCorreoPaci","Este correo ya se encuentra registrado");
+            } else if (opt.isPresent()) {
+                bindingResult.rejectValue("idPaciente","errorPaciente","Este DNI ya se encuentra registrado");
+            }
             List<Seguro> listaSeguro  = seguroRepository.findAll();
             List<Distrito> listaDistrito = distritoRepository.findAll();
             List<Administrativo> listaAdministrativo = administrativoRepository.findAll();
@@ -152,12 +168,10 @@ public class AdministradorController {
             paciente.setEstado(1);
             paciente.setFecharegistro(LocalDateTime.now());
             pacienteRepository.save(paciente);
-
             String passRandom= securityConfig.generateRandomPassword();
             PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
             // Ahora puedes usar el passwordEncoder para codificar una contraseña
             String encodedPassword = passwordEncoder.encode(passRandom);
-
             credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
             CorreoService correoService = new CorreoService();
             correoService.props(paciente.getCorreo(),passRandom);
@@ -177,7 +191,17 @@ public class AdministradorController {
     public String guardarDoctor(@RequestParam("archivo") MultipartFile file,
                                 @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult,
                                 Model model, RedirectAttributes attr){
-        if(bindingResult.hasErrors()){
+        Optional<Doctor> opt = doctorRepository.findById(doctor.getId_doctor());
+        Doctor doctorCorreoExist = doctorRepository.findByCorreo(doctor.getCorreo());
+        if(bindingResult.hasErrors() || opt.isPresent() || doctorCorreoExist!=null){
+            if(opt.isPresent() && doctorCorreoExist!=null){
+                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
+                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+            } else if (doctorCorreoExist!=null) {
+                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+            } else if (opt.isPresent()) {
+                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
+            }
             List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
             List<Sede> listaSede = sedeRepository.findAll();
             model.addAttribute("listaSede",listaSede);
@@ -185,9 +209,9 @@ public class AdministradorController {
             return "administrador/crearDoctor";
         }else {
             if(file.isEmpty()){
-                    doctor.setFoto(null);
-                    doctor.setFotoname(null);
-                    doctor.setFotocontenttype(null);
+                doctor.setFoto(null);
+                doctor.setFotoname(null);
+                doctor.setFotocontenttype(null);
             }else {
                 String fileName = file.getOriginalFilename();
                 try {
@@ -226,6 +250,10 @@ public class AdministradorController {
         if(optPaciente.isPresent()){
             Paciente paciente = optPaciente.get();
             model.addAttribute("paciente", paciente);
+            model.addAttribute("alergias",administradorRepository.alergias(paciente.getIdPaciente()));
+            model.addAttribute("consentimientos",administradorRepository.consentimientos(paciente.getIdPaciente()));
+            model.addAttribute("tratamiento",administradorRepository.tratamiento(paciente.getIdPaciente()));
+            model.addAttribute("prximascitas",administradorRepository.proximascitas(paciente.getIdPaciente()));
             return "administrador/historialPaciente";
         }else {
             return "redirect:/administrador/dashboard";

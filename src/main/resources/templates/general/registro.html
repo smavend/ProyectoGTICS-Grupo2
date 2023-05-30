@@ -73,76 +73,92 @@
                     <p class="text-center small">Ingresa los datos solicitados para comenzar como paciente en la clínica.</p>
                   </div>
 
-                  <form class="row g-3" th:method="post" th:action="@{/general/registrar}">
+                  <form class="row g-3" th:method="post" th:action="@{/signin/save}" th:object="${paciente}">
                     <div class="row col-md-6">
                       <div class="col-md-12">
-                        <label for="nombre" class="form-label">Nombres<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="nombre" name="nombre">
+                        <label class="form-label">Nombres<span style="color:red;">*</span></label>
+                        <input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
+                             th:errors="*{nombre}" ></div>
                       </div>
                       <div class="col-md-12">
-                        <label for="apellidos" class="form-label">Apellidos<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="apellidos" name="apellidos">
+                        <label class="form-label">Apellidos<span style="color:red;">*</span></label>
+                        <input type="text" class="form-control" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
+                             th:errors="*{apellidos}"></div>
                       </div>
                       <div class="col-md-12">
-                        <label for="correo" class="form-label">Correo electrónico<span style="color:red;">*</span></label>
-                        <input type="email" class="form-control" id="correo" name="correo">
+                        <label class="form-label">Correo electrónico<span style="color:red;">*</span></label>
+                        <input type="email" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
+                             th:errors="*{correo}"></div>
                       </div>
                       <div class="col-md-12">
-                        <label for="idPaciente" class="form-label">DNI<span style="color:red;">*</span></label>
-                        <input type="number" class="form-control" id="idPaciente" name="idPaciente">
+                        <label class="form-label">DNI<span style="color:red;">*</span></label>
+                        <input type="number" class="form-control" th:field="*{idPaciente}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}"
+                             th:errors="*{idPaciente}"></div>
                       </div>
                       <div class="col-md-12">
-                        <label for="seguro" class="form-label">Seguro médico<span style="color:red;">*</span></label>
-                        <select id="seguro" class="form-select" name="seguro">
-                          <option>--Seleccione una opción--</option>
+                        <label class="form-label">Seguro médico<span style="color:red;">*</span></label>
+                        <select class="form-select" th:field="*{seguro}">
                           <option th:each="seguro: ${seguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                         </select>
                       </div>
                       <div class="col-md-12">
                         <label for="si" class="form-label">¿Tienes alguna alergia?</label>
-                        <div class="row">
+                        <div class="input-group">
                           <div class="col-md-6">
                             <div class="form-check">
-                              <input class="form-check-input" type="radio" name="radios" id="si" value="option1">
+                              <input class="form-check-input" type="radio" name="radios" id="si" value="1" required>
                               Sí
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-check">
-                              <input class="form-check-input" type="radio" name="radios" id="no" value="option2">
+                              <input class="form-check-input" type="radio" name="radios" id="no" value="0" required checked>
                               No
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-12">
-                          <input style="display: none;" type="text" class="form-control" id="alergias" name="alergias" placeholder="Abejas, cetirizina, ...">
+                      </div>
+                      <div class="col-md-12 d-flex align-items-center">
+                        <input style="display: none;" type="text" class="form-control" id="alergias" name="alergias" placeholder="Abejas, cetirizina">
+                        <div class="ms-auto">
+                          <ul style="display: none; padding-left: 1rem!important;" id="info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Ingresa tus alergias separadas por comas. No es necesario un punto final.">
+                            <i style="color: blue; vertical-align: -0.5em!important;" class="bi bi-question-circle"></i>
+                          </ul>
                         </div>
                       </div>
                     </div>
                     <div class="row col-md-6">
                       <div class="col-md-12">
-                        <label for="distrito" class="form-label">Distrito<span style="color:red;">*</span></label>
-                        <select id="distrito" class="form-select" name="distrito">
-                          <option>--Seleccione una opción--</option>
+                        <label class="form-label">Distrito<span style="color:red;">*</span></label>
+                        <select class="form-select" th:field="*{distrito}">
                           <option th:each="distrito :${distritos}" th:value="${distrito.idDistrito}" th:text="${distrito.nombre}"></option>
                         </select>
                       </div>
                       <div class="col-md-12">
-                        <label for="direccion" class="form-label">Dirección<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="direccion" name="direccion">
+                        <label class="form-label">Dirección<span style="color:red;">*</span></label>
+                        <input type="text" class="form-control" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}"
+                             th:errors="*{direccion}"></div>
                       </div>
                       <div class="col-md-12">
-                        <label for="fechanacimiento" class="form-label">Fecha de nacimiento<span style="color:red;">*</span></label>
-                        <input type="date" class="form-control" id="fechanacimiento" name="fechanacimiento">
+                        <label class="form-label">Fecha de nacimiento<span style="color:red;">*</span></label>
+                        <input type="date" class="form-control" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('fechanacimiento')}"
+                             th:errors="*{fechanacimiento}"></div>
                       </div>
                       <div class="col-md-12">
-                        <label for="telefono" class="form-label">Teléfono<span style="color:red;">*</span></label>
-                        <input type="number" class="form-control" id="telefono" name="telefono">
+                        <label class="form-label">Teléfono<span style="color:red;">*</span></label>
+                        <input type="number" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}"
+                             th:errors="*{telefono}"></div>
                       </div>
                       <div class="col-md-12">
                         <label for="genero" class="form-label">Género<span style="color:red;">*</span></label>
                         <select id="genero" class="form-select" name="genero">
-                          <option>--Seleccione una opción--</option>
                           <option value="M">Masculino</option>
                           <option value="F">Femenino</option>
                         </select>
@@ -207,14 +223,21 @@
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
   <script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+  </script>
+  <script>
     var si = document.getElementById('si');
     var no = document.getElementById('no')
     var alergias = document.getElementById('alergias')
+    var info = document.getElementById('info')
     function updateStatus() {
       if (si.checked) {
         alergias.style.display = "";
+        info.style.display = "";
       } else {
         alergias.style.display = "none";
+        info.style.display = "none";
       }
     }
 

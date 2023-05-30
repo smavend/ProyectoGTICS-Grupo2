@@ -31,7 +31,7 @@
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
         <!-- End Sidebar-->
 
         <main id="main" class="main">
@@ -45,7 +45,7 @@
             <section id="Sedes">
                 <div class="row align-items-start contenedor mx-0">
                     <div class="col-md-4" th:each="sede:${sedeList}">
-                        <a th:href="@{/Paciente/doctores(idSede=${sede.idSede})}">
+                        <a th:href="@{/Paciente/doctores(sede=${sede.idSede}, esp=0, pag=1)}">
                             <figure>
                                 <img class="sedeImg" th:src="@{/Paciente/imageSede(idSede=${sede.idSede})}">
                                 <div class="capa">

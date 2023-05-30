@@ -28,70 +28,67 @@
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar}"></div>
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
         <!-- End Sidebar-->
 
         <main id="main" class="main">
             <h1 class="encabezado">Doctores</h1>
             <section class="seccionPrincipal">
                 <!-- Filtros -->
-                <form method="post" th:action="@{/Paciente/doctoresFiltrado}">
-                    <div class="row filtrosDoctores">
-                        <div class="col-lg-4 filtroDoctor d-flex justify-content-start">
-                            <label class="labelFiltroDoctor">Sede</label>
-                            <select class="selectFiltroDoctor" name="idSedeFilter">
-                                <option th:each="s : ${sedeList}" th:value="${s.idSede}" th:text="${s.nombre}" th:selected="${s.idSede == sede.idSede}"></option>
+                <form method="get" th:action="@{/Paciente/doctores}">
+                    <div class="row filtroNav">
+                        <div class="col-md-4 col-lg-4 filtro d-flex justify-content-start">
+                            <label class="labelFiltro">Sede</label>
+                            <select class="form-select" name="sede">
+                                <option th:each="sede: ${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}" th:selected="${sede.idSede == idSede}"></option>
                             </select>
                         </div>
-                        <div class="col-lg-5 filtroDoctor d-flex justify-content-start">
-                            <label class="labelFiltroDoctor">Especialidad</label>
-                            <select class="selectFiltroDoctor" name="idEspecialidadFilter">
-                                <option th:if="${sinFiltrar}==0">Todas las especialidades</option>
-                                <option th:text="${especialidad.nombre}" th:if="${sinFiltrar}==1"></option>
-                                <option value=0>Todas las especialidades</option>
-                                <option th:each="especialidades: ${especialidadList}" th:value="${especialidades.idEspecialidad}" th:text="${especialidades.nombre}">Dermatología</option>
+                        <div class="col-md-5 col-lg-6 filtro d-flex justify-content-start">
+                            <label class="labelFiltro">Especialidad</label>
+                            <select class="form-select" name="esp">
+                                <option value="0" th:selected="${idEspecialidad == 0}">Todas las especialidades</option>
+                                <option th:each="especialidad : ${especialidadList}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" th:selected="${especialidad.idEspecialidad == idEspecialidad}"></option>
                             </select>
                         </div>
-                        <div class="col-lg-auto filtroDoctor d-lg-flex justify-content-center">
-                            <button class="btn botonBuscarDoctor" type="submit">Buscar</button>
+                        <div class="col-md-3 col-lg-2 d-flex justify-content-center">
+                            <input type="hidden" name="pag" value="1">
+                            <button class="botonFiltro" type="submit"><i class="bi bi-search"></i>   Buscar</button>
                         </div>
                     </div>
                 </form>
-                <!-- Doctores -->
+
                 <div class="row">
-                    <!-- Primera columna de doctores -->
-                    <div class="col-md-6 filaDoctores" th:each="doctor: ${doctorList}">
-                        <!-- Doctor -->
-                        <div class="cardDoctor" >
-                            <div class="row">
-                                <div class="col-5">
-                                    <img class="fotoDoctor" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
-                                </div>
-                                <div class="col-7 informacionDoctor">
-                                    <div class="nombreDoctor" th:text="${doctor.nombre} +' '+ ${doctor.apellidos}">Juan Martinez Rondon</div>
-                                    <div style="color: black" class="fw-semibold text-center fs-5" th:text="${doctor.especialidad.nombre}"></div>
-                                    <div class="disponibilidadDoctor">
-                                        Disponibilidad
-                                        <div class="disponibilidadDoctorDato" th:text="'MARTES: '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+' - '+${doctor.horario.disponibilidad_fin.substring(0,5)}"></div>
-                                        <div class="disponibilidadDoctorDato" th:text="'JUEVES: '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+' - '+${doctor.horario.disponibilidad_fin.substring(0,5)}"></div>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center py-3">
-                                        <a class="botonVerMasDoctor" th:href="@{/Paciente/perfilDoctor(idDoctor=${doctor.id_doctor})}">Ver Más</a>
-                                    </div>
-                                </div>
+                    <div class="col-md-6 col-lg-4 col-xxl-3 filaDoctores" th:each="doctor: ${doctorList}">
+                        <div class="cardDoctor">
+                            <div class="seccionFoto">
+                                <img class="fotoDoctor rounded-circle" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
+                            </div>
+                            <div class="seccionDescripcion">
+                                <div class="seccionNombre" th:text="${doctor.nombre} +' '+ ${doctor.apellidos}">Ronald Richard</div>
+                                <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
+                            </div>
+                            <div class="seccionDisponibilidad">
+                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [['Martes: '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+'  -  '+${doctor.horario.disponibilidad_fin.substring(0,5)}]]</div>
+                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [['Jueves: '+${doctor.horario.disponibilidad_inicio.substring(0,5)}+'  -  '+${doctor.horario.disponibilidad_fin.substring(0,5)}]]</div>
+                            </div>
+                            <div class="d-grid">
+                                <a th:href="@{/Paciente/perfilDoctor(idDoctor=${doctor.id_doctor})}" class="botonVerMasDoctor">Ver más</a>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <nav>
+                <nav class="mt-2">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <li class="page-item" th:classappend="${paginaPrevia == 0? 'disabled': ''}">
+                            <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaPrevia}}">Anterior</a>
+                        </li>
+                        <li class="page-item" th:each="pagina: ${paginas}" th:classappend="${paginaActual == pagina? 'active': ''}">
+                            <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${pagina}}" th:text="${pagina}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${paginaActual == totalPaginas? 'disabled':''}">
+                            <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaSiguiente}}">Siguiente</a>
+                        </li>
                     </ul>
                 </nav>
 
