@@ -3,7 +3,6 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -18,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.print.Doc;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,28 +40,30 @@ public class DoctorController {
     private String fecha;
     private final AlergiaRepository alergiaRepository;
     private final EspecialidadRepository especialidadRepository;
-
-    private Doctor doctor_session_info;
-
+    private final SedeRepository sedeRepository;
+    private final HorarioRepository horarioRepository;
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
                             AlergiaRepository alergiaRepository,
-                            EspecialidadRepository especialidadRepository) {
+                            EspecialidadRepository especialidadRepository,
+                            SedeRepository sedeRepository, HorarioRepository horarioRepository) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
         this.alergiaRepository = alergiaRepository;
         this.especialidadRepository = especialidadRepository;
+        this.sedeRepository = sedeRepository;
+        this.horarioRepository = horarioRepository;
     }
 
     @GetMapping(value={"/dashboard","/",""})
-    public String dashboard(Model model, HttpServletRequest request) {
+    public String dashboard(Model model, HttpSession session) {
 
-        HttpSession httpSession=request.getSession();
-        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+        Doctor doctor_session =(Doctor) session.getAttribute("doctor");
 
         List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
+        System.out.println("SI ENTRA");
         List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor_session.getId_doctor()); //CAMBIAR POR ID SESION
         ArrayList<String> listaHorarios= new ArrayList<>();
         Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
@@ -76,7 +78,7 @@ public class DoctorController {
             LocalDateTime fechaHora2 = cita.getFin();
             String hora2 = fechaHora2.toLocalTime().toString();
             // Transformar a LocalDate
-             // Actualizar objeto ListaBuscadorDoctor con la fecha
+            // Actualizar objeto ListaBuscadorDoctor con la fecha
 
             String horaFinal=hora1+" - "+hora2;
             listaHorarios.add(horaFinal);
@@ -176,6 +178,34 @@ public class DoctorController {
         return "doctor/DoctorCalendario";
     }
 
+    @PostMapping("/guardarHorario")
+    public String guardarHorario(HttpServletRequest request,Model model, BindingResult bindingResult, Doctor doctor1) {
+        //Poner @valid
+        HttpSession httpSession=request.getSession();
+        Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
+        if(bindingResult.hasErrors()){
+
+            Optional<Cita> optionalCita= citaRepository.findById(getIdCita());
+            Optional<Paciente> optionalPaciente = pacienteRepository.findById(getIdPaciente());
+            Paciente paciente = optionalPaciente.get();
+            Cita cita1 = optionalCita.get();
+
+            Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
+            Doctor doctor= doctorOptional.get();
+            model.addAttribute("doctor", doctor);
+
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("fecha", getFecha());
+            model.addAttribute("cita", cita1);
+            return "doctor/DoctorCalendario";
+        }else{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            doctorRepository.save(doctor1);
+
+            return "redirect:/doctor/calendario";
+        }
+    }
     @GetMapping("/reporte")
     public String reporte(Model model, @RequestParam("id") String id,@RequestParam("id2") int id2, HttpServletRequest request){
         setIdPaciente(id);
@@ -289,6 +319,7 @@ public class DoctorController {
         }
     }
 
+
     @PostMapping("/BuscarProxCita")
     public String buscarCita(@RequestParam("searchField") String searchField,
                                       Model model, HttpServletRequest request) {
@@ -396,11 +427,32 @@ public class DoctorController {
         Doctor doctor_session =(Doctor) httpSession.getAttribute("doctor");
 
         Optional<Doctor> doctorOptional=doctorRepository.findById(doctor_session.getId_doctor());
-        Doctor doctor= doctorOptional.get();
-
-        model.addAttribute("doctor", doctor);
+        if (doctorOptional.isPresent()) {
+            Doctor doctor= doctorOptional.get();
+            model.addAttribute("doctor", doctor);
+            List<Sede> sedeList = sedeRepository.findAll();
+            model.addAttribute("sedeList", sedeList);
+        }
         return "doctor/DoctorConfiguracion";
 
+    }
+    @GetMapping("/imageSede")
+    public ResponseEntity<byte[]> mostrarImagenSede(@RequestParam("idSede") int idSede) {
+        Optional<Sede> optionalSede = sedeRepository.findById(idSede);
+
+        if (optionalSede.isPresent()) {
+            Sede sede = optionalSede.get();
+            byte[] imagenComoBytes = sede.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(sede.getFotocontenttype()));
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return null;
+        }
     }
     @GetMapping("/perfil")
     public String perfilDoctor(Model model, @RequestParam("id") String id) {
@@ -523,6 +575,16 @@ public class DoctorController {
 
         return "redirect:/doctor/perfil";
     }
+    @GetMapping("/config/actualizarSede")
+    public String guardarSedeDoctor(@RequestParam("idDoctor") String idDoctor, @RequestParam("sedeSeleccionada") int sedeId,RedirectAttributes attr) {
+
+        Optional<Sede> optionalSede = sedeRepository.findById(sedeId);
+        if (optionalSede.isPresent()) {
+            doctorRepository.actualizarSede(sedeId,idDoctor);
+        }
+        attr.addFlashAttribute("msgActualizacion", "Sede actualizada correctamente");
+        return "redirect:/doctor/configuracion?success";
+    }
 
 
 
@@ -550,11 +612,5 @@ public class DoctorController {
         this.fecha = fecha;
     }
 
-    public Doctor getDoctor_session_info() {
-        return doctor_session_info;
-    }
 
-    public void setDoctor_session_info(Doctor doctor_session_info) {
-        this.doctor_session_info = doctor_session_info;
-    }
 }

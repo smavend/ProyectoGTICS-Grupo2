@@ -186,7 +186,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{'/doctor/perfil'+ '?id=' + ${doctor.id_doctor}}">
+            <a class="dropdown-item d-flex align-items-center" th:href="@{'/doctor/perfil'+ '?id=' + ${session.doctor.id_doctor}}">
               <i class="bi bi-person"></i>
               <span>Mi Perfil</span>
             </a>

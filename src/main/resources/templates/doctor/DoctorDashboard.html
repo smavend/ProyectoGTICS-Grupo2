@@ -53,9 +53,9 @@
 
     <body>
 
-    <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
+        <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
 
-    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
+        <div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
 
         <main id="main" class="main">
 
@@ -77,98 +77,166 @@
                         </div>
                         <div class="card top-selling container">
 
-
                             <div class="card-body pb-0">
-                                <h5 class="card-title">PRÓXIMAS CITAS<span>| Sede San Miguel</span></h5>
-                                <br>
+                                <ul class="nav nav-tabs nav-tabs-bordered">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" data-bs-toggle="tab"
+                                                data-bs-target="#citas">Próximas Citas
+                                        </button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab"
+                                                data-bs-target="#pacientes">Pacientes
+                                        </button>
+                                    </li>
+                                </ul>
 
-                                <div class="d-flex flex-column"
-                                     style="height: 450px;width: max-content;overflow: hidden">
-                                    <div class="table-responsive">
-                                        <table id="example" class="table ">
-                                            <thead style="text-align: left">
-                                                <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">Nombre</th>
-                                                    <th scope="col">Tipo de cita</th>
-                                                    <th scope="col">Horario</th>
-                                                    <th style="width: max-content" scope="col">Estado de consulta
-                                                    </th>
-                                                    <th scope="col"></th>
-                                                </tr>
-                                            </thead>
+                                <div class="tab-content pt-2" style="margin-top: -25px">
+                                    <div class="tab-pane fade show active citas pt-3" id="citas">
+                                        <h5 style="margin-bottom:-10px" class="card-title">PRÓXIMAS CITAS<span>| Sede San Miguel</span>
+                                        </h5>
+                                        <br>
 
-
-                                            <tbody style="text-align: left">
-                                                <tr th:each="cita,obj: ${listaCitas}"
-                                                    th:with="horario=${listaHorarios[obj.index]}">
-
-                                                    <td th:text="${obj.index+1}"></td>
-
-
-                                                    <td style="font-size: 1rem"
-                                                        th:text="${cita.getNombre() + ' ' + cita.getApellidos()}">
-
-                                                    </td>
-
-                                                    <td style="font-size: 1rem">
-                                                        <h6 th:text="${ cita.modalidad==0 ? 'Presencial' : 'Virtual'}"></h6>
-                                                    </td>
-
-
-                                                    <td style="font-size: 1rem;color: black"
-                                                        th:text="${horario}">
-
-                                                    </td>
-
-                                                    <td style="font-size: 1rem;color: black">
-                                                        <h6 th:if="${cita.estado == 0}"
-                                                            th:text="'Próxima cita'"></h6>
-                                                        <h6 th:if="${cita.estado == 1}"
-                                                            th:text="'Registrado en caja'"></h6>
-                                                        <h6 th:if="${cita.estado == 2}"
-                                                            th:text="'En espera'"></h6>
-                                                        <h6 th:if="${cita.estado == 3}"
-                                                            th:text="'En consulta'"></h6>
-                                                    </td>
+                                        <div class="d-flex flex-column"
+                                             style="height: auto;width: max-content;overflow: hidden">
+                                            <div class="table-responsive">
+                                                <table id="example" class="table ">
+                                                    <thead style="text-align: left">
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Nombre</th>
+                                                            <th scope="col">Tipo de cita</th>
+                                                            <th scope="col">Horario</th>
+                                                            <th style="width: max-content" scope="col">Estado de
+                                                                consulta
+                                                            </th>
+                                                            <th scope="col"></th>
+                                                        </tr>
+                                                    </thead>
 
 
-                                                    <td th:if="${cita.modalidad == 1}">
-                                                        <div style="width: max-content">
-                                                            <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
-                                                               type="button" class="btn btn-success">
-                                                                <i style="color: #D891F5" class="bi-play-fill"></i>
-                                                            </a>
+                                                    <tbody style="text-align: left">
+                                                        <tr th:each="cita,obj: ${listaCitas}"
+                                                            th:with="horario=${listaHorarios[obj.index]}">
 
-                                                            <a id="enviar-btn" style="width: max-content"
-                                                               type="button" class="btn btn-warning">
-                                                                <i class="bi-file-text-fill"></i>
-                                                            </a>
+                                                            <td th:text="${obj.index+1}"></td>
 
-                                                        </div>
-                                                    </td>
-                                                    <td th:unless="${cita.modalidad == 1}">
-                                                        <!-- no se muestra nada si la modalidad es presencial -->
-                                                    </td>
 
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                            <td style="font-size: 1rem"
+                                                                th:text="${cita.getNombre() + ' ' + cita.getApellidos()}">
+
+                                                            </td>
+
+                                                            <td style="font-size: 1rem">
+                                                                <h6 th:text="${ cita.modalidad==0 ? 'Presencial' : 'Virtual'}"></h6>
+                                                            </td>
+
+
+                                                            <td style="font-size: 1rem;color: black"
+                                                                th:text="${horario}">
+
+                                                            </td>
+
+                                                            <td style="font-size: 1rem;color: black">
+                                                                <h6 th:if="${cita.estado == 0}"
+                                                                    th:text="'Próxima cita'"></h6>
+                                                                <h6 th:if="${cita.estado == 1}"
+                                                                    th:text="'Registrado en caja'"></h6>
+                                                                <h6 th:if="${cita.estado == 2}"
+                                                                    th:text="'En espera'"></h6>
+                                                                <h6 th:if="${cita.estado == 3}"
+                                                                    th:text="'En consulta'"></h6>
+                                                            </td>
+
+
+                                                            <td th:if="${cita.modalidad == 1}">
+                                                                <div style="width: max-content">
+                                                                    <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
+                                                                       type="button" class="btn btn-success">
+                                                                        <i style="color: #D891F5"
+                                                                           class="bi-play-fill"></i>
+                                                                    </a>
+
+                                                                    <a id="enviar-btn" style="width: max-content"
+                                                                       type="button" class="btn btn-warning">
+                                                                        <i class="bi-file-text-fill"></i>
+                                                                    </a>
+
+                                                                </div>
+                                                            </td>
+                                                            <td th:unless="${cita.modalidad == 1}">
+                                                                <!-- no se muestra nada si la modalidad es presencial -->
+                                                            </td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
                                     </div>
 
+                                    <div style="width: max-content" class="tab-pane fade pacientes pt-3" id="pacientes">
+
+
+                                        <h5 style="margin-bottom:-10px" class="card-title">PACIENTES<span>| Sede San Miguel</span>
+                                        </h5>
+                                        <br>
+
+                                        <div class="d-flex flex-column" style="height: auto; overflow: auto;">
+                                            <div class="table-responsive">
+                                                <table style="text-align: left" id="example2"
+                                                       class="table ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col" style="width: min-content">Foto</th>
+                                                            <th scope="col" style="text-align: left">Nombres</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="height: fit-content"
+                                                            th:each="paciente,obj: ${listaPacientes}">
+                                                            <td th:text="${obj.index+1}"></td>
+                                                            <td style="text-align: left;">
+                                                                <div style="display: inline-block; border-radius: 50%; border: none; overflow: hidden;">
+                                                                    <img th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}"
+                                                                         style="width: 65px; height: 65px; object-fit: cover;"
+                                                                         alt="Foto del paciente">
+                                                                </div>
+                                                            </td>
+                                                            <td style="font-size: 1.2rem; color: black">
+                                                                <a th:href="@{'/doctor/historialClinico' + '?id=' + ${paciente.id_paciente}}"
+                                                                   th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
+
+
+                                                            </td>
+
+                                                        </tr>
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
                                 </div>
+
 
                             </div>
 
                         </div>
                     </div><!-- End Top Selling -->
-                    <div class="col-5">
-                        <div class="card top-selling overflow-auto container"
-                             style="height: 553px;margin-top: 38px; overflow: auto;">
+
+                    <div class="col-5  justify-content-center align-items-start">
+                        <div class="card top-selling overflow-auto container" style="height: 553px; overflow: auto;">
                             <div class="card-body pb-0">
                                 <h5 class="card-title">CALENDARIO</h5>
                                 <section class="section dashboard">
-                                    <div class="row bg-white p-3">
+                                    <pacientesdiv class="row bg-white p-3">
                                         <script>
 
                                             document.addEventListener('DOMContentLoaded', function () {
@@ -267,7 +335,7 @@
                                         </script>
                                         <div id='calendar'></div>
 
-                                    </div>
+                                    </pacientesdiv>
 
                                 </section>
                             </div>
@@ -276,60 +344,6 @@
 
                     </div>
                     <div class="col-6">
-
-
-                        <div class="card-body pb-0">
-                            <div class="card top-selling overflow-auto container">
-
-
-                                <div class="card-body pb-0">
-                                    <h5 class="card-title">PACIENTES<span>| Sede San Miguel</span></h5>
-                                    <br>
-
-                                    <div class="d-flex flex-column" style="height: 550px; overflow: auto;">
-                                        <div class="table-responsive">
-                                            <table style="text-align: left" id="example2"
-                                                   class="table ">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">#</th>
-                                                        <th scope="col" style="width: min-content">Foto</th>
-                                                        <th scope="col" style="text-align: left">Nombres</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr style="height: fit-content"
-                                                        th:each="paciente,obj: ${listaPacientes}">
-                                                        <td th:text="${obj.index+1}"></td>
-                                                        <td style="text-align: left;">
-                                                            <div style="display: inline-block; border-radius: 50%; border: none; overflow: hidden;">
-                                                                <img th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}"
-                                                                     style="width: 65px; height: 65px; object-fit: cover;"
-                                                                     alt="Foto del paciente">
-                                                            </div>
-                                                        </td>
-                                                        <td style="font-size: 1.2rem; color: black">
-                                                            <a th:href="@{'/doctor/historialClinico' + '?id=' + ${paciente.id_paciente}}"
-                                                               th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
-
-
-                                                        </td>
-
-                                                    </tr>
-
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                        </div>
 
 
                     </div><!-- End Left side columns -->

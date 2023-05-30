@@ -11,7 +11,7 @@ public class DoctorDTO_superadmin {
     private String apellidos;
     private String estado;
     private String correo;
-    private String horario;
+    private int horario;
     private String clinica;
     private String sede;
     private String especialidad;
