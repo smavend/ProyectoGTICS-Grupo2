@@ -251,6 +251,10 @@ public class AdministradorController {
         if(optPaciente.isPresent()){
             Paciente paciente = optPaciente.get();
             model.addAttribute("paciente", paciente);
+            model.addAttribute("alergias",administradorRepository.alergias(paciente.getIdPaciente()));
+            model.addAttribute("consentimientos",administradorRepository.consentimientos(paciente.getIdPaciente()));
+            model.addAttribute("tratamiento",administradorRepository.tratamiento(paciente.getIdPaciente()));
+            model.addAttribute("prximascitas",administradorRepository.proximascitas(paciente.getIdPaciente()));
             return "administrador/historialPaciente";
         }else {
             return "redirect:/administrador/dashboard";

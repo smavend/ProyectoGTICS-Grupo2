@@ -1,6 +1,6 @@
 package com.example.proyectogticsgrupo2.repository;
 
-import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
+import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.Administrador;
 
 import com.example.proyectogticsgrupo2.entity.AdministrativoPorEspecialidadPorSede;
@@ -44,4 +44,28 @@ public interface AdministradorRepository extends JpaRepository<Administrador, St
             "inner join seguro s on (paci.seguro_id_seguro=s.id_seguro)\n" +
             "order by p.fecha_cancelada desc")
     List<AdministradorIngresos> obtenerIgresos();
+
+    @Query(nativeQuery = true,value = "select a.nombre as nombrealergia\n" +
+            "from alergias a\n" +
+            "where a.paciente_id_paciente = ?1")
+    List<AlergiasDto> alergias (String id_paciente);
+
+    @Query(nativeQuery = true,value = "select con.consentimiento as concentimientospaciente\n" +
+            "from consentimientos con \n" +
+            "inner join paciente_has_consentimientos pc on (pc.consentimientos_id_consentimiento = con.id_consentimiento)\n" +
+            "where pc.paciente_id_paciente=?1")
+    List<ConsentimPaciDto> consentimientos (String id_paciente );
+
+    @Query(nativeQuery = true, value = "select c.diagnostico as diagnosticopaci,c.receta as recetapaci, c.tratamiento as tratamientopaci\n" +
+            "from cita c\n" +
+            "where c.paciente_id_paciente = ?1")
+    List<TratamientPaciDto> tratamiento (String id_paciente);
+
+    @Query(nativeQuery = true,value = "select c.inicio as iniciocita,c.fin as fincita, concat(d.nombre,' ',d.apellidos) as nombredoctor\n" +
+            "from cita c\n" +
+            "inner join doctor d on (c.doctor_id_doctor=d.id_doctor)\n" +
+            "where c.paciente_id_paciente = ?1")
+    List<ProximasCitasDto> proximascitas(String id_paciente );
+
+
 }
