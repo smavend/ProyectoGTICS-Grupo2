@@ -59,7 +59,7 @@
             <section class="section dashboard">
 
                 <div>
-                    <div th:if="${doctor.duracion_cita_horas != null and doctor.horario != null}"
+                    <div th:if="${doctor.duracion_cita_minutos != null and doctor.horario != null}"
                          class="row bg-white p-3">
                         <script>
 
@@ -162,7 +162,7 @@
                     </div>
 
 
-                    <div th:unless="${doctor.duracion_cita_horas != null and doctor.horario != null}" class="row">
+                    <div th:unless="${doctor.duracion_cita_minutos != null and doctor.horario != null}" class="row">
 
                         <!-- Left side columns -->
                         <div class="col-lg-10 container">
@@ -178,22 +178,21 @@
                                 <div class="card-body pb-0" id="RecibosTable">
                                     <form method="post" th:action="@{'/doctor/guardarHorario'}" class="mt-2">
 
-                                        <input name="horario" type="hidden"  class="form-control">
                                         <h5 class="card-title">Establecer inicio de disponibilidad:</h5>
                                         <div class="mb-3">
-                                            <input name="horario.disponibilidad_inicio" type="time" class="form-control">
+                                            <input name="disponibilidad_inicio" type="time" class="form-control">
                                         </div>
                                         <h5 class="card-title">Establecer fin de disponibilidad:</h5>
                                         <div class="mb-3">
-                                            <input name="horario.disponibilidad_fin" type="time" class="form-control">
+                                            <input name="disponibilidad_fin" type="time" class="form-control">
                                         </div>
                                         <h5 class="card-title">Establecer horario de comida:</h5>
                                         <div class="mb-3">
-                                            <input name="horario.comida_inicio" type="time" class="form-control">
+                                            <input name="comida_inicio" type="time" class="form-control">
                                         </div>
                                         <h5 class="card-title">Establecer duración de citas:</h5>
                                         <div class="mb-3">
-                                            <input name="duracion_cita_horas" type="number" class="form-control">
+                                            <input name="duracion_cita_minutos" type="number" class="form-control">
                                         </div>
 
 
