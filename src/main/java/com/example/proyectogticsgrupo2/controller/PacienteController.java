@@ -131,7 +131,6 @@ public class PacienteController {
 
         if (bindingResult.hasErrors()) {
 
-            System.out.println("Ha ocurrido un error");
             List<Doctor> doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
             model.addAttribute("doctoresDisponibles", doctoresDisponibles);
 

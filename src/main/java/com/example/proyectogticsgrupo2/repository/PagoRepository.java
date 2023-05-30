@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.repository;
 
+import com.example.proyectogticsgrupo2.dto.PagoYPrecioDTO;
 import com.example.proyectogticsgrupo2.entity.Cita;
 import com.example.proyectogticsgrupo2.entity.Pago;
 import org.springframework.data.jpa.repository.JpaRepository;
