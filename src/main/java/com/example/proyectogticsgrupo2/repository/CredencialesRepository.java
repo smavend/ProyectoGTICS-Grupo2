@@ -24,4 +24,10 @@ public interface CredencialesRepository extends JpaRepository<Credenciales,Strin
     @Query(nativeQuery = true, value = "UPDATE credenciales SET correo = ?2 WHERE (id_credenciales = ?1)")
     void actualizarCorreo(String idPaciente, String correo);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE credenciales SET contrasena_hasheada = ?2 WHERE (id_credenciales = ?1)")
+    void actualizarContrasena(String idPaciente, String contrasena);
+
+    Credenciales findByContrasena(String contrasenaHasheada);
 }

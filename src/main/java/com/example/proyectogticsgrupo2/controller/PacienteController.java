@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.HorariosDisponiblesDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,8 +47,9 @@ public class PacienteController {
     final PagoRepository pagoRepository;
     final HorarioRepository horarioRepository;
     final CredencialesRepository credencialesRepository;
+    final SecurityConfig securityConfig;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository, SecurityConfig securityConfig) {
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
@@ -60,14 +63,12 @@ public class PacienteController {
         this.pagoRepository = pagoRepository;
         this.horarioRepository = horarioRepository;
         this.credencialesRepository = credencialesRepository;
+        this.securityConfig = securityConfig;
     }
 
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model) {
-
-        Paciente paciente = pacienteRepository.findById(idPrueba).get();
-        model.addAttribute("paciente", paciente);
 
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
@@ -98,12 +99,6 @@ public class PacienteController {
     @GetMapping("/reservar")
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                               Model model) {
-
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
 
         model.addAttribute("sedeList", sedeRepository.findAll());
         model.addAttribute("especialidadList", especialidadRepository.findAll());
@@ -245,7 +240,7 @@ public class PacienteController {
                     paciente.setFotocontenttype(file.getContentType());
                 }
 
-                if (!p.getCorreo().equals(paciente.getCorreo())){
+                if (!p.getCorreo().equals(paciente.getCorreo())) {
                     credencialesRepository.actualizarCorreo(paciente.getIdPaciente(), paciente.getCorreo());
                 }
                 pacienteRepository.save(paciente);
@@ -316,10 +311,28 @@ public class PacienteController {
 
     @GetMapping("/perfil/cambiarContrasena")
     public String cambiarContrasena(@RequestParam("id") String idPaciente,
-                                    Model model){
+                                    Model model) {
         Paciente paciente = pacienteRepository.findById(idPrueba).get();
         model.addAttribute("paciente", paciente);
-        return "paciente/cambiarContrasena";
+        return "paciente/perfilContrasena";
+    }
+
+    @PostMapping("/perfil/guardarContrasena")
+    public String guardarContrasena(@RequestParam("actual") String actual,
+                                    @RequestParam("nueva1") String nueva1,
+                                    @RequestParam("nueva2") String nueva2,
+                                    RedirectAttributes attr) {
+
+        PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+        String contrasenaHasheada = passwordEncoder.encode(actual);
+        Credenciales credenciales = credencialesRepository.findByContrasena(contrasenaHasheada);
+
+        if (credenciales != null && nueva1.equals(nueva2)) {
+            credencialesRepository.actualizarContrasena(idPrueba, passwordEncoder.encode(nueva1));
+            attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+        }
+
+        return "redirect:/Paciente/perfil";
     }
 
     @GetMapping("/imagePaciente")
@@ -431,7 +444,7 @@ public class PacienteController {
 
     @PostMapping("/reservarDoctor")
     public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                     Model model) {
+                                  Model model) {
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         Paciente paciente = optionalPaciente.get();
@@ -442,16 +455,15 @@ public class PacienteController {
 
     @PostMapping("/reservarDoctor2")
     public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
-                                  Model model){
+                                  Model model) {
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
         Paciente paciente = optionalPaciente.get();
         model.addAttribute("paciente", paciente);
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "paciente/reservarDoctor1";
-        }
-        else {
+        } else {
 
             String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
