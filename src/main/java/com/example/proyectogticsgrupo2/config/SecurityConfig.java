@@ -98,6 +98,7 @@ public class SecurityConfig {
                             }
                             case "administrativo" -> {
                                 session.setAttribute("administrativo", administrativoRepository.findByCorreo(authentication.getName()));
+
                                 response.sendRedirect("/administrativo");
                             }
                             case "superadmin" -> {

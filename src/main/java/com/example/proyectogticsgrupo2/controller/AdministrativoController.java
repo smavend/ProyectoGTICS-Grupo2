@@ -3,7 +3,6 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.TemporalDiasDto;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -29,7 +28,7 @@ public class AdministrativoController {
     final TemporalRepository temporalRepository;
     final AdministrativoRepository administrativoRepository;
 
-    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, HttpSession session, HttpServletRequest request) {
+    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository) {
         this.pacienteRepository = pacienteRepository;
         this.aesRepository = aesRepository;
         this.alergiaRepository = alergiaRepository;
@@ -39,8 +38,7 @@ public class AdministrativoController {
         this.administrativoRepository = administrativoRepository;
     }
     @GetMapping("/administrativo")
-    public String dashboard(Model model, HttpServletRequest request){
-        HttpSession session = request.getSession();
+    public String dashboard(Model model, HttpSession session){
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
@@ -61,8 +59,7 @@ public class AdministrativoController {
     }
 
     @GetMapping("/administrativo/invitar")
-    public String vistaInvitar(HttpServletRequest request, Model model, @ModelAttribute("temporal") Temporal temporal){
-        HttpSession session = request.getSession();
+    public String vistaInvitar(HttpSession session, Model model, @ModelAttribute("temporal") Temporal temporal){
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
@@ -72,14 +69,13 @@ public class AdministrativoController {
     }
 
     @GetMapping("/administrativo/editar")
-    public String vistaEditar(HttpServletRequest request, @RequestParam(name = "id") String id,
+    public String vistaEditar(HttpSession session, @RequestParam(name = "id") String id,
                               Model model){
 
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
         if(optPaciente.isPresent()){
             Paciente paciente = optPaciente.get();
             if(paciente.getAdministrativo()!=null) {
-                HttpSession session = request.getSession();
                 Administrativo admi = (Administrativo) session.getAttribute("administrativo");
                 String idAdmi = admi.getIdAdministrativo();
 
@@ -98,14 +94,13 @@ public class AdministrativoController {
     }
 
     @GetMapping("/administrativo/editar/invitado")
-    public String vistaEditarInvitado(HttpServletRequest request,
+    public String vistaEditarInvitado(HttpSession session,
                                       @RequestParam(name = "id") Integer id,
                                       Model model){
 
         Optional<Temporal> optTemp = temporalRepository.findById(id);
         if(optTemp.isPresent()){
             Temporal temp = optTemp.get();
-            HttpSession session = request.getSession();
             Administrativo admi = (Administrativo) session.getAttribute("administrativo");
             String idAdmi = admi.getIdAdministrativo();
             if(temp.getAdministrativo().getIdAdministrativo().equals(idAdmi)) {
@@ -118,8 +113,7 @@ public class AdministrativoController {
         return "redirect:/administrativo";
     }
     @GetMapping("/administrativo/mensajeria")
-    public String mostrarMensajeria(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession();
+    public String mostrarMensajeria(HttpSession session, Model model){
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
@@ -129,10 +123,10 @@ public class AdministrativoController {
     }
 
     @PostMapping("administrativo/invitar")
-    public String invitarPaciente(HttpServletRequest request, Model model,@ModelAttribute("temporal") @Valid Temporal temporal,
+    public String invitarPaciente(HttpSession session, Model model,
+                                  @ModelAttribute("temporal") @Valid Temporal temporal,
                                   BindingResult bindingResult,
                                   RedirectAttributes attr){
-        HttpSession session = request.getSession();
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
@@ -141,48 +135,47 @@ public class AdministrativoController {
             model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             return "administrativo/invitar";
         }
-        else {
+        else{
             List<Paciente> list = pacienteRepository.findAll();
             boolean exist = false;
             boolean existTemp = false;
-            for(Paciente p: list){
-                if(p.getIdPaciente().equals(temporal.getDni())){
+            for (Paciente p : list) {
+                if (p.getIdPaciente().equals(temporal.getDni())) {
                     exist = true;
                     break;
-                }else if (p.getCorreo().equals(temporal.getCorreo())){
+                } else if (p.getCorreo().equals(temporal.getCorreo())) {
                     exist = true;
                     break;
                 }
             }
             List<Temporal> temp = temporalRepository.findAll();
-            for (Temporal t: temp){
-                if(t.getDni().equals(temporal.getDni())){
+            for (Temporal t : temp) {
+                if (t.getDni().equals(temporal.getDni())) {
                     existTemp = true;
                     break;
-                } else if(t.getCorreo().equals(temporal.getCorreo())){
+                } else if (t.getCorreo().equals(temporal.getCorreo())) {
                     existTemp = true;
                     break;
                 }
             }
-            if(!exist & !existTemp){
+            if (!exist & !existTemp) {
                 temporal.setFechainvitado(LocalDateTime.now());
                 Optional<Administrativo> optAdministrativo = administrativoRepository.findById(idAdmi);
                 temporal.setAdministrativo(optAdministrativo.get());
                 temporalRepository.save(temporal);
                 return "redirect:/administrativo";
-            }else {
-                attr.addFlashAttribute("msg","Ingrese un DNI o correo diferente, ya se encuentra invitado o registrado");
+            } else {
+                attr.addFlashAttribute("msg", "Ingrese un DNI o correo diferente, ya se encuentra invitado o registrado");
                 return "redirect:/administrativo/invitar";
             }
         }
     }
 
     @PostMapping("/administrativo/guardar/invitado")
-    public String actualizarInvitado(HttpServletRequest request,
+    public String actualizarInvitado(HttpSession session,
                                      Model model,
                                      @ModelAttribute("temporal") @Valid Temporal temporal,
                                      BindingResult bindingResult){
-        HttpSession session = request.getSession();
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
         String idAdmi = admi.getIdAdministrativo();
 
