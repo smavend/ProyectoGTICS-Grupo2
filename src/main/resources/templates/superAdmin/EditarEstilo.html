@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <head>
+<head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
@@ -43,142 +43,147 @@
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  </head>
-  <body>
-    <!-- ======= Header ======= -->
-    <div th:replace="~{superAdmin/fragments/header.html :: header}"></div>
-    <!-- End Header -->
+</head>
+<body>
+<!-- ======= Header ======= -->
+<div th:replace="~{superAdmin/fragments/header.html :: header}"></div>
+<!-- End Header -->
 
-    <!-- ======= Sidebar ======= -->
-    <div th:replace="~{superAdmin/fragments/sidebar.html :: sidebar}"></div>
-    <!-- End Sidebar-->
+<!-- ======= Sidebar ======= -->
+<div th:replace="~{superAdmin/fragments/sidebar.html :: sidebar}"></div>
+<!-- End Sidebar-->
 
-    <main id="main" class="main">
+<main id="main" class="main">
 
-      <div class="pagetitle">
+    <div class="pagetitle">
         <h1>Clínica INTERPUCP</h1>
         <nav>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item active">Tabla de usuarios</li>
-          </ol>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Tabla de usuarios</li>
+            </ol>
         </nav>
-      </div><!-- End Page Title -->
-      <section class="section dashboard">
+    </div><!-- End Page Title -->
+    <section class="section dashboard">
         <!-- aqui ira la seleccion de clinicas para los UIUX -->
         <section class="section">
-          <div class="container">
-            <h1>Editar Estilo</h1>
-            <form method="POST" th:action="@{/SuperAdminHomePage/EditarEstilo}" th:object="${stylevistas}">
-              <input type="hidden" th:field="*{id}">
-              <div class="mb-3">
-                <label for="usuarioInput" class="form-label">Usuario</label>
-                <input type="text" class="form-control" id="usuarioInput" th:field="*{user}">
-              </div>
-              <div class="mb-3">
-                <label for="headerInput" class="form-label">Header</label>
-                <div class="row">
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="headerInput" th:field="*{header}">
-                  </div>
-                  <div class="col-sm-4">
-                    <input type="color" class="form-control form-control-color" id="exampleColorInput" th:attr="value=${header}" title="Choose your color">
-                  </div>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="footerInput" class="form-label">Footer</label>
-                <div class="row">
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="footerInput" th:field="*{footer}">
-                  </div>
-                  <div class="col-sm-4">
-                    <input type="color" class="form-control form-control-color" id="exampleColorInput2" th:attr="value=${footer}" title="Choose your color">
-                  </div>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="backgroundInput" class="form-label">Background</label>
-                <div class="row">
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="backgroundInput" th:field="*{background}">
-                  </div>
-                  <div class="col-sm-4">
-                    <input type="color" class="form-control form-control-color" id="exampleColorInput3" th:attr="value=${background}" title="Choose your color">
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            </form>
-          </div>
+            <div class="container">
+                <h1>Editar Estilo</h1>
+                <form method="POST" th:action="@{/SuperAdminHomePage/EditarEstilo}" th:object="${stylevistas}">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="mb-3">
+                        <label for="usuarioInput" class="form-label">Usuario</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="usuarioInput" th:field="*{user}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="headerInput" class="form-label">Header</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" id="headerInput" th:field="*{header}">
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="color" class="form-control form-control-color" id="exampleColorInput"
+                                       th:attr="value=${header}" title="Choose your color">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="footerInput" class="form-label">Footer</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" id="footerInput" th:field="*{footer}">
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="color" class="form-control form-control-color" id="exampleColorInput2"
+                                       th:attr="value=${footer}" title="Choose your color">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="backgroundInput" class="form-label">Background</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" id="backgroundInput" th:field="*{background}">
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="color" class="form-control form-control-color" id="exampleColorInput3"
+                                       th:attr="value=${background}" title="Choose your color">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
+            </div>
         </section>
-      </section>
+    </section>
 
-      <script>
-        window.onload = function() {
-          const headerInput = document.getElementById('headerInput');
-          const headerColorInput = document.getElementById('exampleColorInput');
-          headerColorInput.value = headerInput.value;
-          headerColorInput.addEventListener('input', function() {
-            headerInput.value = this.value;
-          });
+    <script>
+        window.onload = function () {
+            const headerInput = document.getElementById('headerInput');
+            const headerColorInput = document.getElementById('exampleColorInput');
+            headerColorInput.value = headerInput.value;
+            headerColorInput.addEventListener('input', function () {
+                headerInput.value = this.value;
+            });
 
-          const footerInput = document.getElementById('footerInput');
-          const footerColorInput = document.getElementById('exampleColorInput2');
-          footerColorInput.value = footerInput.value;
-          footerColorInput.addEventListener('input', function() {
-            footerInput.value = this.value;
-          });
+            const footerInput = document.getElementById('footerInput');
+            const footerColorInput = document.getElementById('exampleColorInput2');
+            footerColorInput.value = footerInput.value;
+            footerColorInput.addEventListener('input', function () {
+                footerInput.value = this.value;
+            });
 
-          const backgroundInput = document.getElementById('backgroundInput');
-          const backgroundColorInput = document.getElementById('exampleColorInput3');
-          backgroundColorInput.value = backgroundInput.value;
-          backgroundColorInput.addEventListener('input', function() {
-            backgroundInput.value = this.value;
-          });
+            const backgroundInput = document.getElementById('backgroundInput');
+            const backgroundColorInput = document.getElementById('exampleColorInput3');
+            backgroundColorInput.value = backgroundInput.value;
+            backgroundColorInput.addEventListener('input', function () {
+                backgroundInput.value = this.value;
+            });
         };
-      </script>
+    </script>
 
 
-    </main><!-- End #main -->
+</main><!-- End #main -->
 
-    <!-- ======= Footer ======= -->
-    <footer id="footer" class="footer">
-      <div class="copyright">
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+    <div class="copyright">
         &copy; Copyright <strong><span>Clínica InterPUCP</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits">
+    </div>
+    <div class="credits">
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
         Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </footer><!-- End Footer -->
+    </div>
+</footer><!-- End Footer -->
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-    <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-    <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-    <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-    <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-    <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-    <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
-    <!-- Template Main JS File -->
-    <script th:src="@{/assets/js/main.js}"></script>
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
 
-    <script th:src="@{/assets/js/paginacion_administrador_superadmin.js}"></script>
-    <script th:src="@{/assets_home/js/paginacion_administrativo_superadmin.js}"></script>
-    <script th:src="@{/assets/js/paginacion_doctor_superadmin.js}"></script>
-    <script th:src="@{/assets/js/paginacion_paciente_superadmin.js}"></script>
-    <script th:src="@{/assets/js/darkmode.js}"></script>
+<script th:src="@{/assets/js/paginacion_administrador_superadmin.js}"></script>
+<script th:src="@{/assets_home/js/paginacion_administrativo_superadmin.js}"></script>
+<script th:src="@{/assets/js/paginacion_doctor_superadmin.js}"></script>
+<script th:src="@{/assets/js/paginacion_paciente_superadmin.js}"></script>
+<script th:src="@{/assets/js/darkmode.js}"></script>
 
 
-  </body>
+</body>
 
 </html>

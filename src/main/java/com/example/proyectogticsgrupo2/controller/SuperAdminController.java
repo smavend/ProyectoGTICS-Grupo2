@@ -219,7 +219,7 @@ public class SuperAdminController {
         // Actualiza el registro en la base de datos
         stylevistasRepository.save(stylevistas);
         // Redirige de nuevo a la página que muestra la lista de Stylevistas
-        return "redirect:/SuperAdminHomePage/Gestionar_UIUX";
+        return "redirect:/SuperAdminHomePage/SelectClinica";
     }
 
     @GetMapping("/CrearUsuario")
