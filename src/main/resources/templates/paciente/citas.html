@@ -239,8 +239,8 @@
             const botonCitas = $(".botonCitas");
 
             function buscarExamenes() {
-                botonExamenes.addClass("filtroSeleccionado");
-                botonCitas.removeClass("filtroSeleccionado");
+                botonExamenes.addClass("botonTipoSeleccionado");
+                botonCitas.removeClass("botonTipoSeleccionado");
                 const citas = $(".filaCita");
                 for (let i = 0; i < citas.length; i++) {
                     let especialidad = citas[i].querySelector(".especialidad").innerText;
@@ -250,12 +250,13 @@
                 }
             }
             function buscarCitas() {
-                botonExamenes.removeClass("filtroSeleccionado");
-                botonCitas.addClass("filtroSeleccionado");
+                botonExamenes.removeClass("botonTipoSeleccionado");
+                botonCitas.addClass("botonTipoSeleccionado");
                 const citas = $(".filaCita");
                 for (let i = 0; i < citas.length; i++) {
                     citas[i].classList.remove("d-none");
                 }
+
             }
         </script>
 
