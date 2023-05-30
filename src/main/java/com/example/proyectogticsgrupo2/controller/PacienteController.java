@@ -70,6 +70,9 @@ public class PacienteController {
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model) {
 
+        Paciente paciente = pacienteRepository.findById(idPrueba).get();
+        model.addAttribute("paciente", paciente);
+
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
@@ -99,6 +102,12 @@ public class PacienteController {
     @GetMapping("/reservar")
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                               Model model) {
+
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
+        if (optionalPaciente.isPresent()) {
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("paciente", paciente);
+        }
 
         model.addAttribute("sedeList", sedeRepository.findAll());
         model.addAttribute("especialidadList", especialidadRepository.findAll());
