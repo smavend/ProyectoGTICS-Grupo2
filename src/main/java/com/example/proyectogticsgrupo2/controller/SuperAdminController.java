@@ -177,18 +177,14 @@ public class SuperAdminController {
         return "superAdmin/crear_reporte";
     }
 
-    @GetMapping("/selectClinica")
+    @GetMapping("/SelectClinica")
     public String GestionarUIUX(Model model) {
         List<Stylevistas> listaStylevistas = stylevistasRepository.findAll();
-        List<Administrador> listaAdministradores = administradorRepository.findAll();
         if(listaStylevistas.isEmpty()) {
             System.out.println("La lista de Stylevistas está vacía.");
-            System.out.println("hola");
         } else {
             System.out.println("La lista de Stylevistas contiene elementos. Primer elemento: " + listaStylevistas.get(0));
-            System.out.println("chau");
         }
-        model.addAttribute("listadmin", listaAdministradores);
         model.addAttribute("listaStylevistas", listaStylevistas);
         return "superAdmin/Gestionar_UIUX";
     }
@@ -210,9 +206,20 @@ public class SuperAdminController {
         return "general/home";
     }
 
-    @GetMapping("/SelectClinica")
-    public String SelectClinica() {
-        return "superAdmin/Gestionar_UIUX";
+
+    @GetMapping("/EditarEstilo/{id}")
+    public String showEditForm(@PathVariable("id") Integer id, Model model) {
+        Stylevistas stylevistas = stylevistasRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid style ID:" + id));
+        model.addAttribute("stylevistas", stylevistas);
+        return "superAdmin/EditarEstilo";
+    }
+
+    @PostMapping("/EditarEstilo")
+    public String updateStylevistas(@ModelAttribute("stylevistas") Stylevistas stylevistas) {
+        // Actualiza el registro en la base de datos
+        stylevistasRepository.save(stylevistas);
+        // Redirige de nuevo a la página que muestra la lista de Stylevistas
+        return "redirect:/SuperAdminHomePage/SelectClinica";
     }
 
     @GetMapping("/CrearUsuario")

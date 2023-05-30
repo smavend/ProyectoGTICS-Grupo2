@@ -11,6 +11,7 @@
 --------------------------------------------------------------*/
 :root {
     scroll-behavior: smooth;
+    --header-color: #b19cd9;
 }
 
 a {
@@ -1245,9 +1246,8 @@ body {
 /* Modo claro */
 /* Modo claro */
 body.light-mode #header {
-    background-color: #b19cd9;
+    background-color: var(--header-color);
 }
-
 body.light-mode .sidebar {
     background-color: #fff;
 }
@@ -1266,9 +1266,7 @@ body.light-mode .breadcrumb, body.light-mode .dropdown-menu {
 }
 
 /* Modo oscuro */
-body.dark-mode #header {
-    background-color: #363537;  /* Usa el color que desees para el modo oscuro */
-}
+body.dark-mode #header{background-color: #363537;}
 
 body.dark-mode .sidebar {
     background-color: #363537;  /* Ajusta el color al que prefieras */
