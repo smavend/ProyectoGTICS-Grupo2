@@ -33,8 +33,6 @@ import java.util.stream.IntStream;
 @RequestMapping("/Paciente")
 public class PacienteController {
 
-    String idPrueba = "10203010";
-
     final PacienteRepository pacienteRepository;
     final SedeRepository sedeRepository;
     final EspecialidadRepository especialidadRepository;
@@ -71,9 +69,6 @@ public class PacienteController {
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model) {
 
-        Paciente paciente = pacienteRepository.findById(idPrueba).get();
-        model.addAttribute("paciente", paciente);
-
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
@@ -104,12 +99,6 @@ public class PacienteController {
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                               Model model) {
 
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
-
         model.addAttribute("sedeList", sedeRepository.findAll());
         model.addAttribute("especialidadList", especialidadRepository.findAll());
         return "paciente/reservar1";
@@ -118,9 +107,6 @@ public class PacienteController {
     @PostMapping("/reservar1")
     public String reservar1Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model) {
-
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        model.addAttribute("paciente", optionalPaciente.get());
 
         List<Doctor> doctoresDisponibles;
 
@@ -142,9 +128,6 @@ public class PacienteController {
     @PostMapping("/reservar2")
     public String reservar2Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model) {
-
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        model.addAttribute("paciente", optionalPaciente.get());
 
         if (bindingResult.hasErrors()) {
 
@@ -225,11 +208,10 @@ public class PacienteController {
                                 BindingResult bindingResult,
                                 @RequestParam(name = "archivo") MultipartFile file,
                                 RedirectAttributes attr,
-                                Model model) {
+                                Model model,
+                                HttpSession session) {
 
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(paciente.getIdPaciente());
-        Paciente p = optionalPaciente.get();
-
+        Paciente p = (Paciente) session.getAttribute("paciente");
         String fileName = file.getOriginalFilename();
 
         if (fileName.contains("..") || fileName.contains(" ")) {
@@ -336,13 +318,17 @@ public class PacienteController {
 
         Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
         String idPacienteLog = pacienteLog.getIdPaciente();
-        PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
-        String contrasenaHasheada = passwordEncoder.encode(actual);
-        Credenciales credenciales = credencialesRepository.findByContrasena(contrasenaHasheada);
 
-        System.out.println("c1: "+nueva1);
-        System.out.println("c2: "+nueva2);
-        System.out.println("h: "+contrasenaHasheada);
+        PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+        String contrasenaActualHasheada = passwordEncoder.encode(actual);
+        Credenciales credenciales = credencialesRepository.findByContrasena(contrasenaActualHasheada);
+
+        System.out.println("ac: "+actual);
+        System.out.println("c1: " + nueva1);
+        System.out.println("c2: " + nueva2);
+        System.out.println("ach: " + contrasenaActualHasheada);
+        System.out.println("nuh: "+passwordEncoder.encode(nueva1));
+        System.out.println("cred: "+credenciales);
 
         if (credenciales != null && nueva1.equals(nueva2)) {
             credencialesRepository.actualizarContrasena(idPacienteLog, passwordEncoder.encode(nueva1));
@@ -377,11 +363,6 @@ public class PacienteController {
                               @RequestParam("esp") int idEspecialidad,
                               @RequestParam("pag") int pagina,
                               Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
 
         List<Doctor> doctorList;
         int totalPaginas;
@@ -445,9 +426,6 @@ public class PacienteController {
     @GetMapping("/perfilDoctor")
     public String verPerfilDoctor(Model model,
                                   @RequestParam("doc") String idDoctor) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        Paciente paciente = optionalPaciente.get();
-        model.addAttribute("paciente", paciente);
 
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
@@ -460,23 +438,13 @@ public class PacienteController {
     }
 
     @PostMapping("/reservarDoctor")
-    public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                  Model model) {
-
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        Paciente paciente = optionalPaciente.get();
-        model.addAttribute("paciente", paciente);
+    public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal) {
 
         return "paciente/reservarDoctor1";
     }
 
     @PostMapping("/reservarDoctor2")
-    public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
-                                  Model model) {
-
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        Paciente paciente = optionalPaciente.get();
-        model.addAttribute("paciente", paciente);
+    public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "paciente/reservarDoctor1";
@@ -496,22 +464,12 @@ public class PacienteController {
     }
 
     @GetMapping("/confirmacion")
-    public String confirmarReserva(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
+    public String confirmarReserva() {
         return "paciente/confirmacion";
     }
 
     @GetMapping("/sesionVirtual")
-    public String sesionVirtual(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
+    public String sesionVirtual() {
         return "paciente/sesionVirtual";
     }
 
@@ -534,11 +492,6 @@ public class PacienteController {
     /* SECCIÓN PAGOS */
     @GetMapping("/pagos")
     public String pagos(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("pagoList", pagoList);
         return "paciente/pagos";
@@ -546,11 +499,6 @@ public class PacienteController {
 
     @GetMapping("/filtrarPagos")
     public String filtrarPagos(@RequestParam("filtro") int filtro, Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("pagoList", pagoList);
         model.addAttribute("filtro", filtro);
@@ -566,11 +514,6 @@ public class PacienteController {
     @GetMapping("/recibo")
     public String verReciboPago(@RequestParam("idPago") int idPago,
                                 Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
         Optional<Pago> optionalPago = pagoRepository.findById(idPago);
         if (optionalPago.isPresent()) {
             Pago pago = optionalPago.get();
@@ -581,22 +524,12 @@ public class PacienteController {
 
     /* SECCIÓN CUESTIONARIOS */
     @GetMapping("/cuestionarios")
-    public String cuestionarios(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
+    public String cuestionarios() {
         return "paciente/cuestionarios";
     }
 
     @GetMapping("/completarCuestionario")
-    public String completarCuestionario(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("paciente", paciente);
-        }
+    public String completarCuestionario() {
         return "paciente/completarCuestionario";
     }
 
@@ -604,37 +537,27 @@ public class PacienteController {
     @GetMapping("/consentimientos")
     public String consentimientos(Model model, HttpSession session) {
         Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        String idPacienteLog = pacienteLog.getIdPaciente();
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-            List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(idPacienteLog);
 
-            model.addAttribute("consentimientos", consentimientos);
-            model.addAttribute("paciente", paciente);
-        }
+        List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(pacienteLog.getIdPaciente());
+
+        model.addAttribute("consentimientos", consentimientos);
         return "paciente/consentimientos";
     }
 
     @PostMapping("/consentimientos/actualizar")
     public String actualizarConsentimientos(@RequestParam Map<String, Boolean> consentimientos,
-                                            Model model,
                                             RedirectAttributes attr, HttpSession session) {
 
         Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        String idPacienteLog = pacienteLog.getIdPaciente();
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
-        Paciente paciente = optionalPaciente.get();
 
-        pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(idPacienteLog);
+        pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(pacienteLog.getIdPaciente());
         for (String key : consentimientos.keySet()) {
             if (key.length() == 1) {
-                pacientePorConsentimientoRepository.actualizarConsentimientoAPositivo(idPacienteLog, key);
+                pacientePorConsentimientoRepository.actualizarConsentimientoAPositivo(pacienteLog.getIdPaciente(), key);
             }
         }
 
         attr.addFlashAttribute("msgActualizacion", "Consentimientos actualizados correctamente");
-        model.addAttribute("paciente", paciente);
 
         return "redirect:/Paciente/consentimientos";
     }
@@ -642,13 +565,7 @@ public class PacienteController {
     /* SECCIÓN MENSAJERÍA */
 
     @GetMapping("/mensajeria")
-    public String mensajeria(Model model) {
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPrueba);
-        if (optionalPaciente.isPresent()) {
-            Paciente paciente = optionalPaciente.get();
-
-            model.addAttribute("paciente", paciente);
-        }
+    public String mensajeria() {
         return "paciente/mensajeria";
     }
 
