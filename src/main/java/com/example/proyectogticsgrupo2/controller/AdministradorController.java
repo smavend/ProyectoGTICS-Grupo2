@@ -194,14 +194,21 @@ public class AdministradorController {
                                 Model model, RedirectAttributes attr){
         Optional<Doctor> opt = doctorRepository.findById(doctor.getId_doctor());
         Doctor doctorCorreoExist = doctorRepository.findByCorreo(doctor.getCorreo());
-        if(bindingResult.hasErrors() || opt.isPresent() || doctorCorreoExist!=null){
-            if(opt.isPresent() && doctorCorreoExist!=null){
+        //doctor.getEspecialidadID = null 
+        if(bindingResult.hasErrors() || opt.isPresent() || doctorCorreoExist!=null ||
+                doctor.getEspecialidad()==null || doctor.getSede()==null){
+            if(opt.isPresent()){
                 bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
                 bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
-            } else if (doctorCorreoExist!=null) {
+            }
+            if (doctorCorreoExist!=null) {
                 bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
-            } else if (opt.isPresent()) {
-                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
+            }
+            if (doctor.getSede()==null) {
+                bindingResult.rejectValue("sede","errorespecialidad","Seleccione una sede");
+            }
+            if (doctor.getEspecialidad()==null) {
+                bindingResult.rejectValue("especialidad","errorespecialidad","Seleccione una especialidad");
             }
             List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
             List<Sede> listaSede = sedeRepository.findAll();
@@ -223,8 +230,6 @@ public class AdministradorController {
                     e.printStackTrace();
                 }
             }
-
-
             doctor.setEstado(1);
             doctorRepository.save(doctor);
 

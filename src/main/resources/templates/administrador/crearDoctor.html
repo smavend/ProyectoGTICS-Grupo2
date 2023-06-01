@@ -356,16 +356,21 @@
                   <div class="col-md-12 mb-3">
                     <label for="sexo">Especialidad</label>
                     <select class="form-select" id="sexo" name ="especialidad" >
-                      <option value="">Seleccionar</option>
-                      <option th:each="especialidad: ${listaEspecialidad}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" ></option>
+                      <option value="0">Seleccionar</option>
+                      <option th:each="especialidad: ${listaEspecialidad}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" th:classappend="${#fields.hasErrors('especialidad')? 'is-invalid':''}" ></option>
                     </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('especialidad')}" th:errors="*{especialidad}" ></div>
+
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="sede">Sede</label>
                       <select class="form-select" id="sede" name ="sede" >
-                      <option value="">Seleccionar</option>
-                      <option th:each="sede: ${listaSede}" th:value="${sede.idSede}" th:text="${sede.nombre}" ></option>
+                      <option value="0">Seleccionar</option>
+                      <option th:each="sede: ${listaSede}" th:value="${sede.idSede}" th:text="${sede.nombre}" th:classappend="${#fields.hasErrors('sede')? 'is-invalid':''}" ></option>
                     </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('sede')}" th:errors="*{sede}" ></div>
+
+
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="archivo" class="form-label">Subir foto</label>
