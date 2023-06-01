@@ -134,14 +134,24 @@ public class AdministradorController {
                                   Model model, RedirectAttributes attr){
         Optional<Paciente> opt = pacienteRepository.findById(paciente.getIdPaciente());
         Paciente pacienteCorreoExist = pacienteRepository.findByCorreo(paciente.getCorreo());
-        if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null){
-            if(opt.isPresent() && pacienteCorreoExist!=null){
-                bindingResult.rejectValue("idPaciente","errorPaciente","Este DNI ya se encuentra registrado");
-                bindingResult.rejectValue("correo","errorCorreoPaci","Este correo ya se encuentra registrado");
-            } else if (pacienteCorreoExist!=null) {
-                bindingResult.rejectValue("correo","errorCorreoPaci","Este correo ya se encuentra registrado");
-            } else if (opt.isPresent()) {
-                bindingResult.rejectValue("idPaciente","errorPaciente","Este DNI ya se encuentra registrado");
+        if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null ||
+                paciente.getSeguro()==null || paciente.getDistrito()==null || paciente.getFechanacimiento()==null){
+            if(opt.isPresent()){
+                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
+                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+            }
+            if (pacienteCorreoExist!=null) {
+                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+            }
+            if (paciente.getSeguro()==null) {
+                bindingResult.rejectValue("seguro","erroresseguro","Seleccione un seguro");
+            }
+            if (paciente.getDistrito()==null) {
+                bindingResult.rejectValue("distrito","erroresdistrito","Seleccione un distrito");
+            }
+            if(paciente.getFechanacimiento()==null){
+                bindingResult.rejectValue("fechanacimiento","erroresdistrito","");
+
             }
             List<Seguro> listaSeguro  = seguroRepository.findAll();
             List<Distrito> listaDistrito = distritoRepository.findAll();
@@ -194,7 +204,7 @@ public class AdministradorController {
                                 Model model, RedirectAttributes attr){
         Optional<Doctor> opt = doctorRepository.findById(doctor.getId_doctor());
         Doctor doctorCorreoExist = doctorRepository.findByCorreo(doctor.getCorreo());
-        //doctor.getEspecialidadID = null 
+
         if(bindingResult.hasErrors() || opt.isPresent() || doctorCorreoExist!=null ||
                 doctor.getEspecialidad()==null || doctor.getSede()==null){
             if(opt.isPresent()){
