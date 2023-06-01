@@ -30,16 +30,16 @@ public class CorreoService {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(correo, true));
             message.setSubject("Correo de Confirmación");
 
-            message.setText("Estimado(a) usuario,\n\n" +
-                    "¡Bienvenido(a) a nuestra plataforma clínica! Le hemos creado una cuenta para que pueda acceder a sus registros médicos y realizar consultas en línea.\n" +
-                    "\n" +
-                    "Su nombre de usuario es: "+correo+"\n" +
-                    "\n" +
-                    "Su contraseña temporal es: "+pass+"\n" +
-                    "\n" +
-                    "Por motivos de seguridad, le pedimos que cambie su contraseña la primera vez que inicie sesión.\n" +
-                    "\n" +
-                    "Gracias por confiar en nosotros.");
+            // Crear una parte para el contenido HTML
+            MimeBodyPart htmlPart = new MimeBodyPart();
+            htmlPart.setContent(getHTMLContent(), "text/html");
+
+            // Crear el multipart para combinar el contenido HTML y el texto plano
+            MimeMultipart multipart = new MimeMultipart("alternative");
+            multipart.addBodyPart(htmlPart);
+
+            // Agregar el multipart al mensaje
+            message.setContent(multipart);
 
             System.out.println("snding...");
             Transport.send(message);
