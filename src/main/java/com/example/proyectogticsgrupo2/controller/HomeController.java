@@ -53,7 +53,6 @@ public class HomeController {
     @GetMapping("/")
     public String principal(Model model, HttpServletRequest request) throws UnknownHostException {
         InetAddress address = InetAddress.getLocalHost();
-        String ipAddress = address.getHostName();
 
         byte[] bIPAddress = address.getAddress();
 
