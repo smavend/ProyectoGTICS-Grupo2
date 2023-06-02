@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 public class CorreoService {
-    public void props(String correo, String pass) {
+    public void props(String correo, String pass, String link) {
         Properties props = new Properties();
         props.put("mail.smtp.host","smtp.gmail.com");
         props.put("mail.smtp.port", "587");
@@ -36,7 +36,7 @@ public class CorreoService {
 
             // Crear una parte para el contenido HTML
             MimeBodyPart htmlPart = new MimeBodyPart();
-            htmlPart.setContent(getHTMLContent(correo, pass), "text/html");
+            htmlPart.setContent(getHTMLContent(correo, pass, link), "text/html");
 
             // Crear el multipart para combinar el contenido HTML y el texto plano
             MimeMultipart multipart = new MimeMultipart("alternative");
@@ -54,7 +54,7 @@ public class CorreoService {
         }
     }
     // Método para cargar el contenido HTML desde el archivo invitacion.html
-    private String getHTMLContent(String user, String pwd) {
+    private String getHTMLContent(String user, String pwd, String link) {
         String htmlContent = ""; // Contenido HTML del archivo
 
         // Código para cargar el contenido HTML desde el archivo invitacion.html
@@ -64,6 +64,7 @@ public class CorreoService {
 
             htmlContent = htmlContent.replace("%user%",user);
             htmlContent = htmlContent.replace("%pwd%", pwd);
+            htmlContent = htmlContent.replace("%link%", link);
         } catch (IOException e) {
             e.printStackTrace();
         }
