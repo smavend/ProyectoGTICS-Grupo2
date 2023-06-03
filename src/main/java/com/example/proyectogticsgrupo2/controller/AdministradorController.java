@@ -215,7 +215,7 @@ public class AdministradorController {
             String link = sIPAddress+":"+request.getLocalPort();
 
             correoService.props(paciente.getCorreo(),passRandom, link);
-            attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+            attr.addFlashAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
     }
@@ -296,7 +296,7 @@ public class AdministradorController {
             System.out.println(link);
             System.out.println("servername:"+domain);
             correoService.props(doctor.getCorreo(),passRandom, link);
-            attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
+            attr.addFlashAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
     }
@@ -331,7 +331,7 @@ public class AdministradorController {
             Paciente p = opt.get();
 
             byte[] imagenComoBytes = p.getFoto();
-            //agregue desde aca
+            /*//agregue desde aca
             if(imagenComoBytes==null){
                 try {
                     File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
@@ -359,7 +359,7 @@ public class AdministradorController {
                 }
             }else {
 
-            } //agregue hasta aca
+            } //agregue hasta aca*/
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
@@ -386,7 +386,7 @@ public class AdministradorController {
 
             byte[] imagenComoBytes = doc.getFoto();
             //agregue desde aca
-            if(imagenComoBytes==null){
+            /*if(imagenComoBytes==null){
                 try {
                     File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
                     FileInputStream input = new FileInputStream(foto);
@@ -413,7 +413,7 @@ public class AdministradorController {
                 }
             }else {
 
-            } //agregue hasta aca
+            } //agregue hasta aca*/
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(

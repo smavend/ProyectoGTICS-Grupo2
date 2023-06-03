@@ -324,7 +324,7 @@
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
                     <label >DNI</label>
-                    <input type="text" class="form-control" th:field="*{id_doctor}" th:classappend="${#fields.hasErrors('id_doctor')? 'is-invalid':''}">
+                    <input type="text" id="dni" class="form-control" th:field="*{id_doctor}" th:classappend="${#fields.hasErrors('id_doctor')? 'is-invalid':''}">
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('id_doctor')}" th:errors="*{id_doctor}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
@@ -417,8 +417,20 @@
 <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
 <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#dni').on('input', function() {
+      var dniValue = $(this).val();
+      var validCharacters = /^[0-9]{1,8}$/;
 
-
+      if (!validCharacters.test(dniValue)) {
+        $(this).val(dniValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
+        $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
+      }
+    });
+  });
+</script>
 <!-- Agregamos las librerías de jQuery UI para crear el calendario -->
 
 
