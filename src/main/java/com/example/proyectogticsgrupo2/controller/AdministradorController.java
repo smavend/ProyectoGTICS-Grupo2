@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -78,7 +80,7 @@ public class AdministradorController {
         model.addAttribute("listaTemporal",listaTemporal);
         return "administrador/rptaForm";}
     @PostMapping("/guardarTemporales")
-    public String guardarTemporales(@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr){
+    public String guardarTemporales(HttpServletRequest request, @RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr) throws UnknownHostException {
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
             //Cuanto funcione perfectamente los temporales, entonces los filtro por llenado 1
             // y usare el datablindig
@@ -103,7 +105,20 @@ public class AdministradorController {
                 temporalRepository.deleteById(pacitemp.getId_temporal());
 
                 CorreoService correoService= new CorreoService();
-                correoService.props(paciente.getCorreo(),paciente.getNombre());
+
+                InetAddress address = InetAddress.getLocalHost();
+                byte[] bIPAddress = address.getAddress();
+                String sIPAddress = "";
+                for (int i = 0; i < bIPAddress.length; i++){
+                    if (i>0) {
+                        sIPAddress += ".";
+                    }
+                    int unsignedByte = bIPAddress[i] & 0xFF;
+                    sIPAddress += unsignedByte;
+                }
+                String link = sIPAddress+":"+request.getLocalPort();
+
+                correoService.props(paciente.getCorreo(),paciente.getNombre(), link);
                 attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
 
             }
@@ -129,19 +144,30 @@ public class AdministradorController {
         model.addAttribute("listaAdministrativo",listaAdministrativo);
         return "administrador/crearPaciente";}
     @PostMapping("/guardarPaciente")
-    public String guardarEmpleado(@RequestParam("archivo") MultipartFile file,
+    public String guardarEmpleado(HttpServletRequest request,
+                                  @RequestParam("archivo") MultipartFile file,
                                   @ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
-                                  Model model, RedirectAttributes attr){
+                                  Model model, RedirectAttributes attr) throws UnknownHostException {
         Optional<Paciente> opt = pacienteRepository.findById(paciente.getIdPaciente());
         Paciente pacienteCorreoExist = pacienteRepository.findByCorreo(paciente.getCorreo());
-        if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null){
-            if(opt.isPresent() && pacienteCorreoExist!=null){
-                bindingResult.rejectValue("idPaciente","errorPaciente","Este DNI ya se encuentra registrado");
-                bindingResult.rejectValue("correo","errorCorreoPaci","Este correo ya se encuentra registrado");
-            } else if (pacienteCorreoExist!=null) {
-                bindingResult.rejectValue("correo","errorCorreoPaci","Este correo ya se encuentra registrado");
-            } else if (opt.isPresent()) {
-                bindingResult.rejectValue("idPaciente","errorPaciente","Este DNI ya se encuentra registrado");
+        if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null ||
+                paciente.getSeguro()==null || paciente.getDistrito()==null || paciente.getFechanacimiento()==null){
+            if(opt.isPresent()){
+                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
+                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+            }
+            if (pacienteCorreoExist!=null) {
+                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+            }
+            if (paciente.getSeguro()==null) {
+                bindingResult.rejectValue("seguro","erroresseguro","Seleccione un seguro");
+            }
+            if (paciente.getDistrito()==null) {
+                bindingResult.rejectValue("distrito","erroresdistrito","Seleccione un distrito");
+            }
+            if(paciente.getFechanacimiento()==null){
+                bindingResult.rejectValue("fechanacimiento","erroresdistrito","");
+
             }
             List<Seguro> listaSeguro  = seguroRepository.findAll();
             List<Distrito> listaDistrito = distritoRepository.findAll();
@@ -175,7 +201,20 @@ public class AdministradorController {
             String encodedPassword = passwordEncoder.encode(passRandom);
             credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
             CorreoService correoService = new CorreoService();
-            correoService.props(paciente.getCorreo(),passRandom);
+
+            InetAddress address = InetAddress.getLocalHost();
+            byte[] bIPAddress = address.getAddress();
+            String sIPAddress = "";
+            for (int i = 0; i < bIPAddress.length; i++){
+                if (i>0) {
+                    sIPAddress += ".";
+                }
+                int unsignedByte = bIPAddress[i] & 0xFF;
+                sIPAddress += unsignedByte;
+            }
+            String link = sIPAddress+":"+request.getLocalPort();
+
+            correoService.props(paciente.getCorreo(),passRandom, link);
             attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
@@ -189,12 +228,13 @@ public class AdministradorController {
         model.addAttribute("listaEspecialidad",listaEspecialidad);
         return "administrador/crearDoctor";}
     @PostMapping("/guardarDoctor")
-    public String guardarDoctor(@RequestParam("archivo") MultipartFile file,
+    public String guardarDoctor(HttpServletRequest request,
+                                @RequestParam("archivo") MultipartFile file,
                                 @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult,
-                                Model model, RedirectAttributes attr){
+                                Model model, RedirectAttributes attr) throws UnknownHostException {
         Optional<Doctor> opt = doctorRepository.findById(doctor.getId_doctor());
         Doctor doctorCorreoExist = doctorRepository.findByCorreo(doctor.getCorreo());
-        //doctor.getEspecialidadID = null 
+
         if(bindingResult.hasErrors() || opt.isPresent() || doctorCorreoExist!=null ||
                 doctor.getEspecialidad()==null || doctor.getSede()==null){
             if(opt.isPresent()){
@@ -240,7 +280,22 @@ public class AdministradorController {
 
             credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),encodedPassword);
             CorreoService correoService = new CorreoService();
-            correoService.props(doctor.getCorreo(),passRandom);
+
+            InetAddress address = InetAddress.getLocalHost();
+            String domain = request.getServerName();
+            byte[] bIPAddress = address.getAddress();
+            String sIPAddress = "";
+            for (int i = 0; i < bIPAddress.length; i++){
+                if (i>0) {
+                    sIPAddress += ".";
+                }
+                int unsignedByte = bIPAddress[i] & 0xFF;
+                sIPAddress += unsignedByte;
+            }
+            String link = sIPAddress+":"+request.getLocalPort();
+            System.out.println(link);
+            System.out.println("servername:"+domain);
+            correoService.props(doctor.getCorreo(),passRandom, link);
             attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
