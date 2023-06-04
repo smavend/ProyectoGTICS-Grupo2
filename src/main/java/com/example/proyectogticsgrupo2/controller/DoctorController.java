@@ -103,7 +103,7 @@ public class DoctorController {
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
         Doctor doctor = doctorOptional.get();
         model.addAttribute("doctor", doctor);
-        model.addAttribute("listaRecibos", optionalCita);//CAMBIAR POR ID SESION
+        model.addAttribute("listaRecibos", optionalCita);
 
         return "doctor/DoctorRecibos";
     }
