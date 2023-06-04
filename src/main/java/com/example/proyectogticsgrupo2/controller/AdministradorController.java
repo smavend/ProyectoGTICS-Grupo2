@@ -2,6 +2,8 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
+import com.example.proyectogticsgrupo2.dto.Form_reporte_finanzas;
+import com.example.proyectogticsgrupo2.dto.userform_superadmin;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
@@ -71,6 +73,13 @@ public class AdministradorController {
     public String finanzas(Model model){
         List<AdministradorIngresos> listaIngresos = administradorRepository.obtenerIgresos();
         model.addAttribute("listaIngresos",listaIngresos);
+        //###########################################################
+        Form_reporte_finanzas reporteFinanzas = new Form_reporte_finanzas();
+        model.addAttribute("reporteFinanzas", reporteFinanzas);
+        List<Seguro> listaSeguros = seguroRepository.findAll();
+        List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
+        model.addAttribute("listaSeguros", listaSeguros);
+        model.addAttribute("listaEspecialidades", listaEspecialidades);
         return "administrador/finanzas";}
     @GetMapping("/config")
     public String config(){return "administrador/config";}

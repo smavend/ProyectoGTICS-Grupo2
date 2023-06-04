@@ -7,6 +7,10 @@
 */
 
 /*mis js*/
+// Función para abrir el pop-up de filtrado
+function openFilterModal() {
+  $('#filterModal').modal('show');
+}
 
 /*fin de mis js */
 (function() {

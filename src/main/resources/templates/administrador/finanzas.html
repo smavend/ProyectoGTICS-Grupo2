@@ -395,15 +395,56 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                                            Filtrar reporte
+                                        </button>
                                         <a class="btn btn-danger" href="#">
                                             <i class="bi bi-file-earmark-pdf"></i>
                                         </a>
                                         <a class="btn btn-success" href="#">
                                             <i class="bi bi-file-earmark-excel"></i>
                                         </a>
-                                        <a class="btn btn-primary" href="#">
-                                            <i class="bi bi-file-earmark-text"></i>
-                                        </a>
+                                    </div>
+                                    <!-- Pop-up de filtrado -->
+                                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="filterModalLabel">Filtrar reporte</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="filterForm">
+                                                        <div class="mb-3">
+                                                            <label for="monthsInput" class="form-label">Últimos meses</label>
+                                                            <select class="form-select" id="monthsInput">
+                                                                <option value="1">1 mes</option>
+                                                                <option value="3">3 meses</option>
+                                                                <option value="6">6 meses</option>
+                                                                <option value="12">12 meses</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="nameInput" class="form-label">Nombre del paciente</label>
+                                                            <input type="text" class="form-control" id="nameInput">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
+                                                            <select class="form-select" id="paymentTypeInput">
+                                                                <option value="">Todos</option>
+                                                                <option value="Efectivo">Efectivo</option>
+                                                                <option value="Tarjeta">Tarjeta</option>
+                                                                <option value="Transferencia">Transferencia</option>
+                                                            </select>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                    <button type="button" class="btn btn-primary" onclick="generateReport()">Generar reporte</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -435,8 +476,7 @@
                                         </tbody>
                                     </table>
                                     <br>
-
-                            </div>
+                        </div>
 
 
                     </div><!-- End Top Selling -->
@@ -454,9 +494,7 @@
                                         <a class="btn btn-success" href="#">
                                             <i class="bi bi-file-earmark-excel"></i>
                                         </a>
-                                        <a class="btn btn-primary" href="#">
-                                            <i class="bi bi-file-earmark-text"></i>
-                                        </a>
+
                                     </div>
                                 </div>
 
