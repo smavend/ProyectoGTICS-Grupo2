@@ -418,19 +418,7 @@
 <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script>
-  $(document).ready(function() {
-    $('#dni').on('input', function() {
-      var dniValue = $(this).val();
-      var validCharacters = /^[0-9]{1,8}$/;
 
-      if (!validCharacters.test(dniValue)) {
-        $(this).val(dniValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
-        $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
-      }
-    });
-  });
-</script>
 <!-- Agregamos las librerías de jQuery UI para crear el calendario -->
 
 

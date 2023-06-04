@@ -7,6 +7,29 @@
 */
 
 /*mis js*/
+//validar dni
+$(document).ready(function() {
+  $('#dni').on('input', function() {
+    var dniValue = $(this).val();
+    var validCharacters = /^[0-9]{1,8}$/;
+
+    if (!validCharacters.test(dniValue)) {
+      $(this).val(dniValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
+      $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
+    }
+  });
+});
+$(document).ready(function() {
+  $('#telefono').on('input', function() {
+    var telefonoValue = $(this).val();
+    var validCharacters = /^[0-9]{1,9}$/; // Expresión regular para permitir solo números
+
+    if (!validCharacters.test(telefonoValue)) {
+      $(this).val(telefonoValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
+      $(this).val(telefonoValue.slice(0, -1)); // Eliminar el último carácter ingresado
+    }
+  });
+});
 // Función para abrir el pop-up de filtrado
 function openFilterModal() {
   $('#filterModal').modal('show');

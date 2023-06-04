@@ -468,27 +468,27 @@
                                     </div>
                                 </div>
 
-                                    <table class="table " id="datatable">
+                                    <table class="table table-striped" id="datatable">
                                         <thead>
                                         <tr>
-                                            <th>Fecha</th>
-                                            <th>Paciente</th>
                                             <th>Concepto</th>
+                                            <th>Monto</th>
+                                            <th>Paciente</th>
                                             <th>Especialidad</th>
                                             <th>Seguro</th>
-                                            <th>Monto</th>
+                                            <th>Fecha</th>
                                             <th>Forma de Pago</th>
                                             <th></th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr th:each="ingreso : ${listaIngresos}">
-                                            <td th:text="${ingreso.getFechacancelada()}"></td>
-                                            <td th:text="${ingreso.getNombreuser()}"></td>
                                             <td th:text="${ingreso.getConcepto()}"></td>
+                                            <td th:text="'$'+${ingreso.getPreciocita()}"></td>
+                                            <td th:text="${ingreso.getNombreuser()}"></td>
                                             <td th:text="${ingreso.getEspecialidadcita()}"></td>
                                             <td th:text="${ingreso.getNombreseguro()}"></td>
-                                            <td th:text="'$'+${ingreso.getPreciocita()}"></td>
+                                            <td th:text="${#temporals.format(ingreso.getFechacancelada(), 'dd-MM-yyyy')}"></td>
                                             <td th:text="${ingreso.getTipopago()}"></td>
                                             <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
                                         </tr>
