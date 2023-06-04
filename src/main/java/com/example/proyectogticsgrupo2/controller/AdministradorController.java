@@ -74,12 +74,9 @@ public class AdministradorController {
         List<AdministradorIngresos> listaIngresos = administradorRepository.obtenerIgresos();
         model.addAttribute("listaIngresos",listaIngresos);
         //###########################################################
-        Form_reporte_finanzas reporteFinanzas = new Form_reporte_finanzas();
-        model.addAttribute("reporteFinanzas", reporteFinanzas);
-        List<Seguro> listaSeguros = seguroRepository.findAll();
-        List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
-        model.addAttribute("listaSeguros", listaSeguros);
-        model.addAttribute("listaEspecialidades", listaEspecialidades);
+        model.addAttribute("listaSeguros", seguroRepository.findAll());
+        model.addAttribute("listaEspecialidades", especialidadRepository.findAll());
+
         return "administrador/finanzas";}
     @GetMapping("/config")
     public String config(){return "administrador/config";}

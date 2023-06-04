@@ -11,7 +11,40 @@
 function openFilterModal() {
   $('#filterModal').modal('show');
 }
+// Función para mostrar u ocultar los campos de filtrado según la opción seleccionada
+function toggleFilterOptions() {
+  const tiporeporte = document.getElementById('tiporeporte');
+  const porSeguro = document.getElementById('porSeguro');
+  const porEspecialidad = document.getElementById('porEspecialidad');
+  const porTipoPago = document.getElementById('porTipoPago');
+  const porFecha = document.getElementById('porFecha');
 
+  // Ocultar todos los campos de filtrado
+  porSeguro.style.display = 'none';
+  porEspecialidad.style.display = 'none';
+  porTipoPago.style.display = 'none';
+  porFecha.style.display = 'none';
+
+  // Mostrar el campo de filtrado correspondiente según la opción seleccionada
+  if (tiporeporte.value === '1') {
+    porSeguro.style.display = 'block';
+  } else if (tiporeporte.value === '2') {
+    porEspecialidad.style.display = 'block';
+  } else if (tiporeporte.value === '3') {
+    porTipoPago.style.display = 'block';
+  } else if (tiporeporte.value === '5') {
+    porFecha.style.display = 'block';
+  }
+}
+// Al cargar la página, llamar a toggleFilterOptions() para mostrar los campos correctos según la opción seleccionada inicialmente
+window.onload = function () {
+  toggleFilterOptions();
+};
+
+// Función para generar el reporte
+function generateReport() {
+  // Código para generar el reporte
+}
 /*fin de mis js */
 (function() {
   "use strict";
