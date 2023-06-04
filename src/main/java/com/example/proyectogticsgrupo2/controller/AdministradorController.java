@@ -2,8 +2,6 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
-import com.example.proyectogticsgrupo2.dto.Form_reporte_finanzas;
-import com.example.proyectogticsgrupo2.dto.userform_superadmin;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
@@ -23,9 +21,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
@@ -47,6 +42,7 @@ public class AdministradorController {
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
     final SecurityConfig securityConfig;
+
     public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
@@ -59,6 +55,7 @@ public class AdministradorController {
         this.credencialesRepository = credencialesRepository;
         this.temporalRepository = temporalRepository;
         this.securityConfig = securityConfig;
+
     }
     //#####################################33
     @GetMapping("/dashboard")
@@ -78,6 +75,19 @@ public class AdministradorController {
         model.addAttribute("listaEspecialidades", especialidadRepository.findAll());
 
         return "administrador/finanzas";}
+
+
+    /*@GetMapping("/generateReporte")
+    public String reporte(){
+        if(reporteService.generateExcel("C:\\Reporte.xlsx")){
+            System.out.println("reporte generado exitosamente");
+            return "redirect:/administrador/finanzas";
+        }else {
+            System.out.println("reporte generado mal");
+            return "false";
+        }
+    }*/
+
     @GetMapping("/config")
     public String config(){return "administrador/config";}
     @GetMapping("/registro")
