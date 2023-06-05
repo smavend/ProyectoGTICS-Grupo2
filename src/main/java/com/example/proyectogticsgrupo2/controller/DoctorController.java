@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -130,12 +132,12 @@ public class DoctorController {
     }
 
     @GetMapping("/calendario")
-    public String calendario(Model model, HttpServletRequest request) {
+    public String calendario(Model model, HttpServletRequest request, @ModelAttribute("doctor") Doctor doctor) {
         HttpSession httpSession = request.getSession();
         Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
 
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-        Doctor doctor = doctorOptional.get();
+        doctor = doctorOptional.get();
 
         model.addAttribute("doctor", doctor);
 
@@ -143,29 +145,43 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarHorario")
-    public String guardarHorario(HttpServletRequest request, Model model, Horario horario) {
-        //Poner @valid
+    public String guardarHorario(HttpServletRequest request, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult) {
+
+
         HttpSession httpSession = request.getSession();
         Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        horario.setDisponibilidad_inicio(LocalTime.parse(request.getParameter("disponibilidad_inicio"), formatter));
-        horario.setDisponibilidad_fin(LocalTime.parse(request.getParameter("disponibilidad_fin"), formatter));
-        horario.setComida_inicio(LocalTime.parse(request.getParameter("comida_inicio"), formatter));
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError error : fieldErrors) {
+                String fieldName = error.getField();
+                String errorMessage = error.getDefaultMessage();
+                System.out.println("Error en el campo " + fieldName + ": " + errorMessage);
+            }
+            return "redirect:/doctor/calendario";
+        } else if (doctor.getHorario().getDisponibilidad_inicio().isAfter(doctor.getHorario().getDisponibilidad_fin())) {
+            bindingResult.rejectValue("horario.disponibilidad_inicio", "error.disponibilidad", "La hora de inicio debe ser menor que la hora de fin");
+        } else if (doctor.getHorario().getComida_inicio().isAfter(doctor.getHorario().getDisponibilidad_fin()) ||
+                    doctor.getHorario().getComida_inicio().isBefore(doctor.getHorario().getDisponibilidad_inicio())) {
+            bindingResult.rejectValue("horario.comida_inicio", "error.disponibilidad", "La hora de comida debe de estar dentro del horario de trabajo");
+        }else {
+            doctor.getHorario().setDisponibilidad_inicio(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio().format(formatter), formatter));
+            doctor.getHorario().setDisponibilidad_fin(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin().format(formatter), formatter));
+            doctor.getHorario().setComida_inicio(LocalTime.parse(doctor.getHorario().getComida_inicio().format(formatter), formatter));
 
-        // Guardar el objeto Horario antes de asignarlo al Doctor
-        Horario horarioGuardado = horarioRepository.save(horario);
+            Horario horarioGuardado = horarioRepository.save(doctor.getHorario());
 
-        doctor_session.setDuracion_cita_minutos(Integer.parseInt(request.getParameter("duracion_cita_minutos")));
-        doctor_session.setHorario(horarioGuardado);
+            doctor_session.setDuracion_cita_minutos(doctor.getDuracion_cita_minutos());
+            doctor_session.setHorario(horarioGuardado);
 
-        doctorRepository.save(doctor_session);
+            doctorRepository.save(doctor_session);
+        }
 
         return "redirect:/doctor/calendario";
-
-
     }
+
+
 
     @GetMapping("/reporte")
     public String reporte(Model model, @RequestParam("id") String id, @RequestParam("id2") int id2, HttpServletRequest request) {
