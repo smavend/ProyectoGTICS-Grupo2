@@ -35,9 +35,10 @@ public class HomeController {
     final TemporalRepository temporalRepository;
     final AlergiaRepository alergiaRepository;
     final TareaRepository tareaRepository;
+    final TokenRepository tokenRepository;
 
 
-    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository) {
+    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository, TokenRepository tokenRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.administradorRepository = administradorRepository;
@@ -47,6 +48,7 @@ public class HomeController {
         this.temporalRepository = temporalRepository;
         this.alergiaRepository = alergiaRepository;
         this.tareaRepository = tareaRepository;
+        this.tokenRepository = tokenRepository;
     }
 
     @GetMapping("/")
@@ -100,13 +102,34 @@ public class HomeController {
     }
 
 
-    @GetMapping(value = {"/signin","/signin/save"})
-    public String vistaRegistro(Model model, @ModelAttribute("paciente") Paciente paciente){
-        List<Distrito> list = distritoRepository.findAll();
-        List<Seguro> list1 = seguroRepository.findAll();
-        model.addAttribute("distritos", list);
-        model.addAttribute("seguros", list1);
-        return "general/registro";
+    @GetMapping(value = {"/signin/{id}/{token}","/signin/save/{id}/{token}"})
+    public String vistaRegistro(@PathVariable (value = "id", required = false) String id,
+                                @PathVariable (value = "token", required = false) String token,
+                                Model model, @ModelAttribute("paciente") Paciente paciente){
+        if(id==null && token==null){
+            List<Distrito> list = distritoRepository.findAll();
+            List<Seguro> list1 = seguroRepository.findAll();
+            model.addAttribute("distritos", list);
+            model.addAttribute("seguros", list1);
+            return "general/registro";
+        }else {
+            Optional<Token> posible = tokenRepository.findByIdPacienteAndToken(id, token);
+            if(posible.isPresent()){
+                Token token1 = posible.get();
+                if(LocalDateTime.now().isBefore(token1.getFechaExpiracion())){
+                    Temporal temporal = temporalRepository.findByDni(id).get();
+                    paciente.setIdPaciente(temporal.getDni());
+                    paciente.setNombre(temporal.getNombre());
+                    paciente.setApellidos(temporal.getApellidos());
+                    paciente.setCorreo(temporal.getCorreo());
+                    return "general/registro";
+                }else {
+                    return "general/tokenExpirado";
+                }
+            }else {
+                return "general/registro";
+            }
+        }
     }
 
     @PostMapping("/signin/save")
@@ -136,10 +159,10 @@ public class HomeController {
         }
         List<Temporal> temp = temporalRepository.findAll();
         for (Temporal t : temp) {
-            if (t.getDni().equals(paciente.getIdPaciente())) {
+            if (t.getDni().equals(paciente.getIdPaciente()) && t.getLlenado()==1) {
                 existDni1 = true;
                 break;
-            } else if (t.getCorreo().equals(paciente.getCorreo())) {
+            } else if (t.getCorreo().equals(paciente.getCorreo()) && t.getLlenado()==1) {
                 existCorreo1 = true;
                 break;
             }

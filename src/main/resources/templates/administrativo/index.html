@@ -70,6 +70,9 @@
 
         <!-- Left side columns -->
         <div class="col-lg-8">
+          <div th:if="${msg!=null}" th:text="${msg}" class="alert alert-success" role="alert">
+            A simple success alert—check it out!
+          </div>
           <div class="row">
 
             <!-- Top Selling -->

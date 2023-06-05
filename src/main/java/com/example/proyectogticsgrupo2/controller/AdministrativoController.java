@@ -3,6 +3,9 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.TemporalDiasDto;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoPacienteService;
+import com.example.proyectogticsgrupo2.service.TokenService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -27,8 +30,9 @@ public class AdministrativoController {
     final NotificacionRepository notificacionRepository;
     final TemporalRepository temporalRepository;
     final AdministrativoRepository administrativoRepository;
+    final TokenRepository tokenRepository;
 
-    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository) {
+    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, TokenRepository tokenRepository) {
         this.pacienteRepository = pacienteRepository;
         this.aesRepository = aesRepository;
         this.alergiaRepository = alergiaRepository;
@@ -36,6 +40,7 @@ public class AdministrativoController {
         this.notificacionRepository = notificacionRepository;
         this.temporalRepository = temporalRepository;
         this.administrativoRepository = administrativoRepository;
+        this.tokenRepository = tokenRepository;
     }
     @GetMapping("/administrativo")
     public String dashboard(Model model, HttpSession session){
@@ -123,7 +128,7 @@ public class AdministrativoController {
     }
 
     @PostMapping("administrativo/invitar")
-    public String invitarPaciente(HttpSession session, Model model,
+    public String invitarPaciente(HttpServletRequest request, HttpSession session, Model model,
                                   @ModelAttribute("temporal") @Valid Temporal temporal,
                                   BindingResult bindingResult,
                                   RedirectAttributes attr){
@@ -163,6 +168,19 @@ public class AdministrativoController {
                 Optional<Administrativo> optAdministrativo = administrativoRepository.findById(idAdmi);
                 temporal.setAdministrativo(optAdministrativo.get());
                 temporalRepository.save(temporal);
+                TokenService tokenService = new TokenService();
+
+                Token token = new Token();
+                token.setIdPaciente(temporal.getDni());
+                token.setToken(tokenService.generateToken());
+                token.setFechaExpiracion(LocalDateTime.now().plusDays(2));
+                token.setTabla(1);
+                tokenRepository.save(token);
+
+                CorreoPacienteService correoPacienteService = new CorreoPacienteService();
+                String link = request.getServerName()+":"+request.getLocalPort();
+                correoPacienteService.enviarCorreo(temporal.getCorreo(), link, token.getIdPaciente(), token.getToken());
+                attr.addFlashAttribute("msg","Paciente "+temporal.getNombre()+" "+temporal.getApellidos()+" invitado exitosamente");
                 return "redirect:/administrativo";
             } else {
                 attr.addFlashAttribute("msg", "Ingrese un DNI o correo diferente, ya se encuentra invitado o registrado");
