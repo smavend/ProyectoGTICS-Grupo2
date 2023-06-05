@@ -116,7 +116,7 @@ public class AdministradorController {
                     int unsignedByte = bIPAddress[i] & 0xFF;
                     sIPAddress += unsignedByte;
                 }
-                String link = sIPAddress+":"+request.getLocalPort();
+                String link = request.getServerName()+":"+request.getLocalPort();
 
                 correoService.props(paciente.getCorreo(),paciente.getNombre(), link);
                 attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
@@ -212,7 +212,7 @@ public class AdministradorController {
                 int unsignedByte = bIPAddress[i] & 0xFF;
                 sIPAddress += unsignedByte;
             }
-            String link = sIPAddress+":"+request.getLocalPort();
+            String link = request.getServerName()+":"+request.getLocalPort();
 
             correoService.props(paciente.getCorreo(),passRandom, link);
             attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
@@ -292,7 +292,7 @@ public class AdministradorController {
                 int unsignedByte = bIPAddress[i] & 0xFF;
                 sIPAddress += unsignedByte;
             }
-            String link = sIPAddress+":"+request.getLocalPort();
+            String link = request.getServerName()+":"+request.getLocalPort();
             System.out.println(link);
             System.out.println("servername:"+domain);
             correoService.props(doctor.getCorreo(),passRandom, link);
