@@ -10,7 +10,6 @@ import lombok.Setter;
 @Table(name = "credenciales")
 public class Credenciales {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id_credenciales;
 
     private String correo;

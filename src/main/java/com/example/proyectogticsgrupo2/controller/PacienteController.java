@@ -23,7 +23,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +34,8 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("/Paciente")
 public class PacienteController {
+
+    String idPrueba = "10203010";
 
     final PacienteRepository pacienteRepository;
     final SedeRepository sedeRepository;
@@ -71,6 +75,7 @@ public class PacienteController {
 
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
+        model.addAttribute("paciente", obtenerPaciente());
 
         return "paciente/index";
     }
@@ -98,15 +103,18 @@ public class PacienteController {
     @GetMapping("/reservar")
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                               Model model) {
+        model.addAttribute("paciente", obtenerPaciente());
 
         model.addAttribute("sedeList", sedeRepository.findAll());
         model.addAttribute("especialidadList", especialidadRepository.findAll());
+        model.addAttribute("paciente", obtenerPaciente());
         return "paciente/reservar1";
     }
 
     @PostMapping("/reservar1")
     public String reservar1Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model) {
+        model.addAttribute("paciente", obtenerPaciente());
 
         List<Doctor> doctoresDisponibles;
 
@@ -128,6 +136,7 @@ public class PacienteController {
     @PostMapping("/reservar2")
     public String reservar2Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model) {
+        model.addAttribute("paciente", obtenerPaciente());
 
         if (bindingResult.hasErrors()) {
 
@@ -142,8 +151,31 @@ public class PacienteController {
 
         } else {
 
-            HorariosDisponiblesDTO horariosDisponibles = horarioRepository.buscarHorariosDisponibles(citaTemporal.getIdDoctor());
-            model.addAttribute("horariosDisponibles", horariosDisponibles);
+            // PROCESO DE OBTENCIÓN DE HORARIOS ------
+
+            List<LocalTime> horarios = new ArrayList<>();
+            Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
+            int duracionCita = doctor.getDuracion_cita_minutos();
+            int duracionComida = 60; // minutos
+            LocalTime hora = doctor.getHorario().getDisponibilidad_inicio();
+            LocalTime horaFin = doctor.getHorario().getDisponibilidad_fin();
+            LocalTime horaComida = doctor.getHorario().getComida_inicio();
+
+            while (hora.isBefore(horaFin)){
+
+                if (hora.isBefore(horaComida) || hora.isAfter(horaComida.plusMinutes(duracionComida-1))){
+                    horarios.add(hora);
+                }
+                else if (hora.isAfter(horaComida)) {
+                    hora = horaComida.plusMinutes(duracionComida);
+                    continue;
+                }
+
+                hora = hora.plusMinutes(duracionCita);
+            }
+            // ---------------------------------------
+
+            model.addAttribute("horariosDisponibles", horarios);
 
             return "paciente/reservar3";
         }
@@ -152,7 +184,7 @@ public class PacienteController {
     @PostMapping("/reservar3")
     public String reservar(@ModelAttribute("citaTempora") CitaTemporal citaTemporal, HttpSession session) {
 
-        Paciente paciente = (Paciente) session.getAttribute("paciente");
+        Paciente paciente = obtenerPaciente();
 
         String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -168,8 +200,7 @@ public class PacienteController {
     /* SECCIÓN PERFIL */
     @GetMapping("/perfil")
     public String perfil(Model model, HttpSession session) {
-        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        String idPacienteLog = pacienteLog.getIdPaciente();
+        String idPacienteLog = obtenerPaciente().getIdPaciente();
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
@@ -309,33 +340,39 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/cambiarContrasena")
-    public String cambiarContrasena() {
+    public String cambiarContrasena(Model model) {
+        model.addAttribute("paciente", obtenerPaciente());
         return "paciente/perfilContrasena";
     }
 
     @PostMapping("/perfil/guardarContrasena")
-    public String guardarContrasena(@RequestParam("actual") String actual,
-                                    @RequestParam("nueva1") String nueva1,
-                                    @RequestParam("nueva2") String nueva2,
+    public String guardarContrasena(@RequestParam("actual") String contrasenaActual,
+                                    @RequestParam("nueva1") String contrasenaNueva1,
+                                    @RequestParam("nueva2") String contrasenaNueva2,
                                     RedirectAttributes attr, HttpSession session) {
 
-        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        String idPacienteLog = pacienteLog.getIdPaciente();
-
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
-        String contrasenaActualHasheada = passwordEncoder.encode(actual);
-        Credenciales credenciales = credencialesRepository.findByContrasena(contrasenaActualHasheada);
 
-        System.out.println("ac: "+actual);
-        System.out.println("c1: " + nueva1);
-        System.out.println("c2: " + nueva2);
-        System.out.println("ach: " + contrasenaActualHasheada);
-        System.out.println("nuh: "+passwordEncoder.encode(nueva1));
-        System.out.println("cred: "+credenciales);
+        Paciente paciente = obtenerPaciente();
+        Credenciales credenciales = credencialesRepository.buscarPorId(paciente.getIdPaciente());
 
-        if (credenciales != null && nueva1.equals(nueva2)) {
-            credencialesRepository.actualizarContrasena(idPacienteLog, passwordEncoder.encode(nueva1));
-            attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+        System.out.println("actual: "+contrasenaActual);
+        System.out.println("nueva1: " + contrasenaNueva1);
+        System.out.println("nueva2: " + contrasenaNueva2);
+        System.out.println("nueva hash: "+passwordEncoder.encode(contrasenaNueva1));
+
+        if (passwordEncoder.matches(contrasenaActual, credenciales.getContrasena())) {
+            if (contrasenaNueva1.equals(contrasenaNueva2)){
+                System.out.println("ACTUALIZANDO CONTRASEÑA...");
+                credencialesRepository.actualizarContrasena(paciente.getIdPaciente(), passwordEncoder.encode(contrasenaNueva1));
+                attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+            }
+            else{
+                System.out.println("Contraseñas nuevas no coinciden");
+            }
+        }
+        else{
+            System.out.println("Contraseña actual no coincide");
         }
 
         return "redirect:/Paciente/perfil";
@@ -469,6 +506,7 @@ public class PacienteController {
 
     @GetMapping("/confirmacion")
     public String confirmarReserva() {
+        Paciente paciente = obtenerPaciente();
         return "paciente/confirmacion";
     }
 
@@ -580,5 +618,9 @@ public class PacienteController {
         } else {
             return doctorRepository.buscarVirtualesPorSedeYEspecialidad(idSede, idEspecialidad);
         }
+    }
+
+    Paciente obtenerPaciente(){
+        return pacienteRepository.findById(idPrueba).get();
     }
 }
