@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.config;
 
+import com.example.proyectogticsgrupo2.entity.Paciente;
 import com.example.proyectogticsgrupo2.entity.SuperAdmin;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -85,7 +86,8 @@ public class SecurityConfig {
                         }
                         switch (rol) {
                             case "paciente" -> {
-                                session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+                                Paciente pacienteLogueado = pacienteRepository.findByCorreo(authentication.getName());
+                                session.setAttribute("idPacienteLog", pacienteLogueado.getIdPaciente());
                                 response.sendRedirect("/Paciente");
                             }
                             case "doctor" -> {

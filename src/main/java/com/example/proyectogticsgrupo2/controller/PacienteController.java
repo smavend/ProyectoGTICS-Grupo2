@@ -67,8 +67,10 @@ public class PacienteController {
 
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
-    public String index(Model model) {
-
+    public String index(Model model, HttpSession session) {
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
@@ -76,7 +78,12 @@ public class PacienteController {
     }
 
     @GetMapping("/imageSede")
-    public ResponseEntity<byte[]> mostrarImagenSede(@RequestParam("idSede") int idSede) {
+    public ResponseEntity<byte[]> mostrarImagenSede(@RequestParam("idSede") int idSede, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         Optional<Sede> optionalSede = sedeRepository.findById(idSede);
 
         if (optionalSede.isPresent()) {
@@ -97,8 +104,11 @@ public class PacienteController {
     /* RESERVAR CITA */
     @GetMapping("/reservar")
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                              Model model) {
+                              Model model, HttpSession session) {
 
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         model.addAttribute("sedeList", sedeRepository.findAll());
         model.addAttribute("especialidadList", especialidadRepository.findAll());
         return "paciente/reservar1";
@@ -106,9 +116,12 @@ public class PacienteController {
 
     @PostMapping("/reservar1")
     public String reservar1Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
-                                Model model) {
+                                Model model, HttpSession session) {
 
         List<Doctor> doctoresDisponibles;
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
 
         if (bindingResult.hasFieldErrors("modalidad") || bindingResult.hasFieldErrors("idSede") || bindingResult.hasFieldErrors("idEspecialidad")) {
 
@@ -127,8 +140,11 @@ public class PacienteController {
 
     @PostMapping("/reservar2")
     public String reservar2Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
-                                Model model) {
+                                Model model, HttpSession session) {
 
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         if (bindingResult.hasErrors()) {
 
             List<Doctor> doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
@@ -152,14 +168,17 @@ public class PacienteController {
     @PostMapping("/reservar3")
     public String reservar(@ModelAttribute("citaTempora") CitaTemporal citaTemporal, HttpSession session) {
 
-        Paciente paciente = (Paciente) session.getAttribute("paciente");
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+        //Paciente paciente = (Paciente) session.getAttribute("paciente");
 
         String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
         LocalDateTime fin = inicio.plusHours(1);
 
-        citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
+        citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), pacienteLogueado.get().getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
 
         return "redirect:/Paciente/confirmacion";
@@ -168,8 +187,13 @@ public class PacienteController {
     /* SECCIÓN PERFIL */
     @GetMapping("/perfil")
     public String perfil(Model model, HttpSession session) {
-        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        String idPacienteLog = pacienteLog.getIdPaciente();
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
+        //Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        //String idPacienteLog = pacienteLog.getIdPaciente();
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
@@ -185,7 +209,11 @@ public class PacienteController {
     @GetMapping("/perfil/editar")
     public String editarPerfil(@ModelAttribute("paciente") Paciente paciente,
                                @RequestParam(name = "id") String idPaciente,
-                               Model model) {
+                               Model model, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
 
@@ -213,6 +241,10 @@ public class PacienteController {
                                 RedirectAttributes attr,
                                 Model model,
                                 HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
 
         Paciente p = pacienteRepository.findById(paciente.getIdPaciente()).get();
         String fileName = file.getOriginalFilename();
@@ -257,14 +289,24 @@ public class PacienteController {
     }
 
     @PostMapping("/perfil/guardarAlergia")
-    public String guardarAlergia(Alergia alergia) {
+    public String guardarAlergia(Alergia alergia, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         alergiaRepository.save(alergia);
         return "redirect:/Paciente/perfil/editar?idPaciente=" + alergia.getPaciente().getIdPaciente();
     }
 
     @GetMapping("/perfil/borrarAlergia")
     public String borrarAlergia(@RequestParam(name = "idPaciente") String idPaciente,
-                                @RequestParam(name = "idAlergia") int idAlergia) {
+                                @RequestParam(name = "idAlergia") int idAlergia,
+                                HttpSession session) {
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         Optional<Alergia> optionalAlergia = alergiaRepository.findById(idAlergia);
         if (optionalAlergia.isPresent()) {
             alergiaRepository.deleteById(idAlergia);
@@ -274,7 +316,11 @@ public class PacienteController {
 
     @GetMapping("/perfil/quitarFoto")
     public String quitarFoto(@RequestParam(name = "id") String idPaciente,
-                             RedirectAttributes attr) {
+                             RedirectAttributes attr, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()) {
@@ -309,7 +355,12 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/cambiarContrasena")
-    public String cambiarContrasena() {
+    public String cambiarContrasena(HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         return "paciente/perfilContrasena";
     }
 
@@ -319,8 +370,12 @@ public class PacienteController {
                                     @RequestParam("nueva2") String nueva2,
                                     RedirectAttributes attr, HttpSession session) {
 
-        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        String idPacienteLog = pacienteLog.getIdPaciente();
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
+        //Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        //String idPacienteLog = pacienteLog.getIdPaciente();
 
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
         String contrasenaActualHasheada = passwordEncoder.encode(actual);
@@ -342,7 +397,12 @@ public class PacienteController {
     }
 
     @GetMapping("/imagePaciente")
-    public ResponseEntity<byte[]> mostrarImagenPaciente(@RequestParam("idPaciente") String idPaciente) {
+    public ResponseEntity<byte[]> mostrarImagenPaciente(@RequestParam("idPaciente") String idPaciente, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
 
         if (optionalPaciente.isPresent()) {
@@ -365,7 +425,11 @@ public class PacienteController {
     public String verDoctores(@RequestParam("sede") int idSede,
                               @RequestParam("esp") int idEspecialidad,
                               @RequestParam("pag") int pagina,
-                              Model model) {
+                              Model model, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
 
         List<Doctor> doctorList;
         int totalPaginas;
@@ -407,7 +471,11 @@ public class PacienteController {
     }
 
     @GetMapping("/imageDoctor")
-    public ResponseEntity<byte[]> mostrarImagenDoctor(@RequestParam("idDoctor") String idDoctor) {
+    public ResponseEntity<byte[]> mostrarImagenDoctor(@RequestParam("idDoctor") String idDoctor, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
 
         if (optionalDoctor.isPresent()) {
@@ -427,7 +495,12 @@ public class PacienteController {
 
     @GetMapping("/perfilDoctor")
     public String verPerfilDoctor(Model model,
-                                  @RequestParam("doc") String idDoctor) {
+                                  @RequestParam("doc") String idDoctor,
+                                  HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
 
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
@@ -440,7 +513,12 @@ public class PacienteController {
     }
 
     @PostMapping("/reservarDoctor")
-    public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal) {
+    public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                  HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
 
         return "paciente/reservarDoctor1";
     }
@@ -452,14 +530,18 @@ public class PacienteController {
             return "paciente/reservarDoctor1";
         } else {
 
-            Paciente paciente = (Paciente) session.getAttribute("paciente");
+            String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+            Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+            session.setAttribute("paciente", pacienteLogueado.get());
+
+            //Paciente paciente = (Paciente) session.getAttribute("paciente");
 
             String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
             LocalDateTime fin = inicio.plusHours(1);
 
-            citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
+            citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), pacienteLogueado.get().getSeguro().getIdSeguro());
             pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
 
             return "redirect:/Paciente/confirmacion";
@@ -468,20 +550,34 @@ public class PacienteController {
     }
 
     @GetMapping("/confirmacion")
-    public String confirmarReserva() {
+    public String confirmarReserva(HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         return "paciente/confirmacion";
     }
 
     @GetMapping("/sesionVirtual")
-    public String sesionVirtual() {
+    public String sesionVirtual(HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         return "paciente/sesionVirtual";
     }
 
     /* SECCIÓN CITAS */
     @GetMapping("/citas")
     public String verCitas(Model model, HttpSession session) {
-        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        String idPacienteLog = pacienteLog.getIdPaciente();
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
+        //Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        //String idPacienteLog = pacienteLog.getIdPaciente();
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
@@ -495,14 +591,23 @@ public class PacienteController {
 
     /* SECCIÓN PAGOS */
     @GetMapping("/pagos")
-    public String pagos(Model model) {
+    public String pagos(Model model, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("pagoList", pagoList);
         return "paciente/pagos";
     }
 
     @GetMapping("/filtrarPagos")
-    public String filtrarPagos(@RequestParam("filtro") int filtro, Model model) {
+    public String filtrarPagos(@RequestParam("filtro") int filtro, Model model, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("pagoList", pagoList);
         model.addAttribute("filtro", filtro);
@@ -510,14 +615,24 @@ public class PacienteController {
     }
 
     @PostMapping("/guardarPago")
-    public String guardarPago(@RequestParam("idPago") int idPago) {
+    public String guardarPago(@RequestParam("idPago") int idPago, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         pagoRepository.guardarPago(idPago);
         return "redirect:/Paciente/pagos";
     }
 
     @GetMapping("/recibo")
     public String verReciboPago(@RequestParam("idPago") int idPago,
-                                Model model) {
+                                Model model, HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
         Optional<Pago> optionalPago = pagoRepository.findById(idPago);
         if (optionalPago.isPresent()) {
             Pago pago = optionalPago.get();
@@ -528,21 +643,34 @@ public class PacienteController {
 
     /* SECCIÓN CUESTIONARIOS */
     @GetMapping("/cuestionarios")
-    public String cuestionarios() {
+    public String cuestionarios(HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         return "paciente/cuestionarios";
     }
 
     @GetMapping("/completarCuestionario")
-    public String completarCuestionario() {
+    public String completarCuestionario(HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         return "paciente/completarCuestionario";
     }
 
     /* SECCIÓN CONSENTIMIENTOS */
     @GetMapping("/consentimientos")
     public String consentimientos(Model model, HttpSession session) {
-        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
 
-        List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(pacienteLog.getIdPaciente());
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
+
+        //Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+
+        List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(pacienteLogueado.get().getIdPaciente());
 
         model.addAttribute("consentimientos", consentimientos);
         return "paciente/consentimientos";
@@ -552,12 +680,16 @@ public class PacienteController {
     public String actualizarConsentimientos(@RequestParam Map<String, Boolean> consentimientos,
                                             RedirectAttributes attr, HttpSession session) {
 
-        Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
 
-        pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(pacienteLog.getIdPaciente());
+        //Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
+
+        pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(pacienteLogueado.get().getIdPaciente());
         for (String key : consentimientos.keySet()) {
             if (key.length() == 1) {
-                pacientePorConsentimientoRepository.actualizarConsentimientoAPositivo(pacienteLog.getIdPaciente(), key);
+                pacientePorConsentimientoRepository.actualizarConsentimientoAPositivo(pacienteLogueado.get().getIdPaciente(), key);
             }
         }
 
@@ -569,7 +701,11 @@ public class PacienteController {
     /* SECCIÓN MENSAJERÍA */
 
     @GetMapping("/mensajeria")
-    public String mensajeria() {
+    public String mensajeria(HttpSession session) {
+
+        String idPacienteLog = (String) session.getAttribute("idPacienteLog");
+        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
+        session.setAttribute("paciente", pacienteLogueado.get());
         return "paciente/mensajeria";
     }
 
