@@ -51,21 +51,9 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String principal(Model model, HttpServletRequest request) throws UnknownHostException {
-        InetAddress address = InetAddress.getLocalHost();
-
-        byte[] bIPAddress = address.getAddress();
-
-        String sIPAddress = "";
-
-        for (int i = 0; i < bIPAddress.length; i++){
-            if (i>0) {
-                sIPAddress += ".";
-            }
-            int unsignedByte = bIPAddress[i] & 0xFF;
-            sIPAddress += unsignedByte;
-        }
-        String link = sIPAddress+":"+request.getLocalPort()+"/signin";
+    public String principal(Model model, HttpServletRequest request){
+        String server = request.getServerName();
+        String link = server+":"+request.getLocalPort()+"/signin";
 
         byte[] image = new byte[0];
         try {
