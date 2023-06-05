@@ -23,7 +23,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +34,7 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("/Paciente")
 public class PacienteController {
+
 
     final PacienteRepository pacienteRepository;
     final SedeRepository sedeRepository;
@@ -71,6 +74,7 @@ public class PacienteController {
         String idPacienteLog = (String) session.getAttribute("idPacienteLog");
         Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
         session.setAttribute("paciente", pacienteLogueado.get());
+
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
@@ -111,6 +115,7 @@ public class PacienteController {
         session.setAttribute("paciente", pacienteLogueado.get());
         model.addAttribute("sedeList", sedeRepository.findAll());
         model.addAttribute("especialidadList", especialidadRepository.findAll());
+
         return "paciente/reservar1";
     }
 
@@ -158,8 +163,31 @@ public class PacienteController {
 
         } else {
 
-            HorariosDisponiblesDTO horariosDisponibles = horarioRepository.buscarHorariosDisponibles(citaTemporal.getIdDoctor());
-            model.addAttribute("horariosDisponibles", horariosDisponibles);
+            // PROCESO DE OBTENCIÓN DE HORARIOS ------
+
+            List<LocalTime> horarios = new ArrayList<>();
+            Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
+            int duracionCita = doctor.getDuracion_cita_minutos();
+            int duracionComida = 60; // minutos
+            LocalTime hora = doctor.getHorario().getDisponibilidad_inicio();
+            LocalTime horaFin = doctor.getHorario().getDisponibilidad_fin();
+            LocalTime horaComida = doctor.getHorario().getComida_inicio();
+
+            while (hora.isBefore(horaFin)){
+
+                if (hora.isBefore(horaComida) || hora.isAfter(horaComida.plusMinutes(duracionComida-1))){
+                    horarios.add(hora);
+                }
+                else if (hora.isAfter(horaComida)) {
+                    hora = horaComida.plusMinutes(duracionComida);
+                    continue;
+                }
+
+                hora = hora.plusMinutes(duracionCita);
+            }
+            // ---------------------------------------
+
+            model.addAttribute("horariosDisponibles", horarios);
 
             return "paciente/reservar3";
         }
@@ -194,6 +222,7 @@ public class PacienteController {
 
         //Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
         //String idPacienteLog = pacienteLog.getIdPaciente();
+
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
@@ -361,36 +390,44 @@ public class PacienteController {
         Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
         session.setAttribute("paciente", pacienteLogueado.get());
 
+
         return "paciente/perfilContrasena";
     }
 
     @PostMapping("/perfil/guardarContrasena")
-    public String guardarContrasena(@RequestParam("actual") String actual,
-                                    @RequestParam("nueva1") String nueva1,
-                                    @RequestParam("nueva2") String nueva2,
+    public String guardarContrasena(@RequestParam("actual") String contrasenaActual,
+                                    @RequestParam("nueva1") String contrasenaNueva1,
+                                    @RequestParam("nueva2") String contrasenaNueva2,
                                     RedirectAttributes attr, HttpSession session) {
 
         String idPacienteLog = (String) session.getAttribute("idPacienteLog");
-        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
-        session.setAttribute("paciente", pacienteLogueado.get());
+        Paciente pacienteLogueado = pacienteRepository.findById(idPacienteLog).get();
+        session.setAttribute("paciente", pacienteLogueado);
 
         //Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
         //String idPacienteLog = pacienteLog.getIdPaciente();
 
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
-        String contrasenaActualHasheada = passwordEncoder.encode(actual);
-        Credenciales credenciales = credencialesRepository.findByContrasena(contrasenaActualHasheada);
 
-        System.out.println("ac: "+actual);
-        System.out.println("c1: " + nueva1);
-        System.out.println("c2: " + nueva2);
-        System.out.println("ach: " + contrasenaActualHasheada);
-        System.out.println("nuh: "+passwordEncoder.encode(nueva1));
-        System.out.println("cred: "+credenciales);
+        Credenciales credenciales = credencialesRepository.buscarPorId(pacienteLogueado.getIdPaciente());
 
-        if (credenciales != null && nueva1.equals(nueva2)) {
-            credencialesRepository.actualizarContrasena(idPacienteLog, passwordEncoder.encode(nueva1));
-            attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+        System.out.println("actual: "+contrasenaActual);
+        System.out.println("nueva1: " + contrasenaNueva1);
+        System.out.println("nueva2: " + contrasenaNueva2);
+        System.out.println("nueva hash: "+passwordEncoder.encode(contrasenaNueva1));
+
+        if (passwordEncoder.matches(contrasenaActual, credenciales.getContrasena())) {
+            if (contrasenaNueva1.equals(contrasenaNueva2)){
+                System.out.println("ACTUALIZANDO CONTRASEÑA...");
+                credencialesRepository.actualizarContrasena(pacienteLogueado.getIdPaciente(), passwordEncoder.encode(contrasenaNueva1));
+                attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+            }
+            else{
+                System.out.println("Contraseñas nuevas no coinciden");
+            }
+        }
+        else{
+            System.out.println("Contraseña actual no coincide");
         }
 
         return "redirect:/Paciente/perfil";
