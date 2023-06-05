@@ -10,7 +10,7 @@ import lombok.Setter;
 @Table(name = "paciente_has_consentimientos")
 public class PacientePorConsentimiento {
     @EmbeddedId
-    private PacientePorConsentimientoId id;
+    private PacientePorConsentimientoID id;
 
     @MapsId(value = "idPaciente")
     @ManyToOne

@@ -1,7 +1,6 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
-import com.example.proyectogticsgrupo2.dto.HorariosDisponiblesDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -49,9 +48,17 @@ public class PacienteController {
     final PagoRepository pagoRepository;
     final HorarioRepository horarioRepository;
     final CredencialesRepository credencialesRepository;
+    final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
     final SecurityConfig securityConfig;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository, SecurityConfig securityConfig) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository,
+                              SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository,
+                              DistritoRepository distritoRepository, DoctorRepository doctorRepository,
+                              PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository,
+                              PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository,
+                              HorarioRepository horarioRepository, CredencialesRepository credencialesRepository,
+                              SecurityConfig securityConfig, CuestionarioPorCitaRepository cuestionarioPorCitaRepository) {
+
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
@@ -65,6 +72,7 @@ public class PacienteController {
         this.pagoRepository = pagoRepository;
         this.horarioRepository = horarioRepository;
         this.credencialesRepository = credencialesRepository;
+        this.cuestionarioPorCitaRepository = cuestionarioPorCitaRepository;
         this.securityConfig = securityConfig;
     }
 
@@ -613,8 +621,6 @@ public class PacienteController {
         Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
         session.setAttribute("paciente", pacienteLogueado.get());
 
-        //Paciente pacienteLog = (Paciente) session.getAttribute("paciente");
-        //String idPacienteLog = pacienteLog.getIdPaciente();
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPacienteLog);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
@@ -680,11 +686,14 @@ public class PacienteController {
 
     /* SECCIÓN CUESTIONARIOS */
     @GetMapping("/cuestionarios")
-    public String cuestionarios(HttpSession session) {
+    public String cuestionarios(HttpSession session, Model model) {
 
         String idPacienteLog = (String) session.getAttribute("idPacienteLog");
-        Optional<Paciente> pacienteLogueado = pacienteRepository.findById(idPacienteLog);
-        session.setAttribute("paciente", pacienteLogueado.get());
+        Paciente pacienteLogueado = pacienteRepository.findById(idPacienteLog).get();
+        session.setAttribute("paciente", pacienteLogueado);
+
+        model.addAttribute("cuestionarios", cuestionarioPorCitaRepository.buscarPorPaciente(pacienteLogueado.getIdPaciente()));
+
         return "paciente/cuestionarios";
     }
 
