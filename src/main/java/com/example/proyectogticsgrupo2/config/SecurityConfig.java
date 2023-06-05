@@ -86,11 +86,8 @@ public class SecurityConfig {
                         }
                         switch (rol) {
                             case "paciente" -> {
-                                session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-                                Paciente p = (Paciente) session.getAttribute("paciente");
-                                System.out.println("paciente:");
-                                System.out.println(p.getNombre());
-                                System.out.println(p.getIdPaciente());
+                                Paciente pacienteLogueado = pacienteRepository.findByCorreo(authentication.getName());
+                                session.setAttribute("idPacienteLog", pacienteLogueado.getIdPaciente());
                                 response.sendRedirect("/Paciente");
 
                             }
