@@ -77,6 +77,30 @@ public class AdministradorController {
 
         return "administrador/finanzas";}
 
+    @PostMapping("/reportes")
+    public String generarReportes(@RequestParam("tiporeporte") String tiporeporte,@RequestParam("tipopago") String tipopago,
+                                  @RequestParam("seguro") String seguro,@RequestParam("especialidad") String especialidad,
+                                  @RequestParam("todo") String todo,@RequestParam("formato") String formato){
+        if(tiporeporte!=null){
+            System.out.println(tiporeporte);
+        }
+        if(seguro!=null){
+            System.out.println(seguro);
+        }
+        if(especialidad!=null){
+            System.out.println(especialidad);
+        }
+        if(todo!=null){
+            System.out.println(todo);
+        }
+        if(tipopago!=null){
+            System.out.println(tipopago);
+        }
+        if(formato!=null){
+            System.out.println(formato);
+        }
+        return "redirect:/administrador/finanzas";
+    }
 
     @GetMapping("/generateReporteExcel")
     public String reporteExcel(){

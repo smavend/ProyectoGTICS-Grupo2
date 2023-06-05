@@ -400,7 +400,7 @@
                                         </button>
 
                                     </div>
-                                    <!-- Pop-up de filtrado -->
+
 
                                     <!-- Pop-up de filtrado -->
                                     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -410,11 +410,12 @@
                                                     <h5 class="modal-title" id="filterModalLabel">Filtrar reporte</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <form id="filterForm">
+                                                <form method="post" th:action="@{/administrador/reportes}">
+                                                    <div class="modal-body">
+
                                                         <div class="mb-3">
                                                             <label for="tiporeporte" class="form-label">Tipo de reporte</label>
-                                                            <select class="form-select" id="tiporeporte" onchange="toggleFilterOptions()">
+                                                            <select class="form-select" id="tiporeporte" name="tiporeporte" onchange="toggleFilterOptions()">
                                                                 <option value="5" selected>Todo</option>
                                                                 <option value="1">Por seguro</option>
                                                                 <option value="2">Por especialidad</option>
@@ -446,26 +447,54 @@
                                                         </div>
                                                         <div id="porFecha" class="mb-3" style="display: none;">
                                                             <label for="porfechareporte" class="form-label">Todo</label>
-                                                            <select class="form-select" id="porfechareporte">
+                                                            <select class="form-select" id="porfechareporte" name="todo">
                                                                 <option value="">Seleccionar</option>
                                                                 <option value="1">Última semana</option>
                                                                 <option value="2">Último mes</option>
                                                                 <option value="3">Últimos tres meses</option>
                                                             </select>
                                                         </div>
-                                                    </form>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado">Descargar</button>
+                                                            <select class="form-select" name="formato">
+                                                                <option value="1">Excel</option>
+                                                                <option value="2">PDF </option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Pop-up de okok reporte -->
+                                    <!-- Pop-up de generación de reporte -->
+                                    <div class="modal fade" id="generado" tabindex="-1" aria-labelledby="generadoLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <a class="btn btn-danger" th:href="@{/administrador/generateReportepdf}"> Descargar en PDF
-                                                        <i class="bi bi-file-earmark-pdf"></i>
-                                                    </a>
-                                                    <a class="btn btn-success" th:href="@{/administrador/generateReporteExcel}"> Descargar en Excel
-                                                        <i class="bi bi-file-earmark-excel"></i>
-                                                    </a>
+                                                <div class="modal-body">
+                                                    <div class="pt-4 pb-2">
+                                                        <h5 class="card-title text-center pb-0 fs-4">Descarga completado</h5>
+                                                        <p class="text-center small">La descarga se ha realizado con exito.<br> Verifique en su explorador de archivos</p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer mb-1">
+                                                    <button type="button" class="btn btn-primary " data-bs-dismiss="modal" aria-label="Close">OK</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+
+                                    <!--  -->
                                 </div>
 
                                     <table class="table table-striped" id="datatable">
