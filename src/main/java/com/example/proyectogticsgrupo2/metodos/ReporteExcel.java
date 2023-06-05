@@ -2,26 +2,28 @@ package com.example.proyectogticsgrupo2.metodos;
 
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.repository.AdministradorRepository;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-@RestController
+
 public class ReporteExcel {
-    final AdministradorRepository administradorRepository;
 
-    public ReporteExcel(AdministradorRepository administradorRepository) {
-        this.administradorRepository = administradorRepository;
-    }
 
-    @GetMapping("/reporte")
-    public String generarInformeIngresos() {
-        List<AdministradorIngresos> ingresos = administradorRepository.obtenerIgresos();
+    public void generarInformeIngresos(List<AdministradorIngresos> ingresos) {
+
 
         // Crear un nuevo libro de Excel
         Workbook workbook = new XSSFWorkbook();
@@ -88,12 +90,63 @@ public class ReporteExcel {
         // Guardar el libro de Excel en un archivo
         try (OutputStream outputStream = new FileOutputStream(rutaArchivo)) {
             workbook.write(outputStream);
-            return "reporte genrado";
+
         } catch (IOException e) {
             e.printStackTrace();
-            return "reporte mal";
+
         }
     }
 
+    public void generateIncomeReport(List<AdministradorIngresos> incomes) {
+        Document document = new Document();
+        String carpetaDescargas = System.getProperty("user.home") + "/Downloads/";
+
+        // Ruta completa del archivo en la carpeta de descargas
+        String rutaArchivo = carpetaDescargas + "reporte_ingresos.pdf";
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(rutaArchivo));
+            document.open();
+
+            // Agrega el encabezado del informe
+            Paragraph header = new Paragraph("Informe de ingresos\n");
+            document.add(header);
+
+
+            // Crea la tabla de ingresos
+            PdfPTable table = new PdfPTable(7); // Número de columnas
+
+            // Agrega las cabeceras de columna
+            table.addCell("Fecha");
+            table.addCell("Monto");
+            table.addCell("Concepto");
+            table.addCell("Paciente");
+            table.addCell("Tipo de Pago");
+            table.addCell("Especialidad");
+            table.addCell("Seguro");
+
+
+            // Agrega los datos de la tabla de ingresos
+            for (AdministradorIngresos income : incomes) {
+                PdfPCell fechacanceladaCell = new PdfPCell(new Paragraph(income.getFechacancelada().toString()));
+                PdfPCell preciocitaCell = new PdfPCell(new Paragraph(String.valueOf(income.getPreciocita())));
+                table.addCell(fechacanceladaCell);
+                table.addCell(preciocitaCell);
+                table.addCell(income.getConcepto());
+                table.addCell(income.getNombreuser());
+                table.addCell(income.getTipopago());
+                table.addCell(income.getEspecialidadcita());
+                table.addCell(income.getNombreseguro());
+            }
+
+            // Agrega la tabla al documento
+            document.add(table);
+
+            document.close();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

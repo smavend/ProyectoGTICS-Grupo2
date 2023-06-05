@@ -3,6 +3,7 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.entity.*;
+import com.example.proyectogticsgrupo2.metodos.ReporteExcel;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -77,16 +78,18 @@ public class AdministradorController {
         return "administrador/finanzas";}
 
 
-    /*@GetMapping("/generateReporte")
+    @GetMapping("/generateReporte")
     public String reporte(){
-        if(reporteService.generateExcel("C:\\Reporte.xlsx")){
-            System.out.println("reporte generado exitosamente");
-            return "redirect:/administrador/finanzas";
-        }else {
-            System.out.println("reporte generado mal");
-            return "false";
-        }
-    }*/
+        ReporteExcel reporteExcel = new ReporteExcel();
+        reporteExcel.generarInformeIngresos(administradorRepository.obtenerIgresos());
+        return "redirect:/administrador/finanzas";
+    }
+    @GetMapping("/generateReportepdf")
+    public String generateIncomeReport() {
+        ReporteExcel reporteExcel= new ReporteExcel();
+        reporteExcel.generateIncomeReport(administradorRepository.obtenerIgresos());
+        return "redirect:/administrador/finanzas";
+    }
 
     @GetMapping("/config")
     public String config(){return "administrador/config";}
