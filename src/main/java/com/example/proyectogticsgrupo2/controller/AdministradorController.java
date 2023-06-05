@@ -78,8 +78,8 @@ public class AdministradorController {
         return "administrador/finanzas";}
 
 
-    @GetMapping("/generateReporte")
-    public String reporte(){
+    @GetMapping("/generateReporteExcel")
+    public String reporteExcel(){
         ReporteExcel reporteExcel = new ReporteExcel();
         reporteExcel.generarInformeIngresos(administradorRepository.obtenerIgresos());
         return "redirect:/administrador/finanzas";

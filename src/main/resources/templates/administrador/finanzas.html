@@ -415,7 +415,7 @@
                                                         <div class="mb-3">
                                                             <label for="tiporeporte" class="form-label">Tipo de reporte</label>
                                                             <select class="form-select" id="tiporeporte" onchange="toggleFilterOptions()">
-                                                                <option value="5" selected>Por fecha</option>
+                                                                <option value="5" selected>Todo</option>
                                                                 <option value="1">Por seguro</option>
                                                                 <option value="2">Por especialidad</option>
                                                                 <option value="3">Por tipo de pago</option>
@@ -423,21 +423,21 @@
                                                         </div>
                                                         <div id="porSeguro" class="mb-3" style="display: none;">
                                                             <label for="insuranceInput" class="form-label">Seguro</label>
-                                                            <select class="form-select" id="insuranceInput">
+                                                            <select class="form-select" id="insuranceInput" name="seguro">
                                                                 <option value="">Seleccionar seguro</option>
                                                                 <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                                                             </select>
                                                         </div>
                                                         <div id="porEspecialidad" class="mb-3" style="display: none;">
                                                             <label for="specialtyInput" class="form-label">Especialidad</label>
-                                                            <select class="form-select" id="specialtyInput">
+                                                            <select class="form-select" id="specialtyInput" name="especialidad">
                                                                 <option value="">Seleccionar especialidad</option>
                                                                 <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
                                                             </select>
                                                         </div>
                                                         <div id="porTipoPago" class="mb-3" style="display: none;">
                                                             <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
-                                                            <select class="form-select" id="paymentTypeInput">
+                                                            <select class="form-select" id="paymentTypeInput" name="tipopago">
                                                                 <option value="">Seleccionar tipo de pago</option>
                                                                 <option value="1">Efectivo</option>
                                                                 <option value="2">Tarjeta</option>
@@ -445,9 +445,9 @@
                                                             </select>
                                                         </div>
                                                         <div id="porFecha" class="mb-3" style="display: none;">
-                                                            <label for="porfechareporte" class="form-label">Fecha</label>
+                                                            <label for="porfechareporte" class="form-label">Todo</label>
                                                             <select class="form-select" id="porfechareporte">
-                                                                <option value="">Seleccionar fecha</option>
+                                                                <option value="">Seleccionar</option>
                                                                 <option value="1">Última semana</option>
                                                                 <option value="2">Último mes</option>
                                                                 <option value="3">Últimos tres meses</option>
@@ -459,7 +459,7 @@
                                                     <a class="btn btn-danger" th:href="@{/administrador/generateReportepdf}"> Descargar en PDF
                                                         <i class="bi bi-file-earmark-pdf"></i>
                                                     </a>
-                                                    <a class="btn btn-success" th:href="@{/administrador/generateReporte}"> Descargar en Excel
+                                                    <a class="btn btn-success" th:href="@{/administrador/generateReporteExcel}"> Descargar en Excel
                                                         <i class="bi bi-file-earmark-excel"></i>
                                                     </a>
                                                 </div>
