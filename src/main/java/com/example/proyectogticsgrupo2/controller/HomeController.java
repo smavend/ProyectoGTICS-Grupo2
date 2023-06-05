@@ -106,9 +106,9 @@ public class HomeController {
     public String vistaRegistro(@PathVariable (value = "id", required = false) String id,
                                 @PathVariable (value = "token", required = false) String token,
                                 Model model, @ModelAttribute("paciente") Paciente paciente){
+        List<Distrito> list = distritoRepository.findAll();
+        List<Seguro> list1 = seguroRepository.findAll();
         if(id==null && token==null){
-            List<Distrito> list = distritoRepository.findAll();
-            List<Seguro> list1 = seguroRepository.findAll();
             model.addAttribute("distritos", list);
             model.addAttribute("seguros", list1);
             return "general/registro";
@@ -122,6 +122,8 @@ public class HomeController {
                     paciente.setNombre(temporal.getNombre());
                     paciente.setApellidos(temporal.getApellidos());
                     paciente.setCorreo(temporal.getCorreo());
+                    model.addAttribute("distritos", list);
+                    model.addAttribute("seguros", list1);
                     return "general/registro";
                 }else {
                     return "general/tokenExpirado";

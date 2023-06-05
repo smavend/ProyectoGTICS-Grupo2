@@ -21,7 +21,7 @@ public class CorreoPacienteService {
         try {
             MimeMessage message = new MimeMessage(session);
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(correo, true));
-            message.setSubject("Correo de Confirmación");
+            message.setSubject("Invitación a la clínica InterPUCP");
 
             // Crear una parte para el contenido HTML
             MimeBodyPart htmlPart = new MimeBodyPart();
