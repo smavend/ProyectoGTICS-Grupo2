@@ -81,28 +81,82 @@ public class AdministradorController {
     public String generarReportes(@RequestParam("tiporeporte") String tiporeporte,@RequestParam("tipopago") String tipopago,
                                   @RequestParam("seguro") String seguro,@RequestParam("especialidad") String especialidad,
                                   @RequestParam("todo") String todo,@RequestParam("formato") String formato){
-        if(tiporeporte!=null){
-            System.out.println(tiporeporte);
+        ReporteExcel reporte = new ReporteExcel();
+        switch (tiporeporte){
+            case "1":
+                if(seguro!=null){
+                    int seguro_id = Integer.parseInt(seguro);
+                    try {
+                        switch (formato){
+                            case "1":
+                                reporte.generarInformeIngresos(administradorRepository.obtenerIgresosPorSeguro(seguro_id),"PorSeguro");
+                                break;
+                            case "2":
+                                reporte.generateIncomeReport(administradorRepository.obtenerIgresosPorSeguro(seguro_id),"PorSeguro");
+                                 break;
+                        }
+                        return "redirect:/administrador/finanzas";
+                    }catch (NumberFormatException e){
+                        System.out.println("error: "+e);
+                    }
+                }
+
+            case "2":
+                if(especialidad!=null){
+                    int id_especialidad = Integer.parseInt(especialidad);
+                    try {
+                        switch (formato) {
+                            case "1":
+                                reporte.generarInformeIngresos(administradorRepository.obtenerIgresosPorEspecialidad(id_especialidad),"PorEspecialidad");
+                                break;
+                            case "2":
+                                reporte.generateIncomeReport(administradorRepository.obtenerIgresosPorEspecialidad(id_especialidad),"PorEspecialidad");
+                                break;
+                        }
+                        return "redirect:/administrador/finanzas";
+                    }catch (NumberFormatException e){
+                        System.out.println("error: "+e);
+                    }
+                }
+
+            case "3":
+                if(tipopago!=null){
+                    try {
+                        switch (formato) {
+                            case "1":
+                                reporte.generarInformeIngresos(administradorRepository.obtenerIgresosPorTipoPago(tipopago),"PorTipoPago");
+                                break;
+                            case "2":
+                                reporte.generateIncomeReport(administradorRepository.obtenerIgresosPorTipoPago(tipopago),"PorTipoPago");
+                                break;
+                        }
+                        return "redirect:/administrador/finanzas";
+                    }catch (NumberFormatException e){
+                        System.out.println("error: "+e);
+                    }
+                }
+            case "5":
+                if(todo!=null){
+                    try {
+                        switch (formato) {
+                            case "1":
+                                reporte.generarInformeIngresos(administradorRepository.obtenerIgresos(),"General");
+                                break;
+                            case "2":
+                                reporte.generateIncomeReport(administradorRepository.obtenerIgresos(),"General");
+                                break;
+                        }
+                        return "redirect:/administrador/finanzas";
+                    }catch (NumberFormatException e){
+                        System.out.println("error: "+e);
+                    }
+                }
+            default:
+                return "redirect:/administrador/dashboard";
         }
-        if(seguro!=null){
-            System.out.println(seguro);
-        }
-        if(especialidad!=null){
-            System.out.println(especialidad);
-        }
-        if(todo!=null){
-            System.out.println(todo);
-        }
-        if(tipopago!=null){
-            System.out.println(tipopago);
-        }
-        if(formato!=null){
-            System.out.println(formato);
-        }
-        return "redirect:/administrador/finanzas";
     }
 
-    @GetMapping("/generateReporteExcel")
+    /*@GetMapping("/generateReporteExcel")
     public String reporteExcel(){
         ReporteExcel reporteExcel = new ReporteExcel();
         reporteExcel.generarInformeIngresos(administradorRepository.obtenerIgresos());
@@ -113,7 +167,7 @@ public class AdministradorController {
         ReporteExcel reporteExcel= new ReporteExcel();
         reporteExcel.generateIncomeReport(administradorRepository.obtenerIgresos());
         return "redirect:/administrador/finanzas";
-    }
+    }*/
 
     @GetMapping("/config")
     public String config(){return "administrador/config";}

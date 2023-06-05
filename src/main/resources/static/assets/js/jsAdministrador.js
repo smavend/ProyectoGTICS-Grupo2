@@ -35,24 +35,9 @@ function openFilterModal() {
   $('#filterModal').modal('show');
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  var form = document.querySelector("form");
-  var generadoModal = new bootstrap.Modal(document.getElementById("generado"));
-
-  form.addEventListener("submit", function(event) {
-    event.preventDefault();
-    generadoModal.show();
-  });
-
-  generadoModal.addEventListener("hidden.bs.modal", function() {
-    // Restablecer el fondo oscuro después de cerrar el popup
-    document.body.classList.remove("modal-open");
-    var modalBackdrop = document.querySelector(".modal-backdrop");
-    if (modalBackdrop) {
-      modalBackdrop.remove();
-    }
-  });
-});
+function openFilterModale() {
+  $('#generado').modal('show');
+}
 
 // Función para mostrar u ocultar los campos de filtrado según la opción seleccionada
 function toggleFilterOptions() {

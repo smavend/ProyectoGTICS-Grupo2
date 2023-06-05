@@ -22,7 +22,7 @@ import java.util.List;
 public class ReporteExcel {
 
 
-    public void generarInformeIngresos(List<AdministradorIngresos> ingresos) {
+    public void generarInformeIngresos(List<AdministradorIngresos> ingresos, String nombreDoc) {
 
 
         // Crear un nuevo libro de Excel
@@ -86,7 +86,7 @@ public class ReporteExcel {
         String carpetaDescargas = System.getProperty("user.home") + "/Downloads/";
 
         // Ruta completa del archivo en la carpeta de descargas
-        String rutaArchivo = carpetaDescargas + "reporte_ingresos.xlsx";
+        String rutaArchivo = carpetaDescargas + "Reporte"+nombreDoc+".xlsx";
         // Guardar el libro de Excel en un archivo
         try (OutputStream outputStream = new FileOutputStream(rutaArchivo)) {
             workbook.write(outputStream);
@@ -97,12 +97,12 @@ public class ReporteExcel {
         }
     }
 
-    public void generateIncomeReport(List<AdministradorIngresos> incomes) {
+    public void generateIncomeReport(List<AdministradorIngresos> incomes,String nombreDoc) {
         Document document = new Document();
         String carpetaDescargas = System.getProperty("user.home") + "/Downloads/";
 
         // Ruta completa del archivo en la carpeta de descargas
-        String rutaArchivo = carpetaDescargas + "reporte_ingresos.pdf";
+        String rutaArchivo = carpetaDescargas + "Reporte"+nombreDoc+".pdf";
         try {
             PdfWriter.getInstance(document, new FileOutputStream(rutaArchivo));
             document.open();
