@@ -14,7 +14,8 @@
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
 
         <!-- Vendor CSS Files -->
         <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -44,14 +45,48 @@
     </head>
 
     <body>
-    <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
+        <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
 
-    <!-- ======= Sidebar ======= -->
-    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
+        <!-- ======= Sidebar ======= -->
+        <aside id="sidebar" class="sidebar">
+
+            <ul class="sidebar-nav" id="sidebar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/dashboard}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/calendario}">
+                        <i class="bi bi-calendar"></i>
+                        <span>Calendario General</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor/recibo}">
+                        <i class="bi bi-currency-exchange"></i>
+                        <span>Recibos</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/mensajeria}">
+                        <i class="bi bi-chat-quote"></i>
+                        <span>Mensajería</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+            </ul>
+
+        </aside><!-- End Sidebar-->
 
         <main id="main" class="main">
 
-            <h1 style="font-size: 2.5rem;font-weight: 700; width: 50%; margin: 0 50px; color: #435067" >Recibo - 281FH19701228FG</h1>
+            <h1 style="font-size: 2.5rem;font-weight: 700; width: 50%; margin: 0 50px; color: #435067">Recibo -
+                281FH19701228FG</h1>
             <div style="margin-top: 10px;border-radius: 20px;" class="card top-selling overflow-auto container">
 
                 <section style="margin: 30px">
@@ -80,16 +115,24 @@
                     <!-- Informacion recibo y pago -->
                     <div class="row informacionRecibo">
                         <div class="col-6">
-                            <strong>Abonado:<span th:text="${doctor.getNombre() + ' ' + doctor.getApellidos()}" style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato"></span></strong>
+                            <strong>Abonado:<span th:text="${doctor.getNombre() + ' ' + doctor.getApellidos()}"
+                                                  style="font-weight: 400; margin-left: 13px;"
+                                                  class="informacionReciboDato"></span></strong>
                             <br>
-                            <strong>Estado:<span style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato">Cancelado</span></strong>
+                            <strong>Estado:<span style="font-weight: 400; margin-left: 13px;"
+                                                 class="informacionReciboDato">Cancelado</span></strong>
                             <br>
-                            <strong>Fecha emitida:<span th:text="${cita.getFecha()}" style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato"></span></strong>
+                            <strong>Fecha emitida:<span th:text="${cita.getFecha()}"
+                                                        style="font-weight: 400; margin-left: 13px;"
+                                                        class="informacionReciboDato"></span></strong>
                         </div>
                         <div class="col-6">
-                            <strong>Fecha cancelada:<span th:text="${cita.getFecha()}" style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato"></span></strong>
+                            <strong>Fecha cancelada:<span th:text="${cita.getFecha()}"
+                                                          style="font-weight: 400; margin-left: 13px;"
+                                                          class="informacionReciboDato"></span></strong>
                             <br>
-                            <strong>Tipo de pago:<span style="font-weight: 400; margin-left: 13px;" class="informacionReciboDato">Visa ***1234</span></strong>
+                            <strong>Tipo de pago:<span style="font-weight: 400; margin-left: 13px;"
+                                                       class="informacionReciboDato">Visa ***1234</span></strong>
                         </div>
                     </div>
 
@@ -121,7 +164,8 @@
                         <div class="container">
                             <div class="row">
                                 <div class="d-flex align-items-center col-md-10">
-                                    <img style="height: 30px; margin-left: 30px" th:src="@{/assets/img/logoClinicaPNG.png}"
+                                    <img style="height: 30px; margin-left: 30px"
+                                         th:src="@{/assets/img/logoClinicaPNG.png}"
                                          alt="Logo de la clínica">
                                     <span class="fw-bold d-none d-lg-block">Clínica INTERPUCP</span>
                                 </div>
@@ -140,7 +184,6 @@
             </div>
 
 
-
         </main>
 
         <!-- ======= Footer ======= -->
@@ -155,7 +198,8 @@
             </div>
         </footer><!-- End Footer -->
 
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a>
 
         <!-- Vendor JS Files -->
         <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
@@ -172,7 +216,9 @@
         <!-- Template Main JS File -->
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
 
         <!-- Scripts Calendario -->
@@ -180,8 +226,6 @@
 
         <!-- Agregar la biblioteca FullCalendar -->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
-
-
 
 
     </body>

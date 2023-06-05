@@ -38,7 +38,6 @@
         <!-- FIN CSS PAGINACION -->
 
 
-
         <!-- Template Main CSS File -->
         <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
         <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
@@ -56,10 +55,43 @@
     </head>
 
     <body>
-    <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
+        <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
 
-    <!-- ======= Sidebar ======= -->
-    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
+        <!-- ======= Sidebar ======= -->
+        <aside id="sidebar" class="sidebar">
+
+            <ul class="sidebar-nav" id="sidebar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/dashboard}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/calendario}">
+                        <i class="bi bi-calendar"></i>
+                        <span>Calendario General</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor/recibo}">
+                        <i class="bi bi-currency-exchange"></i>
+                        <span>Recibos</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/doctor/mensajeria}">
+                        <i class="bi bi-chat-quote"></i>
+                        <span>Mensajería</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+            </ul>
+
+        </aside><!-- End Sidebar-->
 
         <main id="main" class="main">
             <div class="d-flex justify-content-between align-items-center">
@@ -78,71 +110,70 @@
                     <div class="col-lg-10 container">
 
 
-                            <!-- Top Selling -->
+                        <!-- Top Selling -->
 
-                            <div class="card top-selling overflow-auto container">
-
-
-                                <div class="card-body pb-0" id="RecibosTable">
-                                    <h5 class="card-title">INGRESOS</h5>
-
-                                    <br>
-
-                                    <div class="d-flex flex-column" style="height: auto; overflow: auto;">
-                                        <div class="table-responsive">
-                                            <table id="example" class="table table-striped table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Fecha</th>
-                                                        <th>Paciente</th>
-                                                        <th>Concepto</th>
-                                                        <th>Sede</th>
-                                                        <th>Monto</th>
-                                                        <th>Recibo</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr th:each="recibo,obj: ${listaRecibos}">
+                        <div class="card top-selling overflow-auto container">
 
 
-                                                        <td style="font-size: 1rem" th:text="${recibo.getFecha()}">
+                            <div class="card-body pb-0" id="RecibosTable">
+                                <h5 class="card-title">INGRESOS</h5>
 
-                                                        </td>
+                                <br>
 
-                                                        <td style="font-size: 1rem" th:text="${recibo.getNombres()}">
+                                <div class="d-flex flex-column" style="height: auto; overflow: auto;">
+                                    <div class="table-responsive">
+                                        <table id="example" class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Paciente</th>
+                                                    <th>Concepto</th>
+                                                    <th>Sede</th>
+                                                    <th>Monto</th>
+                                                    <th>Recibo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="recibo,obj: ${listaRecibos}">
 
-                                                        </td>
 
-                                                        <td style="font-size: 1rem;color: black">
-                                                            <h6>Consulta médica</h6>
-                                                        </td>
+                                                    <td style="font-size: 1rem" th:text="${recibo.getFecha()}">
 
-                                                        <td style="font-size: 1rem" th:text="${recibo.getSede()}">
+                                                    </td>
 
-                                                        </td>
+                                                    <td style="font-size: 1rem" th:text="${recibo.getNombres()}">
 
-                                                        <td style="font-size: 1rem"
-                                                            th:text="${'S/.'+recibo.getPago_doctor()}">
+                                                    </td>
 
-                                                        </td>
+                                                    <td style="font-size: 1rem;color: black">
+                                                        <h6>Consulta médica</h6>
+                                                    </td>
 
-                                                        <td>
-                                                            <a th:href="@{'/doctor/verRecibo?id=' + ${recibo.getId_cita()}+ '&id2=' + ${recibo.getId_doctor()}}"
-                                                               type="button" class="btn btn-success">
-                                                                Ver Recibo</a>
-                                                        </td>
-                                                    </tr>
+                                                    <td style="font-size: 1rem" th:text="${recibo.getSede()}">
 
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                    </td>
 
+                                                    <td style="font-size: 1rem"
+                                                        th:text="${'S/.'+recibo.getPago_doctor()}">
+
+                                                    </td>
+
+                                                    <td>
+                                                        <a th:href="@{'/doctor/verRecibo?id=' + ${recibo.getId_cita()}+ '&id2=' + ${recibo.getId_doctor()}}"
+                                                           type="button" class="btn btn-success">
+                                                            Ver Recibo</a>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <br>
-                                </div>
 
+                                </div>
+                                <br>
                             </div>
 
+                        </div>
 
 
                     </div><!-- End Left side columns -->

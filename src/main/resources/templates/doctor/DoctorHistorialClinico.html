@@ -73,7 +73,45 @@
 <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
 
 <!-- ======= Sidebar ======= -->
-<div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/doctor/dashboard}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed">
+          <i class="bi bi-card-text"></i>
+          <span>Reportes</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/doctor/calendario}">
+          <i class="bi bi-calendar"></i>
+          <span>Calendario General</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/doctor/recibo}">
+          <i class="bi bi-currency-exchange"></i>
+          <span>Recibos</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/doctor/mensajeria}">
+          <i class="bi bi-chat-quote"></i>
+          <span>Mensajería</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+    </ul>
+
+  </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
 
