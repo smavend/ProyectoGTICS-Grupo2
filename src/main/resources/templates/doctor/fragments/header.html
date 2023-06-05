@@ -173,7 +173,7 @@
 
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
            data-bs-toggle="dropdown">
-          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+          <img th:src="@{'/usuario/foto/'+${session.doctor.getId_doctor()}}" alt="Profile" class="rounded-circle">
           <span th:text="'Dr. '+${session.doctor.nombre}+' '+${session.doctor.apellidos}" class="d-none d-md-block dropdown-toggle ps-2"></span>
         </a><!-- End Profile Iamge Icon -->
 

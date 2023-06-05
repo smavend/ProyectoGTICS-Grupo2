@@ -78,7 +78,7 @@
 
                                 <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
                                     <input class="form-control" type="file" name="archivo">
-                                    <a th:href="@{/doctor/imageDoctor(idDoctor=${doctor.id_doctor})}"
+                                    <a th:href="@{'/doctor/perfil/quitarFoto?id='+${doctor.id_doctor}}"
                                        style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
                                 </div>
                             </div>

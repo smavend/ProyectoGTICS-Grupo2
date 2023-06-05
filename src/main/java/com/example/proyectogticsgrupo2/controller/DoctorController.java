@@ -426,7 +426,7 @@ public class DoctorController {
     }
 
     @GetMapping("/perfil/quitarFoto")
-    public String quitarFotoDoctor(@RequestParam(name = "idDocF") String id,
+    public String quitarFotoDoctor(@RequestParam(name = "id") String id,
                                    RedirectAttributes attr) {
 
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
