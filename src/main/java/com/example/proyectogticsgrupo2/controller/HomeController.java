@@ -102,7 +102,7 @@ public class HomeController {
     }
 
 
-    @GetMapping(value = {"/signin/{id}/{token}","/signin/save/{id}/{token}"})
+    @GetMapping(value = {"/signin/{id}/{token}","/signin"})
     public String vistaRegistro(@PathVariable (value = "id", required = false) String id,
                                 @PathVariable (value = "token", required = false) String token,
                                 Model model, @ModelAttribute("paciente") Paciente paciente){
