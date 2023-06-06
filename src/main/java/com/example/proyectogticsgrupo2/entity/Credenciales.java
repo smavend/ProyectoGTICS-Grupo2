@@ -16,4 +16,14 @@ public class Credenciales {
 
     @Column(name = "contrasena_hasheada")
     private String contrasena;
+
+    public Credenciales(String id_credenciales, String correo, String contrasena){
+        this.id_credenciales = id_credenciales;
+        this.correo = correo;
+        this.contrasena = contrasena;
+    }
+
+    public Credenciales(){
+
+    }
 }

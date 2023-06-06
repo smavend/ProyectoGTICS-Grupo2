@@ -16,4 +16,6 @@ public interface CuestionarioPorCitaRepository extends JpaRepository<Cuestionari
             "inner join paciente p on (p.id_paciente = c.paciente_id_paciente) " +
             "WHERE p.id_paciente = ?1")
     List<CuestionarioPorCita> buscarPorPaciente(String idPaciente);
+
+    CuestionarioPorCita findByIdIdCuestionarioAndIdIdCita(int idCuestionario, int idCita);
 }
