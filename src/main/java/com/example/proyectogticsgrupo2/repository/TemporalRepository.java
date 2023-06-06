@@ -20,4 +20,7 @@ public interface TemporalRepository extends JpaRepository<Temporal, Integer> {
     void actualizarInvitado(String nombre, String apellidos, String correo, int idTemporal);
 
     public List<Temporal> findByAdministrativo_IdAdministrativo(String idAdministrativo);
+    @Query(nativeQuery = true,value = "SELECT * FROM temporal\n" +
+            "where llenado = 1;")
+    List<Temporal> listatemporalesLlenados ();
 }
