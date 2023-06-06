@@ -60,7 +60,7 @@ public class Temporal {
 
     private String direccion;
 
-    private int estado;
+    private Integer estado;
 
     private String genero;
 }
