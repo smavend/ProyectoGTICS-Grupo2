@@ -31,8 +31,7 @@
   <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- CSS PAGINACION -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css"
-        rel="stylesheet">
+
   <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
   <!-- FIN CSS PAGINACION -->
 
@@ -51,11 +50,8 @@
 </head>
 <body>
 
-<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
-
-<!-- ======= Sidebar ======= -->
-<div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
-
+<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+<div th:replace="~{doctor/fragments/sidebar.html :: sidebar('')}"></div>
 <main style="padding-top: 0;" id="main" class="main">
 
   <div class="container-xl perfil">
@@ -70,7 +66,7 @@
             <p class="text-muted mb-3">Doctor</p>
             <div class="vstack gap-2 col-sm-6 col-md-5 col-lg-8 mx-auto mb-xl-4 mb-3 mt-4">
               <a th:href="@{'/doctor/perfil/editar?id='+${doctor.id_doctor}}" class="btn btn-primary botonEditar">Editar perfil</a>
-              <a class="btn btn-primary botonEditar">Cambiar contraseña</a>
+              <a th:href="@{/doctor/perfil/cambiarContrasena}" class="btn btn-primary botonEditar">Cambiar contraseña</a>
             </div>
             <div style="border-radius: 30px" class="alert alert-success" role="alert" th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"></div>
             <div style="border-radius: 30px" class="alert alert-danger" role="alert" th:if="${msgError != null}" th:text="${msgError}"></div>
@@ -82,6 +78,7 @@
       <div class="col-lg-8">
         <div class="card mb-4">
           <div class="card-body">
+            <hr>
             <div class="row">
               <div class="col-sm-3">
                 <p class="mb-0">Nombre completo</p>
@@ -107,15 +104,6 @@
               </div>
               <div class="col-sm-9">
                 <p class="text-muted mb-0" th:text="${doctor.genero}">Otro</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Fecha de nacimiento</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">25/13/1994</p>
               </div>
             </div>
             <hr>

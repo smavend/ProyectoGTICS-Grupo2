@@ -50,6 +50,7 @@
         <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
         <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
 
+
         <!-- Template Main CSS File -->
         <!--<link href="assets/css/style.css" rel="stylesheet"> -->
         <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
@@ -68,7 +69,7 @@
     <body>
         <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
         <!-- ======= Sidebar ======= -->
-        <div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
+        <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('calendario')}"></div>
 
         <main id="main" class="main">
 
@@ -80,27 +81,44 @@
                          class="row bg-white p-3">
 
                         <div style="margin-left: 3%" class="col-6">
-                            <button style="width: auto" onclick="toggleDiv()" class="btn btn-light"><i
-                                    class="bi bi-caret-down-fill"></i>Modificar disponibilidad de horario
+                            <button style="width: auto" onclick="toggleDiv()" class="btn btn-light">
+                                <i class="bi bi-caret-down-fill"></i>Modificar disponibilidad de horario
                             </button>
                             <div id="miDiv" class="animated-div card top-selling container">
-                                <form method="post" th:action="@{'/doctor/guardarHorario'}"  class="mt-2">
+                                <form th:object="${doctor}" method="post" th:action="@{/doctor/guardarHorario}" class="mt-2">
+
+                                    <input type="hidden" th:field="*{id_doctor}">
+                                    <input type="hidden" th:field="*{correo}">
+                                    <input type="hidden" th:field="*{apellidos}">
+                                    <input type="hidden" th:field="*{nombre}">
+                                    <input type="hidden" th:field="*{genero}">
 
                                     <h5 class="card-title">Establecer inicio de disponibilidad:</h5>
                                     <div class="mb-3">
-                                        <input th:value="${doctor.horario.disponibilidad_inicio}" name="disponibilidad_inicio" type="time" class="form-control">
+                                        <input th:field="*{horario.disponibilidad_inicio}"  type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_inicio')}"
+                                             th:errors="*{horario.disponibilidad_inicio}"></div>
                                     </div>
+
                                     <h5 class="card-title">Establecer fin de disponibilidad:</h5>
                                     <div class="mb-3">
-                                        <input th:value="${doctor.horario.disponibilidad_fin}" name="disponibilidad_fin" type="time" class="form-control">
+                                        <input th:field="*{horario.disponibilidad_fin}"  type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.disponibilidad_fin')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_fin')}"
+                                             th:errors="*{horario.disponibilidad_fin}"></div>
                                     </div>
-                                    <h5 class="card-title">Establecer horario de comida:</h5>
+
+                                    <h5 class="card-title">Establecer horario de comida: (El tiempo de almuerzo es de 1 hora)</h5>
                                     <div class="mb-3">
-                                        <input th:value="${doctor.horario.comida_inicio}" name="comida_inicio" type="time" class="form-control">
+                                        <input th:field="*{horario.comida_inicio}" type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.comida_inicio')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.comida_inicio')}"
+                                             th:errors="*{horario.comida_inicio}"></div>
                                     </div>
-                                    <h5 class="card-title">Establecer duración de citas en minutos:</h5>
+
+                                    <h5 class="card-title">Establecer duración de citas en minutos: (La duración de citas es de entre 10 y 60 minutos)</h5>
                                     <div class="mb-3">
-                                        <input th:value="${doctor.duracion_cita_minutos}" name="duracion_cita_minutos" type="number" class="form-control">
+                                        <input th:field="*{duracion_cita_minutos}" type="text" class="form-control" th:classappend="${#fields.hasErrors('duracion_cita_minutos')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('duracion_cita_minutos')}"
+                                             th:errors="*{duracion_cita_minutos}"></div>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -108,6 +126,8 @@
                                 </form>
                             </div>
                         </div>
+
+
                         <script>
 
                             document.addEventListener('DOMContentLoaded', function () {
@@ -206,7 +226,6 @@
                         </script>
                         <div id='calendar'></div>
 
-
                     </div>
 
 
@@ -224,27 +243,42 @@
 
 
                                 <div class="card-body pb-0" id="RecibosTable">
-                                    <form method="post" th:action="@{'/doctor/guardarHorario'}" class="mt-2">
+                                    <form th:object="${doctor}" method="post" th:action="@{/doctor/guardarHorario}" class="mt-2">
+
+                                        <input type="hidden" th:field="*{id_doctor}">
+                                        <input type="hidden" th:field="*{correo}">
+                                        <input type="hidden" th:field="*{apellidos}">
+                                        <input type="hidden" th:field="*{nombre}">
+                                        <input type="hidden" th:field="*{genero}">
 
                                         <h5 class="card-title">Establecer inicio de disponibilidad:</h5>
                                         <div class="mb-3">
-                                            <input name="disponibilidad_inicio" type="time" class="form-control">
+                                            <input th:field="*{horario.disponibilidad_inicio}"  type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio')?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_inicio')}"
+                                                 th:errors="*{horario.disponibilidad_inicio}"></div>
                                         </div>
+
                                         <h5 class="card-title">Establecer fin de disponibilidad:</h5>
                                         <div class="mb-3">
-                                            <input name="disponibilidad_fin" type="time" class="form-control">
+                                            <input th:field="*{horario.disponibilidad_fin}"  type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.disponibilidad_fin')?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_fin')}"
+                                                 th:errors="*{horario.disponibilidad_fin}"></div>
                                         </div>
+
                                         <h5 class="card-title">Establecer horario de comida:</h5>
                                         <div class="mb-3">
-                                            <input name="comida_inicio" type="time" class="form-control">
+                                            <input th:field="*{horario.comida_inicio}" type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.comida_inicio')?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.comida_inicio')}"
+                                                 th:errors="*{horario.comida_inicio}"></div>
                                         </div>
+
                                         <h5 class="card-title">Establecer duración de citas en minutos:</h5>
                                         <div class="mb-3">
-                                            <input name="duracion_cita_minutos" type="number" class="form-control">
+                                            <input th:field="*{duracion_cita_minutos}" type="text" class="form-control" th:classappend="${#fields.hasErrors('duracion_cita_minutos')?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('duracion_cita_minutos')}"
+                                                 th:errors="*{duracion_cita_minutos}"></div>
                                         </div>
 
-
-                                        <a th:href="@{'/doctor/calendario'}" class="btn btn-danger">Cancelar</a>
                                         <button type="submit" class="btn btn-primary">Guardar</button>
 
                                     </form>

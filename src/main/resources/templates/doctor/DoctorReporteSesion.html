@@ -6,6 +6,7 @@
             .mi-div:hover {
                 background-color: #f2f2f2;
             }
+
             .message {
                 display: none;
                 position: absolute;
@@ -58,10 +59,8 @@
     </head>
 
     <body>
-    <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
-
-    <!-- ======= Sidebar ======= -->
-    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
+    <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('reportes')}"></div>
 
         <main id="main" class="main">
 
@@ -149,13 +148,16 @@
                                     <img th:src="@{/assets/img/zoom.jpg}" style="width: 80%">
                                 </div>
                                 <div style="margin-top: 5px;text-align: center">
-                                    <button type="button" data-message="Enviar cuestionario" class="btn btn-warning myButton">
+                                    <button type="button" data-bs-toggle="tooltip" data-bs-placement="left"
+                                            title="Enviar cuestionario" class="btn btn-warning">
                                         <i style="color: black" class="bi-file-text-fill"></i>
                                     </button>
 
 
-                                    <a data-message="Ver resultados de cuestionario"  th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}" type="button"
-                                       class="btn btn-success myButton" target="_blank">
+                                    <a th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}"
+                                       data-bs-toggle="tooltip" data-bs-placement="right"
+                                       title="Ver resultados de cuestionario" type="button"
+                                       class="btn btn-success" target="_blank">
                                         <i class="bi bi-card-checklist"></i>
                                     </a>
 
@@ -163,7 +165,8 @@
                                 </div>
 
                                 <div style="text-align: center;margin-top: 2px">
-                                    <button id="myButton2" type="button"  class="btn btn-danger">
+                                    <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Finalizar videollamada" class="btn btn-danger">
                                         <i style="color: black" class="bi bi-telephone-x-fill"></i>
                                     </button>
                                 </div>
@@ -171,7 +174,7 @@
                                 <div style="margin-top: 1rem;margin-bottom: 2rem">
 
                                     <h1 style="color: black;text-align: center;">Bitácora Personal</h1>
-                                    <div >
+                                    <div>
                                         <textarea oninput="autoResizeTextarea(this)"
                                                   style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
                                                   maxlength="500" type="text" name="bitacora"
@@ -226,9 +229,6 @@
         <!-- Template Main JS File -->
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                crossorigin="anonymous"></script>
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
         <script>
             function autoResizeTextarea(element) {
@@ -240,37 +240,11 @@
         </script>
 
         <script>
-            var messageBox = null;
-
-            var buttons = document.getElementsByClassName("myButton");
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].addEventListener("mousemove", function(event) {
-                    var message = event.target.getAttribute("data-message");
-
-                    if (message) {
-                        if (!messageBox) {
-                            messageBox = document.createElement("div");
-                            messageBox.className = "message";
-                            document.body.appendChild(messageBox);
-                        }
-
-                        // Posiciona el mensaje arriba del botón
-                        messageBox.style.top = (event.target.offsetTop - messageBox.offsetHeight - 10) + "px";
-                        messageBox.style.left = (event.target.offsetLeft + (event.target.offsetWidth / 2) - (messageBox.offsetWidth / 2)) + "px";
-                        messageBox.innerHTML = message;
-                        messageBox.style.display = "block";
-                    }
-                });
-
-                buttons[i].addEventListener("mouseleave", function() {
-                    if (messageBox) {
-                        messageBox.style.display = "none";
-                    }
-                });
-            }
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
         </script>
-        </script>
-
 
 
     </body>
