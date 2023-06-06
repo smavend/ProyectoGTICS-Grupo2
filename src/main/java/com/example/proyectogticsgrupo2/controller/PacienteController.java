@@ -194,17 +194,35 @@ public class PacienteController {
     }
 
     @PostMapping("/reservar3")
-    public String reservar(@ModelAttribute("citaTempora") CitaTemporal citaTemporal, HttpSession session, Authentication authentication) {
+    public String reservar3Post(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                Model model, HttpSession session, Authentication authentication) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
 
-        String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
+        String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getInicio().toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
-        LocalDateTime fin = inicio.plusHours(1);
+        LocalTime inicio = LocalTime.parse(inicioString, formatter);
+        LocalTime fin = inicio.plusHours(1);
 
-        citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
+        citaTemporal.setInicio(inicio);
+        citaTemporal.setFin(fin);
+
+        model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+        model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+        model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
+
+        return "paciente/reservar4";
+    }
+
+    @PostMapping("/reservar4")
+    public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                            HttpSession session, Authentication authentication){
+
+        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);
+
+        citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
 
         return "redirect:/Paciente/confirmacion";
@@ -519,17 +537,30 @@ public class PacienteController {
 
             Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
 
-            String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getHora().toString();
+            String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getInicio().toString();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
-            LocalDateTime fin = inicio.plusHours(1);
+            LocalTime inicio = LocalTime.parse(inicioString, formatter);
+            LocalTime fin = inicio.plusHours(1);
 
-            citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
-            pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
+            citaTemporal.setInicio(inicio);
+            citaTemporal.setFin(fin);
 
-            return "redirect:/Paciente/confirmacion";
+            return "paciente/reservar4";
         }
 
+    }
+
+    @PostMapping("/reservarDoctor3")
+    public String reserarDoctor3(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                 HttpSession session, Authentication authentication){
+
+        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);
+
+        citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
+        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
+
+        return "redirect:/Paciente/confirmacion";
     }
 
     @GetMapping("/confirmacion")

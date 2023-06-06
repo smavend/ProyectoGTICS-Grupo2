@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,8 +40,6 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorListaPacientes(String id);
 
-
-
     @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos,c.modalidad,c.inicio,c.fin,c.estado FROM cita c inner join doctor d on (d.id_doctor=c.doctor_id_doctor) inner join paciente p on (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor= ?1 and lower(concat(p.nombre,' ',p.apellidos)) like %?2% group by p.id_paciente", nativeQuery = true)
     List<ListaBuscadorDoctor> buscadorPaciente(String id,String nombre);
 
@@ -58,7 +57,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`, `seguro_id_seguro`) VALUES (?1, ?2, ?3, ?4, ?5, 0, ?6, ?7)")
-    void reservarCita(String idPaciente, String idDoctor, LocalDateTime inicio, LocalDateTime fin, int modalidad, int idSede, int idSeguro);
+    void reservarCita(String idPaciente, String idDoctor, LocalTime inicio, LocalTime fin, int modalidad, int idSede, int idSeguro);
 
     @Query(nativeQuery = true, value = "SELECT LAST_INSERT_ID() FROM cita")
     int obtenerUltimoId();

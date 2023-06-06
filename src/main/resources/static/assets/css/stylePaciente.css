@@ -6,7 +6,7 @@ body {
     font-family: "Open Sans", sans-serif;
     background-image: linear-gradient(to right top, #dbe3e8, #e5eaee, #eff0f4, #f7f8f9, #ffffff);
     color: #444444;
-    min-height: 91vh;
+    min-height: 99vh;
 }
 
 a {

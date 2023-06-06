@@ -41,7 +41,10 @@ public class CitaTemporal {
     private LocalDate fecha;
 
     @DateTimeFormat(pattern = "HH:mm:ss")
-    private LocalTime hora;
+    private LocalTime inicio;
+
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private LocalTime fin;
 
     @Column(name = "id_cita_previa")
     private Integer idCitaPrevia;
