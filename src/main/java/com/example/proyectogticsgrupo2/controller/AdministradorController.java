@@ -87,27 +87,55 @@ public class AdministradorController {
     public ResponseEntity<Resource> generarReportes(@RequestParam("tiporeporte") String tiporeporte,@RequestParam("tipopago") String tipopago,
                                   @RequestParam("seguro") String seguro,@RequestParam("especialidad") String especialidad,
                                   @RequestParam("todo") String todo,@RequestParam("formato") String formato, Model model){
-
-
         ReporteExcel reporte = new ReporteExcel();
-        List<AdministradorIngresos> lista = administradorRepository.obtenerIgresos();
-        ResponseEntity<Resource> response = reporte.generarInformeIngresos(lista,"general");
-        return response;
-    }
+        switch (tiporeporte){
+            case "5":
+                List<AdministradorIngresos> lista = administradorRepository.obtenerIgresos();
+                switch (formato){
+                    case "1":
+                        ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(lista,"ReporteGeneral");
+                        return responseExcel;
+                    case "2":
+                        ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(lista,"ReporteGeneral");
+                        return responsePdf;
+                }
 
-    /*@GetMapping("/generateReporteExcel")
-    public String reporteExcel(){
-        ReporteExcel reporteExcel = new ReporteExcel();
-        reporteExcel.generarInformeIngresos(administradorRepository.obtenerIgresos());
-        return "redirect:/administrador/finanzas";
-    }
-    @GetMapping("/generateReportepdf")
-    public String generateIncomeReport() {
-        ReporteExcel reporteExcel= new ReporteExcel();
-        reporteExcel.generateIncomeReport(administradorRepository.obtenerIgresos());
-        return "redirect:/administrador/finanzas";
-    }*/
+            case "1":
+                List<AdministradorIngresos> listaIngresosPorSeguro = administradorRepository.obtenerIgresosPorSeguro(Integer.parseInt(seguro));
+                switch (formato){
+                    case "1":
+                        ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosPorSeguro,"ReporteIngresosPorSeguro");
+                        return responseExcel;
+                    case "2":
+                        ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosPorSeguro,"ReporteIngresosPorSeguro");
+                        return responsePdf;
+                }
+            case "2":
+                List<AdministradorIngresos> listaIngresosPorEspecialidad = administradorRepository.obtenerIgresosPorEspecialidad(Integer.parseInt(especialidad));
+                switch (formato){
+                    case "1":
+                        ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosPorEspecialidad,"ReporteIngresosEspecialidad");
+                        return responseExcel;
+                    case "2":
+                        ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosPorEspecialidad,"ReporteIngresosEspecialidad");
+                        return responsePdf;
+                }
 
+            case "3":
+                List<AdministradorIngresos> listaIngresosTipoPago = administradorRepository.obtenerIgresosPorTipoPago(tipopago);
+                switch (formato){
+                    case "1":
+                        ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosTipoPago,"ReporteIngresosTipoPago");
+                        return responseExcel;
+                    case "2":
+                        ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosTipoPago,"ReporteIngresosTipoPago");
+                        return responsePdf;
+                }
+
+            default:
+                return null;
+        }
+    }
     @GetMapping("/config")
     public String config(){return "administrador/config";}
     @GetMapping("/registro")
