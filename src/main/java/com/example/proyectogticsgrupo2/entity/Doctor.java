@@ -16,7 +16,6 @@ import java.io.Serializable;
 public class Doctor implements Serializable {
     @Id
     @NotBlank(message = "Este campo no puede estar vacío")
-    @Digits(integer = 8, fraction = 0, message = "En DNI debe ser un número")
     @Size(min = 8,max = 8,message = "En DNI debe tener 8 dígitos" )
     @Column(nullable = false)
     private String id_doctor;

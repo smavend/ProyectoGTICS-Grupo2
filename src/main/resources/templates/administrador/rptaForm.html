@@ -320,7 +320,7 @@
 
   <section  >
     <div class="row d-flex justify-content ">
-      <div  class = "bg-white col-md-12 p-5 ">
+      <div  class = "bg-white col-md-12 p-5 " style="min-height: 674px">
         <h3 class=" m-3">PACIENTES POR REGISTRAR</h3>
 
           <form method="POST" th:action="@{/administrador/guardarTemporales}">
@@ -350,12 +350,12 @@
               </tr>
               </tbody>
             </table>
-            <div class="my-4">
+            <div class="mt-2">
               <button type="submit" class="btn btn-primary">Guardar usuarios</button>
             </div>
           </form>
 
-        <br>
+
       </div>
 
     </div>
@@ -388,7 +388,10 @@
 <script>
   $(document).ready(function () {
     $('#datatable').DataTable({
-
+      lengthMenu: [
+        [8,15,20],
+        [8,15,20],
+      ],
       "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Ningún registro encontrado",
@@ -404,7 +407,7 @@
           "previous": "Anterior",
         }
       },
-
+      "pageLength": 8,
       "columnDefs": [
         {"margin-bottom": "10px"}
       ]
