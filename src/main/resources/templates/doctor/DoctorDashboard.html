@@ -176,10 +176,42 @@
                                                                            class="bi-play-fill"></i>
                                                                     </a>
 
-                                                                    <a id="enviar-btn" style="width: max-content"
-                                                                       type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="right" title="Enviar cuestionario">
+                                                                    <a href="#" style="width: max-content" data-bs-toggle="tooltip" data-bs-placement="top" title="Enviar cuestionario" class="btn btn-warning" data-toggle="modal" data-target="#formularioModal">
                                                                         <i class="bi-file-text-fill"></i>
                                                                     </a>
+
+                                                                    <!-- Modal -->
+                                                                    <div class="modal fade" id="formularioModal" tabindex="-1" role="dialog" aria-labelledby="formularioModalLabel" aria-hidden="true">
+                                                                        <div class="modal-dialog" role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h5 class="modal-title" id="formularioModalLabel">Formulario Genérico</h5>
+                                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <!-- Aquí puedes agregar los campos del formulario -->
+                                                                                    <form>
+                                                                                        <div class="form-group">
+                                                                                            <label for="campo1">Campo 1:</label>
+                                                                                            <input type="text" class="form-control" id="campo1">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="campo2">Campo 2:</label>
+                                                                                            <input type="text" class="form-control" id="campo2">
+                                                                                        </div>
+                                                                                        <!-- Agrega más campos según tus necesidades -->
+                                                                                    </form>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-primary">Guardar</button>
+                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
 
                                                                 </div>
                                                             </td>
@@ -228,8 +260,6 @@
                                                             <td style="font-size: 1.2rem; color: black">
                                                                 <a th:href="@{'/doctor/historialClinico' + '?id=' + ${paciente.id_paciente}}"
                                                                    th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
-
-
                                                             </td>
 
                                                         </tr>
@@ -408,6 +438,8 @@
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 
         <!-- Agregar la biblioteca FullCalendar -->
@@ -462,14 +494,6 @@
 
         // Mostrar el calendario
         calendar.render();
-        </script>
-        <script>
-            const enviarBtn = document.getElementById("enviar-btn");
-
-            enviarBtn.addEventListener("click", function () {
-                enviarBtn.classList.add("btn-disabled");
-                enviarBtn.disabled = true;
-            });
         </script>
 
         <script>

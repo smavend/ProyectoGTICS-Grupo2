@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -21,11 +22,11 @@ public class Pago {
     @JoinColumn(name="cita_id_cita", nullable = false)
     private Cita cita;
 
-    @Column(name = "fecha_emtida")
-    private String fechaEmitida;
+    @Column(name = "fecha_emitida")
+    private LocalDate fechaEmitida;
 
     @Column(name = "fecha_cancelada")
-    private String fechaCancelada;
+    private LocalDate fechaCancelada;
 
     @Column(name = "estado_pago")
     private int estadoPago;
