@@ -8,6 +8,7 @@ import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +28,11 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/administrador")
@@ -77,98 +83,59 @@ public class AdministradorController {
 
         return "administrador/finanzas";}
 
-    @PostMapping("/reportes")
-    public String generarReportes(@RequestParam("tiporeporte") String tiporeporte,@RequestParam("tipopago") String tipopago,
+    @RequestMapping("/reportes")
+    public ResponseEntity<Resource> generarReportes(@RequestParam("tiporeporte") String tiporeporte,@RequestParam("tipopago") String tipopago,
                                   @RequestParam("seguro") String seguro,@RequestParam("especialidad") String especialidad,
-                                  @RequestParam("todo") String todo,@RequestParam("formato") String formato){
+                                  @RequestParam("todo") String todo,@RequestParam("formato") String formato, Model model){
         ReporteExcel reporte = new ReporteExcel();
         switch (tiporeporte){
-            case "1":
-                if(seguro!=null){
-                    int seguro_id = Integer.parseInt(seguro);
-                    try {
-                        switch (formato){
-                            case "1":
-                                reporte.generarInformeIngresos(administradorRepository.obtenerIgresosPorSeguro(seguro_id),"PorSeguro");
-                                break;
-                            case "2":
-                                reporte.generateIncomeReport(administradorRepository.obtenerIgresosPorSeguro(seguro_id),"PorSeguro");
-                                 break;
-                        }
-                        return "redirect:/administrador/finanzas";
-                    }catch (NumberFormatException e){
-                        System.out.println("error: "+e);
-                    }
+            case "5":
+                List<AdministradorIngresos> lista = administradorRepository.obtenerIgresos();
+                switch (formato){
+                    case "1":
+                        ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(lista,"ReporteGeneral");
+                        return responseExcel;
+                    case "2":
+                        ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(lista,"ReporteGeneral");
+                        return responsePdf;
                 }
 
+            case "1":
+                List<AdministradorIngresos> listaIngresosPorSeguro = administradorRepository.obtenerIgresosPorSeguro(Integer.parseInt(seguro));
+                switch (formato){
+                    case "1":
+                        ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosPorSeguro,"ReporteIngresosPorSeguro");
+                        return responseExcel;
+                    case "2":
+                        ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosPorSeguro,"ReporteIngresosPorSeguro");
+                        return responsePdf;
+                }
             case "2":
-                if(especialidad!=null){
-                    int id_especialidad = Integer.parseInt(especialidad);
-                    try {
-                        switch (formato) {
-                            case "1":
-                                reporte.generarInformeIngresos(administradorRepository.obtenerIgresosPorEspecialidad(id_especialidad),"PorEspecialidad");
-                                break;
-                            case "2":
-                                reporte.generateIncomeReport(administradorRepository.obtenerIgresosPorEspecialidad(id_especialidad),"PorEspecialidad");
-                                break;
-                        }
-                        return "redirect:/administrador/finanzas";
-                    }catch (NumberFormatException e){
-                        System.out.println("error: "+e);
-                    }
+                List<AdministradorIngresos> listaIngresosPorEspecialidad = administradorRepository.obtenerIgresosPorEspecialidad(Integer.parseInt(especialidad));
+                switch (formato){
+                    case "1":
+                        ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosPorEspecialidad,"ReporteIngresosEspecialidad");
+                        return responseExcel;
+                    case "2":
+                        ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosPorEspecialidad,"ReporteIngresosEspecialidad");
+                        return responsePdf;
                 }
 
             case "3":
-                if(tipopago!=null){
-                    try {
-                        switch (formato) {
-                            case "1":
-                                reporte.generarInformeIngresos(administradorRepository.obtenerIgresosPorTipoPago(tipopago),"PorTipoPago");
-                                break;
-                            case "2":
-                                reporte.generateIncomeReport(administradorRepository.obtenerIgresosPorTipoPago(tipopago),"PorTipoPago");
-                                break;
-                        }
-                        return "redirect:/administrador/finanzas";
-                    }catch (NumberFormatException e){
-                        System.out.println("error: "+e);
-                    }
+                List<AdministradorIngresos> listaIngresosTipoPago = administradorRepository.obtenerIgresosPorTipoPago(tipopago);
+                switch (formato){
+                    case "1":
+                        ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosTipoPago,"ReporteIngresosTipoPago");
+                        return responseExcel;
+                    case "2":
+                        ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosTipoPago,"ReporteIngresosTipoPago");
+                        return responsePdf;
                 }
-            case "5":
-                if(todo!=null){
-                    try {
-                        switch (formato) {
-                            case "1":
-                                reporte.generarInformeIngresos(administradorRepository.obtenerIgresos(),"General");
-                                break;
-                            case "2":
-                                reporte.generateIncomeReport(administradorRepository.obtenerIgresos(),"General");
-                                break;
-                        }
-                        return "redirect:/administrador/finanzas";
-                    }catch (NumberFormatException e){
-                        System.out.println("error: "+e);
-                    }
-                }
+
             default:
-                return "redirect:/administrador/dashboard";
+                return null;
         }
     }
-
-    /*@GetMapping("/generateReporteExcel")
-    public String reporteExcel(){
-        ReporteExcel reporteExcel = new ReporteExcel();
-        reporteExcel.generarInformeIngresos(administradorRepository.obtenerIgresos());
-        return "redirect:/administrador/finanzas";
-    }
-    @GetMapping("/generateReportepdf")
-    public String generateIncomeReport() {
-        ReporteExcel reporteExcel= new ReporteExcel();
-        reporteExcel.generateIncomeReport(administradorRepository.obtenerIgresos());
-        return "redirect:/administrador/finanzas";
-    }*/
-
     @GetMapping("/config")
     public String config(){return "administrador/config";}
     @GetMapping("/registro")
