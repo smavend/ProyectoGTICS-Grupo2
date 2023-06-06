@@ -413,6 +413,8 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <form method="post" th:action="@{/administrador/reportes}">
+                                                    <div class="modal-body">
+
                                                         <div class="mb-3">
                                                             <label for="tiporeporte" class="form-label">Tipo de reporte</label>
                                                             <select class="form-select" id="tiporeporte" name="tiporeporte" onchange="toggleFilterOptions()">
@@ -459,6 +461,8 @@
                                                             </select>
                                                             <div class="invalid-feedback">Campos obligatorios</div>
                                                         </div>
+
+                                                    </div>
                                                     <div class="modal-footer">
                                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                                             <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado" >Descargar</button>
