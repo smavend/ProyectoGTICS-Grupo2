@@ -361,11 +361,14 @@ public class DoctorController {
     }
 
     @GetMapping("/perfil")
-    public String perfilDoctor(Model model, @RequestParam("id") String id) {
+    public String perfilDoctor(Model model, HttpSession session, Authentication authentication,@RequestParam("id") String id) {
+        Doctor doctor= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor);
+
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         if (optionalDoctor.isPresent()) {
-            Doctor doctor = optionalDoctor.get();
-            model.addAttribute("doctor", doctor);
+            Doctor doctor1 = optionalDoctor.get();
+            model.addAttribute("doctor", doctor1);
         }
         return "doctor/DoctorPerfil";
     }
