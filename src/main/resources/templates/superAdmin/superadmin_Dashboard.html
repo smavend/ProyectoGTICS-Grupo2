@@ -3,7 +3,7 @@
 
 
     <head>
-        <meta charset="utf-8">
+         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
         <title>Dashboard - NiceAdmin Bootstrap Template</title>
@@ -89,16 +89,14 @@
             <section class="section dashboard">
                 <section class="section">
                     <div class="col-lg-12">
-
-
                         <div class="card">
                             <div class="card-body pb-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">Tabla de Administradores</h5>
-                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
+                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "> Crear Administrador</i></a>
                                 </div>
                                 <div class=" flex-column" >
-                                    <table class="table table-striped" id="AdministradorTable">
+                                    <table class="table table-striped" id="AdministradorTable" style="display: none; width: 100%;">
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -136,117 +134,14 @@
                                 </div>
                             </div>
                         </div>
-
-                     <!--   <div class="card">
-                            <div class="card-body" id="AdministradorTable" style="display:none">
-                                <h5 class="card-title">Tabla de Administradores</h5>
-                                <div class="container">
-                                    <p class="text-primary fw-bold mb-2">Filtrar por:</p>
-                                    <form class="filter-form" method="POST"
-                                          th:action="@{/SuperAdminHomePage/filtrarAdministradores}">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label for="clinica-filter-administradores"
-                                                           class="form-label small">Clínica: </label>
-                                                    <select id="clinica-filter-administradores" name="clinica"
-                                                            class="form-select form-select-sm">
-                                                        <option value="todos">Todos</option>
-                                                        <option th:each="clinica : ${listaClinicas}"
-                                                                th:value="${clinica.nombre}"
-                                                                th:text="${clinica.nombre}"></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="sede-filter-administradores"
-                                                       class="form-label small">Sede: </label>
-                                                <select id="sede-filter-administradores" name="sede"
-                                                        class="form-select form-select-sm">
-                                                    <option value="todos">Todos</option>
-                                                    <option th:each="Sedes : ${listaSedes}" th:value="${Sedes.nombre}"
-                                                            th:text="${Sedes.nombre}"></option>
-                                                    &lt;!&ndash; Las opciones de sedes se actualizarán dinámicamente &ndash;&gt;
-                                                </select>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <label for="nombre-filter-administradores" class="form-label small">Nombre: </label>
-                                                <input type="text" id="nombre-filter-administradores" name="nombre"
-                                                       class="form-control form-control-sm">
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <br>
-                                                <button type="submit" data-action="filter-administrador"
-                                                        class="btn btn-primary" style="margin-right: 20px">Filtrar
-                                                </button>
-                                                <button type="submit" data-action="clear-administrador"
-                                                        id="clear-filters-btn-3" class="btn btn-secondary">Limpiar
-                                                    filtros
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                &lt;!&ndash; Table with stripped rows &ndash;&gt;
-                                <div class="table-responsive">
-                                    <table class="table table-striped" id="superadmin_administrador_table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">DNI</th>
-                                                <th scope="col">Nombre</th>
-                                                <th scope="col">Apellidos</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Correo</th>
-                                                <th scope="col">Sede</th>
-                                                <th scope="col">Clínica</th>
-                                                <th scope="col">Accion</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tabla_contenido_administrador">
-                                            <tr th:each="listaAdministadores, info : ${listaAdministradoresDTO_superadmin}">
-                                                <td th:text="${info.index + 1}"></td>
-                                                <td th:text="${listaAdministadores.idAdministrador}"></td>
-                                                <td th:text="${listaAdministadores.nombre}"></td>
-                                                <td th:text="${listaAdministadores.apellidos}"></td>
-                                                <td th:text="${listaAdministadores.estado}"></td>
-                                                <td th:text="${listaAdministadores.correo}"></td>
-                                                <td th:text="${listaAdministadores.sedeNombre}"></td>
-                                                <td th:text="${listaAdministadores.clinica}"></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary    "
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#staticBackdrop">Loguear
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                &lt;!&ndash; End Table with stripped rows &ndash;&gt;
-                                <div id="pagination_Administrador" style="width: 100%; text-align: center">
-                                    &lt;!&ndash;display: none;">&ndash;&gt;
-                                    <button type="button" class="btn btn-primary" id="prev-btn1"
-                                            style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">
-                                        <
-                                    </button>
-                                    <span id="page-num1">1</span>
-                                    <button type="button" class="btn btn-primary " id="next-btn1"
-                                            style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .75rem;font-size: 16px">
-                                        >
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>-->
                         <div class="card">
                             <div class="card-body pb-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">Tabla de Administrativos</h5>
-                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
+                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "> Crear Administrativo</i></a>
                                 </div>
                                 <div class=" flex-column" >
-                                    <table class="table table-striped" id="AdministrativoTable">
+                                    <table class="table table-striped" id="AdministrativoTable" style="display: none; width: 100%;" >
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -291,10 +186,9 @@
                             <div class="card-body pb-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">Tabla de Pacientes</h5>
-                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
                                 </div>
                                 <div class=" flex-column" >
-                                    <table class="table table-striped" id="PacientesTable">
+                                    <table class="table table-striped" id="PacientesTable" style="display: none; width: 100%;">
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -346,10 +240,9 @@
                             <div class="card-body pb-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">Tabla de Doctores</h5>
-                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "></i></a>
                                 </div>
                                 <div class=" flex-column" >
-                                    <table class="table table-striped" id="DoctoresTable">
+                                    <table class="table table-striped" id="DoctoresTable" style="display: none; width: 100%;">
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -391,10 +284,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
                     </div>
                 </section>
             </section>
@@ -414,37 +303,69 @@
                 Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
             </div>
         </footer><!-- End Footer -->
-
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-                class="bi bi-arrow-up-short"></i></a>
-
-        <!-- Vendor JS Files -->
-        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
-
-        <script th:src="@{/assets/js/paginacion_administrador_superadmin.js}"></script>
-        <script th:src="@{/assets/js/paginacion_administrativo_superadmin.js}"></script>
-        <script th:src="@{/assets/js/paginacion_doctor_superadmin.js}"></script>
-        <script th:src="@{/assets/js/paginacion_paciente_superadmin.js}"></script>
-        <script th:src="@{/assets/js/filtrado_dashboard_superadmin.js}"></script>
-        <script th:src="@{/assets/js/darkmode.js}"></script>
-
-
-        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-        <!-- Template Main JS File -->
-        <!-- DataTables activate -->
+            class="bi bi-arrow-up-short"></i></a>
         <script>
+            var darkmode = localStorage.getItem('dark-mode') === 'true';
+            var headerColor = localStorage.getItem('headerColor') || "[[${headerColor}]]";
+/*
+            var sidebarColor = localStorage.getItem('sidebarColor') || "[[${sidebarColor}]]"; // Añadir esta línea
+*/
+            var backgroundColor = localStorage.getItem(('backgroundColor')|| "[[${backgroundColor}]]");
+            console.log(headerColor);
+/*
+            console.log(sidebarColor);
+*/
+            console.log(backgroundColor);
+
+            function updateBodyClasses() {
+                document.body.classList.toggle('dark-mode', darkmode);
+                document.body.classList.toggle('light-mode', !darkmode);
+            }
+
+            function updateHeaderColor() {
+                var color = darkmode ? '#363537' : headerColor;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+            /*function updateSidebarColor() {
+                var color = darkmode ? '#363537' : sidebarColor;
+                document.getElementById('sidebar').style.backgroundColor = color; // Reemplazar 'sidebar' con el id de tu elemento de la barra lateral
+            }*/
+
+
+            function setDarkMode(newValue) {
+                darkmode = newValue;
+                localStorage.setItem('dark-mode', newValue);
+                updateBodyClasses();
+                updateHeaderColor();
+/*
+                updateSidebarColor(); // Añadir esta línea
+*/
+
+            }
+
+            updateBodyClasses();
+            updateHeaderColor();
+/*
+            updateSidebarColor(); // Añadir esta línea
+*/
+
+
+            document.addEventListener('DOMContentLoaded', (event) => {
+                document.getElementById('dark-mode-button').checked = darkmode;
+                document.getElementById('dark-mode-button').addEventListener('change', function () {
+                    setDarkMode(this.checked);
+                });
+
+                $(document).ready(function () {
+                    localStorage.setItem('headerColor', headerColor);
+/*
+                    localStorage.setItem('sidebarColor', sidebarColor); // Añadir esta línea
+*/
+                });
+            });
             $(document).ready(function () {
+                var tablaAdministrador = $('#AdministradorTable');
                 $('#AdministradorTable').DataTable({
                     lengthMenu: [
                         [5,10],
@@ -467,12 +388,13 @@
                     },
                     "columnDefs": [
                         {"margin-bottom": "10px"}
-                    ]
+                    ],
+                    "initComplete": function () {
+                        tablaAdministrador.show(); // Mostrar la tabla una vez que se haya completado la inicialización
+                        tablaAdministrador.DataTable().columns.adjust().draw();
+                    }
                 });
-            });
-        </script>
-        <script>
-            $(document).ready(function () {
+                var tablaPacientes = $('#PacientesTable');
                 $('#PacientesTable').DataTable({
                     lengthMenu: [
                         [5,10],
@@ -495,12 +417,13 @@
                     },
                     "columnDefs": [
                         {"margin-bottom": "10px"}
-                    ]
+                    ],
+                    "initComplete": function () {
+                        tablaPacientes.show();
+                        tablaPacientes.DataTable().columns.adjust().draw();
+                    }
                 });
-            });
-        </script>
-        <script>
-            $(document).ready(function () {
+                var tablaAdministrativo = $('#AdministrativoTable');
                 $('#AdministrativoTable').DataTable({
                     lengthMenu: [
                         [5,10],
@@ -523,12 +446,13 @@
                     },
                     "columnDefs": [
                         {"margin-bottom": "10px"}
-                    ]
+                    ],
+                    "initComplete": function () {
+                        tablaAdministrativo.show();
+                        tablaAdministrativo.DataTable().columns.adjust().draw();
+                    }
                 });
-            });
-        </script>
-        <script>
-            $(document).ready(function () {
+                var tablaDoctores = $('#DoctoresTable');
                 $('#DoctoresTable').DataTable({
                     lengthMenu: [
                         [5,10],
@@ -551,59 +475,30 @@
                     },
                     "columnDefs": [
                         {"margin-bottom": "10px"}
-                    ]
+                    ],
+                    "initComplete": function () {
+                        tablaDoctores.show();
+                        tablaDoctores.DataTable().columns.adjust().draw();
+                    }
                 });
             });
+
         </script>
-        <script>
-            var headerColor = "[[${headerColor}]]";
-            console.log(headerColor);
-            localStorage.setItem('headerColor', headerColor);
-            var darkmode = localStorage.getItem('dark-mode');
-            console.log(darkmode);
-        </script>
-        <script>
-            window.addEventListener('load', (event) => {
-                var darkmode = localStorage.getItem('dark-mode');
-                var headerColor = localStorage.getItem('headerColor');
-
-                if (darkmode === 'true') {
-                    document.body.classList.add('dark-mode');
-                    document.getElementById('dark-mode-button').checked = true;
-                    updateHeaderColor("#363537", true); // Llamar directamente con color en modo oscuro
-                } else {
-                    document.body.classList.add('light-mode');
-                    updateHeaderColor(headerColor, false); // Llamar con color en modo claro
-                }
-
-                console.log(headerColor);
-            });
-
-            document.getElementById('dark-mode-button').addEventListener('change', function () {
-                if (this.checked) {
-                    localStorage.setItem('dark-mode', 'true');
-                    document.body.classList.remove('light-mode');
-                    document.body.classList.add('dark-mode');
-                    updateHeaderColor("#363537", true);
-                } else {
-                    localStorage.setItem('dark-mode', 'false');
-                    document.body.classList.remove('dark-mode');
-                    document.body.classList.add('light-mode');
-                    var headerColor = localStorage.getItem('headerColor');
-                    updateHeaderColor(headerColor, false);
-                }
-            });
-
-            function updateHeaderColor(color, isDarkMode) {
-                if (isDarkMode) {
-                    $('#header').css('background-color', '#363537');
-                    console.log('saludo');
-                } else {
-                    $('#header').css('background-color', color);
-                    console.log('despedida');
-                }
-            }
-        </script>
+        <!-- Vendor JS Files -->
+        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <!-- Template Main JS File -->
+        <!-- DataTables activate -->
 
 
     </body>
