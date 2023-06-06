@@ -241,6 +241,11 @@ public class AdministradorController {
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
 
+                String passRandom= securityConfig.generateRandomPassword();
+                PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+                // Ahora puedes usar el passwordEncoder para codificar una contraseña
+                String encodedPassword = passwordEncoder.encode(passRandom);
+                credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
                 CorreoNuevoPaciente correoNuevoPaciente= new CorreoNuevoPaciente();
 
                 InetAddress address = InetAddress.getLocalHost();
@@ -255,10 +260,11 @@ public class AdministradorController {
                 }
                 String link = request.getServerName()+":"+request.getLocalPort();
 
-                correoNuevoPaciente.props(paciente.getCorreo(),paciente.getNombre(), link);
+                correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
                 attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
 
             }
+
             return "redirect:/administrador/dashboard";
 
     }
