@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -116,7 +115,7 @@ public class HomeController {
             Optional<Token> posible = tokenRepository.findByIdPacienteAndToken(id, token);
             if(posible.isPresent()){
                 Token token1 = posible.get();
-                if(LocalDateTime.now().isBefore(token1.getFechaExpiracion())){
+                if(LocalDateTime.now().isBefore(token1.getFechaExpiracion()) && temporalRepository.findByDni(id).isPresent()){
                     Temporal temporal = temporalRepository.findByDni(id).get();
                     paciente.setIdPaciente(temporal.getDni());
                     paciente.setNombre(temporal.getNombre());
@@ -140,7 +139,6 @@ public class HomeController {
                                    @RequestParam ("radios") String radio,
                                    @RequestParam ("alergias") String alergias,
                                    Model model,
-                                   RedirectAttributes attr,
                                    @ModelAttribute("paciente") @Valid Paciente paciente,
                                    BindingResult bindingResult){
         List<Distrito> list = distritoRepository.findAll();
@@ -215,13 +213,13 @@ public class HomeController {
                 tareaRepository.save(tarea);
                 if(radio.equals("1")){
                     String[] alergiasArray = alergias.split(",");
-                    String alergia = "";
-                    Alergia alergia1 = null;
-                    for(int i = 0; i<alergiasArray.length; i++){
-                        alergia = alergiasArray[i].trim();
-                        alergia = alergia.replaceAll(" +"," ");
-                        if(!alergia.equals(" ") && !alergia.equals("")){
-                            alergia = alergia.substring(0,1).toUpperCase() + alergia.substring(1).toLowerCase();
+                    String alergia;
+                    Alergia alergia1;
+                    for (String s : alergiasArray) {
+                        alergia = s.trim();
+                        alergia = alergia.replaceAll(" +", " ");
+                        if (!alergia.equals(" ") && !alergia.equals("")) {
+                            alergia = alergia.substring(0, 1).toUpperCase() + alergia.substring(1).toLowerCase();
                             alergia1 = new Alergia();
                             alergia1.setNombre(alergia);
                             alergia1.setPaciente(paciente);
