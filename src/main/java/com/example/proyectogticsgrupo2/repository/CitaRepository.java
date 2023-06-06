@@ -1,9 +1,6 @@
 package com.example.proyectogticsgrupo2.repository;
 
-import com.example.proyectogticsgrupo2.dto.CuestionarioxDoctorDTO;
-import com.example.proyectogticsgrupo2.dto.ListaBuscadorDoctor;
-import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
-import com.example.proyectogticsgrupo2.dto.TratamientoDTO;
+import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.Cita;
 import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Paciente;
@@ -70,12 +67,18 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     List<ListaBuscadorDoctor> listarPorPacienteProxCitas(String id);
     @Query(value = "SELECT fin, diagnostico, receta \n" +
             "FROM proyectogtics.cita \n" +
-            "WHERE paciente_id_paciente = ?1",
+            "WHERE paciente_id_paciente = ?1 and estado =?2",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
-    List<TratamientoDTO> listarTratamientos(String id);
+    List<TratamientoDTO> listarTratamientos(String id, int estado);
 
     @Query(value = "Select * from cuestionario_x_cita cxc inner join cuestionario c on (cxc.cuestionario_id_cuestionario=c.id_cuestionario) where cxc.cita_id_cita=?1",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     Optional<CuestionarioxDoctorDTO> verCuestionario(int id);
+
+    @Query(value = "SELECT id_cita, fin\n" +
+            "FROM proyectogtics.cita\n" +
+            "WHERE cita.paciente_id_paciente = ?1" +
+            "    AND cita.estado =?2",nativeQuery = true)
+    List<EncuestaDoctorDTO> listarFechaEncuesta(String idPaciente, int estado);
 
 }

@@ -353,10 +353,10 @@ public class DoctorController {
         session.setAttribute("doctor",doctor_session);
 
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
-        List<TratamientoDTO> tratamientoList = citaRepository.listarTratamientos(id);
+        List<TratamientoDTO> tratamientoList = citaRepository.listarTratamientos(id,4);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<ListaBuscadorDoctor> listProxCita = citaRepository.listarPorPacienteProxCitas(id);
-
+        List<EncuestaDoctorDTO> fechaEncuesta = citaRepository.listarFechaEncuesta(id,4);
 
         if (optionalPaciente.isPresent()) {
             Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
@@ -367,6 +367,7 @@ public class DoctorController {
             model.addAttribute("alergiaList", alergiaList);
             model.addAttribute("ListaTratamiento", tratamientoList);
             model.addAttribute("lisProxCitas", listProxCita);
+            model.addAttribute("listEncuesta",fechaEncuesta);
             return "doctor/DoctorHistorialClinico";
         } else {
             return "redirect:/";
