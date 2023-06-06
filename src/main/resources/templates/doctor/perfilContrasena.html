@@ -29,8 +29,34 @@
     <!-- Template Main CSS File -->
     <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
     <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
 
 
+    <style>
+        .botonPersonalizado {
+            background-color: #012970;
+            color: white;
+            border-color: #012970;
+        }
+
+        .botonPersonalizado:hover {
+            background-color: #001f4b;
+            border-color: #001f4b;
+        }
+        .botonEditarPerfil {
+            background-color: white;
+            color: #012970;
+            border: 2px solid #012970;
+            border-radius: 50px;
+            padding: 10px 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .botonEditarPerfil:hover {
+            background-color: #012970;
+            color: white;
+        }
+    </style>
     <!--Links para mensajeria-->
 
     <!--End link mensajeria-->
@@ -62,7 +88,7 @@
                         <p class="text-muted mb-3">Doctor</p>
                         <div class="vstack gap-2 col-sm-6 col-md-5 col-lg-8 mx-auto mb-xl-4 mb-2 mt-4">
                             <a th:href="@{'/doctor/perfil/editar?id='+${session.doctor.id_doctor}}"
-                               class="botonPerfil">Editar perfil</a>
+                               class="botonEditarPerfil">Editar perfil</a>
                         </div>
                     </div>
                 </div>
@@ -102,10 +128,10 @@
                                     <!--<div class="invalid-feedback"></div>-->
                                 </div>
                             </div>
-                            <button type="submit" class="botonAceptar mt-5">
+                            <button type="submit" class="btn btn-primary botonPersonalizado mt-5">
                                 Actualizar
                             </button>
-                            <a th:href="@{'/doctor/perfil?id='+${session.doctor.id_doctor}}" class="botonCancelar mt-5 ms-2">Cancelar</a>
+                            <a th:href="@{'/doctor/perfil?id='+${session.doctor.id_doctor}}" class="btn btn-danger mt-5 ms-2">Cancelar</a>
                         </form>
                     </div>
                 </div>
@@ -113,18 +139,6 @@
         </div>
     </div>
 </main>
-
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-
-    <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-
-    </div>
-</footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
