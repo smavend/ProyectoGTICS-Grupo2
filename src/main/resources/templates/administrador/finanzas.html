@@ -651,6 +651,17 @@
 </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<script>
+    var headerColorAdministrador = "[[${headerColorAdministrador}]]";
+    localStorage.setItem('headerColorAdministrador', headerColorAdministrador);
+
+    function updateHeaderColorAdministrador() {
+        var color = headerColorAdministrador;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+
+    updateHeaderColorAdministrador();
+</script>
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
