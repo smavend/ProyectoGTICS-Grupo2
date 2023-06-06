@@ -11,4 +11,5 @@ public interface ListaBuscadorDoctor {
     LocalDateTime getInicio();
     LocalDateTime getFin();
     int getEstado();
+    int getSeguro_id_seguro();
 }
