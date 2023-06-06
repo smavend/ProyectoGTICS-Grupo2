@@ -138,14 +138,14 @@
                                              th:errors="*{horario.disponibilidad_fin}"></div>
                                     </div>
 
-                                    <h5 class="card-title">Establecer horario de comida:</h5>
+                                    <h5 class="card-title">Establecer horario de comida: (El tiempo de almuerzo es de 1 hora)</h5>
                                     <div class="mb-3">
                                         <input th:field="*{horario.comida_inicio}" type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.comida_inicio')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.comida_inicio')}"
                                              th:errors="*{horario.comida_inicio}"></div>
                                     </div>
 
-                                    <h5 class="card-title">Establecer duración de citas en minutos:</h5>
+                                    <h5 class="card-title">Establecer duración de citas en minutos: (La duración de citas es de entre 10 y 60 minutos)</h5>
                                     <div class="mb-3">
                                         <input th:field="*{duracion_cita_minutos}" type="text" class="form-control" th:classappend="${#fields.hasErrors('duracion_cita_minutos')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('duracion_cita_minutos')}"
