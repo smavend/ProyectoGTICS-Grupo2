@@ -45,43 +45,8 @@
 
 </head>
 <body>
-<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar" >
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/doctor/dashboard}">
-                <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
-            </a>
-        </li><!-- End Dashboard Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/doctor/calendario}">
-                <i class="bi bi-calendar"></i>
-                <span>Calendario General</span>
-            </a>
-        </li><!-- End Profile Page Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/doctor/recibo}">
-                <i class="bi bi-currency-exchange"></i>
-                <span>Recibos</span>
-            </a>
-        </li><!-- End Profile Page Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/doctor/mensajeria}">
-                <i class="bi bi-chat-quote"></i>
-                <span>Mensajería</span>
-            </a>
-        </li><!-- End Profile Page Nav -->
-    </ul>
-
-</aside><!-- End Sidebar-->
-
+<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+<div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
 <main style="padding-top: 0;" id="main" class="main">
 
     <div class="container-xl perfil">
@@ -105,7 +70,7 @@
 
                                 <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
                                     <input class="form-control" type="file" name="archivo">
-                                    <a th:href="@{'/doctor/perfil/quitarFoto?id='+${doctor.id_doctor}}"
+                                    <a th:href="@{'/doctor/perfil/quitarFoto?id='+${session.doctor.id_doctor}}"
                                        style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
                                 </div>
                             </div>
@@ -202,7 +167,7 @@
                             class="btn btn-primary botonActualizarConsentimientos" form="formPaciente">
                         Actualizar
                     </button>
-                    <a style="margin: 40px 10px 0 10px;" th:href="@{'/doctor/perfil?id='+ ${doctor.id_doctor}}"
+                    <a style="margin: 40px 10px 0 10px;" th:href="@{/doctor/perfil}"
                        class="btn btn-danger botonCancelar">Cancelar
                     </a>
                 </div>

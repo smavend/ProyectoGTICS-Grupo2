@@ -398,11 +398,11 @@ public class DoctorController {
     }
 
     @GetMapping("/perfil")
-    public String perfilDoctor(Model model, HttpSession session, Authentication authentication,@RequestParam("id") String id) {
+    public String perfilDoctor(Model model, HttpSession session, Authentication authentication) {
         Doctor doctor= doctorRepository.findByCorreo(authentication.getName());
         session.setAttribute("doctor",doctor);
 
-        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId_doctor());
         if (optionalDoctor.isPresent()) {
             Doctor doctor1 = optionalDoctor.get();
             model.addAttribute("doctor", doctor1);
@@ -411,14 +411,17 @@ public class DoctorController {
     }
 
     @GetMapping("/perfil/editar")
-    public String editarPerfilDoctor(@ModelAttribute("doctor") Doctor doctor,
+    public String editarPerfilDoctor( HttpSession session, Authentication authentication,@ModelAttribute("doctor") Doctor doctor,
                                      @RequestParam(name = "id") String id,
                                      Model model) {
+        Doctor doctor1= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor1);
+
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         if (optionalDoctor.isPresent()) {
             doctor = optionalDoctor.get();
             List<Especialidad> especialidadList = especialidadRepository.findAll();
-            model.addAttribute("doctor", doctor);
+            model.addAttribute("doctor", doctor1);
             model.addAttribute("especialidadList", especialidadList);
             return "doctor/DoctorPerfilEdit";
         }
@@ -538,7 +541,8 @@ public class DoctorController {
     @GetMapping("/perfil/cambiarContrasena")
     public String cambiarContrasena(HttpSession session, Authentication authentication) {
 
-        session.setAttribute("doctor", pacienteRepository.findByCorreo(authentication.getName()));
+        session.setAttribute("doctor", doctorRepository.findByCorreo(authentication.getName()));
+
 
         return "doctor/perfilContrasena";
     }
