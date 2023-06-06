@@ -39,9 +39,9 @@
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
             <section class="seccionPrincipal">
 
-                <a class="btn botonTipo botonTipoSeleccionado botonTodos" onclick="boton0()" th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
-                <a class="btn botonTipo botonPendientes" onclick="boton1()" th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
-                <a class="btn botonTipo botonCancelados" onclick="boton2()" th:href="@{/Paciente/filtrarPagos(filtro=2)}">Cancelados</a>
+                <a class="btn botonTipo botonTodos" th:classappend="${filtro==0?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
+                <a class="btn botonTipo botonPendientes" th:classappend="${filtro==1?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
+                <a class="btn botonTipo botonCancelados" th:classappend="${filtro==2?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=2)}">Cancelados</a>
 
                 <table class="table" id="tablax" th:if="${filtro}==1">
                     <thead>
@@ -413,29 +413,5 @@
                 });
             }
         </script>
-
-        <script th:inline="javascript">
-
-            const botonTodos = $(".botonTodos");
-            const botonPendientes = $(".botonPendientes");
-            const botonCancelados = $(".botonCancelados");
-
-            function boton0() {
-                botonTodos.addClass("botonTipoSeleccionado");
-                botonPendientes.removeClass("botonTipoSeleccionado");
-                botonCancelados.removeClass("botonTipoSeleccionado");
-            }
-            function boton1() {
-                botonTodos.removeClass("botonTipoSeleccionado");
-                botonPendientes.addClass("botonTipoSeleccionado");
-                botonCancelados.removeClass("botonTipoSeleccionado");
-            }
-            function boton2() {
-                botonTodos.removeClass("botonTipoSeleccionado");
-                botonPendientes.removeClass("botonTipoSeleccionado");
-                botonCancelados.addClass("botonTipoSeleccionado");
-            }
-        </script>
-
     </body>
 </html>
