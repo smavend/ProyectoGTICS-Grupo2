@@ -97,6 +97,14 @@ public class DoctorController {
         return "doctor/DoctorDashboard";
     }
 
+    @PostMapping("/enviarCuestionario")
+    public String enviarCuestionario(HttpSession session, Authentication authentication, Model model, @Valid Cita cita, BindingResult bindingResult) {
+        System.out.println("aa");
+        return "doctor/DoctorRecibos";
+    }
+
+
+
     @GetMapping("/recibo")
     public String recibo(Model model, HttpSession session, Authentication authentication) {
         Doctor doctor= doctorRepository.findByCorreo(authentication.getName());
