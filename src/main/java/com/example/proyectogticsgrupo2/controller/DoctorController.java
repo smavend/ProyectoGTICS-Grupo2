@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,12 +46,14 @@ public class DoctorController {
     private final EspecialidadRepository especialidadRepository;
     private final SedeRepository sedeRepository;
     private final HorarioRepository horarioRepository;
+    private final CredencialesRepository credencialesRepository;
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
                             AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository,
-                            SedeRepository sedeRepository, HorarioRepository horarioRepository) {
+                            SedeRepository sedeRepository, HorarioRepository horarioRepository,
+                            CredencialesRepository credencialesRepository) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
@@ -58,6 +61,7 @@ public class DoctorController {
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
         this.horarioRepository = horarioRepository;
+        this.credencialesRepository = credencialesRepository;
     }
 
     @GetMapping(value = {"/dashboard", "/", ""})
