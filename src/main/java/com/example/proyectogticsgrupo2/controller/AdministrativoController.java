@@ -179,7 +179,7 @@ public class AdministrativoController {
 
                 CorreoPacienteService correoPacienteService = new CorreoPacienteService();
                 String link = request.getServerName()+":"+request.getLocalPort();
-                correoPacienteService.enviarCorreo(temporal.getCorreo(), link, token.getIdPaciente(), token.getToken());
+                correoPacienteService.enviarCorreo(temporal.getCorreo(),temporal.getNombre(), link, token.getIdPaciente(), token.getToken());
                 attr.addFlashAttribute("msg","Paciente "+temporal.getNombre()+" "+temporal.getApellidos()+" invitado exitosamente");
                 return "redirect:/administrativo";
             } else {

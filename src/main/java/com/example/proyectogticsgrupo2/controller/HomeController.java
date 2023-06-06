@@ -124,6 +124,7 @@ public class HomeController {
                     paciente.setCorreo(temporal.getCorreo());
                     model.addAttribute("distritos", list);
                     model.addAttribute("seguros", list1);
+                    model.addAttribute("token", "existe");
                     return "general/registro";
                 }else {
                     return "general/tokenExpirado";
@@ -188,31 +189,44 @@ public class HomeController {
             } else{
                 paciente.setGenero("Femenino");
             }
-            paciente.setEstado(3);
-            paciente.setFecharegistro(LocalDateTime.now());
 
-            pacienteRepository.save(paciente);
+            Optional<Temporal> temp1 = temporalRepository.findByDni(paciente.getIdPaciente());
 
-            Tarea tarea = new Tarea();
-            tarea.setFecha(LocalDateTime.now());
-            tarea.setPaciente(paciente);
-            tarea.setEstado(1);
-            tarea.setTipo(1);
-            tareaRepository.save(tarea);
-
-            if(radio.equals("1")){
-                String[] alergiasArray = alergias.split(",");
-                String alergia = "";
-                Alergia alergia1 = null;
-                for(int i = 0; i<alergiasArray.length; i++){
-                    alergia = alergiasArray[i].trim();
-                    alergia = alergia.replaceAll(" +"," ");
-                    if(!alergia.equals(" ") && !alergia.equals("")){
-                        alergia = alergia.substring(0,1).toUpperCase() + alergia.substring(1).toLowerCase();
-                        alergia1 = new Alergia();
-                        alergia1.setNombre(alergia);
-                        alergia1.setPaciente(paciente);
-                        alergiaRepository.save(alergia1);
+            if(temp1.isPresent()){
+                Temporal temporal = temp1.get();
+                temporal.setDistrito(paciente.getDistrito());
+                temporal.setFecha_nacimiento(paciente.getFechanacimiento());
+                temporal.setLlenado(1);
+                temporal.setSeguro(paciente.getSeguro());
+                temporal.setTelefono(paciente.getTelefono());
+                temporal.setDireccion(paciente.getDireccion());
+                temporal.setGenero(paciente.getGenero());
+                temporalRepository.save(temporal);
+                tokenRepository.deleteById(temporal.getDni());
+            }else {
+                paciente.setEstado(3);
+                paciente.setFecharegistro(LocalDateTime.now());
+                pacienteRepository.save(paciente);
+                Tarea tarea = new Tarea();
+                tarea.setFecha(LocalDateTime.now());
+                tarea.setPaciente(paciente);
+                tarea.setEstado(1);
+                tarea.setTipo(1);
+                tareaRepository.save(tarea);
+                if(radio.equals("1")){
+                    String[] alergiasArray = alergias.split(",");
+                    String alergia = "";
+                    Alergia alergia1 = null;
+                    for(int i = 0; i<alergiasArray.length; i++){
+                        alergia = alergiasArray[i].trim();
+                        alergia = alergia.replaceAll(" +"," ");
+                        if(!alergia.equals(" ") && !alergia.equals("")){
+                            alergia = alergia.substring(0,1).toUpperCase() + alergia.substring(1).toLowerCase();
+                            alergia1 = new Alergia();
+                            alergia1.setNombre(alergia);
+                            alergia1.setPaciente(paciente);
+                            alergiaRepository.save(alergia1);
+                        }
                     }
                 }
             }

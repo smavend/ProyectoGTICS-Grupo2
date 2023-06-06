@@ -105,7 +105,7 @@
                           <option th:each="seguro: ${seguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                         </select>
                       </div>
-                      <div class="col-md-12">
+                      <div th:if="${token==null}" class="col-md-12">
                         <label for="si" class="form-label">¿Tienes alguna alergia?</label>
                         <div class="input-group">
                           <div class="col-md-6">
@@ -122,7 +122,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-12 d-flex align-items-center">
+                      <div th:if="${token==null}" class="col-md-12 d-flex align-items-center">
                         <input style="display: none;" type="text" class="form-control" id="alergias" name="alergias" placeholder="Abejas, cetirizina">
                         <div class="ms-auto">
                           <ul style="display: none; padding-left: 1rem!important;" id="info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Ingresa tus alergias separadas por comas. No es necesario un punto final.">
