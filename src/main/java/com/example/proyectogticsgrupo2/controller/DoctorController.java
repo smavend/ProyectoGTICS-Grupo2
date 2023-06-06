@@ -3,7 +3,6 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -48,6 +46,9 @@ public class DoctorController {
     private final SedeRepository sedeRepository;
     private final HorarioRepository horarioRepository;
     private final CredencialesRepository credencialesRepository;
+    private final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
+    private final CuestionarioRepository cuestionarioRepository;
+
     final SecurityConfig securityConfig;
 
 
@@ -56,7 +57,7 @@ public class DoctorController {
                             AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository,
                             SedeRepository sedeRepository, HorarioRepository horarioRepository,
-                            CredencialesRepository credencialesRepository,SecurityConfig securityConfig) {
+                            CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, SecurityConfig securityConfig) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
@@ -65,6 +66,8 @@ public class DoctorController {
         this.sedeRepository = sedeRepository;
         this.horarioRepository = horarioRepository;
         this.credencialesRepository = credencialesRepository;
+        this.cuestionarioPorCitaRepository = cuestionarioPorCitaRepository;
+        this.cuestionarioRepository = cuestionarioRepository;
         this.securityConfig = securityConfig;
     }
 
@@ -76,8 +79,8 @@ public class DoctorController {
         session.setAttribute("doctor",doctor);
 
         List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas(doctor.getId_doctor()); //CAMBIAR POR ID SESION
-        System.out.println("SI ENTRA");
         List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor.getId_doctor()); //CAMBIAR POR ID SESION
+        List<Cuestionario> listaCuestionarios= cuestionarioRepository.findAll();
         ArrayList<String> listaHorarios = new ArrayList<>();
 
 
@@ -97,6 +100,7 @@ public class DoctorController {
 
 
         model.addAttribute("doctor", doctor);
+        model.addAttribute("listaCuestionarios", listaCuestionarios);
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", optionalCita);
         model.addAttribute("listaPacientes", optionalCita2);
@@ -105,29 +109,17 @@ public class DoctorController {
         return "doctor/DoctorDashboard";
     }
 
-    @PostMapping("/enviarCuestionario")
-    public String enviarCuestionario(HttpSession session, Authentication authentication, Model model, @Valid Cita cita, BindingResult bindingResult) {
+    @PostMapping("/guardarCuestionario")
+    public String guardaruestionario(HttpSession session, Authentication authentication, Model model, @Valid CuestionarioPorCita cuestionarioPorCita, BindingResult bindingResult) {
         Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
         session.setAttribute("doctor",doctor_session);
 
         if (bindingResult.hasErrors()) {
 
-            Optional<Cita> optionalCita = citaRepository.findById(getIdCita());
-            Optional<Paciente> optionalPaciente = pacienteRepository.findById(getIdPaciente());
-            Paciente paciente = optionalPaciente.get();
-            Cita cita1 = optionalCita.get();
-
-            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-            Doctor doctor = doctorOptional.get();
-            model.addAttribute("doctor", doctor);
-
-            model.addAttribute("paciente", paciente);
-            model.addAttribute("fecha", getFecha());
-            model.addAttribute("cita", cita1);
-            return "doctor/DoctorReporteSesion";
+            return "redirect:/doctor/dashboard";
         } else {
-            cita.setEstado(4);
-            citaRepository.save(cita);
+
+            cuestionarioPorCitaRepository.save(cuestionarioPorCita);
             return "redirect:/doctor/dashboard";
         }
     }
@@ -414,6 +406,10 @@ public class DoctorController {
     public String editarPerfilDoctor( HttpSession session, Authentication authentication,@ModelAttribute("doctor") Doctor doctor,
                                      @RequestParam(name = "id") String id,
                                      Model model) {
+
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
+
         Doctor doctor1= doctorRepository.findByCorreo(authentication.getName());
         session.setAttribute("doctor",doctor1);
 
@@ -433,7 +429,10 @@ public class DoctorController {
                                       BindingResult bindingResult,
                                       @RequestParam(name = "archivo") MultipartFile file,
                                       RedirectAttributes attr,
-                                      Model model) {
+                                      Model model,HttpSession session, Authentication authentication) {
+
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
 
         String fileName = file.getOriginalFilename();
 
