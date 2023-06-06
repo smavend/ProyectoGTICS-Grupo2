@@ -8,6 +8,8 @@ import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -99,24 +101,86 @@ public class AdministradorController {
         return "administrador/finanzas";}
 
     @RequestMapping("/reportes")
-    public ResponseEntity<Resource> generarReportes(@RequestParam("tiporeporte") String tiporeporte,@RequestParam("tipopago") String tipopago,
-                                  @RequestParam("seguro") String seguro,@RequestParam("especialidad") String especialidad,
-                                  @RequestParam("todo") String todo,@RequestParam("formato") String formato, Model model){
+    public ResponseEntity<Resource> generarReportes(@RequestParam("tiporeporte") String tiporeporte, @RequestParam("tipopago") String tipopago,
+                                                    @RequestParam("seguro") String seguro, @RequestParam("especialidad") String especialidad,
+                                                    @RequestParam("todo") String todo, @RequestParam("formato") String formato){
 
 
         ReporteExcel reporte = new ReporteExcel();
-        List<AdministradorIngresos> lista = administradorRepository.obtenerIgresos();
-        ResponseEntity<Resource> response = reporte.generarInformeIngresos(lista,"general");
-        return response;
+        switch (tiporeporte){
+            case "5":
+                if (todo.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorIngresos> lista = administradorRepository.obtenerIgresos();
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(lista,"ReporteGeneral");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(lista,"ReporteGeneral");
+                            return responsePdf;
+                    }
+                }
+            case "1":
+                if (seguro.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorIngresos> listaIngresosPorSeguro = administradorRepository.obtenerIgresosPorSeguro(Integer.parseInt(seguro));
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosPorSeguro,"ReporteIngresosPorSeguro");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosPorSeguro,"ReporteIngresosPorSeguro");
+                            return responsePdf;
+                    }
+                }
+
+
+            case "2":
+                if (especialidad.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorIngresos> listaIngresosPorEspecialidad = administradorRepository.obtenerIgresosPorEspecialidad(Integer.parseInt(especialidad));
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosPorEspecialidad,"ReporteIngresosEspecialidad");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosPorEspecialidad,"ReporteIngresosEspecialidad");
+                            return responsePdf;
+                    }
+                }
+            case "3":
+                if (tipopago.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorIngresos> listaIngresosTipoPago = administradorRepository.obtenerIgresosPorTipoPago(tipopago);
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosTipoPago,"ReporteIngresosTipoPago");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosTipoPago,"ReporteIngresosTipoPago");
+                            return responsePdf;
+                    }
+                }
+
+
+            default:
+                return null;
+        }
     }
-
-
-
     @GetMapping("/config")
     public String config(){return "administrador/config";}
     @GetMapping("/registro")
     public String registro(Model model){
-        List<Temporal> listaTemporal = temporalRepository.findAll();
+        List<Temporal> listaTemporal = temporalRepository.listatemporalesLlenados();
         model.addAttribute("listaTemporal",listaTemporal);
         return "administrador/rptaForm";}
     @PostMapping("/guardarTemporales")

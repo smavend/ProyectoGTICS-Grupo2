@@ -221,12 +221,12 @@
                         <hr class="dropdown-divider">
                     </li>
 
-                    <li>
+                    <!--<li>
                         <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
                             <i class="bi bi-person"></i>
                             <span>Mi Perfil</span>
                         </a>
-                    </li>
+                    </li>-->
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -247,10 +247,12 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar Sesión</span>
-                        </a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Cerrar Sesión</span>
+                            </button>
+                        </form>
                     </li>
 
                 </ul><!-- End Profile Dropdown Items -->
@@ -391,7 +393,7 @@
 
                     <!-- Top Selling -->
                     <div class="col-12">
-                        <div class="card top-selling container px-4" style="min-height:500px">
+                        <div class="card top-selling container px-4" style="min-height:551px">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
@@ -410,55 +412,56 @@
                                                     <h5 class="modal-title" id="filterModalLabel">Filtrar reporte</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form method="post" th:ac<div class="modal-body">
+                                                <form method="post" th:action="@{/administrador/reportes}">
+                                                        <div class="mb-3">
+                                                            <label for="tiporeporte" class="form-label">Tipo de reporte</label>
+                                                            <select class="form-select" id="tiporeporte" name="tiporeporte" onchange="toggleFilterOptions()">
+                                                                <option value="5" selected>Todo</option>
+                                                                <option value="1">Por seguro</option>
+                                                                <option value="2">Por especialidad</option>
+                                                                <option value="3">Por tipo de pago</option>
+                                                            </select>
+                                                        </div>
+                                                        <div id="porSeguro" class="mb-3" style="display: none;">
+                                                            <label for="insuranceInput" class="form-label">Seguro</label>
+                                                            <select class="form-select" id="insuranceInput" name="seguro">
+                                                                <option value="">Seleccionar seguro</option>
+                                                                <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
 
-                                                <div class="mb-3">
-                                                    <label for="tiporeporte" class="form-label">Tipo de reporte</label>
-                                                    <select class="form-select" id="tiporeporte" name="tiporeporte" onchange="toggleFilterOptions()">
-                                                        <option value="5" selected>Todo</option>
-                                                        <option value="1">Por seguro</option>
-                                                        <option value="2">Por especialidad</option>
-                                                        <option value="3">Por tipo de pago</option>
-                                                    </select>
-                                                </div>
-                                                <div id="porSeguro" class="mb-3" style="display: none;">
-                                                    <label for="insuranceInput" class="form-label">Seguro</label>
-                                                    <select class="form-select" id="insuranceInput" name="seguro">
-                                                        <option value="">Seleccionar seguro</option>
-                                                        <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
-                                                    </select>
-                                                </div>
-                                                <div id="porEspecialidad" class="mb-3" style="display: none;">
-                                                    <label for="specialtyInput" class="form-label">Especialidad</label>
-                                                    <select class="form-select" id="specialtyInput" name="especialidad">
-                                                        <option value="">Seleccionar especialidad</option>
-                                                        <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
-                                                    </select>
-                                                </div>
-                                                <div id="porTipoPago" class="mb-3" style="display: none;">
-                                                    <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
-                                                    <select class="form-select" id="paymentTypeInput" name="tipopago">
-                                                        <option value="">Seleccionar tipo de pago</option>
-                                                        <option value="Efectivo">Efectivo</option>
-                                                        <option value="Tarjeta">Tarjeta</option>
-                                                        <!--<option value="3">Transferencia</option>-->
-                                                    </select>
-                                                </div>
-                                                <div id="porFecha" class="mb-3" style="display: none;">
-                                                    <label for="porfechareporte" class="form-label">Todo</label>
-                                                    <select class="form-select" id="porfechareporte" name="todo">
-                                                        <option value="">Seleccionar</option>
-                                                        <option value="1">Última semana</option>
-                                                        <option value="2">Último mes</option>
-                                                        <option value="3">Últimos tres meses</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>tion="@{/administrador/reportes}">
-
+                                                        </div>
+                                                        <div id="porEspecialidad" class="mb-3" style="display: none;">
+                                                            <label for="specialtyInput" class="form-label">Especialidad</label>
+                                                            <select class="form-select" id="specialtyInput" name="especialidad">
+                                                                <option value="">Seleccionar especialidad</option>
+                                                                <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                        </div>
+                                                        <div id="porTipoPago" class="mb-3" style="display: none;">
+                                                            <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
+                                                            <select class="form-select" id="paymentTypeInput" name="tipopago">
+                                                                <option value="">Seleccionar tipo de pago</option>
+                                                                <option value="Efectivo">Efectivo</option>
+                                                                <option value="Tarjeta">Tarjeta</option>
+                                                                <!--<option value="3">Transferencia</option>-->
+                                                            </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                        </div>
+                                                        <div id="porFecha" class="mb-3" style="display: none;">
+                                                            <label for="porfechareporte" class="form-label">Todo</label>
+                                                            <select class="form-select" id="porfechareporte" name="todo">
+                                                                <option value="">Seleccionar</option>
+                                                                <option value="1">Última semana</option>
+                                                                <option value="2">Último mes</option>
+                                                                <option value="3">Últimos tres meses</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                        </div>
                                                     <div class="modal-footer">
                                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                                            <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado">Descargar</button>
+                                                            <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado" >Descargar</button>
                                                             <select class="form-select" name="formato">
                                                                 <option value="1">Excel</option>
                                                                 <option value="2">PDF </option>
@@ -507,7 +510,7 @@
                                             <th>Seguro</th>
                                             <th>Fecha</th>
                                             <th>Forma de Pago</th>
-                                            <th></th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -519,7 +522,7 @@
                                             <td th:text="${ingreso.getNombreseguro()}"></td>
                                             <td th:text="${#temporals.format(ingreso.getFechacancelada(), 'dd-MM-yyyy')}"></td>
                                             <td th:text="${ingreso.getTipopago()}"></td>
-                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+                                            <!--<th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>-->
                                         </tr>
 
                                         </tbody>
@@ -537,12 +540,9 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">EGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
-                                        <a class="btn btn-danger" href="#">
-                                            <i class="bi bi-file-earmark-pdf"></i>
-                                        </a>
-                                        <a class="btn btn-success" href="#">
-                                            <i class="bi bi-file-earmark-excel"></i>
-                                        </a>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                                            Generar reporte
+                                        </button>
 
                                     </div>
                                 </div>
@@ -672,8 +672,8 @@
     $(document).ready(function () {
         $('#datatable').DataTable({
             lengthMenu: [
-                [5,10,20],
-                [5,10,20],
+                [8,10,20],
+                [8,10,20],
             ],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
@@ -690,7 +690,7 @@
                     "previous": "Anterior",
                 }
             },
-            "pageLength": 5,
+            "pageLength": 8,
             "columnDefs": [
                 {"margin-bottom": "10px"}
             ]
