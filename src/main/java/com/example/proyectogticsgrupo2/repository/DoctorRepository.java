@@ -50,4 +50,9 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
     @Modifying
     @Query(nativeQuery = true,value = "UPDATE proyectogtics.doctor SET sede_id_sede = ?1 WHERE (id_doctor = ?2)")
     void actualizarSede(int idSede,String idDoctor);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`doctor` SET `foto` = null WHERE (`id_doctor` = ?1)")
+    void quitarFoto(String idPaciente);
 }

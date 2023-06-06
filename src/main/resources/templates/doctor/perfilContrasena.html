@@ -80,7 +80,10 @@
             <div class="col-lg-4 pb-4">
                 <div style="height: 100%" class="card mb-4">
                     <div class="card-body text-center mt-4">
-                        <img th:src="@{'/usuario/foto/'+${session.doctor.getId_doctor()}}" alt="avatar"
+                        <img th:if="${session.doctor.foto != null}" th:src="@{'/usuario/foto/'+${session.doctor.getId_doctor()}}" alt="avatar"
+                             class="img-fluid rounded-circle"
+                             style="width: 200px; height: 200px; object-fit: cover">
+                        <img th:unless="${session.doctor.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="avatar"
                              class="img-fluid rounded-circle"
                              style="width: 200px; height: 200px; object-fit: cover">
                         <h5 class="mt-3 mb-1 fw-semibold" th:text="${session.doctor.getNombreYApellido()}">Juanchito
