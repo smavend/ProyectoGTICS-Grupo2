@@ -136,8 +136,8 @@ public class HomeController {
 
     @PostMapping("/signin/save")
     public String guardarRegistro (HttpSession session,
-                                   @RequestParam ("radios") String radio,
-                                   @RequestParam ("alergias") String alergias,
+                                   @RequestParam (value = "radios", required = false) String radio,
+                                   @RequestParam (value = "alergias", required = false) String alergias,
                                    Model model,
                                    @ModelAttribute("paciente") @Valid Paciente paciente,
                                    BindingResult bindingResult){
