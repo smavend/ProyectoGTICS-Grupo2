@@ -45,7 +45,11 @@ public class AdministradorController {
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
     final SecurityConfig securityConfig;
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig) {
+
+    final StylevistasRepository stylevistasRepository;
+
+
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig,StylevistasRepository stylevistasRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.seguroRepository = seguroRepository;
@@ -57,6 +61,7 @@ public class AdministradorController {
         this.credencialesRepository = credencialesRepository;
         this.temporalRepository = temporalRepository;
         this.securityConfig = securityConfig;
+        this.stylevistasRepository = stylevistasRepository;
     }
     //#####################################33
     @GetMapping("/dashboard")
@@ -65,6 +70,17 @@ public class AdministradorController {
         List<Doctor> listaDoctores = doctorRepository.findAll();
         model.addAttribute("listaDoctores",listaDoctores);
         model.addAttribute("listaPaciente", listaPaciente);
+
+        Optional<Stylevistas> style = stylevistasRepository.findById(2);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+            model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+            /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
         return "administrador/dashboard";
     }
     @GetMapping("/finanzas")
