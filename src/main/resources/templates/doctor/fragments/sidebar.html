@@ -6,38 +6,38 @@
 </head>
 <body>
 <!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar" th:fragment="sidebar">
+<aside id="sidebar" class="sidebar" th:fragment="sidebar(seleccion)">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link " th:href="@{/doctor/dashboard}">
+            <a class="nav-link " th:classappend="${seleccion == 'dashboard'? '':'collapsed'}" th:href="@{/doctor/dashboard}">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
-            <a class="nav-link collapsed">
+            <a class="nav-link" th:classappend="${seleccion != 'reportes' ? 'collapsed' : ''}" th:unless="${seleccion != 'reportes'}">
                 <i class="bi bi-card-text"></i>
                 <span>Reportes</span>
             </a>
         </li><!-- End Profile Page Nav -->
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/doctor/calendario}">
+            <a class="nav-link" th:classappend="${seleccion == 'calendario'? '':'collapsed'}" th:href="@{/doctor/calendario}">
                 <i class="bi bi-calendar"></i>
                 <span>Calendario General</span>
             </a>
         </li><!-- End Profile Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/doctor/recibo}">
+            <a class="nav-link" th:classappend="${seleccion == 'recibos'? '':'collapsed'}" th:href="@{/doctor/recibo}">
                 <i class="bi bi-currency-exchange"></i>
                 <span>Recibos</span>
             </a>
         </li><!-- End Profile Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/doctor/mensajeria}">
+            <a class="nav-link collapsed" th:classappend="${seleccion == 'mensajerio'? '':'collapsed'}" th:href="@{/doctor/mensajeria}">
                 <i class="bi bi-chat-quote"></i>
                 <span>Mensajería</span>
             </a>

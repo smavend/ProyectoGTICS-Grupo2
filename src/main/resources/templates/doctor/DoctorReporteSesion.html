@@ -60,7 +60,7 @@
 
     <body>
     <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
-    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
+    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('reportes')}"></div>
 
         <main id="main" class="main">
 
