@@ -219,7 +219,7 @@ public class PacienteController {
 
     @PostMapping("/reservar4")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                            HttpSession session, Authentication authentication){
+                            HttpSession session, Authentication authentication) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
@@ -309,7 +309,6 @@ public class PacienteController {
                     Credenciales credenciales = credencialesRepository.buscarPorId(p.getIdPaciente());
                     Credenciales nuevasCredenciales = new Credenciales(p.getIdPaciente(), paciente.getCorreo(), credenciales.getContrasena());
                     credencialesRepository.save(nuevasCredenciales);
-                    //credencialesRepository.actualizarCorreo(paciente.getIdPaciente(), paciente.getCorreo());
                 }
                 pacienteRepository.save(paciente);
 
@@ -351,30 +350,8 @@ public class PacienteController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
-            try {
-                File foto = new File("source/userPorDefecto.jpg");
-                FileInputStream input = new FileInputStream(foto);
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = input.read(buffer)) != -1) {
-                    output.write(buffer, 0, length);
-                }
-                input.close();
-                output.close();
-                byte[] bytes = output.toByteArray();
-
-                paciente.setFoto(bytes);
-                paciente.setFotoname("userPorDefecto.jpg");
-                paciente.setFotocontenttype("image/jpg");
-
-                pacienteRepository.save(paciente);
-                return "redirect:/Paciente/perfil";
-            } catch (IOException e) {
-                e.printStackTrace();
-                attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
-                return "redirect:/Paciente/perfil";
-            }
+            pacienteRepository.quitarFoto(paciente.getIdPaciente());
+            return "redirect:/Paciente/perfil";
         }
 
         return "redirect:/Paciente/perfil";
@@ -554,7 +531,7 @@ public class PacienteController {
 
     @PostMapping("/reservarDoctor3")
     public String reserarDoctor3(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                 HttpSession session, Authentication authentication){
+                                 HttpSession session, Authentication authentication) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
@@ -618,21 +595,21 @@ public class PacienteController {
 
     @PostMapping("/guardarPago")
     public String guardarPago(@ModelAttribute("tarjetaPago") @Valid TarjetaPago tarjetaPago, BindingResult bindingResult,
-                              @RequestParam("idPago") int idPago,@RequestParam("fechaStr") String fechaStr,
+                              @RequestParam("idPago") int idPago, @RequestParam("fechaStr") String fechaStr,
                               @RequestParam("filtro") int filtro, Model model, RedirectAttributes attr,
                               HttpSession session, Authentication authentication) {
 
         if (bindingResult.hasErrors()) {
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-            if(filtro==0){
+            if (filtro == 0) {
                 List<Pago> pagoList = pagoRepository.findAll();
                 model.addAttribute("pagoList", pagoList);
                 model.addAttribute("filtro", filtro);
                 model.addAttribute("activarModal", true);
 
                 return "paciente/pagos";
-            }else{
-                if(filtro==1){
+            } else {
+                if (filtro == 1) {
                     List<Pago> pagoList = pagoRepository.findAll();
                     model.addAttribute("pagoList", pagoList);
                     model.addAttribute("filtro", filtro);
@@ -641,7 +618,7 @@ public class PacienteController {
                     return "paciente/pagos";
                 }
             }
-        }else {
+        } else {
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
             pagoRepository.guardarPago(idPago);
             attr.addFlashAttribute("msg", "Pago realizado exitosamente");

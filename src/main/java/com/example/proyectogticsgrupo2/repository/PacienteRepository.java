@@ -35,6 +35,11 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
     void actualizarPaciente(String correo, String direccion, int idDistrito, String idPaciente);
     List<Paciente> findByIdPaciente(Integer id);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`doctor` SET `foto` = null WHERE (`id_paciente` = ?1)")
+    void quitarFoto(String idPaciente);
+
     Paciente findByCorreo(String correo);
 
 
