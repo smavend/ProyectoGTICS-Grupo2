@@ -193,13 +193,13 @@ public class AdministradorController {
                 paciente.setNombre(pacitemp.getNombre());
                 paciente.setApellidos(pacitemp.getApellidos());
                 paciente.setTelefono(pacitemp.getTelefono());
-                paciente.setDireccion("Av Calle 124");
+                paciente.setDireccion(pacitemp.getDireccion());
                 paciente.setFechanacimiento(pacitemp.getFecha_nacimiento());
                 paciente.setSeguro(pacitemp.getSeguro());
                 paciente.setDistrito(pacitemp.getDistrito());
-                paciente.setGenero("Masculino");
+                paciente.setGenero(pacitemp.getGenero());
                 paciente.setCorreo(pacitemp.getCorreo());
-                paciente.setEstado(1);
+                paciente.setEstado(pacitemp.getEstado());
                 paciente.setFecharegistro(LocalDateTime.now());
                 paciente.setFechainvitado(pacitemp.getFechainvitado());
                 paciente.setFoto(null);
