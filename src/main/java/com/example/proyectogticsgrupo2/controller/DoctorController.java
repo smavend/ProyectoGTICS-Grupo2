@@ -98,14 +98,14 @@ public class DoctorController {
     }
 
     @GetMapping("/recibo")
-    public String recibo(Model model, HttpServletRequest request) {
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
+    public String recibo(Model model, HttpSession session, Authentication authentication) {
+        Doctor doctor= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor);
 
-        List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos(doctor_session.getId_doctor());
-        Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-        Doctor doctor = doctorOptional.get();
-        model.addAttribute("doctor", doctor);
+        List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos(doctor.getId_doctor());
+        Optional<Doctor> doctorOptional = doctorRepository.findById(doctor.getId_doctor());
+        Doctor doctorDeRepositorio = doctorOptional.get();
+        model.addAttribute("doctor", doctorDeRepositorio);
         model.addAttribute("listaRecibos", optionalCita);
 
         return "doctor/DoctorRecibos";
@@ -133,9 +133,9 @@ public class DoctorController {
     }
 
     @GetMapping("/calendario")
-    public String calendario(Model model, HttpServletRequest request, @ModelAttribute("doctor") Doctor doctor) {
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
+    public String calendario(Model model, HttpSession session, Authentication authentication, @ModelAttribute("doctor") Doctor doctor) {
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
 
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
         doctor = doctorOptional.get();
@@ -146,11 +146,11 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarHorario")
-    public String guardarHorario(HttpServletRequest request, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult) {
+    public String guardarHorario(HttpSession session, Authentication authentication, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult) {
 
 
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         if (bindingResult.hasErrors()) {
@@ -185,11 +185,11 @@ public class DoctorController {
 
 
     @GetMapping("/reporte")
-    public String reporte(Model model, @RequestParam("id") String id, @RequestParam("id2") int id2, HttpServletRequest request) {
+    public String reporte(Model model, @RequestParam("id") String id, @RequestParam("id2") int id2, HttpSession session, Authentication authentication) {
         setIdPaciente(id);
         setIdCita(id2);
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
 
         Optional<Cita> optionalCita = citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
@@ -232,9 +232,9 @@ public class DoctorController {
     }
 
     @GetMapping("/verCuestionario")
-    public String verCuestionario(Model model, @RequestParam("id") int id, HttpServletRequest request) {
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
+    public String verCuestionario(Model model, @RequestParam("id") int id, HttpSession session, Authentication authentication) {
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
 
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
         Optional<CuestionarioxDoctorDTO> cuestionarioxDoctorDTOS = citaRepository.verCuestionario(id);
@@ -255,9 +255,9 @@ public class DoctorController {
     }
 
     @GetMapping("/mensajeria")
-    public String mensajeria(Model model, HttpServletRequest request) {
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
+    public String mensajeria(Model model, HttpSession session, Authentication authentication) {
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
 
         List<ListaBuscadorDoctor> citaList = citaRepository.listarPorDoctorProxCitas(doctor_session.getId_doctor()); //CAMBIAR CON ID DE SESION
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
@@ -268,9 +268,9 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarReporte")
-    public String guardarReporte(HttpServletRequest request, Model model, @Valid Cita cita, BindingResult bindingResult) {
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
+    public String guardarReporte(HttpSession session, Authentication authentication, Model model, @Valid Cita cita, BindingResult bindingResult) {
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
 
         if (bindingResult.hasErrors()) {
 
@@ -294,9 +294,9 @@ public class DoctorController {
         }
     }
     @GetMapping("/historialClinico")
-    public String hClinico(Model model, @RequestParam("id") String id, HttpServletRequest request) {
-        HttpSession httpSession = request.getSession();
-        Doctor doctor_session = (Doctor) httpSession.getAttribute("doctor");
+    public String hClinico(Model model, @RequestParam("id") String id, HttpSession session, Authentication authentication) {
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
 
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
         List<TratamientoDTO> tratamientoList = citaRepository.listarTratamientos(id);
