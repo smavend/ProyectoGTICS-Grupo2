@@ -20,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.proyectogticsgrupo2.config.SecurityConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,13 +48,15 @@ public class DoctorController {
     private final SedeRepository sedeRepository;
     private final HorarioRepository horarioRepository;
     private final CredencialesRepository credencialesRepository;
+    final SecurityConfig securityConfig;
+
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
                             AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository,
                             SedeRepository sedeRepository, HorarioRepository horarioRepository,
-                            CredencialesRepository credencialesRepository) {
+                            CredencialesRepository credencialesRepository,SecurityConfig securityConfig) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
@@ -62,6 +65,7 @@ public class DoctorController {
         this.sedeRepository = sedeRepository;
         this.horarioRepository = horarioRepository;
         this.credencialesRepository = credencialesRepository;
+        this.securityConfig = securityConfig;
     }
 
     @GetMapping(value = {"/dashboard", "/", ""})
@@ -531,7 +535,40 @@ public class DoctorController {
         attr.addFlashAttribute("msgActualizacion", "Sede actualizada correctamente");
         return "redirect:/doctor/configuracion?success";
     }
+    @GetMapping("/perfil/cambiarContrasena")
+    public String cambiarContrasena(HttpSession session, Authentication authentication) {
 
+        session.setAttribute("doctor", pacienteRepository.findByCorreo(authentication.getName()));
+
+        return "doctor/perfilContrasena";
+    }
+
+    @PostMapping("/perfil/guardarContrasena")
+    public String guardarContrasena(@RequestParam("actual") String contrasenaActual,
+                                    @RequestParam("nueva1") String contrasenaNueva1,
+                                    @RequestParam("nueva2") String contrasenaNueva2,
+                                    RedirectAttributes attr, Authentication authentication) {
+
+        Doctor doctor = doctorRepository.findByCorreo(authentication.getName());
+
+        PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+
+        Credenciales credenciales = credencialesRepository.buscarPorId(doctor.getId_doctor());
+        Credenciales nuevasCredenciales = new Credenciales(credenciales.getId_credenciales(), credenciales.getCorreo(), passwordEncoder.encode(contrasenaNueva1));
+
+        if (passwordEncoder.matches(contrasenaActual, credenciales.getContrasena())) {
+            if (contrasenaNueva1.equals(contrasenaNueva2)) {
+                credencialesRepository.save(nuevasCredenciales);
+                attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+            } else {
+                System.out.println("Contraseñas nuevas no coinciden");
+            }
+        } else {
+            System.out.println("Contraseña actual no coincide");
+        }
+
+        return "redirect:/doctor/perfil";
+    }
 
     public String getIdPaciente() {
         return idPaciente;
