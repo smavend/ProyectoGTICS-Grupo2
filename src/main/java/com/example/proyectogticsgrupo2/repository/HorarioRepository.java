@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.repository;
 
+import com.example.proyectogticsgrupo2.dto.DiasDisponiblesDTO;
 import com.example.proyectogticsgrupo2.dto.HorariosDisponiblesDTO;
 import com.example.proyectogticsgrupo2.entity.Horario;
 import org.springframework.data.jpa.repository.JpaRepository;
