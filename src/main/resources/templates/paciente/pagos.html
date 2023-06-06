@@ -40,7 +40,7 @@
             <section class="seccionPrincipal">
 
                 <a class="btn botonTipo botonTipoSeleccionado botonTodos" onclick="boton0()" th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
-                <a class="btn botonTipo botonPendientes " onclick="boton1()" th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
+                <a class="btn botonTipo botonPendientes" onclick="boton1()" th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
                 <a class="btn botonTipo botonCancelados" onclick="boton2()" th:href="@{/Paciente/filtrarPagos(filtro=2)}">Cancelados</a>
 
                 <table class="table" id="tablax" th:if="${filtro}==1">
@@ -406,7 +406,7 @@
         </script>
 
         <script th:inline="javascript">
-            const activarModal = false;
+            const activarModal = /*[[${activarModal}]]*/ false;
             if (activarModal) {
                 $(document).ready(function() {
                     $('#modal-pago').modal('show');
