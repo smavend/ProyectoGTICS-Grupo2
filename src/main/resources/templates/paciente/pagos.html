@@ -41,6 +41,7 @@
                 <a class="btn filtro botonTipo botonTipoSeleccionado" th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
                 <a class="btn filtro botonTipo" th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
                 <a class="btn filtro botonTipo" th:href="@{/Paciente/filtrarPagos(filtro=2)}">Cancelados</a>
+
                 <table class="table" id="tablax" th:if="${filtro}==1">
                     <thead>
                         <tr>
@@ -81,7 +82,7 @@
 
                                         </div>
                                         <div class="modal-body">
-                                            <form method="post" th:action="@{/Paciente/guardarPago}">
+                                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=1)}" th:object="${tarjetaPago}">
                                                 <input type="hidden" th:value="${pago.id}" name="idPago">
                                                 <div class="mb-3 w-75">
                                                     <label class="form-label">Nombre del titular de la tarjeta</label>
@@ -90,7 +91,8 @@
                                                             <span class="input-group-text"><i
                                                                     class="bi bi-person-fill"></i></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control">
+                                                        <input type="text" class="form-control" th:field="*{titular}" th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
+                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}" th:errors="*{titular}"></div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 w-75">
@@ -100,7 +102,8 @@
                                                             <span class="input-group-text"><i
                                                                     class="bi bi-credit-card-fill"></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control">
+                                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}" th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
+                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}" th:errors="*{numeroTarjeta}"></div>
                                                     </div>
 
                                                 </div>
@@ -112,7 +115,8 @@
                                                                 <span class="input-group-text"><i
                                                                         class="bi bi-calendar-event-fill"></i></span>
                                                             </div>
-                                                            <input type="text" class="form-control">
+                                                            <input type="date" class="form-control" th:field="*{fecha}" th:classappend="${#fields.hasErrors('fecha')?'is-invalid':''}">
+                                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -122,7 +126,8 @@
                                                                 <span class="input-group-text"><i
                                                                         class="bi bi-lock-fill"></i></span>
                                                             </div>
-                                                            <input type="text" class="form-control">
+                                                            <input type="text" class="form-control" th:field="*{codigo}" th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
+                                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -161,78 +166,7 @@
                                 <a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver
                                     recibo</a>
                             </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header row-cols-auto" style="background-color: gainsboro">
-                                            <p>
-                                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
-                                                tarjeta</h5>
-                                            <img th:src="@{/assets/img/cards.png}" style="height: 50px"
-                                                 class="col-lg-4">
-                                            <button type="button" class="btn-close col-lg-2 fw-bold"
-                                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                            </p>
-
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" th:action="@{/Paciente/guardarPago}">
-                                                <input type="hidden" th:value="${pago.id}" name="idPago">
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Nombre del titular de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-person-fill"></i></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Número de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-credit-card-fill"></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control">
-                                                    </div>
-
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Fecha de expiración</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-calendar-event-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Código de seguridad</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-lock-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="text-center">
-                                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </tr>
-
                     </tbody>
                 </table>
 
@@ -285,7 +219,7 @@
 
                                         </div>
                                         <div class="modal-body">
-                                            <form method="post" th:action="@{/Paciente/guardarPago}">
+                                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=0)}">
                                                 <input type="hidden" th:value="${pago.id}" name="idPago">
                                                 <div class="mb-3 w-75">
                                                     <label class="form-label">Nombre del titular de la tarjeta</label>

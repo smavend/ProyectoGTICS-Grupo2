@@ -562,7 +562,8 @@ public class PacienteController {
 
     /* SECCIÓN PAGOS */
     @GetMapping("/pagos")
-    public String pagos(Model model, HttpSession session, Authentication authentication) {
+    public String pagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
+                        Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
         List<Pago> pagoList = pagoRepository.findAll();
@@ -571,7 +572,8 @@ public class PacienteController {
     }
 
     @GetMapping("/filtrarPagos")
-    public String filtrarPagos(@RequestParam("filtro") int filtro, Model model, HttpSession session, Authentication authentication) {
+    public String filtrarPagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
+                               @RequestParam("filtro") int filtro, Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 
@@ -582,12 +584,31 @@ public class PacienteController {
     }
 
     @PostMapping("/guardarPago")
-    public String guardarPago(@RequestParam("idPago") int idPago, HttpSession session, Authentication authentication) {
+    public String guardarPago(@ModelAttribute("tarjetaPago") @Valid TarjetaPago tarjetaPago, BindingResult bindingResult,
+                              @RequestParam("idPago") int idPago,@RequestParam("filtro") int filtro, Model model,
+                              HttpSession session, Authentication authentication) {
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
-        pagoRepository.guardarPago(idPago);
-        return "redirect:/Paciente/pagos";
+        if (bindingResult.hasErrors()) {
+            session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+            return "redirect:/Paciente/pagos";
+            /*
+            if(filtro==0){
+                session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+                return "redirect:/Paciente/pagos";
+            }else{
+                if(filtro==1){
+                    session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+                    List<Pago> pagoList = pagoRepository.findAll();
+                    model.addAttribute("pagoList", pagoList);
+                    model.addAttribute("filtro", filtro);
+                    return "redirect:/Paciente/filtrarPagos";
+                }
+            }*/
+        }else {
+            session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+            pagoRepository.guardarPago(idPago);
+            return "redirect:/Paciente/pagos";
+        }
     }
 
     @GetMapping("/recibo")
