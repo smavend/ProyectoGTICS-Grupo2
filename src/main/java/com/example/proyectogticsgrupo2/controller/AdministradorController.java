@@ -232,7 +232,7 @@ public class AdministradorController {
                 paciente.setDistrito(pacitemp.getDistrito());
                 paciente.setGenero(pacitemp.getGenero());
                 paciente.setCorreo(pacitemp.getCorreo());
-                paciente.setEstado(pacitemp.getEstado());
+                paciente.setEstado(1);
                 paciente.setFecharegistro(LocalDateTime.now());
                 paciente.setFechainvitado(pacitemp.getFechainvitado());
                 paciente.setFoto(null);
@@ -241,7 +241,7 @@ public class AdministradorController {
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
 
-                CorreoService correoService= new CorreoService();
+                CorreoNuevoPaciente correoNuevoPaciente= new CorreoNuevoPaciente();
 
                 InetAddress address = InetAddress.getLocalHost();
                 byte[] bIPAddress = address.getAddress();
@@ -255,7 +255,7 @@ public class AdministradorController {
                 }
                 String link = request.getServerName()+":"+request.getLocalPort();
 
-                correoService.props(paciente.getCorreo(),paciente.getNombre(), link);
+                correoNuevoPaciente.props(paciente.getCorreo(),paciente.getNombre(), link);
                 attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
 
             }
