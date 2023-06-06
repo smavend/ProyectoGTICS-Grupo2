@@ -667,7 +667,7 @@ h6 {
     font-size: 15px;
     font-weight: 600;
     color: #4154f1;
-    transition: 0.3;
+    transition: 0.3s;
     background: #f6f9ff;
     padding: 10px 15px;
     border-radius: 4px;
@@ -1273,6 +1273,7 @@ body.dark-mode .sidebar {
 }
 
 body.dark-mode {
+    transition: all 0.5s;
     background: #222;
     color: #f0f0f0;
 }
