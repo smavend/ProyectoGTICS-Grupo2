@@ -57,7 +57,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`, `seguro_id_seguro`) VALUES (?1, ?2, ?3, ?4, ?5, 0, ?6, ?7)")
-    void reservarCita(String idPaciente, String idDoctor, LocalTime inicio, LocalTime fin, int modalidad, int idSede, int idSeguro);
+    void reservarCita(String idPaciente, String idDoctor, LocalDateTime inicio, LocalDateTime fin, int modalidad, int idSede, int idSeguro);
 
     @Query(nativeQuery = true, value = "SELECT LAST_INSERT_ID() FROM cita")
     int obtenerUltimoId();

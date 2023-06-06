@@ -143,13 +143,14 @@
                     <li class="nav-item dropdown pe-3">
 
                         <a style="cursor: pointer" class="nav-link nav-profile d-flex align-items-center pe-0" data-bs-toggle="dropdown">
-                            <img th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="fotoPerfil" class="rounded-circle fotoNavBar">
-                            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${paciente.nombre}+' '+${paciente.apellidos.substring(0,1)}+'.'">Juanchito P.</span>
+                            <img th:if="${paciente.foto != null}" th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="fotoPerfil" class="rounded-circle fotoNavBar">
+                            <img th:unless="${paciente.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="fotoPerfil" class="rounded-circle fotoNavBar">
+                            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="'Paciente '+${paciente.nombre}+' '+${paciente.apellidos.substring(0,1)}+'.'">Juanchito P.</span>
                         </a><!-- End Profile Image Icon -->
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6 th:text="'Paciente '+${paciente.nombre}+' '+${paciente.apellidos.substring(0,1)}+'.'">Juanchito P.</h6>
+                                <h6 th:text="${paciente.nombre}+' '+${paciente.apellidos.substring(0,1)}+'.'">Juanchito P.</h6>
                                 <span>Paciente</span>
                             </li>
                             <li>

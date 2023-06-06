@@ -197,15 +197,16 @@ public class PacienteController {
 
     @PostMapping("/reservar3")
     public String reservar3Post(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                @RequestParam("hora") String hora,
                                 Model model, HttpSession session, Authentication authentication) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
 
-        String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getInicio().toString();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalTime inicio = LocalTime.parse(inicioString, formatter);
-        LocalTime fin = inicio.plusHours(1);
+        String inicioString = citaTemporal.getFecha().toString() + ' ' + hora;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
+        LocalDateTime fin = inicio.plusHours(1);
 
         citaTemporal.setInicio(inicio);
         citaTemporal.setFin(fin);
@@ -481,9 +482,8 @@ public class PacienteController {
     }
 
     @GetMapping("/perfilDoctor")
-    public String verPerfilDoctor(Model model,
-                                  @RequestParam("doc") String idDoctor,
-                                  HttpSession session, Authentication authentication) {
+    public String verPerfilDoctor(@RequestParam("doc") String idDoctor,
+                                  Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 
@@ -499,6 +499,7 @@ public class PacienteController {
 
     @PostMapping("/reservarDoctor")
     public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                  @ModelAttribute("hora") String hora,
                                   HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
@@ -508,21 +509,26 @@ public class PacienteController {
 
     @PostMapping("/reservarDoctor2")
     public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
-                                  Authentication authentication) {
+                                  @ModelAttribute("hora") String hora,
+                                  Model model, HttpSession session, Authentication authentication) {
 
         if (bindingResult.hasErrors()) {
             return "paciente/reservarDoctor1";
         } else {
 
-            Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+            session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 
-            String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getInicio().toString();
+            String inicioString = citaTemporal.getFecha().toString() + ' ' + hora;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalTime inicio = LocalTime.parse(inicioString, formatter);
-            LocalTime fin = inicio.plusHours(1);
+            LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
+            LocalDateTime fin = inicio.plusHours(1);
 
             citaTemporal.setInicio(inicio);
             citaTemporal.setFin(fin);
+
+            model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+            model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+            model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
 
             return "paciente/reservar4";
         }

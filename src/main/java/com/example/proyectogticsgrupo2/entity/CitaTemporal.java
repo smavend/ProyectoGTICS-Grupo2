@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -41,10 +42,10 @@ public class CitaTemporal {
     private LocalDate fecha;
 
     @DateTimeFormat(pattern = "HH:mm:ss")
-    private LocalTime inicio;
+    private LocalDateTime inicio;
 
     @DateTimeFormat(pattern = "HH:mm:ss")
-    private LocalTime fin;
+    private LocalDateTime fin;
 
     @Column(name = "id_cita_previa")
     private Integer idCitaPrevia;
