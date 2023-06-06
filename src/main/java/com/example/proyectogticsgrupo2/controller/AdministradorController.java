@@ -5,6 +5,7 @@ import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.metodos.ReporteExcel;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoNuevoPaciente;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -304,7 +305,7 @@ public class AdministradorController {
             // Ahora puedes usar el passwordEncoder para codificar una contraseña
             String encodedPassword = passwordEncoder.encode(passRandom);
             credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
-            CorreoService correoService = new CorreoService();
+            CorreoNuevoPaciente correoNuevoPaciente = new CorreoNuevoPaciente();
 
             InetAddress address = InetAddress.getLocalHost();
             byte[] bIPAddress = address.getAddress();
@@ -318,7 +319,7 @@ public class AdministradorController {
             }
             String link = request.getServerName()+":"+request.getLocalPort();
 
-            correoService.props(paciente.getCorreo(),passRandom, link);
+            correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
             attr.addFlashAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
