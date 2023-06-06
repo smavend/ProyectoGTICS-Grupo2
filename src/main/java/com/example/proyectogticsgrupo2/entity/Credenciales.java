@@ -10,11 +10,20 @@ import lombok.Setter;
 @Table(name = "credenciales")
 public class Credenciales {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id_credenciales;
 
     private String correo;
 
     @Column(name = "contrasena_hasheada")
     private String contrasena;
+
+    public Credenciales(String id_credenciales, String correo, String contrasena){
+        this.id_credenciales = id_credenciales;
+        this.correo = correo;
+        this.contrasena = contrasena;
+    }
+
+    public Credenciales(){
+
+    }
 }

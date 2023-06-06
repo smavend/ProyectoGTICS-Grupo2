@@ -22,7 +22,7 @@
     </head>
     <body>
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -47,31 +47,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Lorem ipsum, dolor sit amet consec</td>
-                            <td>14/07/2022</td>
-                            <td>-</td>
-                            <td>Juan Martinez R.</td>
+                        <tr th:each="cuestionario:${cuestionarios}">
+                            <td th:text="${cuestionario.cita.doctor.especialidad.nombre}">Lorem ipsum, dolor sit amet consec</td>
+                            <td th:text="${#temporals.format(cuestionario.fecha_enviado, 'dd/MM/yyyy HH:mm')}">14/07/2022</td>
+                            <td th:text="${cuestionario.fecha_completado != null? cuestionario.fecha_completado:'-'}">-</td>
+                            <td th:text="${cuestionario.cita.doctor.getNombreYApellido()}">Juan Martinez R.</td>
                             <td>
-                                <a th:href="@{/Paciente/completarCuestionario}" class="botonCompletar">Completar</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Magn, cor repellendus numquam perspiciatis</td>
-                            <td>13/04/2021</td>
-                            <td>12/04/2022</td>
-                            <td>Pepe Martinez R.</td>
-                            <td>
-                                <a class="botonCompletado">Completado</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Adipisicing elit. Nihil blanditiis aut vel veritatis labore</td>
-                            <td>30/12/2020</td>
-                            <td>01/01/2021</td>
-                            <td>Lucho Martinez R.</td>
-                            <td>
-                                <a class="botonCompletado">Completado</a>
+                                <a th:href="@{'/Paciente/cuestionario?cues='+${cuestionario.id.idCuestionario}+'&cita='+${cuestionario.id.idCita}}" class="botonCompletar">Completar</a>
                             </td>
                         </tr>
                     </tbody>

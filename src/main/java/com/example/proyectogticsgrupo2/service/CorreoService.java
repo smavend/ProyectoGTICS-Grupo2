@@ -1,4 +1,6 @@
 package com.example.proyectogticsgrupo2.service;
+import jakarta.servlet.http.HttpServletRequest;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -8,12 +10,14 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 public class CorreoService {
-    public void props(String correo, String pass) {
+    public void props(String correo, String pass, String link) {
         Properties props = new Properties();
         props.put("mail.smtp.host","smtp.gmail.com");
         props.put("mail.smtp.port", "587");
@@ -30,16 +34,16 @@ public class CorreoService {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(correo, true));
             message.setSubject("Correo de Confirmación");
 
-            message.setText("Estimado(a) usuario,\n\n" +
-                    "¡Bienvenido(a) a nuestra plataforma clínica! Le hemos creado una cuenta para que pueda acceder a sus registros médicos y realizar consultas en línea.\n" +
-                    "\n" +
-                    "Su nombre de usuario es: "+correo+"\n" +
-                    "\n" +
-                    "Su contraseña temporal es: "+pass+"\n" +
-                    "\n" +
-                    "Por motivos de seguridad, le pedimos que cambie su contraseña la primera vez que inicie sesión.\n" +
-                    "\n" +
-                    "Gracias por confiar en nosotros.");
+            // Crear una parte para el contenido HTML
+            MimeBodyPart htmlPart = new MimeBodyPart();
+            htmlPart.setContent(getHTMLContent(correo, pass, link), "text/html");
+
+            // Crear el multipart para combinar el contenido HTML y el texto plano
+            MimeMultipart multipart = new MimeMultipart("alternative");
+            multipart.addBodyPart(htmlPart);
+
+            // Agregar el multipart al mensaje
+            message.setContent(multipart);
 
             System.out.println("snding...");
             Transport.send(message);
@@ -50,13 +54,17 @@ public class CorreoService {
         }
     }
     // Método para cargar el contenido HTML desde el archivo invitacion.html
-    private String getHTMLContent() {
+    private String getHTMLContent(String user, String pwd, String link) {
         String htmlContent = ""; // Contenido HTML del archivo
 
         // Código para cargar el contenido HTML desde el archivo invitacion.html
         try {
             Path path = Paths.get("src/main/resources/templates/administrador/invitar.html");
             htmlContent = new String(Files.readAllBytes(path));
+
+            htmlContent = htmlContent.replace("%user%",user);
+            htmlContent = htmlContent.replace("%pwd%", pwd);
+            htmlContent = htmlContent.replace("%link%", link);
         } catch (IOException e) {
             e.printStackTrace();
         }

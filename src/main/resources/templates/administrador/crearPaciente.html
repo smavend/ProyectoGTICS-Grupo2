@@ -341,11 +341,11 @@
 
                   <div class="col-md-12 mb-3">
                     <label >Nombre del Seguro</label>
-                    <select class="form-select" th:field="*{seguro}" >
+                    <select class="form-select" th:field="*{seguro}"  th:classappend="${#fields.hasErrors('seguro')? 'is-invalid':''}">
                       <option value="">Seleccionar</option>
                       <option th:each="seguro: ${listaSeguro}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}" ></option>
-
                     </select>
+                    <div th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}" class="text-danger" ></div>
 
                   </div>
                   <div class="col-md-12 mb-3">
@@ -379,15 +379,16 @@
                   </div>
                   <div class="col-md-12 mb-3">
                     <label >Fecha Nacimiento</label>
-                    <input type="date" class="form-control" th:field="*{fechanacimiento}" >
+                    <input type="date" class="form-control" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fechanacimiento')}" th:errors="*{fechanacimiento}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label>Distrito</label>
-                    <select class="form-select" th:field="*{distrito}" >
+                    <select class="form-select" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito')? 'is-invalid':''}" >
                       <option value="">Seleccionar</option>
                       <option th:each="distrito:${listaDistrito}" th:value="${distrito.idDistrito}" th:text="${distrito.nombre}"></option>
                     </select>
-
+                    <div th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}" class="text-danger" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="archivo" class="form-label">Subir foto</label>

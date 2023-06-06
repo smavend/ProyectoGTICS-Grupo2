@@ -23,7 +23,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -31,11 +31,11 @@
         <!-- End Sidebar-->
 
         <main id="main" class="main">
-            <h1 class="encabezado">Cuestionario Cardiología</h1>
+            <h1 class="encabezado" th:text="'Cuestionario de '+${cuestionario.cita.doctor.especialidad.nombre}">Cuestionario Cardiología</h1>
             <section class="seccionPrincipal">
 
-                <form>
-
+                <form method="post">
+                    <!--
                     <div class="seccionCuestionario">
                         <div class="textoCuestionario">
                             ¿Ha presentado dolor abdominal en los últimos 5 días?
@@ -80,24 +80,6 @@
 
                     <div class="seccionCuestionario">
                         <div class="textoCuestionario">
-                            Pregunta médica número 3:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text">
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario">
-                            Pregunta médica número 4:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text">
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario">
                             Pregunta médica número 5:
                         </div>
                         <div class="respuestaCuestionario">
@@ -109,20 +91,61 @@
                             </select>
                         </div>
                     </div>
+                    -->
+
+                    <input type="hidden" name="idCuestionario" th:value="${cuestionario.id.getIdCuestionario()}">
+                    <input type="hidden" name="idCita" th:value="${cuestionario.id.getIdCita()}">
+                    <input type="hidden" name="idPaciente" th:value="${session.paciente.idPaciente}">
 
                     <div class="seccionCuestionario">
-                        <div class="textoCuestionario">
-                            Describa los síntomas adicionales que haya sentido la última semana:
+                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP1()}">
+                            Pregunta médica número 4:
                         </div>
                         <div class="respuestaCuestionario">
-                            <textarea class="form-control" cols="80" rows="3"></textarea>
+                            <input class="form-control" type="text">
                         </div>
                     </div>
 
-                    <a href="#" class="btn btn-primary botonActualizarConsentimientos" data-bs-toggle="modal"
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP2()}">
+                            Pregunta médica número 4:
+                        </div>
+                        <div class="respuestaCuestionario">
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP3()}">
+                            Pregunta médica número 4:
+                        </div>
+                        <div class="respuestaCuestionario">
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP4()}">
+                            Pregunta médica número 4:
+                        </div>
+                        <div class="respuestaCuestionario">
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+
+                    <div class="seccionCuestionario">
+                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP5()}">
+                            Pregunta médica número 4:
+                        </div>
+                        <div class="respuestaCuestionario">
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+
+                    <a href="#" class="btn botonAceptar mt-5 mb-3 me-2" data-bs-toggle="modal"
                        data-bs-target="#actualizarModal">Enviar</a>
-                    <a style="margin-left: 10px;" th:href="@{/Paciente/cuestionarios}"
-                       class="btn btn-danger botonCancelar">Cancelar
+                    <a th:href="@{/Paciente/cuestionarios}"
+                       class="btn botonCancelar mt-5 mb-3">Cancelar
                     </a>
 
                     <!-- Modal Actualizar-->
@@ -131,16 +154,16 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5 tituloNavBar" id="actualizarModal">Confirmación</h1>
+                                    <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
                                 </div>
                                 <div class="modal-body">
                                     <span class="textoModal">¿Está seguro que desea enviar el cuestionario?</span>
                                 </div>
                                 <div class="modal-footer mx-auto">
-                                    <button type="submit" style="margin: 0 10px 0 0;" href="#"
-                                            class="btn btn-primary botonActualizarConsentimientos">Enviar
+                                    <button type="submit" href="#"
+                                            class="botonAceptar">Enviar
                                     </button>
-                                    <a style="margin: 0 0 0 10px;" href="#" class="btn btn-danger botonCancelar"
+                                    <a href="#" class="botonCancelar"
                                        data-bs-dismiss="modal">Cancelar</a>
                                 </div>
                             </div>

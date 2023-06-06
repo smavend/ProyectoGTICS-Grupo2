@@ -355,17 +355,22 @@
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
                     <label for="sexo">Especialidad</label>
-                    <select class="form-select" id="sexo" name ="especialidad" >
+                    <select class="form-select" id="sexo" name ="especialidad" th:classappend="${#fields.hasErrors('especialidad')? 'is-invalid':''}" >
                       <option value="">Seleccionar</option>
                       <option th:each="especialidad: ${listaEspecialidad}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" ></option>
                     </select>
+                    <div th:if="${#fields.hasErrors('especialidad')}" th:errors="*{especialidad}" class="text-danger" ></div>
+
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="sede">Sede</label>
-                      <select class="form-select" id="sede" name ="sede" >
+                      <select class="form-select" id="sede" name ="sede" th:classappend="${#fields.hasErrors('sede')? 'is-invalid':''}"  >
                       <option value="">Seleccionar</option>
                       <option th:each="sede: ${listaSede}" th:value="${sede.idSede}" th:text="${sede.nombre}" ></option>
                     </select>
+                    <div th:if="${#fields.hasErrors('sede')}" th:errors="*{sede}" class="text-danger" ></div>
+
+
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="archivo" class="form-label">Subir foto</label>

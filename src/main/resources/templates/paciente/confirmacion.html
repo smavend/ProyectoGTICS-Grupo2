@@ -24,7 +24,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -38,7 +38,7 @@
                 </div>
                 <div class="cardCuerpo">
                     <div class="cardTexto">Para más detalles visite la sección CITAS</div>
-                    <a class="btn botonVolverInicio" th:href="@{/Paciente}">Volver a inicio</a>
+                    <a class="btn botonVolverInicio" th:href="@{/Paciente/citas}">Revisar citas</a>
                 </div>
             </div>
         </main>

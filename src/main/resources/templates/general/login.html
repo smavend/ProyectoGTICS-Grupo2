@@ -80,14 +80,13 @@
 
                                         <form class="row g-3 needs-validation" method="post"
                                               th:action="@{/login/credenciales}" novalidate>
-
                                             <div class="col-12">
                                                 <label for="username" class="form-label">Correo electrónico</label>
                                                 <div class="input-group has-validation">
                                                     <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                                    <input type="text" name="username" class="form-control"
+                                                    <input type="email" name="username" class="form-control"
                                                            id="username" required>
-                                                    <div class="invalid-feedback">Por favor ingrese su correo.</div>
+                                                    <div class="invalid-feedback">Ingrese un correo válido.</div>
                                                 </div>
                                             </div>
 
@@ -95,7 +94,7 @@
                                                 <label for="password" class="form-label">Contraseña</label>
                                                 <input type="password" name="password" class="form-control"
                                                        id="password" required>
-                                                <div class="invalid-feedback">Por favor, ingrese la contraseña</div>
+                                                <div class="invalid-feedback">Ingrese una contraseña</div>
                                                 <a class="small mb-0" th:href="@{/login/olvidepassw}">¿Olvidaste tu
                                                     contraseña?</a>
                                             </div>
@@ -118,14 +117,10 @@
                                     <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
                                     Diseñado por <a style="color: rgb(37, 123, 243)">Grupo Telepucp</a>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </section>
->>>>>>> origin/paciente
-
             </div>
         </main><!-- End #main -->
 

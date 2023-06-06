@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Embeddable
 @Getter
 @Setter
-public class PacientePorConsentimientoId implements Serializable {
+public class PacientePorConsentimientoID implements Serializable {
     @Column(name = "paciente_id_paciente", nullable = false)
     private String idPaciente;
     @Column(name = "consentimientos_id_consentimiento", nullable = false)
