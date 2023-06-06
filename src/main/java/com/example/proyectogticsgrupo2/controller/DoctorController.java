@@ -97,10 +97,12 @@ public class DoctorController {
         return "doctor/DoctorDashboard";
     }
 
-    @PostMapping("/enviarCuestionario")
-    public String enviarCuestionario(HttpSession session, Authentication authentication, Model model, @Valid Cita cita, BindingResult bindingResult) {
-        System.out.println("aa");
-        return "doctor/DoctorRecibos";
+    @PostMapping("/listaCuestionarios")
+    public String listaCuestionarios(HttpSession session, Authentication authentication, Model model, @Valid Cita cita, BindingResult bindingResult) {
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
+
+        return "doctor/DoctorDashboard";
     }
 
 

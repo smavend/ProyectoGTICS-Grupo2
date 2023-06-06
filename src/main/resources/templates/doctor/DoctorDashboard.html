@@ -176,7 +176,7 @@
                                                                            class="bi-play-fill"></i>
                                                                     </a>
 
-                                                                    <a id="enviar-btn" style="width: max-content"
+                                                                    <a th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}" style="width: max-content"
                                                                        type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="right" title="Enviar cuestionario">
                                                                         <i class="bi-file-text-fill"></i>
                                                                     </a>
@@ -228,8 +228,6 @@
                                                             <td style="font-size: 1.2rem; color: black">
                                                                 <a th:href="@{'/doctor/historialClinico' + '?id=' + ${paciente.id_paciente}}"
                                                                    th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
-
-
                                                             </td>
 
                                                         </tr>
@@ -462,14 +460,6 @@
 
         // Mostrar el calendario
         calendar.render();
-        </script>
-        <script>
-            const enviarBtn = document.getElementById("enviar-btn");
-
-            enviarBtn.addEventListener("click", function () {
-                enviarBtn.classList.add("btn-disabled");
-                enviarBtn.disabled = true;
-            });
         </script>
 
         <script>
