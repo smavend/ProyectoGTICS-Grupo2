@@ -22,6 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -593,7 +595,8 @@ public class PacienteController {
 
     /* SECCIÓN PAGOS */
     @GetMapping("/pagos")
-    public String pagos(Model model, HttpSession session, Authentication authentication) {
+    public String pagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
+                        Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
         List<Pago> pagoList = pagoRepository.findAll();
@@ -602,7 +605,8 @@ public class PacienteController {
     }
 
     @GetMapping("/filtrarPagos")
-    public String filtrarPagos(@RequestParam("filtro") int filtro, Model model, HttpSession session, Authentication authentication) {
+    public String filtrarPagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
+                               @RequestParam("filtro") int filtro, Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 
@@ -613,11 +617,36 @@ public class PacienteController {
     }
 
     @PostMapping("/guardarPago")
-    public String guardarPago(@RequestParam("idPago") int idPago, HttpSession session, Authentication authentication) {
+    public String guardarPago(@ModelAttribute("tarjetaPago") @Valid TarjetaPago tarjetaPago, BindingResult bindingResult,
+                              @RequestParam("idPago") int idPago,@RequestParam("fechaStr") String fechaStr,
+                              @RequestParam("filtro") int filtro, Model model, RedirectAttributes attr,
+                              HttpSession session, Authentication authentication) {
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+        if (bindingResult.hasErrors()) {
+            session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+            if(filtro==0){
+                List<Pago> pagoList = pagoRepository.findAll();
+                model.addAttribute("pagoList", pagoList);
+                model.addAttribute("filtro", filtro);
+                model.addAttribute("activarModal", true);
 
-        pagoRepository.guardarPago(idPago);
+                return "paciente/pagos";
+            }else{
+                if(filtro==1){
+                    List<Pago> pagoList = pagoRepository.findAll();
+                    model.addAttribute("pagoList", pagoList);
+                    model.addAttribute("filtro", filtro);
+                    model.addAttribute("activarModal", true);
+
+                    return "paciente/pagos";
+                }
+            }
+        }else {
+            session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+            pagoRepository.guardarPago(idPago);
+            attr.addFlashAttribute("msg", "Pago realizado exitosamente");
+            return "redirect:/Paciente/pagos";
+        }
         return "redirect:/Paciente/pagos";
     }
 
