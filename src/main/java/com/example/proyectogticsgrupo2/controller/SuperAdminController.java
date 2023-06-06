@@ -6,6 +6,10 @@ import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoServiceSuperAdmin;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
@@ -19,11 +23,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@CrossOrigin
 @Controller
 @RequestMapping("/SuperAdminHomePage")
 public class SuperAdminController {
@@ -39,6 +46,10 @@ public class SuperAdminController {
     final SecurityConfig securityConfig;
     final CredencialesRepository credencialesRepository;
     final StylevistasRepository stylevistasRepository;
+
+/*
+    final FormDinamicoRepository formDinamicoRepository;
+*/
 
     public SuperAdminController(PacienteRepository pacienteRepository,
                                 AdministrativoRepository administrativoRepository,
@@ -86,12 +97,44 @@ public class SuperAdminController {
             if (style.isPresent()) {
                 Stylevistas styleActual = style.get();
                 System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+/*
+                System.out.println("El color del Sidebar es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
+*/
+/*
+                System.out.println("El color del Background es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
+*/
+
                 model.addAttribute("headerColor", styleActual.getHeader());
+/*
+                model.addAttribute("sidebarColor", styleActual.getSidebar());
+*/
+                model.addAttribute("backgroundColor", styleActual.getBackground());
+
             } else {
                 // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
                 System.out.println("No se encontró stylevistas con el id proporcionado");
             }
             return "superAdmin/superadmin_Dashboard";
+    }
+    @GetMapping("/administradores")
+    @ResponseBody
+    public List<AdministradorDTO_superadmin> obtenerAdministradores() {
+        return superAdminService.obtenerTodosLosAdministradoresDTO();
+    }
+    @GetMapping("/administrativos")
+    @ResponseBody
+    public List<AdministrativoDTO_superadmin> obtenerAdministrativos() {
+        return superAdminService.obtenerTodosLosAdministrativosDTO();
+    }
+    @GetMapping("/pacientes")
+    @ResponseBody
+    public List<PacienteDTO_superadmin> obtenerPacientes() {
+        return superAdminService.obtenerTodosLosPacientesDTO();
+    }
+    @GetMapping("/doctores")
+    @ResponseBody
+    public List<DoctorDTO_superadmin> obtenerDoctores() {
+        return superAdminService.obtenerTodosLosDoctoresDTO();
     }
 
     @PostMapping("/filtrar")
@@ -158,17 +201,90 @@ public class SuperAdminController {
 
 
     @GetMapping("/verforms")
-    public String verforms() {
+    public String verforms(Model model) {
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+/*
+                System.out.println("El color del Sidebar es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
+*/
+/*
+                System.out.println("El color del Background es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
+*/
+
+            model.addAttribute("headerColor", styleActual.getHeader());
+/*
+                model.addAttribute("sidebarColor", styleActual.getSidebar());
+*/
+            model.addAttribute("backgroundColor", styleActual.getBackground());
+
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
+       /* List<FormDinamico> forms = formDinamicoRepository.findAll();
+        model.addAttribute("forms", forms);*/
+
         return "superAdmin/list_forms";
     }
 
+  /*  @PostMapping("/guardarFormulario")
+    public ResponseEntity<?> guardarFormulario(@RequestBody String formFields) {
+        System.out.println("Recibí una solicitud POST a /guardarFormulario");
+
+        // Divide la cadena en el título y el HTML
+        String[] fields = formFields.split("::", 2);
+
+        // Crea un nuevo objeto FormDinamico y establece su HTML y título con los valores recibidos
+        FormDinamico formDinamico = new FormDinamico();
+        formDinamico.setHtml(fields[1]);
+        formDinamico.setTitulo(fields[0]);
+        formDinamico.setSent(true);
+
+        // Intenta guardar el objeto FormDinamico en la base de datos
+        try {
+            formDinamicoRepository.save(formDinamico);
+        } catch (Exception e) {
+            System.out.println("Error al guardar el formulario: " + e.getMessage());
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Error al guardar el formulario");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Formulario guardado con éxito");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }*/
     @GetMapping("/verReportes")
     public String ReportList() {
         return "superAdmin/list_reportes";
     }
 
     @GetMapping("/crearformulario")
-    public String createForm() {
+    public String createForm(Model model) {
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+/*
+                System.out.println("El color del Sidebar es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
+*/
+/*
+                System.out.println("El color del Background es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
+*/
+
+            model.addAttribute("headerColor", styleActual.getHeader());
+/*
+                model.addAttribute("sidebarColor", styleActual.getSidebar());
+*/
+            model.addAttribute("backgroundColor", styleActual.getBackground());
+
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
+
         return "superAdmin/crear_form";
     }
 
@@ -191,13 +307,23 @@ public class SuperAdminController {
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
             System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
-            model.addAttribute("headerColor", styleActual   .getHeader());
+            model.addAttribute("headerColor", styleActual.getHeader());
+/*
+            model.addAttribute("sidebarColor", styleActual.getSidebar());
+*/
+
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "superAdmin/Gestionar_UIUX";
     }
+    @GetMapping("/SelectTablaEstilos")
+    @ResponseBody
+    public List<Stylevistas> obtenerEstilos() {
+        return stylevistasRepository.findAll();
+    }
+
 
 
 
@@ -225,7 +351,16 @@ public class SuperAdminController {
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
             System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
-            model.addAttribute("headerColor", styleActual   .getHeader());
+/*
+            System.out.println("El color del Sidebar es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
+*/
+
+            model.addAttribute("headerColor", styleActual.getHeader());
+/*
+            model.addAttribute("sidebarColor", styleActual.getSidebar());
+*/
+            model.addAttribute("backgroundColor", styleActual.getBackground());
+
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             System.out.println("No se encontró stylevistas con el id proporcionado");
@@ -255,6 +390,10 @@ public class SuperAdminController {
             Stylevistas styleActual = style.get();
             System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColor", styleActual   .getHeader());
+/*
+            model.addAttribute("sidebarColor", styleActual.getSidebar());
+*/
+
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             System.out.println("No se encontró stylevistas con el id proporcionado");
@@ -295,6 +434,10 @@ public class SuperAdminController {
             Stylevistas styleActual = style.get();
             System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColor", styleActual   .getHeader());
+/*
+            model.addAttribute("sidebarColor", styleActual.getSidebar());
+*/
+
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             System.out.println("No se encontró stylevistas con el id proporcionado");
@@ -383,7 +526,7 @@ public class SuperAdminController {
             model.addAttribute("listaSedes", listaSedes);
             model.addAttribute("listaEspecialidades", listaEspecialidades);
             // Si hay errores de validación, volver a mostrar el formulario con los mensajes de error
-            return "SuperAdmin/Crear_Usuario";
+            return "superAdmin/Crear_Usuario";
         }
 
 

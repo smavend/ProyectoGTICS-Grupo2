@@ -20,6 +20,9 @@ public class Stylevistas {
     @Column(name = "Header")
     private String header;
 
+  /*  @Column(name= "Sidebar")
+    private String sidebar;
+*/
     @Column(name = "Footer")
     private String footer;
 

@@ -21,7 +21,6 @@
         <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
     </head>
     <body>
-
         <!-- ======= Header ======= -->
         <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
@@ -46,7 +45,7 @@
                         <p class="mb-2"><span class="fw-bold">Correo:</span><span style="margin-left: 13px"
                                                                                   th:text="${session.paciente.correo}">juanpc98@gmail.com</span>
                         </p>
-                        <input type="hidden" name="idPaciente" th:value="${session.paciente.idPaciente}">
+
                     </div>
                     <div class="col-6">
                         <p class="mb-2"><span class="fw-bold">Dirección:</span><span style="margin-left: 13px"
@@ -60,30 +59,53 @@
                         </p>
                     </div>
                 </div>
-                <form method="post" th:action="@{/Paciente/reservar3}">
+
+                <h3 class="ms-3 mt-4">Información de cita</h3>
+
+                <form method="post" th:action="@{/Paciente/reservar4}">
 
                     <input type="hidden" name="modalidad" th:value="${citaTemporal.modalidad}">
                     <input type="hidden" name="idSede" th:value="${citaTemporal.idSede}">
                     <input type="hidden" name="idEspecialidad" th:value="${citaTemporal.idEspecialidad}">
                     <input type="hidden" name="idDoctor" th:value="${citaTemporal.idDoctor}">
                     <input type="hidden" name="fecha" th:value="${citaTemporal.fecha}">
+                    <input type="hidden" name="inicio" th:value="${citaTemporal.inicio}">
+                    <input type="hidden" name="fin" th:value="${citaTemporal.fin}">
 
-                    <div class="row" style="margin-top: 20px;margin-left: 20px">
+                    <div class="row mt-2 ms-3">
                         <div class="col-6">
-                            <p><span class="fw-bold">Horarios disponibles:</span><span class="fw-bold"
-                                                                                       style="color: red">*</span></p>
-                            <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
-                                    name="hora">
-                                <option th:each="horario: ${horariosDisponibles}"
-                                        th:value="${#temporals.format(horario, 'HH:mm:ss')}"
-                                        th:text="${#temporals.format(horario, 'HH:mm')}"></option>
-                            </select>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Modalidad: </span>
+                                <span class="valorCita" th:text="${citaTemporal.modalidad == 0? 'Presencial':'Virtual'}">Info</span>
+                            </div>
+                            <div class="campoCita" th:if="${citaTemporal.modalidad == 0}">
+                                <span class="informacionCita fw-bold">Sede: </span>
+                                <span class="valorCita" th:text="${sede.nombre}">Info</span>
+                            </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Especialidad: </span>
+                                <span class="valorCita" th:text="${especialidad.nombre}">Info</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Doctor: </span>
+                                <span class="valorCita" th:text="${doctor.getNombreYApellido()}">Info</span>
+                            </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Fecha: </span>
+                                <span class="valorCita" th:text="${citaTemporal.fecha}">Info</span>
+                            </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Hora de la cita: </span>
+                                <span class="valorCita" th:text="${#temporals.format(citaTemporal.inicio, 'HH:mm')+' Hrs.'}">Info</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-end">
+                    <div class="d-flex justify-content-end mt-5">
                         <a th:href="@{/Paciente}" class="botonCancelar">Cancelar</a>
-                        <button type="submit" class="botonAceptar ms-3">Siguiente</button>
+                        <button type="submit" class="botonAceptar ms-3">Reservar Cita</button>
                     </div>
 
                 </form>

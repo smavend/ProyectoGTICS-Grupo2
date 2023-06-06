@@ -221,12 +221,12 @@
                         <hr class="dropdown-divider">
                     </li>
 
-                    <li>
+                    <!--<li>
                         <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
                             <i class="bi bi-person"></i>
                             <span>Mi Perfil</span>
                         </a>
-                    </li>
+                    </li>-->
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -247,10 +247,12 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar Sesión</span>
-                        </a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Cerrar Sesión</span>
+                            </button>
+                        </form>
                     </li>
 
                 </ul><!-- End Profile Dropdown Items -->
@@ -391,52 +393,146 @@
 
                     <!-- Top Selling -->
                     <div class="col-12">
-                        <div class="card top-selling container px-4" style="min-height:500px">
+                        <div class="card top-selling container px-4" style="min-height:551px">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
-                                        <a class="btn btn-danger" href="#">
-                                            <i class="bi bi-file-earmark-pdf"></i>
-                                        </a>
-                                        <a class="btn btn-success" href="#">
-                                            <i class="bi bi-file-earmark-excel"></i>
-                                        </a>
-                                        <a class="btn btn-primary" href="#">
-                                            <i class="bi bi-file-earmark-text"></i>
-                                        </a>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                                            Generar reporte
+                                        </button>
+
                                     </div>
+
+
+                                    <!-- Pop-up de filtrado -->
+                                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="filterModalLabel">Filtrar reporte</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" th:action="@{/administrador/reportes}">
+                                                    <div class="modal-body">
+
+                                                        <div class="mb-3">
+                                                            <label for="tiporeporte" class="form-label">Tipo de reporte</label>
+                                                            <select class="form-select" id="tiporeporte" name="tiporeporte" onchange="toggleFilterOptions()">
+                                                                <option value="5" selected>Todo</option>
+                                                                <option value="1">Por seguro</option>
+                                                                <option value="2">Por especialidad</option>
+                                                                <option value="3">Por tipo de pago</option>
+                                                            </select>
+                                                        </div>
+                                                        <div id="porSeguro" class="mb-3" style="display: none;">
+                                                            <label for="insuranceInput" class="form-label">Seguro</label>
+                                                            <select class="form-select" id="insuranceInput" name="seguro">
+                                                                <option value="">Seleccionar seguro</option>
+                                                                <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
+
+                                                        </div>
+                                                        <div id="porEspecialidad" class="mb-3" style="display: none;">
+                                                            <label for="specialtyInput" class="form-label">Especialidad</label>
+                                                            <select class="form-select" id="specialtyInput" name="especialidad">
+                                                                <option value="">Seleccionar especialidad</option>
+                                                                <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                        </div>
+                                                        <div id="porTipoPago" class="mb-3" style="display: none;">
+                                                            <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
+                                                            <select class="form-select" id="paymentTypeInput" name="tipopago">
+                                                                <option value="">Seleccionar tipo de pago</option>
+                                                                <option value="Efectivo">Efectivo</option>
+                                                                <option value="Tarjeta">Tarjeta</option>
+                                                                <!--<option value="3">Transferencia</option>-->
+                                                            </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                        </div>
+                                                        <div id="porFecha" class="mb-3" style="display: none;">
+                                                            <label for="porfechareporte" class="form-label">Todo</label>
+                                                            <select class="form-select" id="porfechareporte" name="todo">
+                                                                <option value="">Seleccionar</option>
+                                                                <option value="1">Última semana</option>
+                                                                <option value="2">Último mes</option>
+                                                                <option value="3">Últimos tres meses</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado" >Descargar</button>
+                                                            <select class="form-select" name="formato">
+                                                                <option value="1">Excel</option>
+                                                                <option value="2">PDF </option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Pop-up de okok reporte -->
+                                    <!-- Pop-up de generación de reporte-->
+                                    <div class="modal fade" id="generado" tabindex="-1" aria-labelledby="generadoLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="pt-4 pb-2">
+                                                        <h5 class="card-title text-center pb-0 fs-4">Descarga completa </h5>
+                                                        <p class="text-center small">La descarga se ha realizado con exito.<br> Verifique en su explorador de archivos</p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer mb-1">
+                                                    <!--<button type="button" class="btn btn-primary " data-bs-dismiss="modal" aria-label="Close">OK</button>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!--  -->
                                 </div>
 
-                                    <table class="table " id="datatable">
+                                    <table class="table table-striped" id="datatable">
                                         <thead>
                                         <tr>
-                                            <th>Fecha</th>
-                                            <th>Paciente</th>
                                             <th>Concepto</th>
+                                            <th>Monto</th>
+                                            <th>Paciente</th>
                                             <th>Especialidad</th>
                                             <th>Seguro</th>
-                                            <th>Monto</th>
+                                            <th>Fecha</th>
                                             <th>Forma de Pago</th>
-                                            <th></th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr th:each="ingreso : ${listaIngresos}">
-                                            <td th:text="${ingreso.getFechacancelada()}"></td>
-                                            <td th:text="${ingreso.getNombreuser()}"></td>
                                             <td th:text="${ingreso.getConcepto()}"></td>
+                                            <td th:text="'$'+${ingreso.getPreciocita()}"></td>
+                                            <td th:text="${ingreso.getNombreuser()}"></td>
                                             <td th:text="${ingreso.getEspecialidadcita()}"></td>
                                             <td th:text="${ingreso.getNombreseguro()}"></td>
-                                            <td th:text="'$'+${ingreso.getPreciocita()}"></td>
+                                            <td th:text="${#temporals.format(ingreso.getFechacancelada(), 'dd-MM-yyyy')}"></td>
                                             <td th:text="${ingreso.getTipopago()}"></td>
-                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+                                            <!--<th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>-->
                                         </tr>
 
                                         </tbody>
                                     </table>
                                     <br>
-
-                            </div>
+                        </div>
 
 
                     </div><!-- End Top Selling -->
@@ -448,15 +544,10 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">EGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
-                                        <a class="btn btn-danger" href="#">
-                                            <i class="bi bi-file-earmark-pdf"></i>
-                                        </a>
-                                        <a class="btn btn-success" href="#">
-                                            <i class="bi bi-file-earmark-excel"></i>
-                                        </a>
-                                        <a class="btn btn-primary" href="#">
-                                            <i class="bi bi-file-earmark-text"></i>
-                                        </a>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                                            Generar reporte
+                                        </button>
+
                                     </div>
                                 </div>
 
@@ -564,6 +655,17 @@
 </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<script>
+    var headerColorAdministrador = "[[${headerColorAdministrador}]]";
+    localStorage.setItem('headerColorAdministrador', headerColorAdministrador);
+
+    function updateHeaderColorAdministrador() {
+        var color = headerColorAdministrador;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+
+    updateHeaderColorAdministrador();
+</script>
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
@@ -585,8 +687,8 @@
     $(document).ready(function () {
         $('#datatable').DataTable({
             lengthMenu: [
-                [5,10,20],
-                [5,10,20],
+                [8,10,20],
+                [8,10,20],
             ],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
@@ -603,7 +705,7 @@
                     "previous": "Anterior",
                 }
             },
-            "pageLength": 5,
+            "pageLength": 8,
             "columnDefs": [
                 {"margin-bottom": "10px"}
             ]

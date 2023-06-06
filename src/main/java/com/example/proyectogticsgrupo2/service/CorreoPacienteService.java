@@ -1,23 +1,12 @@
 package com.example.proyectogticsgrupo2.service;
-import jakarta.servlet.http.HttpServletRequest;
-
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
-public class CorreoService {
-    public void props(String correo, String pass, String link) {
+public class CorreoPacienteService {
+    public void enviarCorreo(String correo, String nombre, String link, String id, String token) {
         Properties props = new Properties();
         props.put("mail.smtp.host","smtp.gmail.com");
         props.put("mail.smtp.port", "587");
@@ -32,11 +21,11 @@ public class CorreoService {
         try {
             MimeMessage message = new MimeMessage(session);
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(correo, true));
-            message.setSubject("Correo de Confirmación");
+            message.setSubject("Invitación a la clínica InterPUCP");
 
             // Crear una parte para el contenido HTML
             MimeBodyPart htmlPart = new MimeBodyPart();
-            htmlPart.setContent(getHTMLContent(correo, pass, link), "text/html");
+            htmlPart.setContent(getHTMLContent(nombre, link, id, token), "text/html");
 
             // Crear el multipart para combinar el contenido HTML y el texto plano
             MimeMultipart multipart = new MimeMultipart("alternative");
@@ -54,7 +43,7 @@ public class CorreoService {
         }
     }
     // Método para cargar el contenido HTML desde el archivo invitacion.html
-    private String getHTMLContent(String user, String pwd, String link) {
+    private String getHTMLContent(String nombre, String link, String id, String token) {
         String htmlContent = ""; // Contenido HTML del archivo
 
         // Código para cargar el contenido HTML desde el archivo invitacion.html
@@ -90,7 +79,7 @@ public class CorreoService {
                 "                <tbody>\n" +
                 "                  <tr>\n" +
                 "                    <td align=\"center\">\n" +
-                "                      <h1 class=\"m_6554632393618514601f40\" style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:34px;line-height:normal;font-weight:700;letter-spacing:0;color:#4c4c4c\">¡Bienvenido a nuestra plataforma clínica!</h1>\n" +
+                "                      <h1 class=\"m_6554632393618514601f40\" style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:34px;line-height:normal;font-weight:700;letter-spacing:0;color:#4c4c4c\">¡Bienvenido(a) a nuestra plataforma clínica, %nombre% !</h1>\n" +
                 "                    </td>\n" +
                 "                  </tr>\n" +
                 "                  <tr>\n" +
@@ -118,45 +107,11 @@ public class CorreoService {
                 "                                  <tr>\n" +
                 "                                    <td align=\"center\">\n" +
                 "                                      <p style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:400;letter-spacing:0;color:#777777;max-width:520px\">\n" +
-                "                                        Le hemos creado una cuenta para que pueda acceder a sus registros médicos y realizar consultas en línea.<br>\n" +
-                "                                        <span style=\"font-weight:700\">Rol de usuario: MÉDICO.</span>\n" +
+                "                                        Usted ha sido invitado para ser parte de la familia médica más cálida del Perú.<br>\n" +
+                "                                        <span style=\"font-weight:700\">Rol de usuario: PACIENTE.</span>\n" +
                 "                                        <br><br>\n" +
-                "                                        Puede ingresar a su cuenta con las siguientes credenciales:\n" +
+                "                                        Puede completar sus datos ingresando al siguiente enlace:\n" +
                 "                                      </p>\n" +
-                "                                    </td>\n" +
-                "                                  </tr>\n" +
-                "                                  <tr>\n" +
-                "                                    <td class=\"m_6554632393618514601mobilespace24\" height=\"20\" style=\"height:24px;line-height:24px\">&nbsp;</td>\n" +
-                "                                  </tr>\n" +
-                "                                  <tr>\n" +
-                "                                    <td align=\"center\">\n" +
-                "                                      <div>\n" +
-                "\n" +
-                "                                        <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:220px;border-spacing:0;border-collapse:collapse\" width=\"220\">\n" +
-                "                                          <tbody>\n" +
-                "                                            <tr>\n" +
-                "                                              <td align=\"center\" height=\"43\" style=\"border-collapse:collapse;background-color:#771cf6;border-radius:9px;white-space:nowrap\">\n" +
-                "                                                <a style=\"display:inline-block;width:100%;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:19px;color:#ffffff;text-align:center;text-decoration:none;background-color:#771cf6;border-radius:14px;border-top:12px solid #771cf6;border-bottom:12px solid #771cf6\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.duolingo.com/?email_type%3Dresurrection%26target%3Dget_back_on_track%26utm_source%3Dcomeback%26utm_medium%3Demail%26utm_campaign%3Dresurrection&amp;source=gmail&amp;ust=1685717009586000&amp;usg=AOvVaw1w3dFvXzWW6tAsd8O6tcNi\">\n" +
-                "                                                  &nbsp;&nbsp;USUARIO: %user% &nbsp;&nbsp;<br>\n" +
-                "                                                  &nbsp;&nbsp;CONTRASEÑA: %pwd% &nbsp;&nbsp;\n" +
-                "                                                </a>\n" +
-                "                                              </td>\n" +
-                "                                            </tr>\n" +
-                "                                          </tbody>\n" +
-                "                                        </table>\n" +
-                "                                      </div>\n" +
-                "                                    </td>\n" +
-                "                                  </tr>\n" +
-                "                                  <tr>\n" +
-                "                                    <td class=\"m_6554632393618514601mobilespace24\" height=\"20\" style=\"height:24px;line-height:24px\">&nbsp;</td>\n" +
-                "                                  </tr>\n" +
-                "                                  <tr>\n" +
-                "                                    <td align=\"center\" valign=\"top\" width=\"520\">\n" +
-                "                                      <p style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:400;letter-spacing:0;color:#777777;max-width:520px\">\n" +
-                "                                        Por motivos de seguridad, le pedimos que cambie su contraseña la primera vez que inicie sesión.\n" +
-                "                                        Gracias por confiar en Clínica InterPUCP.\n" +
-                "                                      </p>\n" +
-                "\n" +
                 "                                    </td>\n" +
                 "                                  </tr>\n" +
                 "                                  <tr>\n" +
@@ -171,8 +126,8 @@ public class CorreoService {
                 "                                            <tr>\n" +
                 "                                              <td align=\"center\" height=\"43\" style=\"border-collapse:collapse;background-color:#1cb0f6;border-radius:9px;white-space:nowrap\">\n" +
                 "\n" +
-                "                                                <a href=\"http://%link%/login\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=http://%link%/login\" style=\"display:inline-block;width:100%;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:19px;text-transform:uppercase;color:#ffffff;text-align:center;text-decoration:none;background-color:#1cb0f6;border-radius:14px;border-top:12px solid #1cb0f6;border-bottom:12px solid #1cb0f6\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.duolingo.com/?email_type%3Dresurrection%26target%3Dget_back_on_track%26utm_source%3Dcomeback%26utm_medium%3Demail%26utm_campaign%3Dresurrection&amp;source=gmail&amp;ust=1685717009586000&amp;usg=AOvVaw1w3dFvXzWW6tAsd8O6tcNi\">\n" +
-                "                                                  &nbsp;&nbsp;Iniciar sesión&nbsp;&nbsp;\n" +
+                "                                                <a href=\"http://%link%/signin/%id%/%token%\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=http://%link%/signin/%id%/%token%\" style=\"display:inline-block;width:100%;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:19px;text-transform:uppercase;color:#ffffff;text-align:center;text-decoration:none;background-color:#1cb0f6;border-radius:14px;border-top:12px solid #1cb0f6;border-bottom:12px solid #1cb0f6\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.duolingo.com/?email_type%3Dresurrection%26target%3Dget_back_on_track%26utm_source%3Dcomeback%26utm_medium%3Demail%26utm_campaign%3Dresurrection&amp;source=gmail&amp;ust=1685717009586000&amp;usg=AOvVaw1w3dFvXzWW6tAsd8O6tcNi\">\n" +
+                "                                                  &nbsp;&nbsp;Registrarme&nbsp;&nbsp;\n" +
                 "                                                </a>\n" +
                 "\n" +
                 "                                              </td>\n" +
@@ -181,6 +136,22 @@ public class CorreoService {
                 "                                        </table>\n" +
                 "                                      </div>\n" +
                 "                                    </td>\n" +
+                "                                  </tr>\n" +
+                "                                  <tr>\n" +
+                "                                    <td class=\"m_6554632393618514601mobilespace24\" height=\"20\" style=\"height:24px;line-height:24px\">&nbsp;</td>\n" +
+                "                                  </tr>\n" +
+
+                "                                  <tr>\n" +
+                "                                    <td align=\"center\" valign=\"top\" width=\"520\">\n" +
+                "                                      <p style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:400;letter-spacing:0;color:#777777;max-width:520px\">\n" +
+                "                                        Por motivos de seguridad, le pedimos que no comparta este correo con nadie. Recuerde que cuenta con 48 horas antes de que el ingreso expire.\n" +
+                "                                        Gracias por confiar en Clínica InterPUCP.\n" +
+                "                                      </p>\n" +
+                "\n" +
+                "                                    </td>\n" +
+                "                                  </tr>\n" +
+                "                                  <tr>\n" +
+                "                                    <td class=\"m_6554632393618514601mobilespace24\" height=\"20\" style=\"height:24px;line-height:24px\">&nbsp;</td>\n" +
                 "                                  </tr>\n" +
                 "                                </tbody>\n" +
                 "                              </table>\n" +
@@ -305,9 +276,10 @@ public class CorreoService {
                 "  </body>\n" +
                 "</html>";
 
-        htmlContent = htmlContent.replace("%user%",user);
-        htmlContent = htmlContent.replace("%pwd%", pwd);
+        htmlContent = htmlContent.replace("%nombre%", nombre);
         htmlContent = htmlContent.replace("%link%", link);
+        htmlContent = htmlContent.replace("%id%", id);
+        htmlContent = htmlContent.replace("%token%",token);
 
         return htmlContent;
     }

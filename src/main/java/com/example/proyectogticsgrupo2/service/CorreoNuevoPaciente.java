@@ -1,22 +1,13 @@
 package com.example.proyectogticsgrupo2.service;
-import jakarta.servlet.http.HttpServletRequest;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
-public class CorreoService {
+
+public class CorreoNuevoPaciente {
     public void props(String correo, String pass, String link) {
         Properties props = new Properties();
         props.put("mail.smtp.host","smtp.gmail.com");
@@ -119,7 +110,7 @@ public class CorreoService {
                 "                                    <td align=\"center\">\n" +
                 "                                      <p style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:400;letter-spacing:0;color:#777777;max-width:520px\">\n" +
                 "                                        Le hemos creado una cuenta para que pueda acceder a sus registros médicos y realizar consultas en línea.<br>\n" +
-                "                                        <span style=\"font-weight:700\">Rol de usuario: MÉDICO.</span>\n" +
+                "                                        <span style=\"font-weight:700\">Rol de usuario: PACIENTE.</span>\n" +
                 "                                        <br><br>\n" +
                 "                                        Puede ingresar a su cuenta con las siguientes credenciales:\n" +
                 "                                      </p>\n" +

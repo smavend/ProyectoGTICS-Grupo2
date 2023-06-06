@@ -77,25 +77,25 @@
                     <div class="row col-md-6">
                       <div class="col-md-12">
                         <label class="form-label">Nombres<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                        <input type="text" class="form-control" th:field="*{nombre}" th:readonly="${paciente.nombre!=null}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                              th:errors="*{nombre}" ></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Apellidos<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                        <input type="text" class="form-control" th:field="*{apellidos}" th:readonly="${paciente.apellidos!=null}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                              th:errors="*{apellidos}"></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Correo electrónico<span style="color:red;">*</span></label>
-                        <input type="email" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                        <input type="email" class="form-control" th:field="*{correo}" th:readonly="${paciente.correo!=null}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
                              th:errors="*{correo}"></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">DNI<span style="color:red;">*</span></label>
-                        <input type="number" class="form-control" th:field="*{idPaciente}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}">
+                        <input type="number" class="form-control" th:field="*{idPaciente}" th:readonly="${paciente.idPaciente!=null}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}"
                              th:errors="*{idPaciente}"></div>
                       </div>
@@ -105,7 +105,7 @@
                           <option th:each="seguro: ${seguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                         </select>
                       </div>
-                      <div class="col-md-12">
+                      <div th:if="${token==null}" class="col-md-12">
                         <label for="si" class="form-label">¿Tienes alguna alergia?</label>
                         <div class="input-group">
                           <div class="col-md-6">
@@ -122,7 +122,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-12 d-flex align-items-center">
+                      <div th:if="${token==null}" class="col-md-12 d-flex align-items-center">
                         <input style="display: none;" type="text" class="form-control" id="alergias" name="alergias" placeholder="Abejas, cetirizina">
                         <div class="ms-auto">
                           <ul style="display: none; padding-left: 1rem!important;" id="info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Ingresa tus alergias separadas por comas. No es necesario un punto final.">

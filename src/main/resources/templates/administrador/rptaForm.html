@@ -320,7 +320,7 @@
 
   <section  >
     <div class="row d-flex justify-content ">
-      <div  class = "bg-white col-md-12 p-5 ">
+      <div  class = "bg-white col-md-12 p-5 " style="min-height: 674px">
         <h3 class=" m-3">PACIENTES POR REGISTRAR</h3>
 
           <form method="POST" th:action="@{/administrador/guardarTemporales}">
@@ -350,12 +350,12 @@
               </tr>
               </tbody>
             </table>
-            <div class="my-4">
+            <div class="mt-2">
               <button type="submit" class="btn btn-primary">Guardar usuarios</button>
             </div>
           </form>
 
-        <br>
+
       </div>
 
     </div>
@@ -367,7 +367,17 @@
 
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<script>
+  var headerColorAdministrador = "[[${headerColorAdministrador}]]";
+  localStorage.setItem('headerColorAdministrador', headerColorAdministrador);
 
+  function updateHeaderColorAdministrador() {
+    var color = headerColorAdministrador;
+    document.getElementById('header').style.backgroundColor = color;
+  }
+
+  updateHeaderColorAdministrador();
+</script>
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
 <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -388,7 +398,10 @@
 <script>
   $(document).ready(function () {
     $('#datatable').DataTable({
-
+      lengthMenu: [
+        [8,15,20],
+        [8,15,20],
+      ],
       "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Ningún registro encontrado",
@@ -404,7 +417,7 @@
           "previous": "Anterior",
         }
       },
-
+      "pageLength": 8,
       "columnDefs": [
         {"margin-bottom": "10px"}
       ]
