@@ -141,58 +141,13 @@
                                                                            class="bi-play-fill"></i>
                                                                     </a>
 
-                                                                    <a href="#" style="width: max-content" data-bs-toggle="tooltip" data-bs-placement="top" title="Enviar cuestionario" class="btn btn-warning" data-toggle="modal" data-target="#formularioModal">
+                                                                    <a th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}" style="width: max-content" data-bs-toggle="tooltip" data-bs-placement="top" title="Enviar cuestionario" class="btn btn-warning">
                                                                         <i class="bi-file-text-fill"></i>
                                                                     </a>
 
                                                                     <!-- Modal -->
-                                                                    <div class="modal fade" id="formularioModal" tabindex="-1" role="dialog" aria-labelledby="formularioModalLabel" aria-hidden="true">
-                                                                        <div class="modal-dialog" role="document">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header">
-                                                                                    <h5 class="modal-title" id="formularioModalLabel">Lista de cuestionarios</h5>
-                                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                    </button>
-                                                                                </div>
-                                                                                <div class="modal-body">
-                                                                                    <!-- Aquí puedes agregar los campos del formulario -->
-                                                                                    <form>
-                                                                                        <table class="table ">
-                                                                                            <thead style="text-align: left">
-                                                                                                <tr>
-                                                                                                    <th scope="col">#</th>
-                                                                                                    <th scope="col">Nombre</th>
-
-                                                                                                </tr>
-                                                                                            </thead>
 
 
-                                                                                            <tbody style="text-align: left">
-                                                                                                <tr th:each="cuestionario,obj: ${listaCuestionarios}">
-
-                                                                                                    <td th:text="${obj.index+1}"></td>
-
-
-                                                                                                    <td style="font-size: 1rem"
-                                                                                                        th:text="${'Cuestionario ' }">
-
-                                                                                                    </td>
-
-
-
-                                                                                                </tr>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </form>
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button type="button" class="btn btn-primary">Guardar</button>
-                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
 
 
                                                                 </div>
@@ -483,6 +438,12 @@
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl)
             })
+        </script>
+        <script>
+            function toggleDiv() {
+                var div = document.getElementById("miDiv");
+                div.style.display = div.style.display === "none" ? "block" : "none";
+            }
         </script>
     </body>
 

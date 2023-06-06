@@ -109,8 +109,31 @@ public class DoctorController {
         return "doctor/DoctorDashboard";
     }
 
+    @GetMapping("/enviarCuestionario")
+    public String enviarCuestionario(HttpSession session, Authentication authentication, Model model,@RequestParam("id") int id) {
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
+
+        Optional<Cita> optionalCita = citaRepository.findById(id);
+        List<Cuestionario> listaCuestionarios= cuestionarioRepository.findAll();
+
+        if (optionalCita.isPresent()) {
+            Cita cita = optionalCita.get();
+
+            model.addAttribute("listaCuestionarios", listaCuestionarios);
+            model.addAttribute("cita", cita);
+
+            return "doctor/DoctorEnviarCuestionario";
+        } else {
+            return "redirect:/doctor/dashboard";
+        }
+
+
+
+    }
+
     @PostMapping("/guardarCuestionario")
-    public String guardaruestionario(HttpSession session, Authentication authentication, Model model, @Valid CuestionarioPorCita cuestionarioPorCita, BindingResult bindingResult) {
+    public String guardaCuestionario(HttpSession session, Authentication authentication, Model model, @Valid CuestionarioPorCita cuestionarioPorCita, BindingResult bindingResult) {
         Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
         session.setAttribute("doctor",doctor_session);
 
@@ -123,15 +146,6 @@ public class DoctorController {
             return "redirect:/doctor/dashboard";
         }
     }
-
-    @PostMapping("/listaCuestionarios")
-    public String listaCuestionarios(HttpSession session, Authentication authentication, Model model, @Valid Cita cita, BindingResult bindingResult) {
-        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
-        session.setAttribute("doctor",doctor_session);
-
-        return "doctor/DoctorDashboard";
-    }
-
 
 
     @GetMapping("/recibo")
