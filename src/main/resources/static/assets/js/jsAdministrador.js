@@ -7,6 +7,10 @@
 */
 
 /*mis js*/
+//validar form de descarga
+
+//fin validar form descarga
+
 //validar dni
 $(document).ready(function() {
   $('#dni').on('input', function() {
@@ -34,10 +38,9 @@ $(document).ready(function() {
 function openFilterModal() {
   $('#filterModal').modal('show');
 }
+//funcion para abrir el popu de descarga completada
 
-function openFilterModale() {
-  $('#generado').modal('show');
-}
+
 
 // Función para mostrar u ocultar los campos de filtrado según la opción seleccionada
 function toggleFilterOptions() {

@@ -221,12 +221,12 @@
                         <hr class="dropdown-divider">
                     </li>
 
-                    <li>
+                    <!--<li>
                         <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
                             <i class="bi bi-person"></i>
                             <span>Mi Perfil</span>
                         </a>
-                    </li>
+                    </li>-->
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -247,10 +247,12 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar Sesión</span>
-                        </a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Cerrar Sesión</span>
+                            </button>
+                        </form>
                     </li>
 
                 </ul><!-- End Profile Dropdown Items -->
@@ -391,7 +393,7 @@
 
                     <!-- Top Selling -->
                     <div class="col-12">
-                        <div class="card top-selling container px-4" style="min-height:500px">
+                        <div class="card top-selling container px-4" style="min-height:551px">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
@@ -428,6 +430,8 @@
                                                                 <option value="">Seleccionar seguro</option>
                                                                 <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                                                             </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
+
                                                         </div>
                                                         <div id="porEspecialidad" class="mb-3" style="display: none;">
                                                             <label for="specialtyInput" class="form-label">Especialidad</label>
@@ -435,6 +439,7 @@
                                                                 <option value="">Seleccionar especialidad</option>
                                                                 <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
                                                             </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
                                                         </div>
                                                         <div id="porTipoPago" class="mb-3" style="display: none;">
                                                             <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
@@ -444,6 +449,7 @@
                                                                 <option value="Tarjeta">Tarjeta</option>
                                                                 <!--<option value="3">Transferencia</option>-->
                                                             </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
                                                         </div>
                                                         <div id="porFecha" class="mb-3" style="display: none;">
                                                             <label for="porfechareporte" class="form-label">Todo</label>
@@ -453,12 +459,13 @@
                                                                 <option value="2">Último mes</option>
                                                                 <option value="3">Últimos tres meses</option>
                                                             </select>
+                                                            <div class="invalid-feedback">Campos obligatorios</div>
                                                         </div>
 
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                                            <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado">Descargar</button>
+                                                            <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado2" >Descargar</button>
                                                             <select class="form-select" name="formato">
                                                                 <option value="1">Excel</option>
                                                                 <option value="2">PDF </option>
@@ -473,7 +480,7 @@
                                     </div>
                                     <!-- Pop-up de okok reporte -->
                                     <!-- Pop-up de generación de reporte-->
-                                    <div class="modal fade" id="generado" tabindex="-1" aria-labelledby="generadoLabel" aria-hidden="true">
+                                    <div class="modal fade" id="generado2" tabindex="-1" aria-labelledby="generadoLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -507,7 +514,7 @@
                                             <th>Seguro</th>
                                             <th>Fecha</th>
                                             <th>Forma de Pago</th>
-                                            <th></th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -519,7 +526,7 @@
                                             <td th:text="${ingreso.getNombreseguro()}"></td>
                                             <td th:text="${#temporals.format(ingreso.getFechacancelada(), 'dd-MM-yyyy')}"></td>
                                             <td th:text="${ingreso.getTipopago()}"></td>
-                                            <th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>
+                                            <!--<th><a class="btn btn-outline-secondary rounded-pill text-decoration-none" th:href="@{/administrador/finanzas-recibos}" target="_blank">Ver recibo</a></th>-->
                                         </tr>
 
                                         </tbody>
@@ -672,8 +679,8 @@
     $(document).ready(function () {
         $('#datatable').DataTable({
             lengthMenu: [
-                [5,10,20],
-                [5,10,20],
+                [8,10,20],
+                [8,10,20],
             ],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
@@ -690,7 +697,7 @@
                     "previous": "Anterior",
                 }
             },
-            "pageLength": 5,
+            "pageLength": 8,
             "columnDefs": [
                 {"margin-bottom": "10px"}
             ]
