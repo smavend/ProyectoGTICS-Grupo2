@@ -519,7 +519,7 @@ public class DoctorController {
                 doctor.setFotocontenttype("image/jpg");
 
                 doctorRepository.save(doctor);
-                return "redirect:/doctor/perfil";
+                return "redirect:/doctor/perfil/editar?id=" + doctor.getId_doctor();
             } catch (IOException e) {
                 e.printStackTrace();
                 attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
