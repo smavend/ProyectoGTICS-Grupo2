@@ -222,12 +222,12 @@
             <hr class="dropdown-divider">
           </li>
 
-          <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
-              <i class="bi bi-person"></i>
-              <span>Mi Perfil</span>
-            </a>
-          </li>
+         <!--<li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
+                            <i class="bi bi-person"></i>
+                            <span>Mi Perfil</span>
+                        </a>
+                    </li>-->
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -324,7 +324,7 @@
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
                     <label>DNI</label>
-                    <input type="text" class="form-control" th:field="*{idPaciente}" th:classappend="${#fields.hasErrors('idPaciente')? 'is-invalid':''}" >
+                    <input type="text" id="dni" class="form-control" th:field="*{idPaciente}" th:classappend="${#fields.hasErrors('idPaciente')? 'is-invalid':''}" >
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}" th:errors="*{idPaciente}" ></div>
                   </div>
                   <div class="col-md-12 mb-3">
@@ -334,7 +334,7 @@
                   </div>
                   <div class="col-md-12 mb-3">
                     <label >Teléfono</label>
-                    <input type="text" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')? 'is-invalid':''}">
+                    <input type="text" id="telefono" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')? 'is-invalid':''}">
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" ></div>
                   </div>
 
@@ -436,7 +436,7 @@
 <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
 <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
-
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <!-- Agregamos las librerías de jQuery UI para crear el calendario -->
 

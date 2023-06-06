@@ -2,6 +2,7 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.QRCodeGenerator;
 import com.google.zxing.WriterException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,13 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
@@ -36,9 +34,10 @@ public class HomeController {
     final TemporalRepository temporalRepository;
     final AlergiaRepository alergiaRepository;
     final TareaRepository tareaRepository;
+    final TokenRepository tokenRepository;
 
 
-    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository) {
+    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository, TokenRepository tokenRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.administradorRepository = administradorRepository;
@@ -48,24 +47,13 @@ public class HomeController {
         this.temporalRepository = temporalRepository;
         this.alergiaRepository = alergiaRepository;
         this.tareaRepository = tareaRepository;
+        this.tokenRepository = tokenRepository;
     }
 
     @GetMapping("/")
-    public String principal(Model model, HttpServletRequest request) throws UnknownHostException {
-        InetAddress address = InetAddress.getLocalHost();
-
-        byte[] bIPAddress = address.getAddress();
-
-        String sIPAddress = "";
-
-        for (int i = 0; i < bIPAddress.length; i++){
-            if (i>0) {
-                sIPAddress += ".";
-            }
-            int unsignedByte = bIPAddress[i] & 0xFF;
-            sIPAddress += unsignedByte;
-        }
-        String link = sIPAddress+":"+request.getLocalPort()+"/signin";
+    public String principal(Model model, HttpServletRequest request){
+        String server = request.getServerName();
+        String link = server+":"+request.getLocalPort()+"/signin";
 
         byte[] image = new byte[0];
         try {
@@ -113,13 +101,37 @@ public class HomeController {
     }
 
 
-    @GetMapping(value = {"/signin","/signin/save"})
-    public String vistaRegistro(Model model, @ModelAttribute("paciente") Paciente paciente){
+    @GetMapping(value = {"/signin/{id}/{token}","/signin", "/signin/save"})
+    public String vistaRegistro(@PathVariable (value = "id", required = false) String id,
+                                @PathVariable (value = "token", required = false) String token,
+                                Model model, @ModelAttribute("paciente") Paciente paciente){
         List<Distrito> list = distritoRepository.findAll();
         List<Seguro> list1 = seguroRepository.findAll();
-        model.addAttribute("distritos", list);
-        model.addAttribute("seguros", list1);
-        return "general/registro";
+        if(id==null && token==null){
+            model.addAttribute("distritos", list);
+            model.addAttribute("seguros", list1);
+            return "general/registro";
+        }else {
+            Optional<Token> posible = tokenRepository.findByIdPacienteAndToken(id, token);
+            if(posible.isPresent()){
+                Token token1 = posible.get();
+                if(LocalDateTime.now().isBefore(token1.getFechaExpiracion()) && temporalRepository.findByDni(id).isPresent()){
+                    Temporal temporal = temporalRepository.findByDni(id).get();
+                    paciente.setIdPaciente(temporal.getDni());
+                    paciente.setNombre(temporal.getNombre());
+                    paciente.setApellidos(temporal.getApellidos());
+                    paciente.setCorreo(temporal.getCorreo());
+                    model.addAttribute("distritos", list);
+                    model.addAttribute("seguros", list1);
+                    model.addAttribute("token", "existe");
+                    return "general/registro";
+                }else {
+                    return "general/tokenExpirado";
+                }
+            }else {
+                return "general/registro";
+            }
+        }
     }
 
     @PostMapping("/signin/save")
@@ -127,7 +139,6 @@ public class HomeController {
                                    @RequestParam ("radios") String radio,
                                    @RequestParam ("alergias") String alergias,
                                    Model model,
-                                   RedirectAttributes attr,
                                    @ModelAttribute("paciente") @Valid Paciente paciente,
                                    BindingResult bindingResult){
         List<Distrito> list = distritoRepository.findAll();
@@ -149,10 +160,10 @@ public class HomeController {
         }
         List<Temporal> temp = temporalRepository.findAll();
         for (Temporal t : temp) {
-            if (t.getDni().equals(paciente.getIdPaciente())) {
+            if (t.getDni().equals(paciente.getIdPaciente()) && t.getLlenado()==1) {
                 existDni1 = true;
                 break;
-            } else if (t.getCorreo().equals(paciente.getCorreo())) {
+            } else if (t.getCorreo().equals(paciente.getCorreo()) && t.getLlenado()==1) {
                 existCorreo1 = true;
                 break;
             }
@@ -176,31 +187,44 @@ public class HomeController {
             } else{
                 paciente.setGenero("Femenino");
             }
-            paciente.setEstado(3);
-            paciente.setFecharegistro(LocalDateTime.now());
 
-            pacienteRepository.save(paciente);
+            Optional<Temporal> temp1 = temporalRepository.findByDni(paciente.getIdPaciente());
 
-            Tarea tarea = new Tarea();
-            tarea.setFecha(LocalDateTime.now());
-            tarea.setPaciente(paciente);
-            tarea.setEstado(1);
-            tarea.setTipo(1);
-            tareaRepository.save(tarea);
-
-            if(radio.equals("1")){
-                String[] alergiasArray = alergias.split(",");
-                String alergia = "";
-                Alergia alergia1 = null;
-                for(int i = 0; i<alergiasArray.length; i++){
-                    alergia = alergiasArray[i].trim();
-                    alergia = alergia.replaceAll(" +"," ");
-                    if(!alergia.equals(" ") && !alergia.equals("")){
-                        alergia = alergia.substring(0,1).toUpperCase() + alergia.substring(1).toLowerCase();
-                        alergia1 = new Alergia();
-                        alergia1.setNombre(alergia);
-                        alergia1.setPaciente(paciente);
-                        alergiaRepository.save(alergia1);
+            if(temp1.isPresent()){
+                Temporal temporal = temp1.get();
+                temporal.setDistrito(paciente.getDistrito());
+                temporal.setFecha_nacimiento(paciente.getFechanacimiento());
+                temporal.setLlenado(1);
+                temporal.setSeguro(paciente.getSeguro());
+                temporal.setTelefono(paciente.getTelefono());
+                temporal.setDireccion(paciente.getDireccion());
+                temporal.setGenero(paciente.getGenero());
+                temporalRepository.save(temporal);
+                tokenRepository.deleteById(temporal.getDni());
+            }else {
+                paciente.setEstado(3);
+                paciente.setFecharegistro(LocalDateTime.now());
+                pacienteRepository.save(paciente);
+                Tarea tarea = new Tarea();
+                tarea.setFecha(LocalDateTime.now());
+                tarea.setPaciente(paciente);
+                tarea.setEstado(1);
+                tarea.setTipo(1);
+                tareaRepository.save(tarea);
+                if(radio.equals("1")){
+                    String[] alergiasArray = alergias.split(",");
+                    String alergia;
+                    Alergia alergia1;
+                    for (String s : alergiasArray) {
+                        alergia = s.trim();
+                        alergia = alergia.replaceAll(" +", " ");
+                        if (!alergia.equals(" ") && !alergia.equals("")) {
+                            alergia = alergia.substring(0, 1).toUpperCase() + alergia.substring(1).toLowerCase();
+                            alergia1 = new Alergia();
+                            alergia1.setNombre(alergia);
+                            alergia1.setPaciente(paciente);
+                            alergiaRepository.save(alergia1);
+                        }
                     }
                 }
             }

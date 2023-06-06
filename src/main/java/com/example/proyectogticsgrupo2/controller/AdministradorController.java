@@ -3,10 +3,14 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.entity.*;
+import com.example.proyectogticsgrupo2.metodos.ReporteExcel;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,14 +25,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/administrador")
@@ -45,7 +51,12 @@ public class AdministradorController {
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
     final SecurityConfig securityConfig;
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig) {
+
+    final StylevistasRepository stylevistasRepository;
+
+
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig,StylevistasRepository stylevistasRepository) {
+
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.seguroRepository = seguroRepository;
@@ -57,6 +68,7 @@ public class AdministradorController {
         this.credencialesRepository = credencialesRepository;
         this.temporalRepository = temporalRepository;
         this.securityConfig = securityConfig;
+        this.stylevistasRepository = stylevistasRepository;
     }
     //#####################################33
     @GetMapping("/dashboard")
@@ -65,18 +77,110 @@ public class AdministradorController {
         List<Doctor> listaDoctores = doctorRepository.findAll();
         model.addAttribute("listaDoctores",listaDoctores);
         model.addAttribute("listaPaciente", listaPaciente);
+
+        Optional<Stylevistas> style = stylevistasRepository.findById(2);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+            model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+            /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
         return "administrador/dashboard";
     }
     @GetMapping("/finanzas")
     public String finanzas(Model model){
         List<AdministradorIngresos> listaIngresos = administradorRepository.obtenerIgresos();
         model.addAttribute("listaIngresos",listaIngresos);
+        //###########################################################
+        model.addAttribute("listaSeguros", seguroRepository.findAll());
+        model.addAttribute("listaEspecialidades", especialidadRepository.findAll());
+
         return "administrador/finanzas";}
+
+    @RequestMapping("/reportes")
+    public ResponseEntity<Resource> generarReportes(@RequestParam("tiporeporte") String tiporeporte, @RequestParam("tipopago") String tipopago,
+                                                    @RequestParam("seguro") String seguro, @RequestParam("especialidad") String especialidad,
+                                                    @RequestParam("todo") String todo, @RequestParam("formato") String formato){
+
+
+        ReporteExcel reporte = new ReporteExcel();
+        switch (tiporeporte){
+            case "5":
+                if (todo.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorIngresos> lista = administradorRepository.obtenerIgresos();
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(lista,"ReporteGeneral");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(lista,"ReporteGeneral");
+                            return responsePdf;
+                    }
+                }
+            case "1":
+                if (seguro.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorIngresos> listaIngresosPorSeguro = administradorRepository.obtenerIgresosPorSeguro(Integer.parseInt(seguro));
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosPorSeguro,"ReporteIngresosPorSeguro");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosPorSeguro,"ReporteIngresosPorSeguro");
+                            return responsePdf;
+                    }
+                }
+
+
+            case "2":
+                if (especialidad.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorIngresos> listaIngresosPorEspecialidad = administradorRepository.obtenerIgresosPorEspecialidad(Integer.parseInt(especialidad));
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosPorEspecialidad,"ReporteIngresosEspecialidad");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosPorEspecialidad,"ReporteIngresosEspecialidad");
+                            return responsePdf;
+                    }
+                }
+            case "3":
+                if (tipopago.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorIngresos> listaIngresosTipoPago = administradorRepository.obtenerIgresosPorTipoPago(tipopago);
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarInformeIngresosExcel(listaIngresosTipoPago,"ReporteIngresosTipoPago");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generateIncomeReportPDF(listaIngresosTipoPago,"ReporteIngresosTipoPago");
+                            return responsePdf;
+                    }
+                }
+
+
+            default:
+                return null;
+        }
+    }
     @GetMapping("/config")
     public String config(){return "administrador/config";}
     @GetMapping("/registro")
     public String registro(Model model){
-        List<Temporal> listaTemporal = temporalRepository.findAll();
+        List<Temporal> listaTemporal = temporalRepository.listatemporalesLlenados();
         model.addAttribute("listaTemporal",listaTemporal);
         return "administrador/rptaForm";}
     @PostMapping("/guardarTemporales")
@@ -116,7 +220,7 @@ public class AdministradorController {
                     int unsignedByte = bIPAddress[i] & 0xFF;
                     sIPAddress += unsignedByte;
                 }
-                String link = sIPAddress+":"+request.getLocalPort();
+                String link = request.getServerName()+":"+request.getLocalPort();
 
                 correoService.props(paciente.getCorreo(),paciente.getNombre(), link);
                 attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
@@ -212,10 +316,10 @@ public class AdministradorController {
                 int unsignedByte = bIPAddress[i] & 0xFF;
                 sIPAddress += unsignedByte;
             }
-            String link = sIPAddress+":"+request.getLocalPort();
+            String link = request.getServerName()+":"+request.getLocalPort();
 
             correoService.props(paciente.getCorreo(),passRandom, link);
-            attr.addFlashAttribute("msgPaci","Paciente creado exitosamente");
+            attr.addFlashAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
     }
@@ -292,11 +396,11 @@ public class AdministradorController {
                 int unsignedByte = bIPAddress[i] & 0xFF;
                 sIPAddress += unsignedByte;
             }
-            String link = sIPAddress+":"+request.getLocalPort();
+            String link = request.getServerName()+":"+request.getLocalPort();
             System.out.println(link);
             System.out.println("servername:"+domain);
             correoService.props(doctor.getCorreo(),passRandom, link);
-            attr.addFlashAttribute("msgDoc","Doctor creado exitosamente");
+            attr.addFlashAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
             return "redirect:/administrador/dashboard";
         }
     }
@@ -331,7 +435,7 @@ public class AdministradorController {
             Paciente p = opt.get();
 
             byte[] imagenComoBytes = p.getFoto();
-            //agregue desde aca
+            /*//agregue desde aca
             if(imagenComoBytes==null){
                 try {
                     File foto = new File("source/userPorDefecto.jpg");
@@ -359,7 +463,7 @@ public class AdministradorController {
                 }
             }else {
 
-            } //agregue hasta aca
+            } //agregue hasta aca*/
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
@@ -386,7 +490,7 @@ public class AdministradorController {
 
             byte[] imagenComoBytes = doc.getFoto();
             //agregue desde aca
-            if(imagenComoBytes==null){
+            /*if(imagenComoBytes==null){
                 try {
                     File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
                     FileInputStream input = new FileInputStream(foto);
@@ -413,7 +517,7 @@ public class AdministradorController {
                 }
             }else {
 
-            } //agregue hasta aca
+            } //agregue hasta aca*/
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(

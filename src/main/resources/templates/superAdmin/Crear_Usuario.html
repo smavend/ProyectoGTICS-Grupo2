@@ -236,7 +236,53 @@
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
+<script>
+    var darkmode = localStorage.getItem('dark-mode') === 'true';
+    var headerColor = "[[${headerColor}]]";
+    console.log(headerColor);
+    localStorage.setItem('headerColor', headerColor);
 
+/*
+    console.log(darkmode ? 'Modo oscuro activado' : 'Modo claro activado');
+    var sidebarColor = "[[${sidebarColor}]]";
+    localStorage.setItem('sidebarColor', sidebarColor);
+    var darkModeButton = document.getElementById('dark-mode-button');*/
+    function updateBodyClasses() {
+        document.body.classList.toggle('dark-mode', darkmode);
+        document.body.classList.toggle('light-mode', !darkmode);
+    }
+    function updateHeaderColor() {
+        var color = darkmode ? '#363537' : headerColor;
+        document.getElementById('header').style.backgroundColor = color;
+        console.log(darkmode ? 'saludo' : 'despedida');
+    }
+   /* function updateSidebarColor() {
+        var color = darkmode ? '#363537' : sidebarColor;
+        document.getElementById('sidebar').style.backgroundColor = color;
+    }*/
+    function setDarkMode(newValue) {
+        darkmode = newValue;
+        localStorage.setItem('dark-mode', newValue);
+        updateBodyClasses();
+        updateHeaderColor();
+/*
+        updateSidebarColor(); // Añadir esta línea
+*/
+
+    }
+    updateBodyClasses();
+    updateHeaderColor();
+/*
+    updateSidebarColor(); // Añadir esta línea
+*/
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('dark-mode-button').checked = darkmode;
+        document.getElementById('dark-mode-button').addEventListener('change', function () {
+            setDarkMode(this.checked);
+        });
+    });
+</script>
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
 <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -249,63 +295,7 @@
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
-
-<script th:src="@{/assets/js/paginacion_administrador_superadmin.js}"></script>
-<script th:src="@{/assets/js/paginacion_administrativo_superadmin.js}"></script>
-<script th:src="@{/assets/js/paginacion_doctor_superadmin.js}"></script>
-<script th:src="@{/assets/js/paginacion_paciente_superadmin.js}"></script>
 <script th:src="@{/assets/js/CrearUsuario.js}"></script>
-<script th:src="@{/assets/js/darkmode.js}"></script>
-
-<script>
-    var headerColor = "[[${headerColor}]]";
-    console.log(headerColor);
-    localStorage.setItem('headerColor', headerColor);
-    var darkmode = localStorage.getItem('dark-mode');
-    console.log(darkmode);
-</script>
-<script>
-    window.addEventListener('load', (event) => {
-        var darkmode = localStorage.getItem('dark-mode');
-        var headerColor = localStorage.getItem('headerColor');
-
-        if (darkmode === 'true') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('dark-mode-button').checked = true;
-            updateHeaderColor("#363537", true); // Llamar directamente con color en modo oscuro
-        } else {
-            document.body.classList.add('light-mode');
-            updateHeaderColor(headerColor, false); // Llamar con color en modo claro
-        }
-
-        console.log(headerColor);
-    });
-
-    document.getElementById('dark-mode-button').addEventListener('change', function () {
-        if (this.checked) {
-            localStorage.setItem('dark-mode', 'true');
-            document.body.classList.remove('light-mode');
-            document.body.classList.add('dark-mode');
-            updateHeaderColor("#363537", true);
-        } else {
-            localStorage.setItem('dark-mode', 'false');
-            document.body.classList.remove('dark-mode');
-            document.body.classList.add('light-mode');
-            var headerColor = localStorage.getItem('headerColor');
-            updateHeaderColor(headerColor, false);
-        }
-    });
-
-    function updateHeaderColor(color, isDarkMode) {
-        if (isDarkMode) {
-            $('#header').css('background-color', '#363537');
-            console.log('saludo');
-        } else {
-            $('#header').css('background-color', color);
-            console.log('despedida');
-        }
-    }
-</script>
 
 
 </body>

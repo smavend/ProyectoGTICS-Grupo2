@@ -20,19 +20,23 @@ public class Temporal {
     private int id_temporal;
 
     @Column(nullable = false)
+    @NotBlank
     @Size(min = 8, max = 8, message = "Debe ingresar un número de 8 dígitos")
     @Digits(integer = 8, fraction = 0)
     private String dni;
 
     @Column(nullable = false)
+    @NotBlank
     @Size(min = 2,max = 45, message = "Debe ingresar un nombre entre 2 y 45 caracteres")
     private String nombre;
 
     @Column(nullable = false)
+    @NotBlank
     @Size(min = 2, max = 45,message = "Debe ingresar los apellidos entre 2 y 45 caracteres")
     private String apellidos;
 
     @Column(nullable = false)
+    @NotBlank
     @Email(message = "Debe ingresar un correo válido")
     private String correo;
 
@@ -54,5 +58,9 @@ public class Temporal {
     @JoinColumn(name = "distrito_id_distrito")
     private Distrito distrito;
 
+    private String direccion;
 
+    private int estado;
+
+    private String genero;
 }
