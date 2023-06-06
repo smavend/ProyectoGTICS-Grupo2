@@ -150,7 +150,10 @@ public class DoctorController {
 
 
     @GetMapping("/verRecibo")
-    public String verRecibo(Model model, @RequestParam("id") int id_cita, @RequestParam("id2") String id_doctor) {
+    public String verRecibo(Model model, @RequestParam("id") int id_cita, @RequestParam("id2") String id_doctor,HttpSession session, Authentication authentication) {
+
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
 
         Optional<ListaRecibosDTO> optionalListaRecibosDTO = citaRepository.buscarRecibosPorIdCitaIdDoctor(id_doctor, id_cita);
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id_doctor);
