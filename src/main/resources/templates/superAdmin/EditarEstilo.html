@@ -74,7 +74,7 @@
                     <div class="mb-3">
                         <label for="usuarioInput" class="form-label">Usuario</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="usuarioInput" th:field="*{user}">
+                            <input type="text" class="form-control" id="usuarioInput" th:field="*{user}" readonly>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -84,52 +84,23 @@
                                 <input type="text" class="form-control" id="headerInput" th:field="*{header}">
                             </div>
                             <div class="col-sm-4">
-                                <input type="color" class="form-control form-control-color" id="exampleColorInput"
-                                       th:attr="value=${header}" title="Choose your color">
+                                <input type="color" class="form-control form-control-color" id="exampleColorInput" th:attr="value=${header}" title="Choose your color" style="display: none;">
                             </div>
+                            <script>
+                                window.addEventListener('DOMContentLoaded', function () {
+                                    var exampleColorInput = document.getElementById('exampleColorInput');
+                                    exampleColorInput.style.display = 'block';
+                                });
+                            </script>
                         </div>
                     </div>
-                  <!--  <div class="mb-3">
-                        <label for="headerInput" class="form-label">Sidebar</label>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" id="SidebarInput" th:field="*{sidebar}">
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="color" class="form-control form-control-color" id="exampleSidebarColorInput"
-                                       th:attr="value=${sidebar}" title="Choose your color">
-                            </div>
-                        </div>
-                    </div>-->
-                    <div class="mb-3">
-                        <label for="footerInput" class="form-label">Footer</label>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" id="footerInput" th:field="*{footer}">
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="color" class="form-control form-control-color" id="exampleColorInput2"
-                                       th:attr="value=${footer}" title="Choose your color">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="backgroundInput" class="form-label">Background</label>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" id="backgroundInput" th:field="*{background}">
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="color" class="form-control form-control-color" id="exampleColorInput3"
-                                       th:attr="value=${background}" title="Choose your color">
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Resto del código -->
                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 </form>
             </div>
         </section>
     </section>
+
 
     <script>
         window.onload = function () {
@@ -165,6 +136,7 @@
 
         };
     </script>
+
 
 
 </main><!-- End #main -->
