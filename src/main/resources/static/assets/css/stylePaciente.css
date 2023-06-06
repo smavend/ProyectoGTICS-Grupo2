@@ -1408,6 +1408,25 @@ p{
     background-color: #c0202e;
 }
 
+.mensajeDeVacio{
+    margin: 190px auto;
+    text-align: center;
+}
+
+@media (max-width: 576px) {
+    .mensajeDeVacio{
+        margin: 60px auto;
+        text-align: center;
+    }
+}
+
+@media (max-width: 992px) and (min-width: 577px) {
+    .mensajeDeVacio{
+        margin: 130px auto;
+        text-align: center;
+    }
+}
+
 /* Navbar */
 
 .tituloNavBar{
