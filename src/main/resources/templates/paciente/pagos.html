@@ -83,7 +83,7 @@
                                         <div class="modal-body">
                                             <form method="post" th:action="@{/Paciente/guardarPago}">
                                                 <input type="hidden" th:value="${pago.id}" name="idPago">
-                                                <div class="mb-3">
+                                                <div class="mb-3 w-75">
                                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -93,7 +93,7 @@
                                                         <input type="text" class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3 w-75">
                                                     <label class="form-label">Número de la tarjeta</label>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -126,7 +126,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary text center">Pagar</button>
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -178,7 +180,7 @@
                                         <div class="modal-body">
                                             <form method="post" th:action="@{/Paciente/guardarPago}">
                                                 <input type="hidden" th:value="${pago.id}" name="idPago">
-                                                <div class="mb-3">
+                                                <div class="mb-3 w-75">
                                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -188,7 +190,7 @@
                                                         <input type="text" class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3 w-75">
                                                     <label class="form-label">Número de la tarjeta</label>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -221,7 +223,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary text center">Pagar</button>
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -283,7 +287,7 @@
                                         <div class="modal-body">
                                             <form method="post" th:action="@{/Paciente/guardarPago}">
                                                 <input type="hidden" th:value="${pago.id}" name="idPago">
-                                                <div class="mb-3">
+                                                <div class="mb-3 w-75">
                                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -293,7 +297,7 @@
                                                         <input type="text" class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3 w-75">
                                                     <label class="form-label">Número de la tarjeta</label>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -326,8 +330,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary text center">Pagar</button>
-                                            </form>
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
+                                                </div>                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -357,7 +362,7 @@
                         </div>
                         <div class="modal-body">
                             <form>
-                                <div class="mb-3">
+                                <div class="mb-3 w-75">
                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -366,7 +371,7 @@
                                         <input type="text" class="form-control">
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3 w-75">
                                     <label class="form-label">Número de la tarjeta</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -396,7 +401,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Pagar</button>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -435,7 +442,7 @@
                         processing: "Tratamiento en curso...",
                         search: "Buscar&nbsp;:",
                         lengthMenu: " ",
-                        info: "",
+                        info: "Página _PAGE_ de _PAGES_",
                         infoEmpty: "No existen datos.",
                         infoFiltered: "(filtrado de _MAX_ elementos en total)",
                         infoPostFix: "",
@@ -454,7 +461,7 @@
                         }
                     },
                     scrollY: 400,
-                    lengthMenu: [[5, -1], [5, "All"]],
+                    lengthMenu: [ [5, -1], [5, "All"] ],
                 });
             });
         </script>
