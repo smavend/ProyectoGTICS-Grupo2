@@ -10,19 +10,22 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 
 public class ReporteExcel {
 
 
-    public void generarInformeIngresos(List<AdministradorIngresos> ingresos, String nombreDoc) {
+    public ResponseEntity<Resource> generarInformeIngresos(List<AdministradorIngresos> ingresos, String nombreDoc) {
 
 
         // Crear un nuevo libro de Excel
@@ -82,19 +85,28 @@ public class ReporteExcel {
             sheet.autoSizeColumn(i);
         }
 
-
-        String carpetaDescargas = System.getProperty("user.home") + "/Downloads/";
-
-        // Ruta completa del archivo en la carpeta de descargas
-        String rutaArchivo = carpetaDescargas + "Reporte"+nombreDoc+".xlsx";
-        // Guardar el libro de Excel en un archivo
-        try (OutputStream outputStream = new FileOutputStream(rutaArchivo)) {
+        // Crear un flujo de bytes en memoria para el archivo
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            // Escribir el libro de Excel en el flujo de bytes
             workbook.write(outputStream);
-
+            workbook.close();
         } catch (IOException e) {
             e.printStackTrace();
-
         }
+
+        // Crear un recurso de tipo ByteArrayResource con los bytes del archivo
+        ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
+
+        // Configurar las cabeceras de la respuesta HTTP
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreDoc + ".xlsx\"");
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        // Devolver la respuesta con el archivo adjunto y las cabeceras
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
+
     }
 
     public void generateIncomeReport(List<AdministradorIngresos> incomes,String nombreDoc) {
