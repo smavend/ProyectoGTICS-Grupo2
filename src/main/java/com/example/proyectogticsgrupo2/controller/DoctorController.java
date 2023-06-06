@@ -508,41 +508,17 @@ public class DoctorController {
     }
 
     @GetMapping("/perfil/quitarFoto")
-    public String quitarFotoDoctor(@RequestParam(name = "id") String id,
-                                   RedirectAttributes attr) {
+    public String quitarFoto(@RequestParam(name = "id") String idDoctor,
+                             RedirectAttributes attr) {
 
-        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
-            try {
-                File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-                FileInputStream input = new FileInputStream(foto);
-                byte[] bytes;
-                try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) != -1) {
-                        output.write(buffer, 0, length);
-                    }
-                    input.close();
-                    output.close();
-                    bytes = output.toByteArray();
-                }
-
-                doctor.setFoto(bytes);
-                doctor.setFotoname("userPorDefecto.jpg");
-                doctor.setFotocontenttype("image/jpg");
-
-                doctorRepository.save(doctor);
-                return "redirect:/doctor/perfil/editar?id=" + doctor.getId_doctor();
-            } catch (IOException e) {
-                e.printStackTrace();
-                attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
-                return "redirect:/doctor/perfil";
-            }
+            doctorRepository.quitarFoto(doctor.getId_doctor());
+            return "redirect:/doctor/perfil";
         }
 
-        return "redirect:/doctor/perfil";
+        return "redirect:/dctor/perfil";
     }
 
     @GetMapping("/config/actualizarSede")

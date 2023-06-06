@@ -75,10 +75,11 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     Optional<CuestionarioxDoctorDTO> verCuestionario(int id);
 
-    @Query(value = "SELECT id_cita, fin\n" +
+    @Query(value = "SELECT cita.id_cita, cita.fin\n" +
             "FROM proyectogtics.cita\n" +
+            "INNER JOIN proyectogtics.cuestionario_x_cita ON cita.id_cita = cuestionario_x_cita.cita_id_cita\n" +
             "WHERE cita.paciente_id_paciente = ?1" +
-            "    AND cita.estado =?2",nativeQuery = true)
+            "    AND cita.estado = ?2",nativeQuery = true)
     List<EncuestaDoctorDTO> listarFechaEncuesta(String idPaciente, int estado);
 
 }
