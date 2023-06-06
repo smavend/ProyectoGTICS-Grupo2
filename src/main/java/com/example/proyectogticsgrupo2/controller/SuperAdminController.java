@@ -526,7 +526,7 @@ public class SuperAdminController {
             model.addAttribute("listaSedes", listaSedes);
             model.addAttribute("listaEspecialidades", listaEspecialidades);
             // Si hay errores de validación, volver a mostrar el formulario con los mensajes de error
-            return "SuperAdmin/Crear_Usuario";
+            return "superAdmin/Crear_Usuario";
         }
 
 
