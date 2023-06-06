@@ -1482,4 +1482,22 @@ table a:hover {
     transition: all 400ms ease-out;
     margin-right: 8px;
 }
+.botonAceptar{
+    background-color: #0AA1DD;
+    border-radius: 15px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s;
+}
+.botonAceptar{
+    background-color: #0AA1DD;
+    border-radius: 15px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s;
+}
 /*-----------------------------------------*/
