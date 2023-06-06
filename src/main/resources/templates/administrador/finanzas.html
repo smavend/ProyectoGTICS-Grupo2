@@ -410,52 +410,52 @@
                                                     <h5 class="modal-title" id="filterModalLabel">Filtrar reporte</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form method="post" th:action="@{/administrador/reportes}">
-                                                    <div class="modal-body">
+                                                <form method="post" th:ac<div class="modal-body">
 
-                                                        <div class="mb-3">
-                                                            <label for="tiporeporte" class="form-label">Tipo de reporte</label>
-                                                            <select class="form-select" id="tiporeporte" name="tiporeporte" onchange="toggleFilterOptions()">
-                                                                <option value="5" selected>Todo</option>
-                                                                <option value="1">Por seguro</option>
-                                                                <option value="2">Por especialidad</option>
-                                                                <option value="3">Por tipo de pago</option>
-                                                            </select>
-                                                        </div>
-                                                        <div id="porSeguro" class="mb-3" style="display: none;">
-                                                            <label for="insuranceInput" class="form-label">Seguro</label>
-                                                            <select class="form-select" id="insuranceInput" name="seguro">
-                                                                <option value="">Seleccionar seguro</option>
-                                                                <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
-                                                            </select>
-                                                        </div>
-                                                        <div id="porEspecialidad" class="mb-3" style="display: none;">
-                                                            <label for="specialtyInput" class="form-label">Especialidad</label>
-                                                            <select class="form-select" id="specialtyInput" name="especialidad">
-                                                                <option value="">Seleccionar especialidad</option>
-                                                                <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
-                                                            </select>
-                                                        </div>
-                                                        <div id="porTipoPago" class="mb-3" style="display: none;">
-                                                            <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
-                                                            <select class="form-select" id="paymentTypeInput" name="tipopago">
-                                                                <option value="">Seleccionar tipo de pago</option>
-                                                                <option value="Efectivo">Efectivo</option>
-                                                                <option value="Tarjeta">Tarjeta</option>
-                                                                <!--<option value="3">Transferencia</option>-->
-                                                            </select>
-                                                        </div>
-                                                        <div id="porFecha" class="mb-3" style="display: none;">
-                                                            <label for="porfechareporte" class="form-label">Todo</label>
-                                                            <select class="form-select" id="porfechareporte" name="todo">
-                                                                <option value="">Seleccionar</option>
-                                                                <option value="1">Última semana</option>
-                                                                <option value="2">Último mes</option>
-                                                                <option value="3">Últimos tres meses</option>
-                                                            </select>
-                                                        </div>
+                                                <div class="mb-3">
+                                                    <label for="tiporeporte" class="form-label">Tipo de reporte</label>
+                                                    <select class="form-select" id="tiporeporte" name="tiporeporte" onchange="toggleFilterOptions()">
+                                                        <option value="5" selected>Todo</option>
+                                                        <option value="1">Por seguro</option>
+                                                        <option value="2">Por especialidad</option>
+                                                        <option value="3">Por tipo de pago</option>
+                                                    </select>
+                                                </div>
+                                                <div id="porSeguro" class="mb-3" style="display: none;">
+                                                    <label for="insuranceInput" class="form-label">Seguro</label>
+                                                    <select class="form-select" id="insuranceInput" name="seguro">
+                                                        <option value="">Seleccionar seguro</option>
+                                                        <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
+                                                    </select>
+                                                </div>
+                                                <div id="porEspecialidad" class="mb-3" style="display: none;">
+                                                    <label for="specialtyInput" class="form-label">Especialidad</label>
+                                                    <select class="form-select" id="specialtyInput" name="especialidad">
+                                                        <option value="">Seleccionar especialidad</option>
+                                                        <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
+                                                    </select>
+                                                </div>
+                                                <div id="porTipoPago" class="mb-3" style="display: none;">
+                                                    <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
+                                                    <select class="form-select" id="paymentTypeInput" name="tipopago">
+                                                        <option value="">Seleccionar tipo de pago</option>
+                                                        <option value="Efectivo">Efectivo</option>
+                                                        <option value="Tarjeta">Tarjeta</option>
+                                                        <!--<option value="3">Transferencia</option>-->
+                                                    </select>
+                                                </div>
+                                                <div id="porFecha" class="mb-3" style="display: none;">
+                                                    <label for="porfechareporte" class="form-label">Todo</label>
+                                                    <select class="form-select" id="porfechareporte" name="todo">
+                                                        <option value="">Seleccionar</option>
+                                                        <option value="1">Última semana</option>
+                                                        <option value="2">Último mes</option>
+                                                        <option value="3">Últimos tres meses</option>
+                                                    </select>
+                                                </div>
 
-                                                    </div>
+                                            </div>tion="@{/administrador/reportes}">
+
                                                     <div class="modal-footer">
                                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                                             <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado">Descargar</button>

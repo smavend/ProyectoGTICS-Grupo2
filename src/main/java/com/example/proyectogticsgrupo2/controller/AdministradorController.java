@@ -110,18 +110,7 @@ public class AdministradorController {
         return response;
     }
 
-    /*@GetMapping("/generateReporteExcel")
-    public String reporteExcel(){
-        ReporteExcel reporteExcel = new ReporteExcel();
-        reporteExcel.generarInformeIngresos(administradorRepository.obtenerIgresos());
-        return "redirect:/administrador/finanzas";
-    }
-    @GetMapping("/generateReportepdf")
-    public String generateIncomeReport() {
-        ReporteExcel reporteExcel= new ReporteExcel();
-        reporteExcel.generateIncomeReport(administradorRepository.obtenerIgresos());
-        return "redirect:/administrador/finanzas";
-    }*/
+
 
     @GetMapping("/config")
     public String config(){return "administrador/config";}
