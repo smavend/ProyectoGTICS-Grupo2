@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
-    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado,c.seguro_id_seguro \n" +
+    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado,c.seguro_id_seguro,c.foto,c.fotoname,c.fotocontenttype \n" +
             "FROM cita c \n" +
             "INNER JOIN doctor d ON d.id_doctor = c.doctor_id_doctor \n" +
             "INNER JOIN paciente p ON p.id_paciente = c.paciente_id_paciente \n" +
