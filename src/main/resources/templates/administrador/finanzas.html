@@ -413,6 +413,8 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
 
+
+
                                                 <form method="post" th:action="@{/administrador/reportes}" class="row p-4 needs-validation" novalidate>
                                                     <div class="mb-3">
                                                         <label for="tiporeporte" class="form-label">Tipo de reporte</label>
@@ -425,9 +427,9 @@
                                                     </div>
                                                     <div id="porSeguro" class="mb-3" style="display: none;">
                                                         <label for="validationCustom04" class="form-label">Seguro</label>
-                                                        <select class="form-select" id="validationCustom01" required>
+                                                        <select class="form-select" id="validationCustom01" required  name="seguro">
                                                             <option selected disabled value="">Seleccionar seguro</option>
-                                                            <option>...</option>
+                                                            <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                                                         </select>
                                                         <div class="invalid-feedback">
                                                             Por favor seleccione un seguro
@@ -435,9 +437,9 @@
                                                     </div>
                                                     <div id="porEspecialidad" class="mb-3" style="display: none;">
                                                         <label for="validationCustom04" class="form-label">Especialidad</label>
-                                                        <select class="form-select" id="validationCustom02" required>
-                                                            <option selected disabled value="">Seleccionar especialidad</option>
-                                                            <option>...</option>
+                                                        <select class="form-select" id="validationCustom02" required name="especialidad">
+                                                            <option selected disabled  value="">Seleccionar especialidad</option>
+                                                            <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
                                                         </select>
                                                         <div class="invalid-feedback">
                                                            Por favor seleccione una especialidad
@@ -446,9 +448,10 @@
 
                                                     <div id="porTipoPago" class="mb-3" style="display: none;">
                                                         <label for="validationCustom04" class="form-label">Tipo de pago</label>
-                                                        <select class="form-select" id="validationCustom03" required>
+                                                        <select class="form-select" id="validationCustom03" required name="tipopago">
                                                             <option selected disabled value="">Seleccionar tipo de pago</option>
-                                                            <option>...</option>
+                                                            <option value="Efectivo">Efectivo</option>
+                                                            <option value="Tarjeta">Tarjeta</option>
                                                         </select>
                                                         <div class="invalid-feedback">
                                                            Por favor seleccione el tipo de pago
@@ -456,9 +459,11 @@
                                                     </div>
                                                     <div id="porFecha" class="mb-3" style="display: none;">
                                                         <label for="validationCustom04" class="form-label">Todos</label>
-                                                        <select class="form-select" id="validationCustom04" required>
+                                                        <select class="form-select" id="validationCustom04" required name="todo">
                                                             <option selected disabled value="">Seleccionar</option>
-                                                            <option>...</option>
+                                                            <option value="1">Última semana</option>
+                                                            <option value="2">Último mes</option>
+                                                            <option value="3">Últimos tres meses</option>
                                                         </select>
                                                         <div class="invalid-feedback">
                                                             Por favor seleccione una opción

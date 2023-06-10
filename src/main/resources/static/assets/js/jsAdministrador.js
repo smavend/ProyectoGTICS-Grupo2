@@ -8,56 +8,7 @@
 
 /*mis js*/
 //validar form de descarga
-$("#reportForm").submit(function validateForm(event) {
 
-  // Obtener los elementos select del formulario
-  var tiporeporte = document.getElementById("tiporeporte");
-  var insuranceInput = document.getElementById("insuranceInput");
-  var specialtyInput = document.getElementById("specialtyInput");
-  var paymentTypeInput = document.getElementById("paymentTypeInput");
-  var porfechareporte = document.getElementById("porfechareporte");
-
-
-  switch (tiporeporte.value){
-
-    case "5":
-      if(porfechareporte.value==""){
-        event.preventDefault();
-        porfechareporte.classList.add("is-invalid");
-        $('#filterModal').modal('show');
-      } else {
-        return;
-      }
-      break;
-    case "1":
-      if (insuranceInput.value === "") {
-        event.preventDefault();
-        insuranceInput.classList.add("is-invalid");
-        $('#filterModal').modal('show');
-      } else {
-
-        return;
-      }
-      break;
-    case "2":
-      if (specialtyInput.value === "") {
-        specialtyInput.classList.add("is-invalid");
-
-      } else {
-        return;
-      }
-      break;
-    case "3":
-      if (paymentTypeInput.value === "") {
-        paymentTypeInput.classList.add("is-invalid");
-
-      } else {
-        return;
-      }
-      break;
-  }
-
-})
 //fin validar form descarga
 
 //validar dni
