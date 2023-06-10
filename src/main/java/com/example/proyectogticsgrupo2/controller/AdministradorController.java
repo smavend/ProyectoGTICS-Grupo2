@@ -82,7 +82,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
@@ -101,7 +100,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
@@ -192,7 +190,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
@@ -208,7 +205,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
@@ -288,7 +284,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
@@ -382,7 +377,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
@@ -468,7 +462,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
@@ -482,7 +475,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
@@ -495,7 +487,6 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {

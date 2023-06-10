@@ -412,9 +412,9 @@
                                                     <h5 class="modal-title" id="filterModalLabel">Filtrar reporte</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form method="post" th:action="@{/administrador/reportes}">
-                                                    <div class="modal-body">
 
+                                                <form method="post" id="reportForm" th:action="@{/administrador/reportes}">
+                                                    <div class="modal-body">
                                                         <div class="mb-3">
                                                             <label for="tiporeporte" class="form-label">Tipo de reporte</label>
                                                             <select class="form-select" id="tiporeporte" name="tiporeporte" onchange="toggleFilterOptions()">
@@ -428,10 +428,9 @@
                                                             <label for="insuranceInput" class="form-label">Seguro</label>
                                                             <select class="form-select" id="insuranceInput" name="seguro">
                                                                 <option value="">Seleccionar seguro</option>
-                                                                <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
+                                                                <option th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                                                             </select>
                                                             <div class="invalid-feedback">Campos obligatorios</div>
-
                                                         </div>
                                                         <div id="porEspecialidad" class="mb-3" style="display: none;">
                                                             <label for="specialtyInput" class="form-label">Especialidad</label>
@@ -461,25 +460,22 @@
                                                             </select>
                                                             <div class="invalid-feedback">Campos obligatorios</div>
                                                         </div>
-
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                                             <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado" >Descargar</button>
                                                             <select class="form-select" name="formato">
                                                                 <option value="1">Excel</option>
-                                                                <option value="2">PDF </option>
+                                                                <option value="2">PDF</option>
                                                             </select>
-
                                                         </div>
                                                     </div>
-
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- Pop-up de okok reporte -->
-                                    <!-- Pop-up de generación de reporte-->
+                                    <!-- Pop-up de generación de reporte
                                     <div class="modal fade" id="generado" tabindex="-1" aria-labelledby="generadoLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
@@ -494,13 +490,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer mb-1">
-                                                    <!--<button type="button" class="btn btn-primary " data-bs-dismiss="modal" aria-label="Close">OK</button>-->
+                                                    <button type="button" class="btn btn-primary " data-bs-dismiss="modal" aria-label="Close">OK</button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-
+                                    </div>-->
                                     <!--  -->
                                 </div>
 
