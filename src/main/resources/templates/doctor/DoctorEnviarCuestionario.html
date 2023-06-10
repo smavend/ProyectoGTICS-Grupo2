@@ -5,6 +5,7 @@
             .mi-div:hover {
                 background-color: #f2f2f2;
             }
+
             input[readonly] {
                 background-color: #f1f1f1; /* Cambia el color de fondo */
                 cursor: not-allowed; /* Cambia el cursor a no permitido */
@@ -20,8 +21,9 @@
         <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
         <!-- Google Fonts -->
-        <link href="https://fonts.gstatic.com}" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
 
         <!-- Vendor CSS Files -->
         <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -34,7 +36,6 @@
 
         <!-- Template Main CSS File -->
         <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
-        <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
 
     </head>
     <body>
@@ -70,7 +71,7 @@
                                     </a>
                                     <div id="miDiv" class="animated-div card top-selling container"
                                          style="display: none;width: auto">
-                                        <form method="post" th:action="@{/doctor/guardarCuestionario}"
+                                        <form method="post" th:object="${cuestionario}" th:action="@{/doctor/guardarCuestionario}"
                                               class="mt-2">
 
                                             <div class="seccionCuestionario">
@@ -140,7 +141,7 @@
                                                     <h6 th:text="${'11. '+cuestionario.getP11()}"></h6>
                                                 </div>
                                             </div>
-                                            <input type="hidden" th:value="" name="cita"/>
+                                            <input type="hidden" name="id_cuestionario" th:value="${cita.getId_cita()}" />
 
 
                                             <div class="text-center">
@@ -202,9 +203,14 @@
         </script>
         <script>
             function toggleDiv() {
-                var div = document.getElementById("miDiv");
-                div.style.display = div.style.display === "none" ? "block" : "none";
+                var miDiv = document.getElementById("miDiv");
+                if (miDiv.style.display === "none") {
+                    miDiv.style.display = "block";
+                } else {
+                    miDiv.style.display = "none";
+                }
             }
         </script>
+
     </body>
 </html>

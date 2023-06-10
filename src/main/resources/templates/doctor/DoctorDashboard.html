@@ -189,8 +189,9 @@
                                                             <td th:text="${obj.index+1}"></td>
                                                             <td style="text-align: left;">
                                                                 <div style="display: inline-block; border-radius: 50%; border: none; overflow: hidden;">
-                                                                    <img th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}"
-                                                                         style="width: 65px; height: 65px; object-fit: cover;"
+                                                                    <img th:if="${paciente.foto != null}" th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}" style="width: 65px; height: 65px; object-fit: cover;"
+                                                                         alt="Foto del paciente">
+                                                                    <img th:unless="${paciente.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" style="width: 65px; height: 65px; object-fit: cover;"
                                                                          alt="Foto del paciente">
                                                                 </div>
                                                             </td>
