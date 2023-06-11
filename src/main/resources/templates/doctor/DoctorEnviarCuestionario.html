@@ -64,14 +64,12 @@
                                 <td style="font-size: 1rem" th:text="${'Cuestionario ' }"></td>
                                 <td>
                                     <a href="#" id="toggleButton" style="width: max-content"
-                                       onclick="toggleDiv()" data-bs-toggle="tooltip"
-                                       data-bs-placement="top"
-                                       title="Enviar cuestionario" class="btn btn-light">
-                                        <i class="bi-file-text-fill">Mostrar cuestionario</i>
+                                       onclick="toggleDiv()" class="btn btn-light">
+                                        Mostrar cuestionario
                                     </a>
                                     <div id="miDiv" class="animated-div card top-selling container"
                                          style="display: none;width: auto">
-                                        <form method="post" th:object="${cuestionario}" th:action="@{/doctor/guardarCuestionario}"
+                                        <form method="post" th:action="@{/doctor/guardarCuestionario}"
                                               class="mt-2">
 
                                             <div class="seccionCuestionario">
@@ -141,7 +139,10 @@
                                                     <h6 th:text="${'11. '+cuestionario.getP11()}"></h6>
                                                 </div>
                                             </div>
-                                            <input type="hidden" name="id_cuestionario" th:value="${cita.getId_cita()}" />
+
+                                            <input type="hidden" name="cuestionario.id_cuestionario" th:value="${cuestionario.id_cuestionario}">
+                                            <input type="hidden" name="cita.id_cita" th:value="${cita.id_cita}">
+                                            <input type="hidden" name="id.idCuestionario" th:value="${cuestionario.id_cuestionario}">
 
 
                                             <div class="text-center">
@@ -158,10 +159,7 @@
                     </table>
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Guardar</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
+
 
 
             </section>

@@ -127,25 +127,40 @@ public class DoctorController {
         } else {
             return "redirect:/doctor/dashboard";
         }
-
-
-
     }
 
     @PostMapping("/guardarCuestionario")
     public String guardaCuestionario(HttpSession session, Authentication authentication, Model model, @Valid CuestionarioPorCita cuestionarioPorCita, BindingResult bindingResult) {
-        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
-        session.setAttribute("doctor",doctor_session);
+        Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor", doctor_session);
 
         if (bindingResult.hasErrors()) {
-
             return "redirect:/doctor/dashboard";
         } else {
+            // Obtener los valores de los campos hidden
+            Integer cuestionarioId = cuestionarioPorCita.getCuestionario().getId_cuestionario();
+            Integer citaId = cuestionarioPorCita.getCita().getId_cita();
+
+            // Crear instancias de las entidades relacionadas
+            Cuestionario cuestionario = new Cuestionario();
+            cuestionario.setId_cuestionario(cuestionarioId);
+
+            Cita cita = new Cita();
+            cita.setId_cita(citaId);
+
+            // Establecer las relaciones entre las entidades
+            cuestionarioPorCita.setCuestionario(cuestionario);
+            cuestionarioPorCita.setCita(cita);
+            cuestionarioPorCita.getId().setIdCuestionario(cuestionarioId);
+            cuestionarioPorCita.getId().setIdCita(citaId);
+            cuestionarioPorCita.setEstado(0);
 
             cuestionarioPorCitaRepository.save(cuestionarioPorCita);
+
             return "redirect:/doctor/dashboard";
         }
     }
+
 
 
     @GetMapping("/recibo")
