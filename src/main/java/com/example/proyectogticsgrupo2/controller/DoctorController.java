@@ -82,7 +82,7 @@ public class DoctorController {
         List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor.getId_doctor()); //CAMBIAR POR ID SESION
         List<Cuestionario> listaCuestionarios= cuestionarioRepository.findAll();
         ArrayList<String> listaHorarios = new ArrayList<>();
-
+        List<CuestionarioPorCita> cuestionarioPorCitaList=cuestionarioPorCitaRepository.findAll();
 
         // Transformar LocalDateTime a LocalDate
         optionalCita.forEach(cita -> {
@@ -104,6 +104,7 @@ public class DoctorController {
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", optionalCita);
         model.addAttribute("listaPacientes", optionalCita2);
+        model.addAttribute("listaCuestionarioPorCita", cuestionarioPorCitaList);
 
 
         return "doctor/DoctorDashboard";
@@ -116,14 +117,23 @@ public class DoctorController {
 
         Optional<Cita> optionalCita = citaRepository.findById(id);
         List<Cuestionario> listaCuestionarios= cuestionarioRepository.findAll();
+        Optional<CuestionarioPorCita> optionalCuestionarioPorCita = cuestionarioPorCitaRepository.findByIdIdCita(id);
 
         if (optionalCita.isPresent()) {
-            Cita cita = optionalCita.get();
 
-            model.addAttribute("listaCuestionarios", listaCuestionarios);
-            model.addAttribute("cita", cita);
+            if (optionalCuestionarioPorCita.isEmpty()){
+                Cita cita = optionalCita.get();
 
-            return "doctor/DoctorEnviarCuestionario";
+                model.addAttribute("listaCuestionarios", listaCuestionarios);
+                model.addAttribute("cita", cita);
+
+                return "doctor/DoctorEnviarCuestionario";
+
+            }else{
+
+                return "redirect:/doctor/dashboard";
+            }
+
         } else {
             return "redirect:/doctor/dashboard";
         }

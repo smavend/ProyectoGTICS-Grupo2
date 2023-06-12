@@ -42,7 +42,7 @@
         <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
         <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('dashboard')}"></div>
         <main id="main" class="main">
-            <strong th:text="${'Cuestionario '}" style="font-size: 2.5rem"></strong>
+            <strong style="font-size: 2.5rem">Cuestionarios disponibles</strong>
             <section class="seccionPrincipal">
 
                 <strong style="font-size: 1.5rem">Seleccionar el cuestionario a
@@ -54,12 +54,35 @@
                         <thead style="text-align: left">
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Especialidad</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody style="text-align: left">
                             <tr th:each="cuestionario, obj: ${listaCuestionarios}">
                                 <td th:text="${obj.index+1}"></td>
+                                <td>
+                                    <!-- Estructura condicional if -->
+                                    <span th:if="${obj.index+1 == 1}">General</span>
+                                    <span th:if="${obj.index+1 == 2}">Cardiología</span>
+                                    <span th:if="${obj.index+1 == 3}">Traumatología</span>
+                                    <span th:if="${obj.index+1 == 4}">Cirugía cardiovascular</span>
+                                    <span th:if="${obj.index+1 == 5}">Laboratorio</span>
+                                    <span th:if="${obj.index+1 == 6}">Rayos X</span>
+                                    <span th:if="${obj.index+1 == 7}">Ecografía</span>
+                                    <span th:if="${obj.index+1 == 8}">Ginecología</span>
+                                    <span th:if="${obj.index+1 == 9}">Urología</span>
+                                    <span th:if="${obj.index+1 == 10}">Medicina Interna</span>
+                                    <span th:if="${obj.index+1 == 11}">Neumología</span>
+                                    <span th:if="${obj.index+1 == 12}">Pediatría</span>
+                                    <span th:if="${obj.index+1 == 13}">Neurología</span>
+                                    <span th:if="${obj.index+1 == 14}">Gastroenterología</span>
+                                    <span th:if="${obj.index+1 == 15}">Endocrinología</span>
+                                    <span th:if="${obj.index+1 == 16}">Otorrinolaringología</span>
+                                    <span th:if="${obj.index+1 == 17}">Nefrología</span>
+                                    <span th:if="${obj.index+1 == 18}">Dermatología</span>
+
+                                </td>
                                 <td>
                                     <a href="#" th:id="'toggleButton-' + ${obj.index+1}" style="width: max-content"
                                        onclick="toggleDiv(event)" class="btn btn-warning">
@@ -146,11 +169,32 @@
                                                    th:value="${cuestionario.id_cuestionario}">
 
 
+
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-success"><i
-                                                        class="bi bi-check2-square"></i>
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                                                    <i class="bi bi-check2-square"></i>
                                                 </button>
                                             </div>
+
+                                            <!-- Modal de Confirmación -->
+                                            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmModalLabel">Confirmar envío</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>¿Estás seguro de que deseas enviar el cuestionario seleccionado? (No podrá volver a cambiarlo)</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-success">Confirmar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <br>
 
 
@@ -190,8 +234,6 @@
         <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
         <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
 
-
-        <!-- Template Main JS File -->
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
@@ -215,7 +257,5 @@
                 }
             }
         </script>
-
-
     </body>
 </html>
