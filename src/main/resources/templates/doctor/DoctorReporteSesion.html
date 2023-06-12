@@ -148,10 +148,10 @@
                                     <img th:src="@{/assets/img/zoom.jpg}" style="width: 80%">
                                 </div>
                                 <div style="margin-top: 5px;text-align: center">
-                                    <button type="button" data-bs-toggle="tooltip" data-bs-placement="left"
+                                    <a th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}" type="button" data-bs-toggle="tooltip" data-bs-placement="left"
                                             title="Enviar cuestionario" class="btn btn-warning">
                                         <i style="color: black" class="bi-file-text-fill"></i>
-                                    </button>
+                                    </a>
 
 
                                     <a th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}"

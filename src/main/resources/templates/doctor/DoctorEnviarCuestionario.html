@@ -14,7 +14,7 @@
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        <title>Dashboard - Doctor</title>
+        <title>Enviar Cuestionario - Doctor</title>
         <meta content="" name="description">
         <meta content="" name="keywords">
         <link th:href="@{/assets/img/favicon.png}" rel="icon">
@@ -54,21 +54,20 @@
                         <thead style="text-align: left">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Nombre</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody style="text-align: left">
                             <tr th:each="cuestionario, obj: ${listaCuestionarios}">
                                 <td th:text="${obj.index+1}"></td>
-                                <td style="font-size: 1rem" th:text="${'Cuestionario ' }"></td>
                                 <td>
-                                    <a href="#" id="toggleButton" style="width: max-content"
-                                       onclick="toggleDiv()" class="btn btn-light">
-                                        Mostrar cuestionario
+                                    <a href="#" th:id="'toggleButton-' + ${obj.index+1}" style="width: max-content"
+                                       onclick="toggleDiv(event)" class="btn btn-warning">
+                                        Mostrar
                                     </a>
-                                    <div id="miDiv" class="animated-div card top-selling container"
-                                         style="display: none;width: auto">
+
+                                    <div class="animated-div card top-selling container"
+                                         th:id="'cuestionarioDiv-' + ${obj.index+1}" style="display: none; width: auto">
                                         <form method="post" th:action="@{/doctor/guardarCuestionario}"
                                               class="mt-2">
 
@@ -140,15 +139,19 @@
                                                 </div>
                                             </div>
 
-                                            <input type="hidden" name="cuestionario.id_cuestionario" th:value="${cuestionario.id_cuestionario}">
+                                            <input type="hidden" name="cuestionario.id_cuestionario"
+                                                   th:value="${cuestionario.id_cuestionario}">
                                             <input type="hidden" name="cita.id_cita" th:value="${cita.id_cita}">
-                                            <input type="hidden" name="id.idCuestionario" th:value="${cuestionario.id_cuestionario}">
+                                            <input type="hidden" name="id.idCuestionario"
+                                                   th:value="${cuestionario.id_cuestionario}">
 
 
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-primary">Seleccionar
+                                                <button type="submit" class="btn btn-success"><i
+                                                        class="bi bi-check2-square"></i>
                                                 </button>
                                             </div>
+                                            <br>
 
 
                                         </form>
@@ -159,7 +162,6 @@
                     </table>
 
                 </div>
-
 
 
             </section>
@@ -200,15 +202,20 @@
             })
         </script>
         <script>
-            function toggleDiv() {
-                var miDiv = document.getElementById("miDiv");
-                if (miDiv.style.display === "none") {
-                    miDiv.style.display = "block";
+            function toggleDiv(event) {
+                event.preventDefault();
+
+                var cuestionarioId = event.target.getAttribute('id').split('-')[1];
+                var div = document.getElementById("cuestionarioDiv-" + cuestionarioId);
+
+                if (div.style.display === "none") {
+                    div.style.display = "block";
                 } else {
-                    miDiv.style.display = "none";
+                    div.style.display = "none";
                 }
             }
         </script>
+
 
     </body>
 </html>
