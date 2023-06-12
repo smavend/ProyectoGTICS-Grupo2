@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:8080")
 @Controller
 @RequestMapping("/SuperAdminHomePage")
 public class SuperAdminController {
@@ -47,6 +47,8 @@ public class SuperAdminController {
     final CredencialesRepository credencialesRepository;
     final StylevistasRepository stylevistasRepository;
 
+    final FormularioJsonRepository formularioJsonRepository;
+
 /*
     final FormDinamicoRepository formDinamicoRepository;
 */
@@ -61,7 +63,8 @@ public class SuperAdminController {
                                 SuperAdminService superAdminService,
                                 AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository,
                                 SecurityConfig securityConfig,
-                                CredencialesRepository credencialesRepository, StylevistasRepository stylevistasRepository) {
+                                CredencialesRepository credencialesRepository, StylevistasRepository stylevistasRepository,
+                                FormularioJsonRepository formularioJsonRepository) {
         this.pacienteRepository = pacienteRepository;
         this.administradorRepository = administradorRepository;
         this.administrativoRepository = administrativoRepository;
@@ -74,29 +77,30 @@ public class SuperAdminController {
         this.securityConfig = securityConfig;
         this.credencialesRepository = credencialesRepository;
         this.stylevistasRepository = stylevistasRepository;
+        this.formularioJsonRepository = formularioJsonRepository;
     }
 
-        @GetMapping("")
-        public String HomePageSuperAdmin(Model model) throws IOException {
-            List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
-            List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
-            List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
-            List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
-            List<Clinica> listaClinicas = clinicaRepository.findAll();
-            List<Sede> listaSedes = sedeRepository.findAll();
-            List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
-            model.addAttribute("listaClinicas", listaClinicas);
-            model.addAttribute("listaSedes", listaSedes);
-            model.addAttribute("listaEspecialidad", listaEspecialidad);
-            model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
-            model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
-            model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
-            model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
+    @GetMapping("")
+    public String HomePageSuperAdmin(Model model) throws IOException {
+        List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
+        List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
+        List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
+        List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
+        List<Clinica> listaClinicas = clinicaRepository.findAll();
+        List<Sede> listaSedes = sedeRepository.findAll();
+        List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
+        model.addAttribute("listaClinicas", listaClinicas);
+        model.addAttribute("listaSedes", listaSedes);
+        model.addAttribute("listaEspecialidad", listaEspecialidad);
+        model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
+        model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
+        model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
+        model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
 
-            Optional<Stylevistas> style = stylevistasRepository.findById(1);
-            if (style.isPresent()) {
-                Stylevistas styleActual = style.get();
-                System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
 /*
                 System.out.println("El color del Sidebar es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
 */
@@ -104,33 +108,37 @@ public class SuperAdminController {
                 System.out.println("El color del Background es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
 */
 
-                model.addAttribute("headerColor", styleActual.getHeader());
+            model.addAttribute("headerColor", styleActual.getHeader());
 /*
                 model.addAttribute("sidebarColor", styleActual.getSidebar());
 */
-                model.addAttribute("backgroundColor", styleActual.getBackground());
+            model.addAttribute("backgroundColor", styleActual.getBackground());
 
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-                System.out.println("No se encontró stylevistas con el id proporcionado");
-            }
-            return "superAdmin/superadmin_Dashboard";
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
+        return "superAdmin/superadmin_Dashboard";
     }
+
     @GetMapping("/administradores")
     @ResponseBody
     public List<AdministradorDTO_superadmin> obtenerAdministradores() {
         return superAdminService.obtenerTodosLosAdministradoresDTO();
     }
+
     @GetMapping("/administrativos")
     @ResponseBody
     public List<AdministrativoDTO_superadmin> obtenerAdministrativos() {
         return superAdminService.obtenerTodosLosAdministrativosDTO();
     }
+
     @GetMapping("/pacientes")
     @ResponseBody
     public List<PacienteDTO_superadmin> obtenerPacientes() {
         return superAdminService.obtenerTodosLosPacientesDTO();
     }
+
     @GetMapping("/doctores")
     @ResponseBody
     public List<DoctorDTO_superadmin> obtenerDoctores() {
@@ -223,42 +231,109 @@ public class SuperAdminController {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             System.out.println("No se encontró stylevistas con el id proporcionado");
         }
-       /* List<FormDinamico> forms = formDinamicoRepository.findAll();
-        model.addAttribute("forms", forms);*/
+        List<FormularioJson> formularios = formularioJsonRepository.findAll();
+        model.addAttribute("formularios", formularios);
 
         return "superAdmin/list_forms";
     }
 
-  /*  @PostMapping("/guardarFormulario")
-    public ResponseEntity<?> guardarFormulario(@RequestBody String formFields) {
-        System.out.println("Recibí una solicitud POST a /guardarFormulario");
+    @PostMapping("/actualizarFormulario/{id}")
+    public String actualizarFormulario(
+            @PathVariable("id") Integer id,
+            @RequestParam("titulo") String titulo,
+            @RequestParam("estructura_formulario") String estructuraFormulario,
+            Model model) {
 
-        // Divide la cadena en el título y el HTML
-        String[] fields = formFields.split("::", 2);
+        Optional<FormularioJson> formularioJsonOptional = formularioJsonRepository.findById(id);
 
-        // Crea un nuevo objeto FormDinamico y establece su HTML y título con los valores recibidos
-        FormDinamico formDinamico = new FormDinamico();
-        formDinamico.setHtml(fields[1]);
-        formDinamico.setTitulo(fields[0]);
-        formDinamico.setSent(true);
+        if (formularioJsonOptional.isPresent()) {
+            FormularioJson formularioJson = formularioJsonOptional.get();
+            formularioJson.setTitulo(titulo);
+            formularioJson.setEstructura_formulario(estructuraFormulario);
+            formularioJson.setSent(1); // Seteamos el valor en 1 siempre.
 
-        // Intenta guardar el objeto FormDinamico en la base de datos
-        try {
-            formDinamicoRepository.save(formDinamico);
-        } catch (Exception e) {
-            System.out.println("Error al guardar el formulario: " + e.getMessage());
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Error al guardar el formulario");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            try {
+                formularioJsonRepository.save(formularioJson);
+                model.addAttribute("message", "Formulario actualizado con éxito");
+            } catch (Exception e) {
+                model.addAttribute("message", "Error al actualizar el formulario: " + e.getMessage());
+                return "errorPage";  // cambiar a la página de error que tenga configurada.
+            }
+        } else {
+            model.addAttribute("message", "No se encontró el formulario con la id proporcionada");
+            return "errorPage";
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "Formulario guardado con éxito");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }*/
+        return "redirect:/SuperAdminHomePage/verforms";
+    }
+
+    @PostMapping("/eliminarFormulario/{id}")
+    public String eliminarFormulario(
+            @PathVariable("id") Integer id,
+            Model model) {
+
+        try {
+            formularioJsonRepository.deleteById(id);
+            model.addAttribute("message", "Formulario eliminado con éxito");
+        } catch (Exception e) {
+            model.addAttribute("message", "Error al eliminar el formulario: " + e.getMessage());
+            return "errorPage";  // cambiar a la página de error que tenga configurada.
+        }
+
+        return "redirect:/SuperAdminHomePage/verforms";
+    }
+    @PostMapping("/guardarFormulario")
+    public String guardarFormulario(
+            @RequestParam("titulo") String titulo,
+            @RequestParam("estructura_formulario") String estructuraFormulario,
+            Model model) {
+
+        FormularioJson formularioJson = new FormularioJson();
+        formularioJson.setTitulo(titulo);
+        formularioJson.setEstructura_formulario(estructuraFormulario);
+        formularioJson.setSent(0); // Seteamos el valor en 1 siempre.
+
+        try {
+            formularioJsonRepository.save(formularioJson);
+            model.addAttribute("message", "Formulario guardado con éxito");
+        } catch (Exception e) {
+            model.addAttribute("message", "Error al guardar el formulario: " + e.getMessage());
+            return "errorPage";  // cambiar a la página de error que tenga configurada.
+        }
+
+        return "redirect:/SuperAdminHomePage/verforms";
+    }
+
+
+
+    public ResponseEntity<String> guardarFormulario(@RequestBody FormularioJson formularioJson) {
+
+        try {
+            formularioJsonRepository.save(formularioJson);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al guardar el formulario: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>("Formulario guardado con éxito", HttpStatus.OK);
+    }
+
+
     @GetMapping("/verReportes")
     public String ReportList() {
         return "superAdmin/list_reportes";
+    }
+
+    @GetMapping("/getFormularios")
+    public ResponseEntity<List<FormularioJson>> getFormularios() {
+        try {
+            List<FormularioJson> formularios = formularioJsonRepository.findAll();
+            if (formularios.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(formularios, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/crearformulario")
@@ -296,7 +371,7 @@ public class SuperAdminController {
     @GetMapping("/SelectClinica")
     public String GestionarUIUX(Model model) {
         List<Stylevistas> listaStylevistas = stylevistasRepository.findAll();
-        if(listaStylevistas.isEmpty()) {
+        if (listaStylevistas.isEmpty()) {
             System.out.println("La lista de Stylevistas está vacía.");
         } else {
             System.out.println("La lista de Stylevistas contiene elementos. Primer elemento: " + listaStylevistas.get(0));
@@ -318,13 +393,12 @@ public class SuperAdminController {
         }
         return "superAdmin/Gestionar_UIUX";
     }
+
     @GetMapping("/SelectTablaEstilos")
     @ResponseBody
     public List<Stylevistas> obtenerEstilos() {
         return stylevistasRepository.findAll();
     }
-
-
 
 
     @GetMapping("/perfil")
@@ -389,7 +463,7 @@ public class SuperAdminController {
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
             System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
-            model.addAttribute("headerColor", styleActual   .getHeader());
+            model.addAttribute("headerColor", styleActual.getHeader());
 /*
             model.addAttribute("sidebarColor", styleActual.getSidebar());
 */
@@ -433,7 +507,7 @@ public class SuperAdminController {
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
             System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
-            model.addAttribute("headerColor", styleActual   .getHeader());
+            model.addAttribute("headerColor", styleActual.getHeader());
 /*
             model.addAttribute("sidebarColor", styleActual.getSidebar());
 */
@@ -442,7 +516,6 @@ public class SuperAdminController {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             System.out.println("No se encontró stylevistas con el id proporcionado");
         }
-
 
 
         // Valida que los nombres solo contengan caracteres alfabéticos
@@ -463,27 +536,27 @@ public class SuperAdminController {
         else if (dni != null && !dni.trim().isEmpty() && !dni.matches("\\d+")) {
             result.rejectValue("dni", "", "DNI debe contener sólo dígitos.");
         }
-        System.out.println("el valor de sede a buscar es : "+sede);
+        System.out.println("el valor de sede a buscar es : " + sede);
 
         List<Administrador> listaAdministrador2 = administradorRepository.findAll();
         boolean sedeIsNull = false;
         for (Administrador administrador : listaAdministrador2) {
             int existingSede2 = administrador.getSede().getIdSede();
             Sede existingSede = sedeRepository.buscarPorNombreDeSede(sede);
-            if(existingSede == null){
+            if (existingSede == null) {
                 sedeIsNull = true;
                 break;
             } else {
-                if((existingSede.getIdSede() == existingSede2) && selectUsuario.equals("administrador")){
+                if ((existingSede.getIdSede() == existingSede2) && selectUsuario.equals("administrador")) {
                     result.rejectValue("sede", "", "Ya existe administrador para esta sede.");
                     break;
                 }
             }
         }
         List<Credenciales> listaCredenciales = credencialesRepository.findAll();
-        for (Credenciales credencial : listaCredenciales){
+        for (Credenciales credencial : listaCredenciales) {
             String existingDni2 = credencial.getId_credenciales();
-            if(dni.equals(existingDni2)){
+            if (dni.equals(existingDni2)) {
                 result.rejectValue("dni", "", "Ya existe un usuario con esta credencial.");
             }
         }
@@ -518,8 +591,6 @@ public class SuperAdminController {
         }
 
 
-
-
         if (result.hasErrors()) {
             List<Sede> listaSedes = sedeRepository.findAll();
             List<Especialidad> listaEspecialidades = especialidadRepository.findAll();
@@ -530,22 +601,21 @@ public class SuperAdminController {
         }
 
 
-
         if (selectUsuario.equals("administrador")) {
             //Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
             Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
             administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
             Optional<Administrador> administrador = administradorRepository.findById(dni);
-            String passRandom= securityConfig.generateRandomPassword();
+            String passRandom = securityConfig.generateRandomPassword();
             PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
             // Ahora puedes usar el passwordEncoder para codificar una contraseña
             String encodedPassword = passwordEncoder.encode(passRandom);
-            credencialesRepository.crearCredenciales(administrador.get().getIdAdministrador(),administrador.get().getCorreo(),encodedPassword);
+            credencialesRepository.crearCredenciales(administrador.get().getIdAdministrador(), administrador.get().getCorreo(), encodedPassword);
             CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
-            correoService.props(administrador.get().getCorreo(),passRandom);
+            correoService.props(administrador.get().getCorreo(), passRandom);
 
 
-        }else if (selectUsuario.equals("administrativo")) {
+        } else if (selectUsuario.equals("administrativo")) {
             Administrativo administrativonuevo = new Administrativo();
             administrativonuevo.setIdAdministrativo(dni);
             administrativonuevo.setNombre(nombres);
@@ -566,17 +636,17 @@ public class SuperAdminController {
             administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
             administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
 
-            String passRandom= securityConfig.generateRandomPassword();
+            String passRandom = securityConfig.generateRandomPassword();
             PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
             // Ahora puedes usar el passwordEncoder para codificar una contraseña
             String encodedPassword = passwordEncoder.encode(passRandom);
-            credencialesRepository.crearCredenciales(administrativonuevo.getIdAdministrativo(),administrativonuevo.getCorreo(),encodedPassword);
+            credencialesRepository.crearCredenciales(administrativonuevo.getIdAdministrativo(), administrativonuevo.getCorreo(), encodedPassword);
             CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
-            correoService.props(administrativonuevo.getCorreo(),passRandom);
+            correoService.props(administrativonuevo.getCorreo(), passRandom);
 
 
         }
-            // ... (por ejemplo, guarda el usuario en la base de datos)
+        // ... (por ejemplo, guarda el usuario en la base de datos)
         return "redirect:/SuperAdminHomePage";
 
     }
