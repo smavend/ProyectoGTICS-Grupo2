@@ -39,7 +39,7 @@
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
             <section class="seccionPrincipal">
 
-                <a class="btn botonTipo botonTodos" th:classappend="${filtro==0?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
+                <a class="btn botonTipo botonTodos" th:classappend="${filtro==0 || filtro == null?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
                 <a class="btn botonTipo botonPendientes" th:classappend="${filtro==1?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
                 <a class="btn botonTipo botonCancelados" th:classappend="${filtro==2?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=2)}">Cancelados</a>
 

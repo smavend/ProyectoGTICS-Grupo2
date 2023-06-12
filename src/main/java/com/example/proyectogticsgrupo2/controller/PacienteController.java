@@ -248,29 +248,21 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/editar")
-    public String editarPerfil(@ModelAttribute("paciente") Paciente paciente,
-                               @RequestParam(name = "id") String idPaciente,
-                               Model model, HttpSession session, Authentication authentication) {
+    public String editarPerfil(Model model, HttpSession session, Authentication authentication) {
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);
 
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
+        List<Seguro> seguroList = seguroRepository.findAll();
+        List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente());
+        List<Distrito> distritoList = distritoRepository.findAll();
 
-        if (optionalPaciente.isPresent()) {
-            paciente = optionalPaciente.get();
-            List<Seguro> seguroList = seguroRepository.findAll();
-            List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(idPaciente);
-            List<Distrito> distritoList = distritoRepository.findAll();
+        model.addAttribute("seguroList", seguroList);
+        model.addAttribute("alergiasPaciente", alergiasPaciente);
+        model.addAttribute("distritoList", distritoList);
+        model.addAttribute("paciente", paciente);
 
-            model.addAttribute("seguroList", seguroList);
-            model.addAttribute("alergiasPaciente", alergiasPaciente);
-            model.addAttribute("distritoList", distritoList);
-            model.addAttribute("paciente", paciente);
-
-            return "paciente/perfilEditar";
-        }
-
-        return "redirect:/Paciente/perfil";
+        return "paciente/perfilEditar";
     }
 
     @PostMapping("/perfil/guardar")
@@ -278,75 +270,93 @@ public class PacienteController {
                                 BindingResult bindingResult,
                                 @RequestParam(name = "archivo") MultipartFile file,
                                 RedirectAttributes attr,
-                                Model model, HttpSession session) {
+                                Model model, Authentication authentication, HttpSession session) {
 
-        Paciente p = pacienteRepository.findById(paciente.getIdPaciente()).get();
+        Paciente p = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", p);
         String fileName = file.getOriginalFilename();
 
-        if (fileName.contains("..") || fileName.contains(" ")) {
-            attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
-            return "redirect:/Paciente/perfil/editar?id=" + paciente.getIdPaciente();
-        }
+        if (p.getIdPaciente().equals(paciente.getIdPaciente())){
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("seguroList", seguroRepository.findAll());
-            model.addAttribute("alergiasPaciente", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
-            model.addAttribute("distritoList", distritoRepository.findAll());
-            return "paciente/perfilEditar";
-        } else {
-            try {
-                if (file.isEmpty()) {
-                    paciente.setFoto(p.getFoto());
-                    paciente.setFotoname(p.getFotoname());
-                    paciente.setFotocontenttype(p.getFotocontenttype());
-                } else {
-                    paciente.setFoto(file.getBytes());
-                    paciente.setFotoname(fileName);
-                    paciente.setFotocontenttype(file.getContentType());
-                }
-
-                if (!p.getCorreo().equals(paciente.getCorreo())) {
-                    Credenciales credenciales = credencialesRepository.buscarPorId(p.getIdPaciente());
-                    Credenciales nuevasCredenciales = new Credenciales(p.getIdPaciente(), paciente.getCorreo(), credenciales.getContrasena());
-                    credencialesRepository.save(nuevasCredenciales);
-                }
-                pacienteRepository.save(paciente);
-
-                attr.addFlashAttribute("msgActualizacion", "Su perfil se ha actualizado correctamente");
-                return "redirect:/Paciente/perfil";
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
-                return "redirect:/Paciente/perfil";
+            if (fileName.contains("..") || fileName.contains(" ")) {
+                attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
+                return "redirect:/Paciente/perfil/editar?id=" + paciente.getIdPaciente();
             }
 
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("seguroList", seguroRepository.findAll());
+                model.addAttribute("alergiasPaciente", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
+                model.addAttribute("distritoList", distritoRepository.findAll());
+                return "paciente/perfilEditar";
+            } else {
+                try {
+                    if (file.isEmpty()) {
+                        paciente.setFoto(p.getFoto());
+                        paciente.setFotoname(p.getFotoname());
+                        paciente.setFotocontenttype(p.getFotocontenttype());
+                    } else {
+                        paciente.setFoto(file.getBytes());
+                        paciente.setFotoname(fileName);
+                        paciente.setFotocontenttype(file.getContentType());
+                    }
+
+                    if (!p.getCorreo().equals(paciente.getCorreo())) {
+                        Credenciales credenciales = credencialesRepository.buscarPorId(p.getIdPaciente());
+                        Credenciales nuevasCredenciales = new Credenciales(p.getIdPaciente(), paciente.getCorreo(), credenciales.getContrasena());
+                        credencialesRepository.save(nuevasCredenciales);
+                    }
+                    pacienteRepository.save(paciente);
+
+                    attr.addFlashAttribute("msgActualizacion", "Su perfil se ha actualizado correctamente");
+                    return "redirect:/Paciente/perfil";
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
+                    return "redirect:/Paciente/perfil";
+                }
+
+            }
+
+        }
+        else {
+            attr.addFlashAttribute("msgError", "Ocurrió un error al actualizar el perfil");
+            return "redirect:/Paciente/perfil";
         }
     }
 
     @PostMapping("/perfil/guardarAlergia")
-    public String guardarAlergia(Alergia alergia) {
+    public String guardarAlergia(Alergia alergia, RedirectAttributes attr, Authentication authentication) {
 
-        alergiaRepository.save(alergia);
-
-        return "redirect:/Paciente/perfil/editar?id=" + alergia.getPaciente().getIdPaciente();
+        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        if (paciente.getIdPaciente().equals(alergia.getPaciente().getIdPaciente())){
+            alergiaRepository.save(alergia);
+            return "redirect:/Paciente/perfil/editar";
+        }
+        else {
+            attr.addFlashAttribute("msgError" ,"Ocurrió un error al actualizar el perfil");
+            return "redirect:/Paciente/perfil";
+        }
     }
 
     @GetMapping("/perfil/borrarAlergia")
-    public String borrarAlergia(@RequestParam(name = "idPaciente") String idPaciente,
-                                @RequestParam(name = "idAlergia") int idAlergia) {
+    public String borrarAlergia(@RequestParam(name = "idAlergia") int idAlergia,
+                                Authentication authentication, HttpSession session) {
+
+        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);
 
         Optional<Alergia> optionalAlergia = alergiaRepository.findById(idAlergia);
         if (optionalAlergia.isPresent()) {
             alergiaRepository.deleteById(idAlergia);
         }
-        return "redirect:/Paciente/perfil/editar?id=" + idPaciente;
+        return "redirect:/Paciente/perfil/editar";
     }
 
     @GetMapping("/perfil/quitarFoto")
-    public String quitarFoto(@RequestParam(name = "id") String idPaciente,
-                             RedirectAttributes attr) {
+    public String quitarFoto(Authentication authentication) {
+
+        String idPaciente = pacienteRepository.findByCorreo(authentication.getName()).getIdPaciente();
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()) {
@@ -589,7 +599,7 @@ public class PacienteController {
 
     @GetMapping("/filtrarPagos")
     public String filtrarPagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
-                               @RequestParam("filtro") int filtro, Model model, HttpSession session, Authentication authentication) {
+                               @RequestParam("filtro") Integer filtro, Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 

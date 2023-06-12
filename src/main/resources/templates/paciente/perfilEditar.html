@@ -58,7 +58,7 @@
 
                                         <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
                                             <input class="form-control" type="file" name="archivo">
-                                            <a th:href="@{'/Paciente/perfil/quitarFoto?id='+${session.paciente.idPaciente}}"
+                                            <a th:href="@{/Paciente/perfil/quitarFoto}"
                                                style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
                                         </div>
                                     </div>
@@ -69,6 +69,7 @@
                                 <input type="hidden" th:field="*{fechanacimiento}">
                                 <input type="hidden" th:field="*{genero}">
                                 <input type="hidden" th:field="*{fecharegistro}">
+
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
@@ -178,7 +179,7 @@
 
                                     <p class="mb-2 mb-lg-0 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
                                        th:inline="text">[[${alergia.nombre}]]
-                                        <a th:href="@{'/Paciente/perfil/borrarAlergia?idPaciente='+${paciente.idPaciente}+'&idAlergia='+${alergia.idAlergia}}"
+                                        <a th:href="@{'/Paciente/perfil/borrarAlergia?idAlergia='+${alergia.idAlergia}}"
                                            class="ms-2" style="color: red"><i class="bi bi-x-circle ms-2"></i></a>
                                     </p>
                                 </div>
@@ -208,11 +209,23 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- Proximamente para mejorar la vista de subida de fotos
+        <!-- SCRIPT para mostrar errores -->
         <script>
+            let msg = $(".invalid-feedback");
+            $(".form-control").keyup(function (event){
+                let input = $(event.target);
+                let id = input.attr("id");
+                if (input.val().length === 0){
+                    input.addClass("is-invalid");
+                    //$(".invalid-feedback#"+id).removeClass("d-none");
+                }
+                else{
+                    input.removeClass("is-invalid");
+                    //$(".invalid-feedback#"+id).addClass("d-none");
+                }
+            })
 
         </script>
-        -->
 
     </body>
 </html>

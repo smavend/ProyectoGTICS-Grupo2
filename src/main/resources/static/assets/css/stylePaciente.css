@@ -6,7 +6,7 @@ body {
     font-family: "Open Sans", sans-serif;
     background-image: linear-gradient(to right top, #dbe3e8, #e5eaee, #eff0f4, #f7f8f9, #ffffff);
     color: #444444;
-    min-height: 99vh;
+    min-height: 100vh;
 }
 
 a {
@@ -1369,7 +1369,7 @@ p{
 
 @media (max-width: 1199px) {
     .seccionPrincipal{
-        padding: 10px 15px;
+        padding: 10px 20px;
     }
 }
 
@@ -1798,6 +1798,7 @@ botonTipo{
     height: 250px;
     width: 250px;
     object-fit: cover;
+    box-shadow: -7px 0px 0px 5px #0AA1DD;
 }
 
 @media(min-width: 768px){
