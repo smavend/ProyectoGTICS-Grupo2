@@ -273,9 +273,9 @@ public class DoctorController {
         Optional<Cita> optionalCita = citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
+        System.out.println(optionalCita.get().getModalidad());
 
-
-        if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && optionalCita.get().getModalidad()==1 && optionalCita.get().getDoctor().getId_doctor()==doctor_session.getId_doctor()) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
