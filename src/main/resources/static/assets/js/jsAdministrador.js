@@ -8,6 +8,54 @@
 
 /*mis js*/
 //validar form de descarga
+/*function validateForm() {
+  var tiporeporte = document.getElementById("tiporeporte").value;
+  var seguro = document.getElementById("validationCustom01").value;
+  var especialidad = document.getElementById("validationCustom02").value;
+  var tipopago = document.getElementById("validationCustom03").value;
+  var todo = document.getElementById("validationCustom04").value;
+  var isValid = true;
+
+  switch (tiporeporte) {
+    case "1":
+      if (seguro === "") {
+        document.getElementById("validationCustom01").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("validationCustom01").classList.remove("is-invalid");
+      }
+      break;
+    case "2":
+      if (especialidad === "") {
+        document.getElementById("validationCustom02").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("validationCustom02").classList.remove("is-invalid");
+      }
+      break;
+    case "3":
+      if (tipopago === "") {
+        document.getElementById("validationCustom03").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("validationCustom03").classList.remove("is-invalid");
+      }
+      break;
+    case "5":
+      if (todo === "") {
+        document.getElementById("validationCustom04").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("validationCustom04").classList.remove("is-invalid");
+      }
+      break;
+    default:
+      isValid = false;
+      break;
+  }
+
+  return isValid;
+}*/
 
 //fin validar form descarga
 
