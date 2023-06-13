@@ -73,4 +73,8 @@ public class Cita {
     @Column(name = "seguro_id_seguro")
     private String idSeguro;
 
+    @ManyToOne
+    @JoinColumn(name = "especialidad_id_especialidad")
+    private Especialidad especialidad;
+
 }

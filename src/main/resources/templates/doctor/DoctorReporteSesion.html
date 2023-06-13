@@ -135,6 +135,16 @@
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('receta')}"
                                  th:errors="*{receta}"></div>
 
+                            <h2 style="text-align: center;" for="especialidad">Orden de exámenes médicos</h2>
+                            <div style="display: flex;justify-content: center;" class="select-container">
+                                <select name="especialidad" id="especialidad">
+                                    <option value="">No se necesita exámenes</option>
+                                    <option value="4">Laboratorio</option>
+                                    <option value="5">Rayos X</option>
+                                    <option value="6">Ecografía</option>
+                                </select>
+                            </div>
+
 
                         </div>
 
