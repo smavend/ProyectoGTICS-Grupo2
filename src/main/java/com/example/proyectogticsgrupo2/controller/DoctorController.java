@@ -500,7 +500,16 @@ public class DoctorController {
                     doctor.setFotoname(fileName);
                     doctor.setFotocontenttype(file.getContentType());
                 }
-                doctorRepository.save(doctor);
+                try {
+                    doctorRepository.save(doctor);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    attr.addFlashAttribute("msgError", "No se puede subir la imagen");
+                    return "redirect:/doctor/perfilid="+ doctor.getId_doctor();
+                }
+
+
+
                 attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
                 return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
 
