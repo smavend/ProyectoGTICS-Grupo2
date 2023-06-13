@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
-    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado \n" +
+    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado,c.seguro_id_seguro \n" +
             "FROM cita c \n" +
             "INNER JOIN doctor d ON d.id_doctor = c.doctor_id_doctor \n" +
             "INNER JOIN paciente p ON p.id_paciente = c.paciente_id_paciente \n" +
@@ -75,10 +75,11 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     Optional<CuestionarioxDoctorDTO> verCuestionario(int id);
 
-    @Query(value = "SELECT id_cita, fin\n" +
+    @Query(value = "SELECT cita.id_cita, cita.fin\n" +
             "FROM proyectogtics.cita\n" +
+            "INNER JOIN proyectogtics.cuestionario_x_cita ON cita.id_cita = cuestionario_x_cita.cita_id_cita\n" +
             "WHERE cita.paciente_id_paciente = ?1" +
-            "    AND cita.estado =?2",nativeQuery = true)
+            "    AND cita.estado = ?2",nativeQuery = true)
     List<EncuestaDoctorDTO> listarFechaEncuesta(String idPaciente, int estado);
 
 }

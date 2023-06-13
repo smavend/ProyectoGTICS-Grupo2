@@ -286,7 +286,7 @@ public class PacienteController {
 
         if (fileName.contains("..") || fileName.contains(" ")) {
             attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
-            return "redirect:/Paciente/perfil/editar?idPaciente=" + paciente.getIdPaciente();
+            return "redirect:/Paciente/perfil/editar?id=" + paciente.getIdPaciente();
         }
 
         if (bindingResult.hasErrors()) {

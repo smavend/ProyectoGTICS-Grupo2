@@ -116,7 +116,12 @@
                                             <td th:text="${listaAdministadores.idAdministrador}"></td>
                                             <td th:text="${listaAdministadores.nombre}"></td>
                                             <td th:text="${listaAdministadores.apellidos}"></td>
-                                            <td th:text="${listaAdministadores.estado}"></td>
+                                            <td th:switch="${listaAdministadores.estado}" class="centered">
+                                                <span th:case="1" class="badge bg-primary">Activo</span>
+                                                <span th:case="3" class="badge bg-info">Registrado</span>
+                                                <span th:case="4" class="badge bg-success">Agendado</span>
+                                                <span th:case="5" class="badge bg-warning">En consulta</span>
+                                            </td>
                                             <td th:text="${listaAdministadores.correo}"></td>
                                             <td th:text="${listaAdministadores.sedeNombre}"></td>
                                             <td th:text="${listaAdministadores.clinica}"></td>
@@ -162,7 +167,12 @@
                                             <td th:text="${listaAdministrativo.idAdministrativo}"></td>
                                             <td th:text="${listaAdministrativo.nombre}"></td>
                                             <td th:text="${listaAdministrativo.apellidos}"></td>
-                                            <td th:text="${listaAdministrativo.estado}"></td>
+                                            <td th:switch="${listaAdministrativo.estado}" class="centered">
+                                                <span th:case="1" class="badge bg-primary">Activo</span>
+                                                <span th:case="3" class="badge bg-info">Registrado</span>
+                                                <span th:case="4" class="badge bg-success">Agendado</span>
+                                                <span th:case="5" class="badge bg-warning">En consulta</span>
+                                            </td>
                                             <td th:text="${listaAdministrativo.sedeNombre}"></td>
                                             <td th:text="${listaAdministrativo.especialidad}"><</td>
                                             <!--                                     <td th:text="${listaAdminstrativo.administrativoId.getSedeId().nombre}"></td>-->
@@ -213,7 +223,12 @@
                                             <td th:text="${paciente.idPaciente}"></td>
                                             <td th:text="${paciente.nombre}"></td>
                                             <td th:text="${paciente.apellidos}"></td>
-                                            <td th:text="${paciente.estado}"></td>
+                                            <td th:switch="${paciente.estado}" class="centered">
+                                                <span th:case="1" class="badge bg-primary">Activo</span>
+                                                <span th:case="3" class="badge bg-info">Registrado</span>
+                                                <span th:case="4" class="badge bg-success">Agendado</span>
+                                                <span th:case="5" class="badge bg-warning">En consulta</span>
+                                            </td>
                                             <td th:text="${paciente.seguro}"></td>
                                             <td th:text="${paciente.telefono}"></td>
                                             <td th:text="${paciente.correo}"></td>
@@ -264,7 +279,12 @@
                                             <td th:text="${listaDoctores.idDoctor}"></td>
                                             <td th:text="${listaDoctores.nombre}"></td>
                                             <td th:text="${listaDoctores.apellidos}"></td>
-                                            <td th:text="${listaDoctores.estado}"></td>
+                                            <td th:switch="${listaDoctores.estado}" class="centered">
+                                                <span th:case="1" class="badge bg-primary">Activo</span>
+                                                <span th:case="3" class="badge bg-info">Registrado</span>
+                                                <span th:case="4" class="badge bg-success">Agendado</span>
+                                                <span th:case="5" class="badge bg-warning">En consulta</span>
+                                            </td>
                                             <td th:text="${listaDoctores.correo}"></td>
                                             <td th:text="${listaDoctores.horario}"></td>
                                             <td th:text="${listaDoctores.clinica}"></td>
