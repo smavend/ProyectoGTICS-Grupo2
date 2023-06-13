@@ -3,10 +3,6 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.apache.commons.io.FileUtils;
@@ -603,62 +599,7 @@ public class DoctorController {
         return "redirect:/doctor/perfil";
     }
 
-    @PostMapping("/guardarImagen")
-    public String guardarImagenEvento(@RequestParam("file") MultipartFile file, @RequestParam("id") int id, RedirectAttributes attr) {
-        StringBuilder fileNames = new StringBuilder();
-        String nombreArchivo= "foto-evento-" + id;
-        uploadObject(file,nombreArchivo, "hola-a20d1", "lab5william");
-        return "redirect:/evento";
 
-    }
-
-    public static void uploadObject
-            (MultipartFile multipartFile, String fileName, String projectId, String gcpBucketId) {
-        try {
-            byte[] fileData = FileUtils.readFileToByteArray(convertFile(multipartFile));
-            Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
-            Bucket bucket = storage.get(gcpBucketId, Storage.BucketGetOption.fields());
-//            RandomString id = new RandomString(6, ThreadLocalRandom.current());
-            Blob blob = bucket.create("proyecto" + "/" + fileName + checkFileExtension(fileName), fileData);
-
-            if (blob != null) {
-//                LOGGER.debug("File successfully uploaded to GCS");
-//                return new FileDto(blob.getName(), blob.getMediaLink());
-            }
-        } catch (Exception e) {
-//            LOGGER.error("An error occurred while uploading data. Exception: ", e);
-            throw new RuntimeException("An error occurred while storing data to GCS");
-        }
-    }
-
-    private static File convertFile(MultipartFile file) {
-
-        try {
-            if (file.getOriginalFilename() == null) {
-            }
-            File convertedFile = new File(file.getOriginalFilename());
-            FileOutputStream outputStream = new FileOutputStream(convertedFile);
-            outputStream.write(file.getBytes());
-            outputStream.close();
-            return convertedFile;
-        } catch (Exception e) {
-            throw new RuntimeException("An error has occurred while converting the file");
-        }
-    }
-
-    private static String checkFileExtension(String fileName) {
-        if (fileName != null && fileName.contains(".")) {
-            String[] extensionList = {".png", ".jpeg", ".pdf", ".doc", ".mp3"};
-
-            for (String extension : extensionList) {
-                if (fileName.endsWith(extension)) {
-//                    LOGGER.debug("Accepted file type : {}", extension);
-                    return extension;
-                }
-            }
-        }
-        return ".jpeg";
-    }
 
     public String getIdPaciente() {
         return idPaciente;
