@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CuestionarioPorCitaRepository extends JpaRepository<CuestionarioPorCita, CuestionarioPorCitaID> {
@@ -18,4 +19,5 @@ public interface CuestionarioPorCitaRepository extends JpaRepository<Cuestionari
     List<CuestionarioPorCita> buscarPorPaciente(String idPaciente);
 
     CuestionarioPorCita findByIdIdCuestionarioAndIdIdCita(int idCuestionario, int idCita);
+    Optional<CuestionarioPorCita> findByIdIdCita(int idCita);
 }
