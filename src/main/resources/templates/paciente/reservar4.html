@@ -100,6 +100,10 @@
                                 <span class="informacionCita fw-bold">Hora de la cita: </span>
                                 <span class="valorCita" th:text="${#temporals.format(citaTemporal.inicio, 'HH:mm')+' Hrs.'}">Info</span>
                             </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Precio: </span>
+                                <span class="valorCita" th:text="'S/. '+${#numbers.formatDecimal(precio, 1, 2)}">Info</span>
+                            </div>
                         </div>
                     </div>
 

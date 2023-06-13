@@ -217,11 +217,11 @@
                 let id = input.attr("id");
                 if (input.val().length === 0){
                     input.addClass("is-invalid");
-                    //$(".invalid-feedback#"+id).removeClass("d-none");
+                    //$("#feedback_"+id).show();
                 }
                 else{
                     input.removeClass("is-invalid");
-                    //$(".invalid-feedback#"+id).addClass("d-none");
+                    //$("#feedback_"+id).hide();
                 }
             })
 

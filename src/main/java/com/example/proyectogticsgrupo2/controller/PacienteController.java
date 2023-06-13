@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
+import com.example.proyectogticsgrupo2.dto.HorarioOcupadoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -18,19 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Controller
@@ -52,6 +45,7 @@ public class PacienteController {
     final CredencialesRepository credencialesRepository;
     final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
     final CuestionarioRepository cuestionarioRepository;
+    final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
     final SecurityConfig securityConfig;
 
     public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository,
@@ -61,6 +55,7 @@ public class PacienteController {
                               PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository,
                               HorarioRepository horarioRepository, CredencialesRepository credencialesRepository,
                               CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository,
+                              AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository,
                               SecurityConfig securityConfig) {
 
         this.pacienteRepository = pacienteRepository;
@@ -78,6 +73,7 @@ public class PacienteController {
         this.credencialesRepository = credencialesRepository;
         this.cuestionarioPorCitaRepository = cuestionarioPorCitaRepository;
         this.cuestionarioRepository = cuestionarioRepository;
+        this.administrativoPorEspecialidadPorSedeRepository = administrativoPorEspecialidadPorSedeRepository;
         this.securityConfig = securityConfig;
     }
 
@@ -166,9 +162,8 @@ public class PacienteController {
 
         } else {
 
-            // PROCESO DE OBTENCIÓN DE HORARIOS ------
-
-            List<LocalTime> horarios = new ArrayList<>();
+            // OBTENCIÓN DE HORARIOS TOTALES
+            List<LocalTime> horariosTotal = new ArrayList<>();
             Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
             int duracionCita = doctor.getDuracion_cita_minutos();
             int duracionComida = 60; // minutos
@@ -179,7 +174,7 @@ public class PacienteController {
             while (hora.isBefore(horaFin)) {
 
                 if (hora.isBefore(horaComida) || hora.isAfter(horaComida.plusMinutes(duracionComida - 1))) {
-                    horarios.add(hora);
+                    horariosTotal.add(hora);
                 } else if (hora.isAfter(horaComida)) {
                     hora = horaComida.plusMinutes(duracionComida);
                     continue;
@@ -187,7 +182,28 @@ public class PacienteController {
 
                 hora = hora.plusMinutes(duracionCita);
             }
-            // ---------------------------------------
+
+            // OBTENCIÓN DE HORARIOS OCUPADOS
+            List<HorarioOcupadoDTO> horariosOcupados = horarioRepository.buscarHorariosOcupados(doctor.getId_doctor(), citaTemporal.getFecha());
+            HashMap<LocalTime, String> horarios = new HashMap<>();
+
+            if (horariosOcupados.size() > 0){
+                for (LocalTime horario: horariosTotal){
+                    for (HorarioOcupadoDTO ocupado: horariosOcupados){
+                        if (horario.equals(ocupado.getHorario())){
+                            horarios.put(horario, "Ocupado");
+                            break;
+                        }else {
+                            horarios.put(horario, "Disponible");
+                        }
+                    }
+                }
+            }
+            else{
+                for (LocalTime horario: horariosTotal){
+                    horarios.put(horario, "Disponible");
+                }
+            }
 
             model.addAttribute("horariosDisponibles", horarios);
 
@@ -214,6 +230,7 @@ public class PacienteController {
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
         model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
         model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
+        model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
 
         return "paciente/reservar4";
     }

@@ -75,8 +75,8 @@
                             <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
                                     name="hora">
                                 <option th:each="horario: ${horariosDisponibles}"
-                                        th:value="${#temporals.format(horario, 'HH:mm:ss')}"
-                                        th:text="${#temporals.format(horario, 'HH:mm')}"></option>
+                                        th:value="${#temporals.format(horario.key, 'HH:mm:ss')}"
+                                        th:text="${#temporals.format(horario.key, 'HH:mm')}+' - '+ ${horario.value}" th:disabled="${horario.value=='Ocupado'}"></option>
                             </select>
                         </div>
                     </div>
