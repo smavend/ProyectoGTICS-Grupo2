@@ -82,7 +82,57 @@
                 <li class="breadcrumb-item active">Crear formulario</li>
             </ol>
         </nav>
-    </div><!-- End Page Title -->
+    </div>
+    <!-- End Page Title -->
+    <!--<section class="section">
+        <div class="row align-items-center">
+            &lt;!&ndash; Fila para los botones &ndash;&gt;
+            <div class="row mb-3">
+                <div class="col-lg-12 d-flex justify-content-start">
+                    <button id="add-row" type="button" class="btn btn-danger me-2">Añadir fila</button>
+                    <button id="remove-row" type="button" class="btn btn-danger me-2">Eliminar fila</button>
+                    &lt;!&ndash; Espacio entre los botones &ndash;&gt;
+                    <div style="flex-grow: 1"></div>
+                    &lt;!&ndash; Botón para guardar formulario &ndash;&gt;
+                    <button id="save-form" type="button" class="btn btn-primary">Guardar formulario</button>
+                </div>
+            </div>
+            <div class="col-lg-4 container" id="my-container">
+                &lt;!&ndash; Fila para el formulario &ndash;&gt;
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title" contentEditable="true">Titulo de formulario</h5>
+
+                                &lt;!&ndash; General Form Elements &ndash;&gt;
+                           &lt;!&ndash;     <form id="dynamic-form" method="post" action="/administrativo/invitar">
+                                    <div id="form-rows">
+                                        &lt;!&ndash; Las filas del formulario se agregarán aquí &ndash;&gt;
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-primary">Enviar invitación</button>
+                                        <a type="button" class="btn btn-secondary" href="#">Cancelar</a>
+                                    </div>
+                                </form>&lt;!&ndash; End General Form Elements &ndash;&gt;
+&ndash;&gt;
+                                <form id="my-form" th:action="@{/SuperAdminHomePage/guardarFormulario}" method="POST">
+                                    <label for="titulo">Título:</label><br>
+                                    <input type="text" id="titulo" name="titulo" required><br>
+                                    <label for="estructura_formulario">Estructura del formulario (max 5000 caracteres):</label><br>
+                                    <textarea id="estructura_formulario" name="estructura_formulario" maxlength="5000" required></textarea><br>
+                                    <input type="hidden" id="sent" name="sent" value="1">
+&lt;!&ndash;
+                                    <input id="save-form" type="button" value="Guardar">
+&ndash;&gt;
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>-->
     <section class="section">
         <div class="row align-items-center">
             <!-- Fila para los botones -->
@@ -103,17 +153,21 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title" contentEditable="true">Titulo de formulario</h5>
-
                                 <!-- General Form Elements -->
-                                <form id="dynamic-form" method="post" action="/administrativo/invitar">
+                                <form id="my-form" th:action="@{/SuperAdminHomePage/guardarFormulario}" method="POST">
                                     <div id="form-rows">
                                         <!-- Las filas del formulario se agregarán aquí -->
                                     </div>
+                                    <input type="hidden" id="titulo" name="titulo" required>
+                                    <input type="hidden" id="estructura_formulario" name="estructura_formulario" maxlength="5000" required>
+<!--
+                                    <input type="hidden" id="sent" name="sent" value="true">
+-->
                                     <div class="text-center">
                                         <button type="button" class="btn btn-primary">Enviar invitación</button>
                                         <a type="button" class="btn btn-secondary" href="#">Cancelar</a>
                                     </div>
-                                </form><!-- End General Form Elements -->
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -246,8 +300,145 @@
         }
     });
 </script>
+<script>
+    document.getElementById('save-form').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        // Obtiene el título del formulario
+        var title = document.querySelector('.card-title').textContent;
+
+        // Guarda el título en el campo de entrada correspondiente
+        document.getElementById('titulo').value = title;
+
+        // Obtiene las filas del formulario
+        var formRows = document.getElementById('form-rows');
+        var rows = formRows.getElementsByClassName('row mb-3');
+
+        // Recopila la información de los campos de entrada
+        var fields = Array.from(rows).map(row => {
+            var label = row.querySelector('.col-form-label').textContent;
+            var input = row.querySelector('.form-control');
+
+            return {
+                type: input.type,
+                label: label,
+                id: input.id,
+                name: input.name
+            };
+        });
+
+        // Convierte los datos recopilados a formato JSON y los añade a un objeto con la clave "fields"
+        var formStructureJSON = JSON.stringify({ fields: fields });
+
+        // Guarda la estructura del formulario en el campo de entrada correspondiente
+        document.getElementById('estructura_formulario').value = formStructureJSON;
+
+        // Envía el formulario
+        document.getElementById('my-form').submit();
+    });
+</script>
+
+
+<!--<script>
+    $('#save-form').click(function () {
+        var title = $('.card-title').text();
+        var fields = [];
+
+        $('#form-rows .row.mb-3').each(function(index, row) {
+            var label = $(row).find('label').text();
+            var type = $(row).find('input').attr('type');
+
+            var field = {
+                "type": type,
+                "label": label,
+                "id": label.toLowerCase().replace(/ /g, '-'),
+                "name": label.toLowerCase().replace(/ /g, '-')
+            };
+
+            fields.push(field);
+        });
+
+        var dataToSave = {
+            "titulo": title,
+            "estructura_formulario": JSON.stringify({ "fields": fields }),
+            "sent": false // Este valor será reemplazado en el servidor, así que puedes poner cualquier cosa aquí.
+        };
+
+        console.log('Data to save:', JSON.stringify(dataToSave));
+
+        console.log('Realizando solicitud POST a /SuperAdminHomePage/guardarFormulario2');
+
+        $.ajax({
+            url: '/SuperAdminHomePage/guardarFormulario2',
+            method: 'POST',
+            contentType: 'application/json', // El contenido de la solicitud será un objeto JSON
+            data: JSON.stringify(dataToSave), // Convertimos el objeto JavaScript a una cadena JSON
+            beforeSend: function (xhr) {   //Añadido
+                xhr.setRequestHeader("Authorization", "Basic " + btoa("nico@gmail.com:123456"));
+            },
+            success: function (response) {
+                // Lógica de éxito (opcional)
+                console.log('Respuesta del servidor:', response);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // Si algo salió mal, imprime el estado de la respuesta en la consola
+                console.log('Respuesta de red incorrecta o inexistente:', xhr.status);
+            }
+        });
+    });
+</script>-->
 
 <!--
+<script>
+    $('#save-form').click(function () {
+        var title = $('.card-title').text();
+        var fields = [];
+
+        $('#form-rows .row.mb-3').each(function(index, row) {
+            var label = $(row).find('label').text();
+            var type = $(row).find('input').attr('type');
+
+            var field = {
+                "type": type,
+                "label": label,
+                "id": label.toLowerCase().replace(/ /g, '-'),
+                "name": label.toLowerCase().replace(/ /g, '-')
+            };
+
+            fields.push(field);
+        });
+
+        var dataToSave = {
+            "titulo": title,
+            "estructura_formulario": JSON.stringify({ "fields": fields })
+        };
+
+        console.log('Data to save:', dataToSave);
+
+        console.log('Realizando solicitud POST a /SuperAdminHomePage/guardarFormulario');
+
+        $.ajax({
+            url: '/SuperAdminHomePage/guardarFormulario',
+            method: 'POST',
+            contentType: 'application/json', // El contenido de la solicitud será un objeto JSON
+            data: JSON.stringify(dataToSave), // Convertimos el objeto JavaScript a una cadena JSON
+            beforeSend: function (xhr) {   //Añadido
+                xhr.setRequestHeader("Authorization", "Basic " + btoa("nico@gmail.com:123456"));
+            },
+            success: function (response) {
+                // Lógica de éxito (opcional)
+                console.log('Respuesta del servidor:', response);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // Si algo salió mal, imprime el estado de la respuesta en la consola
+                console.log('Respuesta de red incorrecta o inexistente:', xhr.status);
+            }
+        });
+    });
+</script>-->
+
+<!--
+
 <script>
     $('#save-form').click(function () {
         var title = $('.card-title').text();
@@ -281,8 +472,6 @@
     });
 </script>
 -->
-
-
 
 
 
