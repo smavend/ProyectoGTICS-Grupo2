@@ -237,35 +237,6 @@ public class SuperAdminController {
         return "superAdmin/list_forms";
     }
 
-    @PostMapping("/actualizarFormulario/{id}")
-    public String actualizarFormulario(
-            @PathVariable("id") Integer id,
-            @RequestParam("titulo") String titulo,
-            @RequestParam("estructura_formulario") String estructuraFormulario,
-            Model model) {
-
-        Optional<FormularioJson> formularioJsonOptional = formularioJsonRepository.findById(id);
-
-        if (formularioJsonOptional.isPresent()) {
-            FormularioJson formularioJson = formularioJsonOptional.get();
-            formularioJson.setTitulo(titulo);
-            formularioJson.setEstructura_formulario(estructuraFormulario);
-            formularioJson.setSent(1); // Seteamos el valor en 1 siempre.
-
-            try {
-                formularioJsonRepository.save(formularioJson);
-                model.addAttribute("message", "Formulario actualizado con éxito");
-            } catch (Exception e) {
-                model.addAttribute("message", "Error al actualizar el formulario: " + e.getMessage());
-                return "errorPage";  // cambiar a la página de error que tenga configurada.
-            }
-        } else {
-            model.addAttribute("message", "No se encontró el formulario con la id proporcionada");
-            return "errorPage";
-        }
-
-        return "redirect:/SuperAdminHomePage/verforms";
-    }
 
     @PostMapping("/eliminarFormulario/{id}")
     public String eliminarFormulario(
@@ -299,6 +270,29 @@ public class SuperAdminController {
         } catch (Exception e) {
             model.addAttribute("message", "Error al guardar el formulario: " + e.getMessage());
             return "errorPage";  // cambiar a la página de error que tenga configurada.
+        }
+
+        return "redirect:/SuperAdminHomePage/verforms";
+    }
+    @PostMapping("/actualizarFormulario/{id}")
+    public String actualizarFormulario(
+            @PathVariable("id") Integer id,
+            @RequestParam("titulo") String titulo,
+            @RequestParam("estructura_formulario") String estructuraFormulario,
+            Model model) {
+        FormularioJson formularioJson = formularioJsonRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid formulario Id:" + id));
+        formularioJson.setTitulo(titulo);
+        formularioJson.setEstructura_formulario(estructuraFormulario);
+        formularioJson.setSent(0); // Seteamos el valor en 0 siempre.
+        System.out.println("aqui llegamos compa");
+
+        try {
+            formularioJsonRepository.save(formularioJson);
+            model.addAttribute("message", "Formulario actualizado con éxito");
+        } catch (Exception e) {
+            model.addAttribute("message", "Error al actualizar el formulario: " + e.getMessage());
+            return "errorPage";
         }
 
         return "redirect:/SuperAdminHomePage/verforms";
