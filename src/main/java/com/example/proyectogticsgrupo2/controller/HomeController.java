@@ -129,7 +129,7 @@ public class HomeController {
                     return "general/tokenExpirado";
                 }
             }else {
-                return "general/registro";
+                return "redirect:/signin";
             }
         }
     }
@@ -180,6 +180,10 @@ public class HomeController {
             }
             model.addAttribute("distritos", list);
             model.addAttribute("seguros", list1);
+            Object token = model.getAttribute("token");
+            if(token!=null){
+                model.addAttribute("token", token);
+            }
             return "general/registro";
         }else{
             if(paciente.getGenero().equals("M")){

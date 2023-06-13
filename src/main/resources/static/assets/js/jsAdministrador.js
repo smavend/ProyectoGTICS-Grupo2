@@ -8,6 +8,55 @@
 
 /*mis js*/
 //validar form de descarga
+function validateForm() {
+  var tiporeporte = document.getElementById("tiporeporte").value;
+  var seguro = document.getElementById("insuranceInput").value;
+  var especialidad = document.getElementById("specialtyInput").value;
+  var tipopago = document.getElementById("paymentTypeInput").value;
+  var todo = document.getElementById("porfechareporte").value;
+  var isValid = true;
+
+  switch (tiporeporte) {
+    case "1":
+      if (seguro === "") {
+        document.getElementById("insuranceInput").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("insuranceInput").classList.remove("is-invalid");
+      }
+      break;
+    case "2":
+      if (especialidad === "") {
+        document.getElementById("specialtyInput").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("specialtyInput").classList.remove("is-invalid");
+      }
+      break;
+    case "3":
+      if (tipopago === "") {
+        document.getElementById("paymentTypeInput").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("paymentTypeInput").classList.remove("is-invalid");
+      }
+      break;
+    case "5":
+      if (todo === "") {
+        document.getElementById("porfechareporte").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("porfechareporte").classList.remove("is-invalid");
+      }
+      break;
+    default:
+      isValid = false;
+      break;
+  }
+
+  return isValid;
+}
+
 
 //fin validar form descarga
 
