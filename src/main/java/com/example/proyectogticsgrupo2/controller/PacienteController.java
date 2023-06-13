@@ -225,8 +225,11 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
 
+        String tipoPago;
+        if(citaTemporal.getModalidad()==0){tipoPago = "Efectivo";}else{tipoPago = "Tarjeta";}
+
         citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
-        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
+        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
 
         return "redirect:/Paciente/confirmacion";
     }
@@ -553,7 +556,7 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
-        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId());
+        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), "Efectivo");
 
         return "redirect:/Paciente/confirmacion";
     }
@@ -614,7 +617,7 @@ public class PacienteController {
                               @RequestParam("idPago") int idPago, @RequestParam("fechaStr") String fechaStr,
                               @RequestParam("filtro") int filtro, Model model, RedirectAttributes attr,
                               HttpSession session, Authentication authentication) {
-
+        
         if (bindingResult.hasErrors()) {
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
             if (filtro == 0) {
