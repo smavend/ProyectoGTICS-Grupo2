@@ -11,5 +11,8 @@ public interface ListaBuscadorDoctor {
     LocalDateTime getInicio();
     LocalDateTime getFin();
     int getEstado();
-    int getSeguro_id_seguro();
+    String getFotoname();
+    String getFotocontenttype();
+    byte[] getFoto();
+
 }

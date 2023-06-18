@@ -5,6 +5,7 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -82,7 +80,7 @@ public class DoctorController {
         List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor.getId_doctor()); //CAMBIAR POR ID SESION
         List<Cuestionario> listaCuestionarios= cuestionarioRepository.findAll();
         ArrayList<String> listaHorarios = new ArrayList<>();
-
+        List<CuestionarioPorCita> cuestionarioPorCitaList=cuestionarioPorCitaRepository.findAll();
 
         // Transformar LocalDateTime a LocalDate
         optionalCita.forEach(cita -> {
@@ -104,6 +102,7 @@ public class DoctorController {
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", optionalCita);
         model.addAttribute("listaPacientes", optionalCita2);
+        model.addAttribute("listaCuestionarioPorCita", cuestionarioPorCitaList);
 
 
         return "doctor/DoctorDashboard";
@@ -116,36 +115,60 @@ public class DoctorController {
 
         Optional<Cita> optionalCita = citaRepository.findById(id);
         List<Cuestionario> listaCuestionarios= cuestionarioRepository.findAll();
+        Optional<CuestionarioPorCita> optionalCuestionarioPorCita = cuestionarioPorCitaRepository.findByIdIdCita(id);
 
         if (optionalCita.isPresent()) {
-            Cita cita = optionalCita.get();
 
-            model.addAttribute("listaCuestionarios", listaCuestionarios);
-            model.addAttribute("cita", cita);
+            if (optionalCuestionarioPorCita.isEmpty()){
+                Cita cita = optionalCita.get();
 
-            return "doctor/DoctorEnviarCuestionario";
+                model.addAttribute("listaCuestionarios", listaCuestionarios);
+                model.addAttribute("cita", cita);
+
+                return "doctor/DoctorEnviarCuestionario";
+
+            }else{
+
+                return "redirect:/doctor/dashboard";
+            }
+
         } else {
             return "redirect:/doctor/dashboard";
         }
-
-
-
     }
 
     @PostMapping("/guardarCuestionario")
     public String guardaCuestionario(HttpSession session, Authentication authentication, Model model, @Valid CuestionarioPorCita cuestionarioPorCita, BindingResult bindingResult) {
-        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
-        session.setAttribute("doctor",doctor_session);
+        Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor", doctor_session);
 
         if (bindingResult.hasErrors()) {
-
             return "redirect:/doctor/dashboard";
         } else {
+            // Obtener los valores de los campos hidden
+            Integer cuestionarioId = cuestionarioPorCita.getCuestionario().getId_cuestionario();
+            Integer citaId = cuestionarioPorCita.getCita().getId_cita();
+
+            // Crear instancias de las entidades relacionadas
+            Cuestionario cuestionario = new Cuestionario();
+            cuestionario.setId_cuestionario(cuestionarioId);
+
+            Cita cita = new Cita();
+            cita.setId_cita(citaId);
+
+            // Establecer las relaciones entre las entidades
+            cuestionarioPorCita.setCuestionario(cuestionario);
+            cuestionarioPorCita.setCita(cita);
+            cuestionarioPorCita.getId().setIdCuestionario(cuestionarioId);
+            cuestionarioPorCita.getId().setIdCita(citaId);
+            cuestionarioPorCita.setEstado(0);
 
             cuestionarioPorCitaRepository.save(cuestionarioPorCita);
+
             return "redirect:/doctor/dashboard";
         }
     }
+
 
 
     @GetMapping("/recibo")
@@ -248,9 +271,9 @@ public class DoctorController {
         Optional<Cita> optionalCita = citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
+        System.out.println(optionalCita.get().getModalidad());
 
-
-        if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && optionalCita.get().getModalidad()==1 && optionalCita.get().getDoctor().getId_doctor()==doctor_session.getId_doctor()) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
@@ -475,7 +498,16 @@ public class DoctorController {
                     doctor.setFotoname(fileName);
                     doctor.setFotocontenttype(file.getContentType());
                 }
-                doctorRepository.save(doctor);
+                try {
+                    doctorRepository.save(doctor);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    attr.addFlashAttribute("msgError", "No se puede subir la imagen");
+                    return "redirect:/doctor/perfilid="+ doctor.getId_doctor();
+                }
+
+
+
                 attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
                 return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
 
@@ -566,6 +598,8 @@ public class DoctorController {
 
         return "redirect:/doctor/perfil";
     }
+
+
 
     public String getIdPaciente() {
         return idPaciente;

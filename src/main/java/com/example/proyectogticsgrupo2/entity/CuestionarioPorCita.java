@@ -25,7 +25,7 @@ public class CuestionarioPorCita {
     private Cita cita;
 
     private Integer opcion_inicio_sesion;
-    private Integer estado;
+    private Integer estado; //1---> cuestionario completado; 0 ------> cuestionario pendiente
     private String r1;
     private String r2;
     private String r3;
