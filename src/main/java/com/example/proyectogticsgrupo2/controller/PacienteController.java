@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 @Controller
@@ -296,11 +297,13 @@ public class PacienteController {
         session.setAttribute("paciente", p);
         String fileName = file.getOriginalFilename();
 
+        String regexNombre = "^[A-Za-záÁéÉíÍóÓúÚñÑüÜ\\s']+$";
+
         if (p.getIdPaciente().equals(paciente.getIdPaciente())){
 
             if (fileName.contains("..") || fileName.contains(" ")) {
                 attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
-                return "redirect:/Paciente/perfil/editar?id=" + paciente.getIdPaciente();
+                return "redirect:/Paciente/perfil/editar";
             }
 
             if (bindingResult.hasErrors()) {
@@ -325,6 +328,7 @@ public class PacienteController {
                         Credenciales nuevasCredenciales = new Credenciales(p.getIdPaciente(), paciente.getCorreo(), credenciales.getContrasena());
                         credencialesRepository.save(nuevasCredenciales);
                     }
+
                     pacienteRepository.save(paciente);
 
                     attr.addFlashAttribute("msgActualizacion", "Su perfil se ha actualizado correctamente");
