@@ -46,7 +46,7 @@
                                 <p class="text-muted mb-3">Paciente</p>
                                 <div class="vstack gap-2 col-sm-6 col-md-5 col-lg-8 mx-auto mb-xl-4 mb-3 mt-4">
                                     <a th:href="@{/Paciente/perfil/editar}" class="botonPerfil">Editar perfil</a>
-                                    <a th:href="@{'/Paciente/perfil/cambiarContrasena?id='+${paciente.idPaciente}}" class="botonPerfil">Cambiar contraseña</a>
+                                    <a th:href="@{/Paciente/perfil/cambiarContrasena}" class="botonPerfil">Cambiar contraseña</a>
                                     <a href="#HistorialDeCitas" class="botonPerfil">Historial de citas</a>
                                     </div>
                                 <div style="border-radius: 15px" class="alert alert-success" role="alert" th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"></div>
@@ -147,7 +147,7 @@
                                         <p class="mb-0">Alergias</p>
                                     </div>
                                     <div class="col-sm-9">
-                                        <p class="mb-2 mb-xxl-0 alergia" th:each="alergia: ${alergiasPaciente}"
+                                        <p class="mb-2 alergia" th:each="alergia: ${alergiasPaciente}"
                                            th:text="${alergia.nombre}">Maní</p>
                                     </div>
                                 </div>
