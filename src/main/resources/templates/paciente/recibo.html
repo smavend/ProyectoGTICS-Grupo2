@@ -35,7 +35,7 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
 
             <h1 class="encabezado">Recibo - 281FH19701228FG</h1>
 
@@ -105,7 +105,9 @@
             </section>
 
             <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
             <!-- End footer -->
 
         </main>

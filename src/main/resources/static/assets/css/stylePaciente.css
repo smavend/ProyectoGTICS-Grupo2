@@ -7,8 +7,11 @@ body {
     background-image: linear-gradient(to right top, #dbe3e8, #e5eaee, #eff0f4, #f7f8f9, #ffffff);
     color: #444444;
     min-height: 100vh;
+    height: 100%;
 }
-
+html {
+    height: 100%;
+}
 a {
     text-decoration: none;
 }
@@ -78,7 +81,7 @@ transition: all 0.3s;
 }
 .contenedor figure{
     position:relative;
-    height: 450px;
+    height: 500px;
     cursor: pointer;
     width: auto;
     overflow: hidden;
@@ -1668,6 +1671,15 @@ botonTipo{
 .botonEntrarCita:hover{
     background-color: #197ce6;
     color: white;
+}
+
+.site-footer {
+    background-color: #00000000;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
 }
 
 /* Consentimientos */

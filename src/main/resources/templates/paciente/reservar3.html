@@ -30,7 +30,7 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
             <h1 class="encabezado">Reservar Cita</h1>
             <section class="seccionPrincipal">
 
@@ -89,6 +89,12 @@
                 </form>
 
             </section>
+
+            <!-- ====== Footer ====== -->
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
+            <!-- End footer -->
         </main>
 
         <!-- Bootstrap CDN JS -->

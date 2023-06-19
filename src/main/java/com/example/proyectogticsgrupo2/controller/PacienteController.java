@@ -238,7 +238,7 @@ public class PacienteController {
 
     @PostMapping("/reservar4")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                            HttpSession session, Authentication authentication) {
+                            HttpSession session, Authentication authentication, Model model) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
@@ -249,7 +249,12 @@ public class PacienteController {
         citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
 
-        return "redirect:/Paciente/confirmacion";
+        model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+        model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+        model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
+        model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
+        model.addAttribute("activarModal", true);
+        return "paciente/confirmacion";
     }
 
     /* SECCIÓN PERFIL */
@@ -571,22 +576,23 @@ public class PacienteController {
 
     @PostMapping("/reservarDoctor3")
     public String reserarDoctor3(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                 HttpSession session, Authentication authentication) {
+                                 HttpSession session, Authentication authentication, Model model) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
 
         citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), "Efectivo");
+        model.addAttribute("activarModal", true);
 
-        return "redirect:/Paciente/confirmacion";
+        return "paciente/confirmacion";
     }
 
     @GetMapping("/confirmacion")
-    public String confirmarReserva(HttpSession session, Authentication authentication) {
+    public String confirmarReserva(HttpSession session, Authentication authentication,Model model) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
+        model.addAttribute("activarModal", true);
         return "paciente/confirmacion";
     }
 

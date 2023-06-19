@@ -31,7 +31,7 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
         <!-- End Sidebar-->
 
-        <main style="padding-top: 0;" id="main" class="main">
+        <main style="padding-top: 0;" id="main" class="main site-content">
             <section style="margin-top: 0; padding-top: 30px;" class="seccionPrincipal">
                 <!-- Perfil doctor -->
                 <div style="margin-bottom: 50px;" class="row">
@@ -106,7 +106,9 @@
             </section>
 
             <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
             <!-- End footer -->
 
         </main>

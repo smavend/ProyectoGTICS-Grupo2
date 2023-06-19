@@ -33,7 +33,7 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
 
             <h1 class="encabezado">Historial de pagos</h1>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
@@ -142,10 +142,6 @@
                 </table>
             </section>
 
-            <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            <!-- End footer -->
-
             <!-- Modal -->
             <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label"
                  aria-hidden="true">
@@ -219,6 +215,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ====== Footer ====== -->
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
+            <!-- End footer -->
 
         </main><!-- End #main -->
 

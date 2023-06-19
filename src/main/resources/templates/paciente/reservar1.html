@@ -32,7 +32,7 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
 
             <h1 class="encabezado" style="color: #435067">Reservar cita</h1>
 
@@ -91,7 +91,7 @@
                                     style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
                                     th:classappend="${#fields.hasErrors('idSede')?'is-invalid':''}">
                                 <option value="">--Seleccione una sede--</option>
-                                <option th:each="sede:${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}">
+                                <option th:each="sede, iterStat:${sedeList}" th:if="${iterStat.index} &lt; 3" th:value="${sede.idSede}" th:text="${sede.nombre}">
                                     Sede
                                 </option>
                             </select>
@@ -117,6 +117,12 @@
                     </div>
                 </form>
             </section>
+
+            <!-- ====== Footer ====== -->
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
+            <!-- End footer -->
 
         </main><!-- End #main -->
 

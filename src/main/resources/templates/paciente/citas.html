@@ -33,7 +33,7 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('citas')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
 
             <h1 class="encabezado">Citas agendadas</h1>
             <section class="seccionPrincipal">
@@ -207,7 +207,9 @@
             </section>
 
             <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
             <!-- End footer -->
 
         </main><!-- End #main -->
