@@ -1641,7 +1641,14 @@ botonTipo{
     background-color: #197ce6;
     color: white;
 }
-
+@media print {
+    #header {
+        display: none !important;
+    }
+    #botonImp {
+        display: none !important;
+    }
+}
 
 /* Consentimientos */
 

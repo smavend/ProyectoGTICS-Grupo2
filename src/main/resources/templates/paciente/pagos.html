@@ -47,20 +47,22 @@
                     <thead>
                         <tr>
                             <th>Concepto</th>
-                            <th>Fecha pago</th>
+                            <th>Doctor</th>
+                            <th>Fecha de cita</th>
                             <th>Pago</th>
                             <th>Tipo de pago</th>
-                            <th>Estado</th>
+                            <th>Fecha de pago</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="pago: ${pagoList}" th:if="${pago.estadoPago}==0">
                             <td th:text="${pago.cita.doctor.especialidad.nombre}"></td>
-                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
+                            <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                            <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
-                            <td th:text="'Pendiente'"></td>
+                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Efectivo'" style="font-weight: 700">Cancelar en caja</td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Tarjeta'">
                                 <a  th:href="@{/Paciente/pagar(filtro=1, idPago=${pago.id})}" class="botonPagar botonPagarModal">Pagar</a>
@@ -74,20 +76,22 @@
                     <thead>
                         <tr>
                             <th>Concepto</th>
-                            <th>Fecha pago</th>
+                            <th>Doctor</th>
+                            <th>Fecha de cita</th>
                             <th>Pago</th>
                             <th>Tipo de pago</th>
-                            <th>Estado</th>
+                            <th>Fecha de pago</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="pago: ${pagoList}" th:if="${pago.estadoPago}==1">
                             <td th:text="${pago.cita.doctor.especialidad.nombre}"></td>
-                            <td th:text="${pago.fechaCancelada}">-</td>
+                            <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                            <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
-                            <td th:text="'Cancelado'"></td>
+                            <td th:text="${pago.fechaCancelada}">-</td>
                             <td th:if="${pago.estadoPago == 1}">
                                 <a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver
                                     recibo</a>
@@ -101,9 +105,11 @@
                     <thead>
                         <tr>
                             <th>Concepto</th>
-                            <th>Fecha pago</th>
+                            <th>Doctor</th>
+                            <th>Fecha de cita</th>
                             <th>Pago</th>
                             <th>Tipo de pago</th>
+                            <th>Fecha de pago</th>
                             <th>Estado</th>
                             <th></th>
                         </tr>
@@ -111,10 +117,12 @@
                     <tbody>
                         <tr th:each="pago: ${pagoList}">
                             <td th:text="${pago.cita.doctor.especialidad.nombre}">Facere ullam ratione qui</td>
-                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
-                            <td th:if="${pago.estadoPago == 1}" th:text="${pago.fechaCancelada}">-</td>
+                            <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                            <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
+                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
+                            <td th:if="${pago.estadoPago == 1}" th:text="${pago.fechaCancelada}">-</td>
                             <td th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}"></td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Efectivo'"
                                 style="font-weight: 700">

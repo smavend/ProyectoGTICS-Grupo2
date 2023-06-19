@@ -28,7 +28,7 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
+        <div id="header" th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
@@ -38,13 +38,14 @@
         <main id="main" class="main">
 
             <h1 class="encabezado">Recibo - 281FH19701228FG</h1>
+
             <section class="seccionPrincipal recibo">
                 <div class="row encabezadoRecibo">
                     <div class="col-10">
                         <h2 class="subEncabezado">Recibo - 13/12/2022</h2>
                     </div>
-                    <div class="col-2">
-                        <button class="btn btn-secondary botonImprimir">Imprimir</button>
+                    <div id="botonImp" class="col-2">
+                        <button class="btn btn-secondary botonImprimir" onclick="imprimir()">Imprimir</button>
                     </div>
                 </div>
 
@@ -78,26 +79,31 @@
                 <section class="informacionPago">
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th>Por concepto de</th>
-                                <th>Cantidad</th>
-                                <th>Precio</th>
-                                <th>Importe total</th>
-                                <th>Importe con seguro</th>
-                            </tr>
+                        <tr>
+                            <th>Por concepto de</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Importe total</th>
+                            <th>Importe con seguro</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur</td>
-                                <td>1</td>
-                                <td>S/ 1300.00</td>
-                                <td>S/ 1300.00</td>
-                                <td>S/ 130.00</td>
-                            </tr>
+                        <tr>
+                            <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur</td>
+                            <td>1</td>
+                            <td>S/ 1300.00</td>
+                            <td>S/ 1300.00</td>
+                            <td>S/ 130.00</td>
+                        </tr>
                         </tbody>
                     </table>
                 </section>
             </section>
+
+            <!-- ====== Footer ====== -->
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <!-- End footer -->
+
         </main>
 
         <!-- Bootstrap CDN JS -->
@@ -107,6 +113,12 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <script>
+            function imprimir() {
+                window.print();
+            }
+        </script>
 
     </body>
 </html>
