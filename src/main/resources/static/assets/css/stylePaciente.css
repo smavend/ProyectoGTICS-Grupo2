@@ -1524,6 +1524,22 @@ p{
     line-height: 2;
 }
 
+.botonVolverPagos{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: #0AA1DD;
+    border-radius: 50px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.botonVolverPagos:hover{
+    background-color: #197ce6;
+    color: white;
+}
+
 .informacionRecibo{
     margin-top: 25px;
     font-size: 1rem;
@@ -1554,6 +1570,18 @@ p{
 
 .botonImprimir:hover{
     background-color: rgb(198, 0, 0);
+}
+
+@media print {
+    #header {
+        display: none !important;
+    }
+    #botonImp {
+        display: none !important;
+    }
+    #botonVolver{
+        display: none !important;
+    }
 }
 
 /* Sección Dashboard */
@@ -1640,14 +1668,6 @@ botonTipo{
 .botonEntrarCita:hover{
     background-color: #197ce6;
     color: white;
-}
-@media print {
-    #header {
-        display: none !important;
-    }
-    #botonImp {
-        display: none !important;
-    }
 }
 
 /* Consentimientos */
