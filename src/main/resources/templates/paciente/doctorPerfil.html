@@ -47,19 +47,16 @@
                         <div class="perfilDoctorNombre" th:text="${doctor.nombre}+' '+${doctor.apellidos}">
                             Juan Martinez Rondon
                         </div>
-                        <div class="perfilDoctorInformacion">
-                            <span style="font-weight: 600;">Colegiatura:</span> 68860
+                        <div class="perfilDoctorInformacion" th:inline="text">
+                            <span style="font-weight: 600;">Colegiatura/RMS:</span> [[${doctor.colegiatura}]]
                         </div>
-                        <div class="perfilDoctorInformacion">
+                        <div class="perfilDoctorInformacion" th:inline="text">
                             <span style="font-weight: 600;">Pregrado:</span>
-                            Médico Neurólogo - Universidad de San Martín de Porres
+                            [[${doctor.pregrado}]]
                         </div>
-                        <div class="perfilDoctorInformacion">
+                        <div class="perfilDoctorInformacion" th:inline="text">
                             <span style="font-weight: 600;">Posgrado:</span>
-                            Especialista en Neurocirugía - Universidad Nacional Mayor de San Marcos
-                        </div>
-                        <div class="perfilDoctorInformacion">
-                            <span style="font-weight: 600;">Idiomas:</span> Español / Inglés
+                            [[${doctor.posgrado}]]
                         </div>
                     </div>
                 </div>
@@ -90,7 +87,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td th:text="${#temporals.dayOfWeekName(dia1)}">MARTES</td>
+                            <td th:text="${#strings.capitalize(#temporals.dayOfWeekName(dia1))}">MARTES</td>
                             <td th:text="${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+' - '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}">13:00 - 18:00</td>
                             <td>
                                 <button type="submit" form="formDia1" class="botonAceptar">Reservar en este
@@ -98,7 +95,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td th:text="${#temporals.dayOfWeekName(dia2)}">JUEVES</td>
+                            <td th:text="${#strings.capitalize(#temporals.dayOfWeekName(dia2))}">JUEVES</td>
                             <td th:text="${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+' - '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}">08:00 - 12:00</td>
                             <td>
                                 <button type="submit" form="formDia2" class="botonAceptar">Reservar en este horario</button>

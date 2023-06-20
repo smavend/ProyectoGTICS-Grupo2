@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.config;
 
+import com.example.proyectogticsgrupo2.entity.Paciente;
 import com.example.proyectogticsgrupo2.entity.SuperAdmin;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -85,7 +86,6 @@ public class SecurityConfig {
                         }
                         switch (rol) {
                             case "paciente" -> {
-                                session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
                                 response.sendRedirect("/Paciente");
                             }
                             case "doctor" -> {
@@ -162,7 +162,7 @@ public class SecurityConfig {
                 "    c.correo,\n" +
                 "    c.contrasena_hasheada,\n" +
                 "    CASE \n" +
-                "\t\tWHEN exists(select estado from paciente where id_paciente=id_credenciales and estado!=0 and estado!=3) THEN 1\n" +
+                "\t\tWHEN exists(select estado from paciente where id_paciente=id_credenciales and (estado!=0 or estado!=3)) THEN 1\n" +
                 "\t\tWHEN exists(select estado from doctor where id_doctor=id_credenciales and estado!=0) THEN 1\n" +
                 "\t\tWHEN exists(select estado from administrativo where id_administrativo=id_credenciales and estado!=0) THEN 1\n" +
                 "\t\tWHEN exists(select estado from administrador where id_administrador=id_credenciales and estado!=0) THEN 1\n" +

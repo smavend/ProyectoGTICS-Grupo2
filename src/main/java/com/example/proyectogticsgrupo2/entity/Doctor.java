@@ -2,6 +2,7 @@ package com.example.proyectogticsgrupo2.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -16,7 +17,6 @@ import java.io.Serializable;
 public class Doctor implements Serializable {
     @Id
     @NotBlank(message = "Este campo no puede estar vacío")
-    @Digits(integer = 8, fraction = 0, message = "En DNI debe ser un número")
     @Size(min = 8,max = 8,message = "En DNI debe tener 8 dígitos" )
     @Column(nullable = false)
     private String id_doctor;
@@ -39,6 +39,9 @@ public class Doctor implements Serializable {
     @JoinColumn(name = "sede_id_sede",nullable = false)
     private Sede sede;
 
+    @Digits(integer =2, fraction = 0,message = "Solo se permiten dos dígitos")
+    @Max(value = 60,message = "El máximo tiempo es de 60 minutos")
+    @Min(value = 10,message = "El mínimo tiempo es de 10 minutos")
     @Column(name = "duracion_cita_minutos")
     private Integer duracion_cita_minutos;
 
@@ -50,11 +53,14 @@ public class Doctor implements Serializable {
     @Size(max = 100, message = "El posgrado no puede tener más de 100 caracteres")
     private String posgrado;
 
-    
+
     @Size(max = 10, message = "La colegiatura no puede tener más de 10 caracteres")
+    @Pattern(regexp = "\\d+", message = "La colegiatura debe contener solo números")
     private String colegiatura;
+
     @ManyToOne
     @JoinColumn(name = "horario_id_horario")
+    @Valid
     private Horario horario;
 
     

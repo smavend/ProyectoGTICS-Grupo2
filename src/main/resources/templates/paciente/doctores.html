@@ -58,7 +58,7 @@
                 </form>
 
                 <div class="row">
-                    <div class="col-md-6 col-lg-4 col-xxl-3 filaDoctores" th:each="doctor: ${doctorList}">
+                    <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor: ${doctorList}">
                         <div class="cardDoctor">
                             <div class="seccionFoto">
                                 <img class="fotoDoctor rounded-circle" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
@@ -68,17 +68,20 @@
                                 <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
                             </div>
                             <div class="seccionDisponibilidad">
-                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#temporals.dayOfWeekName(dia1)}+': '+${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+'  -  '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}]]</div>
-                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#temporals.dayOfWeekName(dia2)}+': '+${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+'  -  '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}]]</div>
+                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#strings.capitalize(#temporals.dayOfWeekName(dia1))}+': '+${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+'  -  '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}]]</div>
+                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#strings.capitalize(#temporals.dayOfWeekName(dia2))}+': '+${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+'  -  '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}]]</div>
                             </div>
                             <div class="d-grid">
                                 <a th:href="@{/Paciente/perfilDoctor(doc=${doctor.id_doctor})}" class="botonVerMasDoctor">Ver más</a>
                             </div>
                         </div>
                     </div>
+                    <div class="mensajeDeVacio d-none" id="noDoctores">
+                        No se encontraron doctores disponibles
+                    </div>
                 </div>
 
-                <nav class="mt-2">
+                <nav class="mt-2" id="paginacion">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${paginaPrevia == 0? 'disabled': ''}">
                             <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaPrevia}}">Anterior</a>
@@ -107,5 +110,13 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+        <script>
+            let num = $(".doctor").length;
+            if (num === 0){
+                $("#noDoctores").removeClass("d-none");
+                $("#paginacion").addClass("d-none");
+            }
+        </script>
     </body>
 </html>

@@ -21,7 +21,7 @@ public class Paciente implements Serializable {
     @Id
     @Column(name="id_paciente")
     @NotBlank(message = "Este campo no puede estar vacío")
-    @Digits(integer = 8, fraction = 0, message = "En DNI debe ser un número")
+    //@Digits(integer = 8, fraction = 0, message = "En DNI debe ser un número")
     @Size(min = 8, max = 8, message = "En DNI debe tener 8 dígitos" )
     private String idPaciente;
 
@@ -43,7 +43,7 @@ public class Paciente implements Serializable {
     private Seguro seguro;
 
     @NotBlank(message = "Este campo no puede estar vacío")
-    @Digits(integer = 9, fraction = 0, message = "El teléfono debe ser un número")
+    //@Digits(integer = 9, fraction = 0, message = "El teléfono debe ser un número")
     @Size(min = 9, max = 9, message = "El teléfono debe tener 9 dígitos" )
     private String telefono;
 

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -116,7 +115,7 @@ public class HomeController {
             Optional<Token> posible = tokenRepository.findByIdPacienteAndToken(id, token);
             if(posible.isPresent()){
                 Token token1 = posible.get();
-                if(LocalDateTime.now().isBefore(token1.getFechaExpiracion())){
+                if(LocalDateTime.now().isBefore(token1.getFechaExpiracion()) && temporalRepository.findByDni(id).isPresent()){
                     Temporal temporal = temporalRepository.findByDni(id).get();
                     paciente.setIdPaciente(temporal.getDni());
                     paciente.setNombre(temporal.getNombre());
@@ -124,22 +123,22 @@ public class HomeController {
                     paciente.setCorreo(temporal.getCorreo());
                     model.addAttribute("distritos", list);
                     model.addAttribute("seguros", list1);
+                    model.addAttribute("token", "existe");
                     return "general/registro";
                 }else {
                     return "general/tokenExpirado";
                 }
             }else {
-                return "general/registro";
+                return "redirect:/signin";
             }
         }
     }
 
     @PostMapping("/signin/save")
     public String guardarRegistro (HttpSession session,
-                                   @RequestParam ("radios") String radio,
-                                   @RequestParam ("alergias") String alergias,
+                                   @RequestParam (value = "radios", required = false) String radio,
+                                   @RequestParam (value = "alergias", required = false) String alergias,
                                    Model model,
-                                   RedirectAttributes attr,
                                    @ModelAttribute("paciente") @Valid Paciente paciente,
                                    BindingResult bindingResult){
         List<Distrito> list = distritoRepository.findAll();
@@ -181,6 +180,10 @@ public class HomeController {
             }
             model.addAttribute("distritos", list);
             model.addAttribute("seguros", list1);
+            Object token = model.getAttribute("token");
+            if(token!=null){
+                model.addAttribute("token", token);
+            }
             return "general/registro";
         }else{
             if(paciente.getGenero().equals("M")){
@@ -188,31 +191,44 @@ public class HomeController {
             } else{
                 paciente.setGenero("Femenino");
             }
-            paciente.setEstado(3);
-            paciente.setFecharegistro(LocalDateTime.now());
 
-            pacienteRepository.save(paciente);
+            Optional<Temporal> temp1 = temporalRepository.findByDni(paciente.getIdPaciente());
 
-            Tarea tarea = new Tarea();
-            tarea.setFecha(LocalDateTime.now());
-            tarea.setPaciente(paciente);
-            tarea.setEstado(1);
-            tarea.setTipo(1);
-            tareaRepository.save(tarea);
-
-            if(radio.equals("1")){
-                String[] alergiasArray = alergias.split(",");
-                String alergia = "";
-                Alergia alergia1 = null;
-                for(int i = 0; i<alergiasArray.length; i++){
-                    alergia = alergiasArray[i].trim();
-                    alergia = alergia.replaceAll(" +"," ");
-                    if(!alergia.equals(" ") && !alergia.equals("")){
-                        alergia = alergia.substring(0,1).toUpperCase() + alergia.substring(1).toLowerCase();
-                        alergia1 = new Alergia();
-                        alergia1.setNombre(alergia);
-                        alergia1.setPaciente(paciente);
-                        alergiaRepository.save(alergia1);
+            if(temp1.isPresent()){
+                Temporal temporal = temp1.get();
+                temporal.setDistrito(paciente.getDistrito());
+                temporal.setFecha_nacimiento(paciente.getFechanacimiento());
+                temporal.setLlenado(1);
+                temporal.setSeguro(paciente.getSeguro());
+                temporal.setTelefono(paciente.getTelefono());
+                temporal.setDireccion(paciente.getDireccion());
+                temporal.setGenero(paciente.getGenero());
+                temporalRepository.save(temporal);
+                tokenRepository.deleteById(temporal.getDni());
+            }else {
+                paciente.setEstado(3);
+                paciente.setFecharegistro(LocalDateTime.now());
+                pacienteRepository.save(paciente);
+                Tarea tarea = new Tarea();
+                tarea.setFecha(LocalDateTime.now());
+                tarea.setPaciente(paciente);
+                tarea.setEstado(1);
+                tarea.setTipo(1);
+                tareaRepository.save(tarea);
+                if(radio.equals("1")){
+                    String[] alergiasArray = alergias.split(",");
+                    String alergia;
+                    Alergia alergia1;
+                    for (String s : alergiasArray) {
+                        alergia = s.trim();
+                        alergia = alergia.replaceAll(" +", " ");
+                        if (!alergia.equals(" ") && !alergia.equals("")) {
+                            alergia = alergia.substring(0, 1).toUpperCase() + alergia.substring(1).toLowerCase();
+                            alergia1 = new Alergia();
+                            alergia1.setNombre(alergia);
+                            alergia1.setPaciente(paciente);
+                            alergiaRepository.save(alergia1);
+                        }
                     }
                 }
             }

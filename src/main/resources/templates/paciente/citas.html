@@ -46,18 +46,20 @@
                         <thead>
                             <tr>
                                 <th>Especialidad</th>
+                                <th>Doctor</th>
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Tipo de cita</th>
-                                <th>Estado</th>
+                                <th>Estado de pago</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="cita : ${proximasCitas}" class="filaCita">
                                 <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
+                                <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
                                 <td th:text="${#temporals.format(cita.inicio, 'dd/MM/yyyy')}">10/05/23</td>
-                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')}">13:00 Hrs.</td>
+                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')}+' Hrs.'">13:00 Hrs.</td>
                                 <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</td>
                                 <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
                                 <td>
@@ -250,10 +252,6 @@
             }
         </script>
 
-        <!-- JQUERY -->
-        <script src="https://code.jquery.com/jquery-3.4.1.js"
-                integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
-        </script>
         <!-- DATATABLES -->
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
         </script>
@@ -267,13 +265,13 @@
                         processing: "Tratamiento en curso...",
                         search: "Buscar&nbsp;:",
                         lengthMenu: " ",
-                        info: "",
+                        info: "Página _PAGE_ de _PAGES_",
                         infoEmpty: "No existen datos.",
                         infoFiltered: "(filtrado de _MAX_ elementos en total)",
                         infoPostFix: "",
                         loadingRecords: "Cargando...",
-                        zeroRecords: "No se encontraron datos con tu busqueda",
-                        emptyTable: "No hay datos disponibles en la tabla.",
+                        zeroRecords: "No se encontraron citas con tu búsqueda",
+                        emptyTable: "No tienes citas pendientes",
                         paginate: {
                             first: "Primero",
                             previous: "Anterior",

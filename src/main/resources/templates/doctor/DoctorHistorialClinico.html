@@ -70,11 +70,8 @@
 
 <body>
 
-<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${doctor})}"></div>
-
-<!-- ======= Sidebar ======= -->
-<div th:replace="~{doctor/fragments/sidebar.html :: sidebar}"></div>
-
+<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+<div th:replace="~{doctor/fragments/sidebar.html :: sidebar('')}"></div>
 <main id="main" class="main">
 
 
@@ -147,9 +144,36 @@
             </div>
 
             <div class="tab-pane fade encuesta pt-3" id="encuesta">
-              <h5 class="card-title">Formularios y cuestionario</h5>
-              <!-- Documentos de consentimiento -->
+              <h5 class="card-title">Cuestionarios</h5>
+              <div class="row">
+                <div class="col-lg-9 col-md-8">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Fecha de encuesta</th>
+                      <th scope="col">Visualización de encuesta</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Verificar si la lista de cuestionarios está vacía -->
+                    <th:block th:if="${#lists.isEmpty(listEncuesta)}">
+                      <tr>
+                        <td colspan="3">No hay cuestionarios disponibles</td>
+                      </tr>
+                    </th:block>
+                    <!-- Iterar sobre las alergias del paciente -->
+                    <tr th:each="encuesta, i : ${listEncuesta}">
+                      <th scope="row" th:text="${i.index + 1}"></th>
+                      <td th:text="${#temporals.format(encuesta.getFin(), 'HH:mm dd-MM-yyyy')}"></td>
+                      <td><a th:href="@{'/doctor/verCuestionario?id=' + ${encuesta.getId_cita()}}" class="btn btn-primary">Ver encuesta</a></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
+
 
             <div class="tab-pane fade tratamiento pt-3" id="tratamiento">
               <h5 class="card-title">Información de consultas</h5>

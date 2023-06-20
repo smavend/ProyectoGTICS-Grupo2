@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -71,5 +72,9 @@ public class Cita {
 
     @Column(name = "seguro_id_seguro")
     private String idSeguro;
+
+    @ManyToOne
+    @JoinColumn(name = "especialidad_id_especialidad")
+    private Especialidad especialidad;
 
 }

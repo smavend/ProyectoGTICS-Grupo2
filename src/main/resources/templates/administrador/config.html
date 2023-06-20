@@ -256,10 +256,12 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Cerrar Sesión</span>
-            </a>
+            <form th:action="@{/logout}" method="post">
+              <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Cerrar Sesión</span>
+              </button>
+            </form>
           </li>
 
         </ul><!-- End Profile Dropdown Items -->
@@ -351,7 +353,17 @@
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->
+<script>
+  var headerColorAdministrador = "[[${headerColorAdministrador}]]";
+  localStorage.setItem('headerColorAdministrador', headerColorAdministrador);
 
+  function updateHeaderColorAdministrador() {
+    var color = headerColorAdministrador;
+    document.getElementById('header').style.backgroundColor = color;
+  }
+
+  updateHeaderColorAdministrador();
+</script>
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>

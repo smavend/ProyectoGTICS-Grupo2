@@ -6,7 +6,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 public class CorreoPacienteService {
-    public void enviarCorreo(String correo, String link, String id, String token) {
+    public void enviarCorreo(String correo, String nombre, String link, String id, String token) {
         Properties props = new Properties();
         props.put("mail.smtp.host","smtp.gmail.com");
         props.put("mail.smtp.port", "587");
@@ -25,7 +25,7 @@ public class CorreoPacienteService {
 
             // Crear una parte para el contenido HTML
             MimeBodyPart htmlPart = new MimeBodyPart();
-            htmlPart.setContent(getHTMLContent(link, id, token), "text/html");
+            htmlPart.setContent(getHTMLContent(nombre, link, id, token), "text/html");
 
             // Crear el multipart para combinar el contenido HTML y el texto plano
             MimeMultipart multipart = new MimeMultipart("alternative");
@@ -43,7 +43,7 @@ public class CorreoPacienteService {
         }
     }
     // Método para cargar el contenido HTML desde el archivo invitacion.html
-    private String getHTMLContent(String link, String id, String token) {
+    private String getHTMLContent(String nombre, String link, String id, String token) {
         String htmlContent = ""; // Contenido HTML del archivo
 
         // Código para cargar el contenido HTML desde el archivo invitacion.html
@@ -79,7 +79,7 @@ public class CorreoPacienteService {
                 "                <tbody>\n" +
                 "                  <tr>\n" +
                 "                    <td align=\"center\">\n" +
-                "                      <h1 class=\"m_6554632393618514601f40\" style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:34px;line-height:normal;font-weight:700;letter-spacing:0;color:#4c4c4c\">¡Bienvenido a nuestra plataforma clínica!</h1>\n" +
+                "                      <h1 class=\"m_6554632393618514601f40\" style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:34px;line-height:normal;font-weight:700;letter-spacing:0;color:#4c4c4c\">¡Bienvenido(a) a nuestra plataforma clínica, %nombre% !</h1>\n" +
                 "                    </td>\n" +
                 "                  </tr>\n" +
                 "                  <tr>\n" +
@@ -136,6 +136,9 @@ public class CorreoPacienteService {
                 "                                        </table>\n" +
                 "                                      </div>\n" +
                 "                                    </td>\n" +
+                "                                  </tr>\n" +
+                "                                  <tr>\n" +
+                "                                    <td class=\"m_6554632393618514601mobilespace24\" height=\"20\" style=\"height:24px;line-height:24px\">&nbsp;</td>\n" +
                 "                                  </tr>\n" +
 
                 "                                  <tr>\n" +
@@ -273,7 +276,7 @@ public class CorreoPacienteService {
                 "  </body>\n" +
                 "</html>";
 
-
+        htmlContent = htmlContent.replace("%nombre%", nombre);
         htmlContent = htmlContent.replace("%link%", link);
         htmlContent = htmlContent.replace("%id%", id);
         htmlContent = htmlContent.replace("%token%",token);
