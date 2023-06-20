@@ -57,7 +57,7 @@ public class DoctorController {
         this.horarioRepository = horarioRepository;
     }
 
-    @GetMapping(value = {"/dashboard", "/", ""})
+ /*   @GetMapping(value = {"/dashboard", "/", ""})
     public String dashboard(Model model, HttpSession session) {
 
         Doctor doctor_session = (Doctor) session.getAttribute("doctor");
@@ -92,7 +92,57 @@ public class DoctorController {
 
 
         return "doctor/DoctorDashboard";
-    }
+    }*/
+ @GetMapping(value = {"/dashboard", "/", ""})
+ public String dashboard(@RequestParam(value = "id", required = false) String doctorId, Model model, HttpSession session) {
+     Doctor doctor_session = (Doctor) session.getAttribute("doctor");
+
+     // Si no se proporcionó un doctorId en la URL, usa el id del doctor en la sesión.
+     if (doctorId == null && doctor_session != null) {
+         doctorId = doctor_session.getId_doctor();
+     }
+
+     // Si aún no se ha establecido doctorId (porque no se proporcionó en la URL y no hay doctor en la sesión), redirige a una página de error o realiza otra acción apropiada.
+     if (doctorId == null) {
+         return "error-page"; // Cambia esto según tus necesidades
+     }
+
+     // Verifica si el doctor de la sesión coincide con el doctor seleccionado
+     if (doctor_session != null && doctor_session.getId_doctor().equals(doctorId)) {
+         // Realiza las operaciones necesarias para mostrar el dashboard del doctor seleccionado
+         List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas(doctorId);
+         List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctorId);
+         ArrayList<String> listaHorarios = new ArrayList<>();
+         Optional<Doctor> doctorOptional = doctorRepository.findById(doctorId);
+
+         if (doctorOptional.isPresent()) {
+             Doctor doctor = doctorOptional.get();
+
+             // Transformar LocalDateTime a LocalDate
+             optionalCita.forEach(cita -> {
+                 LocalDateTime fechaHora = cita.getInicio();
+                 String hora1 = fechaHora.toLocalTime().toString();
+
+                 LocalDateTime fechaHora2 = cita.getFin();
+                 String hora2 = fechaHora2.toLocalTime().toString();
+
+                 String horaFinal = hora1 + " - " + hora2;
+                 listaHorarios.add(horaFinal);
+             });
+
+             model.addAttribute("doctor", doctor);
+             model.addAttribute("listaHorarios", listaHorarios);
+             model.addAttribute("listaCitas", optionalCita);
+             model.addAttribute("listaPacientes", optionalCita2);
+
+             return "doctor/DoctorDashboard";
+         }
+     }
+
+     // Si el doctor seleccionado no coincide con el doctor de la sesión o no se encuentra en la base de datos, redirige a una página de error o realiza otra acción apropiada.
+     return "error-page";
+ }
+
 
     @GetMapping("/recibo")
     public String recibo(Model model, HttpServletRequest request) {

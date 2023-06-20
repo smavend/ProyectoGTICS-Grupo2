@@ -14,6 +14,8 @@ public class AdministrativoDTO_superadmin {
     private String sedeNombre;
     private String clinica;
     private String especialidad;
+    private boolean showLoguearButton;  // Nueva propiedad
+
 
 
     // Constructor, getters y setters

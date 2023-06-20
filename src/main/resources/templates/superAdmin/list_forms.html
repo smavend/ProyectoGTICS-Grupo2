@@ -50,23 +50,6 @@
 
 </head>
 
-<!-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-       <div class="modal-dialog modal-dialog-centered">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <div class="modal-title" id="staticBackdropLabel"></div>
-                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-               </div>
-               <div class="modal-body">
-               </div>
-               <div class="modal-footer">
-                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                   <button type="button" class="btn btn-primary">Loguearse</button>
-               </div>
-           </div>
-       </div>
-   </div>-->
 
 <body>
 <!-- ======= Header ======= -->
@@ -77,90 +60,6 @@
 <div th:replace="~{superAdmin/fragments/sidebar.html :: sidebar}"></div>
 <!-- End Sidebar-->
 
-<!-- <main id="main" class="main">
-
-     <div class="pagetitle">
-         <h1>Clínica INTERPUCP</h1>
-         <nav>
-             <ol class="breadcrumb">
-                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                 <li class="breadcrumb-item active">Formularios</li>
-                 <li class="breadcrumb-item active">Tabla de formularios</li>
-             </ol>
-         </nav>
-     </div>&lt;!&ndash; End Page Title &ndash;&gt;
-     <section class="section dashboard">&lt;!&ndash;
-         <table>
-             <tr th:each="form : ${forms}">
-                 <td th:text="${form.titulo}"></td>
-             </tr>
-
-         </table>&ndash;&gt;
-             <div class="row align-items-center">
-                 <div class="col-lg-5 container">
-                     <div class="col-lg-12">
-                         <div class="card">
-                             <div class="card-body pb-0">
-                                 <div class="d-flex justify-content-between align-items-center">
-                                     <h5 class="card-title">Tabla de formularios</h5>
-                                 </div>
-                                 <div class="flex-column">
-                                     <table class="table table-striped" id="Sedes_uiux">
-                                         <thead>
-                                         <tr>
-                                             <th scope="col">#</th>
-                                             <th scope="col">Formularios</th>
-                                             <th scope="col">Acción</th>
-                                         </tr>
-                                         </thead>
-                                         <tbody>
-                                         <tr>
-                                             <td>1</td>
-                                             <td>Formulario de invitación</td>
-                                             <td>
-                                                 <button class="btn btn-primary">Enviar a Administrativo</button>
-                                             </td>
-                                         </tr>
-                                         <tr>
-                                             <td>2</td>
-                                             <td>Formulario 2</td>
-                                             <td>
-                                                 <button class="btn btn-primary">Enviar a Administrativo</button>
-                                             </td>
-                                         </tr>
-                                         &lt;!&ndash; Agrega más filas según sea necesario &ndash;&gt;
-                                         </tbody>
-                                     </table>
-                                     <br>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-     </section>
- </main>&lt;!&ndash; End #main &ndash;&gt;
--->
-<!--<div id="formularioModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h5 class="modal-title">Formulario</h5>
-                <button type="button" class="btn btn-circle close" data-dismiss="modal" aria-label="Close"
-                        style="background-color: #ccc; width: 30px; height: 30px; border: none; border-radius: 50%; padding: 0; margin-right: 5px;">
-                    <span aria-hidden="true" class="close-icon" style="color: #000; font-size: 24px; display: block; text-align: center; line-height: 30px;">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="dynamic-modal-form">
-                &lt;!&ndash; Aquí se insertará el formulario dinámico &ndash;&gt;
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Editar</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>-->
 <div id="formularioModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -188,7 +87,7 @@
     <section class="section dashboard">
         <!-- ... -->
         <div class="row align-items-center">
-            <div class="col-lg-10 container">
+            <div class="col-lg-8 container">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body pb-0">
@@ -204,7 +103,6 @@
                                         <th scope="col">Visualizar</th>
                                         <th scope="col">Editar</th>
                                         <th scope="col">Borrar</th>
-                                        <th scope="col">Acción</th>
                                         <th scope="col">Estado</th>
                                     </tr>
                                     </thead>
@@ -214,25 +112,32 @@
                                         <td th:text="${formulario.titulo}"></td>
                                         <td>
                                             <button type="button" class="btn btn-primary formulario-link"
-                                                    th:data-form-index="${iterStat.index}">Visualizar
+                                                    th:data-form-index="${iterStat.index}">
+                                                <i class="fas fa-eye"></i>
                                             </button>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-secondary" th:data-form-id="${formulario.id}">Editar</button>
+                                            <a class="btn btn-primary editar-btn" th:href="@{/SuperAdminHomePage/ShowToEditForm/{id}(id=${formulario.id})}">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
                                         </td>
                                         <td>
                                             <form th:action="@{/SuperAdminHomePage/eliminarFormulario/{id}(id=${formulario.id})}"
                                                   method="post">
-                                                <button type="submit" class="btn btn-danger eliminar-btn">Borrar
+                                                <button type="submit" class="btn btn-danger eliminar-btn">
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-success">Acción</button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-warning"
-                                                    th:text="${formulario.sent == 1 ? 'Enviado' : 'No enviado'}"></button>
+                                            <div>
+                                                <span style="display: inline-block;" th:class="${formulario.sent == 1 ? 'btn btn-success' : 'btn btn-warning'}" th:text="${formulario.sent == 1 ? 'Disponible' : 'No Disponible'}"></span>
+                                                <form style="display: inline-block;" th:action="@{/SuperAdminHomePage/cambioDisponibilidad/{id}(id=${formulario.id})}" method="post">
+                                                    <button type="submit" class="btn btn-success change-btn">
+                                                        <i class="fas fa-sync-alt"></i> <!-- Esto es para el símbolo de actualizar -->
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -245,6 +150,7 @@
             </div>
         </div>
     </section>
+
 </main>
 
 <!-- ======= Footer ======= -->
@@ -553,23 +459,9 @@
     });
 </script>-->
 <script th:inline="javascript">
+
     /*<![CDATA[*/
     var formularios = /*[[${formularios}]]*/ [];
-
-    function obtenerEstructuraFormularioDinamico() {
-        var estructuraFormulario = { fields: [] };
-
-        $('.row.mb-3').each(function () {
-            var label = $(this).find('label.col-form-label').text();
-            var type = $(this).find('input').attr('type');
-            var id = ""; // Puedes reemplazar esto por el valor correcto si es necesario
-            var name = ""; // Puedes reemplazar esto por el valor correcto si es necesario
-            estructuraFormulario.fields.push({ type: type, label: label, id: id, name: name });
-        });
-
-        return estructuraFormulario;
-    }
-
     $(document).ready(function () {
         $(document).on('click', 'button.formulario-link', function (e) {
             e.preventDefault();
@@ -611,190 +503,6 @@
             $('#dynamic-modal-form').html(fullFormularioHtml);
             $('#formularioModal').modal('show');
         });
-
-        $(document).on('click', 'button.btn.btn-secondary', function (e) {
-            e.preventDefault();
-            var formularioId = $(this).data('formId'); // Obtener el formulario.id
-            var formIndex = Number($(this).closest('tr').find('button.formulario-link').data('form-index'));
-            var formulario = formularios[formIndex];
-
-            var estructuraFormulario = JSON.parse(formulario.estructura_formulario);
-            var htmlFormulario = '';
-
-            estructuraFormulario.fields.forEach(function (field) {
-                htmlFormulario += `
-        <div class="row mb-3">
-            <div class="col-sm-3">
-                <label class="col-form-label" contentEditable="true">${field.label}:</label>
-            </div>
-            <div class="col-sm-6">
-                <input type="${field.type}" class="form-control">
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
-            </div>
-        </div>`;
-            });
-
-            var fullFormularioHtml = `
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 id="titulo" class="card-title" contentEditable="true">${formulario.titulo} </h5>
-                <form id="dynamic-form-${formIndex}">
-                    ${htmlFormulario}
-                    <input type="hidden" id="estructura_formulario" name="estructura_formulario">
-                </form>
-                <form id="my-form2"></form>
-            </div>
-        </div>
-    </div>`;
-
-            $('#edit-buttons').empty();
-            $('#view-buttons').empty();
-            $('#edit-buttons').html(`
-        <button type="button" class="btn btn-primary" id="update-btn">Actualizar</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-    `);
-
-            $('#dynamic-modal-form').html(fullFormularioHtml);
-            $('#formularioModal').modal('show');
-
-          /*  $(document).on('click', '#update-btn', function (event) {
-                event.preventDefault();
-
-                var title = document.getElementById('titulo').textContent;
-                var estructuraFormulario = obtenerEstructuraFormularioDinamico();
-                var estructuraFormularioValue = JSON.stringify(estructuraFormulario);
-
-                console.log('titulo:', title);
-                console.log('estructura_formulario:', estructuraFormularioValue);
-
-                document.getElementById('titulo').value = title;
-                document.getElementById('estructura_formulario').value = estructuraFormularioValue;
-
-                document.getElementById('my-form').submit();
-            });*/
-                         $(document).on('click', '#update-btn', function (event) {
-                event.preventDefault();
-
-                var title = document.getElementById('titulo').textContent;
-                var estructuraFormulario = obtenerEstructuraFormularioDinamico();
-                var estructuraFormularioValue = JSON.stringify(estructuraFormulario);
-
-                console.log('titulo:', title);
-                console.log('estructura_formulario:', estructuraFormularioValue);
-                console.log('formIndex:', formIndex + 1);
-                console.log('formularioId:', formularioId); // Mostrar formulario.id en la consola
-
-
-                var $form = $(`<form id="my-form2" method="post" th:action="@{/SuperAdminHomePage/actualizarFormulario/${formularioId}}">
-        <input type="hidden" id="titulo" name="titulo" value="${title}">
-        <input type="hidden" id="estructura_formulario" name="estructura_formulario" value='${estructuraFormularioValue}'>
-    </form>`);
-
-                console.log('Formulario a enviar:', $form);
-                console.log('Valor de titulo en el formulario:', $form.find('input[name="titulo"]').val());
-                console.log('Valor de estructura_formulario en el formulario:', $form.find('input[name="estructura_formulario"]').val());
-
-                $(document.body).append($form);
-                console.log('Formulario a enviar (HTML):', $form.prop('outerHTML'));
-                document.getElementById('my-form2').submit();
-            });
-/*
-            $(document).on('click', '#update-btn', function (event) {
-                event.preventDefault();
-
-                var formIndex = Number($(this).closest('tr').find('button.formulario-link').data('form-index'));
-                var formulario = formularios[formIndex];
-/!*
-                var formularioId = formulario.id; // Obtener el formulario.id
-*!/
-/!*
-                var formularioId = $(this).data('formId'); // Obtener el formulario.id
-*!/
-
-                var title = document.getElementById('titulo').textContent;
-                var estructuraFormulario = obtenerEstructuraFormularioDinamico();
-                var estructuraFormularioValue = JSON.stringify(estructuraFormulario);
-
-                console.log('titulo:', title);
-                console.log('estructura_formulario:', estructuraFormularioValue);
-                console.log('formIndex:', formIndex + 1);
-                console.log('formularioId:', formularioId); // Mostrar formulario.id en la consola
-
-                var $form = $(`<form id="my-form" method="post" th:action="@{/SuperAdminHomePage/actualizarFormulario/${formularioId}}">
-        <input type="hidden" id="titulo" name="titulo" value="${title}">
-        <input type="hidden" id="estructura_formulario" name="estructura_formulario" value='${estructuraFormularioValue}'>
-    </form>`);
-
-                console.log('Formulario a enviar:', $form);
-                console.log('Valor de titulo en el formulario:', $form.find('input[name="titulo"]').val());
-                console.log('Valor de estructura_formulario en el formulario:', $form.find('input[name="estructura_formulario"]').val());
-
-                $(document.body).append($form);
-                console.log('Formulario a enviar (HTML):', $form.prop('outerHTML'));
-                $form.submit();
-            });
-*/
-
-
-
-          /*  $(document).on('click', '#update-btn', function (event) {
-                event.preventDefault();
-
-                var title = document.getElementById('titulo').textContent;
-                var estructuraFormulario = obtenerEstructuraFormularioDinamico();
-                var estructuraFormularioValue = JSON.stringify(estructuraFormulario);
-
-                console.log('titulo:', title);
-                console.log('estructura_formulario:', estructuraFormularioValue);
-                console.log('formIndex:', formIndex);
-
-                var $form = $(`<form method="post" action="/SuperAdminHomePage/actualizarFormulario/${formIndex}">
-        <input type="hidden" name="titulo" value="${title}">
-        <input type="hidden" name="estructura_formulario" value='${estructuraFormularioValue}'>
-    </form>`);
-
-                console.log('Formulario a enviar:', $form);
-                console.log('Valor de titulo en el formulario:', $form.find('input[name="titulo"]').val());
-                console.log('Valor de estructura_formulario en el formulario:', $form.find('input[name="estructura_formulario"]').val());
-
-                $(document.body).append($form);
-                $form.submit();
-            });
-*/
-
-        });
-
-        // Agregar fila al formulario
-        $(document).on('click', '.add-row', function () {
-            var newRow = `
-                <div class="row mb-3">
-                    <div class="col-sm-3">
-                        <label class="col-form-label" contentEditable="true">Nuevo campo:</label>
-                    </div>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" value="" contentEditable="true">
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
-                    </div>
-                </div>`;
-            $(this).closest('.row').after(newRow);
-        });
-
-        // Eliminar fila del formulario
-        $(document).on('click', '.remove-row', function () {
-            $(this).closest('.row').remove();
-        });
-
         // Cuando se hace click en el botón de cerrar el modal o en el botón X
         $(document).on('click', '#formularioModal [data-dismiss="modal"]', function () {
             $('#formularioModal').modal('hide');
@@ -815,6 +523,12 @@
         // Cuando se hace click en el botón de eliminar de la tabla
         $(document).on('click', '.eliminar-btn', function (e) {
             if (!confirm("¿Estás seguro de que deseas eliminar este formulario?")) {
+                e.preventDefault();
+            }
+        });
+        // Cuando se hace click en el botón de Editar de la tabla
+        $(document).on('click', '.editar-btn', function (e) {
+            if (!confirm("¿Estás seguro de que deseas editar este formulario?")) {
                 e.preventDefault();
             }
         });

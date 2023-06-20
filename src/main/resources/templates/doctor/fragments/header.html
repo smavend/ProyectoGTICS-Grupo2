@@ -25,6 +25,16 @@
         </a>
       </li><!-- End Search Icon-->
 
+      <li>
+        <div th:if="${session.superAdminLogueadoComoDoctor}">
+          <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin}" method="POST">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-home"></i> Volver a SuperAdmin
+            </button>
+          </form>
+        </div>
+      </li>
+
       <li class="nav-item dropdown">
 
         <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">

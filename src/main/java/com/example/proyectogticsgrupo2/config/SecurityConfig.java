@@ -110,11 +110,11 @@ public class SecurityConfig {
                 });
 
         http.authorizeHttpRequests()
-                .requestMatchers("/Paciente","/Paciente/***").hasAuthority("paciente")
-                .requestMatchers("/doctor","/doctor/***").hasAuthority("doctor")
-                .requestMatchers("/administrativo","/administrativo/***").hasAuthority("administrativo")
+                .requestMatchers("/Paciente","/Paciente/***").hasAnyAuthority("paciente", "superadmin")
+                .requestMatchers("/doctor","/doctor/***").hasAnyAuthority("doctor", "superadmin")
+                .requestMatchers("/administrativo","/administrativo/***").hasAnyAuthority("administrativo", "superadmin")
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
-                .requestMatchers("/administrador","/administrador/***").hasAuthority("administrador")
+                .requestMatchers("/administrador","/administrador/***").hasAnyAuthority("administrador", "superadmin")
                 .requestMatchers("/","/login","/login/**","/signin","/signin/**").anonymous()
                 .anyRequest().permitAll();
 
