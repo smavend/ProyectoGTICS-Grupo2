@@ -25,14 +25,93 @@ public class Horario implements Serializable {
 
     @NotNull(message = "El campo hora es obligatorio")
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime comida_inicio;
+    @Column(name = "comida_inicio_lunes", nullable = false)
+    private LocalTime comida_inicio_lunes;
 
     @NotNull(message = "El campo hora es obligatorio")
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime disponibilidad_inicio;
+    @Column(name = "disponibilidad_inicio_lunes", nullable = false)
+    private LocalTime disponibilidad_inicio_lunes;
 
     @NotNull(message = "El campo hora es obligatorio")
-    @DateTimeFormat(pattern = "HH:mm:ss")
-    private LocalTime disponibilidad_fin;
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_fin_lunes", nullable = false)
+    private LocalTime disponibilidad_fin_lunes;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "comida_inicio_martes", nullable = false)
+    private LocalTime comida_inicio_martes;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_inicio_martes", nullable = false)
+    private LocalTime disponibilidad_inicio_martes;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_fin_martes", nullable = false)
+    private LocalTime disponibilidad_fin_martes;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "comida_inicio_miercoles", nullable = false)
+    private LocalTime comida_inicio_miercoles;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_inicio_miercoles", nullable = false)
+    private LocalTime disponibilidad_inicio_miercoles;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_fin_miercoles", nullable = false)
+    private LocalTime disponibilidad_fin_miercoles;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "comida_inicio_jueves", nullable = false)
+    private LocalTime comida_inicio_jueves;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_inicio_jueves", nullable = false)
+    private LocalTime disponibilidad_inicio_jueves;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_fin_jueves", nullable = false)
+    private LocalTime disponibilidad_fin_jueves;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "comida_inicio_viernes", nullable = false)
+    private LocalTime comida_inicio_viernes;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_inicio_viernes", nullable = false)
+    private LocalTime disponibilidad_inicio_viernes;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_fin_viernes", nullable = false)
+    private LocalTime disponibilidad_fin_viernes;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "comida_inicio_sabado", nullable = false)
+    private LocalTime comida_inicio_sabado;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_inicio_sabado", nullable = false)
+    private LocalTime disponibilidad_inicio_sabado;
+
+    @NotNull(message = "El campo hora es obligatorio")
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "disponibilidad_fin_sabado", nullable = false)
+    private LocalTime disponibilidad_fin_sabado;
+
 
 }
