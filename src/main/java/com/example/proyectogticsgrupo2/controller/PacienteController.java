@@ -2,6 +2,7 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.HorarioOcupadoDTO;
+import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +25,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 @Controller
@@ -188,20 +188,19 @@ public class PacienteController {
             List<HorarioOcupadoDTO> horariosOcupados = horarioRepository.buscarHorariosOcupados(doctor.getId_doctor(), citaTemporal.getFecha());
             HashMap<LocalTime, String> horarios = new HashMap<>();
 
-            if (horariosOcupados.size() > 0){
-                for (LocalTime horario: horariosTotal){
-                    for (HorarioOcupadoDTO ocupado: horariosOcupados){
-                        if (horario.equals(ocupado.getHorario())){
+            if (horariosOcupados.size() > 0) {
+                for (LocalTime horario : horariosTotal) {
+                    for (HorarioOcupadoDTO ocupado : horariosOcupados) {
+                        if (horario.equals(ocupado.getHorario())) {
                             horarios.put(horario, "Ocupado");
                             break;
-                        }else {
+                        } else {
                             horarios.put(horario, "Disponible");
                         }
                     }
                 }
-            }
-            else{
-                for (LocalTime horario: horariosTotal){
+            } else {
+                for (LocalTime horario : horariosTotal) {
                     horarios.put(horario, "Disponible");
                 }
             }
@@ -244,7 +243,11 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         String tipoPago;
-        if(citaTemporal.getModalidad()==0){tipoPago = "Efectivo";}else{tipoPago = "Tarjeta";}
+        if (citaTemporal.getModalidad() == 0) {
+            tipoPago = "Efectivo";
+        } else {
+            tipoPago = "Tarjeta";
+        }
 
         citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
@@ -297,9 +300,7 @@ public class PacienteController {
         session.setAttribute("paciente", p);
         String fileName = file.getOriginalFilename();
 
-        String regexNombre = "^[A-Za-záÁéÉíÍóÓúÚñÑüÜ\\s']+$";
-
-        if (p.getIdPaciente().equals(paciente.getIdPaciente())){
+        if (p.getIdPaciente().equals(paciente.getIdPaciente())) {
 
             if (fileName.contains("..") || fileName.contains(" ")) {
                 attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
@@ -342,8 +343,7 @@ public class PacienteController {
 
             }
 
-        }
-        else {
+        } else {
             attr.addFlashAttribute("msgError", "Ocurrió un error al actualizar el perfil");
             return "redirect:/Paciente/perfil";
         }
@@ -353,12 +353,11 @@ public class PacienteController {
     public String guardarAlergia(Alergia alergia, RedirectAttributes attr, Authentication authentication) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        if (paciente.getIdPaciente().equals(alergia.getPaciente().getIdPaciente())){
+        if (paciente.getIdPaciente().equals(alergia.getPaciente().getIdPaciente())) {
             alergiaRepository.save(alergia);
             return "redirect:/Paciente/perfil/editar";
-        }
-        else {
-            attr.addFlashAttribute("msgError" ,"Ocurrió un error al actualizar el perfil");
+        } else {
+            attr.addFlashAttribute("msgError", "Ocurrió un error al actualizar el perfil");
             return "redirect:/Paciente/perfil";
         }
     }
@@ -604,8 +603,10 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         List<Cita> proximasCitas = citaRepository.buscarProximasCitas(paciente.getIdPaciente());
+        List<TorreYPisoDTO> torresYPisos = citaRepository.buscarTorresYPisos(paciente.getIdPaciente());
 
         model.addAttribute("proximasCitas", proximasCitas);
+        model.addAttribute("torresYPisos", torresYPisos);
 
         return "paciente/citas";
     }
@@ -638,7 +639,7 @@ public class PacienteController {
                               @RequestParam("idPago") int idPago, @RequestParam("fechaStr") String fechaStr,
                               @RequestParam("filtro") int filtro, Model model, RedirectAttributes attr,
                               HttpSession session, Authentication authentication) {
-        
+
         if (bindingResult.hasErrors()) {
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
             if (filtro == 0) {
@@ -698,6 +699,7 @@ public class PacienteController {
     @GetMapping("/cuestionario")
     public String completarCuestionario(@RequestParam("cues") Integer idCuestionario,
                                         @RequestParam("cita") Integer idCita,
+                                        @ModelAttribute("cuestionario") CuestionarioPorCita cuestionario,
                                         Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
@@ -705,7 +707,25 @@ public class PacienteController {
         model.addAttribute("cuestionario", cuestionarioPorCitaRepository.findByIdIdCuestionarioAndIdIdCita(idCuestionario, idCita));
         model.addAttribute("preguntas", cuestionarioRepository.buscarPorId(idCuestionario));
 
-        return "paciente/completarCuestionario";
+        return "paciente/cuestionariosCompletar";
+    }
+
+    @PostMapping("/guardarCuestionario")
+    public String guardarCuestionario(@ModelAttribute("cuestionario") @Valid CuestionarioPorCita cuestionario, BindingResult bindingResult,
+                                      Model model, HttpSession session, Authentication authentication) {
+
+        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("preguntas", cuestionarioRepository.buscarPorId(cuestionario.getCuestionario().getId_cuestionario()));
+            return "paciente/cuestionariosCompletar";
+        }
+
+        cuestionarioPorCitaRepository.guardarCuestionario(cuestionario.getR1(), cuestionario.getR2(), cuestionario.getR3(), cuestionario.getR4(), cuestionario.getR5(),
+                cuestionario.getR6(), cuestionario.getR7(), cuestionario.getR8(), cuestionario.getR9(), cuestionario.getR10(), cuestionario.getR11(),
+                cuestionario.getCuestionario().getId_cuestionario(), cuestionario.getCita().getId_cita());
+
+        return "redirect:/Paciente/cuestionarios";
     }
 
     /* SECCIÓN CONSENTIMIENTOS */

@@ -1393,6 +1393,21 @@ p{
     color: white;
 }
 
+.botonSecundario{
+    background-color: #e3e3e3;
+    border-radius: 15px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: #414141;
+    transition: all 0.3s;
+}
+
+.botonSecundario:hover{
+    color: #414141;
+    background-color: #c5c5c5;
+}
+
 .botonCancelar{
     background-color: #dc3545;
     border-radius: 15px;
@@ -1408,20 +1423,20 @@ p{
     background-color: #c0202e;
 }
 
-.mensajeDeVacio{
+.mensajeDeContenidoVacio{
     margin: 190px auto;
     text-align: center;
 }
 
 @media (max-width: 576px) {
-    .mensajeDeVacio{
+    .mensajeDeContenidoVacio{
         margin: 60px auto;
         text-align: center;
     }
 }
 
 @media (max-width: 992px) and (min-width: 577px) {
-    .mensajeDeVacio{
+    .mensajeDeContenidoVacio{
         margin: 130px auto;
         text-align: center;
     }

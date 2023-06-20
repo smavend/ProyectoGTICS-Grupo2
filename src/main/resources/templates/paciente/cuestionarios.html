@@ -48,26 +48,23 @@
                     </thead>
                     <tbody>
                         <tr th:each="cuestionario:${cuestionarios}">
-                            <td th:text="${cuestionario.cita.doctor.especialidad.nombre}">Lorem ipsum, dolor sit amet consec</td>
-                            <td th:text="${#temporals.format(cuestionario.fecha_enviado, 'dd/MM/yyyy HH:mm')}">14/07/2022</td>
-                            <td th:text="${cuestionario.fecha_completado != null? cuestionario.fecha_completado:'-'}">-</td>
+                            <td th:text="${cuestionario.cita.doctor.especialidad.nombre}">Lorem ipsum, dolor sit amet
+                                consec
+                            </td>
+                            <td th:text="${cuestionario.fecha_enviado != null? #temporals.format(cuestionario.fecha_enviado, 'dd/MM/yyyy - HH:mm'): '-'}">
+                                14/07/2022
+                            </td>
+                            <td th:text="${cuestionario.fecha_completado != null? #temporals.format(cuestionario.fecha_completado, 'dd/MM/yyyy - HH:mm'):'-'}">
+                                -
+                            </td>
                             <td th:text="${cuestionario.cita.doctor.getNombreYApellido()}">Juan Martinez R.</td>
                             <td>
-                                <a th:href="@{'/Paciente/cuestionario?cues='+${cuestionario.id.idCuestionario}+'&cita='+${cuestionario.id.idCita}}" class="botonCompletar">Completar</a>
+                                <a th:href="@{'/Paciente/cuestionario?cues='+${cuestionario.id.idCuestionario}+'&cita='+${cuestionario.id.idCita}}"
+                                   th:text="${cuestionario.estado == 0? 'Completar':'Revisar'}" th:class="${cuestionario.estado == 0? 'botonAcepta':'botonSecundario'}">Completar</a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
 
             </section>
 

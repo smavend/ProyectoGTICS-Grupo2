@@ -39,7 +39,7 @@
             <section class="seccionPrincipal">
 
                 <a class="btn botonTipo botonTipoSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
-                <a class="btn botonTipo botonExamenes" onclick="buscarExamenes()">Próximos citas virtuales</a>
+                <a class="btn botonTipo botonExamenes" onclick="buscarExamenes()">Próximas exámenes</a>
 
                 <div class="table-responsive-xl">
                     <table class="table" id="tablax">
@@ -63,7 +63,7 @@
                                 <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</td>
                                 <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
                                 <td>
-                                    <a class="botonVerMas" data-bs-toggle="modal"
+                                    <a href="#" class="botonAceptar" data-bs-toggle="modal"
                                        th:attr="data-bs-target='#citaModal'+${cita.id_cita}">Ver más</a>
                                 </td>
                             </tr>
@@ -72,7 +72,7 @@
                 </div>
 
                 <!-- Modal Presencial-->
-                <div th:each="cita : ${proximasCitas}" th:if="${cita.modalidad == 0}"
+                <div th:each="cita, i : ${proximasCitas}" th:if="${cita.modalidad == 0}"
                      th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" id="citaPresencialModal" tabindex="-1"
                      aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
@@ -90,7 +90,7 @@
                                 <div class="row informacionModal">
                                     <div class="col-6">
                                         <p>Nombres y apellidos:<span class="informacionModalDato"
-                                                                     th:text="${cita.paciente.nombre}+' '+${cita.paciente.apellidos}">Juanchito Palacios Castro</span>
+                                                                     th:text="${cita.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
                                         </p>
                                         <p>Seguro:<span class="informacionModalDato"
                                                         th:text="${cita.paciente.seguro.nombre}">Pacífico EPS</span></p>
@@ -117,15 +117,15 @@
                                         <p>Tipo de cita:<span class="informacionModalDato"
                                                               th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
                                         </p>
-                                        <p>Torre:<span class="informacionModalDato">B (Falta)</span></p>
+                                        <p>Torre:<span class="informacionModalDato" th:text="${torresYPisos[i.index].getTorre()}">B (Falta)</span></p>
                                     </div>
                                     <div class="col-6">
                                         <p>Doctor:<span class="informacionModalDato" th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
                                         </p>
                                         <p>Sede:<span
-                                                class="informacionModalDato" th:text="${cita.sede.nombre}+' '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
+                                                class="informacionModalDato" th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
                                         </p>
-                                        <p>Piso:<span class="informacionModalDato">2 (Falta)</span></p>
+                                        <p>Piso:<span class="informacionModalDato" th:text="${torresYPisos[i.index].getPiso()}">2 (Falta)</span></p>
                                     </div>
                                 </div>
                             </div>
