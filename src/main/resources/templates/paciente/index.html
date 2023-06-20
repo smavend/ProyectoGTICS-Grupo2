@@ -53,9 +53,11 @@
                                     <h6>CLINICAS</h6>
                                     <h2 class="fw-bold" style="color: darkblue" th:text="${sede.nombre}">San Isidro</h2>
                                     <p th:text="${sede.direccion}">Av. Javier Prado Este 1066, Lima.</p>
-                                    <div class="d-flex align-items-center justify-content-end" style="margin-right: 30px">
+                                    <div class="d-flex align-items-center justify-content-end"
+                                         style="margin-right: 30px">
                                         <span>Conoce la sede</span>
-                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill" style="color: darkgray"></i>
+                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
+                                           style="color: darkgray"></i>
                                     </div>
                                 </div>
                             </figure>
@@ -65,11 +67,9 @@
                 </div>
             </section>
 
-            <footer class="site-footer">
-                <!-- ====== Footer ====== -->
-                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-                <!-- End footer -->
-            </footer>
+            <!-- ====== Footer ====== -->
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <!-- End footer -->
 
         </main>
         <!-- End #main -->

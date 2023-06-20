@@ -40,19 +40,22 @@
                         <div class="col-md-4 col-lg-4 filtro d-flex justify-content-start">
                             <label class="labelFiltro">Sede</label>
                             <select class="form-select" name="sede">
-                                <option th:each="sede: ${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}" th:selected="${sede.idSede == idSede}"></option>
+                                <option th:each="sede: ${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}"
+                                        th:selected="${sede.idSede == idSede}"></option>
                             </select>
                         </div>
                         <div class="col-md-5 col-lg-6 filtro d-flex justify-content-start">
                             <label class="labelFiltro">Especialidad</label>
                             <select class="form-select" name="esp">
                                 <option value="0" th:selected="${idEspecialidad == 0}">Todas las especialidades</option>
-                                <option th:each="especialidad : ${especialidadList}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}" th:selected="${especialidad.idEspecialidad == idEspecialidad}"></option>
+                                <option th:each="especialidad : ${especialidadList}"
+                                        th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"
+                                        th:selected="${especialidad.idEspecialidad == idEspecialidad}"></option>
                             </select>
                         </div>
                         <div class="col-md-3 col-lg-2 d-flex justify-content-center">
                             <input type="hidden" name="pag" value="1">
-                            <button class="botonFiltro" type="submit"><i class="bi bi-search"></i>   Buscar</button>
+                            <button class="botonFiltro" type="submit"><i class="bi bi-search"></i> Buscar</button>
                         </div>
                     </div>
                 </form>
@@ -61,18 +64,30 @@
                     <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor: ${doctorList}">
                         <div class="cardDoctor">
                             <div class="seccionFoto">
-                                <img class="fotoDoctor rounded-circle" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
+                                <img class="fotoDoctor rounded-circle"
+                                     th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
                             </div>
                             <div class="seccionDescripcion">
-                                <div class="seccionNombre" th:text="'Dr. '+ ${doctor.nombre} +' '+ ${doctor.apellidos}">Ronald Richard</div>
+                                <div class="seccionNombre" th:text="'Dr. '+ ${doctor.nombre} +' '+ ${doctor.apellidos}">
+                                    Ronald Richard
+                                </div>
                                 <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
                             </div>
                             <div class="seccionDisponibilidad">
-                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#strings.capitalize(#temporals.dayOfWeekName(dia1))}+': '+${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+'  -  '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}]]</div>
-                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i> [[${#strings.capitalize(#temporals.dayOfWeekName(dia2))}+': '+${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+'  -  '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}]]</div>
+                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i>
+                                    [[${#strings.capitalize(#temporals.dayOfWeekName(dia1))}+':
+                                    '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}+' -
+                                    '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}]]
+                                </div>
+                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i>
+                                    [[${#strings.capitalize(#temporals.dayOfWeekName(dia2))}+':
+                                    '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}+' -
+                                    '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}]]
+                                </div>
                             </div>
                             <div class="d-grid">
-                                <a th:href="@{/Paciente/perfilDoctor(doc=${doctor.id_doctor})}" class="botonVerMasDoctor">Ver más</a>
+                                <a th:href="@{/Paciente/perfilDoctor(doc=${doctor.id_doctor})}"
+                                   class="botonVerMasDoctor">Ver más</a>
                             </div>
                         </div>
                     </div>
@@ -84,13 +99,19 @@
                 <nav class="mt-2" id="paginacion">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${paginaPrevia == 0? 'disabled': ''}">
-                            <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaPrevia}}">Anterior</a>
+                            <a class="page-link"
+                               th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaPrevia}}">Anterior</a>
                         </li>
-                        <li class="page-item" th:each="pagina: ${paginas}" th:classappend="${paginaActual == pagina? 'active': ''}">
-                            <a class="page-link" th:style="${paginaActual == pagina? 'background: #0AA1DD; border-color: #dee2e6':''}" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${pagina}}" th:text="${pagina}">1</a>
+                        <li class="page-item" th:each="pagina: ${paginas}"
+                            th:classappend="${paginaActual == pagina? 'active': ''}">
+                            <a class="page-link"
+                               th:style="${paginaActual == pagina? 'background: #0AA1DD; border-color: #dee2e6':''}"
+                               th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${pagina}}"
+                               th:text="${pagina}">1</a>
                         </li>
                         <li class="page-item" th:classappend="${paginaActual == totalPaginas? 'disabled':''}">
-                            <a class="page-link" th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaSiguiente}}">Siguiente</a>
+                            <a class="page-link"
+                               th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaSiguiente}}">Siguiente</a>
                         </li>
                     </ul>
                 </nav>
@@ -110,10 +131,11 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
-        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"
+                integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
         <script>
             let num = $(".doctor").length;
-            if (num === 0){
+            if (num === 0) {
                 $("#noDoctores").removeClass("d-none");
                 $("#paginacion").addClass("d-none");
             }

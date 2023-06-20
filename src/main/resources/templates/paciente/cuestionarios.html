@@ -60,7 +60,8 @@
                             <td th:text="${cuestionario.cita.doctor.getNombreYApellido()}">Juan Martinez R.</td>
                             <td>
                                 <a th:href="@{'/Paciente/cuestionario?cues='+${cuestionario.id.idCuestionario}+'&cita='+${cuestionario.id.idCita}}"
-                                   th:text="${cuestionario.estado == 0? 'Completar':'Revisar'}" th:class="${cuestionario.estado == 0? 'botonAcepta':'botonSecundario'}">Completar</a>
+                                   th:text="${cuestionario.estado == 0? 'Completar':'Revisar'}"
+                                   th:class="${cuestionario.estado == 0? 'botonAceptar':'botonSecundario'}">Completar</a>
                             </td>
                         </tr>
                     </tbody>
@@ -69,9 +70,7 @@
             </section>
 
             <!-- ====== Footer ====== -->
-            <footer class="site-footer">
-                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            </footer>
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
 
         </main>

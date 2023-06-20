@@ -39,9 +39,13 @@
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
             <section class="seccionPrincipal">
 
-                <a class="btn botonTipo botonTodos" th:classappend="${filtro==0 || filtro == null?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
-                <a class="btn botonTipo botonPendientes" th:classappend="${filtro==1?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
-                <a class="btn botonTipo botonCancelados" th:classappend="${filtro==2?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=2)}">Cancelados</a>
+                <a class="btn botonTipo botonTodos"
+                   th:classappend="${filtro==0 || filtro == null?'botonTipoSeleccionado':''}"
+                   th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
+                <a class="btn botonTipo botonPendientes" th:classappend="${filtro==1?'botonTipoSeleccionado':''}"
+                   th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
+                <a class="btn botonTipo botonCancelados" th:classappend="${filtro==2?'botonTipoSeleccionado':''}"
+                   th:href="@{/Paciente/filtrarPagos(filtro=2)}">Cancelados</a>
 
                 <table class="table" id="tablax" th:if="${filtro}==1">
                     <thead>
@@ -63,9 +67,12 @@
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
                             <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
-                            <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Efectivo'" style="font-weight: 700">Cancelar en caja</td>
+                            <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Efectivo'"
+                                style="font-weight: 700">Cancelar en caja
+                            </td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Tarjeta'">
-                                <a  th:href="@{/Paciente/pagar(filtro=1, idPago=${pago.id})}" class="botonPagar botonPagarModal">Pagar</a>
+                                <a th:href="@{/Paciente/pagar(filtro=1, idPago=${pago.id})}"
+                                   class="botonPagar botonPagarModal">Pagar</a>
                             </td>
                         </tr>
 
@@ -130,7 +137,8 @@
                                 Cancelar en caja
                             </td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Tarjeta'">
-                                <a th:href="@{/Paciente/pagar(filtro=0, idPago=${pago.id})}" class="botonPagar botonPagarModal">Pagar</a>
+                                <a th:href="@{/Paciente/pagar(filtro=0, idPago=${pago.id})}"
+                                   class="botonPagar botonPagarModal">Pagar</a>
                             </td>
                             <td th:if="${pago.estadoPago == 1}">
                                 <a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver
@@ -143,7 +151,8 @@
             </section>
 
             <!-- Modal -->
-            <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label"
+            <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1"
+                 aria-labelledby="modal-pago-label"
                  aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -159,7 +168,8 @@
 
                         </div>
                         <div class="modal-body">
-                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=${filtro})}" th:object="${tarjetaPago}">
+                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=${filtro})}"
+                                  th:object="${tarjetaPago}">
                                 <input type="hidden" th:value="${idPagar}" name="idPago">
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Nombre del titular de la tarjeta</label>
@@ -168,8 +178,10 @@
                                                             <span class="input-group-text"><i
                                                                     class="bi bi-person-fill"></i></i></span>
                                         </div>
-                                        <input type="text" class="form-control" th:field="*{titular}" th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}" th:errors="*{titular}"></div>
+                                        <input type="text" class="form-control" th:field="*{titular}"
+                                               th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}"
+                                             th:errors="*{titular}"></div>
                                     </div>
                                 </div>
                                 <div class="mb-3 w-75">
@@ -179,8 +191,10 @@
                                                             <span class="input-group-text"><i
                                                                     class="bi bi-credit-card-fill"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}" th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}" th:errors="*{numeroTarjeta}"></div>
+                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}"
+                                               th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}"
+                                             th:errors="*{numeroTarjeta}"></div>
                                     </div>
 
                                 </div>
@@ -192,7 +206,9 @@
                                                                 <span class="input-group-text"><i
                                                                         class="bi bi-calendar-event-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="MM-yyyy" name="fechaStr" th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
+                                            <input type="text" class="form-control" placeholder="MM-yyyy"
+                                                   name="fechaStr"
+                                                   th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -202,13 +218,16 @@
                                                                 <span class="input-group-text"><i
                                                                         class="bi bi-lock-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" th:field="*{codigo}" th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
+                                            <input type="text" class="form-control" th:field="*{codigo}"
+                                                   th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}"
+                                                 th:errors="*{codigo}"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
+                                    <button type="submit" class="btn btn-primary w-25"
+                                            style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
                                 </div>
                             </form>
                         </div>
@@ -216,10 +235,7 @@
                 </div>
             </div>
 
-            <!-- ====== Footer ====== -->
-            <footer class="site-footer">
-                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            </footer>
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
 
         </main><!-- End #main -->
@@ -273,7 +289,7 @@
                         }
                     },
                     scrollY: 400,
-                    lengthMenu: [ [5, -1], [5, "All"] ],
+                    lengthMenu: [[5, -1], [5, "All"]],
                 });
             });
         </script>
@@ -281,7 +297,7 @@
         <script th:inline="javascript">
             const activarModal = /*[[${activarModal}]]*/ false;
             if (activarModal) {
-                $(document).ready(function() {
+                $(document).ready(function () {
                     $('#modal-pago').modal('show');
                 });
             }

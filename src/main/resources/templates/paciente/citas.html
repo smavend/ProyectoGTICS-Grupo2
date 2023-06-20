@@ -108,7 +108,8 @@
                                         </p>
                                     </div>
                                 </div>
-                                <span class="textoModal" th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' del '+${#temporals.format(cita.inicio,'MM')}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                <span class="textoModal"
+                                      th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' del '+${#temporals.format(cita.inicio,'MM')}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
                                 <div class="row informacionModal">
                                     <div class="col-6">
                                         <p>Especialidad:<span class="informacionModalDato"
@@ -117,15 +118,20 @@
                                         <p>Tipo de cita:<span class="informacionModalDato"
                                                               th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
                                         </p>
-                                        <p>Torre:<span class="informacionModalDato" th:text="${torresYPisos[i.index].getTorre()}">B (Falta)</span></p>
+                                        <p>Torre:<span class="informacionModalDato"
+                                                       th:text="${torresYPisos[i.index].getTorre()}">B (Falta)</span>
+                                        </p>
                                     </div>
                                     <div class="col-6">
-                                        <p>Doctor:<span class="informacionModalDato" th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
+                                        <p>Doctor:<span class="informacionModalDato"
+                                                        th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
                                         </p>
                                         <p>Sede:<span
-                                                class="informacionModalDato" th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
+                                                class="informacionModalDato"
+                                                th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
                                         </p>
-                                        <p>Piso:<span class="informacionModalDato" th:text="${torresYPisos[i.index].getPiso()}">2 (Falta)</span></p>
+                                        <p>Piso:<span class="informacionModalDato"
+                                                      th:text="${torresYPisos[i.index].getPiso()}">2 (Falta)</span></p>
                                     </div>
                                 </div>
                             </div>
@@ -175,7 +181,8 @@
                                         </p>
                                     </div>
                                 </div>
-                                <span class="textoModal" th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' del '+${#temporals.format(cita.inicio,'MM')}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                <span class="textoModal"
+                                      th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' del '+${#temporals.format(cita.inicio,'MM')}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
                                 <div class="row informacionModal">
                                     <div class="col-6">
                                         <p>Especialidad:<span class="informacionModalDato"
@@ -190,7 +197,8 @@
                                         </p>
                                     </div>
                                     <div class="col-6">
-                                        <p>Doctor:<span class="informacionModalDato" th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
+                                        <p>Doctor:<span class="informacionModalDato"
+                                                        th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
                                         </p>
                                     </div>
                                 </div>
@@ -207,9 +215,7 @@
             </section>
 
             <!-- ====== Footer ====== -->
-            <footer class="site-footer">
-                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            </footer>
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
 
         </main><!-- End #main -->
@@ -225,7 +231,7 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
-        <script th:inline="javascript">
+        <script>
 
             const especialidadesExam = ["Cardiología", "Cirugía cardiovascular", "Laboratorio", "Rayos X",
                 "Ecografía", "Neurología", "Gastroenterología", "Endocrinología", "Nefrología"];
@@ -243,6 +249,7 @@
                     }
                 }
             }
+
             function buscarCitas() {
                 botonExamenes.removeClass("botonTipoSeleccionado");
                 botonCitas.addClass("botonTipoSeleccionado");
@@ -259,36 +266,6 @@
         </script>
         <!-- BOOTSTRAP -->
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
-        </script>
-        <script>
-            $(document).ready(function () {
-                $('#tablax').DataTable({
-                    language: {
-                        processing: "Tratamiento en curso...",
-                        search: "Buscar&nbsp;:",
-                        lengthMenu: " ",
-                        info: "Página _PAGE_ de _PAGES_",
-                        infoEmpty: "No existen datos.",
-                        infoFiltered: "(filtrado de _MAX_ elementos en total)",
-                        infoPostFix: "",
-                        loadingRecords: "Cargando...",
-                        zeroRecords: "No se encontraron citas con tu búsqueda",
-                        emptyTable: "No tienes citas pendientes",
-                        paginate: {
-                            first: "Primero",
-                            previous: "Anterior",
-                            next: "Siguiente",
-                            last: "Ultimo"
-                        },
-                        aria: {
-                            sortAscending: ": active para ordenar la columna en orden ascendente",
-                            sortDescending: ": active para ordenar la columna en orden descendente"
-                        }
-                    },
-                    scrollY: 400,
-                    lengthMenu: [ [5, -1], [5, "All"] ],
-                });
-            });
         </script>
 
     </body>

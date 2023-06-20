@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
+import com.example.proyectogticsgrupo2.dto.HorarioDeDiaDTO;
 import com.example.proyectogticsgrupo2.dto.HorarioOcupadoDTO;
 import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -165,14 +167,29 @@ public class PacienteController {
 
             // PROCESO DE OBTENCIÓN DE HORARIOS ------
 
-            /*List<LocalTime> horarios = new ArrayList<>();
+            List<LocalTime> horariosTotal = new ArrayList<>();
 
             Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
             int duracionCita = doctor.getDuracion_cita_minutos();
             int duracionComida = 60; // minutos
-            LocalTime hora = doctor.getHorario().getDisponibilidad_inicio();
-            LocalTime horaFin = doctor.getHorario().getDisponibilidad_fin();
-            LocalTime horaComida = doctor.getHorario().getComida_inicio();
+
+            HorarioDeDiaDTO horarioDeDia = null;
+            LocalTime hora;
+            LocalTime horaFin;
+            LocalTime horaComida;
+
+            switch (citaTemporal.getFecha().getDayOfWeek().getValue()) {
+                case 1 -> horarioDeDia = horarioRepository.buscarHorarioLunes(citaTemporal.getIdDoctor());
+                case 2 -> horarioDeDia = horarioRepository.buscarHorarioMartes(citaTemporal.getIdDoctor());
+                case 3 -> horarioDeDia = horarioRepository.buscarHorarioMiercoles(citaTemporal.getIdDoctor());
+                case 4 -> horarioDeDia = horarioRepository.buscarHorarioJueves(citaTemporal.getIdDoctor());
+                case 5 -> horarioDeDia = horarioRepository.buscarHorarioViernes(citaTemporal.getIdDoctor());
+                case 6 -> horarioDeDia = horarioRepository.buscarHorarioSabado(citaTemporal.getIdDoctor());
+            }
+
+            hora = horarioDeDia.getInicio();
+            horaFin = horarioDeDia.getFin();
+            horaComida = horarioDeDia.getComidaInicio();
 
             while (hora.isBefore(horaFin)) {
 
@@ -189,6 +206,7 @@ public class PacienteController {
             // OBTENCIÓN DE HORARIOS OCUPADOS
             List<HorarioOcupadoDTO> horariosOcupados = horarioRepository.buscarHorariosOcupados(doctor.getId_doctor(), citaTemporal.getFecha());
             HashMap<LocalTime, String> horarios = new HashMap<>();
+
 
             if (horariosOcupados.size() > 0) {
                 for (LocalTime horario : horariosTotal) {
@@ -207,7 +225,7 @@ public class PacienteController {
                 }
             }
 
-            model.addAttribute("horariosDisponibles", horarios);*/
+            model.addAttribute("horariosDisponibles", horarios);
 
             return "paciente/reservar3";
         }
@@ -494,6 +512,57 @@ public class PacienteController {
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
 
+        // Obtener dos próximos horarios disponibles
+
+        /*
+        Set<LocalTime> horariosTotal = new HashSet<>();
+        LocalDateTime momentoActual = LocalDateTime.now().plusDays(1);
+
+        HorarioDeDiaDTO horarioDeDia = null;
+        LocalTime hora;
+        LocalTime horaFin;
+        LocalTime horaComida;
+
+        for (Doctor doctor: doctorList){
+            int duracionCita = doctor.getDuracion_cita_minutos();
+            int duracionComida = 60;
+
+            switch (momentoActual.getDayOfWeek().getValue()){
+                case 1 -> horarioDeDia = horarioRepository.buscarHorarioLunes(doctor.getId_doctor());
+                case 2 -> horarioDeDia = horarioRepository.buscarHorarioMartes(doctor.getId_doctor());
+                case 3 -> horarioDeDia = horarioRepository.buscarHorarioMiercoles(doctor.getId_doctor());
+                case 4 -> horarioDeDia = horarioRepository.buscarHorarioJueves(doctor.getId_doctor());
+                case 5 -> horarioDeDia = horarioRepository.buscarHorarioViernes(doctor.getId_doctor());
+                case 6 -> horarioDeDia = horarioRepository.buscarHorarioSabado(doctor.getId_doctor());
+            }
+
+            hora = horarioDeDia.getInicio();
+            horaFin = horarioDeDia.getFin();
+            horaComida = horarioDeDia.getComidaInicio();
+
+            while (hora.isBefore(horaFin)) {
+
+                if (hora.isBefore(horaComida) || hora.isAfter(horaComida.plusMinutes(duracionComida - 1))) {
+                    horariosTotal.add(hora);
+                } else if (hora.isAfter(horaComida)) {
+                    hora = horaComida.plusMinutes(duracionComida);
+                    continue;
+                }
+
+                hora = hora.plusMinutes(duracionCita);
+            }
+
+            List<HorarioOcupadoDTO> horariosOcupadosDTO = horarioRepository.buscarHorariosOcupados(doctor.getId_doctor(), momentoActual.toLocalDate());
+            Set<LocalTime> horariosOcupados = new HashSet<>();
+            for (HorarioOcupadoDTO horarioOcupado: horariosOcupadosDTO){
+                horariosOcupados.add(horarioOcupado.getHorario());
+            }
+
+            horariosTotal.removeAll(horariosOcupados);
+
+        }
+        */
+
         model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
         model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
 
@@ -569,6 +638,7 @@ public class PacienteController {
             model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
             model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
             model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
+            model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
 
             return "paciente/reservar4";
         }

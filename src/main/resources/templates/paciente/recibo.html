@@ -65,36 +65,44 @@
                 <!-- Informacion recibo y pago -->
                 <div class="row informacionRecibo">
                     <div class="col-6">
-                        <p>Paciente:<span class="informacionReciboDato" th:text="${session.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span></p>
-                        <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span></p>
-                        <p>Estado:<span class="informacionReciboDato" th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</span></p>
+                        <p>Paciente:<span class="informacionReciboDato"
+                                          th:text="${session.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
+                        </p>
+                        <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span>
+                        </p>
+                        <p>Estado:<span class="informacionReciboDato"
+                                        th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</span></p>
                     </div>
                     <div class="col-6">
-                        <p>Fecha emitida:<span class="informacionReciboDato" th:text="${pago.fechaEmitida}">13/12/2022</span></p>
-                        <p>Fecha cancelada:<span class="informacionReciboDato"th:text="${pago.fechaCancelada}">13/12/2022</span></p>
-                        <p>Tipo de pago:<span class="informacionReciboDato" th:text="${pago.tipoPago}">Visa ***1234</span></p>
+                        <p>Fecha emitida:<span class="informacionReciboDato"
+                                               th:text="${pago.fechaEmitida}">13/12/2022</span></p>
+                        <p>Fecha cancelada:<span class="informacionReciboDato" th:text="${pago.fechaCancelada}">13/12/2022</span>
+                        </p>
+                        <p>Tipo de pago:<span class="informacionReciboDato"
+                                              th:text="${pago.tipoPago}">Visa ***1234</span></p>
                     </div>
                 </div>
 
                 <section class="informacionPago">
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th>Por concepto de</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                            <th>Importe total</th>
-                            <th>Importe con seguro</th>
-                        </tr>
+                            <tr>
+                                <th>Por concepto de</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Importe total</th>
+                                <th>Importe con seguro</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur</td>
-                            <td>1</td>
-                            <td>S/ 1300.00</td>
-                            <td>S/ 1300.00</td>
-                            <td>S/ 130.00</td>
-                        </tr>
+                            <tr>
+                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur
+                                </td>
+                                <td>1</td>
+                                <td>S/ 1300.00</td>
+                                <td>S/ 1300.00</td>
+                                <td>S/ 130.00</td>
+                            </tr>
                         </tbody>
                     </table>
                 </section>
@@ -105,9 +113,7 @@
             </section>
 
             <!-- ====== Footer ====== -->
-            <footer class="site-footer">
-                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            </footer>
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
 
         </main>
