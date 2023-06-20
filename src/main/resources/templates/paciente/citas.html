@@ -39,10 +39,10 @@
             <section class="seccionPrincipal">
 
                 <a class="btn botonTipo botonTipoSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
-                <a class="btn botonTipo botonExamenes" onclick="buscarExamenes()">Próximas exámenes</a>
+                <a class="btn botonTipo botonExamenes" onclick="buscarExamenes()">Próximos exámenes</a>
 
                 <div class="table-responsive-xl">
-                    <table class="table" id="tablax">
+                    <table class="table pt-2 pb-4" id="tabla_citas">
                         <thead>
                             <tr>
                                 <th>Especialidad</th>
@@ -231,6 +231,8 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <!-- JS para botones filtro -->
         <script>
 
             const especialidadesExam = ["Cardiología", "Cirugía cardiovascular", "Laboratorio", "Rayos X",
@@ -261,11 +263,47 @@
             }
         </script>
 
-        <!-- DATATABLES -->
+        <!-- DATATABLES CDN -->
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
         </script>
-        <!-- BOOTSTRAP -->
+
+        <!-- BOOTSTRAP DATATABLES-->
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
+        </script>
+
+        <script>
+            $(document).ready(function (){
+                $("#tabla_citas").DataTable({
+                    dom:'<"toolbar">frtrip',
+                    bInfo:false,
+                    pageLength:5,
+                    columns: [
+                        null,
+                        null,
+                        null,
+                        null,
+                        {orderable: false},
+                        {orderable: false},
+                        {orderable: false}
+                    ],
+                    columnDefs:[
+                        {
+                            searchable:false,
+                            targets:[4, 5, 6]
+                        }
+                    ],
+                    language:{
+                        infoEmpty:"No hay citas registradas",
+                        zeroRecords:"No hay citas registradas",
+                        sProcessing:"Cargando...",
+                        sSearch:"Buscar:",
+                        paginate:{
+                            previous: "Anterior",
+                            next: "Siguiente"
+                        }
+                    }
+                });
+            })
         </script>
 
     </body>

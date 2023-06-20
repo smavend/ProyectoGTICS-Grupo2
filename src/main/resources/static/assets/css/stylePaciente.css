@@ -1445,6 +1445,13 @@ p{
     }
 }
 
+/* DATATABLES */
+
+.active>.page-link, .page-link.active {
+    background: #0AA1DD;
+    border-color: #DEE2E6;
+}
+
 /* Navbar */
 
 .tituloNavBar{
