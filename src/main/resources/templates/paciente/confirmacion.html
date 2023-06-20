@@ -31,16 +31,107 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main d-flex justify-content-center align-items-center">
-            <div class="cardConfirmacion">
-                <div class="cardTitulo">
-                    Cita agendada
+        <main id="main" class="main site-content">
+            <h1 class="encabezado">Cita Reservada</h1>
+            <section class="seccionPrincipal">
+                <div class="row" style="margin-top: 40px;margin-left: 20px">
+                    <div class="col-6">
+                        <p class="mb-2"><span class="fw-bold">Paciente:</span><span style="margin-left: 13px"
+                                                                                    th:text="${session.paciente.nombre}+' '+${session.paciente.apellidos}">Juanchito Palacios Castro</span>
+                        </p>
+                        <p class="mb-2"><span class="fw-bold">Fecha de nacimiento:</span><span
+                                style="margin-left: 20px"
+                                th:text="${#temporals.format(session.paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span>
+                        </p>
+                        <p class="mb-2"><span class="fw-bold">Correo:</span><span style="margin-left: 13px"
+                                                                                  th:text="${session.paciente.correo}">juanpc98@gmail.com</span>
+                        </p>
+
+                    </div>
+                    <div class="col-6">
+                        <p class="mb-2"><span class="fw-bold">Dirección:</span><span style="margin-left: 13px"
+                                                                                     th:text="${session.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
+                        </p>
+                        <p class="mb-2"><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px"
+                                                                                    th:text="${session.paciente.telefono}">934-250-488</span>
+                        </p>
+                        <p class="mb-2"><span class="fw-bold">Seguro:</span><span style="margin-left: 13px"
+                                                                                  th:text="${session.paciente.seguro.nombre}">Seguro</span>
+                        </p>
+                    </div>
                 </div>
-                <div class="cardCuerpo">
-                    <div class="cardTexto">Para más detalles visite la sección CITAS</div>
-                    <a class="btn botonVolverInicio" th:href="@{/Paciente/citas}">Revisar citas</a>
+
+                <h3 class="ms-3 mt-4">Información de cita</h3>
+
+                    <div class="row mt-2 ms-3">
+                        <div class="col-6">
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Modalidad: </span>
+                                <span class="valorCita" th:text="${citaTemporal.modalidad == 0? 'Presencial':'Virtual'}">Info</span>
+                            </div>
+                            <div class="campoCita" th:if="${citaTemporal.modalidad == 0}">
+                                <span class="informacionCita fw-bold">Sede: </span>
+                                <span class="valorCita" th:text="${sede.nombre}">Info</span>
+                            </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Especialidad: </span>
+                                <span class="valorCita" th:text="${especialidad.nombre}">Info</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Doctor: </span>
+                                <span class="valorCita" th:text="${doctor.getNombreYApellido()}">Info</span>
+                            </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Fecha: </span>
+                                <span class="valorCita" th:text="${citaTemporal.fecha}">Info</span>
+                            </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Hora de la cita: </span>
+                                <span class="valorCita" th:text="${#temporals.format(citaTemporal.inicio, 'HH:mm')+' Hrs.'}">Info</span>
+                            </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Precio: </span>
+                                <span class="valorCita" th:text="'S/. '+${#numbers.formatDecimal(precio, 1, 2)}">Info</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-5">
+                        <a th:href="@{/Paciente}" class="botonCancelar">Volver</a>
+                    </div>
+            </section>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modal-cita" tabindex="-1" aria-labelledby="modal-pago-label"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto">
+                            <button type="button" class="btn-close col-lg-2 fw-bold"
+                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="cardConfirmacion">
+                                <div class="cardTitulo">
+                                    Cita agendada
+                                </div>
+                                <div class="cardCuerpo">
+                                    <div class="cardTexto">Para más detalles visite la sección CITAS</div>
+                                    <a class="btn botonVolverInicio" th:href="@{/Paciente/citas}">Revisar citas</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <!-- ====== Footer ====== -->
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
+            <!-- End footer -->
+
         </main>
 
         <!-- Bootstrap CDN JS -->
@@ -50,5 +141,11 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#modal-cita').modal('show');
+            });
+        </script>
     </body>
 </html>
