@@ -163,8 +163,10 @@ public class PacienteController {
 
         } else {
 
-            // OBTENCIÓN DE HORARIOS TOTALES
-            List<LocalTime> horariosTotal = new ArrayList<>();
+            // PROCESO DE OBTENCIÓN DE HORARIOS ------
+
+            /*List<LocalTime> horarios = new ArrayList<>();
+
             Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
             int duracionCita = doctor.getDuracion_cita_minutos();
             int duracionComida = 60; // minutos
@@ -205,7 +207,7 @@ public class PacienteController {
                 }
             }
 
-            model.addAttribute("horariosDisponibles", horarios);
+            model.addAttribute("horariosDisponibles", horarios);*/
 
             return "paciente/reservar3";
         }

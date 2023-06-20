@@ -122,6 +122,7 @@ public class DoctorController {
             if (optionalCuestionarioPorCita.isEmpty()){
                 Cita cita = optionalCita.get();
 
+                model.addAttribute("doctor", doctor_session);
                 model.addAttribute("listaCuestionarios", listaCuestionarios);
                 model.addAttribute("cita", cita);
 
@@ -223,7 +224,7 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarHorario")
-    public String guardarHorario(HttpSession session, Authentication authentication, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult) {
+    public String guardarHorario(HttpSession session, Authentication authentication, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult,RedirectAttributes redirectAttributes) {
 
 
         Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
@@ -237,23 +238,80 @@ public class DoctorController {
                 String errorMessage = error.getDefaultMessage();
                 System.out.println("Error en el campo " + fieldName + ": " + errorMessage);
             }
-            return "redirect:/doctor/calendario";
-        } else if (doctor.getHorario().getDisponibilidad_inicio().isAfter(doctor.getHorario().getDisponibilidad_fin())) {
-            bindingResult.rejectValue("horario.disponibilidad_inicio", "error.disponibilidad", "La hora de inicio debe ser menor que la hora de fin");
-        } else if (doctor.getHorario().getComida_inicio().isAfter(doctor.getHorario().getDisponibilidad_fin()) ||
-                    doctor.getHorario().getComida_inicio().isBefore(doctor.getHorario().getDisponibilidad_inicio())) {
-            bindingResult.rejectValue("horario.comida_inicio", "error.disponibilidad", "La hora de comida debe de estar dentro del horario de trabajo");
-        }else {
-            doctor.getHorario().setDisponibilidad_inicio(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio().format(formatter), formatter));
-            doctor.getHorario().setDisponibilidad_fin(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin().format(formatter), formatter));
-            doctor.getHorario().setComida_inicio(LocalTime.parse(doctor.getHorario().getComida_inicio().format(formatter), formatter));
+            redirectAttributes.addFlashAttribute("error", "Debe de ingresar carácteres válidos");
 
-            Horario horarioGuardado = horarioRepository.save(doctor.getHorario());
+            return "redirect:/doctor/calendario";
+        }else if (doctor.getHorario().getDisponibilidad_inicio_lunes().isAfter(doctor.getHorario().getDisponibilidad_fin_lunes()) ||
+                doctor.getHorario().getDisponibilidad_inicio_martes().isAfter(doctor.getHorario().getDisponibilidad_fin_martes()) ||
+                doctor.getHorario().getDisponibilidad_inicio_miercoles().isAfter(doctor.getHorario().getDisponibilidad_fin_miercoles()) ||
+                doctor.getHorario().getDisponibilidad_inicio_jueves().isAfter(doctor.getHorario().getDisponibilidad_fin_jueves()) ||
+                doctor.getHorario().getDisponibilidad_inicio_viernes().isAfter(doctor.getHorario().getDisponibilidad_fin_viernes()) ||
+                doctor.getHorario().getDisponibilidad_inicio_sabado().isAfter(doctor.getHorario().getDisponibilidad_fin_sabado())) {
+            redirectAttributes.addFlashAttribute("error", "La hora de inicio debe ser menor que la hora de fin");
+
+
+        } else if (doctor.getHorario().getComida_inicio_lunes().isAfter(doctor.getHorario().getDisponibilidad_fin_lunes()) ||
+                    doctor.getHorario().getComida_inicio_lunes().isBefore(doctor.getHorario().getDisponibilidad_inicio_lunes()) ||
+                    doctor.getHorario().getComida_inicio_martes().isAfter(doctor.getHorario().getDisponibilidad_fin_martes()) ||
+                    doctor.getHorario().getComida_inicio_martes().isBefore(doctor.getHorario().getDisponibilidad_inicio_martes()) ||
+                    doctor.getHorario().getComida_inicio_miercoles().isAfter(doctor.getHorario().getDisponibilidad_fin_miercoles()) ||
+                    doctor.getHorario().getComida_inicio_miercoles().isBefore(doctor.getHorario().getDisponibilidad_inicio_miercoles()) ||
+                    doctor.getHorario().getComida_inicio_jueves().isAfter(doctor.getHorario().getDisponibilidad_fin_jueves()) ||
+                    doctor.getHorario().getComida_inicio_jueves().isBefore(doctor.getHorario().getDisponibilidad_inicio_jueves()) ||
+                    doctor.getHorario().getComida_inicio_viernes().isAfter(doctor.getHorario().getDisponibilidad_fin_viernes()) ||
+                    doctor.getHorario().getComida_inicio_viernes().isBefore(doctor.getHorario().getDisponibilidad_inicio_viernes()) ||
+                    doctor.getHorario().getComida_inicio_sabado().isAfter(doctor.getHorario().getDisponibilidad_fin_sabado()) ||
+                    doctor.getHorario().getComida_inicio_sabado().isBefore(doctor.getHorario().getDisponibilidad_inicio_sabado()) )  {
+            redirectAttributes.addFlashAttribute("error", "La hora de comida debe de estar dentro del horario de trabajo");
+        } else if (doctor.getHorario().getComida_inicio_lunes().isAfter(doctor.getHorario().getDisponibilidad_fin_lunes().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_martes().isAfter(doctor.getHorario().getDisponibilidad_fin_martes().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_miercoles().isAfter(doctor.getHorario().getDisponibilidad_fin_miercoles().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_jueves().isAfter(doctor.getHorario().getDisponibilidad_fin_jueves().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_viernes().isAfter(doctor.getHorario().getDisponibilidad_fin_viernes().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_sabado().isAfter(doctor.getHorario().getDisponibilidad_fin_sabado().minusHours(1))
+                 ) {
+
+            redirectAttributes.addFlashAttribute("error", "La hora de comida debe estar al menos una hora antes de la hora de fin");
+
+        } else {
+
+            if (doctor_session.getHorario() == null) {
+                doctor_session.setHorario(new Horario());
+            }
+
+
+            doctor_session.getHorario().setDisponibilidad_inicio_lunes(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_lunes().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_lunes(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_lunes().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_lunes(LocalTime.parse(doctor.getHorario().getComida_inicio_lunes().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_martes(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_martes().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_martes(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_martes().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_martes(LocalTime.parse(doctor.getHorario().getComida_inicio_martes().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_miercoles(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_miercoles().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_miercoles(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_miercoles().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_miercoles(LocalTime.parse(doctor.getHorario().getComida_inicio_miercoles().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_jueves(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_jueves().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_jueves(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_jueves().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_jueves(LocalTime.parse(doctor.getHorario().getComida_inicio_jueves().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_viernes(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_viernes().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_viernes(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_viernes().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_viernes(LocalTime.parse(doctor.getHorario().getComida_inicio_viernes().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_sabado(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_sabado().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_sabado(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_sabado().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_sabado(LocalTime.parse(doctor.getHorario().getComida_inicio_sabado().format(formatter), formatter));
+
+            Horario horarioGuardado = horarioRepository.save(doctor_session.getHorario());
 
             doctor_session.setDuracion_cita_minutos(doctor.getDuracion_cita_minutos());
             doctor_session.setHorario(horarioGuardado);
 
             doctorRepository.save(doctor_session);
+            redirectAttributes.addFlashAttribute("success_creado", "Horario creado correctamente");
+            redirectAttributes.addFlashAttribute("success_editado", "Horario editado correctamente");
         }
 
         return "redirect:/doctor/calendario";
