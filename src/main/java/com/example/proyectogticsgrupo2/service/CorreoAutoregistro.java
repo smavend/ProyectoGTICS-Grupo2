@@ -122,33 +122,18 @@ public class CorreoAutoregistro {
                 "                                        Usted ha completado el formulario de registro para ser parte de la clínica. Le enviamos este correo para confirmar su información enviada:<br>\n" +
                 "                                        <span style=\"font-weight:700\">Rol de usuario: PACIENTE.</span>\n" +
                 "                                        <br><br>\n" +
-                "                                        <span style=\"font-weight:700\">Nombres: </span> %nombre%\n" +
-                "                                        <span style=\"font-weight:700\">Apellidos: </span> %apellido%\n" +
-                "                                        <span style=\"font-weight:700\">Correo: </span> %correo%\n" +
-                "                                        <span style=\"font-weight:700\">Distrito: </span> %distrito%\n" +
-                "                                        <span style=\"font-weight:700\">Dirección: </span> %direccion%\n" +
-                "                                        <span style=\"font-weight:700\">Fecha de nacimiento: </span> %fecha%\n" +
-                "                                        <span style=\"font-weight:700\">DNI: </span> %dni%\n" +
+                "                                        <span style=\"font-weight:700\">Nombres: </span> %nombre%<br>\n" +
+                "                                        <span style=\"font-weight:700\">Apellidos: </span> %apellido%<br>\n" +
+                "                                        <span style=\"font-weight:700\">Correo: </span> %correo%<br>\n" +
+                "                                        <span style=\"font-weight:700\">Distrito: </span> %distrito%<br>\n" +
+                "                                        <span style=\"font-weight:700\">Dirección: </span> %direccion%<br>\n" +
+                "                                        <span style=\"font-weight:700\">Fecha de nacimiento: </span> %fecha%<br>\n" +
+                "                                        <span style=\"font-weight:700\">DNI: </span> %dni%<br>\n" +
                 "                                      </p>\n" +
                 "                                    </td>\n" +
                 "                                  </tr>\n" +
                 "                                  <tr>\n" +
                 "                                    <td class=\"m_6554632393618514601mobilespace24\" height=\"20\" style=\"height:24px;line-height:24px\">&nbsp;</td>\n" +
-                "                                  </tr>\n" +
-                "                                  <tr>\n" +
-                "                                    <td align=\"center\">\n" +
-                "                                      <div>\n" +
-                "\n" +
-                "                                        <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:220px;border-spacing:0;border-collapse:collapse\" width=\"220\">\n" +
-                "                                          <tbody>\n" +
-                "                                            <tr>\n" +
-                "                                              <td align=\"center\" height=\"43\" style=\"border-collapse:collapse;background-color:#771cf6;border-radius:9px;white-space:nowrap\">\n" +
-                "                                              </td>\n" +
-                "                                            </tr>\n" +
-                "                                          </tbody>\n" +
-                "                                        </table>\n" +
-                "                                      </div>\n" +
-                "                                    </td>\n" +
                 "                                  </tr>\n" +
                 "                                  <tr>\n" +
                 "                                    <td class=\"m_6554632393618514601mobilespace24\" height=\"20\" style=\"height:24px;line-height:24px\">&nbsp;</td>\n" +
@@ -156,7 +141,7 @@ public class CorreoAutoregistro {
                 "                                  <tr>\n" +
                 "                                    <td align=\"center\" valign=\"top\" width=\"520\">\n" +
                 "                                      <p style=\"Margin:0;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:400;letter-spacing:0;color:#777777;max-width:520px\">\n" +
-                "                                        Por motivos de seguridad, le pedimos que cambie su contraseña la primera vez que inicie sesión.\n" +
+                "                                        En un plazo de 48 horas le volverá a llegar un correo para confirmarle que ya puede ingresar a la plataforma\n" +
                 "                                        Gracias por confiar en Clínica InterPUCP.\n" +
                 "                                      </p>\n" +
                 "\n" +
@@ -164,26 +149,6 @@ public class CorreoAutoregistro {
                 "                                  </tr>\n" +
                 "                                  <tr>\n" +
                 "                                    <td class=\"m_6554632393618514601mobilespace24\" height=\"20\" style=\"height:24px;line-height:24px\">&nbsp;</td>\n" +
-                "                                  </tr>\n" +
-                "                                  <tr>\n" +
-                "                                    <td align=\"center\">\n" +
-                "                                      <div>\n" +
-                "\n" +
-                "                                        <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:220px;border-spacing:0;border-collapse:collapse\" width=\"220\">\n" +
-                "                                          <tbody>\n" +
-                "                                            <tr>\n" +
-                "                                              <td align=\"center\" height=\"43\" style=\"border-collapse:collapse;background-color:#1cb0f6;border-radius:9px;white-space:nowrap\">\n" +
-                "\n" +
-                "                                                <a href=\"http://%link%/login\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=http://%link%/login\" style=\"display:inline-block;width:100%;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:19px;text-transform:uppercase;color:#ffffff;text-align:center;text-decoration:none;background-color:#1cb0f6;border-radius:14px;border-top:12px solid #1cb0f6;border-bottom:12px solid #1cb0f6\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.duolingo.com/?email_type%3Dresurrection%26target%3Dget_back_on_track%26utm_source%3Dcomeback%26utm_medium%3Demail%26utm_campaign%3Dresurrection&amp;source=gmail&amp;ust=1685717009586000&amp;usg=AOvVaw1w3dFvXzWW6tAsd8O6tcNi\">\n" +
-                "                                                  &nbsp;&nbsp;Iniciar sesión&nbsp;&nbsp;\n" +
-                "                                                </a>\n" +
-                "\n" +
-                "                                              </td>\n" +
-                "                                            </tr>\n" +
-                "                                          </tbody>\n" +
-                "                                        </table>\n" +
-                "                                      </div>\n" +
-                "                                    </td>\n" +
                 "                                  </tr>\n" +
                 "                                </tbody>\n" +
                 "                              </table>\n" +
