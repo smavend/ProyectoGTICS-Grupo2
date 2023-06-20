@@ -33,7 +33,7 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
 
             <h1 class="encabezado">Historial de pagos</h1>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
@@ -47,98 +47,26 @@
                     <thead>
                         <tr>
                             <th>Concepto</th>
-                            <th>Fecha pago</th>
+                            <th>Doctor</th>
+                            <th>Fecha de cita</th>
                             <th>Pago</th>
                             <th>Tipo de pago</th>
-                            <th>Estado</th>
+                            <th>Fecha de pago</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="pago: ${pagoList}" th:if="${pago.estadoPago}==0">
                             <td th:text="${pago.cita.doctor.especialidad.nombre}"></td>
-                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
+                            <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                            <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
-                            <td th:text="'Pendiente'"></td>
+                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Efectivo'" style="font-weight: 700">Cancelar en caja</td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Tarjeta'">
-                                <a class="botonPagar botonPagarModal" data-bs-toggle="modal"
-                                   data-bs-target="#modal-pago">Pagar</a>
+                                <a  th:href="@{/Paciente/pagar(filtro=1, idPago=${pago.id})}" class="botonPagar botonPagarModal">Pagar</a>
                             </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header row-cols-auto" style="background-color: gainsboro">
-                                            <p>
-                                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
-                                                tarjeta</h5>
-                                            <img th:src="@{/assets/img/cards.png}" style="height: 50px"
-                                                 class="col-lg-4">
-                                            <button type="button" class="btn-close col-lg-2 fw-bold"
-                                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                            </p>
-
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=1)}" th:object="${tarjetaPago}">
-                                                <input type="hidden" th:value="${pago.id}" name="idPago">
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Nombre del titular de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-person-fill"></i></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" th:field="*{titular}" th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
-                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}" th:errors="*{titular}"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Número de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-credit-card-fill"></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}" th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
-                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}" th:errors="*{numeroTarjeta}"></div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Fecha de expiración</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-calendar-event-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control" placeholder="MM-yyyy" name="fechaStr" th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Código de seguridad</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-lock-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control" th:field="*{codigo}" th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
-                                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="text-center">
-                                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </tr>
 
                     </tbody>
@@ -148,20 +76,22 @@
                     <thead>
                         <tr>
                             <th>Concepto</th>
-                            <th>Fecha pago</th>
+                            <th>Doctor</th>
+                            <th>Fecha de cita</th>
                             <th>Pago</th>
                             <th>Tipo de pago</th>
-                            <th>Estado</th>
+                            <th>Fecha de pago</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="pago: ${pagoList}" th:if="${pago.estadoPago}==1">
                             <td th:text="${pago.cita.doctor.especialidad.nombre}"></td>
-                            <td th:text="${pago.fechaCancelada}">-</td>
+                            <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                            <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
-                            <td th:text="'Cancelado'"></td>
+                            <td th:text="${pago.fechaCancelada}">-</td>
                             <td th:if="${pago.estadoPago == 1}">
                                 <a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver
                                     recibo</a>
@@ -175,9 +105,11 @@
                     <thead>
                         <tr>
                             <th>Concepto</th>
-                            <th>Fecha pago</th>
+                            <th>Doctor</th>
+                            <th>Fecha de cita</th>
                             <th>Pago</th>
                             <th>Tipo de pago</th>
+                            <th>Fecha de pago</th>
                             <th>Estado</th>
                             <th></th>
                         </tr>
@@ -185,138 +117,70 @@
                     <tbody>
                         <tr th:each="pago: ${pagoList}">
                             <td th:text="${pago.cita.doctor.especialidad.nombre}">Facere ullam ratione qui</td>
-                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
-                            <td th:if="${pago.estadoPago == 1}" th:text="${pago.fechaCancelada}">-</td>
+                            <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                            <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
+                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
+                            <td th:if="${pago.estadoPago == 1}" th:text="${pago.fechaCancelada}">-</td>
+
                             <td th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}"></td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Efectivo'"
                                 style="font-weight: 700">
                                 Cancelar en caja
                             </td>
                             <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Tarjeta'">
-                                <a class="botonPagar botonPagarModal" data-bs-toggle="modal"
-                                   data-bs-target="#modal-pago">Pagar</a>
+                                <a th:href="@{/Paciente/pagar(filtro=0, idPago=${pago.id})}" class="botonPagar botonPagarModal">Pagar</a>
                             </td>
                             <td th:if="${pago.estadoPago == 1}">
                                 <a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver
                                     recibo</a>
                             </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header row-cols-auto" style="background-color: gainsboro">
-                                            <p>
-                                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
-                                                tarjeta</h5>
-                                            <img th:src="@{/assets/img/cards.png}" style="height: 50px"
-                                                 class="col-lg-4">
-                                            <button type="button" class="btn-close col-lg-2 fw-bold"
-                                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                            </p>
-
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=0)}" th:object="${tarjetaPago}">
-                                                <input type="hidden" th:value="${pago.id}" name="idPago">
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Nombre del titular de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-person-fill"></i></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" th:field="*{titular}" th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
-                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}" th:errors="*{titular}"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Número de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-credit-card-fill"></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}" th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
-                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}" th:errors="*{numeroTarjeta}"></div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Fecha de expiración</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-calendar-event-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control" placeholder="MM-yyyy" name="fechaStr" th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Código de seguridad</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-lock-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control" th:field="*{codigo}" th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
-                                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="text-center">
-                                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
                         </tr>
 
                     </tbody>
                 </table>
             </section>
 
-            <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            <!-- End footer -->
-
             <!-- Modal -->
-            <div class="modal fade" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label" aria-hidden="true">
+            <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label"
+                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header row-cols-auto" style="background-color: gainsboro">
                             <p>
-                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con tarjeta</h5>
-                            <img th:src="@{/assets/img/cards.png}" style="height: 50px" class="col-lg-4">
-                            <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal"
-                                    aria-label="Cerrar"></button>
+                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
+                                tarjeta</h5>
+                            <img th:src="@{/assets/img/cards.png}" style="height: 50px"
+                                 class="col-lg-4">
+                            <button type="button" class="btn-close col-lg-2 fw-bold"
+                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </p>
 
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=${filtro})}" th:object="${tarjetaPago}">
+                                <input type="hidden" th:value="${idPagar}" name="idPago">
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-person-fill"></i></i></span>
+                                                            <span class="input-group-text"><i
+                                                                    class="bi bi-person-fill"></i></i></span>
                                         </div>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" th:field="*{titular}" th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}" th:errors="*{titular}"></div>
                                     </div>
                                 </div>
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Número de la tarjeta</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
+                                                            <span class="input-group-text"><i
+                                                                    class="bi bi-credit-card-fill"></i></span>
                                         </div>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}" th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}" th:errors="*{numeroTarjeta}"></div>
                                     </div>
 
                                 </div>
@@ -325,18 +189,21 @@
                                         <label class="form-label">Fecha de expiración</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
+                                                                <span class="input-group-text"><i
+                                                                        class="bi bi-calendar-event-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" placeholder="MM-yyyy" name="fechaStr" th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Código de seguridad</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                                                <span class="input-group-text"><i
+                                                                        class="bi bi-lock-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" th:field="*{codigo}" th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -348,6 +215,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ====== Footer ====== -->
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
+            <!-- End footer -->
 
         </main><!-- End #main -->
 

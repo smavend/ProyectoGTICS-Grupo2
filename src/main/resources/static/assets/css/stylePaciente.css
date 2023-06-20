@@ -7,8 +7,11 @@ body {
     background-image: linear-gradient(to right top, #dbe3e8, #e5eaee, #eff0f4, #f7f8f9, #ffffff);
     color: #444444;
     min-height: 100vh;
+    height: 100%;
 }
-
+html {
+    height: 100%;
+}
 a {
     text-decoration: none;
 }
@@ -78,7 +81,7 @@ transition: all 0.3s;
 }
 .contenedor figure{
     position:relative;
-    height: 450px;
+    height: 500px;
     cursor: pointer;
     width: auto;
     overflow: hidden;
@@ -1539,6 +1542,22 @@ p{
     line-height: 2;
 }
 
+.botonVolverPagos{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: #0AA1DD;
+    border-radius: 50px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.botonVolverPagos:hover{
+    background-color: #197ce6;
+    color: white;
+}
+
 .informacionRecibo{
     margin-top: 25px;
     font-size: 1rem;
@@ -1569,6 +1588,18 @@ p{
 
 .botonImprimir:hover{
     background-color: rgb(198, 0, 0);
+}
+
+@media print {
+    #header {
+        display: none !important;
+    }
+    #botonImp {
+        display: none !important;
+    }
+    #botonVolver{
+        display: none !important;
+    }
 }
 
 /* Sección Dashboard */
@@ -1657,6 +1688,14 @@ botonTipo{
     color: white;
 }
 
+.site-footer {
+    background-color: #00000000;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
 
 /* Consentimientos */
 

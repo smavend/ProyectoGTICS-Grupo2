@@ -237,7 +237,7 @@ public class PacienteController {
 
     @PostMapping("/reservar4")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                            HttpSession session, Authentication authentication) {
+                            HttpSession session, Authentication authentication, Model model) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
@@ -252,7 +252,12 @@ public class PacienteController {
         citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
 
-        return "redirect:/Paciente/confirmacion";
+        model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+        model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+        model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
+        model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
+        model.addAttribute("activarModal", true);
+        return "paciente/confirmacion";
     }
 
     /* SECCIÓN PERFIL */
@@ -570,22 +575,23 @@ public class PacienteController {
 
     @PostMapping("/reservarDoctor3")
     public String reserarDoctor3(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                 HttpSession session, Authentication authentication) {
+                                 HttpSession session, Authentication authentication, Model model) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
 
         citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), "Efectivo");
+        model.addAttribute("activarModal", true);
 
-        return "redirect:/Paciente/confirmacion";
+        return "paciente/confirmacion";
     }
 
     @GetMapping("/confirmacion")
-    public String confirmarReserva(HttpSession session, Authentication authentication) {
+    public String confirmarReserva(HttpSession session, Authentication authentication,Model model) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
+        model.addAttribute("activarModal", true);
         return "paciente/confirmacion";
     }
 
@@ -634,6 +640,21 @@ public class PacienteController {
         return "paciente/pagos";
     }
 
+    @GetMapping("/pagar")
+    public String pagar(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
+                        @RequestParam("idPago") Integer idPago,@RequestParam("filtro") Integer filtro,
+                        Model model, HttpSession session, Authentication authentication) {
+
+        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+
+        List<Pago> pagoList = pagoRepository.findAll();
+        model.addAttribute("idPagar", idPago);
+        model.addAttribute("pagoList", pagoList);
+        model.addAttribute("filtro", filtro);
+        model.addAttribute("activarModal", true);
+        return "paciente/pagos";
+    }
+
     @PostMapping("/guardarPago")
     public String guardarPago(@ModelAttribute("tarjetaPago") @Valid TarjetaPago tarjetaPago, BindingResult bindingResult,
                               @RequestParam("idPago") int idPago, @RequestParam("fechaStr") String fechaStr,
@@ -645,17 +666,17 @@ public class PacienteController {
             if (filtro == 0) {
                 List<Pago> pagoList = pagoRepository.findAll();
                 model.addAttribute("pagoList", pagoList);
+                model.addAttribute("idPagar", idPago);
                 model.addAttribute("filtro", filtro);
                 model.addAttribute("activarModal", true);
-
                 return "paciente/pagos";
             } else {
                 if (filtro == 1) {
                     List<Pago> pagoList = pagoRepository.findAll();
                     model.addAttribute("pagoList", pagoList);
+                    model.addAttribute("idPagar", idPago);
                     model.addAttribute("filtro", filtro);
                     model.addAttribute("activarModal", true);
-
                     return "paciente/pagos";
                 }
             }
