@@ -101,7 +101,7 @@
                                     </div>
                                     <div class="col-6">
                                         <p>Fecha de nacimiento:<span class="informacionModalDato"
-                                                                     th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span>
+                                                                     th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}">25 años</span>
                                         </p>
                                         <p>Dirección:<span
                                                 class="informacionModalDato" th:text="${cita.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
@@ -174,7 +174,7 @@
                                     </div>
                                     <div class="col-6">
                                         <p>Fecha de nacimiento:<span class="informacionModalDato"
-                                                                     th:text="${cita.paciente.fechanacimiento}">25 años</span>
+                                                                     th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}">25 años</span>
                                         </p>
                                         <p>Dirección:<span
                                                 class="informacionModalDato" th:text="${cita.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>

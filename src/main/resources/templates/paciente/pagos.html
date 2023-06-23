@@ -68,7 +68,7 @@
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
                             <!-- columna estado -->
-                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Cancelar en caja</td>
+                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
                                 <a th:href="@{/Paciente/pagar(idPago=${pago.id})}"
                                    class="botonPagar botonPagarModal">Pagar</a>

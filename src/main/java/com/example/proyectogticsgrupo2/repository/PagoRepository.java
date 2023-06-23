@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface PagoRepository extends JpaRepository<Pago, Integer> {
 
@@ -21,4 +23,10 @@ public interface PagoRepository extends JpaRepository<Pago, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO pago (`fecha_emitida`, `estado_pago`, `cita_id_cita`, `tipo_pago`) VALUES (NOW(), 0, ?1, ?2)")
     void nuevoPago(int idCita, String tipoPago);
+
+    @Query(nativeQuery = true, value = "select p.*, c.inicio from pago p " +
+            "inner join cita c on (p.cita_id_cita = c.id_cita) " +
+            "where c.paciente_id_paciente = ?1 " +
+            "order by c.inicio DESC")
+    List<Pago> buscarPorPaciente(String idPaciente);
 }
