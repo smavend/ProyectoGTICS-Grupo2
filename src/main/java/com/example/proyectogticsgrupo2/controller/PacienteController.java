@@ -685,6 +685,7 @@ public class PacienteController {
 
         model.addAttribute("proximasCitas", proximasCitas);
         model.addAttribute("torresYPisos", torresYPisos);
+        model.addAttribute("momentoActual", LocalDateTime.now());
 
         return "paciente/citas";
     }
@@ -700,21 +701,9 @@ public class PacienteController {
         return "paciente/pagos";
     }
 
-    @GetMapping("/filtrarPagos")
-    public String filtrarPagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
-                               @RequestParam("filtro") Integer filtro, Model model, HttpSession session, Authentication authentication) {
-
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
-        List<Pago> pagoList = pagoRepository.findAll();
-        model.addAttribute("pagoList", pagoList);
-        model.addAttribute("filtro", filtro);
-        return "paciente/pagos";
-    }
-
     @GetMapping("/pagar")
     public String pagar(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
-                        @RequestParam("idPago") Integer idPago,@RequestParam("filtro") Integer filtro,
+                        @RequestParam("idPago") Integer idPago,
                         Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
@@ -722,7 +711,6 @@ public class PacienteController {
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("idPagar", idPago);
         model.addAttribute("pagoList", pagoList);
-        model.addAttribute("filtro", filtro);
         model.addAttribute("activarModal", true);
         return "paciente/pagos";
     }

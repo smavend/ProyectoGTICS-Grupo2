@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -58,13 +58,15 @@
                             <tr th:each="cita : ${proximasCitas}" class="filaCita">
                                 <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
                                 <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
-                                <td th:text="${#temporals.format(cita.inicio, 'dd/MM/yyyy')}">10/05/23</td>
+                                <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
                                 <td th:text="${#temporals.format(cita.inicio, 'HH:mm')}+' Hrs.'">13:00 Hrs.</td>
                                 <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</td>
                                 <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
                                 <td>
                                     <a href="#" class="botonAceptar" data-bs-toggle="modal"
-                                       th:attr="data-bs-target='#citaModal'+${cita.id_cita}">Ver más</a>
+                                       th:attr="data-bs-target='#citaModal'+${cita.id_cita}"
+                                       th:text="${cita.inicio.isAfter(momentoActual) && cita.modalidad == 1?'Acceder a cita': 'Ver más'}">Ver
+                                        más</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -109,7 +111,7 @@
                                     </div>
                                 </div>
                                 <span class="textoModal"
-                                      th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' del '+${#temporals.format(cita.inicio,'MM')}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                      th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
                                 <div class="row informacionModal">
                                     <div class="col-6">
                                         <p>Especialidad:<span class="informacionModalDato"
@@ -232,7 +234,7 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- JS para botones filtro -->
+        <!-- Script para botones filtro -->
         <script>
 
             const especialidadesExam = ["Cardiología", "Cirugía cardiovascular", "Laboratorio", "Rayos X",
@@ -272,11 +274,11 @@
         </script>
 
         <script>
-            $(document).ready(function (){
+            $(document).ready(function () {
                 $("#tabla_citas").DataTable({
-                    dom:'<"toolbar">frtrip',
-                    bInfo:false,
-                    pageLength:5,
+                    dom: '<"toolbar">frtrip',
+                    bInfo: false,
+                    pageLength: 5,
                     columns: [
                         null,
                         null,
@@ -286,18 +288,18 @@
                         {orderable: false},
                         {orderable: false}
                     ],
-                    columnDefs:[
+                    columnDefs: [
                         {
-                            searchable:false,
-                            targets:[4, 5, 6]
+                            searchable: false,
+                            targets: [4, 5, 6]
                         }
                     ],
-                    language:{
-                        infoEmpty:"No hay citas registradas",
-                        zeroRecords:"No hay citas registradas",
-                        sProcessing:"Cargando...",
-                        sSearch:"Buscar:",
-                        paginate:{
+                    language: {
+                        infoEmpty: "No hay citas registradas",
+                        zeroRecords: "No hay citas registradas",
+                        sProcessing: "Cargando...",
+                        sSearch: "Buscar:",
+                        paginate: {
                             previous: "Anterior",
                             next: "Siguiente"
                         }

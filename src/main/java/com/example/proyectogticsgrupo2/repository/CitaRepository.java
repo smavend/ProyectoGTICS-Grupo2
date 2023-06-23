@@ -30,9 +30,10 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     List<ListaBuscadorDoctor> listarPorDoctorListaPacientes(String id);
 
 
-    @Query(nativeQuery = true, value = "select c.* from cita c \n" +
-            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
-            "where NOW() <= c.inicio and p.id_paciente = ?1")
+    @Query(nativeQuery = true, value = "select c.* from cita c " +
+            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
+            "where NOW() <= c.inicio and p.id_paciente = ?1 " +
+            "order by c.inicio DESC")
     List<Cita> buscarProximasCitas(String idPaciente);
 
 
@@ -46,7 +47,8 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(nativeQuery = true, value = "select c.* from cita c \n" +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) \n" +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
-            "where p.id_paciente = ?1 and NOW() >= c.inicio")
+            "where p.id_paciente = ?1 and NOW() >= c.inicio " +
+            "order by c.inicio DESC")
     List<Cita> buscarHistorialDeCitas(String idPaciente);
 
     @Transactional

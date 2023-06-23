@@ -17,7 +17,8 @@ public interface CuestionarioPorCitaRepository extends JpaRepository<Cuestionari
     @Query(nativeQuery = true, value = "select x.* from cuestionario_x_cita x " +
             "inner join cita c on (x.cita_id_cita = c.id_cita) " +
             "inner join paciente p on (p.id_paciente = c.paciente_id_paciente) " +
-            "WHERE p.id_paciente = ?1")
+            "WHERE p.id_paciente = ?1 " +
+            "order by c.inicio DESC")
     List<CuestionarioPorCita> buscarPorPaciente(String idPaciente);
 
     CuestionarioPorCita findByIdIdCuestionarioAndIdIdCita(int idCuestionario, int idCita);
