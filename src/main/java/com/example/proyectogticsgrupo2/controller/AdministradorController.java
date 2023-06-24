@@ -82,12 +82,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/dashboard";
     }
@@ -101,12 +99,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
 
         return "administrador/finanzas";}
@@ -192,12 +188,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/config";
     }
@@ -208,12 +202,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/rptaForm";}
     @PostMapping("/guardarTemporales")
@@ -288,12 +280,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/crearPaciente";}
     @PostMapping("/guardarPaciente")
@@ -307,7 +297,7 @@ public class AdministradorController {
                 paciente.getSeguro()==null || paciente.getDistrito()==null || paciente.getFechanacimiento()==null){
             if(opt.isPresent()){
                 bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
-                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+
             }
             if (pacienteCorreoExist!=null) {
                 bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
@@ -382,12 +372,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/crearDoctor";}
     @PostMapping("/guardarDoctor")
@@ -468,12 +456,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/calendario";}
     @GetMapping("/mensajeria")
@@ -482,12 +468,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/mensajeria";}
     @GetMapping("/historialPaciente")
@@ -495,12 +479,10 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
 
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
