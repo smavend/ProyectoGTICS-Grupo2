@@ -145,7 +145,6 @@
 
             <div class="tab-pane fade encuesta pt-3" id="encuesta">
               <h5 class="card-title">Cuestionarios</h5>
-              <!-- Documentos de consentimiento -->
               <div class="row">
                 <div class="col-lg-9 col-md-8">
                   <table class="table">
@@ -157,6 +156,12 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <!-- Verificar si la lista de cuestionarios está vacía -->
+                    <th:block th:if="${#lists.isEmpty(listEncuesta)}">
+                      <tr>
+                        <td colspan="3">No hay cuestionarios disponibles</td>
+                      </tr>
+                    </th:block>
                     <!-- Iterar sobre las alergias del paciente -->
                     <tr th:each="encuesta, i : ${listEncuesta}">
                       <th scope="row" th:text="${i.index + 1}"></th>
@@ -168,6 +173,7 @@
                 </div>
               </div>
             </div>
+
 
             <div class="tab-pane fade tratamiento pt-3" id="tratamiento">
               <h5 class="card-title">Información de consultas</h5>

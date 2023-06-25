@@ -77,8 +77,8 @@
                     <input th:field="*{modalidad}" name="modalidad" type="hidden"/>
                     <input th:field="*{reporte}" name="reporte" type="hidden"/>
                     <input th:field="*{estado}" name="estado" type="hidden"/>
-
                     <input th:field="*{sede.idSede}" name="sede" type="hidden"/>
+                    <input th:field="*{idSeguro}" name="" type="hidden"/>
 
 
                     <input name="cita_previa" value="" type="hidden" class="form-control d-inline">
@@ -135,6 +135,16 @@
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('receta')}"
                                  th:errors="*{receta}"></div>
 
+                            <h2 style="text-align: center;" for="especialidad">Orden de exámenes médicos</h2>
+                            <div style="display: flex;justify-content: center;" class="select-container">
+                                <select name="especialidad" id="especialidad">
+                                    <option value="">No se necesita exámenes</option>
+                                    <option value="4">Laboratorio</option>
+                                    <option value="5">Rayos X</option>
+                                    <option value="6">Ecografía</option>
+                                </select>
+                            </div>
+
 
                         </div>
 
@@ -148,10 +158,10 @@
                                     <img th:src="@{/assets/img/zoom.jpg}" style="width: 80%">
                                 </div>
                                 <div style="margin-top: 5px;text-align: center">
-                                    <button type="button" data-bs-toggle="tooltip" data-bs-placement="left"
-                                            title="Enviar cuestionario" class="btn btn-warning">
+                                    <a th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}" type="button" data-bs-toggle="tooltip" data-bs-placement="left"
+                                            title="Enviar cuestionario" class="btn btn-warning" target="_blank">
                                         <i style="color: black" class="bi-file-text-fill"></i>
-                                    </button>
+                                    </a>
 
 
                                     <a th:href="@{'/doctor/verCuestionario?id=' + ${cita.getId_cita()}}"

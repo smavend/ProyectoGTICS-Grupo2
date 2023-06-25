@@ -8,45 +8,82 @@
 
 /*mis js*/
 //validar form de descarga
+<<<<<<< HEAD
 /*function validateForm() {
   var tiporeporte = document.getElementById("tiporeporte").value;
   var seguro = document.getElementById("validationCustom01").value;
   var especialidad = document.getElementById("validationCustom02").value;
   var tipopago = document.getElementById("validationCustom03").value;
   var todo = document.getElementById("validationCustom04").value;
+=======
+function validateForm() {
+  var tiporeporte = document.getElementById("tiporeporte").value;
+  var seguro = document.getElementById("insuranceInput").value;
+  var especialidad = document.getElementById("specialtyInput").value;
+  var tipopago = document.getElementById("paymentTypeInput").value;
+  var todo = document.getElementById("porfechareporte").value;
+>>>>>>> develop
   var isValid = true;
 
   switch (tiporeporte) {
     case "1":
       if (seguro === "") {
+<<<<<<< HEAD
         document.getElementById("validationCustom01").classList.add("is-invalid");
         isValid = false;
       } else {
         document.getElementById("validationCustom01").classList.remove("is-invalid");
+=======
+        document.getElementById("insuranceInput").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("insuranceInput").classList.remove("is-invalid");
+>>>>>>> develop
       }
       break;
     case "2":
       if (especialidad === "") {
+<<<<<<< HEAD
         document.getElementById("validationCustom02").classList.add("is-invalid");
         isValid = false;
       } else {
         document.getElementById("validationCustom02").classList.remove("is-invalid");
+=======
+        document.getElementById("specialtyInput").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("specialtyInput").classList.remove("is-invalid");
+>>>>>>> develop
       }
       break;
     case "3":
       if (tipopago === "") {
+<<<<<<< HEAD
         document.getElementById("validationCustom03").classList.add("is-invalid");
         isValid = false;
       } else {
         document.getElementById("validationCustom03").classList.remove("is-invalid");
+=======
+        document.getElementById("paymentTypeInput").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("paymentTypeInput").classList.remove("is-invalid");
+>>>>>>> develop
       }
       break;
     case "5":
       if (todo === "") {
+<<<<<<< HEAD
         document.getElementById("validationCustom04").classList.add("is-invalid");
         isValid = false;
       } else {
         document.getElementById("validationCustom04").classList.remove("is-invalid");
+=======
+        document.getElementById("porfechareporte").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("porfechareporte").classList.remove("is-invalid");
+>>>>>>> develop
       }
       break;
     default:
@@ -55,7 +92,12 @@
   }
 
   return isValid;
+<<<<<<< HEAD
 }*/
+=======
+}
+
+>>>>>>> develop
 
 //fin validar form descarga
 

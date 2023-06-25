@@ -2,8 +2,6 @@ package com.example.proyectogticsgrupo2.repository;
 
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.Cita;
-import com.example.proyectogticsgrupo2.entity.Doctor;
-import com.example.proyectogticsgrupo2.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
-    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado \n" +
+    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado,c.seguro_id_seguro \n" +
             "FROM cita c \n" +
             "INNER JOIN doctor d ON d.id_doctor = c.doctor_id_doctor \n" +
             "INNER JOIN paciente p ON p.id_paciente = c.paciente_id_paciente \n" +
@@ -27,7 +25,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorProxCitas(String id);
 
-    @Query(value = "SELECT MAX(c.id_cita), p.id_paciente, p.nombre, p.apellidos FROM proyectogtics.cita c INNER JOIN proyectogtics.doctor d ON (d.id_doctor=c.doctor_id_doctor) INNER JOIN proyectogtics.paciente p ON (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor=10304011 AND c.sede_id_sede = d.sede_id_sede  group by p.id_paciente",
+    @Query(value = "SELECT MAX(c.id_cita), p.id_paciente, p.nombre, p.apellidos,p.foto,p.fotoname,p.fotocontenttype FROM proyectogtics.cita c INNER JOIN proyectogtics.doctor d ON (d.id_doctor=c.doctor_id_doctor) INNER JOIN proyectogtics.paciente p ON (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor=10304011 AND c.sede_id_sede = d.sede_id_sede  group by p.id_paciente",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorListaPacientes(String id);
 
@@ -36,6 +34,14 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
             "where NOW() <= c.inicio and p.id_paciente = ?1")
     List<Cita> buscarProximasCitas(String idPaciente);
+
+
+    @Query(nativeQuery = true, value = "select x.torre, x.piso  from cita c " +
+            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
+            "inner join doctor d on (d.id_doctor = c.doctor_id_doctor) " +
+            "inner join sede_x_especialidad_x_administrativo x on (c.sede_id_sede = x.sede_id_sede) " +
+            "where NOW() <= c.inicio and x.especialidad_id_especialidad = d.especialidad_id_especialidad and p.id_paciente = ?1")
+    List<TorreYPisoDTO> buscarTorresYPisos(String idPaciente);
 
     @Query(nativeQuery = true, value = "select c.* from cita c \n" +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) \n" +
@@ -75,10 +81,11 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     Optional<CuestionarioxDoctorDTO> verCuestionario(int id);
 
-    @Query(value = "SELECT id_cita, fin\n" +
+    @Query(value = "SELECT cita.id_cita, cita.fin\n" +
             "FROM proyectogtics.cita\n" +
+            "INNER JOIN proyectogtics.cuestionario_x_cita ON cita.id_cita = cuestionario_x_cita.cita_id_cita\n" +
             "WHERE cita.paciente_id_paciente = ?1" +
-            "    AND cita.estado =?2",nativeQuery = true)
+            "    AND cita.estado = ?2",nativeQuery = true)
     List<EncuestaDoctorDTO> listarFechaEncuesta(String idPaciente, int estado);
 
 }

@@ -5,6 +5,7 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -82,7 +80,7 @@ public class DoctorController {
         List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor.getId_doctor()); //CAMBIAR POR ID SESION
         List<Cuestionario> listaCuestionarios= cuestionarioRepository.findAll();
         ArrayList<String> listaHorarios = new ArrayList<>();
-
+        List<CuestionarioPorCita> cuestionarioPorCitaList=cuestionarioPorCitaRepository.findAll();
 
         // Transformar LocalDateTime a LocalDate
         optionalCita.forEach(cita -> {
@@ -104,6 +102,7 @@ public class DoctorController {
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", optionalCita);
         model.addAttribute("listaPacientes", optionalCita2);
+        model.addAttribute("listaCuestionarioPorCita", cuestionarioPorCitaList);
 
 
         return "doctor/DoctorDashboard";
@@ -116,36 +115,61 @@ public class DoctorController {
 
         Optional<Cita> optionalCita = citaRepository.findById(id);
         List<Cuestionario> listaCuestionarios= cuestionarioRepository.findAll();
+        Optional<CuestionarioPorCita> optionalCuestionarioPorCita = cuestionarioPorCitaRepository.findByIdIdCita(id);
 
         if (optionalCita.isPresent()) {
-            Cita cita = optionalCita.get();
 
-            model.addAttribute("listaCuestionarios", listaCuestionarios);
-            model.addAttribute("cita", cita);
+            if (optionalCuestionarioPorCita.isEmpty()){
+                Cita cita = optionalCita.get();
 
-            return "doctor/DoctorEnviarCuestionario";
+                model.addAttribute("doctor", doctor_session);
+                model.addAttribute("listaCuestionarios", listaCuestionarios);
+                model.addAttribute("cita", cita);
+
+                return "doctor/DoctorEnviarCuestionario";
+
+            }else{
+
+                return "redirect:/doctor/dashboard";
+            }
+
         } else {
             return "redirect:/doctor/dashboard";
         }
-
-
-
     }
 
     @PostMapping("/guardarCuestionario")
     public String guardaCuestionario(HttpSession session, Authentication authentication, Model model, @Valid CuestionarioPorCita cuestionarioPorCita, BindingResult bindingResult) {
-        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
-        session.setAttribute("doctor",doctor_session);
+        Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor", doctor_session);
 
         if (bindingResult.hasErrors()) {
-
             return "redirect:/doctor/dashboard";
         } else {
+            // Obtener los valores de los campos hidden
+            Integer cuestionarioId = cuestionarioPorCita.getCuestionario().getId_cuestionario();
+            Integer citaId = cuestionarioPorCita.getCita().getId_cita();
+
+            // Crear instancias de las entidades relacionadas
+            Cuestionario cuestionario = new Cuestionario();
+            cuestionario.setId_cuestionario(cuestionarioId);
+
+            Cita cita = new Cita();
+            cita.setId_cita(citaId);
+
+            // Establecer las relaciones entre las entidades
+            cuestionarioPorCita.setCuestionario(cuestionario);
+            cuestionarioPorCita.setCita(cita);
+            cuestionarioPorCita.getId().setIdCuestionario(cuestionarioId);
+            cuestionarioPorCita.getId().setIdCita(citaId);
+            cuestionarioPorCita.setEstado(0);
 
             cuestionarioPorCitaRepository.save(cuestionarioPorCita);
+
             return "redirect:/doctor/dashboard";
         }
     }
+
 
 
     @GetMapping("/recibo")
@@ -200,7 +224,7 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarHorario")
-    public String guardarHorario(HttpSession session, Authentication authentication, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult) {
+    public String guardarHorario(HttpSession session, Authentication authentication, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult,RedirectAttributes redirectAttributes) {
 
 
         Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
@@ -214,23 +238,80 @@ public class DoctorController {
                 String errorMessage = error.getDefaultMessage();
                 System.out.println("Error en el campo " + fieldName + ": " + errorMessage);
             }
-            return "redirect:/doctor/calendario";
-        } else if (doctor.getHorario().getDisponibilidad_inicio().isAfter(doctor.getHorario().getDisponibilidad_fin())) {
-            bindingResult.rejectValue("horario.disponibilidad_inicio", "error.disponibilidad", "La hora de inicio debe ser menor que la hora de fin");
-        } else if (doctor.getHorario().getComida_inicio().isAfter(doctor.getHorario().getDisponibilidad_fin()) ||
-                    doctor.getHorario().getComida_inicio().isBefore(doctor.getHorario().getDisponibilidad_inicio())) {
-            bindingResult.rejectValue("horario.comida_inicio", "error.disponibilidad", "La hora de comida debe de estar dentro del horario de trabajo");
-        }else {
-            doctor.getHorario().setDisponibilidad_inicio(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio().format(formatter), formatter));
-            doctor.getHorario().setDisponibilidad_fin(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin().format(formatter), formatter));
-            doctor.getHorario().setComida_inicio(LocalTime.parse(doctor.getHorario().getComida_inicio().format(formatter), formatter));
+            redirectAttributes.addFlashAttribute("error", "Debe de ingresar carácteres válidos");
 
-            Horario horarioGuardado = horarioRepository.save(doctor.getHorario());
+            return "redirect:/doctor/calendario";
+        }else if (doctor.getHorario().getDisponibilidad_inicio_lunes().isAfter(doctor.getHorario().getDisponibilidad_fin_lunes()) ||
+                doctor.getHorario().getDisponibilidad_inicio_martes().isAfter(doctor.getHorario().getDisponibilidad_fin_martes()) ||
+                doctor.getHorario().getDisponibilidad_inicio_miercoles().isAfter(doctor.getHorario().getDisponibilidad_fin_miercoles()) ||
+                doctor.getHorario().getDisponibilidad_inicio_jueves().isAfter(doctor.getHorario().getDisponibilidad_fin_jueves()) ||
+                doctor.getHorario().getDisponibilidad_inicio_viernes().isAfter(doctor.getHorario().getDisponibilidad_fin_viernes()) ||
+                doctor.getHorario().getDisponibilidad_inicio_sabado().isAfter(doctor.getHorario().getDisponibilidad_fin_sabado())) {
+            redirectAttributes.addFlashAttribute("error", "La hora de inicio debe ser menor que la hora de fin");
+
+
+        } else if (doctor.getHorario().getComida_inicio_lunes().isAfter(doctor.getHorario().getDisponibilidad_fin_lunes()) ||
+                    doctor.getHorario().getComida_inicio_lunes().isBefore(doctor.getHorario().getDisponibilidad_inicio_lunes()) ||
+                    doctor.getHorario().getComida_inicio_martes().isAfter(doctor.getHorario().getDisponibilidad_fin_martes()) ||
+                    doctor.getHorario().getComida_inicio_martes().isBefore(doctor.getHorario().getDisponibilidad_inicio_martes()) ||
+                    doctor.getHorario().getComida_inicio_miercoles().isAfter(doctor.getHorario().getDisponibilidad_fin_miercoles()) ||
+                    doctor.getHorario().getComida_inicio_miercoles().isBefore(doctor.getHorario().getDisponibilidad_inicio_miercoles()) ||
+                    doctor.getHorario().getComida_inicio_jueves().isAfter(doctor.getHorario().getDisponibilidad_fin_jueves()) ||
+                    doctor.getHorario().getComida_inicio_jueves().isBefore(doctor.getHorario().getDisponibilidad_inicio_jueves()) ||
+                    doctor.getHorario().getComida_inicio_viernes().isAfter(doctor.getHorario().getDisponibilidad_fin_viernes()) ||
+                    doctor.getHorario().getComida_inicio_viernes().isBefore(doctor.getHorario().getDisponibilidad_inicio_viernes()) ||
+                    doctor.getHorario().getComida_inicio_sabado().isAfter(doctor.getHorario().getDisponibilidad_fin_sabado()) ||
+                    doctor.getHorario().getComida_inicio_sabado().isBefore(doctor.getHorario().getDisponibilidad_inicio_sabado()) )  {
+            redirectAttributes.addFlashAttribute("error", "La hora de comida debe de estar dentro del horario de trabajo");
+        } else if (doctor.getHorario().getComida_inicio_lunes().isAfter(doctor.getHorario().getDisponibilidad_fin_lunes().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_martes().isAfter(doctor.getHorario().getDisponibilidad_fin_martes().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_miercoles().isAfter(doctor.getHorario().getDisponibilidad_fin_miercoles().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_jueves().isAfter(doctor.getHorario().getDisponibilidad_fin_jueves().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_viernes().isAfter(doctor.getHorario().getDisponibilidad_fin_viernes().minusHours(1)) ||
+                doctor.getHorario().getComida_inicio_sabado().isAfter(doctor.getHorario().getDisponibilidad_fin_sabado().minusHours(1))
+                 ) {
+
+            redirectAttributes.addFlashAttribute("error", "La hora de comida debe estar al menos una hora antes de la hora de fin");
+
+        } else {
+
+            if (doctor_session.getHorario() == null) {
+                doctor_session.setHorario(new Horario());
+            }
+
+
+            doctor_session.getHorario().setDisponibilidad_inicio_lunes(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_lunes().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_lunes(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_lunes().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_lunes(LocalTime.parse(doctor.getHorario().getComida_inicio_lunes().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_martes(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_martes().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_martes(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_martes().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_martes(LocalTime.parse(doctor.getHorario().getComida_inicio_martes().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_miercoles(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_miercoles().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_miercoles(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_miercoles().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_miercoles(LocalTime.parse(doctor.getHorario().getComida_inicio_miercoles().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_jueves(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_jueves().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_jueves(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_jueves().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_jueves(LocalTime.parse(doctor.getHorario().getComida_inicio_jueves().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_viernes(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_viernes().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_viernes(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_viernes().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_viernes(LocalTime.parse(doctor.getHorario().getComida_inicio_viernes().format(formatter), formatter));
+
+            doctor_session.getHorario().setDisponibilidad_inicio_sabado(LocalTime.parse(doctor.getHorario().getDisponibilidad_inicio_sabado().format(formatter), formatter));
+            doctor_session.getHorario().setDisponibilidad_fin_sabado(LocalTime.parse(doctor.getHorario().getDisponibilidad_fin_sabado().format(formatter), formatter));
+            doctor_session.getHorario().setComida_inicio_sabado(LocalTime.parse(doctor.getHorario().getComida_inicio_sabado().format(formatter), formatter));
+
+            Horario horarioGuardado = horarioRepository.save(doctor_session.getHorario());
 
             doctor_session.setDuracion_cita_minutos(doctor.getDuracion_cita_minutos());
             doctor_session.setHorario(horarioGuardado);
 
             doctorRepository.save(doctor_session);
+            redirectAttributes.addFlashAttribute("success_creado", "Horario creado correctamente");
+            redirectAttributes.addFlashAttribute("success_editado", "Horario editado correctamente");
         }
 
         return "redirect:/doctor/calendario";
@@ -248,9 +329,9 @@ public class DoctorController {
         Optional<Cita> optionalCita = citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
+        System.out.println(optionalCita.get().getModalidad());
 
-
-        if (optionalPaciente.isPresent() & optionalCita.isPresent()) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && optionalCita.get().getModalidad()==1 && optionalCita.get().getDoctor().getId_doctor()==doctor_session.getId_doctor()) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
@@ -475,7 +556,16 @@ public class DoctorController {
                     doctor.setFotoname(fileName);
                     doctor.setFotocontenttype(file.getContentType());
                 }
-                doctorRepository.save(doctor);
+                try {
+                    doctorRepository.save(doctor);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    attr.addFlashAttribute("msgError", "No se puede subir la imagen");
+                    return "redirect:/doctor/perfilid="+ doctor.getId_doctor();
+                }
+
+
+
                 attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
                 return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
 
@@ -508,41 +598,17 @@ public class DoctorController {
     }
 
     @GetMapping("/perfil/quitarFoto")
-    public String quitarFotoDoctor(@RequestParam(name = "id") String id,
-                                   RedirectAttributes attr) {
+    public String quitarFoto(@RequestParam(name = "id") String idDoctor,
+                             RedirectAttributes attr) {
 
-        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
-            try {
-                File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-                FileInputStream input = new FileInputStream(foto);
-                byte[] bytes;
-                try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) != -1) {
-                        output.write(buffer, 0, length);
-                    }
-                    input.close();
-                    output.close();
-                    bytes = output.toByteArray();
-                }
-
-                doctor.setFoto(bytes);
-                doctor.setFotoname("userPorDefecto.jpg");
-                doctor.setFotocontenttype("image/jpg");
-
-                doctorRepository.save(doctor);
-                return "redirect:/doctor/perfil/editar?id=" + doctor.getId_doctor();
-            } catch (IOException e) {
-                e.printStackTrace();
-                attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
-                return "redirect:/doctor/perfil";
-            }
+            doctorRepository.quitarFoto(doctor.getId_doctor());
+            return "redirect:/doctor/perfil";
         }
 
-        return "redirect:/doctor/perfil";
+        return "redirect:/dctor/perfil";
     }
 
     @GetMapping("/config/actualizarSede")
@@ -590,6 +656,8 @@ public class DoctorController {
 
         return "redirect:/doctor/perfil";
     }
+
+
 
     public String getIdPaciente() {
         return idPaciente;

@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,18 +26,41 @@ public class CuestionarioPorCita {
     private Cita cita;
 
     private Integer opcion_inicio_sesion;
-    private Integer estado;
+    private Integer estado; //1---> cuestionario completado; 0 ------> cuestionario pendiente
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r1;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r2;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r3;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r4;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r5;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r6;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r7;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r8;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r9;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r10;
+
+    @NotBlank(message = "Ingrese una respuesta válida")
     private String r11;
+
     private LocalDateTime fecha_enviado;
     private LocalDateTime fecha_completado;
 }

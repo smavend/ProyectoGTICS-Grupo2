@@ -58,7 +58,7 @@
 
                                         <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
                                             <input class="form-control" type="file" name="archivo">
-                                            <a th:href="@{'/Paciente/perfil/quitarFoto?id='+${session.paciente.idPaciente}}"
+                                            <a th:href="@{/Paciente/perfil/quitarFoto}"
                                                style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
                                         </div>
                                     </div>
@@ -69,15 +69,18 @@
                                 <input type="hidden" th:field="*{fechanacimiento}">
                                 <input type="hidden" th:field="*{genero}">
                                 <input type="hidden" th:field="*{fecharegistro}">
+                                <input type="hidden" th:field="*{correo}">
+
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <p class="mb-0">Nombres</p>
                                     </div>
                                     <div class="col-sm-9">
-                                        <input class="form-control mb-0" type="text" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                                        <input class="form-control mb-0 input-texto" type="text" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                                              th:errors="*{nombre}"></div>
+                                        <div class="invalid-feedback d-none" id="validacion-nombre">Ingrese un nombre válido</div>
                                     </div>
                                 </div>
                                 <hr>
@@ -86,7 +89,7 @@
                                         <p class="mb-0">Apellidos</p>
                                     </div>
                                     <div class="col-sm-9">
-                                        <input class="form-control mb-0" type="text" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                                        <input class="form-control mb-0 input-texto" type="text" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
                                              th:errors="*{apellidos}"></div>
                                     </div>
@@ -119,6 +122,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                <!--
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
@@ -131,6 +135,7 @@
                                              th:errors="*{correo}"></div>
                                     </div>
                                 </div>
+                                -->
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
@@ -155,6 +160,7 @@
                                              th:errors="*{direccion}"></div>
                                     </div>
                                 </div>
+
                             </form>
                             <hr>
                             <div class="row">
@@ -176,18 +182,19 @@
                                         </div>
                                     </form>
 
-                                    <p class="mb-2 mb-lg-0 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
+                                    <p class="mb-2 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
                                        th:inline="text">[[${alergia.nombre}]]
-                                        <a th:href="@{'/Paciente/perfil/borrarAlergia?idPaciente='+${paciente.idPaciente}+'&idAlergia='+${alergia.idAlergia}}"
+                                        <a th:href="@{'/Paciente/perfil/borrarAlergia?idAlergia='+${alergia.idAlergia}}"
                                            class="ms-2" style="color: red"><i class="bi bi-x-circle ms-2"></i></a>
                                     </p>
                                 </div>
                             </div>
+
                             <button type="submit" class="botonAceptar mt-5" form="formPaciente">
                                 Actualizar
                             </button>
                             <a th:href="@{/Paciente/perfil}"
-                               class="botonCancelar mt-5 ms-2">Cancelar
+                               class="botonCancelar mt-5 ms-2">Regresar
                             </a>
                         </div>
                     </div>
@@ -208,11 +215,25 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- Proximamente para mejorar la vista de subida de fotos
+        <!-- SCRIPT para mostrar errores -->
+        <!--
         <script>
+            const formatoString = /^([A-Za-záÁéÉíÍóÓúÚñÑüÜ\s']+)(\s+[A-Za-záÁéÉíÍóÓúÚñÑüÜ\s']+)*$/;
+            const formatoCorreo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+            let msg = $(".invalid-feedback");
+            $(".input-texto").keyup(function (event){
+                let input = $(event.target);
+                let id = input.attr("id");
+                if (formatoString.test(input.val())){
+                    input.removeClass("is-invalid");
+                }
+                else{
+                    input.addClass("is-invalid");
+                }
+            })
 
         </script>
         -->
-
     </body>
 </html>

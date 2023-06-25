@@ -30,17 +30,21 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('consentimientos')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="mainsite-content">
 
             <h1 class="encabezado">Consentimientos dados</h1>
             <section class="seccionPrincipal">
 
                 <form method="post" th:action="@{/Paciente/consentimientos/actualizar}">
 
-                    <div th:if="${msgActualizacion != null}" th:text="${msgActualizacion}" class="alert alert-success mt-3" role="alert"></div>
+                    <div th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"
+                         class="alert alert-success mt-3" role="alert"></div>
 
                     <div class="form-check consentimiento" th:each="consentimiento : ${consentimientos}">
-                        <input class="form-check-input" type="checkbox" th:id="${consentimiento.consentimiento.id_consentimiento}" th:name="${consentimiento.consentimiento.id_consentimiento}" th:checked="${consentimiento.valor==1}">
+                        <input class="form-check-input" type="checkbox"
+                               th:id="${consentimiento.consentimiento.id_consentimiento}"
+                               th:name="${consentimiento.consentimiento.id_consentimiento}"
+                               th:checked="${consentimiento.valor==1}">
                         <label class="form-check-label" th:for="${consentimiento.consentimiento.id_consentimiento}"
                                th:text="${consentimiento.consentimiento.consentimiento}">
                             Consentimiento

@@ -29,7 +29,7 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
             <h1 class="encabezado">Reservar Cita</h1>
             <section class="seccionPrincipal">
 
@@ -100,6 +100,10 @@
                                 <span class="informacionCita fw-bold">Hora de la cita: </span>
                                 <span class="valorCita" th:text="${#temporals.format(citaTemporal.inicio, 'HH:mm')+' Hrs.'}">Info</span>
                             </div>
+                            <div class="campoCita">
+                                <span class="informacionCita fw-bold">Precio: </span>
+                                <span class="valorCita" th:text="'S/. '+${#numbers.formatDecimal(precio, 1, 2)}">Info</span>
+                            </div>
                         </div>
                     </div>
 
@@ -111,6 +115,7 @@
                 </form>
 
             </section>
+
         </main>
 
         <!-- Bootstrap CDN JS -->

@@ -107,11 +107,11 @@ public class SuperAdminService {
         dto.setEstado(String.valueOf(doctor.getEstado()));
         dto.setEspecialidad(doctor.getEspecialidad().getNombre());
         dto.setSede(doctor.getSede().getNombre());
-        if(doctor.getHorario()==null){
+        /*if(doctor.getHorario()==null){
             dto.setHorario(0);
         }else{
             dto.setHorario(doctor.getHorario().getId_horario());
-        }
+        }*/
         dto.setCorreo(doctor.getCorreo());
         dto.setClinica(doctor.getSede().getClinica().getNombre());
 //        if(doctor.getDuracion_cita_horas() == null){
