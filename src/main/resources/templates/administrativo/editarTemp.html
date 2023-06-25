@@ -87,7 +87,7 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title" th:inline="text">
-                <th:block th:utext="${temporal.nombre + ' '+ temporal.apellidos}"/>
+                <th:block th:utext="${temporal.getNombreYApellido()}"/>
                 <span>| Paciente referido</span></h5>
 
               <!-- General Form Elements -->
