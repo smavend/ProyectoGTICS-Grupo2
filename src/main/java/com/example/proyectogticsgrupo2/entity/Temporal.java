@@ -20,23 +20,23 @@ public class Temporal {
     private int id_temporal;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotBlank(message = "Debe ingresar un DNI")
+    @Digits(integer = 8, fraction = 0, message = "Ingrese un número válido")
     @Size(min = 8, max = 8, message = "Debe ingresar un número de 8 dígitos")
-    @Digits(integer = 8, fraction = 0)
     private String dni;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotBlank(message = "Debe ingresar un nombre")
     @Size(min = 2,max = 45, message = "Debe ingresar un nombre entre 2 y 45 caracteres")
     private String nombre;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotBlank(message = "Debe ingresar sus apellidos")
     @Size(min = 2, max = 45,message = "Debe ingresar los apellidos entre 2 y 45 caracteres")
     private String apellidos;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotBlank(message = "Ingrese un correo")
     @Email(message = "Debe ingresar un correo válido")
     private String correo;
 
@@ -63,4 +63,10 @@ public class Temporal {
     private Integer estado;
 
     private String genero;
+
+    public String getNombreYApellido(){
+        String[] nombres = this.getNombre().split(" ");
+        String[] apellidos = this.getApellidos().split(" ");
+        return nombres[0] + " " + apellidos[0];
+    }
 }
