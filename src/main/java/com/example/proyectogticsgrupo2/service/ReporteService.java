@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayOutputStream;
@@ -27,8 +28,15 @@ public class ReporteService {
     }
 
     @GetMapping(value = "/reporteExc", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<byte[]> generarReporteIngresos() throws IOException {
-        List<AdministradorIngresos> ingresos = administradorRepository.obtenerIgresosPorSeguro(5);
+    public ResponseEntity<byte[]> generarReporteIngresos(@RequestParam("seguro") String seguro, @RequestParam("tiporeporte") String tiporeporte) throws IOException {
+        List<AdministradorIngresos> ingresos;
+       switch (tiporeporte){
+           case "1":
+               ingresos = administradorRepository.obtenerIgresosPorSeguro(Integer.parseInt(seguro));
+           default:
+               ingresos = administradorRepository.obtenerIgresos();
+       }
+
 
         // Crear un nuevo libro de Excel
         Workbook workbook = new XSSFWorkbook();

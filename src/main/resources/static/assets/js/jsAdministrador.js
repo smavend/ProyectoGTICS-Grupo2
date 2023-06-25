@@ -8,35 +8,54 @@
 
 /*mis js*/
 //validar form de descarga
-function validateForm() {
+document.getElementById('btnDescargar').addEventListener('click', function() {
   var tiporeporte = document.getElementById("tiporeporte").value;
   var seguro = document.getElementById("insuranceInput").value;
   var especialidad = document.getElementById("specialtyInput").value;
   var tipopago = document.getElementById("paymentTypeInput").value;
   var todo = document.getElementById("porfechareporte").value;
-  var isValid = true;
-
   switch (tiporeporte) {
     case "1":
       if (seguro === "") {
         document.getElementById("insuranceInput").classList.add("is-invalid");
-        isValid = false;
+
       } else {
         document.getElementById("insuranceInput").classList.remove("is-invalid");
+        fetch('http://localhost:8080/reporteExc?tiporeporte='+tiporeporte+'&seguro='+seguro)
+            .then(function(response) {
+              return response.blob();
+            })
+            .then(function(blob) {
+              // Crear un objeto URL para el archivo blob
+              var url = window.URL.createObjectURL(blob);
+
+              // Crear un enlace de descarga y hacer clic automáticamente en él
+              var link = document.createElement('a');
+              link.href = url;
+              link.download = 'reporte.xlsx';
+              link.click();
+
+              // Liberar el objeto URL
+              window.URL.revokeObjectURL(url);
+            })
+            .catch(function(error) {
+              console.log('Error en la solicitud AJAX:', error);
+            });
       }
       break;
     case "2":
       if (especialidad === "") {
         document.getElementById("specialtyInput").classList.add("is-invalid");
-        isValid = false;
+
       } else {
         document.getElementById("specialtyInput").classList.remove("is-invalid");
+
       }
       break;
     case "3":
       if (tipopago === "") {
         document.getElementById("paymentTypeInput").classList.add("is-invalid");
-        isValid = false;
+
       } else {
         document.getElementById("paymentTypeInput").classList.remove("is-invalid");
       }
@@ -44,15 +63,20 @@ function validateForm() {
     case "5":
       if (todo === "") {
         document.getElementById("porfechareporte").classList.add("is-invalid");
-        isValid = false;
+
       } else {
         document.getElementById("porfechareporte").classList.remove("is-invalid");
       }
       break;
-    default:
-      isValid = false;
-      break;
+
   }
+
+});
+function validateForm() {
+
+  var isValid = true;
+
+
 
   return isValid;
 }
