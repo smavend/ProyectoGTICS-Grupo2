@@ -325,6 +325,7 @@
                   <div class="col-md-12 mb-3">
                     <label>DNI</label>
                     <input type="text" id="dni" class="form-control" th:field="*{idPaciente}" th:classappend="${#fields.hasErrors('idPaciente')? 'is-invalid':''}" >
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}" th:errors="*{idPaciente}" ></div>
                     <div class="invalid-feedback" id="errordni"></div>
                   </div>
                   <div class="col-md-12 mb-3">
@@ -337,7 +338,7 @@
                     <label >Teléfono</label>
                     <input type="text" id="telefono" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')? 'is-invalid':''}">
                     <!--<div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" ></div>-->
-                   <div class="invalid-feedback" id="errortelefono" style="display: none"></div>
+                   <div class="invalid-feedback" id="errortelefon" style="display: none"></div>
                  </div>
 
 
@@ -476,14 +477,13 @@
       }
       if(telefono==""){
         $("#telefono").addClass('is-invalid');
-        $("#errortelefono").text("Ingrese su número de teléfono").show(500).delay(1000);
-      }else if (dni.length !== 9) {
+        $("#errortelefon").text("Ingrese su número de teléfono").show(500).delay(1000);
+      }else if (telefono.length !==9) {
         $("#telefono").addClass("is-invalid");
         $("#errortelefono").text("El teléfono debe tener 9 dígitos").show(500).delay(1000);
       }else {
         $("#telefono").removeClass('is-invalid');
         $("#telefono").addClass('is-valid');
-
       }
       if(nombre==""){
         $("#nombre").addClass('is-invalid');
@@ -529,8 +529,8 @@
         $("#distrito").addClass('is-invalid');
         $("#errordistrito").text("Seleccione un distrito").show(500).delay(1000);
       }else {
-        $("#sede").removeClass('is-invalid');
-        $("#sede").addClass('is-valid');
+        $("#distrito").removeClass('is-invalid');
+        $("#distrito").addClass('is-valid');
       }
       if(direccion==""){
         $("#direccion").addClass('is-invalid');
@@ -549,7 +549,7 @@
       if ($("#dni").hasClass("is-valid") && $("#nombre").hasClass("is-valid") &&
               $("#apellido").hasClass('is-valid') && $("#genero").hasClass('is-valid') && $("#correo").hasClass('is-valid') &&
               $("#seguro").hasClass('is-valid') && $("#distrito").hasClass('is-valid') && $("#direccion").hasClass('is-valid')
-              && $("#fechanacimiento").hasClass('is-valid')) {
+              && $("#fechanacimiento").hasClass('is-valid') && $("#telefono").hasClass('is-valid')) {
         this.submit();
       }
     });

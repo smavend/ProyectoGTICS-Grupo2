@@ -296,7 +296,7 @@ public class AdministradorController {
         if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null ||
                 paciente.getSeguro()==null || paciente.getDistrito()==null || paciente.getFechanacimiento()==null){
             if(opt.isPresent()){
-                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
+                bindingResult.rejectValue("idPaciente","errorDoctor","Este DNI ya se encuentra registrado");
 
             }
             if (pacienteCorreoExist!=null) {

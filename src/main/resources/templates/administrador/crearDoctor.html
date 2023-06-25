@@ -328,6 +328,7 @@
                   <div class="col-md-12 mb-3">
                     <label >DNI</label>
                     <input type="text" id="dni" class="form-control" th:field="*{id_doctor}" th:classappend="${#fields.hasErrors('id_doctor')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('id_doctor')}" th:errors="*{id_doctor}" ></div>
                     <div class="invalid-feedback" id="errordni" style="display: none"></div>
                   </div>
                   <div class="col-md-12 mb-3">
@@ -352,6 +353,7 @@
                   <div class="col-md-12 mb-3">
                     <label >Correo electrónico</label>
                     <input type="text" id="correo" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')? 'is-invalid':''}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" ></div>
                     <div class="invalid-feedback" id="errorcorreo" style="display: none"></div>
                   </div>
                 </div>

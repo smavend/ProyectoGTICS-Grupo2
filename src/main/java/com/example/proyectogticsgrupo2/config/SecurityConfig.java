@@ -115,7 +115,7 @@ public class SecurityConfig {
                 .requestMatchers("/administrativo","/administrativo/***").hasAuthority("administrativo")
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
                 .requestMatchers("/administrador","/administrador/***").hasAuthority("administrador")
-                .requestMatchers("/","/login","/login/**","/signin","/signin/**").anonymous()
+                .requestMatchers("/","/reporteExc","/login","/login/**","/signin","/signin/**").anonymous()
                 .anyRequest().permitAll();
 
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
