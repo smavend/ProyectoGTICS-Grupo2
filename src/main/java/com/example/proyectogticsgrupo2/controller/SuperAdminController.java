@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -414,7 +415,7 @@ public class SuperAdminController {
         }
     }
 
-    @PostMapping("/switchDoctor/{id}")
+  /*  @PostMapping("/switchDoctor/{id}")
     public String cambiarARolDoctor(@PathVariable("id") String doctorId, Authentication authentication, HttpSession session) {
         String rol = authentication.getAuthorities().iterator().next().getAuthority();
         System.out.println("Rol del usuario autenticado: " + rol);
@@ -434,7 +435,71 @@ public class SuperAdminController {
 
         // Redirige al usuario a la página correspondiente para el rol de "doctor"
         return "redirect:/doctor/dashboard?id=" + doctor.getId_doctor();
+    }*/
+ /* @GetMapping("/switchDoctor/{id}")
+  public String switchDoctor(@PathVariable("id") String id, HttpSession session) {
+      // Buscar el doctor en la base de datos por su id
+      Doctor doctor = doctorRepository.findById(id).get();
+
+      // Establecer el atributo "impersonatedUser" en la sesión con el correo del doctor
+      session.setAttribute("impersonatedUser", doctor.getCorreo());
+
+      // Redirigir a la página que quieras después de cambiar a modo de impersonación
+      return "redirect:/doctor/dashboard";
+  }*/
+    @PostMapping("/switchDoctor/{id_doctor}")
+    public String cambiarRolADoctor(@PathVariable String id_doctor, HttpSession session, Authentication authentication) {
+        Doctor doctor = doctorRepository.findById(id_doctor).orElse(null);
+
+        if (doctor == null) {
+            return "redirect:/error";
+        }
+        // Establecer un atributo de sesión para indicar que el superadmin está logueado como doctor
+        session.setAttribute("superAdminLogueadoComoDoctor", true);
+        // Establecer un atributo de sesión para indicar el correo del doctor que está siendo "impersonado"
+        session.setAttribute("impersonatedUser", doctor.getCorreo());
+        // Redirigir al dashboard del doctor
+        return "redirect:/doctor/dashboard";
     }
+
+
+  /*  @PostMapping("/switchDoctor/{id_doctor}")
+    public String cambiarRolADoctor(@PathVariable String id_doctor, HttpSession session, Authentication authentication) {
+        Doctor doctor = doctorRepository.findById(id_doctor).orElse(null);
+
+        if (doctor == null) {
+            return "redirect:/error";
+        }
+
+        // Mostrar el nombre del principal antes de cambiarlo
+        System.out.println("Nombre del principal antes: " + authentication.getName());
+
+        // Crear un principal ficticio para el doctor
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("doctor"));
+
+        // Crear un objeto Authentication ficticio con el correo del doctor y los roles correspondientes
+        Authentication fictitiousAuthentication = new UsernamePasswordAuthenticationToken(doctor.getCorreo(), null, authorities);
+
+        // Establecer el objeto Authentication ficticio en el contexto de seguridad
+        SecurityContextHolder.getContext().setAuthentication(fictitiousAuthentication);
+
+        // Mostrar el nombre del principal después de cambiarlo
+        System.out.println("Nombre del principal después: " + SecurityContextHolder.getContext().getAuthentication().getName());
+
+        // Eliminar la sesión de superadmin
+        session.removeAttribute("superadmin");
+
+        // Establecer un atributo de sesión para indicar que el superadmin está logueado como doctor
+        session.setAttribute("superAdminLogueadoComoDoctor", true);
+
+        // Iniciar una nueva sesión con el doctor
+        session.setAttribute("doctor", doctor);
+
+        // Redirigir al dashboard del doctor
+        return "redirect:/doctor/dashboard?id=" + doctor.getId_doctor();
+    }
+*/
 
     @PostMapping("/switchAdministrador/{id}")
     public String cambiarARolAdministrador(@PathVariable("id") String administradoId, Authentication authentication, HttpSession session) {
