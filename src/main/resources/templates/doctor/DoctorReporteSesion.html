@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
     <head>
         <style>
@@ -66,7 +66,7 @@
 
 
             <section class="section dashboard">
-                <form method="post" th:action="@{/doctor/guardarReporte}" th:object="${cita}" class="mt-2">
+                <form th:if="${cita.estado != 5}" method="post" th:action="@{/doctor/guardarReporte}" th:object="${cita}" class="mt-2">
 
 
                     <input th:field="*{id_cita}" name="id_cita" type="hidden"/>
@@ -202,9 +202,51 @@
                     <div style="text-align: center;" class=" col-12">
                         <button type="submit" class="btn btn-primary">Finalizar Reporte</button>
                     </div>
-
-
                 </form>
+                <div th:unless="${cita.estado != 5}" class="container-xl perfil">
+                    <div class="row">
+                        <div class="pagetitle">
+                            <h1 for="pdf">Exámenes Médicos</h1>
+                        </div>
+                        <div style="margin-bottom: 0" class="card">
+                            <div class="card-body">
+                                <form th:action="@{/doctor/cita/guardarExamen}" method="post" th:object="${cita}"
+                                      id="formExamen" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-lg-12 text-center">
+                                            <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
+                                                <input type="hidden" th:field="*{id_cita}">
+                                                <input type="hidden" th:field="*{paciente}">
+                                                <input type="hidden" th:field="*{doctor}">
+                                                <input type="hidden" th:field="*{inicio}">
+                                                <input type="hidden" th:field="*{fin}">
+                                                <input type="hidden" th:field="*{modalidad}">
+                                                <input type="hidden" th:field="*{estado}">
+                                                <input type="hidden" th:field="*{sede}">
+                                                <input type="hidden" th:field="*{idSeguro}">
+                                                <h2 style="color: black;text-align: center;">Subir examen:</h2>
+                                                <input type="file" class="form-control" name="archivo" accept=".pdf">
+                                            </div>
+                                            <div class="mb-3">
+                                                <h2 style="color: black;text-align: center;">Descripción:</h2>
+                                                <textarea oninput="autoResizeTextarea(this)" required
+                                                          style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
+                                                          type="text" maxlength="500" th:field="*{diagnostico}"
+                                                          th:classappend="${#fields.hasErrors('diagnostico')?'is-invalid':''}"
+                                                          class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="text-align: center;" class="col-12">
+                                        <button type="submit" class="btn btn-primary">Finalizar Reporte</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
 
             </section>
