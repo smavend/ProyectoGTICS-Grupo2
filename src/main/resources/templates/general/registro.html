@@ -76,14 +76,23 @@
                   <form class="row g-3" th:method="post" th:action="@{/signin/save}" th:object="${paciente}">
                     <div class="row col-md-6">
                       <div class="col-md-12">
+                        <label class="form-label">DNI<span style="color:red;">*</span></label>
+                        <div class="input-group">
+                          <input type="number" id="dni" class="form-control" th:field="*{idPaciente}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}" aria-describedby="consulta">
+                          <button class="btn btn-outline-info" type="button" id="consulta">Consulta</button>
+                          <div class="invalid-feedback" id="errorDni" th:if="${#fields.hasErrors('idPaciente')}"
+                               th:errors="*{idPaciente}"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
                         <label class="form-label">Nombres<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" th:field="*{nombre}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                              th:errors="*{nombre}" ></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Apellidos<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" th:field="*{apellidos}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                        <input type="text" class="form-control" id="apellidos" th:field="*{apellidos}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                              th:errors="*{apellidos}"></div>
                       </div>
@@ -92,12 +101,6 @@
                         <input type="email" class="form-control" th:field="*{correo}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
                              th:errors="*{correo}"></div>
-                      </div>
-                      <div class="col-md-12">
-                        <label class="form-label">DNI<span style="color:red;">*</span></label>
-                        <input type="number" class="form-control" th:field="*{idPaciente}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}">
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}"
-                             th:errors="*{idPaciente}"></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Seguro médico<span style="color:red;">*</span></label>
@@ -222,6 +225,7 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -242,6 +246,36 @@
     }
     si.addEventListener('change', updateStatus)
     no.addEventListener('change', updateStatus)
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#consulta").click(function (){
+        let dni = $("#dni").val();
+        console.log("dni:" , dni);
+        if (dni === "") {
+          console.log("alert");
+          alert("Debe ingresar un DNI");
+        }else {
+          $.ajax({
+            method: "GET",
+            dataType: "json",
+            crossDomain: true,
+            headers: {"Authorization": "Bearer 5fe50f076dafad000ed90cd7d442fdd13381fe61cef4bddfb583614504a6b6de"},
+            url: "https://apiperu.dev/api/dni/" + dni
+          }).done(function (info) {
+            console.log(info);
+            if (info.success === true) {
+              console.log("exitoso");
+              $("#nombre").val(info.data.nombres);
+              console.log(info.data.nombres, info.data.apellido_paterno, info.data.apellido_materno);
+              $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
+            } else {
+              $("#errorDni").val("El DNI ingresado no es válido");
+            }
+          })
+        }
+      })
+    })
   </script>
 </body>
 
