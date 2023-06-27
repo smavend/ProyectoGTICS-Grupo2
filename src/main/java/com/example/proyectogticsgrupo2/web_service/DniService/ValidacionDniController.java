@@ -1,8 +1,9 @@
 package com.example.proyectogticsgrupo2.web_service.DniService;
 
 import com.example.proyectogticsgrupo2.entity.Paciente;
+import com.example.proyectogticsgrupo2.entity.Temporal;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
-import org.springframework.http.ResponseEntity;
+import com.example.proyectogticsgrupo2.repository.TemporalRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,9 +13,11 @@ import java.util.List;
 @CrossOrigin
 public class ValidacionDniController {
     final PacienteRepository pacienteRepository;
+    final TemporalRepository temporalRepository;
 
-    public ValidacionDniController(PacienteRepository pacienteRepository) {
+    public ValidacionDniController(PacienteRepository pacienteRepository, TemporalRepository temporalRepository) {
         this.pacienteRepository = pacienteRepository;
+        this.temporalRepository = temporalRepository;
     }
 
     @GetMapping("/validarDni/{dni}")
@@ -23,6 +26,13 @@ public class ValidacionDniController {
         boolean existDni = false;
         for (Paciente p : pacientes) {
             if (p.getIdPaciente().equals(dni)) {
+                existDni = true;
+                break;
+            }
+        }
+        List<Temporal> temp = temporalRepository.findAll();
+        for (Temporal t : temp) {
+            if (t.getDni().equals(dni) && t.getLlenado() == 1) {
                 existDni = true;
                 break;
             }
