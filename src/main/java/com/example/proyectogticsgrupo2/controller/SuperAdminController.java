@@ -95,41 +95,6 @@ public class SuperAdminController {
 
     }
 
- /*   @GetMapping("")
-    public String HomePageSuperAdmin(Model model) throws IOException {
-
-        List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
-        List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
-        List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
-        List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
-        List<Clinica> listaClinicas = clinicaRepository.findAll();
-        List<Sede> listaSedes = sedeRepository.findAll();
-        List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
-        model.addAttribute("listaClinicas", listaClinicas);
-        model.addAttribute("listaSedes", listaSedes);
-        model.addAttribute("listaEspecialidad", listaEspecialidad);
-        model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
-        model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
-        model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
-        model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
-
-        Optional<Stylevistas> style = stylevistasRepository.findById(1);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
-*//*                System.out.println("El color del Sidebar es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola*//*
-*//*              System.out.println("El color del Background es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola*//*
-            model.addAttribute("headerColor", styleActual.getHeader());
-            *//* model.addAttribute("sidebarColor", styleActual.getSidebar());*//*
-            model.addAttribute("backgroundColor", styleActual.getBackground());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
-        }
-
-        return "superAdmin/superadmin_Dashboard";
-    }
-*/
  @GetMapping("")
  public String HomePageSuperAdmin(Model model) throws IOException {
      List<Credenciales> credencialesDoctorIds = credencialesRepository.findAll();
@@ -415,38 +380,8 @@ public class SuperAdminController {
         }
     }
 
-  /*  @PostMapping("/switchDoctor/{id}")
-    public String cambiarARolDoctor(@PathVariable("id") String doctorId, Authentication authentication, HttpSession session) {
-        String rol = authentication.getAuthorities().iterator().next().getAuthority();
-        System.out.println("Rol del usuario autenticado: " + rol);
 
-        // Utiliza el doctorId y el rol del usuario autenticado para realizar las operaciones necesarias para cambiar al rol de "doctor"
-        // Esto puede incluir buscar los detalles del doctor en función del ID, establecer atributos de sesión, etc.
-        Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
-        if (doctor != null) {
-            session.setAttribute("doctor", doctor);
-            session.setAttribute("superAdminLogueadoComoDoctor", true); // Añade este atributo
-            System.out.println("Cambio de rol completado: Superadmin -> Doctor");
-            System.out.println("Doctor autenticado: " + doctor.getNombre() + " " + doctor.getApellidos() + " (ID: " + doctor.getId_doctor() + ")");
-        } else {
-            // Si no se encuentra el doctor, puedes redirigir a una página de error o realizar otra acción adecuada
-            return "redirect:/error";
-        }
-
-        // Redirige al usuario a la página correspondiente para el rol de "doctor"
-        return "redirect:/doctor/dashboard?id=" + doctor.getId_doctor();
-    }*/
- /* @GetMapping("/switchDoctor/{id}")
-  public String switchDoctor(@PathVariable("id") String id, HttpSession session) {
-      // Buscar el doctor en la base de datos por su id
-      Doctor doctor = doctorRepository.findById(id).get();
-
-      // Establecer el atributo "impersonatedUser" en la sesión con el correo del doctor
-      session.setAttribute("impersonatedUser", doctor.getCorreo());
-
-      // Redirigir a la página que quieras después de cambiar a modo de impersonación
-      return "redirect:/doctor/dashboard";
-  }*/
+    // Switchs hacia los otros roles
     @PostMapping("/switchDoctor/{id_doctor}")
     public String cambiarRolADoctor(@PathVariable String id_doctor, HttpSession session, Authentication authentication) {
         Doctor doctor = doctorRepository.findById(id_doctor).orElse(null);
@@ -462,70 +397,29 @@ public class SuperAdminController {
         return "redirect:/doctor/dashboard";
     }
 
-
-  /*  @PostMapping("/switchDoctor/{id_doctor}")
-    public String cambiarRolADoctor(@PathVariable String id_doctor, HttpSession session, Authentication authentication) {
-        Doctor doctor = doctorRepository.findById(id_doctor).orElse(null);
-
-        if (doctor == null) {
-            return "redirect:/error";
-        }
-
-        // Mostrar el nombre del principal antes de cambiarlo
-        System.out.println("Nombre del principal antes: " + authentication.getName());
-
-        // Crear un principal ficticio para el doctor
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("doctor"));
-
-        // Crear un objeto Authentication ficticio con el correo del doctor y los roles correspondientes
-        Authentication fictitiousAuthentication = new UsernamePasswordAuthenticationToken(doctor.getCorreo(), null, authorities);
-
-        // Establecer el objeto Authentication ficticio en el contexto de seguridad
-        SecurityContextHolder.getContext().setAuthentication(fictitiousAuthentication);
-
-        // Mostrar el nombre del principal después de cambiarlo
-        System.out.println("Nombre del principal después: " + SecurityContextHolder.getContext().getAuthentication().getName());
-
-        // Eliminar la sesión de superadmin
-        session.removeAttribute("superadmin");
-
-        // Establecer un atributo de sesión para indicar que el superadmin está logueado como doctor
-        session.setAttribute("superAdminLogueadoComoDoctor", true);
-
-        // Iniciar una nueva sesión con el doctor
-        session.setAttribute("doctor", doctor);
-
-        // Redirigir al dashboard del doctor
-        return "redirect:/doctor/dashboard?id=" + doctor.getId_doctor();
-    }
-*/
-
     @PostMapping("/switchAdministrador/{id}")
     public String cambiarARolAdministrador(@PathVariable("id") String administradoId, Authentication authentication, HttpSession session) {
-        String rol = authentication.getAuthorities().iterator().next().getAuthority();
-        System.out.println("Rol del usuario autenticado: " + rol);
-
-        // Utiliza el doctorId y el rol del usuario autenticado para realizar las operaciones necesarias para cambiar al rol de "doctor"
-        // Esto puede incluir buscar los detalles del doctor en función del ID, establecer atributos de sesión, etc.
         Administrador administrador = administradorRepository.findById(administradoId).orElse(null);
-        if (administrador != null) {
-            session.setAttribute("administrador", administrador);
-            session.setAttribute("superAdminLogueadoComoAdministrador", true); // Añade este atributo
-            System.out.println("Cambio de rol completado: Superadmin -> Administrador");
-            System.out.println("Doctor autenticado: " + administrador.getNombre() + " " + administrador.getApellidos() + " (ID: " + administrador.getIdAdministrador() + ")");
-        } else {
-            // Si no se encuentra el doctor, puedes redirigir a una página de error o realizar otra acción adecuada
+        if (administrador == null){
             return "redirect:/error";
         }
-
-        // Redirige al usuario a la página correspondiente para el rol de "doctor"
-        return "redirect:/administrador/dashboard?id=" + administrador.getIdAdministrador();
+        session.setAttribute("superAdminLogueadoComoAdministrador", true);
+        session.setAttribute("impersonatedUser", administrador.getCorreo());
+        return "redirect:/administrador/dashboard";
     }
 
+
+////////////////// returns desde los otros roles
     @PostMapping("/returnToSuperAdmin")
     public String returnToSuperAdmin(HttpSession session) {
         session.removeAttribute("doctor");  // Elimina el atributo de sesión del doctor
+        session.removeAttribute("superAdminLogueadoComoAdministrador");  // Añade esta línea
+
+        return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
+    }
+    @PostMapping("/returnToSuperAdmin_being_Administrador")
+    public String returnToSuperAdmin_being_Administrador(HttpSession session) {
+        session.removeAttribute("administrador");  // Elimina el atributo de sesión del doctor
         session.removeAttribute("superAdminLogueadoComoDoctor");  // Añade esta línea
 
         return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
