@@ -154,9 +154,16 @@
                             <div style="height: auto">
                                 <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
                                 <hr>
-                                <div style="display: flex; justify-content: center; align-items: center;">
-                                    <img th:src="@{/assets/img/zoom.jpg}" style="width: 80%">
+                                <div class="p-4" style="background: rgb(220, 220, 220); border-radius: 15px">
+                                    <button class="btn btn-primary mb-3" onclick="crearReunion()">Crear reunión</button>
+                                    <br/>
+                                    <div class="hstack gap-2 mb-3">
+                                        <input class="form-control" type="text" id="copyInput">
+                                        <button style="white-space: nowrap" class="btn btn-primary" onclick="copiar()">Copiar link</button>
+                                    </div>
+                                    <p>Copie y pegue el link para ingresar a la reunión</p>
                                 </div>
+
                                 <div style="margin-top: 5px;text-align: center">
                                     <a th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}" type="button" data-bs-toggle="tooltip" data-bs-placement="left"
                                             title="Enviar cuestionario" class="btn btn-warning" target="_blank">
@@ -174,12 +181,6 @@
 
                                 </div>
 
-                                <div style="text-align: center;margin-top: 2px">
-                                    <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Finalizar videollamada" class="btn btn-danger">
-                                        <i style="color: black" class="bi bi-telephone-x-fill"></i>
-                                    </button>
-                                </div>
                                 <hr style="border-top: 3px solid #ccc">
                                 <div style="margin-top: 1rem;margin-bottom: 2rem">
 
@@ -242,6 +243,33 @@
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    // Función crear ID de la videollamada
+                    function crearReunion() {
+                        let meetingId =  'xxxxyxxx'.replace(/[xy]/g, function(c) {
+                            let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                            return v.toString(16);
+                        });
+                        console.log("http://"+ window.location.host + "?meetingId="+ meetingId)
+                        document.getElementById("copyInput").value = window.location.host + "/doctor/reunion?id="+ meetingId;
+                    }
+
+                    // Función copiar link
+                    function copiar() {
+                        let copyText = document.getElementById("copyInput");
+                        copyText.select();
+                        copyText.setSelectionRange(0, 99999);
+
+                        try {
+                            // Intentar copiar utilizando execCommand
+                            document.execCommand('copy');
+                            console.log('Texto copiado al portapapeles');
+                        } catch (err) {
+                            console.error('Error al copiar el texto al portapapeles: ', err);
+                        }
+                    }
+                </script>
 
                 <script>
                     document.getElementById('formExamen').addEventListener('submit', function(event) {

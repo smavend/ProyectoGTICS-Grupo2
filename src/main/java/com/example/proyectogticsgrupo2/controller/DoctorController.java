@@ -42,6 +42,10 @@ public class DoctorController {
     final CitaRepository citaRepository;
 
     private String idPaciente;
+
+
+
+    private int CitaIdLink;
     private int idCita;
     private String fecha;
     private final AlergiaRepository alergiaRepository;
@@ -285,7 +289,15 @@ public class DoctorController {
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
         doctor = doctorOptional.get();
 
+        List<Cita> citasDelDoctor=citaRepository.obtenerCitasPorDoctorId(doctor_session.getId_doctor());
+        Doctor buscarHorarioDeDoctor=doctorRepository.buscarHorarioPorDoctorId(doctor_session.getId_doctor());
+        Horario horarioDeDoctor=horarioRepository.buscarHorarioPorDoctorId(buscarHorarioDeDoctor.getHorario().getId_horario());
+
         model.addAttribute("doctor", doctor);
+        model.addAttribute("citas", citasDelDoctor);
+        model.addAttribute("horario",horarioDeDoctor );
+
+        System.out.println(horarioDeDoctor.getId_horario());
 
         return "doctor/DoctorCalendario";
     }
@@ -438,11 +450,22 @@ public class DoctorController {
             model.addAttribute("cita", cita);
             model.addAttribute("alergias", alergias);
 
+            setCitaIdLink(id2);
+
+
+
             return "doctor/DoctorReporteSesion";
         } else {
             return "redirect:/doctor/dashboard";
         }
 
+    }
+
+    @GetMapping("/reunion")
+    public String reunion(@RequestParam("id") String id){
+
+        citaRepository.guardarLink(id,getCitaIdLink());
+        return "doctor/reunion";
     }
 
     @GetMapping("/verCuestionario")
@@ -978,6 +1001,14 @@ public class DoctorController {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public int getCitaIdLink() {
+        return CitaIdLink;
+    }
+
+    public void setCitaIdLink(int citaIdLink) {
+        CitaIdLink = citaIdLink;
     }
 
 
