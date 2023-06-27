@@ -552,7 +552,7 @@ public class PacienteController {
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("idPagar", idPago);
         model.addAttribute("pagoList", pagoList);
-        model.addAttribute("activarModal", true);
+        //model.addAttribute("activarModal", true);
         return "paciente/pagos";
     }
 
@@ -567,6 +567,7 @@ public class PacienteController {
             model.addAttribute("pagoList", pagoList);
             model.addAttribute("idPagar", idPago);
             model.addAttribute("activarModal", true);
+            model.addAttribute("pagoFilt",1);
             return "paciente/pagos";
         } else {
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));

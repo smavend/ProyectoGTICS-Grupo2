@@ -73,8 +73,7 @@
                             <!-- columna estado -->
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
-                                <a th:href="@{/Paciente/pagar(idPago=${pago.id})}"
-                                   class="botonPagar botonPagarModal">Pagar</a>
+                                <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
                             </td>
                             <td th:if="${pago.estadoPago == 1}">Cancelado</td>
                         </tr>
@@ -103,7 +102,7 @@
                         <div class="modal-body">
                             <form method="post" th:action="@{/Paciente/guardarPago(filtro=${filtro})}"
                                   th:object="${tarjetaPago}">
-                                <input type="hidden" th:value="${idPagar}" name="idPago">
+                                <input type="hidden" id="idPagoTarjeta" th:value="${idPagoTarjeta}" name="idPago"/>
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                     <div class="input-group mb-3">
@@ -222,6 +221,9 @@
 
         <!-- DATATABLES SCRIPT -->
         <script>
+            var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
+            $('#idPagoTarjeta').val(idPagoTarjeta);
+
             $(document).ready(function () {
                 $('#tablax').DataTable({
                     language: {
@@ -272,12 +274,17 @@
             });
         </script>
 
+        <!--Script para Modal-->
         <script th:inline="javascript">
             const activarModal = /*[[${activarModal}]]*/ false;
             if (activarModal) {
                 $(document).ready(function () {
                     $('#modal-pago').modal('show');
                 });
+            }
+            function mostrarModal(){
+                $('.modal')
+                $('#modal-pago').modal('show');
             }
         </script>
 
