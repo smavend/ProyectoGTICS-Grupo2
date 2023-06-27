@@ -76,8 +76,29 @@ public class PacienteController {
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model, Authentication authentication, HttpSession session) {
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String impersonatedUser = (String) session.getAttribute("impersonatedUser");
+        Boolean superAdminLogueadoComoPaciente = (Boolean) session.getAttribute("superAdminLogueadoComoPaciente");
+        if (superAdminLogueadoComoPaciente == null) {
+            superAdminLogueadoComoPaciente = false;
+        }
+        model.addAttribute("superAdminLogueadoComoPaciente", superAdminLogueadoComoPaciente);
 
+        Paciente paciente;
+
+        if (impersonatedUser != null) {
+            // Si hay un usuario "impersonado", buscar al paciente por ese correo electrónico
+            paciente = pacienteRepository.findByCorreo(impersonatedUser);
+        } else {
+            paciente = pacienteRepository.findByCorreo(authentication.getName());
+            if (paciente == null) {
+                return "redirect:/error";
+            }
+        }
+
+        session.setAttribute("paciente", paciente);
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
@@ -104,7 +125,17 @@ public class PacienteController {
     @GetMapping("/reservar")
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         model.addAttribute("sedeList", sedeRepository.findAll());
 
@@ -116,7 +147,17 @@ public class PacienteController {
                                 Model model, HttpSession session, Authentication authentication) {
 
         List<Doctor> doctoresDisponibles;
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         if (bindingResult.hasErrors()) {
             System.out.println("Error validacion: "+bindingResult.getAllErrors());
@@ -137,7 +178,18 @@ public class PacienteController {
     public String reservar2Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+/*
+        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+
         session.setAttribute("paciente", paciente);
 
         if (bindingResult.hasErrors()) {
@@ -167,7 +219,16 @@ public class PacienteController {
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                             HttpSession session, Authentication authentication, Model model) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+       /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         String tipoPago;
@@ -198,7 +259,16 @@ public class PacienteController {
     @GetMapping("/perfil")
     public String perfil(Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente());
@@ -216,7 +286,16 @@ public class PacienteController {
     @GetMapping("/perfil/editar")
     public String editarPerfil(Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         List<Seguro> seguroList = seguroRepository.findAll();
@@ -234,8 +313,18 @@ public class PacienteController {
     @PostMapping("/perfil/guardar")
     public String guardarPerfil(@ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult, @RequestParam(name = "archivo") MultipartFile file, RedirectAttributes attr, Model model, Authentication authentication, HttpSession session) {
 
-        Paciente p = pacienteRepository.findByCorreo(authentication.getName());
+    /*    Paciente p = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", p);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente p = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", p);
+
         String fileName = file.getOriginalFilename();
 
         if (p.getIdPaciente().equals(paciente.getIdPaciente())) {
@@ -288,10 +377,18 @@ public class PacienteController {
     }
 
     @PostMapping("/perfil/guardarAlergia")
-    public String guardarAlergia(Alergia alergia, RedirectAttributes attr, Authentication authentication) {
+    public String guardarAlergia(Alergia alergia, RedirectAttributes attr, Authentication authentication, HttpSession session) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        if (paciente.getIdPaciente().equals(alergia.getPaciente().getIdPaciente())) {
+      /*  Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        if (paciente.getIdPaciente().equals(alergia.getPaciente().getIdPaciente())){
             alergiaRepository.save(alergia);
             return "redirect:/Paciente/perfil/editar";
         } else {
@@ -303,7 +400,16 @@ public class PacienteController {
     @GetMapping("/perfil/borrarAlergia")
     public String borrarAlergia(@RequestParam(name = "idAlergia") int idAlergia, Authentication authentication, HttpSession session) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         Optional<Alergia> optionalAlergia = alergiaRepository.findById(idAlergia);
@@ -314,9 +420,17 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/quitarFoto")
-    public String quitarFoto(Authentication authentication) {
+    public String quitarFoto(HttpSession session, Authentication authentication) {
 
-        String idPaciente = pacienteRepository.findByCorreo(authentication.getName()).getIdPaciente();
+      /*  String idPaciente = pacienteRepository.findByCorreo(authentication.getName()).getIdPaciente();*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        String idPaciente = pacienteRepository.findByCorreo(userEmail).getIdPaciente();
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()) {
@@ -331,15 +445,40 @@ public class PacienteController {
     @GetMapping("/perfil/cambiarContrasena")
     public String cambiarContrasena(HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
 
         return "paciente/perfilContrasena";
     }
 
     @PostMapping("/perfil/guardarContrasena")
-    public String guardarContrasena(@RequestParam("actual") String contrasenaActual, @RequestParam("nueva1") String contrasenaNueva1, @RequestParam("nueva2") String contrasenaNueva2, RedirectAttributes attr, Authentication authentication) {
+    public String guardarContrasena(@RequestParam("actual") String contrasenaActual,
+                                    @RequestParam("nueva1") String contrasenaNueva1,
+                                    @RequestParam("nueva2") String contrasenaNueva2,
+                                    RedirectAttributes attr, Authentication authentication,
+                                    HttpSession session) {
+/*
+        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
 
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
 
@@ -380,7 +519,17 @@ public class PacienteController {
     @GetMapping("/doctores")
     public String verDoctores(@RequestParam("sede") int idSede, @RequestParam("esp") int idEspecialidad, @RequestParam("pag") int pagina, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         List<Doctor> doctorList;
         int totalPaginas;
@@ -442,7 +591,18 @@ public class PacienteController {
     @GetMapping("/perfilDoctor")
     public String verPerfilDoctor(@RequestParam("doc") String idDoctor, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
@@ -458,7 +618,19 @@ public class PacienteController {
     @PostMapping("/reservarDoctor")
     public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, @ModelAttribute("hora") String hora, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+
+        session.setAttribute("paciente", paciente);
 
         return "paciente/reservarDoctor1";
     }
@@ -470,7 +642,19 @@ public class PacienteController {
             return "paciente/reservarDoctor1";
         } else {
 
+/*
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
+
+            Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+
+            session.setAttribute("paciente", paciente);
 
             String inicioString = citaTemporal.getFecha().toString() + ' ' + hora;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -493,7 +677,16 @@ public class PacienteController {
     @PostMapping("/reservarDoctor3")
     public String reserarDoctor3(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, HttpSession session, Authentication authentication, Model model) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+      /*  Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         //citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
@@ -506,14 +699,39 @@ public class PacienteController {
     @GetMapping("/confirmacion")
     public String confirmarReserva(HttpSession session, Authentication authentication, Model model) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
         model.addAttribute("activarModal", true);
+
         return "paciente/confirmacion";
     }
 
     @GetMapping("/sesionVirtual")
     public String sesionVirtual(HttpSession session, Authentication authentication) {
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
         return "paciente/sesionVirtual";
     }
 
@@ -521,7 +739,16 @@ public class PacienteController {
     @GetMapping("/citas")
     public String verCitas(Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+       /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         List<Cita> proximasCitas = citaRepository.buscarProximasCitas(paciente.getIdPaciente());
@@ -538,11 +765,22 @@ public class PacienteController {
     @GetMapping("/pagos")
     public String pagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago, Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+/*
+        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
 
         List<Pago> pagoList = pagoRepository.buscarPorPaciente(paciente.getIdPaciente());
+
         model.addAttribute("pagoList", pagoList);
         return "paciente/pagos";
     }
@@ -550,7 +788,18 @@ public class PacienteController {
     @GetMapping("/pagar")
     public String pagar(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago, @RequestParam("idPago") Integer idPago, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("idPagar", idPago);
@@ -565,7 +814,18 @@ public class PacienteController {
                               Model model, RedirectAttributes attr, HttpSession session, Authentication authentication) {
 
         if (bindingResult.hasErrors()) {
+/*
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
+
+            Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+            session.setAttribute("paciente", paciente);
             List<Pago> pagoList = pagoRepository.findAll();
             model.addAttribute("pagoList", pagoList);
             model.addAttribute("idPagar", idPago);
@@ -573,7 +833,19 @@ public class PacienteController {
             model.addAttribute("pagoFilt",1);
             return "paciente/pagos";
         } else {
+/*
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
+
+            Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+            session.setAttribute("paciente", paciente);
+
             pagoRepository.guardarPago(idPago);
             attr.addFlashAttribute("msg", "Pago realizado exitosamente");
             return "redirect:/Paciente/pagos";
@@ -583,7 +855,19 @@ public class PacienteController {
     @GetMapping("/recibo")
     public String verReciboPago(@RequestParam("idPago") int idPago, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         Optional<Pago> optionalPago = pagoRepository.findById(idPago);
         if (optionalPago.isPresent()) {
@@ -597,8 +881,19 @@ public class PacienteController {
     @GetMapping("/cuestionarios")
     public String cuestionarios(HttpSession session, Model model, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+       /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
+
 
         List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.buscarPorPaciente(paciente.getIdPaciente());
 
@@ -610,7 +905,19 @@ public class PacienteController {
     @GetMapping("/cuestionario")
     public String completarCuestionario(@RequestParam("cues") Integer idCuestionario, @RequestParam("cita") Integer idCita, @ModelAttribute("cuestionario") CuestionarioPorCita cuestionario, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         model.addAttribute("cuestionario", cuestionarioPorCitaRepository.findByIdIdCuestionarioAndIdIdCita(idCuestionario, idCita));
         model.addAttribute("preguntas", cuestionarioRepository.buscarPorId(idCuestionario));
@@ -637,9 +944,17 @@ public class PacienteController {
     @GetMapping("/consentimientos")
     public String consentimientos(Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
 
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
         List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(paciente.getIdPaciente());
 
         model.addAttribute("consentimientos", consentimientos);
@@ -647,9 +962,24 @@ public class PacienteController {
     }
 
     @PostMapping("/consentimientos/actualizar")
-    public String actualizarConsentimientos(@RequestParam Map<String, Boolean> consentimientos, RedirectAttributes attr, Authentication authentication) {
+    public String actualizarConsentimientos(@RequestParam Map<String, Boolean> consentimientos,
+                                            RedirectAttributes attr, Authentication authentication,
+                                            HttpSession session) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+
+        session.setAttribute("paciente", paciente);
+
+
 
         pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(paciente.getIdPaciente());
         for (String key : consentimientos.keySet()) {
@@ -667,7 +997,19 @@ public class PacienteController {
 
     @GetMapping("/mensajeria")
     public String mensajeria(HttpSession session, Authentication authentication) {
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
         return "paciente/mensajeria";
     }
 

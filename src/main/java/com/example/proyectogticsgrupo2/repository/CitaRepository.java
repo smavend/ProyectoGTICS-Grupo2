@@ -99,4 +99,9 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "    AND cita.estado = ?2",nativeQuery = true)
     List<EncuestaDoctorDTO> listarFechaEncuesta(String idPaciente, int estado);
 
+    @Query(value = "SELECT * FROM proyectogtics.cita\n" +
+            "WHERE  paciente_id_paciente= ?1" +
+            "  AND especialidad_id_especialidad IN (4, 5, 6)",nativeQuery = true)
+    List<Cita> listarExamenes(String idPaciente);
+
 }

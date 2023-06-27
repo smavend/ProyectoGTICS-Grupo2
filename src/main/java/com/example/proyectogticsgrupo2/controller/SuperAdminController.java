@@ -5,14 +5,26 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoServiceSuperAdmin;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +35,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,6 +58,9 @@ public class SuperAdminController {
 
     final FormularioJsonRepository formularioJsonRepository;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
 /*
     final FormDinamicoRepository formDinamicoRepository;
 */
@@ -64,7 +76,8 @@ public class SuperAdminController {
                                 AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository,
                                 SecurityConfig securityConfig,
                                 CredencialesRepository credencialesRepository, StylevistasRepository stylevistasRepository,
-                                FormularioJsonRepository formularioJsonRepository) {
+                                FormularioJsonRepository formularioJsonRepository,
+                                UserDetailsService userDetailsService) {
         this.pacienteRepository = pacienteRepository;
         this.administradorRepository = administradorRepository;
         this.administrativoRepository = administrativoRepository;
@@ -78,49 +91,61 @@ public class SuperAdminController {
         this.credencialesRepository = credencialesRepository;
         this.stylevistasRepository = stylevistasRepository;
         this.formularioJsonRepository = formularioJsonRepository;
+        this.userDetailsService = userDetailsService;
+
     }
 
-    @GetMapping("")
-    public String HomePageSuperAdmin(Model model) throws IOException {
-        List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
-        List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
-        List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
-        List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
-        List<Clinica> listaClinicas = clinicaRepository.findAll();
-        List<Sede> listaSedes = sedeRepository.findAll();
-        List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
-        model.addAttribute("listaClinicas", listaClinicas);
-        model.addAttribute("listaSedes", listaSedes);
-        model.addAttribute("listaEspecialidad", listaEspecialidad);
-        model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
-        model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
-        model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
-        model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
+ @GetMapping("")
+ public String HomePageSuperAdmin(Model model) throws IOException {
+     List<Credenciales> credencialesDoctorIds = credencialesRepository.findAll();
 
-        Optional<Stylevistas> style = stylevistasRepository.findById(1);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
-/*
-                System.out.println("El color del Sidebar es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
-*/
-/*
-                System.out.println("El color del Background es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
-*/
+     List<String> listaCredenciales = new ArrayList<>();
 
-            model.addAttribute("headerColor", styleActual.getHeader());
-/*
-                model.addAttribute("sidebarColor", styleActual.getSidebar());
-*/
-            model.addAttribute("backgroundColor", styleActual.getBackground());
+     for (Credenciales credencial : credencialesDoctorIds) {
+         listaCredenciales.add(credencial.getId_credenciales());
+     }
 
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
-        }
-        return "superAdmin/superadmin_Dashboard";
-    }
+     List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
+     List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
+     List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
+     List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
+     List<Clinica> listaClinicas = clinicaRepository.findAll();
+     List<Sede> listaSedes = sedeRepository.findAll();
+     List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
 
+     // Para cada DoctorDTO_superadmin, comprueba si su id está en listaCredenciales y establece showLoguearButton en consecuencia
+     for (DoctorDTO_superadmin doctorDTO : listaDoctorDTO_superadmin) {
+         doctorDTO.setShowLoguearButton(listaCredenciales.contains(doctorDTO.getIdDoctor()));
+     }
+     for (AdministradorDTO_superadmin administradoresDTO : listaAdministradoresDTO_superadmin){
+         administradoresDTO.setShowLoguearButton(listaCredenciales.contains(administradoresDTO.getIdAdministrador()));
+     }
+     for (AdministrativoDTO_superadmin administrativoDTO : listaAdministrativoDTO_superadmin){
+         administrativoDTO.setShowLoguearButton(listaCredenciales.contains(administrativoDTO.getIdAdministrativo()));
+     }
+     for (PacienteDTO_superadmin pacienteDTO : listaPacienteDTO_superadmin){
+         pacienteDTO.setShowLoguearButton(listaCredenciales.contains(pacienteDTO.getIdPaciente()));
+     }
+     model.addAttribute("listaClinicas", listaClinicas);
+     model.addAttribute("listaSedes", listaSedes);
+     model.addAttribute("listaEspecialidad", listaEspecialidad);
+     model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
+     model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
+     model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
+     model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
+
+     Optional<Stylevistas> style = stylevistasRepository.findById(1);
+     if (style.isPresent()) {
+         Stylevistas styleActual = style.get();
+         System.out.println("El color del encabezado es: " + styleActual.getHeader());
+         model.addAttribute("headerColor", styleActual.getHeader());
+         model.addAttribute("backgroundColor", styleActual.getBackground());
+     } else {
+         System.out.println("No se encontró stylevistas con el id proporcionado");
+     }
+
+     return "superAdmin/superadmin_Dashboard";
+ }
     @GetMapping("/administradores")
     @ResponseBody
     public List<AdministradorDTO_superadmin> obtenerAdministradores() {
@@ -213,22 +238,10 @@ public class SuperAdminController {
         Optional<Stylevistas> style = stylevistasRepository.findById(1);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
-/*
-                System.out.println("El color del Sidebar es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
-*/
-/*
-                System.out.println("El color del Background es: " + styleActual.getSidebar());  // Esto imprimirá el valor en tu consola
-*/
-
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());
             model.addAttribute("headerColor", styleActual.getHeader());
-/*
-                model.addAttribute("sidebarColor", styleActual.getSidebar());
-*/
             model.addAttribute("backgroundColor", styleActual.getBackground());
-
         } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         List<FormularioJson> formularios = formularioJsonRepository.findAll();
@@ -242,7 +255,6 @@ public class SuperAdminController {
     public String eliminarFormulario(
             @PathVariable("id") Integer id,
             Model model) {
-
         try {
             formularioJsonRepository.deleteById(id);
             model.addAttribute("message", "Formulario eliminado con éxito");
@@ -274,6 +286,199 @@ public class SuperAdminController {
 
         return "redirect:/SuperAdminHomePage/verforms";
     }
+    @GetMapping("/ShowToEditForm/{id}")
+    public String mostrarFormulario(
+            @PathVariable("id") Integer id,
+            Model model) {
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());
+            model.addAttribute("headerColor", styleActual.getHeader());
+            model.addAttribute("backgroundColor", styleActual.getBackground());
+        } else {
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
+        FormularioJson formularioJson = formularioJsonRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid formulario Id:" + id));
+
+        // Agregar el formularioJson al modelo
+        model.addAttribute("formulario", formularioJson);
+        System.out.println("El ID del formulario es: " + formularioJson.getId());
+
+        return "superAdmin/EditForm";
+    }
+
+    @GetMapping("/impersonarDoctor/{idDoctor}")
+    public String impersonarDoctor(@PathVariable("idDoctor") String idDoctor, HttpSession session) {
+        System.out.println("Esta leyendo esto");
+        System.out.println("Buscando al doctor con ID: " + idDoctor);
+
+        // Obtén la autenticación actual
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null) {
+            System.out.println("Authenticación actual: " + auth.toString());
+            if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("superadmin"))) {
+                // El usuario actualmente autenticado es un superadministrador.
+
+                // Busca las credenciales en la base de datos
+                Optional<Credenciales> optionalCredenciales = credencialesRepository.findById(idDoctor);
+                if (optionalCredenciales.isPresent()) {
+                    System.out.println("encontro credenciales");
+                    Credenciales credenciales = optionalCredenciales.get();
+                    System.out.println("Credenciales encontradas: " + credenciales.toString());
+
+                    // Crea una lista de authorities basada en el rol del doctor y agrega "impersonar"
+                    List<GrantedAuthority> authorities = new ArrayList<>();
+                    authorities.add(new SimpleGrantedAuthority("doctor"));
+                    authorities.add(new SimpleGrantedAuthority("impersonar"));
+
+                    System.out.println("Lista de authorities creada: " + authorities.toString());
+
+                    // Busca al doctor por su ID
+                    Optional<Doctor> doctorOptional = doctorRepository.findById(credenciales.getId_credenciales());
+                    if (doctorOptional.isPresent()) {
+                        Doctor doctor = doctorOptional.get();
+                        // Aquí puedes imprimir los datos del doctor en la consola
+                        System.out.println("Datos del doctor: " + doctor.toString());
+
+                        // Establece la autenticación en el contexto de seguridad
+                        UsernamePasswordAuthenticationToken doctorAuth =
+                                new UsernamePasswordAuthenticationToken(credenciales.getCorreo(), null, authorities);
+
+                        System.out.println("Objeto de autenticación del doctor creado: " + doctorAuth.toString());
+
+                        // Establece el doctor en la sesión
+                        session.setAttribute("doctor", doctor);
+
+                        System.out.println("Autenticación establecida en el contexto de seguridad");
+
+                        System.out.println("redirige aqui?");
+                        session.setAttribute("doctor", doctor);
+
+                        // Redirige al usuario a la ruta del controlador de dashboard del doctor
+                        return "redirect:/doctor/dashboard";
+                    } else {
+                        // No se encontró el doctor en la base de datos
+                        System.out.println("No se encontró el doctor con ID: " + credenciales.getId_credenciales());
+                        return "redirect:/SuperAdminHomePage";
+                    }
+                } else {
+                    // Las credenciales no se encontraron en la base de datos
+                    System.out.println("No se encontraron las credenciales con ID: " + idDoctor);
+                    return "redirect:/SuperAdminHomePage";
+                }
+            } else {
+                // El usuario no está autenticado o no es un superadministrador
+                System.out.println("El usuario no está autenticado o no es un superadministrador");
+                return "redirect:/login";
+            }
+        } else {
+            System.out.println("Auth es null");
+            return "redirect:/login";
+        }
+    }
+
+
+    // Switchs hacia los otros roles
+    @PostMapping("/switchDoctor/{id_doctor}")
+    public String cambiarRolADoctor(@PathVariable String id_doctor, HttpSession session, Authentication authentication) {
+        Doctor doctor = doctorRepository.findById(id_doctor).orElse(null);
+
+        if (doctor == null) {
+            return "redirect:/error";
+        }
+        // Establecer un atributo de sesión para indicar que el superadmin está logueado como doctor
+        session.setAttribute("superAdminLogueadoComoDoctor", true);
+        // Establecer un atributo de sesión para indicar el correo del doctor que está siendo "impersonado"
+        session.setAttribute("impersonatedUser", doctor.getCorreo());
+        // Redirigir al dashboard del doctor
+        return "redirect:/doctor/dashboard";
+    }
+
+    @PostMapping("/switchAdministrador/{id}")
+    public String cambiarARolAdministrador(@PathVariable("id") String administradorId, Authentication authentication, HttpSession session) {
+        Administrador administrador = administradorRepository.findById(administradorId).orElse(null);
+        if (administrador == null){
+            return "redirect:/error";
+        }
+        session.setAttribute("superAdminLogueadoComoAdministrador", true);
+        session.setAttribute("impersonatedUser", administrador.getCorreo());
+        return "redirect:/administrador/dashboard";
+    }
+    @PostMapping("/switchAdministrativo/{id}")
+    public String cambiarARolAdministrativo(@PathVariable("id") String administrativoId, Authentication authentication, HttpSession session) {
+        Administrativo administrativo = administrativoRepository.findById(administrativoId).orElse(null);
+        if (administrativo == null){
+            return "redirect:/error";
+        }
+        session.setAttribute("superAdminLogueadoComoAdministrativo", true);
+        session.setAttribute("impersonatedUser", administrativo.getCorreo());
+        return "redirect:/administrativo";
+    }
+
+    @PostMapping("/switchPaciente/{id}")
+    public String cambiarARolPaciente(@PathVariable("id") String pacienteId, Authentication authentication, HttpSession session) {
+        Paciente paciente = pacienteRepository.findById(pacienteId).orElse(null);
+        if (paciente == null){
+            return "redirect:/error";
+        }
+        session.setAttribute("superAdminLogueadoComoPaciente", true);
+        session.setAttribute("impersonatedUser", paciente.getCorreo());
+        return "redirect:/Paciente";
+    }
+
+////////////////// returns desde los otros roles
+    @PostMapping("/returnToSuperAdmin")
+    public String returnToSuperAdmin(HttpSession session) {
+        session.removeAttribute("doctor");  // Elimina el atributo de sesión del doctor
+        session.removeAttribute("superAdminLogueadoComoAdministrador");  // Añade esta línea
+
+        return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
+    }
+    @PostMapping("/returnToSuperAdmin_being_Administrador")
+    public String returnToSuperAdmin_being_Administrador(HttpSession session) {
+        session.removeAttribute("administrador");  // Elimina el atributo de sesión del doctor
+        session.removeAttribute("superAdminLogueadoComoDoctor");  // Añade esta línea
+
+        return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
+    }
+
+    @PostMapping("/returnToSuperAdmin_being_Administrativo")
+    public String returnToSuperAdmin_being_Administrativo(HttpSession session) {
+        session.removeAttribute("administrativo");  // Elimina el atributo de sesión del doctor
+        session.removeAttribute("superAdminLogueadoComoAdministrativo");  // Añade esta línea
+        return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
+    }
+    @PostMapping("/returnToSuperAdmin_being_Paciente")
+    public String returnToSuperAdmin_being_Paciente(HttpSession session) {
+        session.removeAttribute("paciente");  // Elimina el atributo de sesión del doctor
+        session.removeAttribute("superAdminLogueadoComoPaciente");  // Añade esta línea
+
+        return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
+    }
+
+
+    @PostMapping("/cambioDisponibilidad/{id}")
+    public String cambioDisponibilidad(
+            @PathVariable("id") Integer id,
+            Model model) {
+        FormularioJson formularioJson = formularioJsonRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid formulario Id:" + id));
+
+        // Cambia el valor de 'sent' a su opuesto (1 si es 0, 0 si es 1)
+        formularioJson.setSent(formularioJson.getSent() == 0 ? 1 : 0);
+
+        try {
+            formularioJsonRepository.save(formularioJson);
+            model.addAttribute("message", "Disponibilidad del formulario actualizada con éxito");
+        } catch (Exception e) {
+            model.addAttribute("message", "Error al actualizar la disponibilidad del formulario: " + e.getMessage());
+            return "errorPage";
+        }
+        return "redirect:/SuperAdminHomePage/verforms";
+    }
     @PostMapping("/actualizarFormulario/{id}")
     public String actualizarFormulario(
             @PathVariable("id") Integer id,
@@ -285,7 +490,6 @@ public class SuperAdminController {
         formularioJson.setTitulo(titulo);
         formularioJson.setEstructura_formulario(estructuraFormulario);
         formularioJson.setSent(0); // Seteamos el valor en 0 siempre.
-        System.out.println("aqui llegamos compa");
 
         try {
             formularioJsonRepository.save(formularioJson);
@@ -294,7 +498,6 @@ public class SuperAdminController {
             model.addAttribute("message", "Error al actualizar el formulario: " + e.getMessage());
             return "errorPage";
         }
-
         return "redirect:/SuperAdminHomePage/verforms";
     }
 

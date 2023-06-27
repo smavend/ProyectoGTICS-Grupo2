@@ -13,4 +13,6 @@ public class AdministradorDTO_superadmin {
     private String correo;
     private String sedeNombre;
     private String clinica;
+    private boolean showLoguearButton;  // Nueva propiedad
+
 }

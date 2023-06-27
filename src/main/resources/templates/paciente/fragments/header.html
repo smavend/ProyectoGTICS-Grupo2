@@ -20,6 +20,15 @@
             <nav class="header-nav ms-auto">
 
                 <ul class="d-flex align-items-center">
+                    <li>
+                        <div th:if="${session.superAdminLogueadoComoPaciente}">
+                            <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin_being_Paciente}" method="POST">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-home"></i> Volver a SuperAdmin
+                                </button>
+                            </form>
+                        </div>
+                    </li>
 
                     <!-- Notificaciones -->
                     <li class="nav-item dropdown">

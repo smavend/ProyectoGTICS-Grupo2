@@ -57,10 +57,6 @@ function validateForm() {
   return isValid;
 }
 
-
-//fin validar form descarga
-
-//validar dni
 $(document).ready(function() {
   $('#dni').on('input', function() {
     var dniValue = $(this).val();
