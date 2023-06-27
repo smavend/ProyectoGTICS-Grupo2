@@ -36,6 +36,11 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "order by c.inicio DESC")
     List<Cita> buscarProximasCitas(String idPaciente);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `link` =?1 WHERE (`id_cita` = ?2)")
+    void guardarLink(String link,int idCita);
+
 
     @Query(nativeQuery = true, value = "select x.torre, x.piso, x.precio_cita as precio  from cita c " +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
@@ -104,4 +109,6 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "  AND especialidad_id_especialidad IN (4, 5, 6)",nativeQuery = true)
     List<Cita> listarExamenes(String idPaciente);
 
+    @Query(value = "select * from cita where doctor_id_doctor=?1",nativeQuery = true)
+    List<Cita> obtenerCitasPorDoctorId(String idDoctor);
 }

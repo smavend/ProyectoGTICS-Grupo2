@@ -44,4 +44,7 @@ public interface HorarioRepository extends JpaRepository<Horario, Integer> {
             "inner join doctor d on (h.id_horario = d.horario_id_horario) " +
             "where d.id_doctor = ?1")
     HorarioDeDiaDTO buscarHorarioSabado(String idDoctor);
+
+    @Query(nativeQuery = true, value = "select * from horario where id_horario=?1")
+    Horario buscarHorarioPorDoctorId(int idHorario);
 }
