@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -82,53 +83,52 @@ public class AdministradorController {
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
-            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
             model.addAttribute("headerColorAdministrador", styleActual.getHeader());
             *//*model.addAttribute("sidebarColor", styleActual.getSidebar());*//*
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/dashboard";
     }*/
-    @GetMapping(value = {"/dashboard", "/", ""})
-    public String dashboard(@RequestParam(value = "id", required = false) String adminId, Model model, HttpSession session) {
-        Administrador administrador_session = (Administrador) session.getAttribute("administrador");
-
-        // Si no se proporcionó un adminId en la URL, usa el id del administrador en la sesión.
-        if (adminId == null && administrador_session != null) {
-            adminId = administrador_session.getIdAdministrador();
+    @GetMapping("/dashboard")
+    public String dashboard (Model model, HttpSession session, Authentication authentication){
+        // Check if superadmin is logged in as administrador
+        Boolean superAdminLogueadoComoAdministrador = (Boolean) session.getAttribute("superAdminLogueadoComoAdministrador");
+        if (superAdminLogueadoComoAdministrador == null) {
+            superAdminLogueadoComoAdministrador = false;
         }
+        model.addAttribute("superAdminLogueadoComoAdministrador", superAdminLogueadoComoAdministrador);
 
-        // Si aún no se ha establecido adminId (porque no se proporcionó en la URL y no hay administrador en la sesión), redirige a una página de error o realiza otra acción apropiada.
-        if (adminId == null) {
-            return "error-page"; // Cambia esto según tus necesidades
-        }
+        Administrador administrador;
 
-        // Verifica si el administrador de la sesión coincide con el administrador seleccionado
-        if (administrador_session != null && administrador_session.getIdAdministrador().equals(adminId)) {
-            // Realiza las operaciones necesarias para mostrar el dashboard del administrador seleccionado
-            List<Paciente> listaPaciente = pacienteRepository.findAll();
-            List<Doctor> listaDoctores = doctorRepository.findAll();
-            model.addAttribute("listaDoctores", listaDoctores);
-            model.addAttribute("listaPaciente", listaPaciente);
-
-            Optional<Stylevistas> style = stylevistasRepository.findById(2);
-            if (style.isPresent()) {
-                Stylevistas styleActual = style.get();
-                System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
-                model.addAttribute("headerColorAdministrador", styleActual.getHeader());
-                /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-                System.out.println("No se encontró stylevistas con el id proporcionado");
+        // Obtener el correo electrónico del administrador a "impersonar" desde la sesión
+        String impersonatedUser = (String) session.getAttribute("impersonatedUser");
+        if (impersonatedUser != null) {
+            // Si hay un usuario "impersonado", buscar al administrador por ese correo electrónico
+            administrador = administradorRepository.findByCorreo(impersonatedUser);
+        } else {
+            administrador = administradorRepository.findByCorreo(authentication.getName());
+            if (administrador == null) {
+                return "redirect:/error";
             }
-
-            return "administrador/dashboard";
         }
 
-        // Si el administrador seleccionado no coincide con el administrador de la sesión o no se encuentra en la base de datos, redirige a una página de error o realiza otra acción apropiada.
-        return "error-page";
+        session.setAttribute("administrador", administrador);
+
+        List<Paciente> listaPaciente =pacienteRepository.findAll();
+        List<Doctor> listaDoctores = doctorRepository.findAll();
+        model.addAttribute("listaDoctores",listaDoctores);
+        model.addAttribute("listaPaciente", listaPaciente);
+
+        Optional<Stylevistas> style = stylevistasRepository.findById(2);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+            /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+        }
+        return "administrador/dashboard";
     }
     @GetMapping("/finanzas")
     public String finanzas(Model model){
