@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
     <head>
         <style>
@@ -66,7 +66,7 @@
 
 
             <section class="section dashboard">
-                <form method="post" th:action="@{/doctor/guardarReporte}" th:object="${cita}" class="mt-2">
+                <form th:if="${cita.estado != 5}" method="post" th:action="@{/doctor/guardarReporte}" th:object="${cita}" class="mt-2">
 
 
                     <input th:field="*{id_cita}" name="id_cita" type="hidden"/>
@@ -138,7 +138,7 @@
                             <h2 style="text-align: center;" for="especialidad">Orden de exámenes médicos</h2>
                             <div style="display: flex;justify-content: center;" class="select-container">
                                 <select name="especialidad" id="especialidad">
-                                    <option value="">No se necesita exámenes</option>
+                                    <option th:value="${doctor.especialidad.getIdEspecialidad()}">No se necesita exámenes</option>
                                     <option value="4">Laboratorio</option>
                                     <option value="5">Rayos X</option>
                                     <option value="6">Ecografía</option>
@@ -202,9 +202,58 @@
                     <div style="text-align: center;" class=" col-12">
                         <button type="submit" class="btn btn-primary">Finalizar Reporte</button>
                     </div>
-
-
                 </form>
+                <div th:unless="${cita.estado != 5}" class="container-xl perfil">
+                    <div class="row">
+                        <div class="pagetitle">
+                            <h1 for="pdf">Exámenes Médicos</h1>
+                        </div>
+                        <div style="border-radius: 30px" class="alert alert-success" role="alert" th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"></div>
+                        <div style="border-radius: 30px" class="alert alert-danger" role="alert" th:if="${msgError != null}" th:text="${msgError}"></div>
+                        <div style="margin-bottom: 0" class="card">
+                            <div class="card-body">
+                                <form th:action="@{/doctor/guardarExamen}" method="post" id="formExamen"
+                                      enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-lg-12 text-center">
+                                            <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
+                                                <input type="hidden" id="idCita" name="idCita" th:value="${cita.getId_cita()}">
+                                                <input type="hidden" id="receta" name="receta" th:value="${cita.getReceta()}">
+                                                <input type="hidden" id="tratamiento" name="tratamiento" th:value="${cita.getReceta()}">
+
+                                                <h2 style="color: black;text-align: center;">Subir examen:</h2>
+                                                <input type="file" class="form-control" id="archivo" name="archivo" accept=".pdf">
+                                            </div>
+                                            <div class="mb-3">
+                                                <h2 style="color: black;text-align: center;">Descripción:</h2>
+                                                <textarea oninput="autoResizeTextarea(this)"
+                                                          style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
+                                                          name="descripcion" maxlength="500" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="text-align: center;" class="col-12">
+                                        <button type="submit" class="btn btn-primary">Registrar Reporte</button>
+                                        <a th:href="@{/doctor/dashboard}" class="btn btn-danger">Cancelar</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('formExamen').addEventListener('submit', function(event) {
+                        var textarea = document.querySelector('textarea[name="diagnostico"]');
+                        if (textarea.value.trim() === '') {
+                            textarea.removeAttribute('required');
+                        }
+                    });
+                </script>
+
+
+
 
 
             </section>
