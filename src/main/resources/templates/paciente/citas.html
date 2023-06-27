@@ -59,13 +59,13 @@
                                 <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
                                 <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
                                 <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
-                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')}+' Hrs.'">13:00 Hrs.</td>
+                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">13:00 Hrs.</td>
                                 <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</td>
                                 <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
-                                <td>
+                                <td class="text-center">
                                     <a href="#" class="botonAceptar" data-bs-toggle="modal"
                                        th:attr="data-bs-target='#citaModal'+${cita.id_cita}"
-                                       th:text="${cita.inicio.isAfter(momentoActual) && cita.modalidad == 1?'Acceder a cita': 'Ver más'}">Ver
+                                       th:text="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.modalidad == 1?'Acceder a cita': 'Ver más'}">Ver
                                         más</a>
                                 </td>
                             </tr>
@@ -121,7 +121,7 @@
                                                               th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
                                         </p>
                                         <p>Torre:<span class="informacionModalDato"
-                                                       th:text="${torresYPisos[i.index].getTorre()}">B (Falta)</span>
+                                                       th:text="${torresPisosPrecio[i.index].getTorre()}">B (Falta)</span>
                                         </p>
                                     </div>
                                     <div class="col-6">
@@ -133,7 +133,7 @@
                                                 th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
                                         </p>
                                         <p>Piso:<span class="informacionModalDato"
-                                                      th:text="${torresYPisos[i.index].getPiso()}">2 (Falta)</span></p>
+                                                      th:text="${torresPisosPrecio[i.index].getPiso()}">2 (Falta)</span></p>
                                     </div>
                                 </div>
                             </div>
@@ -206,9 +206,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer mx-auto">
-                                <a class="btn btn-primary botonEntrarCita"
-                                   th:href="@{/Paciente/sesionVirtual}">Acceder
-                                    a sesión virtual</a>
+                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual)}"
+                                   class="btn botonAceptar" th:href="${cita.link}">Acceder a sesión virtual</a>
+                                <a style="cursor: context-menu" th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}" class="btn botonSecundario">Aún no puede acceder a la sesión</a>
                             </div>
                         </div>
                     </div>

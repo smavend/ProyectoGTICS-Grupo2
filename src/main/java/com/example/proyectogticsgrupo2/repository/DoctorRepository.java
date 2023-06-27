@@ -35,9 +35,9 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
 
     List<Doctor> findBySede_IdSedeAndEspecialidad_IdEspecialidad(int idSede, int idEspecialidad);
 
-    @Query(nativeQuery = true, value = "select d.* from doctor d \n" +
-            "inner join especialidad e on (d.especialidad_id_especialidad = e.id_especialidad) \n" +
-            "where d.especialidad_id_especialidad = ?1 and d.sede_id_sede = ?2 and e.es_examen = 0")
+    @Query(nativeQuery = true, value = "select d.* from doctor d " +
+            "inner join especialidad e on (d.especialidad_id_especialidad = e.id_especialidad) " +
+            "where d.especialidad_id_especialidad = ?2 and d.sede_id_sede = ?1 and e.es_examen = 0")
     List<Doctor> buscarVirtualesPorSedeYEspecialidad(int idSede, int idEspecialidad);
 
     // ---------------------------------------------------------

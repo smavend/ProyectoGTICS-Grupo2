@@ -41,11 +41,12 @@ public class CitaTemporal {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha;
 
+    @NotNull(message = "Seleccione un horario disponible")
     @DateTimeFormat(pattern = "HH:mm:ss")
-    private LocalDateTime inicio;
+    private LocalTime inicio;
 
     @DateTimeFormat(pattern = "HH:mm:ss")
-    private LocalDateTime fin;
+    private LocalTime fin;
 
     @Column(name = "id_cita_previa")
     private Integer idCitaPrevia;

@@ -77,4 +77,6 @@ public class Cita {
     @JoinColumn(name = "especialidad_id_especialidad")
     private Especialidad especialidad;
 
+    private String link;
+
 }
