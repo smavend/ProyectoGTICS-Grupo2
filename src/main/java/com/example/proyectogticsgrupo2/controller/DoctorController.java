@@ -762,15 +762,22 @@ public class DoctorController {
             Cita c = optionalCita.get();
 
             if (c.getExamendoc() != null) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.parseMediaType(c.getExamencontenttype()));
+                headers.setContentDispositionFormData("attachment", c.getExamenname());
+                headers.setCacheControl("no-cache, no-store, must-revalidate");
+                headers.setPragma("no-cache");
+                headers.setExpires(0L);
+
                 return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType(c.getExamencontenttype()))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + c.getExamenname() + "\"")
+                        .headers(headers)
                         .body(new ByteArrayResource(c.getExamendoc()));
             }
         }
 
         return ResponseEntity.notFound().build();
     }
+
 
 
 
