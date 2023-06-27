@@ -424,7 +424,6 @@ public class DoctorController {
         } else {
             if (cita.getEspecialidad().getIdEspecialidad()==4 || cita.getEspecialidad().getIdEspecialidad()==5 || cita.getEspecialidad().getIdEspecialidad()==6){
 
-
                 cita.setEstado(4);
                 citaRepository.save(cita);
 
@@ -455,18 +454,6 @@ public class DoctorController {
                 cita.setEstado(4);
                 citaRepository.save(cita);
             }
-
-
-
-
-
-
-
-
-
-
-
-
 
             return "redirect:/doctor/dashboard";
         }
