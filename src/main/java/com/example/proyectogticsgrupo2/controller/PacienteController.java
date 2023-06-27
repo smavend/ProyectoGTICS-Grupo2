@@ -540,6 +540,7 @@ public class PacienteController {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
+        model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
 
         List<Pago> pagoList = pagoRepository.buscarPorPaciente(paciente.getIdPaciente());
         model.addAttribute("pagoList", pagoList);
@@ -554,7 +555,7 @@ public class PacienteController {
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("idPagar", idPago);
         model.addAttribute("pagoList", pagoList);
-        model.addAttribute("activarModal", true);
+        //model.addAttribute("activarModal", true);
         return "paciente/pagos";
     }
 
@@ -569,6 +570,7 @@ public class PacienteController {
             model.addAttribute("pagoList", pagoList);
             model.addAttribute("idPagar", idPago);
             model.addAttribute("activarModal", true);
+            model.addAttribute("pagoFilt",1);
             return "paciente/pagos";
         } else {
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
