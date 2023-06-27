@@ -116,7 +116,9 @@ public class SecurityConfig {
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
 
                 .requestMatchers("/administrador","/administrador/***").hasAuthority("administrador")
+
                 .requestMatchers("/","/validarDni/*","/login","/login/**","/signin","/signin/**").anonymous()
+
                 .anyRequest().permitAll();
 
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
