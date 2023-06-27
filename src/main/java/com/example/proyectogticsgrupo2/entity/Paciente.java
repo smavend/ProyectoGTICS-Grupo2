@@ -28,11 +28,13 @@ public class Paciente implements Serializable {
     @Column (nullable = false)
     @NotBlank(message = "Este campo no puede estar vacío")
     @Size(max = 45, message = "El nombre no puede tener más de 45 caracteres")
+    @Pattern(regexp = "^[A-Za-z]+(\\s[A-Za-z]+)*$", message = "Ingrese un nombre válido")
     private String nombre;
 
     @Column (nullable = false)
     @NotBlank(message = "Este campo no puede estar vacío")
     @Size(max = 45, message = "El apellido no puede tener mas de 45 caracteres")
+    @Pattern(regexp = "^[A-Za-z]+(\\s[A-Za-z]+)*$", message = "Ingrese un apellido válido")
     private String apellidos;
 
     @Column (nullable = false)
@@ -45,6 +47,7 @@ public class Paciente implements Serializable {
     @NotBlank(message = "Este campo no puede estar vacío")
     //@Digits(integer = 9, fraction = 0, message = "El teléfono debe ser un número")
     @Size(min = 9, max = 9, message = "El teléfono debe tener 9 dígitos" )
+    @Pattern(regexp = "^\\d{9}$", message = "Ingrese un número válido")
     private String telefono;
 
     @ManyToOne
@@ -53,7 +56,7 @@ public class Paciente implements Serializable {
 
     @Column (nullable = false)
     @NotBlank(message = "Este campo no puede estar vacío")
-    @Email(message = "Ingrese una dirección de correo válida")
+    @Pattern(regexp = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$", message = "Ingrese una dirección de correo válida")
     private String correo;
 
     private String fotoname;

@@ -31,15 +31,15 @@ public class Cita {
     @Column(nullable = false)
     private LocalDateTime fin;
 
-    @NotBlank(message = "El campo no puede estar vacío")
+
     @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String diagnostico;
 
-    @NotBlank(message = "El campo no puede estar vacío")
+
     @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String receta;
 
-    @NotBlank(message = "El campo no puede estar vacío")
+
     @Size(max=100,message = "El campo no puede tener más de 100 caracteres")
     private String tratamiento;
 
@@ -77,4 +77,8 @@ public class Cita {
     @JoinColumn(name = "especialidad_id_especialidad")
     private Especialidad especialidad;
 
+    @Lob
+    private byte[] examendoc;
+    private String examenname;
+    private String examencontenttype;
 }

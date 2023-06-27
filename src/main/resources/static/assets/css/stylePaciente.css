@@ -5,10 +5,14 @@
 body {
     font-family: "Open Sans", sans-serif;
     background-image: linear-gradient(to right top, #dbe3e8, #e5eaee, #eff0f4, #f7f8f9, #ffffff);
+    background-repeat: repeat;
     color: #444444;
     min-height: 100vh;
+    height: 100%;
 }
-
+html {
+    height: 100%;
+}
 a {
     text-decoration: none;
 }
@@ -78,7 +82,7 @@ transition: all 0.3s;
 }
 .contenedor figure{
     position:relative;
-    height: 450px;
+    height: 500px;
     cursor: pointer;
     width: auto;
     overflow: hidden;
@@ -387,54 +391,6 @@ color: #3e4f6f;
 font-size: 15px;
 }
 
-/* Breadcrumbs */
-.breadcrumb {
-font-size: 14px;
-font-family: "Nunito", sans-serif;
-color: #899bbd;
-font-weight: 600;
-}
-
-.breadcrumb a {
-color: #899bbd;
-transition: 0.3s;
-}
-
-.breadcrumb a:hover {
-color: #51678f;
-}
-
-.breadcrumb .breadcrumb-item::before {
-color: #899bbd;
-}
-
-.breadcrumb .active {
-color: #51678f;
-font-weight: 600;
-}
-
-/* Bordered Tabs */
-.nav-tabs-bordered {
-border-bottom: 2px solid #ebeef4;
-}
-
-.nav-tabs-bordered .nav-link {
-margin-bottom: -2px;
-border: none;
-color: #2c384e;
-}
-
-.nav-tabs-bordered .nav-link:hover,
-.nav-tabs-bordered .nav-link:focus {
-color: #4154f1;
-}
-
-.nav-tabs-bordered .nav-link.active {
-background-color: #fff;
-color: #4154f1;
-border-bottom: 2px solid #4154f1;
-}
-
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
@@ -708,7 +664,7 @@ background-color: #aab7cf;
 
 #main,
 #footer {
-    margin-left: 265px;
+    margin-left: 275px;
 }
 }
 
@@ -989,85 +945,6 @@ color: #777777;
 margin-left: 95px;
 }
 
-/* Recent Sales */
-.dashboard .recent-sales {
-font-size: 14px;
-}
-
-.dashboard .recent-sales .table thead {
-background: #f6f6fe;
-}
-
-.dashboard .recent-sales .table thead th {
-border: 0;
-}
-
-.dashboard .recent-sales .dataTable-top {
-padding: 0 0 10px 0;
-}
-
-.dashboard .recent-sales .dataTable-bottom {
-padding: 10px 0 0 0;
-}
-
-/* Top Selling */
-.dashboard .top-selling {
-font-size: 14px;
-}
-
-.dashboard .top-selling .table thead {
-background: #f6f6fe;
-}
-
-.dashboard .top-selling .table thead th {
-border: 0;
-}
-
-.dashboard .top-selling .table tbody td {
-vertical-align: middle;
-}
-
-.dashboard .top-selling img {
-border-radius: 5px;
-max-width: 60px;
-}
-
-/*--------------------------------------------------------------
-# Icons list page
---------------------------------------------------------------*/
-.iconslist {
-display: grid;
-max-width: 100%;
-grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-gap: 1.25rem;
-padding-top: 15px;
-}
-
-.iconslist .icon {
-background-color: #fff;
-border-radius: 0.25rem;
-text-align: center;
-color: #012970;
-padding: 15px 0;
-}
-
-.iconslist i {
-margin: 0.25rem;
-font-size: 2.5rem;
-}
-
-.iconslist .label {
-font-family: var(--bs-font-monospace);
-display: inline-block;
-width: 100%;
-overflow: hidden;
-padding: 0.25rem;
-font-size: 12px;
-text-overflow: ellipsis;
-white-space: nowrap;
-color: #666;
-}
-
 /*--------------------------------------------------------------
 # Profie Page
 --------------------------------------------------------------*/
@@ -1120,129 +997,6 @@ color: rgba(1, 41, 112, 0.6);
 
 .profile .profile-edit img {
 max-width: 120px;
-}
-
-/*--------------------------------------------------------------
-# F.A.Q Page
---------------------------------------------------------------*/
-.faq .basic h6 {
-font-size: 18px;
-font-weight: 600;
-color: #4154f1;
-}
-
-.faq .basic p {
-color: #6980aa;
-}
-
-/*--------------------------------------------------------------
-# Contact
---------------------------------------------------------------*/
-.contact .info-box {
-padding: 28px 30px;
-}
-
-.contact .info-box i {
-font-size: 38px;
-line-height: 0;
-color: #4154f1;
-}
-
-.contact .info-box h3 {
-font-size: 20px;
-color: #012970;
-font-weight: 700;
-margin: 20px 0 10px 0;
-}
-
-.contact .info-box p {
-padding: 0;
-line-height: 24px;
-font-size: 14px;
-margin-bottom: 0;
-}
-
-.contact .php-email-form .error-message {
-display: none;
-color: #fff;
-background: #ed3c0d;
-text-align: left;
-padding: 15px;
-margin-bottom: 24px;
-font-weight: 600;
-}
-
-.contact .php-email-form .sent-message {
-display: none;
-color: #fff;
-background: #18d26e;
-text-align: center;
-padding: 15px;
-margin-bottom: 24px;
-font-weight: 600;
-}
-
-.contact .php-email-form .loading {
-display: none;
-background: #fff;
-text-align: center;
-padding: 15px;
-margin-bottom: 24px;
-}
-
-.contact .php-email-form .loading:before {
-content: "";
-display: inline-block;
-border-radius: 50%;
-width: 24px;
-height: 24px;
-margin: 0 10px -6px 0;
-border: 3px solid #18d26e;
-border-top-color: #eee;
-animation: animate-loading 1s linear infinite;
-}
-
-.contact .php-email-form input,
-.contact .php-email-form textarea {
-border-radius: 0;
-box-shadow: none;
-font-size: 14px;
-}
-
-.contact .php-email-form input:focus,
-.contact .php-email-form textarea:focus {
-border-color: #4154f1;
-}
-
-.contact .php-email-form input {
-padding: 10px 15px;
-}
-
-.contact .php-email-form textarea {
-padding: 12px 15px;
-}
-
-.contact .php-email-form button[type=submit] {
-background: #4154f1;
-border: 0;
-padding: 10px 30px;
-color: #fff;
-transition: 0.4s;
-border-radius: 4px;
-}
-
-.contact .php-email-form button[type=submit]:hover {
-background: #5969f3;
-}
-
-@keyframes animate-loading {
-0% {
-    transform: rotate(0deg);
-}
-
-100% {
-    transform: rotate(360deg);
-}
 }
 
 /*--------------------------------------------------------------
@@ -1393,6 +1147,21 @@ p{
     color: white;
 }
 
+.botonSecundario{
+    background-color: #e3e3e3;
+    border-radius: 15px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: #414141;
+    transition: all 0.3s;
+}
+
+.botonSecundario:hover{
+    color: #414141;
+    background-color: #c5c5c5;
+}
+
 .botonCancelar{
     background-color: #dc3545;
     border-radius: 15px;
@@ -1408,23 +1177,30 @@ p{
     background-color: #c0202e;
 }
 
-.mensajeDeVacio{
+.mensajeDeContenidoVacio{
     margin: 190px auto;
     text-align: center;
 }
 
 @media (max-width: 576px) {
-    .mensajeDeVacio{
+    .mensajeDeContenidoVacio{
         margin: 60px auto;
         text-align: center;
     }
 }
 
 @media (max-width: 992px) and (min-width: 577px) {
-    .mensajeDeVacio{
+    .mensajeDeContenidoVacio{
         margin: 130px auto;
         text-align: center;
     }
+}
+
+/* DATATABLES */
+
+.active>.page-link, .page-link.active {
+    background: #0AA1DD;
+    border-color: #DEE2E6;
 }
 
 /* Navbar */
@@ -1467,6 +1243,62 @@ p{
     height: 36px;
     width: 36px;
     object-fit: cover;
+}
+
+/* Reservar cita */
+
+.bodyReservar{
+    margin: 20px auto 0 auto;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.cardReservar{
+    border-radius: 15px;
+    width: 65%;
+    margin: auto;
+    background-color: white;
+    box-shadow: 0 2px 20px rgba(0, 13, 35, 0.1);
+}
+
+.campo{
+    margin: 30px;
+}
+
+.campoHorario{
+    padding: 8px 20px;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    border: solid 4px #e1e1e1;
+    color: #4f4f4f;
+    font-weight: 600;
+    transition: all 0.3s;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.campoHorario:hover{
+    background-color: #0AA1DD;
+    color: white;
+}
+
+.campoHorario:visited{
+    background-color: #0AA1DD;
+    color: white;
+}
+
+.campoHorarioOcupado{
+
+}
+
+.informacion{
+    text-align: left;
+    background-image: linear-gradient(to right, #f5f5f5, #f4f4f4, #f2f3f2, #f1f1f1, #f0f0f0);
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    font-family: "Open Sans";
 }
 
 /* Sección Pagos */
@@ -1524,6 +1356,22 @@ p{
     line-height: 2;
 }
 
+.botonVolverPagos{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: #0AA1DD;
+    border-radius: 50px;
+    border: 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.botonVolverPagos:hover{
+    background-color: #197ce6;
+    color: white;
+}
+
 .informacionRecibo{
     margin-top: 25px;
     font-size: 1rem;
@@ -1554,6 +1402,18 @@ p{
 
 .botonImprimir:hover{
     background-color: rgb(198, 0, 0);
+}
+
+@media print {
+    #header {
+        display: none !important;
+    }
+    #botonImp {
+        display: none !important;
+    }
+    #botonVolver{
+        display: none !important;
+    }
 }
 
 /* Sección Dashboard */
@@ -1642,6 +1502,14 @@ botonTipo{
     color: white;
 }
 
+.site-footer {
+    background-color: #00000000;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
 
 /* Consentimientos */
 

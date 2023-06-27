@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Reservar Cita</title>
-
 
         <!-- BOOTSTRAP -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -32,91 +31,76 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
 
             <h1 class="encabezado" style="color: #435067">Reservar cita</h1>
 
-            <section class="seccionPrincipal">
+            <div class="bodyReservar">
+                <div class="cardReservar py-4">
 
-                <div class="row" style="margin-top: 40px;margin-left: 20px">
-                    <div class="col-6">
-                        <p class="mb-2"><span class="fw-bold">Paciente:</span><span style="margin-left: 13px"
-                                                                                    th:text="${session.paciente.nombre}+' '+${session.paciente.apellidos}">Juanchito Palacios Castro</span>
-                        </p>
-                        <p class="mb-2"><span class="fw-bold">Fecha de nacimiento:</span><span
-                                style="margin-left: 20px"
-                                th:text="${#temporals.format(session.paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span>
-                        </p>
-                        <p class="mb-2"><span class="fw-bold">Correo:</span><span style="margin-left: 13px"
-                                                                                  th:text="${session.paciente.correo}">juanpc98@gmail.com</span>
-                        </p>
-                    </div>
-                    <div class="col-6">
-                        <p class="mb-2"><span class="fw-bold">Dirección:</span><span style="margin-left: 13px"
-                                                                                     th:text="${session.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
-                        </p>
-                        <p class="mb-2"><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px"
-                                                                                    th:text="${session.paciente.telefono}">934-250-488</span>
-                        </p>
-                        <p class="mb-2"><span class="fw-bold">Seguro:</span><span style="margin-left: 13px"
-                                                                                  th:text="${session.paciente.seguro.nombre}">Seguro</span>
-                        </p>
-                    </div>
+                    <form method="post" th:action="@{/Paciente/reservar1}" th:object="${citaTemporal}">
+
+                        <input type="hidden" name="idPaciente" th:value="${session.paciente.idPaciente}">
+                        <input type="hidden" name="idSeguro" th:value="${session.paciente.seguro.idSeguro}">
+                        <input type="hidden" name="idDoctor" value="0">
+                        <input type="hidden" name="fecha" value="2023-12-31">
+                        <input type="hidden" name="inicio" value="00:00:00">
+
+                        <div class="row justify-content-center">
+                            <div class="col-sm-10 col-md-8 col-lg-6">
+
+                                <div class="campo">
+                                    <div class="fw-bold mb-1">
+                                        Modalidad
+                                    </div>
+                                    <select name="modalidad" class="form-select" id="select_modalidad"
+                                            th:field="*{modalidad}"
+                                            th:classappend="${#fields.hasErrors('modalidad')? 'is-invalid':''}">
+                                        <option value="">-- Seleccione tipo de cita --</option>
+                                        <option value="0">Presencial</option>
+                                        <option value="1">Virtual</option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('modalidad')}"
+                                         th:errors="*{modalidad}"></div>
+                                </div>
+
+                                <div class="campo">
+                                    <div class="fw-bold mb-1">
+                                        Especialidad
+                                    </div>
+                                    <select class="form-select" id="select_especialidad" th:field="*{idEspecialidad}"
+                                            th:classappend="${#fields.hasErrors('idEspecialidad')? 'is-invalid':''}">
+                                        <option value="">-- Seleccione una especialidad --</option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('idEspecialidad')}"
+                                         th:errors="*{idEspecialidad}"></div>
+                                </div>
+
+                                <div class="campo" id="campoSede">
+                                    <div class="fw-bold mb-1">
+                                        Sede
+                                    </div>
+                                    <select class="form-select" th:field="*{idSede}"
+                                            th:classappend="${#fields.hasErrors('idSede')?'is-invalid':''}">
+                                        <option value="">-- Seleccione una sede --</option>
+                                        <option th:each="sede, iterStat:${sedeList}" th:if="${iterStat.index} &lt; 3"
+                                                th:value="${sede.idSede}" th:text="${sede.nombre}">San Miguel
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('idSede')}"
+                                         th:errors="*{idSede}"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center py-3">
+                            <a th:href="@{/Paciente}" class="botonCancelar">Cancelar</a>
+                            <button type="submit" class="botonAceptar ms-3">Siguiente</button>
+                        </div>
+                    </form>
+
                 </div>
-
-                <form method="post" th:action="@{/Paciente/reservar1}" th:object="${citaTemporal}">
-
-                    <input type="hidden" name="idPaciente" th:value="${session.paciente.idPaciente}">
-                    <input type="hidden" name="idSeguro" th:value="${session.paciente.seguro.idSeguro}">
-                    <input type="hidden" name="idDoctor" value="0">
-
-                    <div class="row" style="margin-top: 20px;margin-left: 20px">
-                        <div class="col-6">
-                            <p><span class="fw-bold">Modalidad:</span><span class="fw-bold" style="color: red">*</span>
-                            </p>
-                            <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
-                                    th:field="*{modalidad}" th:classappend="${#fields.hasErrors('modalidad')? 'is-invalid':''}">
-                                <option value="">--Seleccione tipo de cita--</option>
-                                <option value="0">Presencial</option>
-                                <option value="1">Virtual</option>
-                            </select>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('modalidad')}" th:errors="*{modalidad}"></div>
-
-
-                        </div>
-                        <div class="col-6">
-                            <p><span class="fw-bold">Sede:</span><span class="fw-bold"
-                                                                       style="color: red">*</span></p>
-                            <select th:field="*{idSede}"
-                                    style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
-                                    th:classappend="${#fields.hasErrors('idSede')?'is-invalid':''}">
-                                <option value="">--Seleccione una sede--</option>
-                                <option th:each="sede:${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}">
-                                    Sede
-                                </option>
-                            </select>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('idSede')}" th:errors="*{idSede}"></div>
-
-                            <p><span class="fw-bold">Especialidad:</span><span class="fw-bold"
-                                                                               style="color: red">*</span></p>
-                            <select th:field="*{idEspecialidad}"
-                                    style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px" th:classappend="${#fields.hasErrors('idEspecialidad')? 'is-invalid':''}">
-                                <option value="">--Seleccione una especialidad--</option>
-                                <option th:each="especialidad:${especialidadList}"
-                                        th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}">Sede
-                                </option>
-                            </select>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('idEspecialidad')}" th:errors="*{idEspecialidad}"></div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-end"
-                         style="margin-top: 70px; margin-right: 80px; margin-bottom: 20px">
-                        <a th:href="@{/Paciente}" class="botonCancelar">Cancelar</a>
-                        <button type="submit" class="btn botonAceptar ms-3">Siguiente</button>
-                    </div>
-                </form>
-            </section>
+            </div>
 
         </main><!-- End #main -->
 
@@ -127,5 +111,12 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.0.js"
+                integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+        <!-- Funciones y Ajax -->
+        <script th:src="@{/assets/js/paciente_ReservarCita.js}"></script>
     </body>
 </html>

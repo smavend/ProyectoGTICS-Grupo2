@@ -5,7 +5,7 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.apache.commons.io.FileUtils;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -409,7 +409,6 @@ public class DoctorController {
         Optional<Cita> optionalCita = citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
-        System.out.println(optionalCita.get().getModalidad());
 
         if (optionalPaciente.isPresent() & optionalCita.isPresent() && optionalCita.get().getModalidad() == 1 && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor()) {
             Paciente paciente = optionalPaciente.get();
@@ -507,6 +506,8 @@ public class DoctorController {
         Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
         session.setAttribute("doctor", doctor_session);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
         if (bindingResult.hasErrors()) {
 
             Optional<Cita> optionalCita = citaRepository.findById(getIdCita());
@@ -523,45 +524,87 @@ public class DoctorController {
             model.addAttribute("cita", cita1);
             return "doctor/DoctorReporteSesion";
         } else {
-            cita.setEstado(4);
-            citaRepository.save(cita);
+            if (cita.getEspecialidad().getIdEspecialidad()==4 || cita.getEspecialidad().getIdEspecialidad()==5 || cita.getEspecialidad().getIdEspecialidad()==6){
+
+
+                cita.setEstado(4);
+                citaRepository.save(cita);
+
+                Cita cita_examen= new Cita();
+                cita_examen.setPaciente(cita.getPaciente());
+
+                Doctor doctor_examen = doctorRepository.obtenerDoctorPorIdEspecialidad(cita.getEspecialidad().getIdEspecialidad());
+                cita_examen.setDoctor(doctor_examen);
+
+                cita_examen.setInicio(cita.getFin());
+                cita_examen.setFin(cita.getFin().plusDays(7));
+                cita_examen.setModalidad(cita.getModalidad());
+                cita_examen.setEstado(0);
+                cita_examen.setSede(cita.getSede());
+                cita_examen.setIdSeguro(cita.getIdSeguro());
+                cita_examen.setDiagnostico(cita.getDiagnostico());
+                cita_examen.setTratamiento(cita.getTratamiento());
+                cita_examen.setReceta(cita.getReceta());
+
+                Optional<Cita> optionalCita = citaRepository.findById(cita.getId_cita());
+                Cita cita_previa = optionalCita.get();
+                cita_examen.setCita_previa(cita_previa);
+
+                citaRepository.save(cita_examen);
+
+
+            } else {
+                cita.setEstado(4);
+                citaRepository.save(cita);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
             return "redirect:/doctor/dashboard";
         }
     }
 
-    @GetMapping("/historialClinico")
-    public String hClinico(Model model, @RequestParam("id") String id, HttpSession session, Authentication authentication) {
-        /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        String userEmail;
-        if (session.getAttribute("impersonatedUser") != null) {
-            userEmail = (String) session.getAttribute("impersonatedUser");
-        } else {
-            userEmail = authentication.getName();
-        }
-        Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
-        session.setAttribute("doctor", doctor_session);
+    @PostMapping("/guardarExamen")
+    public String guardarExamen(HttpSession session, Authentication authentication, Model model, @RequestParam("archivo") MultipartFile file, @RequestParam("descripcion") String descripcion, @RequestParam("idCita") int idCita, RedirectAttributes attr) {
 
-        List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
-        List<TratamientoDTO> tratamientoList = citaRepository.listarTratamientos(id, 4);
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
-        List<ListaBuscadorDoctor> listProxCita = citaRepository.listarPorPacienteProxCitas(id);
-        List<EncuestaDoctorDTO> fechaEncuesta = citaRepository.listarFechaEncuesta(id, 4);
-
-        if (optionalPaciente.isPresent()) {
-            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-            Doctor doctor = doctorOptional.get();
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("doctor", doctor);
-            model.addAttribute("paciente", paciente);
-            model.addAttribute("alergiaList", alergiaList);
-            model.addAttribute("ListaTratamiento", tratamientoList);
-            model.addAttribute("lisProxCitas", listProxCita);
-            model.addAttribute("listEncuesta", fechaEncuesta);
-            return "doctor/DoctorHistorialClinico";
-        } else {
-            return "redirect:/";
+        String fileName = file.getOriginalFilename();
+        if (fileName.contains("..")) {
+            model.addAttribute("msg", "No se permiten '..' en el archivo");
+            return "doctor/DoctorReporteSesion";
         }
+
+        try {
+            Optional<Cita> optionalCita = citaRepository.findById(idCita);
+            if (optionalCita.isPresent()) {
+                Cita cita = optionalCita.get();
+                cita.setExamenname(fileName);
+                cita.setExamencontenttype(file.getContentType());
+                cita.setDiagnostico(descripcion);
+                cita.setExamendoc(file.getBytes());
+                cita.setEstado(4);
+                citaRepository.save(cita);
+                attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
+            } else {
+                attr.addFlashAttribute("msgError", "No se encontró la cita");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
+        }
+
+        return "redirect:/doctor/dashboard";
     }
+
 
     @GetMapping("/configuracion")
     public String configuracion(Model model, HttpSession session, Authentication authentication) {
@@ -841,6 +884,89 @@ public class DoctorController {
        return "redirect:/doctor/perfil";
    }
 
+
+    @GetMapping("/historialClinico")
+    public String hClinico(Model model, @RequestParam("id") String id, HttpSession session, Authentication authentication) {
+        /*Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);*/
+            /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
+        session.setAttribute("doctor", doctor_session);
+
+        List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
+        List<TratamientoDTO> tratamientoList = citaRepository.listarTratamientos(id,4);
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
+        List<ListaBuscadorDoctor> listProxCita = citaRepository.listarPorPacienteProxCitas(id);
+        List<EncuestaDoctorDTO> fechaEncuesta = citaRepository.listarFechaEncuesta(id,4);
+        List<Cita> citaList=citaRepository.listarExamenes(id);
+
+        if (optionalPaciente.isPresent()) {
+            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
+            Doctor doctor = doctorOptional.get();
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("alergiaList", alergiaList);
+            model.addAttribute("ListaTratamiento", tratamientoList);
+            model.addAttribute("lisProxCitas", listProxCita);
+            model.addAttribute("listCitas",citaList);
+            model.addAttribute("listEncuesta",fechaEncuesta);
+            return "doctor/DoctorHistorialClinico";
+        } else {
+            return "redirect:/";
+        }
+    }
+    /*@GetMapping ("/docPaciente/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id) {
+        Optional<Cita> opt = citaRepository.findById (id);
+        if (opt.isPresent()) {
+            Cita cita = opt.get();
+
+            byte[] pdfComoBytes = cita.getExamendoc();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType (
+
+                    MediaType. parseMediaType(cita.getExamencontenttype()));
+
+            return new ResponseEntity<> (
+                    pdfComoBytes,
+                    httpHeaders,
+                    HttpStatus. OK) ;
+        } else {
+
+            return null;
+        }
+    }*/
+    @GetMapping("/downloadFile/{id}")
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("id") int id) {
+        Optional<Cita> optionalCita = citaRepository.findById(id);
+
+        if (optionalCita.isPresent()) {
+            Cita c = optionalCita.get();
+
+            if (c.getExamendoc() != null) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.parseMediaType(c.getExamencontenttype()));
+                headers.setContentDispositionFormData("attachment", c.getExamenname());
+                headers.setCacheControl("no-cache, no-store, must-revalidate");
+                headers.setPragma("no-cache");
+                headers.setExpires(0L);
+
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(new ByteArrayResource(c.getExamendoc()));
+            }
+        }
+
+        return ResponseEntity.notFound().build();
+    }
 
 
     public String getIdPaciente() {

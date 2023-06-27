@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -69,6 +69,7 @@
                                 <input type="hidden" th:field="*{fechanacimiento}">
                                 <input type="hidden" th:field="*{genero}">
                                 <input type="hidden" th:field="*{fecharegistro}">
+                                <input type="hidden" th:field="*{correo}">
 
                                 <hr>
                                 <div class="row">
@@ -76,9 +77,10 @@
                                         <p class="mb-0">Nombres</p>
                                     </div>
                                     <div class="col-sm-9">
-                                        <input class="form-control mb-0" type="text" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                                        <input class="form-control mb-0 input-texto" type="text" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                                              th:errors="*{nombre}"></div>
+                                        <div class="invalid-feedback d-none" id="validacion-nombre">Ingrese un nombre válido</div>
                                     </div>
                                 </div>
                                 <hr>
@@ -87,7 +89,7 @@
                                         <p class="mb-0">Apellidos</p>
                                     </div>
                                     <div class="col-sm-9">
-                                        <input class="form-control mb-0" type="text" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                                        <input class="form-control mb-0 input-texto" type="text" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
                                              th:errors="*{apellidos}"></div>
                                     </div>
@@ -120,6 +122,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                <!--
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
@@ -132,6 +135,7 @@
                                              th:errors="*{correo}"></div>
                                     </div>
                                 </div>
+                                -->
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
@@ -156,6 +160,7 @@
                                              th:errors="*{direccion}"></div>
                                     </div>
                                 </div>
+
                             </form>
                             <hr>
                             <div class="row">
@@ -177,18 +182,19 @@
                                         </div>
                                     </form>
 
-                                    <p class="mb-2 mb-lg-0 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
+                                    <p class="mb-2 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
                                        th:inline="text">[[${alergia.nombre}]]
                                         <a th:href="@{'/Paciente/perfil/borrarAlergia?idAlergia='+${alergia.idAlergia}}"
                                            class="ms-2" style="color: red"><i class="bi bi-x-circle ms-2"></i></a>
                                     </p>
                                 </div>
                             </div>
+
                             <button type="submit" class="botonAceptar mt-5" form="formPaciente">
                                 Actualizar
                             </button>
                             <a th:href="@{/Paciente/perfil}"
-                               class="botonCancelar mt-5 ms-2">Cancelar
+                               class="botonCancelar mt-5 ms-2">Regresar
                             </a>
                         </div>
                     </div>
@@ -210,22 +216,24 @@
         <script th:src="@{/assets/js/main.js}"></script>
 
         <!-- SCRIPT para mostrar errores -->
+        <!--
         <script>
+            const formatoString = /^([A-Za-záÁéÉíÍóÓúÚñÑüÜ\s']+)(\s+[A-Za-záÁéÉíÍóÓúÚñÑüÜ\s']+)*$/;
+            const formatoCorreo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
             let msg = $(".invalid-feedback");
-            $(".form-control").keyup(function (event){
+            $(".input-texto").keyup(function (event){
                 let input = $(event.target);
                 let id = input.attr("id");
-                if (input.val().length === 0){
-                    input.addClass("is-invalid");
-                    //$("#feedback_"+id).show();
+                if (formatoString.test(input.val())){
+                    input.removeClass("is-invalid");
                 }
                 else{
-                    input.removeClass("is-invalid");
-                    //$("#feedback_"+id).hide();
+                    input.addClass("is-invalid");
                 }
             })
 
         </script>
-
+        -->
     </body>
 </html>

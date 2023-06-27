@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,13 +31,14 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
         <!-- End Sidebar-->
 
-        <main style="padding-top: 0;" id="main" class="main">
+        <main style="padding-top: 0;" id="main" class="main site-content">
             <section style="margin-top: 0; padding-top: 30px;" class="seccionPrincipal">
                 <!-- Perfil doctor -->
                 <div style="margin-bottom: 50px;" class="row">
                     <!-- Foto Doctor -->
                     <div class="col-md-5 d-flex justify-content-center justify-content-md-end align-items-center py-5 py-md-0">
-                        <img class="fotoDoctorPerfil rounded-circle" th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
+                        <img class="fotoDoctorPerfil rounded-circle"
+                             th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
                     </div>
                     <!-- Información Doctor -->
                     <div class="col-md-7">
@@ -66,14 +67,14 @@
                     <input type="hidden" name="idDoctor" th:value="${doctor.id_doctor}">
                     <input type="hidden" name="idSede" th:value="${doctor.sede.idSede}">
                     <input type="hidden" name="idEspecialidad" th:value="${doctor.especialidad.idEspecialidad}">
-                    <input type="hidden" name="hora" th:value="${doctor.horario.disponibilidad_inicio}">
+                    <input type="hidden" name="hora" th:value="${doctor.horario.disponibilidad_inicio_lunes}">
                 </form>
 
                 <form method="post" th:action="@{/Paciente/reservarDoctor}" id="formDia2">
                     <input type="hidden" name="idDoctor" th:value="${doctor.id_doctor}">
                     <input type="hidden" name="idSede" th:value="${doctor.sede.idSede}">
                     <input type="hidden" name="idEspecialidad" th:value="${doctor.especialidad.idEspecialidad}">
-                    <input type="hidden" name="hora" th:value="${doctor.horario.disponibilidad_inicio}">
+                    <input type="hidden" name="hora" th:value="${doctor.horario.disponibilidad_inicio_lunes}">
                 </form>
 
                 <h3 style="text-align: center; font-weight: 600;">Disponibilidad</h3>
@@ -88,24 +89,29 @@
                     <tbody>
                         <tr>
                             <td th:text="${#strings.capitalize(#temporals.dayOfWeekName(dia1))}">MARTES</td>
-                            <td th:text="${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+' - '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}">13:00 - 18:00</td>
+                            <td th:text="${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}+' - '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}">
+                                13:00 - 18:00
+                            </td>
                             <td>
                                 <button type="submit" form="formDia1" class="botonAceptar">Reservar en este
-                                    horario</button>
+                                    horario
+                                </button>
                             </td>
                         </tr>
                         <tr>
                             <td th:text="${#strings.capitalize(#temporals.dayOfWeekName(dia2))}">JUEVES</td>
-                            <td th:text="${#temporals.format(doctor.horario.disponibilidad_inicio, 'HH:mm')}+' - '+${#temporals.format(doctor.horario.disponibilidad_fin, 'HH:mm')}">08:00 - 12:00</td>
+                            <td th:text="${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}+' - '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}">
+                                08:00 - 12:00
+                            </td>
                             <td>
-                                <button type="submit" form="formDia2" class="botonAceptar">Reservar en este horario</button>
+                                <button type="submit" form="formDia2" class="botonAceptar">Reservar en este horario
+                                </button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </section>
 
-            <!-- ====== Footer ====== -->
             <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
 

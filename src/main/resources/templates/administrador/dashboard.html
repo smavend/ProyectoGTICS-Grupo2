@@ -230,13 +230,6 @@
           <li>
             <hr class="dropdown-divider">
           </li>
-
-         <!--<li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
-                            <i class="bi bi-person"></i>
-                            <span>Mi Perfil</span>
-                        </a>
-                    </li>-->
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -319,30 +312,15 @@
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-
-  <div class="pagetitle">
-    <h1>Dashboard</h1>
-
-  </div><!-- End Page Title -->
-
   <section class="section dashboard">
-    <div class="row">
-
-      <!-- Left side columns -->
-      <div class="col-lg-7">
-        <div class="row">
-
-
+        <div class="row gx-5">
           <!-- Top Selling -->
-
-
-            <div class="card top-selling container px-4" style="min-height:653px">
+            <div class="col-lg card mx-2" style="min-height:653px">
                 <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title">DOCTORES <span>| Sede San Isidro</span></h5>
                   <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
                 </div>
                 <div th:if="${msgDoc != null}" th:text="${msgDoc}" class="alert alert-success" role="alert"></div>
-
                   <table class="table" id="datatable">
                     <thead>
                     <tr>
@@ -353,12 +331,12 @@
                     <tbody>
                     <tr th:each="doctor : ${listaDoctores}">
                       <td>
-                        <div class="row">
-                          <div class="col-lg-2 col-sm-3">
+                        <div class="row gx-5">
+                          <div class="col-sm-3">
                             <img th:if="${doctor.foto!=null}" th:src="@{|/administrador/imageDoc/${doctor.id_doctor}|}" alt="#" width="70" height="70" class="rounded-circle"/>
                             <img th:unless="${doctor.foto!=null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="#" width="70" height="70" class="rounded-circle"/>
                           </div>
-                          <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
+                          <div class="col d-flex justify-content-between align-items-center">
                             <div>
                               <h5 th:text="${doctor.nombre}+' '+${doctor.apellidos}"> </h5>
                               <p th:text="${doctor.correo}"></p>
@@ -367,7 +345,7 @@
                         </div>
                       </td>
                       <td>
-                        <span class="text-muted ms-2 float-end"><h6 th:text="${doctor.especialidad.nombre}"></h6></span>
+                        <span class="text-muted text-end ms-2 float-end"><h6 th:text="${doctor.especialidad.nombre}"></h6></span>
                       </td>
                     </tr>
 
@@ -377,20 +355,13 @@
 
 
               </div>
-
-
           <!-- End Top Selling -->
-
-
-
-            <div class="card top-selling container px-4" style="min-height:653px">
+            <div class="col-lg card mx-2" style="min-height:653px">
                 <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title">PACIENTES <span>| Sede San Isidro</span></h5>
                   <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
                 </div>
                 <div th:if="${msgPaci != null}" th:text="${msgPaci}" class="alert alert-success" role="alert"></div>
-
-
                   <table class="table table-hover" id="datatable2">
                     <thead>
                     <tr>
@@ -399,28 +370,26 @@
                     </tr>
                     </thead>
                     <tbody>
+                      <tr th:each="paciente: ${listaPaciente}" >
+                      <td >
 
-                      <tr th:each="paciente: ${listaPaciente}">
-
-                      <td>
-                        <a th:href="@{/administrador/historialPaciente(id=${paciente.idPaciente})}">
-                        <div class="row">
-                          <div class="col-lg-2 col-sm-3">
+                        <div class="row gx-5">
+                          <div class="col-sm-3">
                             <img th:if="${paciente.foto!=null}" th:src="@{|/administrador/imagePaci/${paciente.idPaciente}|}" alt="#" width="70" height="70" class="rounded-circle"/>
                             <img th:unless="${paciente.foto!=null}" th:src="@{/assets/img/userPorDefecto.jpg}"  alt="#" width="70" height="70" class="rounded-circle"/>
 
                           </div>
-                          <div class="col-lg-9 col-sm-8 d-flex justify-content-between align-items-center">
+                          <div class="col-sm-9 d-flex justify-content-between align-items-center">
                             <div>
-                              <h5 th:text="${paciente.nombre}+' '+${paciente.apellidos}"> </h5>
+                              <a th:text="${paciente.nombre}+' '+${paciente.apellidos}" th:href="@{/administrador/historialPaciente(id=${paciente.idPaciente})}"> </a>
                               <p th:text="${paciente.correo}">okerosco@example.com</p>
                             </div>
                           </div>
                         </div>
-                        </a>
+
                       </td>
                         <td>
-                          <span class="text-muted ms-2 float-end"><h6 th:if="${paciente.estado == 1}" th:text="Activo"></h6></span>
+                          <span class="text-muted text-end ms-2 float-end"><h6 th:if="${paciente.estado == 1}" th:text="Activo"></h6></span>
 
                         </td>
                     </tr>
@@ -431,81 +400,9 @@
               </div>
 
         </div>
-      </div><!-- End Left side columns -->
-
-      <!-- Right side columns -->
-
-      <div class="col-lg-5">
-
-
-        <div class="card">
-          <div class="card-body">
-
-
-            <div class="info-card revenue-card">
-
-
-              <div class="card-body">
-                <h5 class="card-title">Igresos <span>| Este mes</span></h5>
-
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-currency-dollar"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>$124,264</h6>
-                    <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">incremento</span>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Area Chart -->
-            <div id="areaChart"></div>
-
-
-            <!-- End Area Chart -->
-
-          </div>
-        </div>
-
-
-        <!-- Website Traffic -->
-        <div class="card">
-
-          <div class="card-body pb-0">
-
-          </div>
-
-
-
-
-
-        </div><!-- End Website Traffic -->
-
-
-
-      </div><!-- End Right side columns -->
-
-    </div>
   </section>
 
 </main><!-- End #main -->
-
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-
-  <div class="credits">
-    <!-- All the links in the footer should remain intact. -->
-    <!-- You can delete the links only if you purchased the pro version. -->
-    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-
-  </div>
-</footer><!-- End Footer -->
-
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <script>
   var headerColorAdministrador = "[[${headerColorAdministrador}]]";

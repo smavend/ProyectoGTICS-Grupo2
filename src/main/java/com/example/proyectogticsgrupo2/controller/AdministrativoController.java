@@ -1,6 +1,5 @@
 package com.example.proyectogticsgrupo2.controller;
 
-import com.example.proyectogticsgrupo2.dto.TemporalDiasDto;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoPacienteService;
@@ -77,11 +76,9 @@ public class AdministrativoController {
 
         List<Paciente> lista = pacienteRepository.buscarPorIdAdministrativo(idAdmi);
         List<Temporal> listaTemp = temporalRepository.findByAdministrativo_IdAdministrativo(idAdmi);
-        List<TemporalDiasDto> listaDias = temporalRepository.obtenerDias();
 
         model.addAttribute("listaPacientes", lista);
         model.addAttribute("listaTemp", listaTemp);
-        model.addAttribute("dias",listaDias);
 
         return "administrativo/index";
     }

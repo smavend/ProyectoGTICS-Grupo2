@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,23 +28,24 @@
     <body>
 
         <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
+        <div id="header" th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
 
             <h1 class="encabezado">Recibo - 281FH19701228FG</h1>
+
             <section class="seccionPrincipal recibo">
                 <div class="row encabezadoRecibo">
                     <div class="col-10">
                         <h2 class="subEncabezado">Recibo - 13/12/2022</h2>
                     </div>
-                    <div class="col-2">
-                        <button class="btn btn-secondary botonImprimir">Imprimir</button>
+                    <div id="botonImp" class="col-2">
+                        <button class="btn btn-secondary botonImprimir" onclick="imprimir()">Imprimir</button>
                     </div>
                 </div>
 
@@ -64,14 +65,21 @@
                 <!-- Informacion recibo y pago -->
                 <div class="row informacionRecibo">
                     <div class="col-6">
-                        <p>Paciente:<span class="informacionReciboDato" th:text="${session.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span></p>
-                        <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span></p>
-                        <p>Estado:<span class="informacionReciboDato" th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</span></p>
+                        <p>Paciente:<span class="informacionReciboDato"
+                                          th:text="${session.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
+                        </p>
+                        <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span>
+                        </p>
+                        <p>Estado:<span class="informacionReciboDato"
+                                        th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</span></p>
                     </div>
                     <div class="col-6">
-                        <p>Fecha emitida:<span class="informacionReciboDato" th:text="${pago.fechaEmitida}">13/12/2022</span></p>
-                        <p>Fecha cancelada:<span class="informacionReciboDato"th:text="${pago.fechaCancelada}">13/12/2022</span></p>
-                        <p>Tipo de pago:<span class="informacionReciboDato" th:text="${pago.tipoPago}">Visa ***1234</span></p>
+                        <p>Fecha emitida:<span class="informacionReciboDato"
+                                               th:text="${pago.fechaEmitida}">13/12/2022</span></p>
+                        <p>Fecha cancelada:<span class="informacionReciboDato" th:text="${pago.fechaCancelada}">13/12/2022</span>
+                        </p>
+                        <p>Tipo de pago:<span class="informacionReciboDato"
+                                              th:text="${pago.tipoPago}">Visa ***1234</span></p>
                     </div>
                 </div>
 
@@ -88,7 +96,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur</td>
+                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur
+                                </td>
                                 <td>1</td>
                                 <td>S/ 1300.00</td>
                                 <td>S/ 1300.00</td>
@@ -97,7 +106,16 @@
                         </tbody>
                     </table>
                 </section>
+                <div id="botonVolver" class="d-flex justify-content-end"
+                     style="margin-top: 70px; margin-right: 80px; margin-bottom: 20px">
+                    <a th:href="@{/Paciente/pagos}" class="btn botonVolverPagos ms-3">Volver</a>
+                </div>
             </section>
+
+            <!-- ====== Footer ====== -->
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <!-- End footer -->
+
         </main>
 
         <!-- Bootstrap CDN JS -->
@@ -107,6 +125,12 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <script>
+            function imprimir() {
+                window.print();
+            }
+        </script>
 
     </body>
 </html>
