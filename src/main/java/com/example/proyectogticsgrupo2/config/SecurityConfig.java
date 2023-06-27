@@ -114,8 +114,9 @@ public class SecurityConfig {
                 .requestMatchers("/doctor","/doctor/***").hasAnyAuthority("doctor", "superadmin")
                 .requestMatchers("/administrativo","/administrativo/***").hasAnyAuthority("administrativo", "superadmin")
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
-                .requestMatchers("/administrador","/administrador/***").hasAnyAuthority("administrador", "superadmin")
-                .requestMatchers("/","/login","/login/**","/signin","/signin/**").anonymous()
+
+                .requestMatchers("/administrador","/administrador/***").hasAuthority("administrador")
+                .requestMatchers("/","/validarDni/*","/login","/login/**","/signin","/signin/**").anonymous()
                 .anyRequest().permitAll();
 
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
