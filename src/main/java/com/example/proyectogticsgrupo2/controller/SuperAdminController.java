@@ -418,6 +418,17 @@ public class SuperAdminController {
         return "redirect:/administrativo";
     }
 
+    @PostMapping("/switchPaciente/{id}")
+    public String cambiarARolPaciente(@PathVariable("id") String pacienteId, Authentication authentication, HttpSession session) {
+        Paciente paciente = pacienteRepository.findById(pacienteId).orElse(null);
+        if (paciente == null){
+            return "redirect:/error";
+        }
+        session.setAttribute("superAdminLogueadoComoPaciente", true);
+        session.setAttribute("impersonatedUser", paciente.getCorreo());
+        return "redirect:/Paciente";
+    }
+
 ////////////////// returns desde los otros roles
     @PostMapping("/returnToSuperAdmin")
     public String returnToSuperAdmin(HttpSession session) {
