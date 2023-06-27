@@ -487,6 +487,7 @@ public class DoctorController {
                 cita.setExamencontenttype(file.getContentType());
                 cita.setDiagnostico(descripcion);
                 cita.setExamendoc(file.getBytes());
+                cita.setEstado(4);
                 citaRepository.save(cita);
                 attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
             } else {
@@ -701,6 +702,54 @@ public class DoctorController {
         }
 
         return "redirect:/doctor/perfil";
+    }
+    @GetMapping("/historialClinico")
+    public String hClinico(Model model, @RequestParam("id") String id, HttpSession session, Authentication authentication) {
+        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
+        session.setAttribute("doctor",doctor_session);
+
+        List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
+        List<TratamientoDTO> tratamientoList = citaRepository.listarTratamientos(id,4);
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
+        List<ListaBuscadorDoctor> listProxCita = citaRepository.listarPorPacienteProxCitas(id);
+        List<EncuestaDoctorDTO> fechaEncuesta = citaRepository.listarFechaEncuesta(id,4);
+
+        if (optionalPaciente.isPresent()) {
+            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
+            Doctor doctor = doctorOptional.get();
+            Paciente paciente = optionalPaciente.get();
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("alergiaList", alergiaList);
+            model.addAttribute("ListaTratamiento", tratamientoList);
+            model.addAttribute("lisProxCitas", listProxCita);
+            model.addAttribute("listEncuesta",fechaEncuesta);
+            return "doctor/DoctorHistorialClinico";
+        } else {
+            return "redirect:/";
+        }
+    }
+    @GetMapping ("/docPaciente/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id) {
+        Optional<Cita> opt = citaRepository.findById (id);
+        if (opt.isPresent()) {
+            Cita cita = opt.get();
+
+            byte[] pdfComoBytes = cita.getExamendoc();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType (
+
+                    MediaType. parseMediaType(cita.getExamencontenttype()));
+
+            return new ResponseEntity<> (
+                    pdfComoBytes,
+                    httpHeaders,
+                    HttpStatus. OK) ;
+        } else {
+
+            return null;
+        }
     }
 
 
