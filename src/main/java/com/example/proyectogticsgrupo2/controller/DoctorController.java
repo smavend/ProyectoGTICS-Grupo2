@@ -327,7 +327,6 @@ public class DoctorController {
         Optional<Cita> optionalCita = citaRepository.findById(id2);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
-        System.out.println(optionalCita.get().getModalidad());
 
         if (optionalPaciente.isPresent() & optionalCita.isPresent() && optionalCita.get().getModalidad()==1 && optionalCita.get().getDoctor().getId_doctor()==doctor_session.getId_doctor()) {
             Paciente paciente = optionalPaciente.get();
@@ -404,6 +403,7 @@ public class DoctorController {
     public String guardarReporte(HttpSession session, Authentication authentication, Model model, @Valid Cita cita, BindingResult bindingResult) {
         Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
         session.setAttribute("doctor",doctor_session);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         if (bindingResult.hasErrors()) {
 
@@ -421,8 +421,52 @@ public class DoctorController {
             model.addAttribute("cita", cita1);
             return "doctor/DoctorReporteSesion";
         } else {
-            cita.setEstado(4);
-            citaRepository.save(cita);
+            if (cita.getEspecialidad().getIdEspecialidad()==4 || cita.getEspecialidad().getIdEspecialidad()==5 || cita.getEspecialidad().getIdEspecialidad()==6){
+
+
+                cita.setEstado(4);
+                citaRepository.save(cita);
+
+                Cita cita_examen= new Cita();
+                cita_examen.setPaciente(cita.getPaciente());
+
+                Doctor doctor_examen = doctorRepository.obtenerDoctorPorIdEspecialidad(cita.getEspecialidad().getIdEspecialidad());
+                cita_examen.setDoctor(doctor_examen);
+
+                cita_examen.setInicio(cita.getFin());
+                cita_examen.setFin(cita.getFin().plusDays(7));
+                cita_examen.setModalidad(cita.getModalidad());
+                cita_examen.setEstado(0);
+                cita_examen.setSede(cita.getSede());
+                cita_examen.setIdSeguro(cita.getIdSeguro());
+                cita_examen.setDiagnostico(cita.getDiagnostico());
+                cita_examen.setTratamiento(cita.getTratamiento());
+                cita_examen.setReceta(cita.getReceta());
+
+                Optional<Cita> optionalCita = citaRepository.findById(cita.getId_cita());
+                Cita cita_previa = optionalCita.get();
+                cita_examen.setCita_previa(cita_previa);
+
+                citaRepository.save(cita_examen);
+
+
+            } else {
+                cita.setEstado(4);
+                citaRepository.save(cita);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
             return "redirect:/doctor/dashboard";
         }
     }

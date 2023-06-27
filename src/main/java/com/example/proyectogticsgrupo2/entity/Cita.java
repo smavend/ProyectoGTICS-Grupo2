@@ -77,8 +77,15 @@ public class Cita {
     @JoinColumn(name = "especialidad_id_especialidad")
     private Especialidad especialidad;
 
-    @Lob
+    @Column(name = "examendoc")
     private byte[] examendoc;
+
+    @Size(max = 45)
+    @Column(name = "examenname", length = 45)
     private String examenname;
+
+    @Size(max = 45)
+    @Column(name = "examencontenttype", length = 45)
     private String examencontenttype;
+
 }
