@@ -220,7 +220,7 @@
                   <td th:text="${cita.especialidad.getNombre()}"></td>
                   <td th:text="${#temporals.format(cita.getFin(), 'dd-MM-yyyy')}"></td>
                   <td style="text-align: left">
-                    <a th:href="@{'/doctor/downloadFile/' + ${cita.getId_cita()}}" class="button-icon">
+                    <a th:href="@{'/doctor/downloadFile/' + ${cita.getId_cita()}}" class="button-icon" target="_blank">
                       <i style="font-size: 180%" class="bi bi-file-earmark-pdf-fill"></i>
                     </a>
                   </td>
