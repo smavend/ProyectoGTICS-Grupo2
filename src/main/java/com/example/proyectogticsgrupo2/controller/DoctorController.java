@@ -635,11 +635,12 @@ public class DoctorController {
         } else {
             userEmail = authentication.getName();
         }
-        Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
-        session.setAttribute("doctor", doctor_session);
-
+        Doctor doctor1 = doctorRepository.findByCorreo(userEmail);
+        session.setAttribute("doctor", doctor1);
+/*
         Doctor doctor1 = doctorRepository.findByCorreo(authentication.getName());
         session.setAttribute("doctor", doctor1);
+*/
 
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         if (optionalDoctor.isPresent()) {
