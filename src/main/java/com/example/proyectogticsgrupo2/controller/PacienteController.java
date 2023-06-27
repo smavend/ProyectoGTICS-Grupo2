@@ -311,7 +311,9 @@ public class PacienteController {
     }
 
     @PostMapping("/perfil/guardar")
-    public String guardarPerfil(@ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult, @RequestParam(name = "archivo") MultipartFile file, RedirectAttributes attr, Model model, Authentication authentication, HttpSession session) {
+    public String guardarPerfil(@ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
+                                @RequestParam(name = "archivo") MultipartFile file, RedirectAttributes attr,
+                                Model model, Authentication authentication, HttpSession session) {
 
     /*    Paciente p = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", p);*/
