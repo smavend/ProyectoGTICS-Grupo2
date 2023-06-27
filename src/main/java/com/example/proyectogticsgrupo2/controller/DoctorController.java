@@ -427,7 +427,7 @@ public class DoctorController {
         }
     }
     @PostMapping("/guardarExamen")
-    public String guardarExamen(HttpSession session, Authentication authentication, Model model, @RequestParam("archivo") MultipartFile file, Cita cita, @RequestParam("descripcion") String descripcion,@RequestParam("idCita") int idCita, RedirectAttributes attr) {
+    public String guardarExamen(HttpSession session, Authentication authentication, Model model, @RequestParam("archivo") MultipartFile file, @RequestParam("descripcion") String descripcion, @RequestParam("idCita") int idCita, RedirectAttributes attr) {
 
         String fileName = file.getOriginalFilename();
         if (fileName.contains("..")) {
@@ -436,68 +436,26 @@ public class DoctorController {
         }
 
         try {
-            if (file.isEmpty()) {
-                Optional<Cita> optionalCita = citaRepository.findById(idCita);
-                if (optionalCita.isPresent()) {
-                    Cita c = optionalCita.get();
-                    cita.setExamendoc(c.getExamendoc());
-                    cita.setExamenname(c.getExamenname());
-                    cita.setExamencontenttype(c.getExamencontenttype());
-                    cita.setDiagnostico(c.getDiagnostico());
-                }
-                model.addAttribute("msg", "Debe subir un archivo");
-                return "doctor/DoctorReporteSesion";
-            } else {
-                cita.setExamendoc(file.getBytes());
+            Optional<Cita> optionalCita = citaRepository.findById(idCita);
+            if (optionalCita.isPresent()) {
+                Cita cita = optionalCita.get();
                 cita.setExamenname(fileName);
                 cita.setExamencontenttype(file.getContentType());
                 cita.setDiagnostico(descripcion);
-            }
-
-            try {
+                cita.setExamendoc(file.getBytes());
                 citaRepository.save(cita);
-            } catch (Exception e) {
-                e.printStackTrace();
-                attr.addFlashAttribute("msgError", "No se puede subir el archivo");
-                return "doctor/DoctorReporteSesion";
+                attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
+            } else {
+                attr.addFlashAttribute("msgError", "No se encontró la cita");
             }
-
-            attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
-            return "redirect:/doctor/dashboard";
         } catch (IOException e) {
             e.printStackTrace();
             attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
-            return "doctor/DoctorReporteSesion";
         }
+
+        return "redirect:/doctor/dashboard";
     }
 
-
-    @GetMapping("/historialClinico")
-    public String hClinico(Model model, @RequestParam("id") String id, HttpSession session, Authentication authentication) {
-        Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
-        session.setAttribute("doctor",doctor_session);
-
-        List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
-        List<TratamientoDTO> tratamientoList = citaRepository.listarTratamientos(id,4);
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
-        List<ListaBuscadorDoctor> listProxCita = citaRepository.listarPorPacienteProxCitas(id);
-        List<EncuestaDoctorDTO> fechaEncuesta = citaRepository.listarFechaEncuesta(id,4);
-
-        if (optionalPaciente.isPresent()) {
-            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-            Doctor doctor = doctorOptional.get();
-            Paciente paciente = optionalPaciente.get();
-            model.addAttribute("doctor", doctor);
-            model.addAttribute("paciente", paciente);
-            model.addAttribute("alergiaList", alergiaList);
-            model.addAttribute("ListaTratamiento", tratamientoList);
-            model.addAttribute("lisProxCitas", listProxCita);
-            model.addAttribute("listEncuesta",fechaEncuesta);
-            return "doctor/DoctorHistorialClinico";
-        } else {
-            return "redirect:/";
-        }
-    }
 
     @GetMapping("/configuracion")
     public String configuracion(Model model, HttpSession session, Authentication authentication) {

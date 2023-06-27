@@ -218,6 +218,9 @@
                                         <div class="col-lg-12 text-center">
                                             <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
                                                 <input type="hidden" id="idCita" name="idCita" th:value="${cita.getId_cita()}">
+                                                <input type="hidden" id="receta" name="receta" th:value="${cita.getReceta()}">
+                                                <input type="hidden" id="tratamiento" name="tratamiento" th:value="${cita.getReceta()}">
+
                                                 <h2 style="color: black;text-align: center;">Subir examen:</h2>
                                                 <input type="file" class="form-control" id="archivo" name="archivo" accept=".pdf">
                                             </div>
