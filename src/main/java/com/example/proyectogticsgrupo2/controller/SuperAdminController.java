@@ -105,7 +105,9 @@ public class SuperAdminController {
          listaCredenciales.add(credencial.getId_credenciales());
      }
 
+/*
      List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
+*/
      List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
      List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
      List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
@@ -120,16 +122,18 @@ public class SuperAdminController {
      for (AdministradorDTO_superadmin administradoresDTO : listaAdministradoresDTO_superadmin){
          administradoresDTO.setShowLoguearButton(listaCredenciales.contains(administradoresDTO.getIdAdministrador()));
      }
-     for (AdministrativoDTO_superadmin administrativoDTO : listaAdministrativoDTO_superadmin){
+    /* for (AdministrativoDTO_superadmin administrativoDTO : listaAdministrativoDTO_superadmin){
          administrativoDTO.setShowLoguearButton(listaCredenciales.contains(administrativoDTO.getIdAdministrativo()));
-     }
+     }*/
      for (PacienteDTO_superadmin pacienteDTO : listaPacienteDTO_superadmin){
          pacienteDTO.setShowLoguearButton(listaCredenciales.contains(pacienteDTO.getIdPaciente()));
      }
      model.addAttribute("listaClinicas", listaClinicas);
      model.addAttribute("listaSedes", listaSedes);
      model.addAttribute("listaEspecialidad", listaEspecialidad);
+/*
      model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
+*/
      model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
      model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
      model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
@@ -308,7 +312,22 @@ public class SuperAdminController {
 
         return "superAdmin/EditForm";
     }
-
+    @GetMapping("/TareaPacientes")
+    public String registro(Model model){
+        List<Paciente> listaPaciente = pacienteRepository.buscarPorEstado(3);
+        model.addAttribute("listaPaciente",listaPaciente);
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());  // Esto imprimirá el valor en tu consola
+            model.addAttribute("headerColor", styleActual.getHeader());
+            /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
+        return "superAdmin/Tareas";
+    }
     @GetMapping("/impersonarDoctor/{idDoctor}")
     public String impersonarDoctor(@PathVariable("idDoctor") String idDoctor, HttpSession session) {
         System.out.println("Esta leyendo esto");
@@ -499,6 +518,19 @@ public class SuperAdminController {
             return "errorPage";
         }
         return "redirect:/SuperAdminHomePage/verforms";
+    }
+
+    @PostMapping("/GuardarPacientes")
+    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds) {
+        for(String id : pacientesIds) {
+            Optional<Paciente> optPaciente = pacienteRepository.findById(id);
+            if (optPaciente.isPresent()) {
+                Paciente paciente = optPaciente.get();
+                paciente.setEstado(1);
+                pacienteRepository.save(paciente);
+            }
+        }
+        return "redirect:/SuperAdminHomePage/TareaPacientes";
     }
 
 
