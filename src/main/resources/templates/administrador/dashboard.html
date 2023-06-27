@@ -59,7 +59,15 @@
 
   <nav class="header-nav ms-auto">
     <ul class="d-flex align-items-center">
-
+      <li>
+        <div th:if="${session.superAdminLogueadoComoAdministrador}">
+          <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin_being_Administrador}" method="POST">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-home"></i> Volver a SuperAdmin
+            </button>
+          </form>
+        </div>
+      </li>
       <li class="nav-item dropdown">
 			<div class="form-check form-switch">
 			<input class="form-check-input" type="checkbox" id="darkModeSwitch">

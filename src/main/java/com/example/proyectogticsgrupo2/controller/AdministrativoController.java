@@ -8,6 +8,7 @@ import com.example.proyectogticsgrupo2.service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,7 +45,29 @@ public class AdministrativoController {
     }
     @GetMapping("/administrativo")
     public String dashboard(Model model, HttpSession session){
-        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+        /*Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+        String impersonatedUser = (String) session.getAttribute("impersonatedUser");
+
+        Boolean superAdminLogueadoComoAdministrativo = (Boolean) session.getAttribute("superAdminLogueadoComoAdministrativo");
+        if (superAdminLogueadoComoAdministrativo == null) {
+            superAdminLogueadoComoAdministrativo = false;
+        }
+        model.addAttribute("superAdminLogueadoComoAdministrativo", superAdminLogueadoComoAdministrativo);
+
+        Administrativo admi;
+
+        if (impersonatedUser != null) {
+            // Si hay un usuario "impersonado", buscar al administrativo por ese correo electrónico
+            admi = administrativoRepository.findByCorreo(impersonatedUser);
+        } else {
+            admi = (Administrativo) session.getAttribute("administrativo");
+            if (admi == null) {
+                return "redirect:/error";
+            }
+        }
+        System.out.println(admi.getIdAdministrativo());
+        System.out.println(admi.getNombre());
+        session.setAttribute("administrativo", admi);
         String idAdmi = admi.getIdAdministrativo();
 
         AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
@@ -63,9 +86,28 @@ public class AdministrativoController {
         return "administrativo/index";
     }
 
-    @GetMapping("/administrativo/invitar")
+    //Comentado por Gustavo
+/*    @GetMapping("/administrativo/invitar")
     public String vistaInvitar(HttpSession session, Model model, @ModelAttribute("temporal") Temporal temporal){
+
         Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+        String idAdmi = admi.getIdAdministrativo();
+
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
+        return "administrativo/invitar";
+    }*/
+    @GetMapping("/administrativo/invitar")
+    public String vistaInvitar(HttpSession session, Model model, @ModelAttribute("temporal") Temporal temporal, Authentication authentication){
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Administrativo admi = administrativoRepository.findByCorreo(userEmail);
+        session.setAttribute("administrativo", admi);
+
         String idAdmi = admi.getIdAdministrativo();
 
         model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
@@ -76,7 +118,6 @@ public class AdministrativoController {
     @GetMapping("/administrativo/editar")
     public String vistaEditar(HttpSession session, @RequestParam(name = "id") String id,
                               Model model){
-
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
         if(optPaciente.isPresent()){
             Paciente paciente = optPaciente.get();
@@ -101,12 +142,20 @@ public class AdministrativoController {
     @GetMapping("/administrativo/editar/invitado")
     public String vistaEditarInvitado(HttpSession session,
                                       @RequestParam(name = "id") Integer id,
-                                      Model model){
+                                      Model model,Authentication authentication){
 
         Optional<Temporal> optTemp = temporalRepository.findById(id);
         if(optTemp.isPresent()){
             Temporal temp = optTemp.get();
-            Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+/*          Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
+            Administrativo admi = administrativoRepository.findByCorreo(userEmail);
+            session.setAttribute("administrativo", admi);
             String idAdmi = admi.getIdAdministrativo();
             if(temp.getAdministrativo().getIdAdministrativo().equals(idAdmi)) {
                 model.addAttribute("temporal", temp);
@@ -118,8 +167,16 @@ public class AdministrativoController {
         return "redirect:/administrativo";
     }
     @GetMapping("/administrativo/mensajeria")
-    public String mostrarMensajeria(HttpSession session, Model model){
-        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+    public String mostrarMensajeria(HttpSession session, Model model,Authentication authentication){
+/*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Administrativo admi = administrativoRepository.findByCorreo(userEmail);
+        session.setAttribute("administrativo", admi);
         String idAdmi = admi.getIdAdministrativo();
 
         model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
@@ -131,8 +188,17 @@ public class AdministrativoController {
     public String invitarPaciente(HttpServletRequest request, HttpSession session, Model model,
                                   @ModelAttribute("temporal") @Valid Temporal temporal,
                                   BindingResult bindingResult,
-                                  RedirectAttributes attr){
-        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+                                  RedirectAttributes attr,
+                                  Authentication authentication){
+/*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Administrativo admi = administrativoRepository.findByCorreo(userEmail);
+        session.setAttribute("administrativo", admi);
         String idAdmi = admi.getIdAdministrativo();
 
         if(bindingResult.hasErrors()){
@@ -193,8 +259,17 @@ public class AdministrativoController {
     public String actualizarInvitado(HttpSession session,
                                      Model model,
                                      @ModelAttribute("temporal") @Valid Temporal temporal,
-                                     BindingResult bindingResult){
-        Administrativo admi = (Administrativo) session.getAttribute("administrativo");
+                                     BindingResult bindingResult,
+                                     Authentication authentication){
+/*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Administrativo admi = administrativoRepository.findByCorreo(userEmail);
+        session.setAttribute("administrativo", admi);
         String idAdmi = admi.getIdAdministrativo();
 
         if(bindingResult.hasErrors()){

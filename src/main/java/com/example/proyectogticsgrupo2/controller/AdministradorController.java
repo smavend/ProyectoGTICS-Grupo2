@@ -73,7 +73,8 @@ public class AdministradorController {
         this.stylevistasRepository = stylevistasRepository;
     }
     //#####################################33
-   /* @GetMapping("/dashboard")
+   //Comentado por Gustavo
+    /* @GetMapping("/dashboard")
     public String dashboard (Model model){
         List<Paciente> listaPaciente =pacienteRepository.findAll();
         List<Doctor> listaDoctores = doctorRepository.findAll();

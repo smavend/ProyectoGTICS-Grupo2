@@ -398,8 +398,8 @@ public class SuperAdminController {
     }
 
     @PostMapping("/switchAdministrador/{id}")
-    public String cambiarARolAdministrador(@PathVariable("id") String administradoId, Authentication authentication, HttpSession session) {
-        Administrador administrador = administradorRepository.findById(administradoId).orElse(null);
+    public String cambiarARolAdministrador(@PathVariable("id") String administradorId, Authentication authentication, HttpSession session) {
+        Administrador administrador = administradorRepository.findById(administradorId).orElse(null);
         if (administrador == null){
             return "redirect:/error";
         }
@@ -407,7 +407,16 @@ public class SuperAdminController {
         session.setAttribute("impersonatedUser", administrador.getCorreo());
         return "redirect:/administrador/dashboard";
     }
-
+    @PostMapping("/switchAdministrativo/{id}")
+    public String cambiarARolAdministrativo(@PathVariable("id") String administrativoId, Authentication authentication, HttpSession session) {
+        Administrativo administrativo = administrativoRepository.findById(administrativoId).orElse(null);
+        if (administrativo == null){
+            return "redirect:/error";
+        }
+        session.setAttribute("superAdminLogueadoComoAdministrativo", true);
+        session.setAttribute("impersonatedUser", administrativo.getCorreo());
+        return "redirect:/administrativo";
+    }
 
 ////////////////// returns desde los otros roles
     @PostMapping("/returnToSuperAdmin")
@@ -424,6 +433,21 @@ public class SuperAdminController {
 
         return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
     }
+
+    @PostMapping("/returnToSuperAdmin_being_Administrativo")
+    public String returnToSuperAdmin_being_Administrativo(HttpSession session) {
+        session.removeAttribute("administrativo");  // Elimina el atributo de sesión del doctor
+        session.removeAttribute("superAdminLogueadoComoAdministrativo");  // Añade esta línea
+        return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
+    }
+    @PostMapping("/returnToSuperAdmin_being_Paciente")
+    public String returnToSuperAdmin_being_Paciente(HttpSession session) {
+        session.removeAttribute("paciente");  // Elimina el atributo de sesión del doctor
+        session.removeAttribute("superAdminLogueadoComoPaciente");  // Añade esta línea
+
+        return "redirect:/SuperAdminHomePage";  // Redirige al SuperAdminHomePage
+    }
+
 
     @PostMapping("/cambioDisponibilidad/{id}")
     public String cambioDisponibilidad(
