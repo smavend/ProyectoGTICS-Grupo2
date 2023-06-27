@@ -755,19 +755,23 @@ public class DoctorController {
         }
     }*/
     @GetMapping("/downloadFile/{id}")
-    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("id") int id){
-        Optional<Cita> optionalCita=citaRepository.findById(id);
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("id") int id) {
+        Optional<Cita> optionalCita = citaRepository.findById(id);
 
-        Cita c=optionalCita.get();
-        c.getExamendoc();
+        if (optionalCita.isPresent()) {
+            Cita c = optionalCita.get();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(c.getExamencontenttype()))
-                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment:filename=\""+c.getExamenname()+"\"")
-                .body(new ByteArrayResource(c.getExamendoc()));
+            if (c.getExamendoc() != null) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(c.getExamencontenttype()))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + c.getExamenname() + "\"")
+                        .body(new ByteArrayResource(c.getExamendoc()));
+            }
+        }
 
-
+        return ResponseEntity.notFound().build();
     }
+
 
 
 
