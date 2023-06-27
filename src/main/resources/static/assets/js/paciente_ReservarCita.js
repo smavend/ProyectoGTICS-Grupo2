@@ -1,15 +1,3 @@
-// DATEPICKER JQUERY UI
-$(function(){
-    $("#input_fecha").datepicker({
-        dateFormat: 'yy-mm-dd',
-        monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
-        dayNamesShort: [ "Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb" ],
-        prevText: "Ant",
-        nextText: "Sig",
-    });
-})
-
 // OBTENER ESPECIALIDADES
 $("#select_modalidad").click(function(){
     let selectEsp = $("#select_especialidad");
@@ -42,7 +30,6 @@ $("#select_modalidad").click(function(){
 });
 
 // VALIDAR SELECCIONES Y OBTENER HORARIOS
-
 $("#select_doctor").change(function(){
     buscarHorarios($(this).val(), $("#input_fecha").val());
 });
@@ -68,7 +55,6 @@ function buscarHorarios(doctor, fecha){
         }).fail(function(e){
             console.log("error");
         });
-
     }
 }
 

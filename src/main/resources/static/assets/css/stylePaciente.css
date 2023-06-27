@@ -4,11 +4,11 @@
 
 body {
     font-family: "Open Sans", sans-serif;
-    background-image: linear-gradient(to right top, #dbe3e8, #e5eaee, #eff0f4, #f7f8f9, #ffffff);
-    background-repeat: repeat;
-    color: #444444;
+    background-image: linear-gradient(to right, #ebf0f2, #f1f4f6, #f6f7f9, #fbfbfc, #ffffff);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     min-height: 100vh;
-    height: 100%;
+    color: #444444;
 }
 html {
     height: 100%;

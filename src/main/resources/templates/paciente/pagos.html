@@ -44,6 +44,8 @@
                 <a id="boton_pendientes" class="btn botonTipo" onclick="buscarPagosPendientes()">Pendientes</a>
                 <a id="boton_cancelados" class="btn botonTipo" onclick="buscarPagosCancelados()">Cancelados</a>
 
+                <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
+
                 <table class="table pt-2 pb-4" id="tablax">
                     <thead>
                         <tr>
@@ -51,27 +53,27 @@
                             <th>Doctor</th>
                             <th>Fecha de cita</th>
                             <th>Fecha de pago</th>
-                            <th>Pago</th>
+                            <th>Pago S/</th>
                             <th>Tipo de pago</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="pago: ${pagoList}" class="fila_cita"
-                            th:classappend="${pago.estadoPago == 0?'cita_pendiente':'cita_cancelada'}">
+                            th:classappend="${pago.estadoPago == 0?'cita_pendiente':'cita_cancelada'}"
+                            th:attr="data-id-especialidad=${pago.cita.doctor.especialidad.idEspecialidad}">
                             <td th:text="${pago.cita.doctor.especialidad.nombre}"></td>
                             <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
                             <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
                             <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'-'}">
                                 Fecha de pago
                             </td>
-                            <td>S/ 250.00</td>
+                            <td th:class="precio-calculado"></td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
                             <!-- columna estado -->
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
-                                <a th:href="@{/Paciente/pagar(idPago=${pago.id})}"
-                                   class="botonPagar botonPagarModal">Pagar</a>
+                                <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
                             </td>
                             <td th:if="${pago.estadoPago == 1}">Cancelado</td>
                         </tr>
@@ -100,7 +102,7 @@
                         <div class="modal-body">
                             <form method="post" th:action="@{/Paciente/guardarPago(filtro=${filtro})}"
                                   th:object="${tarjetaPago}">
-                                <input type="hidden" th:value="${idPagar}" name="idPago">
+                                <input type="hidden" id="idPagoTarjeta" th:value="${idPagoTarjeta}" name="idPago"/>
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                     <div class="input-group mb-3">
@@ -189,8 +191,39 @@
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
         </script>
 
+        <!--Cálculo de precio de cita-->
+        <script>
+            function calcularPrecio(idEspecialidad){
+                var precioIni;
+                switch (idEspecialidad){
+                    case 1: precioIni = 150;break;
+                    case 2: precioIni = 120;break;
+                    case 3: precioIni = 80;break;
+                    case 4: precioIni = 90;break;
+                    case 5: precioIni=100;break;
+                    case 6: precioIni=130;break;
+                    case 7: precioIni=80;break;
+                    case 8: precioIni=90;break;
+                    case 9: precioIni=110;break;
+                    case 10: precioIni=120;break;
+                    case 11: precioIni=150;break;
+                    case 12: precioIni=140;break;
+                    case 13: precioIni=110;break;
+                    case 14: precioIni=100;break;
+                    case 15: precioIni=150;break;
+                    case 16: precioIni=90;break;
+                    case 17: precioIni=120;break;
+                }
+                var precioCalculado = precioIni * coaseguro;
+                return precioCalculado
+            }
+        </script>
+
         <!-- DATATABLES SCRIPT -->
         <script>
+            var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
+            $('#idPagoTarjeta').val(idPagoTarjeta);
+
             $(document).ready(function () {
                 $('#tablax').DataTable({
                     language: {
@@ -233,15 +266,25 @@
                         }
                     ]
                 });
+                $(".fila_cita").each(function (){
+                    var idEspecialidad = $(this).data('id-especialidad');
+                    var precioCalculado = calcularPrecio(idEspecialidad);
+                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
+                })
             });
         </script>
 
+        <!--Script para Modal-->
         <script th:inline="javascript">
             const activarModal = /*[[${activarModal}]]*/ false;
             if (activarModal) {
                 $(document).ready(function () {
                     $('#modal-pago').modal('show');
                 });
+            }
+            function mostrarModal(){
+                $('.modal')
+                $('#modal-pago').modal('show');
             }
         </script>
 
@@ -251,12 +294,16 @@
             const botonPendientes = $("#boton_pendientes");
             const botonCancelados = $("#boton_cancelados");
             const citas = $(".fila_cita");
+            const coaseguro = document.getElementById('coaseguro').dataset.valor
             function buscarPagosPendientes() {
                 botonPendientes.addClass("botonTipoSeleccionado");
                 botonTodos.removeClass("botonTipoSeleccionado");
                 botonCancelados.removeClass("botonTipoSeleccionado");
 
                 citas.each(function (){
+                    var idEspecialidad = $(this).data('id-especialidad');
+                    var precioCalculado = calcularPrecio(idEspecialidad);
+                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
                     if ($(this).hasClass("cita_pendiente")){
                         $(this).show();
                     }
@@ -272,6 +319,9 @@
                 botonPendientes.removeClass("botonTipoSeleccionado");
 
                 citas.each(function (){
+                    var idEspecialidad = $(this).data('id-especialidad');
+                    var precioCalculado = calcularPrecio(idEspecialidad);
+                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
                     if ($(this).hasClass("cita_cancelada")){
                         $(this).show();
                     }
@@ -287,6 +337,9 @@
                 botonCancelados.removeClass("botonTipoSeleccionado");
 
                 citas.each(function (){
+                    var idEspecialidad = $(this).data('id-especialidad');
+                    var precioCalculado = calcularPrecio(idEspecialidad);
+                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
                     $(this).show();
                 })
             }

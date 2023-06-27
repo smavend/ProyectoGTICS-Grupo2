@@ -25,10 +25,10 @@ public class CitaTemporal {
     @Column(name = "paciente_id_paciente")
     private String idPaciente;
 
-    @NotNull(message = "Seleccione una de las modalidades disponibles")
+    @NotNull(message = "Seleccione una de las modalidades disponibles", groups = {validacion1.class})
     private Integer modalidad;
 
-    @NotNull(message = "Seleccione una de las sedes disponibles")
+    @NotNull(message = "Seleccione una de las sedes disponibles", groups = {validacion1.class})
     @Column(name = "sede_id_sede")
     private Integer idSede;
 
@@ -51,7 +51,9 @@ public class CitaTemporal {
     @Column(name = "id_cita_previa")
     private Integer idCitaPrevia;
 
-    @NotNull(message = "Seleccione una de las especialidades disponibles")
+    @NotNull(message = "Seleccione una de las especialidades disponibles", groups = {validacion1.class})
     @Column(name = "id_especialidad")
     private Integer idEspecialidad;
+
+    public interface validacion1{}
 }

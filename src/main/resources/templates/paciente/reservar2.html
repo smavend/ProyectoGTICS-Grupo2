@@ -19,7 +19,8 @@
         <!-- CSS -->
         <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
         <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
-        <link rel="stylesheet" th:href="@{/assets/css/stylePaciente_Datepicker.css}">
+        <!--<link rel="stylesheet" th:href="@{/assets/css/stylePaciente_Datepicker.css}">-->
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     </head>
     <body>
 
@@ -115,5 +116,16 @@
 
         <!-- Funciones y Ajax -->
         <script th:src="@{/assets/js/paciente_ReservarCita.js}"></script>
+
+        <script th:inline="javascript">
+
+            // MODIFICAR CALENDARIO PARA MOSTRAR SOLO DÍAS DISPONIBLES
+
+            $(function(){
+                $("#input_fecha").datepicker({
+                    dateFormat: 'yy-mm-dd',
+                });
+            })
+        </script>
     </body>
 </html>
