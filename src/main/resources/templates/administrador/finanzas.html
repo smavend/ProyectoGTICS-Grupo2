@@ -309,90 +309,7 @@
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-
-    <div class="d-flex justify-content-between align-items-center">
-        <div class="pagetitle">
-            <h1>Finanzas de Sede</h1>
-        </div><!-- End Page Title -->
-        <div class="icon" >
-            <a th:href="@{/administrador/dashboard}"><i class="bi bi-arrow-return-left"></i></a>
-        </div>
-
-    </div>
-
     <section class="section dashboard">
-        <div class="row">
-
-            <!-- Left side columns -->
-            <div class="col-lg-12 container">
-                <div class="row">
-
-                    <div class="col-12">
-                        <div class="card top-selling overflow-auto container">
-                            <div class="info-card revenue-card">
-
-
-
-                                <h5 class="card-title">Gráfico de ingresos mensuales <span>| Sede San Isidro</span></h5>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-currency-dollar"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>$124,264</h6>
-                                        <h4><span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">incrementó</span></h4>
-
-                                    </div>
-                                </div>
-                                <div id="lineChart"></div>
-
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                        new ApexCharts(document.querySelector("#lineChart"), {
-                                            series: [{
-                                                name: "Ingresos Totales",
-                                                data: [124000.31, 141798.32, 241563.25, 151563.24, 189258.36, 162254.25, 219563.23, 191178.89, 148587.26, 169563.23, 191178.89, 148587.26]
-                                            }],
-                                            chart: {
-                                                height: 350,
-                                                type: 'line',
-                                                zoom: {
-                                                    enabled: false
-                                                }
-                                            },
-                                            dataLabels: {
-                                                enabled: false
-                                            },
-                                            stroke: {
-                                                curve: 'straight'
-                                            },
-                                            grid: {
-                                                row: {
-                                                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                                                    opacity: 0.5
-                                                },
-                                            },
-                                            xaxis: {
-                                                categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Agost', 'Sep','Oct','Nov','Dic'],
-                                            }
-                                        }).render();
-                                    });
-                                </script>
-                                <!-- End Line Chart -->
-
-
-
-                            </div>
-
-                            <!-- Area Chart -->
-
-
-                        </div>
-                    </div><!-- End Top Selling -->
-
-                    <!-- Top Selling -->
-                    <div class="col-12">
                         <div class="card top-selling container px-4" style="min-height:551px">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
@@ -402,8 +319,6 @@
                                         </button>
 
                                     </div>
-
-
                                     <!-- Pop-up de filtrado -->
                                     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -412,7 +327,7 @@
                                                     <h5 class="modal-title" id="filterModalLabel">Filtrar reporte</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form method="post" th:action="@{/administrador/reportes}">
+                                                <form method="post" th:action="@{/administrador/reportes}" novalidate onsubmit="return validateForm()">
                                                     <div class="modal-body">
 
                                                         <div class="mb-3">
@@ -426,11 +341,13 @@
                                                         </div>
                                                         <div id="porSeguro" class="mb-3" style="display: none;">
                                                             <label for="insuranceInput" class="form-label">Seguro</label>
-                                                            <select class="form-select" id="insuranceInput" name="seguro">
+                                                            <select class="form-select" id="insuranceInput" name="seguro" required>
                                                                 <option value="">Seleccionar seguro</option>
                                                                 <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                                                             </select>
-                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                            <div class="invalid-feedback">
+                                                                Por favor seleccione una opción
+                                                            </div>
 
                                                         </div>
                                                         <div id="porEspecialidad" class="mb-3" style="display: none;">
@@ -439,7 +356,9 @@
                                                                 <option value="">Seleccionar especialidad</option>
                                                                 <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
                                                             </select>
-                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                            <div class="invalid-feedback">
+                                                                Por favor seleccione una opción
+                                                            </div>
                                                         </div>
                                                         <div id="porTipoPago" class="mb-3" style="display: none;">
                                                             <label for="paymentTypeInput" class="form-label">Tipo de pago</label>
@@ -449,7 +368,9 @@
                                                                 <option value="Tarjeta">Tarjeta</option>
                                                                 <!--<option value="3">Transferencia</option>-->
                                                             </select>
-                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                            <div class="invalid-feedback">
+                                                                Por favor seleccione una opción
+                                                            </div>
                                                         </div>
                                                         <div id="porFecha" class="mb-3" style="display: none;">
                                                             <label for="porfechareporte" class="form-label">Todo</label>
@@ -459,13 +380,15 @@
                                                                 <option value="2">Último mes</option>
                                                                 <option value="3">Últimos tres meses</option>
                                                             </select>
-                                                            <div class="invalid-feedback">Campos obligatorios</div>
+                                                            <div class="invalid-feedback">
+                                                                Por favor seleccione una opción
+                                                            </div>
                                                         </div>
 
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                                            <button class="btn btn-primary me-1" type="submit" data-bs-toggle="modal" data-bs-target="#generado" >Descargar</button>
+                                                            <button class="btn btn-primary me-1" type="submit" >Descargar</button>
                                                             <select class="form-select" name="formato">
                                                                 <option value="1">Excel</option>
                                                                 <option value="2">PDF </option>
@@ -533,12 +456,6 @@
                                     </table>
                                     <br>
                         </div>
-
-
-                    </div><!-- End Top Selling -->
-
-
-                    <div class="col-12">
 
                         <div class="card top-selling container px-4" style="min-height:550px">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -626,18 +543,6 @@
 
                             </div>
 
-                    </div>
-
-
-
-                </div>
-            </div><!-- End Left side columns -->
-
-            <!-- Right side columns -->
-
-
-
-        </div>
     </section>
 
 </main><!-- End #main -->

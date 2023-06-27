@@ -2,526 +2,588 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 
-    <head>
-         <meta charset="utf-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        <title>Dashboard - NiceAdmin Bootstrap Template</title>
-        <meta content="" name="description">
-        <meta content="" name="keywords">
+    <title>Dashboard - NiceAdmin Bootstrap Template</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
-        <!-- Favicons -->
-        <link th:href="@{/assets/img/favicon.png}" rel="icon">
-        <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-        <!-- Google Fonts -->
-        <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-              rel="stylesheet">
-        <!-- BOOTSTRAP -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-              crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet">
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+          crossorigin="anonymous">
 
 
-        <!-- Vendor CSS Files -->
-        <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
-        <!-- Template Main CSS File -->
-        <link th:href="@{/assets/css/stylesuperadmin.css}" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/stylesuperadmin.css}" rel="stylesheet">
 
-        <!-- =======================================================
-        * Template Name: NiceAdmin
-        * Updated: Mar 09 2023 with Bootstrap v5.2.3
-        * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-        * Author: BootstrapMade.com
-        * License: https://bootstrapmade.com/license/
-        ======================================================== -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    </head>
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Mar 09 2023 with Bootstrap v5.2.3
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
 
-    <body>
+<body>
 
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title" id="staticBackdropLabel"></div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="staticBackdropLabel"></div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="login-form" th:action="@{/SuperAdminHomePage/loguear}" method="GET">
+                <div class="modal-body">
+                    <input type="hidden" id="doctor-id-input" name="doctorId">
+                    <p id="modal-body-confirm"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="login-confirm-btn" class="btn btn-primary">Loguearse</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ======= Header ======= -->
+<div th:replace="~{superAdmin/fragments/header.html :: header}"></div>
+<!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<div th:replace="~{superAdmin/fragments/sidebar.html :: sidebar}"></div>
+<!-- End Sidebar-->
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Clínica INTERPUCP</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Tabla de usuarios</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <section class="section">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Tabla de Administradores</h5>
+                            <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i
+                                    class="bi bi-person-fill-add "> Crear Administrador</i></a>
+                        </div>
+                        <div class=" flex-column">
+                            <table class="table table-striped" id="AdministradorTable"
+                                   style="display: none; width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellidos</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Sede</th>
+                                    <th scope="col">Clínica</th>
+                                    <th scope="col">Accion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="listaAdministradores, info : ${listaAdministradoresDTO_superadmin}">
+                                    <td th:text="${info.index + 1}"></td>
+                                    <td th:text="${listaAdministradores.idAdministrador}"></td>
+                                    <td th:text="${listaAdministradores.nombre}"></td>
+                                    <td th:text="${listaAdministradores.apellidos}"></td>
+                                    <td th:switch="${listaAdministradores.estado}" class="centered">
+                                        <span th:case="1" class="badge bg-primary">Activo</span>
+                                        <span th:case="3" class="badge bg-info">Registrado</span>
+                                        <span th:case="4" class="badge bg-success">Agendado</span>
+                                        <span th:case="5" class="badge bg-warning">En consulta</span>
+                                    </td>
+                                    <td th:text="${listaAdministradores.correo}"></td>
+                                    <td th:text="${listaAdministradores.sedeNombre}"></td>
+                                    <td th:text="${listaAdministradores.clinica}"></td>
+                                    <td>
+                                        <div th:if="${listaAdministradores.showLoguearButton}">
+                                            <form th:action="@{/SuperAdminHomePage/switchAdministrador/{id}(id=${listaAdministradores.getIdAdministrador()})}" method="POST">
+                                                <button type="submit" class="btn btn-primary loguearAdministrador-btn" th:data-administrador-name="${listaAdministradores.getNombre()}" th:data-administrador-apellido="${listaAdministradores.getApellidos()}">
+                                                    <i class="fas fa-sign-in-alt"></i> Loguear
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
                     </div>
-                    <div class="modal-body">
+                </div>
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Tabla de Administrativos</h5>
+                            <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i
+                                    class="bi bi-person-fill-add "> Crear Administrativo</i></a>
+                        </div>
+                        <div class=" flex-column">
+                            <table class="table table-striped" id="AdministrativoTable"
+                                   style="display: none; width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellidos</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Sede</th>
+                                    <th scope="col">Especialidad</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Clinica</th>
+                                    <th scope="col">Accion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="listaAdministrativo, info : ${listaAdministrativoDTO_superadmin}">
+                                    <td class="row-id" th:text="${info.index + 1}"></td>
+                                    <td th:text="${listaAdministrativo.idAdministrativo}"></td>
+                                    <td th:text="${listaAdministrativo.nombre}"></td>
+                                    <td th:text="${listaAdministrativo.apellidos}"></td>
+                                    <td th:switch="${listaAdministrativo.estado}" class="centered">
+                                        <span th:case="1" class="badge bg-primary">Activo</span>
+                                        <span th:case="3" class="badge bg-info">Registrado</span>
+                                        <span th:case="4" class="badge bg-success">Agendado</span>
+                                        <span th:case="5" class="badge bg-warning">En consulta</span>
+                                    </td>
+                                    <td th:text="${listaAdministrativo.sedeNombre}"></td>
+                                    <td th:text="${listaAdministrativo.especialidad}"><</td>
+                                    <!--                                     <td th:text="${listaAdminstrativo.administrativoId.getSedeId().nombre}"></td>-->
+                                    <!--                                        <td th:text="${listaAdminstrativo.getSedesAdministrativo().get(0).getSede().nombre}"></td>-->
+                                    <td th:text="${listaAdministrativo.correo}"></td>
+                                    <td th:text="${listaAdministrativo.clinica}"></td>
+                                    <td>
+                                        <div th:if="${listaAdministrativo.showLoguearButton}">
+                                            <form th:action="@{/SuperAdminHomePage/switchAdministrativo/{id}(id=${listaAdministrativo.getIdAdministrativo()})}" method="POST">
+                                                <button type="submit" class="btn btn-primary loguearAdministrativo-btn" th:data-administrativo-name="${listaAdministrativo.getNombre()}" th:data-administrativo-apellido="${listaAdministrativo.getApellidos()}">
+                                                    <i class="fas fa-sign-in-alt"></i> Loguear
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Loguearse</button>
+                </div>
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Tabla de Pacientes</h5>
+                        </div>
+                        <div class=" flex-column">
+                            <table class="table table-striped" id="PacientesTable" style="display: none; width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellidos</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Seguro</th>
+                                    <th scope="col">Telefono</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Dirección</th>
+                                    <th scope="col">Distrito</th>
+                                    <th scope="col">Se atiende en</th>
+                                    <th scope="col">Sede</th>
+                                    <th scope="col">Administrador a Cargo</th>
+                                    <th scope="col">Accion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="paciente, info : ${listaPacienteDTO_superadmin}">
+                                    <td th:text="${info.index + 1}"></td>
+                                    <td th:text="${paciente.idPaciente}"></td>
+                                    <td th:text="${paciente.nombre}"></td>
+                                    <td th:text="${paciente.apellidos}"></td>
+                                    <td th:switch="${paciente.estado}" class="centered">
+                                        <span th:case="1" class="badge bg-primary">Activo</span>
+                                        <span th:case="3" class="badge bg-info">Registrado</span>
+                                        <span th:case="4" class="badge bg-success">Agendado</span>
+                                        <span th:case="5" class="badge bg-warning">En consulta</span>
+                                    </td>
+                                    <td th:text="${paciente.seguro}"></td>
+                                    <td th:text="${paciente.telefono}"></td>
+                                    <td th:text="${paciente.correo}"></td>
+                                    <td th:text="${paciente.direccion}"></td>
+                                    <td th:text="${paciente.distrito}"></td>
+                                    <td th:text="${paciente.clinica}"></td>
+                                    <td th:text="${paciente.sede}"></td>
+                                    <td th:text="${paciente.administrador_in_Charge}"></td>
+                                    <td>
+                                        <div th:if="${paciente.showLoguearButton}">
+                                            <form th:action="@{/SuperAdminHomePage/switchPaciente/{id}(id=${paciente.getIdPaciente()})}" method="POST">
+                                                <button type="submit" class="btn btn-primary loguearPaciente-btn" th:data-paciente-name="${paciente.getNombre()}" th:data-paciente-apellido="${paciente.getApellidos()}">
+                                                    <i class="fas fa-sign-in-alt"></i> Loguear
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Tabla de Doctores</h5>
+                        </div>
+                        <div class=" flex-column">
+                            <table class="table table-striped" id="DoctoresTable" style="display: none; width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellidos</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Horario</th>
+                                    <th scope="col">Clínica</th>
+                                    <th scope="col">Sede</th>
+                                    <th scope="col">Especialidad</th>
+                                    <th scope="col">Accion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="listaDoctores, info : ${listaDoctorDTO_superadmin}">
+                                    <td th:text="${info.index + 1}"></td>
+                                    <td th:text="${listaDoctores.idDoctor}"></td>
+                                    <td th:text="${listaDoctores.nombre}"></td>
+                                    <td th:text="${listaDoctores.apellidos}"></td>
+                                    <td th:switch="${listaDoctores.estado}" class="centered">
+                                        <span th:case="1" class="badge bg-primary">Activo</span>
+                                        <span th:case="3" class="badge bg-info">Registrado</span>
+                                        <span th:case="4" class="badge bg-success">Agendado</span>
+                                        <span th:case="5" class="badge bg-warning">En consulta</span>
+                                    </td>
+                                    <td th:text="${listaDoctores.correo}"></td>
+                                    <td th:text="${listaDoctores.horario}"></td>
+                                    <td th:text="${listaDoctores.clinica}"></td>
+                                    <td th:text="${listaDoctores.sede}"></td>
+                                    <td th:text="${listaDoctores.especialidad}"></td>
+                                    <td>
+                                        <div th:if="${listaDoctores.showLoguearButton}">
+                                            <form th:action="@{/SuperAdminHomePage/switchDoctor/{id}(id=${listaDoctores.getIdDoctor()})}" method="POST">
+                                                <button type="submit" class="btn btn-primary loguearDoctor-btn" th:data-doctor-name="${listaDoctores.getNombre()}" th:data-doctor-apellido="${listaDoctores.getApellidos()}">
+                                                    <i class="fas fa-sign-in-alt"></i> Loguear
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+    </section>
 
-        <!-- ======= Header ======= -->
-        <div th:replace="~{superAdmin/fragments/header.html :: header}"></div>
-        <!-- End Header -->
+</main><!-- End #main -->
 
-        <!-- ======= Sidebar ======= -->
-        <div th:replace="~{superAdmin/fragments/sidebar.html :: sidebar}"></div>
-        <!-- End Sidebar-->
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+    <div class="copyright">
+        &copy; Copyright <strong><span>Clínica InterPUCP</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+</footer><!-- End Footer -->
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+<script>
+    var darkmode = localStorage.getItem('dark-mode') === 'true';
+    var headerColor = localStorage.getItem('headerColor') || "[[${headerColor}]]";
+    /*
+                var sidebarColor = localStorage.getItem('sidebarColor') || "[[${sidebarColor}]]"; // Añadir esta línea
+    */
+    var backgroundColor = localStorage.getItem(('backgroundColor') || "[[${backgroundColor}]]");
+    console.log(headerColor);
+    /*
+                console.log(sidebarColor);
+    */
+    console.log(backgroundColor);
 
-        <main id="main" class="main">
+    function updateBodyClasses() {
+        document.body.classList.toggle('dark-mode', darkmode);
+        document.body.classList.toggle('light-mode', !darkmode);
+    }
 
-            <div class="pagetitle">
-                <h1>Clínica INTERPUCP</h1>
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item active">Tabla de usuarios</li>
-                    </ol>
-                </nav>
-            </div><!-- End Page Title -->
+    function updateHeaderColor() {
+        var color = darkmode ? '#363537' : headerColor;
+        document.getElementById('header').style.backgroundColor = color;
+    }
 
-            <section class="section dashboard">
-                <section class="section">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body pb-0">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title">Tabla de Administradores</h5>
-                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "> Crear Administrador</i></a>
-                                </div>
-                                <div class=" flex-column" >
-                                    <table class="table table-striped" id="AdministradorTable" style="display: none; width: 100%;">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">DNI</th>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Apellidos</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Correo</th>
-                                            <th scope="col">Sede</th>
-                                            <th scope="col">Clínica</th>
-                                            <th scope="col">Accion</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="listaAdministadores, info : ${listaAdministradoresDTO_superadmin}">
-                                            <td th:text="${info.index + 1}"></td>
-                                            <td th:text="${listaAdministadores.idAdministrador}"></td>
-                                            <td th:text="${listaAdministadores.nombre}"></td>
-                                            <td th:text="${listaAdministadores.apellidos}"></td>
-                                            <td th:switch="${listaAdministadores.estado}" class="centered">
-                                                <span th:case="1" class="badge bg-primary">Activo</span>
-                                                <span th:case="3" class="badge bg-info">Registrado</span>
-                                                <span th:case="4" class="badge bg-success">Agendado</span>
-                                                <span th:case="5" class="badge bg-warning">En consulta</span>
-                                            </td>
-                                            <td th:text="${listaAdministadores.correo}"></td>
-                                            <td th:text="${listaAdministadores.sedeNombre}"></td>
-                                            <td th:text="${listaAdministadores.clinica}"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary    "
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#staticBackdrop">Loguear
-                                                </button>
-                                            </td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                    <br>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body pb-0">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title">Tabla de Administrativos</h5>
-                                    <a class="btn btn-primary" th:href="@{/SuperAdminHomePage/CrearUsuario}"><i class="bi bi-person-fill-add "> Crear Administrativo</i></a>
-                                </div>
-                                <div class=" flex-column" >
-                                    <table class="table table-striped" id="AdministrativoTable" style="display: none; width: 100%;" >
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">DNI</th>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Apellidos</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Sede</th>
-                                            <th scope="col">Especialidad</th>
-                                            <th scope="col">Correo</th>
-                                            <th scope="col">Clinica</th>
-                                            <th scope="col">Accion</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="listaAdministrativo, info : ${listaAdministrativoDTO_superadmin}">
-                                            <td class="row-id" th:text="${info.index + 1}"></td>
-                                            <td th:text="${listaAdministrativo.idAdministrativo}"></td>
-                                            <td th:text="${listaAdministrativo.nombre}"></td>
-                                            <td th:text="${listaAdministrativo.apellidos}"></td>
-                                            <td th:switch="${listaAdministrativo.estado}" class="centered">
-                                                <span th:case="1" class="badge bg-primary">Activo</span>
-                                                <span th:case="3" class="badge bg-info">Registrado</span>
-                                                <span th:case="4" class="badge bg-success">Agendado</span>
-                                                <span th:case="5" class="badge bg-warning">En consulta</span>
-                                            </td>
-                                            <td th:text="${listaAdministrativo.sedeNombre}"></td>
-                                            <td th:text="${listaAdministrativo.especialidad}"><</td>
-                                            <!--                                     <td th:text="${listaAdminstrativo.administrativoId.getSedeId().nombre}"></td>-->
-                                            <!--                                        <td th:text="${listaAdminstrativo.getSedesAdministrativo().get(0).getSede().nombre}"></td>-->
-                                            <td th:text="${listaAdministrativo.correo}"></td>
-                                            <td th:text="${listaAdministrativo.clinica}"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#staticBackdrop">Loguear
-                                                </button>
-                                            </td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                    <br>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body pb-0">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title">Tabla de Pacientes</h5>
-                                </div>
-                                <div class=" flex-column" >
-                                    <table class="table table-striped" id="PacientesTable" style="display: none; width: 100%;">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">DNI</th>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Apellidos</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Seguro</th>
-                                            <th scope="col">Telefono</th>
-                                            <th scope="col">Correo</th>
-                                            <th scope="col">Dirección</th>
-                                            <th scope="col">Distrito</th>
-                                            <th scope="col">Se atiende en</th>
-                                            <th scope="col">Sede</th>
-                                            <th scope="col">Administrador a Cargo</th>
-                                            <th scope="col">Accion</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="paciente, info : ${listaPacienteDTO_superadmin}">
-                                            <td th:text="${info.index + 1}"></td>
-                                            <td th:text="${paciente.idPaciente}"></td>
-                                            <td th:text="${paciente.nombre}"></td>
-                                            <td th:text="${paciente.apellidos}"></td>
-                                            <td th:switch="${paciente.estado}" class="centered">
-                                                <span th:case="1" class="badge bg-primary">Activo</span>
-                                                <span th:case="3" class="badge bg-info">Registrado</span>
-                                                <span th:case="4" class="badge bg-success">Agendado</span>
-                                                <span th:case="5" class="badge bg-warning">En consulta</span>
-                                            </td>
-                                            <td th:text="${paciente.seguro}"></td>
-                                            <td th:text="${paciente.telefono}"></td>
-                                            <td th:text="${paciente.correo}"></td>
-                                            <td th:text="${paciente.direccion}"></td>
-                                            <td th:text="${paciente.distrito}"></td>
-                                            <td th:text="${paciente.clinica}"></td>
-                                            <td th:text="${paciente.sede}"></td>
-                                            <td th:text="${paciente.administrador_in_Charge}"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary    "
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#staticBackdrop">Loguear
-                                                </button>
-                                            </td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                    <br>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body pb-0">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title">Tabla de Doctores</h5>
-                                </div>
-                                <div class=" flex-column" >
-                                    <table class="table table-striped" id="DoctoresTable" style="display: none; width: 100%;">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">DNI</th>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Apellidos</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Correo</th>
-                                            <th scope="col">Horario</th>
-                                            <th scope="col">Clínica</th>
-                                            <th scope="col">Sede</th>
-                                            <th scope="col">Especialidad</th>
-                                            <th scope="col">Accion</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="listaDoctores, info : ${listaDoctorDTO_superadmin}">
-                                            <td th:text="${info.index + 1}"></td>
-                                            <td th:text="${listaDoctores.idDoctor}"></td>
-                                            <td th:text="${listaDoctores.nombre}"></td>
-                                            <td th:text="${listaDoctores.apellidos}"></td>
-                                            <td th:switch="${listaDoctores.estado}" class="centered">
-                                                <span th:case="1" class="badge bg-primary">Activo</span>
-                                                <span th:case="3" class="badge bg-info">Registrado</span>
-                                                <span th:case="4" class="badge bg-success">Agendado</span>
-                                                <span th:case="5" class="badge bg-warning">En consulta</span>
-                                            </td>
-                                            <td th:text="${listaDoctores.correo}"></td>
-                                            <td th:text="${listaDoctores.horario}"></td>
-                                            <td th:text="${listaDoctores.clinica}"></td>
-                                            <td th:text="${listaDoctores.sede}"></td>
-                                            <td th:text="${listaDoctores.especialidad}"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary    "
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#staticBackdrop">Loguear
-                                                </button>
-                                            </td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                    <br>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </section>
-
-        </main><!-- End #main -->
-
-        <!-- ======= Footer ======= -->
-        <footer id="footer" class="footer">
-            <div class="copyright">
-                &copy; Copyright <strong><span>Clínica InterPUCP</span></strong>. All Rights Reserved
-            </div>
-            <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-            </div>
-        </footer><!-- End Footer -->
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
-        <script>
-            var darkmode = localStorage.getItem('dark-mode') === 'true';
-            var headerColor = localStorage.getItem('headerColor') || "[[${headerColor}]]";
-/*
-            var sidebarColor = localStorage.getItem('sidebarColor') || "[[${sidebarColor}]]"; // Añadir esta línea
-*/
-            var backgroundColor = localStorage.getItem(('backgroundColor')|| "[[${backgroundColor}]]");
-            console.log(headerColor);
-/*
-            console.log(sidebarColor);
-*/
-            console.log(backgroundColor);
-
-            function updateBodyClasses() {
-                document.body.classList.toggle('dark-mode', darkmode);
-                document.body.classList.toggle('light-mode', !darkmode);
-            }
-
-            function updateHeaderColor() {
-                var color = darkmode ? '#363537' : headerColor;
-                document.getElementById('header').style.backgroundColor = color;
-            }
-            /*function updateSidebarColor() {
-                var color = darkmode ? '#363537' : sidebarColor;
-                document.getElementById('sidebar').style.backgroundColor = color; // Reemplazar 'sidebar' con el id de tu elemento de la barra lateral
-            }*/
+    /*function updateSidebarColor() {
+        var color = darkmode ? '#363537' : sidebarColor;
+        document.getElementById('sidebar').style.backgroundColor = color; // Reemplazar 'sidebar' con el id de tu elemento de la barra lateral
+    }*/
 
 
-            function setDarkMode(newValue) {
-                darkmode = newValue;
-                localStorage.setItem('dark-mode', newValue);
-                updateBodyClasses();
-                updateHeaderColor();
-/*
+    function setDarkMode(newValue) {
+        darkmode = newValue;
+        localStorage.setItem('dark-mode', newValue);
+        updateBodyClasses();
+        updateHeaderColor();
+        /*
+                        updateSidebarColor(); // Añadir esta línea
+        */
+
+    }
+
+    updateBodyClasses();
+    updateHeaderColor();
+    /*
                 updateSidebarColor(); // Añadir esta línea
-*/
+    */
 
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('dark-mode-button').checked = darkmode;
+        document.getElementById('dark-mode-button').addEventListener('change', function () {
+            setDarkMode(this.checked);
+        });
+
+        $(document).ready(function () {
+            localStorage.setItem('headerColor', headerColor);
+            /*
+                                localStorage.setItem('sidebarColor', sidebarColor); // Añadir esta línea
+            */
+        });
+    });
+    $(document).ready(function () {
+        var tablaAdministrador = $('#AdministradorTable');
+        $('#AdministradorTable').DataTable({
+            lengthMenu: [
+                [5, 10],
+                [5, 10],
+            ],
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "Ningún registro encontrado",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar:",
+                "loadingRecords": "Cargando...",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior",
+                }
+            },
+            "columnDefs": [
+                {"margin-bottom": "10px"}
+            ],
+            "initComplete": function () {
+                tablaAdministrador.show(); // Mostrar la tabla una vez que se haya completado la inicialización
+                tablaAdministrador.DataTable().columns.adjust().draw();
             }
+        });
+        var tablaPacientes = $('#PacientesTable');
+        $('#PacientesTable').DataTable({
+            lengthMenu: [
+                [5, 10],
+                [5, 10],
+            ],
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "Ningún registro encontrado",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar:",
+                "loadingRecords": "Cargando...",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior",
+                }
+            },
+            "columnDefs": [
+                {"margin-bottom": "10px"}
+            ],
+            "initComplete": function () {
+                tablaPacientes.show();
+                tablaPacientes.DataTable().columns.adjust().draw();
+            }
+        });
+        var tablaAdministrativo = $('#AdministrativoTable');
+        $('#AdministrativoTable').DataTable({
+            lengthMenu: [
+                [5, 10],
+                [5, 10],
+            ],
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "Ningún registro encontrado",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar:",
+                "loadingRecords": "Cargando...",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior",
+                }
+            },
+            "columnDefs": [
+                {"margin-bottom": "10px"}
+            ],
+            "initComplete": function () {
+                tablaAdministrativo.show();
+                tablaAdministrativo.DataTable().columns.adjust().draw();
+            }
+        });
+        var tablaDoctores = $('#DoctoresTable');
+        $('#DoctoresTable').DataTable({
+            lengthMenu: [
+                [5, 10],
+                [5, 10],
+            ],
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "Ningún registro encontrado",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar:",
+                "loadingRecords": "Cargando...",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior",
+                }
+            },
+            "columnDefs": [
+                {"margin-bottom": "10px"}
+            ],
+            "initComplete": function () {
+                tablaDoctores.show();
+                tablaDoctores.DataTable().columns.adjust().draw();
+            }
+        });
+    });
 
-            updateBodyClasses();
-            updateHeaderColor();
-/*
-            updateSidebarColor(); // Añadir esta línea
-*/
+</script>
+<script>
+    $(document).on('click', '.loguearDoctor-btn', function (e) {
+        var doctorName = $(this).data('doctor-name');
+        var doctorApellido = $(this).data('doctor-apellido')
+        if (!confirm("¿Estás seguro de que deseas loguearte como el Dr. " + doctorName + " " + doctorApellido + "?")) {
+            e.preventDefault();
+        }
+    });
+    $(document).on('click', '.loguearAdministrativo-btn', function (e) {
+        var administrativoName = $(this).data('administrativo-name');
+        var administrativoApellido = $(this).data('administrativo-apellido')
+            if (!confirm("¿Estás seguro de que deseas loguearte como el Administrativo " + administrativoName + " " + administrativoApellido + "?")) {
+            e.preventDefault();
+        }
+    });
+    $(document).on('click', '.loguearPaciente-btn', function (e) {
+        var pacienteName = $(this).data('paciente-name');
+        var pacienteApellido = $(this).data('paciente-apellido')
+        if (!confirm("¿Estás seguro de que deseas loguearte como el Paciente " + pacienteName + " " + pacienteApellido + "?")) {
+            e.preventDefault();
+        }
+    });
+    $(document).on('click', '.loguearAdministrador-btn', function (e) {
+        var administradorName = $(this).data('administrador-name');
+        var administradorApellido = $(this).data('administrador-apellido')
+        if (!confirm("¿Estás seguro de que deseas loguearte como el Administrador " + administradorName + " " + administradorApellido + "?")) {
+            e.preventDefault();
+        }
+    });
+    /*   $(document).on('click', '.loguear-btn', function () {
+           var doctorName = $(this).data('doctor-name');
+           var doctorId = $(this).data('doctor-id');
+           $('#modal-body-confirm').text('¿Estás seguro de loguearte como ' + doctorName + '?');
+           $('#doctor-id-input').val(doctorId);
+       });*/
 
-
-            document.addEventListener('DOMContentLoaded', (event) => {
-                document.getElementById('dark-mode-button').checked = darkmode;
-                document.getElementById('dark-mode-button').addEventListener('change', function () {
-                    setDarkMode(this.checked);
-                });
-
-                $(document).ready(function () {
-                    localStorage.setItem('headerColor', headerColor);
-/*
-                    localStorage.setItem('sidebarColor', sidebarColor); // Añadir esta línea
-*/
-                });
-            });
-            $(document).ready(function () {
-                var tablaAdministrador = $('#AdministradorTable');
-                $('#AdministradorTable').DataTable({
-                    lengthMenu: [
-                        [5,10],
-                        [5,10],
-                    ],
-                    "language": {
-                        "lengthMenu": "Mostrar _MENU_ registros por página",
-                        "zeroRecords": "Ningún registro encontrado",
-                        "info": "Página _PAGE_ de _PAGES_",
-                        "infoEmpty": "No hay registros disponibles",
-                        "infoFiltered": "(filtrado de _MAX_ registros)",
-                        "search": "Buscar:",
-                        "loadingRecords": "Cargando...",
-                        "paginate":{
-                            "first": "Primero",
-                            "last": "Último",
-                            "next": "Siguiente",
-                            "previous": "Anterior",
-                        }
-                    },
-                    "columnDefs": [
-                        {"margin-bottom": "10px"}
-                    ],
-                    "initComplete": function () {
-                        tablaAdministrador.show(); // Mostrar la tabla una vez que se haya completado la inicialización
-                        tablaAdministrador.DataTable().columns.adjust().draw();
-                    }
-                });
-                var tablaPacientes = $('#PacientesTable');
-                $('#PacientesTable').DataTable({
-                    lengthMenu: [
-                        [5,10],
-                        [5,10],
-                    ],
-                    "language": {
-                        "lengthMenu": "Mostrar _MENU_ registros por página",
-                        "zeroRecords": "Ningún registro encontrado",
-                        "info": "Página _PAGE_ de _PAGES_",
-                        "infoEmpty": "No hay registros disponibles",
-                        "infoFiltered": "(filtrado de _MAX_ registros)",
-                        "search": "Buscar:",
-                        "loadingRecords": "Cargando...",
-                        "paginate":{
-                            "first": "Primero",
-                            "last": "Último",
-                            "next": "Siguiente",
-                            "previous": "Anterior",
-                        }
-                    },
-                    "columnDefs": [
-                        {"margin-bottom": "10px"}
-                    ],
-                    "initComplete": function () {
-                        tablaPacientes.show();
-                        tablaPacientes.DataTable().columns.adjust().draw();
-                    }
-                });
-                var tablaAdministrativo = $('#AdministrativoTable');
-                $('#AdministrativoTable').DataTable({
-                    lengthMenu: [
-                        [5,10],
-                        [5,10],
-                    ],
-                    "language": {
-                        "lengthMenu": "Mostrar _MENU_ registros por página",
-                        "zeroRecords": "Ningún registro encontrado",
-                        "info": "Página _PAGE_ de _PAGES_",
-                        "infoEmpty": "No hay registros disponibles",
-                        "infoFiltered": "(filtrado de _MAX_ registros)",
-                        "search": "Buscar:",
-                        "loadingRecords": "Cargando...",
-                        "paginate":{
-                            "first": "Primero",
-                            "last": "Último",
-                            "next": "Siguiente",
-                            "previous": "Anterior",
-                        }
-                    },
-                    "columnDefs": [
-                        {"margin-bottom": "10px"}
-                    ],
-                    "initComplete": function () {
-                        tablaAdministrativo.show();
-                        tablaAdministrativo.DataTable().columns.adjust().draw();
-                    }
-                });
-                var tablaDoctores = $('#DoctoresTable');
-                $('#DoctoresTable').DataTable({
-                    lengthMenu: [
-                        [5,10],
-                        [5,10],
-                    ],
-                    "language": {
-                        "lengthMenu": "Mostrar _MENU_ registros por página",
-                        "zeroRecords": "Ningún registro encontrado",
-                        "info": "Página _PAGE_ de _PAGES_",
-                        "infoEmpty": "No hay registros disponibles",
-                        "infoFiltered": "(filtrado de _MAX_ registros)",
-                        "search": "Buscar:",
-                        "loadingRecords": "Cargando...",
-                        "paginate":{
-                            "first": "Primero",
-                            "last": "Último",
-                            "next": "Siguiente",
-                            "previous": "Anterior",
-                        }
-                    },
-                    "columnDefs": [
-                        {"margin-bottom": "10px"}
-                    ],
-                    "initComplete": function () {
-                        tablaDoctores.show();
-                        tablaDoctores.DataTable().columns.adjust().draw();
-                    }
-                });
-            });
-
-        </script>
-        <!-- Vendor JS Files -->
-        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
-        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-        <!-- Template Main JS File -->
-        <!-- DataTables activate -->
+    /*   $('#login-confirm-btn').click(function () {
+           $('#login-form').submit();
+       });*/
+</script>
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<!-- Template Main JS File -->
+<!-- DataTables activate -->
 
 
-    </body>
+</body>
 
 
 </html>

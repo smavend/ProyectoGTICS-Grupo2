@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pagos</title>
 
+        <!-- DATATABLES -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 
         <!-- BOOTSTRAP -->
@@ -33,290 +34,97 @@
         <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
         <!-- End Sidebar-->
 
-        <main id="main" class="main">
+        <main id="main" class="main site-content">
 
             <h1 class="encabezado">Historial de pagos</h1>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
             <section class="seccionPrincipal">
 
-                <a class="btn botonTipo botonTodos" th:classappend="${filtro==0?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=0)}">Todos</a>
-                <a class="btn botonTipo botonPendientes" th:classappend="${filtro==1?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=1)}">Pendientes</a>
-                <a class="btn botonTipo botonCancelados" th:classappend="${filtro==2?'botonTipoSeleccionado':''}" th:href="@{/Paciente/filtrarPagos(filtro=2)}">Cancelados</a>
+                <a id="boton_todos" class="btn botonTipo botonTipoSeleccionado" onclick="buscarPagosTodos()">Todos</a>
+                <a id="boton_pendientes" class="btn botonTipo" onclick="buscarPagosPendientes()">Pendientes</a>
+                <a id="boton_cancelados" class="btn botonTipo" onclick="buscarPagosCancelados()">Cancelados</a>
 
-                <table class="table" id="tablax" th:if="${filtro}==1">
+                <table class="table pt-2 pb-4" id="tablax">
                     <thead>
                         <tr>
                             <th>Concepto</th>
-                            <th>Fecha pago</th>
+                            <th>Doctor</th>
+                            <th>Fecha de cita</th>
+                            <th>Fecha de pago</th>
                             <th>Pago</th>
                             <th>Tipo de pago</th>
                             <th>Estado</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="pago: ${pagoList}" th:if="${pago.estadoPago}==0">
+                        <tr th:each="pago: ${pagoList}" class="fila_cita"
+                            th:classappend="${pago.estadoPago == 0?'cita_pendiente':'cita_cancelada'}">
                             <td th:text="${pago.cita.doctor.especialidad.nombre}"></td>
-                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
+                            <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                            <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
+                            <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'-'}">
+                                Fecha de pago
+                            </td>
                             <td>S/ 250.00</td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
-                            <td th:text="'Pendiente'"></td>
-                            <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Efectivo'" style="font-weight: 700">Cancelar en caja</td>
-                            <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Tarjeta'">
-                                <a class="botonPagar botonPagarModal" data-bs-toggle="modal"
-                                   data-bs-target="#modal-pago">Pagar</a>
+                            <!-- columna estado -->
+                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
+                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
+                                <a th:href="@{/Paciente/pagar(idPago=${pago.id})}"
+                                   class="botonPagar botonPagarModal">Pagar</a>
                             </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header row-cols-auto" style="background-color: gainsboro">
-                                            <p>
-                                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
-                                                tarjeta</h5>
-                                            <img th:src="@{/assets/img/cards.png}" style="height: 50px"
-                                                 class="col-lg-4">
-                                            <button type="button" class="btn-close col-lg-2 fw-bold"
-                                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                            </p>
-
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=1)}" th:object="${tarjetaPago}">
-                                                <input type="hidden" th:value="${pago.id}" name="idPago">
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Nombre del titular de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-person-fill"></i></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" th:field="*{titular}" th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
-                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}" th:errors="*{titular}"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Número de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-credit-card-fill"></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}" th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
-                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}" th:errors="*{numeroTarjeta}"></div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Fecha de expiración</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-calendar-event-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control" placeholder="MM-yyyy" name="fechaStr" th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Código de seguridad</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-lock-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control" th:field="*{codigo}" th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
-                                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="text-center">
-                                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-                <table class="table" id="tablax" th:if="${filtro}==2">
-                    <thead>
-                        <tr>
-                            <th>Concepto</th>
-                            <th>Fecha pago</th>
-                            <th>Pago</th>
-                            <th>Tipo de pago</th>
-                            <th>Estado</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="pago: ${pagoList}" th:if="${pago.estadoPago}==1">
-                            <td th:text="${pago.cita.doctor.especialidad.nombre}"></td>
-                            <td th:text="${pago.fechaCancelada}">-</td>
-                            <td>S/ 250.00</td>
-                            <td th:text="${pago.tipoPago}">Visa ***1234</td>
-                            <td th:text="'Cancelado'"></td>
-                            <td th:if="${pago.estadoPago == 1}">
-                                <a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver
-                                    recibo</a>
-                            </td>
+                            <td th:if="${pago.estadoPago == 1}">Cancelado</td>
                         </tr>
                     </tbody>
                 </table>
 
-
-                <table class="table" id="tablax" th:if="${filtro}==0 or (${filtro}!=1 and ${filtro}!=2)">
-                    <thead>
-                        <tr>
-                            <th>Concepto</th>
-                            <th>Fecha pago</th>
-                            <th>Pago</th>
-                            <th>Tipo de pago</th>
-                            <th>Estado</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="pago: ${pagoList}">
-                            <td th:text="${pago.cita.doctor.especialidad.nombre}">Facere ullam ratione qui</td>
-                            <td th:if="${pago.estadoPago == 0}">Por cancelar</td>
-                            <td th:if="${pago.estadoPago == 1}" th:text="${pago.fechaCancelada}">-</td>
-                            <td>S/ 250.00</td>
-                            <td th:text="${pago.tipoPago}">Visa ***1234</td>
-                            <td th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}"></td>
-                            <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Efectivo'"
-                                style="font-weight: 700">
-                                Cancelar en caja
-                            </td>
-                            <td th:if="${pago.estadoPago == 0} and ${pago.tipoPago}=='Tarjeta'">
-                                <a class="botonPagar botonPagarModal" data-bs-toggle="modal"
-                                   data-bs-target="#modal-pago">Pagar</a>
-                            </td>
-                            <td th:if="${pago.estadoPago == 1}">
-                                <a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver
-                                    recibo</a>
-                            </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header row-cols-auto" style="background-color: gainsboro">
-                                            <p>
-                                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
-                                                tarjeta</h5>
-                                            <img th:src="@{/assets/img/cards.png}" style="height: 50px"
-                                                 class="col-lg-4">
-                                            <button type="button" class="btn-close col-lg-2 fw-bold"
-                                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                            </p>
-
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=0)}" th:object="${tarjetaPago}">
-                                                <input type="hidden" th:value="${pago.id}" name="idPago">
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Nombre del titular de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-person-fill"></i></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" th:field="*{titular}" th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
-                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}" th:errors="*{titular}"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 w-75">
-                                                    <label class="form-label">Número de la tarjeta</label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-credit-card-fill"></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}" th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
-                                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}" th:errors="*{numeroTarjeta}"></div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Fecha de expiración</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-calendar-event-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control" placeholder="MM-yyyy" name="fechaStr" th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Código de seguridad</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-lock-fill"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control" th:field="*{codigo}" th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
-                                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="text-center">
-                                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </tr>
-
-                    </tbody>
-                </table>
             </section>
 
-            <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            <!-- End footer -->
-
             <!-- Modal -->
-            <div class="modal fade" id="modal-pago" tabindex="-1" aria-labelledby="modal-pago-label" aria-hidden="true">
+            <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1"
+                 aria-labelledby="modal-pago-label"
+                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header row-cols-auto" style="background-color: gainsboro">
                             <p>
-                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con tarjeta</h5>
-                            <img th:src="@{/assets/img/cards.png}" style="height: 50px" class="col-lg-4">
-                            <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal"
-                                    aria-label="Cerrar"></button>
+                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
+                                tarjeta</h5>
+                            <img th:src="@{/assets/img/cards.png}" style="height: 50px"
+                                 class="col-lg-4">
+                            <button type="button" class="btn-close col-lg-2 fw-bold"
+                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </p>
 
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=${filtro})}"
+                                  th:object="${tarjetaPago}">
+                                <input type="hidden" th:value="${idPagar}" name="idPago">
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-person-fill"></i></i></span>
+                                                            <span class="input-group-text"><i
+                                                                    class="bi bi-person-fill"></i></i></span>
                                         </div>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" th:field="*{titular}"
+                                               th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}"
+                                             th:errors="*{titular}"></div>
                                     </div>
                                 </div>
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Número de la tarjeta</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
+                                                            <span class="input-group-text"><i
+                                                                    class="bi bi-credit-card-fill"></i></span>
                                         </div>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}"
+                                               th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}"
+                                             th:errors="*{numeroTarjeta}"></div>
                                     </div>
 
                                 </div>
@@ -325,23 +133,31 @@
                                         <label class="form-label">Fecha de expiración</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
+                                                                <span class="input-group-text"><i
+                                                                        class="bi bi-calendar-event-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" placeholder="MM-yyyy"
+                                                   name="fechaStr"
+                                                   th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Código de seguridad</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                                                <span class="input-group-text"><i
+                                                                        class="bi bi-lock-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" th:field="*{codigo}"
+                                                   th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}"
+                                                 th:errors="*{codigo}"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary w-25" style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
+                                    <button type="submit" class="btn btn-primary w-25"
+                                            style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
                                 </div>
                             </form>
                         </div>
@@ -349,8 +165,10 @@
                 </div>
             </div>
 
-        </main><!-- End #main -->
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <!-- End footer -->
 
+        </main><!-- End #main -->
 
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -360,10 +178,6 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-DRC0ZmUBHbCwVPmKj7V/btg9QWdx7VqfS2yz/7+T34G8WssZ/wiA4GL4g25O4Nc6"
-                crossorigin="anonymous"></script>
-
         <!-- JQUERY -->
         <script src="https://code.jquery.com/jquery-3.4.1.js"
                 integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
@@ -371,9 +185,11 @@
         <!-- DATATABLES -->
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
         </script>
-        <!-- BOOTSTRAP -->
+        <!-- BOOTSTRAP DATATABLES -->
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
         </script>
+
+        <!-- DATATABLES SCRIPT -->
         <script>
             $(document).ready(function () {
                 $('#tablax').DataTable({
@@ -382,25 +198,40 @@
                         search: "Buscar&nbsp;:",
                         lengthMenu: " ",
                         info: "Página _PAGE_ de _PAGES_",
-                        infoEmpty: "No existen datos.",
+                        infoEmpty: "No hay pagos registrados",
                         infoFiltered: "(filtrado de _MAX_ elementos en total)",
                         infoPostFix: "",
                         loadingRecords: "Cargando...",
-                        zeroRecords: "No se encontraron datos con tu busqueda",
+                        zeroRecords: "No hay pagos registrados",
                         emptyTable: "No hay datos disponibles en la tabla.",
                         paginate: {
                             first: "Primero",
                             previous: "Anterior",
                             next: "Siguiente",
-                            last: "Ultimo"
+                            last: "Último"
                         },
                         aria: {
                             sortAscending: ": active para ordenar la columna en orden ascendente",
                             sortDescending: ": active para ordenar la columna en orden descendente"
                         }
                     },
-                    scrollY: 400,
-                    lengthMenu: [ [5, -1], [5, "All"] ],
+                    pageLength: 6,
+                    bInfo: false,
+                    columns: [
+                        null,
+                        null,
+                        null,
+                        null,
+                        {orderable: false},
+                        {orderable: false},
+                        {orderable: false}
+                    ],
+                    columnDefs: [
+                        {
+                            searchable: false,
+                            targets: [4, 5, 6]
+                        }
+                    ]
                 });
             });
         </script>
@@ -408,9 +239,56 @@
         <script th:inline="javascript">
             const activarModal = /*[[${activarModal}]]*/ false;
             if (activarModal) {
-                $(document).ready(function() {
+                $(document).ready(function () {
                     $('#modal-pago').modal('show');
                 });
+            }
+        </script>
+
+        <!-- Script para botones filtro -->
+        <script>
+            const botonTodos = $("#boton_todos");
+            const botonPendientes = $("#boton_pendientes");
+            const botonCancelados = $("#boton_cancelados");
+            const citas = $(".fila_cita");
+            function buscarPagosPendientes() {
+                botonPendientes.addClass("botonTipoSeleccionado");
+                botonTodos.removeClass("botonTipoSeleccionado");
+                botonCancelados.removeClass("botonTipoSeleccionado");
+
+                citas.each(function (){
+                    if ($(this).hasClass("cita_pendiente")){
+                        $(this).show();
+                    }
+                    else{
+                        $(this).hide();
+                    }
+                })
+            }
+
+            function buscarPagosCancelados() {
+                botonCancelados.addClass("botonTipoSeleccionado");
+                botonTodos.removeClass("botonTipoSeleccionado");
+                botonPendientes.removeClass("botonTipoSeleccionado");
+
+                citas.each(function (){
+                    if ($(this).hasClass("cita_cancelada")){
+                        $(this).show();
+                    }
+                    else{
+                        $(this).hide();
+                    }
+                })
+            }
+
+            function buscarPagosTodos() {
+                botonTodos.addClass("botonTipoSeleccionado");
+                botonPendientes.removeClass("botonTipoSeleccionado");
+                botonCancelados.removeClass("botonTipoSeleccionado");
+
+                citas.each(function (){
+                    $(this).show();
+                })
             }
         </script>
     </body>

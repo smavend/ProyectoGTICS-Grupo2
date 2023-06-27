@@ -2,8 +2,6 @@ package com.example.proyectogticsgrupo2.repository;
 
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.Cita;
-import com.example.proyectogticsgrupo2.entity.Doctor;
-import com.example.proyectogticsgrupo2.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -32,16 +30,35 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     List<ListaBuscadorDoctor> listarPorDoctorListaPacientes(String id);
 
 
-    @Query(nativeQuery = true, value = "select c.* from cita c \n" +
-            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
-            "where NOW() <= c.inicio and p.id_paciente = ?1")
+    @Query(nativeQuery = true, value = "select c.* from cita c " +
+            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
+            "where NOW() <= c.inicio and p.id_paciente = ?1 " +
+            "order by c.inicio DESC")
     List<Cita> buscarProximasCitas(String idPaciente);
+
+
+    @Query(nativeQuery = true, value = "select x.torre, x.piso, x.precio_cita as precio  from cita c " +
+            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
+            "inner join doctor d on (d.id_doctor = c.doctor_id_doctor) " +
+            "inner join sede_x_especialidad_x_administrativo x on (c.sede_id_sede = x.sede_id_sede) " +
+            "where NOW() <= c.inicio and x.especialidad_id_especialidad = d.especialidad_id_especialidad and p.id_paciente = ?1 " +
+            "order by c.inicio DESC")
+    List<TorreYPisoDTO> buscarTorresPisosPrecioProximasCitas(String idPaciente);
 
     @Query(nativeQuery = true, value = "select c.* from cita c \n" +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) \n" +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
-            "where p.id_paciente = ?1 and NOW() >= c.inicio")
+            "where p.id_paciente = ?1 and NOW() >= c.fin " +
+            "order by c.inicio DESC")
     List<Cita> buscarHistorialDeCitas(String idPaciente);
+
+    @Query(nativeQuery = true, value = "select x.torre, x.piso, x.precio_cita as precio  from cita c " +
+            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
+            "inner join doctor d on (d.id_doctor = c.doctor_id_doctor) " +
+            "inner join sede_x_especialidad_x_administrativo x on (c.sede_id_sede = x.sede_id_sede) " +
+            "where p.id_paciente = ?1 and NOW() >= c.fin and x.especialidad_id_especialidad = d.especialidad_id_especialidad " +
+            "order by c.inicio DESC")
+    List<TorreYPisoDTO> buscarTorresPisosPrecioHistorialCitas(String idPaciente);
 
     @Transactional
     @Modifying

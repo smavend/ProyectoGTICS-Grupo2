@@ -15,4 +15,6 @@ public class DoctorDTO_superadmin {
     private String clinica;
     private String sede;
     private String especialidad;
+    private boolean showLoguearButton;  // Nueva propiedad
+
 }

@@ -26,9 +26,15 @@
         <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
-        <main style="display: flex; align-items: center; justify-content: center;">
+        <main style="display: flex; align-items: center; justify-content: center;" class="main site-content">
             <img style="border-radius: 20px; margin-top: 100px; width: 80%;"
                  src="https://assets.mspimages.in/wp-content/uploads/2021/06/Gogole-Meet.jpg" alt="Meet">
+
+            <!-- ====== Footer ====== -->
+            <footer class="site-footer">
+                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            </footer>
+            <!-- End footer -->
         </main><!-- End #main -->
 
         <!-- Bootstrap CDN JS -->
