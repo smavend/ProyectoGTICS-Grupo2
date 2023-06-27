@@ -3,10 +3,7 @@ package com.example.proyectogticsgrupo2.web_service.DniService;
 import com.example.proyectogticsgrupo2.entity.Paciente;
 import com.example.proyectogticsgrupo2.repository.PacienteRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +17,7 @@ public class ValidacionDniController {
         this.pacienteRepository = pacienteRepository;
     }
 
-    @PostMapping("/validarDni/{dni}")
+    @GetMapping("/validarDni/{dni}")
     public HashMap<String, Object> validacion(@PathVariable("dni") String dni){
         List<Paciente> pacientes = pacienteRepository.findAll();
         boolean existDni = false;
