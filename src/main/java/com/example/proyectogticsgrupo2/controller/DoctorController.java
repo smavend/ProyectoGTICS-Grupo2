@@ -5,7 +5,6 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,7 +47,6 @@ public class DoctorController {
     private final CuestionarioRepository cuestionarioRepository;
 
     final SecurityConfig securityConfig;
-
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
@@ -428,6 +426,52 @@ public class DoctorController {
             return "redirect:/doctor/dashboard";
         }
     }
+    @PostMapping("/guardarExamen")
+    public String guardarExamen(HttpSession session, Authentication authentication, Model model, @RequestParam("archivo") MultipartFile file, Cita cita, @RequestParam("descripcion") String descripcion, RedirectAttributes attr) {
+
+        String fileName = file.getOriginalFilename();
+        if (fileName.contains("..")) {
+            model.addAttribute("msg", "No se permiten '..' en el archivo");
+            return "doctor/DoctorReporteSesion";
+        }
+
+        try {
+            if (file.isEmpty()) {
+                Optional<Cita> optionalCita = citaRepository.findById(cita.getId_cita());
+                if (optionalCita.isPresent()) {
+                    Cita c = optionalCita.get();
+                    cita.setExamendoc(c.getExamendoc());
+                    cita.setExamenname(c.getExamenname());
+                    cita.setExamencontenttype(c.getExamencontenttype());
+                    cita.setDiagnostico(c.getDiagnostico());
+                }
+                model.addAttribute("msg", "Debe subir un archivo");
+                return "doctor/DoctorReporteSesion";
+            } else {
+                cita.setExamendoc(file.getBytes());
+                cita.setExamenname(fileName);
+                cita.setExamencontenttype(file.getContentType());
+                cita.setDiagnostico(descripcion);
+            }
+
+            try {
+                citaRepository.save(cita);
+            } catch (Exception e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("msgError", "No se puede subir el archivo");
+                return "doctor/DoctorReporteSesion";
+            }
+
+            attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
+            return "doctor/DoctorDashboard";
+        } catch (IOException e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
+            return "doctor/DoctorReporteSesion";
+        }
+    }
+
+
     @GetMapping("/historialClinico")
     public String hClinico(Model model, @RequestParam("id") String id, HttpSession session, Authentication authentication) {
         Doctor doctor_session= doctorRepository.findByCorreo(authentication.getName());
