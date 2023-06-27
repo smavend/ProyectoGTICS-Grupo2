@@ -86,13 +86,13 @@
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Nombres<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}" disabled="disabled" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                              th:errors="*{nombre}" ></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Apellidos<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="apellidos" th:field="*{apellidos}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                        <input type="text" class="form-control" id="apellidos" th:field="*{apellidos}" disabled="disabled" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                              th:errors="*{apellidos}"></div>
                       </div>
@@ -256,6 +256,7 @@
           console.log("alert");
           alert("Debe ingresar un DNI");
         }else {
+          if (dni )
           $.ajax({
             method: "GET",
             dataType: "json",
@@ -271,6 +272,8 @@
               $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
             } else {
               $("#errorDni").val("El DNI ingresado no es válido");
+              $("#nombre").val("");
+              $("#apellidos").val("");
             }
           })
         }
