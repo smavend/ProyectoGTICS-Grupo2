@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -120,7 +121,7 @@ public class PacienteController {
         }
     }
 
-    /* RESERVAR CITA */
+    /* SECCIÓN RESERVAR CITA */
     @GetMapping("/reservar")
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, Model model, HttpSession session, Authentication authentication) {
 
@@ -142,7 +143,8 @@ public class PacienteController {
     }
 
     @PostMapping("/reservar1")
-    public String reservar1Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult, Model model, HttpSession session, Authentication authentication) {
+    public String reservar1Post(@Validated(CitaTemporal.validacion1.class) @ModelAttribute("citaTemporal") CitaTemporal citaTemporal, BindingResult bindingResult,
+                                Model model, HttpSession session, Authentication authentication) {
 
         List<Doctor> doctoresDisponibles;
 /*
@@ -157,8 +159,8 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
-        if (bindingResult.hasFieldErrors("modalidad") || bindingResult.hasFieldErrors("idSede") || bindingResult.hasFieldErrors("idEspecialidad")) {
-
+        if (bindingResult.hasErrors()) {
+            System.out.println("Error validacion: "+bindingResult.getAllErrors());
             model.addAttribute("sedeList", sedeRepository.findAll());
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "paciente/reservar1";
@@ -191,7 +193,7 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
+            System.out.println("Error validacion: "+bindingResult.getAllErrors());
             List<Doctor> doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
             model.addAttribute("doctoresDisponibles", doctoresDisponibles);
 
@@ -775,6 +777,7 @@ public class PacienteController {
 
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
+        model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
 
         List<Pago> pagoList = pagoRepository.buscarPorPaciente(paciente.getIdPaciente());
 
@@ -801,7 +804,7 @@ public class PacienteController {
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("idPagar", idPago);
         model.addAttribute("pagoList", pagoList);
-        model.addAttribute("activarModal", true);
+        //model.addAttribute("activarModal", true);
         return "paciente/pagos";
     }
 
@@ -827,6 +830,7 @@ public class PacienteController {
             model.addAttribute("pagoList", pagoList);
             model.addAttribute("idPagar", idPago);
             model.addAttribute("activarModal", true);
+            model.addAttribute("pagoFilt",1);
             return "paciente/pagos";
         } else {
 /*
