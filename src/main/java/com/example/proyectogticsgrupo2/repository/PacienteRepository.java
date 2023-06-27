@@ -43,4 +43,6 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
     Paciente findByCorreo(String correo);
 
 
+    @Query(nativeQuery = true, value = "select * from paciente where estado = ?1")
+    List<Paciente> buscarPorEstado(int i);
 }
