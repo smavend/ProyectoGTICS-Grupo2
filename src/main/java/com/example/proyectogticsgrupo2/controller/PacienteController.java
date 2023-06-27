@@ -537,6 +537,7 @@ public class PacienteController {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
+        model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
 
         List<Pago> pagoList = pagoRepository.buscarPorPaciente(paciente.getIdPaciente());
         model.addAttribute("pagoList", pagoList);
