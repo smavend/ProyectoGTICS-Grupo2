@@ -19,6 +19,7 @@
         <!-- CSS -->
         <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
         <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/stylePaciente_Datepicker.css}">
     </head>
     <body>
 
@@ -32,69 +33,67 @@
 
         <main id="main" class="main site-content">
             <h1 class="encabezado">Reservar Cita</h1>
-            <section class="seccionPrincipal">
 
-                <div class="row" style="margin-top: 40px;margin-left: 20px">
-                    <div class="col-6">
-                        <p class="mb-2"><span class="fw-bold">Paciente:</span><span style="margin-left: 13px"
-                                                                                    th:text="${session.paciente.nombre}+' '+${session.paciente.apellidos}">Juanchito Palacios Castro</span>
-                        </p>
-                        <p class="mb-2"><span class="fw-bold">Fecha de nacimiento:</span><span
-                                style="margin-left: 20px"
-                                th:text="${#temporals.format(session.paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span>
-                        </p>
-                        <p class="mb-2"><span class="fw-bold">Correo:</span><span style="margin-left: 13px"
-                                                                                  th:text="${session.paciente.correo}">juanpc98@gmail.com</span>
-                        </p>
+            <div class="bodyReservar">
+                <div class="cardReservar py-4">
 
-                    </div>
-                    <div class="col-6">
-                        <p class="mb-2"><span class="fw-bold">Dirección:</span><span style="margin-left: 13px"
-                                                                                     th:text="${session.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
-                        </p>
-                        <p class="mb-2"><span class="fw-bold">Teléfono:</span><span style="margin-left: 13px"
-                                                                                    th:text="${session.paciente.telefono}">934-250-488</span>
-                        </p>
-                        <p class="mb-2"><span class="fw-bold">Seguro:</span><span style="margin-left: 13px"
-                                                                                  th:text="${session.paciente.seguro.nombre}">Seguro</span>
-                        </p>
-                    </div>
-                </div>
+                    <form method="post" th:action="@{/Paciente/reservar2}" th:object="${citaTemporal}">
 
-                <form method="post" th:action="@{/Paciente/reservar2}" th:object="${citaTemporal}">
+                        <input type="hidden" th:field="*{idPaciente}">
+                        <input type="hidden" th:field="*{modalidad}">
+                        <input type="hidden" th:field="*{idSede}">
+                        <input type="hidden" th:field="*{idEspecialidad}">
 
-                    <input type="hidden" name="idPaciente" th:field="*{idPaciente}">
-                    <input type="hidden" name="modalidad" th:field="*{modalidad}">
-                    <input type="hidden" name="idSede" th:field="*{idSede}">
-                    <input type="hidden" name="idEspecialidad" th:field="*{idEspecialidad}">
-
-                    <div class="row" style="margin-top: 20px;margin-left: 20px">
-                        <div class="col-6">
-                            <p><span class="fw-bold">Doctores disponibles:</span><span class="fw-bold"
-                                                                                       style="color: red">*</span></p>
-                            <select style="border-radius: 8px; padding-left: 18px; font-size: 15px; margin-top: 5px; padding-right: 25px"
-                                    th:field="*{idDoctor}" th:classappend="${#fields.hasErrors('idDoctor')? 'is-invalid':''}">
-                                <option value="">--Seleccione un doctor--</option>
-                                <option th:each="doctor: ${doctoresDisponibles}" th:value="${doctor.id_doctor}"
-                                        th:text="${doctor.nombre+' '+doctor.apellidos}"></option>
-                            </select>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('idDoctor')}" th:errors="*{idDoctor}"></div>
-
-
-                            <p><span class="fw-bold">Fecha de la cita:</span><span class="fw-bold"
-                                                                                   style="color: red">*</span></p>
-                            <input type="date" th:field="*{fecha}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
+                        <div class="row justify-content-center">
+                            <div class="col-sm-10 col-md-8 col-lg-6">
+                                <div class="campo">
+                                    <div class="fw-bold mb-1">
+                                        Doctores disponibles
+                                    </div>
+                                    <select class="form-select" id="select_doctor" th:field="*{idDoctor}"
+                                            th:classappend="${#fields.hasErrors('idDoctor')? 'is-invalid':''}">
+                                        <option value="">-- Seleccione un doctor --</option>
+                                        <option th:each="doctor: ${doctoresDisponibles}" th:value="${doctor.id_doctor}"
+                                                th:text="${doctor.nombre+' '+doctor.apellidos}">Gustavo Pardito
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('idDoctor')}"
+                                         th:errors="*{idDoctor}"></div>
+                                </div>
+                                <div class="campo">
+                                    <div class="fw-bold mb-1">
+                                        Fecha de cita
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="input_fecha" th:field="*{fecha}"
+                                               th:classappend="${#fields.hasErrors('fecha')?'is-invalid':''}">
+                                        <span class="input-group-text" id="basic-addon2"><i class="bi bi-calendar3"></i></span>
+                                    </div>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha')}"
+                                         th:errors="*{fecha}"></div>
+                                </div>
+                                <div class="campo">
+                                    <div class="fw-bold mb-1">
+                                        Horarios disponibles
+                                    </div>
+                                    <select class="form-select" id="select_horario" th:field="*{inicio}"
+                                            th:classappend="${#fields.hasErrors('inicio')?'is-invalid':''}">
+                                        <option value="">-- Seleccione un horario --</option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('inicio')}"
+                                         th:errors="*{inicio}"></div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="d-flex justify-content-center py-3">
+                            <a th:href="@{/Paciente}" class="botonCancelar">Cancelar</a>
+                            <button type="submit" class="botonAceptar ms-3">Siguiente</button>
+                        </div>
 
-                    <div class="d-flex justify-content-end">
-                        <a th:href="@{/Paciente}" class="botonCancelar">Cancelar</a>
-                        <button type="submit" class="botonAceptar ms-3 ">Siguiente</button>
-                    </div>
+                    </form>
 
-                </form>
-            </section>
+                </div>
+            </div>
 
         </main>
 
@@ -105,5 +104,16 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.0.js"
+                integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+        <!-- JQuery UI -->
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"
+                integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+
+        <!-- Funciones y Ajax -->
+        <script th:src="@{/assets/js/paciente_ReservarCita.js}"></script>
     </body>
 </html>

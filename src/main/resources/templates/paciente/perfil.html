@@ -191,11 +191,9 @@
                                             <td th:text="${cita.doctor.especialidad.nombre}">Psicología</td>
                                             <td th:text="${cita.doctor.getNombreYApellido()}">María Godoy</td>
                                             <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">04/01/21</td>
-                                            <td th:text="${#temporals.format(cita.inicio, 'HH:mm')}+' Hrs.'">18:30
-                                                Hrs.
-                                            </td>
+                                            <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">13:00 Hrs.</td>
                                             <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Virtual</td>
-                                            <td>
+                                            <td class="text-center">
                                                 <a href="#" class="botonAceptar" data-bs-toggle="modal"
                                                    th:attr="data-bs-target='#citaModal'+${cita.id_cita}">Ver más</a>
                                             </td>
@@ -251,7 +249,11 @@
                                                           th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
                                     </p>
                                     <p>Torre:<span class="informacionModalDato"
-                                                   th:text="${torresYPisos[i.index].getTorre()}">B (Falta)</span></p>
+                                                   th:text="${torresPisosPrecio[i.index].getTorre()}">B (Falta)</span>
+                                    </p>
+                                    <p>Costo:<span class="informacionModalDato"
+                                                   th:text="'S/. '+${#numbers.formatDecimal(torresPisosPrecio[i.index].getPrecio()*paciente.seguro.getCoaseguro(), 1, 2)}">100</span>
+                                    </p>
                                 </div>
                                 <div class="col-6">
                                     <p>Doctor:<span class="informacionModalDato"
@@ -261,7 +263,7 @@
                                                   th:text="${cita.sede.nombre}+' '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
                                     </p>
                                     <p>Piso:<span class="informacionModalDato"
-                                                  th:text="${torresYPisos[i.index].getPiso()}">2 (Falta)</span></p>
+                                                  th:text="${torresPisosPrecio[i.index].getPiso()}">2 (Falta)</span></p>
                                 </div>
                             </div>
                             <div class="row informacionModal">

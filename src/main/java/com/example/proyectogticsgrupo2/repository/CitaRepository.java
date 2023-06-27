@@ -37,13 +37,13 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     List<Cita> buscarProximasCitas(String idPaciente);
 
 
-    @Query(nativeQuery = true, value = "select x.torre, x.piso  from cita c " +
+    @Query(nativeQuery = true, value = "select x.torre, x.piso, x.precio_cita as precio  from cita c " +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
             "inner join doctor d on (d.id_doctor = c.doctor_id_doctor) " +
             "inner join sede_x_especialidad_x_administrativo x on (c.sede_id_sede = x.sede_id_sede) " +
             "where NOW() <= c.inicio and x.especialidad_id_especialidad = d.especialidad_id_especialidad and p.id_paciente = ?1 " +
             "order by c.inicio DESC")
-    List<TorreYPisoDTO> buscarTorresYPisosProximasCitas(String idPaciente);
+    List<TorreYPisoDTO> buscarTorresPisosPrecioProximasCitas(String idPaciente);
 
     @Query(nativeQuery = true, value = "select c.* from cita c \n" +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) \n" +
@@ -52,13 +52,13 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "order by c.inicio DESC")
     List<Cita> buscarHistorialDeCitas(String idPaciente);
 
-    @Query(nativeQuery = true, value = "select x.torre, x.piso  from cita c " +
+    @Query(nativeQuery = true, value = "select x.torre, x.piso, x.precio_cita as precio  from cita c " +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
             "inner join doctor d on (d.id_doctor = c.doctor_id_doctor) " +
             "inner join sede_x_especialidad_x_administrativo x on (c.sede_id_sede = x.sede_id_sede) " +
-            "where p.id_paciente = ?1 and NOW() >= c.fin and x.especialidad_id_especialidad = d.especialidad_id_especialidad" +
+            "where p.id_paciente = ?1 and NOW() >= c.fin and x.especialidad_id_especialidad = d.especialidad_id_especialidad " +
             "order by c.inicio DESC")
-    List<TorreYPisoDTO> buscarTorresYPisosHistorialCitas(String idPaciente);
+    List<TorreYPisoDTO> buscarTorresPisosPrecioHistorialCitas(String idPaciente);
 
     @Transactional
     @Modifying

@@ -52,18 +52,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="cuestionario:${cuestionarios}">
+                        <tr th:each="cuestionario:${cuestionarios}" th:class="${cuestionario.estado == 1? 'completado':'incompleto'}">
                             <td th:text="${cuestionario.cita.doctor.especialidad.nombre}">Lorem ipsum, dolor sit amet
                                 consec
                             </td>
-                            <td th:text="${cuestionario.fecha_enviado != null? #temporals.format(cuestionario.fecha_enviado, 'dd/MM/yyyy - HH:mm'): '-'}">
+                            <td th:text="${cuestionario.fecha_enviado != null? #temporals.format(cuestionario.fecha_enviado, 'dd-MM-yyyy - HH:mm'): '-'}">
                                 14/07/2022
                             </td>
-                            <td th:text="${cuestionario.fecha_completado != null? #temporals.format(cuestionario.fecha_completado, 'dd/MM/yyyy - HH:mm'):'-'}">
+                            <td th:text="${cuestionario.fecha_completado != null? #temporals.format(cuestionario.fecha_completado, 'dd-MM-yyyy - HH:mm'):'-'}">
                                 -
                             </td>
                             <td th:text="${cuestionario.cita.doctor.getNombreYApellido()}">Juan Martinez R.</td>
-                            <td>
+                            <td class="text-center">
                                 <a th:href="@{'/Paciente/cuestionario?cues='+${cuestionario.id.idCuestionario}+'&cita='+${cuestionario.id.idCita}}"
                                    th:text="${cuestionario.estado == 0? 'Completar':'Revisar'}"
                                    th:class="${cuestionario.estado == 0? 'botonAceptar':'botonSecundario'}">Completar</a>
