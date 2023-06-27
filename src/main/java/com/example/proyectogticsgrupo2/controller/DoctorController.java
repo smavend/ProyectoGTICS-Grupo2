@@ -427,7 +427,7 @@ public class DoctorController {
         }
     }
     @PostMapping("/guardarExamen")
-    public String guardarExamen(HttpSession session, Authentication authentication, Model model, @RequestParam("archivo") MultipartFile file, Cita cita, @RequestParam("descripcion") String descripcion, RedirectAttributes attr) {
+    public String guardarExamen(HttpSession session, Authentication authentication, Model model, @RequestParam("archivo") MultipartFile file, Cita cita, @RequestParam("descripcion") String descripcion,@RequestParam("idCita") int idCita, RedirectAttributes attr) {
 
         String fileName = file.getOriginalFilename();
         if (fileName.contains("..")) {
@@ -437,7 +437,7 @@ public class DoctorController {
 
         try {
             if (file.isEmpty()) {
-                Optional<Cita> optionalCita = citaRepository.findById(cita.getId_cita());
+                Optional<Cita> optionalCita = citaRepository.findById(idCita);
                 if (optionalCita.isPresent()) {
                     Cita c = optionalCita.get();
                     cita.setExamendoc(c.getExamendoc());
@@ -463,7 +463,7 @@ public class DoctorController {
             }
 
             attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
-            return "doctor/DoctorDashboard";
+            return "redirect:/doctor/dashboard";
         } catch (IOException e) {
             e.printStackTrace();
             attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");

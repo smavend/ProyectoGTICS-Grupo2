@@ -77,7 +77,8 @@ public class Cita {
     @JoinColumn(name = "especialidad_id_especialidad")
     private Especialidad especialidad;
 
+    @Lob
+    private byte[] examendoc;
     private String examenname;
     private String examencontenttype;
-    private byte[] examendoc;
 }

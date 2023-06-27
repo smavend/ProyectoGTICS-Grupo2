@@ -68,11 +68,9 @@ public class Doctor implements Serializable {
     @Email(message = "Ingrese una dirección de correo válida")
     private String correo;
 
-    @Lob
-    private byte[] examendoc;
-    private String examenname;
-    private String examencontenttype;
-
+    private String fotoname;
+    private String fotocontenttype;
+    private byte[] foto;
 
     @NotBlank(message = "Seleccione un género")
     private String genero;
