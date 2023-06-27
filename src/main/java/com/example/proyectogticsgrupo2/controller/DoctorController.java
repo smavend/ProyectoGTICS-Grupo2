@@ -5,6 +5,7 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -713,6 +714,7 @@ public class DoctorController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<ListaBuscadorDoctor> listProxCita = citaRepository.listarPorPacienteProxCitas(id);
         List<EncuestaDoctorDTO> fechaEncuesta = citaRepository.listarFechaEncuesta(id,4);
+        List<Cita> citaList=citaRepository.listarExamenes(id);
 
         if (optionalPaciente.isPresent()) {
             Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
@@ -723,13 +725,14 @@ public class DoctorController {
             model.addAttribute("alergiaList", alergiaList);
             model.addAttribute("ListaTratamiento", tratamientoList);
             model.addAttribute("lisProxCitas", listProxCita);
+            model.addAttribute("listCitas",citaList);
             model.addAttribute("listEncuesta",fechaEncuesta);
             return "doctor/DoctorHistorialClinico";
         } else {
             return "redirect:/";
         }
     }
-    @GetMapping ("/docPaciente/{id}")
+    /*@GetMapping ("/docPaciente/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id) {
         Optional<Cita> opt = citaRepository.findById (id);
         if (opt.isPresent()) {
@@ -750,6 +753,20 @@ public class DoctorController {
 
             return null;
         }
+    }*/
+    @GetMapping("/downloadFile/{id}")
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("id") int id){
+        Optional<Cita> optionalCita=citaRepository.findById(id);
+
+        Cita c=optionalCita.get();
+        c.getExamendoc();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(c.getExamencontenttype()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment:filename=\""+c.getExamenname()+"\"")
+                .body(new ByteArrayResource(c.getExamendoc()));
+
+
     }
 
 

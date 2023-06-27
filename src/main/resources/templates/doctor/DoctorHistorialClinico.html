@@ -205,8 +205,31 @@
 
             <div class="tab-pane fade documentos-anexados pt-3" id="documentos-anexados">
               <h5 class="card-title">Documentos del Paciente</h5>
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Especialidad</th>
+                  <th>Fecha</th>
+                  <th style="text-align: left">Examen</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cita, info : ${listCitas}">
+                  <td th:text="${info.index + 1}"></td>
+                  <td th:text="${cita.especialidad.getNombre()}"></td>
+                  <td th:text="${#temporals.format(cita.getFin(), 'dd-MM-yyyy')}"></td>
+                  <td style="text-align: left"><a th:href="@{'/doctor/downloadFile/' + ${cita.getId_cita()}}" class="button-icon">
+                    <i style="font-size: 180%" class="bi bi-file-earmark-pdf-fill"></i>
+                  </a>
+
+                  </td>
+                </tr>
+                </tbody>
+              </table>
               <!-- seccion doc anexados -->
             </div>
+
             <div class="tab-pane fade informacion-personal pt-3" id="informacion-personal">
               <div class="row">
                 <h5 class="card-title">Información Personal</h5>
