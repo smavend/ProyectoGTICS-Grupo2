@@ -98,16 +98,13 @@ public class SuperAdminController {
  @GetMapping("")
  public String HomePageSuperAdmin(Model model) throws IOException {
      List<Credenciales> credencialesDoctorIds = credencialesRepository.findAll();
-
      List<String> listaCredenciales = new ArrayList<>();
-
      for (Credenciales credencial : credencialesDoctorIds) {
          listaCredenciales.add(credencial.getId_credenciales());
      }
 
-/*
      List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
-*/
+
      List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
      List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
      List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
@@ -122,18 +119,18 @@ public class SuperAdminController {
      for (AdministradorDTO_superadmin administradoresDTO : listaAdministradoresDTO_superadmin){
          administradoresDTO.setShowLoguearButton(listaCredenciales.contains(administradoresDTO.getIdAdministrador()));
      }
-    /* for (AdministrativoDTO_superadmin administrativoDTO : listaAdministrativoDTO_superadmin){
+     for (AdministrativoDTO_superadmin administrativoDTO : listaAdministrativoDTO_superadmin){
          administrativoDTO.setShowLoguearButton(listaCredenciales.contains(administrativoDTO.getIdAdministrativo()));
-     }*/
+     }
      for (PacienteDTO_superadmin pacienteDTO : listaPacienteDTO_superadmin){
          pacienteDTO.setShowLoguearButton(listaCredenciales.contains(pacienteDTO.getIdPaciente()));
      }
      model.addAttribute("listaClinicas", listaClinicas);
      model.addAttribute("listaSedes", listaSedes);
      model.addAttribute("listaEspecialidad", listaEspecialidad);
-/*
+
      model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
-*/
+
      model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
      model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
      model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
@@ -150,6 +147,8 @@ public class SuperAdminController {
 
      return "superAdmin/superadmin_Dashboard";
  }
+
+
     @GetMapping("/administradores")
     @ResponseBody
     public List<AdministradorDTO_superadmin> obtenerAdministradores() {
