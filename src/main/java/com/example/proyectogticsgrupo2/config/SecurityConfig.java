@@ -117,7 +117,7 @@ public class SecurityConfig {
 
                 .requestMatchers("/administrador","/administrador/***").hasAuthority("administrador")
 
-                .requestMatchers("/","/validarDni/*","/login","/login/**","/signin","/signin/**").anonymous()
+                .requestMatchers("/","/validarDni/**","/login","/login/**","/signin","/signin/**").anonymous()
 
                 .anyRequest().permitAll();
 
