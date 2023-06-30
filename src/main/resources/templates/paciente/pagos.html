@@ -169,7 +169,7 @@
                                         </div>
                                         <input type="text" class="form-control" id="titularTarjeta">
                                     </div>
-                                    <div class="invalid-feedback" id="errorTitularTarjeta" style="display: none;margin-top: -5px">Este campo no puede estar vacío</div>
+                                    <div class="invalid-feedback" id="errorTitularTarjeta" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
                                 </div>
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Número de la tarjeta</label>
@@ -179,8 +179,8 @@
                                         </div>
                                         <input type="text" class="form-control" id="numeroTarjeta">
                                     </div>
-                                    <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-bottom: 10px">Este campo no puede estar vacío</div>
-                                    <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-bottom: 10px">El número de tarjeta debe tener 16 dígitos</div>
+                                    <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
+                                    <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px">El número de tarjeta debe tener 16 dígitos</div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
@@ -202,8 +202,8 @@
                                             </div>
                                             <input type="text" class="form-control" id="codigoSegTarjeta">
                                         </div>
-                                        <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-bottom: 10px">Este campo no puede estar vacío</div>
-                                        <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-bottom: 10px">El código de seguridad debe tener 3 dígitos</div>
+                                        <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
+                                        <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px">El código de seguridad debe tener 3 dígitos</div>
                                     </div>
                                 </div>
                                 <div class="text-center">
@@ -346,17 +346,37 @@
                 var numeroTarjeta = $("#numeroTarjeta").val();
                 var codigoSegTarjeta = $("#codigoSegTarjeta").val();
 
-                if (titularTarjeta != "") {
+                var error = false; // Variable para verificar si se encontraron errores de validación
+
+                if (titularTarjeta === "") {
+                    $("#errorTitularTarjeta").show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si el campo está vacío
+                }
+
+                if (numeroTarjeta === "") {
+                    $("#nroTarjetaVacio").show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si el campo está vacío
+                } else if (numeroTarjeta.length !== 16) {
+                    $('#nroTarjetaDig').show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si la longitud no es 16
+                }
+
+                if (codigoSegTarjeta === "") {
+                    $("#codigoTarjetaVacio").show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si el campo está vacío
+                } else if (codigoSegTarjeta.length !== 3) {
+                    $('#codigoTarjetaDig').show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si la longitud no es 3
+                }
+
+                if (!error) {
+                    // Si no se encontraron errores, se puede enviar el formulario
+                    //$("#formValidarPago")[0].submit();
                     document.addEventListener("DOMContentLoaded", function (){
                         var form = document.getElementById("formPagar");
-
-                        // Enviar el formulario automáticamente
                         form.submit();
                     });
-                    return;
-                } else {
-                    $("#errorTitularTarjeta").show(500).delay(1000).hide(500);
-                    return;
+                    $("#modal-pago").modal("hide");
                 }
             });
 
