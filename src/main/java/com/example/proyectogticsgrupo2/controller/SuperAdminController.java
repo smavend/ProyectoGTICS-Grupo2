@@ -3,6 +3,7 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoService;
 import com.example.proyectogticsgrupo2.service.CorreoServiceSuperAdmin;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -520,17 +523,45 @@ public class SuperAdminController {
     }
 
     @PostMapping("/GuardarPacientes")
-    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds) {
+    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds,HttpServletRequest request) {
         for(String id : pacientesIds) {
-            Optional<Paciente> optPaciente = pacienteRepository.findById(id);
-            if (optPaciente.isPresent()) {
-                Paciente paciente = optPaciente.get();
+            pacienteRepository.findById(id).ifPresent(paciente -> {
                 paciente.setEstado(1);
                 pacienteRepository.save(paciente);
-            }
+
+
+                String passRandom = securityConfig.generateRandomPassword();
+                PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+                String encodedPassword = passwordEncoder.encode(passRandom);
+                // Asegúrate de tener los métodos getIdPaciente y getCorreo en tu clase Paciente
+                credencialesRepository.crearCredenciales(paciente.getIdPaciente(), paciente.getCorreo(), encodedPassword);
+                CorreoService correoService = new CorreoService();
+                InetAddress address = null;
+                try {
+                    address = InetAddress.getLocalHost();
+                } catch (UnknownHostException e) {
+                    throw new RuntimeException(e);
+                }
+                String domain = request.getServerName();
+                byte[] bIPAddress = address.getAddress();
+                String sIPAddress = "";
+                for (int i = 0; i < bIPAddress.length; i++){
+                    if (i>0) {
+                        sIPAddress += ".";
+                    }
+                    int unsignedByte = bIPAddress[i] & 0xFF;
+                    sIPAddress += unsignedByte;
+                }
+                String link = request.getServerName()+":"+request.getLocalPort();
+                System.out.println(link);
+                System.out.println("servername:"+domain);
+                correoService.props(paciente.getCorreo(),passRandom, link);
+            });
         }
+
         return "redirect:/SuperAdminHomePage/TareaPacientes";
     }
+
 
 
 
@@ -834,6 +865,7 @@ public class SuperAdminController {
             Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
             administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
             Optional<Administrador> administrador = administradorRepository.findById(dni);
+
             String passRandom = securityConfig.generateRandomPassword();
             PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
             // Ahora puedes usar el passwordEncoder para codificar una contraseña
