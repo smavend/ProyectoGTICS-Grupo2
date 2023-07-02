@@ -81,4 +81,6 @@ public class Cita {
     private byte[] examendoc;
     private String examenname;
     private String examencontenttype;
+
+    private String link;
 }
