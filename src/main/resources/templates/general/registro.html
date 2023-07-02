@@ -271,12 +271,12 @@
           console.log("alert");
           alert("Debe ingresar un DNI");
         }else {
+          console.log("validacion en curso")
           $.ajax({
             method: "GET",
             crossDomain: true,
             url: getUrl()+"/validarDni/"+dni
           }).done(function (result){
-            console.log(result);
             if (result.msg === "Éxito"){
               $.ajax({
                 method: "GET",

@@ -335,6 +335,15 @@ public class AdministradorController {
                                   @RequestParam("archivo") MultipartFile file,
                                   @ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
                                   Model model, RedirectAttributes attr) throws UnknownHostException {
+        Optional<Stylevistas> style = stylevistasRepository.findById(2);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+
+            model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+            /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+        }
         Optional<Paciente> opt = pacienteRepository.findById(paciente.getIdPaciente());
         Paciente pacienteCorreoExist = pacienteRepository.findByCorreo(paciente.getCorreo());
         if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null ||
@@ -492,6 +501,15 @@ public class AdministradorController {
             System.out.println("servername:"+domain);
             correoService.props(doctor.getCorreo(),passRandom, link);
             attr.addFlashAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
+            Optional<Stylevistas> style = stylevistasRepository.findById(2);
+            if (style.isPresent()) {
+                Stylevistas styleActual = style.get();
+
+                model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+                /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+            } else {
+                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            }
             return "redirect:/administrador/dashboard";
         }
     }
