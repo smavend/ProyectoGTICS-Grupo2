@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.*;
 
+import java.time.Period;
 import java.util.Date;
 
 @Getter
@@ -90,6 +91,16 @@ public class Paciente implements Serializable {
         String[] nombres = this.getNombre().split(" ");
         String[] apellidos = this.getApellidos().split(" ");
         return nombres[0] + " " + apellidos[0];
+    }
+
+    public String getEdad(){
+        LocalDate fechaActual = LocalDate.now();
+        if (this.getFechanacimiento() != null){
+            return String.valueOf(Period.between(this.getFechanacimiento(), fechaActual).getYears());
+        }
+        else {
+            return "0";
+        }
     }
 
 }

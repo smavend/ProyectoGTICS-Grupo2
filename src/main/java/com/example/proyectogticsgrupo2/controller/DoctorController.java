@@ -3,6 +3,8 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.core.io.ByteArrayResource;
@@ -26,13 +28,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
 
 import java.io.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequestMapping("/doctor")
 @Controller
@@ -426,7 +429,6 @@ public class DoctorController {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
-
             String alergias = "";
 
             for (int i = 0; i < alergiaList.size(); i++) {
@@ -449,15 +451,139 @@ public class DoctorController {
             model.addAttribute("paciente", paciente);
             model.addAttribute("cita", cita);
             model.addAttribute("alergias", alergias);
+            model.addAttribute("momentoActual", LocalDateTime.now());
 
             setCitaIdLink(id2);
-
-
 
             return "doctor/DoctorReporteSesion";
         } else {
             return "redirect:/doctor/dashboard";
         }
+
+    }
+
+    @PostMapping("/iniciarCita")
+    public String iniciarCita(@RequestParam("id_cita") Integer idCita,
+                              @RequestParam("idPaciente") String idPaciente,
+                              Model model, HttpSession session, Authentication authentication){
+
+        Cita cita = citaRepository.findById(idCita).get();
+
+        //LocalDateTime horaFinCita = cita.getFin().plusMinutes(15);
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        //String horaFinReunion = horaFinCita.format(formatter);
+
+        var apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmFwcGVhci5pbiIsImF1ZCI6Imh0dHBzOi8vYXBpLmFwcGVhci5pbi92MSIsImV4cCI6OTAwNzE5OTI1NDc0MDk5MSwiaWF0IjoxNjg4MDA4NTgxLCJvcmdhbml6YXRpb25JZCI6MTg0MjM1LCJqdGkiOiI3NTYwYmMwOC05ODhmLTRjYTEtYTgyNS1mOTVhOTU0NTM4NTcifQ.jOsnLwuVcqDmAWcgo24rvZgfO5fcDJIIDQiF92ugAzg";
+        var data = Map.of(
+                "endDate", "2023-07-05T14:23:00.000Z",
+                "fields", Collections.singletonList("hostRoomUrl")
+        );
+
+        try {
+            var request = HttpRequest.newBuilder(
+                            URI.create("https://api.whereby.dev/v1/meetings"))
+                    .header("Authorization", "Bearer " + apiKey)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(new ObjectMapper().writeValueAsString(data)))
+                    .build();
+
+            var response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Status code: " + response.statusCode());
+            System.out.println("Body: " + response.body() + "\n");
+
+            Reunion reunion = new Gson().fromJson(response.body(), Reunion.class);
+
+            citaRepository.guardarLink(reunion.getRoomUrl(), idCita);
+            model.addAttribute("reunion", reunion);
+
+            // Fin de creación y guardado de link de reunión ----------
+
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
+            Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
+            session.setAttribute("doctor", doctor_session);
+
+            Paciente paciente = pacienteRepository.findById(idPaciente).get();
+            List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(idPaciente);
+            String alergias = "";
+
+            for (int i = 0; i < alergiaList.size(); i++) {
+                if (i == alergiaList.size() - 1) {
+                    Alergia alergiaIterador = alergiaList.get(i);
+                    alergias = alergias + " " + alergiaIterador.getNombre();
+                } else {
+                    Alergia alergiaIterador = alergiaList.get(i);
+                    alergias = alergias + " " + alergiaIterador.getNombre() + ",";
+                }
+            }
+
+            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
+            Doctor doctor = doctorOptional.get();
+
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("cita", cita);
+            model.addAttribute("alergias", alergias);
+
+            return "doctor/DoctorCita";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return "redirect:/doctor/";
+        }
+    }
+
+    @GetMapping("/cita")
+    public String cita(@RequestParam("id") String idPaciente,
+                       @RequestParam("id2") Integer idCita,
+                       Model model, HttpSession session, Authentication authentication){
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
+        session.setAttribute("doctor", doctor_session);
+
+        Optional<Cita> optionalCita = citaRepository.findById(idCita);
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
+        List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(idPaciente);
+
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && optionalCita.get().getModalidad() == 1 && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor()) {
+            Paciente paciente = optionalPaciente.get();
+            Cita cita = optionalCita.get();
+
+            String alergias = "";
+
+            for (int i = 0; i < alergiaList.size(); i++) {
+                if (i == alergiaList.size() - 1) {
+                    Alergia alergiaIterador = alergiaList.get(i);
+                    alergias = alergias + " " + alergiaIterador.getNombre();
+                } else {
+                    Alergia alergiaIterador = alergiaList.get(i);
+                    alergias = alergias + " " + alergiaIterador.getNombre() + ",";
+                }
+            }
+
+            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
+            Doctor doctor = doctorOptional.get();
+
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("cita", cita);
+            model.addAttribute("alergias", alergias);
+
+            return "doctor/DoctorCita";
+
+        }
+
+        return "redirect:/dashboard";
 
     }
 
