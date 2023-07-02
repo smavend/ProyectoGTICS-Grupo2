@@ -512,8 +512,14 @@ public class PacienteController {
     }
 
     @GetMapping("/sesionVirtual")
-    public String sesionVirtual(HttpSession session, Authentication authentication) {
+    public String sesion(@RequestParam("c") Integer idCita,
+                         Model model, HttpSession session, Authentication authentication){
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+
+        Cita cita = citaRepository.findById(idCita).get();
+
+        model.addAttribute("link", cita.getLink());
+
         return "paciente/sesionVirtual";
     }
 

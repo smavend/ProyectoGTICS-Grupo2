@@ -206,9 +206,12 @@
                                 </div>
                             </div>
                             <div class="modal-footer mx-auto">
-                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual)}"
-                                   class="btn botonAceptar" th:href="${cita.link}">Acceder a sesión virtual</a>
-                                <a style="cursor: context-menu" th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}" class="btn botonSecundario">Aún no puede acceder a la sesión</a>
+                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link != null}"
+                                   class="btn botonAceptar" th:href="@{'/Paciente/sesionVirtual?c='+${cita.id_cita}}">Acceder a sesión virtual</a>
+                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}" 
+                                   style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha sido creada</a>
+                                <a th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}" 
+                                   style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a la cita</a>
                             </div>
                         </div>
                     </div>

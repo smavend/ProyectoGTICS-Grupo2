@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,8 +17,8 @@
               rel="stylesheet">
 
         <!-- CSS -->
-        <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
-        <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
+        <link th:href="@{/assets/css/stylePaciente.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
     </head>
     <body>
 
@@ -26,15 +26,18 @@
         <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
 
-        <main style="display: flex; align-items: center; justify-content: center;" class="main site-content">
-            <img style="border-radius: 20px; margin-top: 100px; width: 80%;"
-                 src="https://assets.mspimages.in/wp-content/uploads/2021/06/Gogole-Meet.jpg" alt="Meet">
+        <!-- ======= Sidebar ======= -->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
+        <!-- End Sidebar-->
 
-            <!-- ====== Footer ====== -->
-            <footer class="site-footer">
-                <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            </footer>
-            <!-- End footer -->
+        <main id="main" class="main site-content py-1 px-4">
+            <!--<img
+                 src="https://assets.mspimages.in/wp-content/uploads/2021/06/Gogole-Meet.jpg" alt="Meet">-->
+            <iframe
+                    style="width: 100%; height: 620px; border-radius: 15px"
+                    src="https://project.whereby.com/bb969bac-9ffc-4e01-b7d1-bdfde50f940b"
+                    allow="camera; microphone; fullscreen; speaker; display-capture; autoplay"
+            ></iframe>
         </main><!-- End #main -->
 
         <!-- Bootstrap CDN JS -->
