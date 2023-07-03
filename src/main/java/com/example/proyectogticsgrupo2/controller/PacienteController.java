@@ -182,11 +182,13 @@ public class PacienteController {
         LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
         LocalDateTime fin = inicio.plusHours(1);
 
-        citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
+        Especialidad especialidad = especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get();
+
+        citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
-        model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+        model.addAttribute("especialidad", especialidad);
         model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
         model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
         model.addAttribute("activarModal", true);
@@ -440,15 +442,24 @@ public class PacienteController {
     }
 
     @GetMapping("/perfilDoctor")
-    public String verPerfilDoctor(@RequestParam("doc") String idDoctor, Model model, HttpSession session, Authentication authentication) {
+    public String verPerfilDoctor(@RequestParam("doc") String idDoctor,
+                                  Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
+
+            LocalDate dia1 = LocalDate.now();
+            List<LocalTime> horarios1 = new ArrayList<>();
+            LocalDate dia2 = dia1.plusDays(1);
+            List<LocalTime> horarios2 = new ArrayList<>();
+
+
+
             model.addAttribute("doctor", doctor);
-            model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
-            model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
+            model.addAttribute("dia1", dia1);
+            model.addAttribute("dia2", dia2);
         } else {
             return "redirect:/Paciente/doctores";
         }
