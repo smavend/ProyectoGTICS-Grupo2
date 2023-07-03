@@ -207,7 +207,7 @@
                             </div>
                             <div class="modal-footer mx-auto">
                                 <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual)}"
-                                   class="btn botonAceptar" th:href="${cita.link}">Acceder a sesión virtual</a>
+                                   class="btn botonAceptar">Acceder a sesión virtual</a>
                                 <a style="cursor: context-menu" th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}" class="btn botonSecundario">Aún no puede acceder a la sesión</a>
                             </div>
                         </div>
