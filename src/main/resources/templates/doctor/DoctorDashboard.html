@@ -361,7 +361,16 @@
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
+        <script>
+        var headerColorDoctor = "[[${headerColorDoctor}]]";
+        localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
 
+        function updateHeaderColorDoctor() {
+            var color = headerColorDoctor;
+            document.getElementById('header').style.backgroundColor = color;
+        }
+        updateHeaderColorDoctor();
+        </script>
         <!-- Vendor JS Files -->
         <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
         <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>

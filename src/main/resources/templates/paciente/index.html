@@ -83,3 +83,13 @@
         <script th:src="@{/assets/js/main.js}"></script>
     </body>
 </html>
+<script>
+    var headerColorPaciente = "[[${headerColorPaciente}]]";
+    localStorage.setItem('headerColorPaciente', headerColorPaciente);
+
+    function updateHeaderColorPaciente() {
+        var color = headerColorPaciente;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorPaciente();
+</script>

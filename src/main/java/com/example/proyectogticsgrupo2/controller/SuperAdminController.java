@@ -528,9 +528,6 @@ public class SuperAdminController {
             @RequestParam("estructura_formulario") String estructuraFormulario,
             @RequestParam("rutaController") String rutaController,  // Nuevo parámetro
             Model model) {
-
-
-
         FormularioJson formularioJson = formularioJsonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid formulario Id:" + id));
         formularioJson.setTitulo(titulo);
