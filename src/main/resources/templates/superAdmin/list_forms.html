@@ -225,239 +225,6 @@
     });
 </script>
 
-<!--<script th:inline="javascript">
-    /*<![CDATA[*/
-    var formularios = /*[[${formularios}]]*/ [];
-    /*]]>*/
-    $(document).ready(function () {
-        // Cuando se haga click en un enlace de formulario...
-        $(document).on('click', 'button.formulario-link', function (e) {
-            e.preventDefault(); // Evitar que el enlace cambie la URL
-
-            var formIndex = Number($(this).data('form-index')); // Obtener el índice del formulario
-            var formulario = formularios[formIndex]; // Obtener el formulario correspondiente
-
-            // Crear el HTML del formulario dinámico
-            var estructuraFormulario = JSON.parse(formulario.estructura_formulario);
-            var htmlFormulario = '';
-
-            estructuraFormulario.fields.forEach(function (field) {
-                htmlFormulario += `
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">${field.label}:</label>
-                    <div class="col-sm-7">
-                        <input type="${field.type}" class="form-control">
-                    </div>
-                </div>`;
-            });
-
-            var fullFormularioHtml = `
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">${formulario.titulo}</h5>
-                        <form id="dynamic-form-${formIndex}">
-                            ${htmlFormulario}
-                        </form>
-                    </div>
-                </div>
-            </div>`;
-
-            // Borrar los botones existentes
-            $('#edit-buttons').empty();
-            $('#view-buttons').empty();
-            // Agregar el botón de Cerrar al div de view-buttons
-            $('#view-buttons').html(`
-<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-`);
-            // Insertar el formulario dinámico en el modal y mostrar el modal
-            $('#dynamic-modal-form').html(fullFormularioHtml);
-            $('#formularioModal').modal('show');
-        });
-
-        $(document).on('click', 'button.btn.btn-secondary', function (e) {
-            e.preventDefault(); // Evitar que el enlace cambie la URL
-
-            var formIndex = Number($(this).closest('tr').find('button.formulario-link').data('form-index')); // Obtener el índice del formulario
-            var formulario = formularios[formIndex]; // Obtener el formulario correspondiente
-
-            // Crear el HTML del formulario dinámico
-            var estructuraFormulario = JSON.parse(formulario.estructura_formulario);
-            var htmlFormulario = '';
-
-            estructuraFormulario.fields.forEach(function (field) {
-                htmlFormulario += `
-<div class="row mb-3">
-    <div class="col-sm-3">
-        <label class="col-form-label" contentEditable="true">${field.label}:</label>
-    </div>
-    <div class="col-sm-6">
-        <input type="${field.type}" class="form-control">
-    </div>
-    <div class="col-sm-1">
-        <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
-    </div>
-    <div class="col-sm-1">
-        <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
-    </div>
-</div>`;
-            });
-
-            var fullFormularioHtml = `
-<div class="col-lg-12">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title" contentEditable="true">${formulario.titulo} </h5>
-            <form id="dynamic-form-${formIndex}">
-                ${htmlFormulario}
-            </form>
-        </div>
-    </div>
-</div>`;
-
-            // Borrar los botones existentes
-            $('#edit-buttons').empty();
-            $('#view-buttons').empty();
-            // Agregar los botones Actualizar y Cerrar al div de edit-buttons
-            $('#edit-buttons').html(`
-<button type="button" class="btn btn-primary" id="update-btn">Actualizar</button>
-<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-`);
-
-            // Insertar el formulario dinámico en el modal y mostrar el modal
-            $('#dynamic-modal-form').html(fullFormularioHtml);
-            $('#formularioModal').modal('show');
-            // Después de que el botón de actualizar ha sido agregado al DOM,
-            // adjuntar el manejador de eventos
-            $(document).on('click', 'button.btn.btn-secondary', function (e) {
-                e.preventDefault(); // Evitar que el enlace cambie la URL
-
-                var formIndex = Number($(this).closest('tr').find('button.formulario-link').data('form-index')); // Obtener el índice del formulario
-                var formulario = formularios[formIndex]; // Obtener el formulario correspondiente
-
-                // Crear el HTML del formulario dinámico
-                var estructuraFormulario = JSON.parse(formulario.estructura_formulario);
-                var htmlFormulario = '';
-
-                estructuraFormulario.fields.forEach(function (field) {
-                    htmlFormulario += `
-        <div class="row mb-3">
-            <div class="col-sm-3">
-                <label class="col-form-label" contentEditable="true">${field.label}:</label>
-            </div>
-            <div class="col-sm-6">
-                <input type="${field.type}" class="form-control">
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
-            </div>
-        </div>`;
-                });
-
-                var fullFormularioHtml = `
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title" contentEditable="true">${formulario.titulo}</h5>
-                <form id="dynamic-form-${formIndex}">
-                    ${htmlFormulario}
-                </form>
-            </div>
-        </div>
-    </div>`;
-
-                // Borrar los botones existentes
-                $('#edit-buttons').empty();
-                $('#view-buttons').empty();
-                // Agregar los botones Actualizar y Cerrar al div de edit-buttons
-                $('#edit-buttons').html(`
-        <button type="button" class="btn btn-primary" id="update-btn">Actualizar</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-    `);
-
-                // Insertar el formulario dinámico en el modal y mostrar el modal
-                $('#dynamic-modal-form').html(fullFormularioHtml);
-                $('#formularioModal').modal('show');
-
-                // Después de que el botón de actualizar ha sido agregado al DOM, adjuntar el manejador de eventos
-                $(document).on('click', '#update-btn', function(event) {
-                    event.preventDefault();
-
-                    var title = document.querySelector('.card-title').textContent;
-                    var estructuraFormularioValue = JSON.stringify(estructuraFormulario);
-                    var myFormElement = document.getElementById('my-form');
-
-                    console.log('titulo:', title);
-                    console.log('estructura_formulario:', estructuraFormularioValue);
-                    console.log('my-form:', myFormElement);
-
-                    document.getElementById('titulo').value = title;
-                    document.getElementById('estructura_formulario').value = estructuraFormularioValue;
-
-                    myFormElement.submit();
-                });
-            });
-
-        });
-
-// Agregar fila al formulario
-        $(document).off('click', '.add-row').on('click', '.add-row', function () {
-            var newRow = `
-<div class="row mb-3">
-    <div class="col-sm-3">
-        <label class="col-form-label" contentEditable="true">Nuevo campo:</label>
-    </div>
-    <div class="col-sm-6">
-        <input type="text" class="form-control" value="" contentEditable="true">
-    </div>
-    <div class="col-sm-1">
-        <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
-    </div>
-    <div class="col-sm-1">
-        <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
-    </div>
-</div>`;
-            $(this).closest('.row').after(newRow);
-        });
-
-// Eliminar fila del formulario
-        $(document).on('click', '.remove-row', function () {
-            $(this).closest('.row').remove();
-        });
-
-
-
-
-
-
-        // Cuando se haga click en el botón de cerrar el modal o en el botón X
-        $(document).on('click', '#formularioModal [data-dismiss="modal"]', function () {
-            $('#formularioModal').modal('hide');
-        });
-
-        // Cuando se haga click fuera del modal
-        $(document).on('click', function (e) {
-            if ($(e.target).is('.modal')) {
-                $('#formularioModal').modal('hide');
-            }
-        });
-
-        // Limpiar el contenido del modal al cerrar
-        $('#formularioModal').on('hidden.bs.modal', function () {
-            $('#dynamic-modal-form').empty();
-        });
-
-        // Cuando se haga click en el botón de eliminar de la tabla
-        $(document).on('click', '.eliminar-btn', function (e) {
-            if (!confirm("¿Estás seguro de que deseas eliminar este formulario?")) {
-                e.preventDefault(); // Evitar que el botón envíe el formulario si el usuario no confirma
-            }
-        });
-    });
-</script>-->
 <script th:inline="javascript">
 
     /*<![CDATA[*/
@@ -472,37 +239,50 @@
             var htmlFormulario = '';
 
             estructuraFormulario.fields.forEach(function (field) {
-                htmlFormulario += `
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">${field.label}:</label>
-                    <div class="col-sm-7">
-                        <input type="${field.type}" class="form-control">
-                    </div>
-                </div>`;
-            });
+                var buttonHtml = '';
+                if (field.hasButton) {
+                    buttonHtml = `<button class="btn btn-primary" type="button" id="consulta">Consulta</button>`;
+                }
+                var isDisabled = '';
+                if (field.isLocked) {
+                    isDisabled = 'disabled';
+                }
 
-            var fullFormularioHtml = `
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">${formulario.titulo}</h5>
-                        <form id="dynamic-form-${formIndex}">
-                            ${htmlFormulario}
-                        </form>
-                        <form id="my-form"></form>
+                htmlFormulario += `
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">${field.label}:</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input type="${field.type}" class="form-control" ${isDisabled} aria-describedby="consulta">
+                        ${buttonHtml}
                     </div>
                 </div>
             </div>`;
+            });
+
+            var fullFormularioHtml = `
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">${formulario.titulo}</h5>
+                    <form id="dynamic-form-${formIndex}">
+                        ${htmlFormulario}
+                    </form>
+                    <form id="my-form"></form>
+                </div>
+            </div>
+        </div>`;
 
             $('#edit-buttons').empty();
             $('#view-buttons').empty();
             $('#view-buttons').html(`
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            `);
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+        `);
 
             $('#dynamic-modal-form').html(fullFormularioHtml);
             $('#formularioModal').modal('show');
         });
+
         // Cuando se hace click en el botón de cerrar el modal o en el botón X
         $(document).on('click', '#formularioModal [data-dismiss="modal"]', function () {
             $('#formularioModal').modal('hide');

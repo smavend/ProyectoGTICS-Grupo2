@@ -31,8 +31,9 @@ public class AdministrativoController {
     final TemporalRepository temporalRepository;
     final AdministrativoRepository administrativoRepository;
     final TokenRepository tokenRepository;
+    final FormularioJsonRepository formularioJsonRepository;
 
-    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, TokenRepository tokenRepository) {
+    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, TokenRepository tokenRepository, FormularioJsonRepository formularioJsonRepository) {
         this.pacienteRepository = pacienteRepository;
         this.aesRepository = aesRepository;
         this.alergiaRepository = alergiaRepository;
@@ -41,6 +42,7 @@ public class AdministrativoController {
         this.temporalRepository = temporalRepository;
         this.administrativoRepository = administrativoRepository;
         this.tokenRepository = tokenRepository;
+        this.formularioJsonRepository = formularioJsonRepository;
     }
     @GetMapping("/administrativo")
     public String dashboard(Model model, HttpSession session){
@@ -104,9 +106,7 @@ public class AdministrativoController {
         }
         Administrativo admi = administrativoRepository.findByCorreo(userEmail);
         session.setAttribute("administrativo", admi);
-
         String idAdmi = admi.getIdAdministrativo();
-
         model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
         model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
         return "administrativo/invitar";
@@ -284,5 +284,35 @@ public class AdministrativoController {
         pacienteRepository.actualizarPaciente(paciente.getCorreo(), paciente.getDireccion(),
                 paciente.getDistrito().getIdDistrito(), paciente.getIdPaciente());
         return "redirect:/administrativo";
+    }
+
+
+    @GetMapping("/administrativo/elegirFormulario")
+    public String elegirFormulario(Model model, HttpSession session, Authentication authentication){
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Administrativo admi = administrativoRepository.findByCorreo(userEmail);
+        session.setAttribute("administrativo", admi);
+
+        List<FormularioJson> formularios = formularioJsonRepository.findAll();
+        model.addAttribute("formularios", formularios);
+        String idAdmi = admi.getIdAdministrativo();
+
+        AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
+        model.addAttribute("datos", aes);
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
+
+        List<Paciente> lista = pacienteRepository.buscarPorIdAdministrativo(idAdmi);
+        List<Temporal> listaTemp = temporalRepository.findByAdministrativo_IdAdministrativo(idAdmi);
+
+        model.addAttribute("listaPacientes", lista);
+        model.addAttribute("listaTemp", listaTemp);
+
+        return "administrativo/elegirFormulario";
     }
 }
