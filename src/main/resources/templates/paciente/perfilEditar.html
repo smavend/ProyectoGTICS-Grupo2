@@ -182,7 +182,7 @@
                                         </div>
                                     </form>
 
-                                    <p class="mb-2 mt-3 burbuja" th:each="alergia: ${alergiasPaciente}"
+                                    <p class="mb-2 mt-3 alergia" th:each="alergia: ${alergiasPaciente}"
                                        th:inline="text">[[${alergia.nombre}]]
                                         <a th:href="@{'/Paciente/perfil/borrarAlergia?idAlergia='+${alergia.idAlergia}}"
                                            class="ms-2" style="color: red"><i class="bi bi-x-circle ms-2"></i></a>

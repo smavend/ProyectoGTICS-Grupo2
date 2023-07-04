@@ -177,10 +177,12 @@ public class PacienteController {
             tipoPago = "Tarjeta";
         }
 
+        Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
+
         String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getInicio().toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
-        LocalDateTime fin = inicio.plusHours(1);
+        LocalDateTime fin = inicio.plusMinutes(doctor.getDuracion_cita_minutos());
 
         Especialidad especialidad = especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get();
 
@@ -449,17 +451,7 @@ public class PacienteController {
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
-
-            LocalDate dia1 = LocalDate.now();
-            List<LocalTime> horarios1 = new ArrayList<>();
-            LocalDate dia2 = dia1.plusDays(1);
-            List<LocalTime> horarios2 = new ArrayList<>();
-
-
-
             model.addAttribute("doctor", doctor);
-            model.addAttribute("dia1", dia1);
-            model.addAttribute("dia2", dia2);
         } else {
             return "redirect:/Paciente/doctores";
         }
@@ -467,51 +459,24 @@ public class PacienteController {
     }
 
     @PostMapping("/reservarDoctor")
-    public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, @ModelAttribute("hora") String hora, HttpSession session, Authentication authentication) {
-
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
-        return "paciente/reservarDoctor1";
-    }
-
-    @PostMapping("/reservarDoctor2")
-    public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult, @ModelAttribute("hora") String hora, Model model, HttpSession session, Authentication authentication) {
-
-        if (bindingResult.hasErrors()) {
-            return "paciente/reservarDoctor1";
-        } else {
-
-            session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
-            String inicioString = citaTemporal.getFecha().toString() + ' ' + hora;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
-            LocalDateTime fin = inicio.plusHours(1);
-
-            //citaTemporal.setInicio(inicio);
-            //citaTemporal.setFin(fin);
-
-            model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
-            model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
-            model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
-            model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
-
-            return "paciente/reservar4";
-        }
-
-    }
-
-    @PostMapping("/reservarDoctor3")
-    public String reserarDoctor3(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, HttpSession session, Authentication authentication, Model model) {
+    public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                  Model model, HttpSession session, Authentication authentication) {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
+        System.out.println("Recibido correctamente");
 
-        //citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
-        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), "Efectivo");
-        model.addAttribute("activarModal", true);
+        Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
 
-        return "paciente/confirmacion";
+        model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+        model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+        model.addAttribute("doctor", doctor);
+        Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
+        model.addAttribute("precio", precioBase*paciente.getSeguro().getCoaseguro());
+
+        citaTemporal.setFin(citaTemporal.getInicio().plusMinutes(doctor.getDuracion_cita_minutos()));
+
+        return "paciente/reservar3";
     }
 
     @GetMapping("/confirmacion")

@@ -1662,19 +1662,6 @@ botonTipo{
     background-color: #0AA1DD;
 }
 
-.fotoDoctorPerfil{
-    height: 250px;
-    width: 250px;
-    object-fit: cover;
-    box-shadow: -7px 0px 0px 5px #0AA1DD;
-}
-
-@media(min-width: 768px){
-    .fotoDoctorPerfil{
-        margin-right: 40px;
-    }
-}
-
 /* Cuestionarios */
 
 .botonCompletar{
@@ -1711,6 +1698,18 @@ botonTipo{
 }
 
 /* Perfil Doctor */
+
+.fotoDoctorPerfil{
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+}
+
+@media(min-width: 768px){
+    .fotoDoctorPerfil{
+        margin-right: 40px;
+    }
+}
 
 .perfilDoctorFoto{
     width: 60%;
@@ -1769,6 +1768,36 @@ botonTipo{
     background-color:#197ce6;
 }
 
+.disponibilidad{
+    padding: 20px;
+    background-image: linear-gradient(to bottom, #f6f6f6, #f8f8f8, #fafafa, #fdfdfd, #ffffff);
+    border-radius: 15px;
+    height: 400px;
+}
+
+@media (min-width:1200px){
+    .disponibilidad{
+        padding: 30px 50px;
+    }
+}
+
+.burbuja{
+    display: inline-block;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    margin-right: 5px;
+    margin-bottom: 8px;
+    padding: 8px 20px;
+    transition: all 0.3s;
+    border: 1px solid rgb(202, 202, 202);
+    cursor: pointer;
+}
+
+.burbujaSeleccionada{
+    background-color: #0AA1DD;
+    color: white;
+}
+
 /* Formulario reservar cita mediante perfil del doctor */
 
 .inputPaciente{
@@ -1816,7 +1845,7 @@ botonTipo{
     font-family: 'Nunito', sans-serif;
 }
 
-.burbuja{
+.alergia{
     display: inline-block;
     background-color: #f5f5f5;
     border-radius: 15px;

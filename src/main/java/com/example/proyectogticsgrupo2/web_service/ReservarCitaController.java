@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(method = RequestMethod.GET, value = "/SERVICE_reservarCita")
+@RequestMapping(method = RequestMethod.GET, value = "/Paciente/api")
 public class ReservarCitaController {
 
     final EspecialidadRepository especialidadRepository;
@@ -70,7 +70,7 @@ public class ReservarCitaController {
                 horariosOcupados.add(h.getHorario());
             }
 
-            List<LocalTime> horariosDisponibles = new ArrayList<>(); // Todos los horarios registrados por el doctor
+            List<HashMap<String, LocalTime>> horariosDisponibles = new ArrayList<>(); // Todos los horarios registrados por el doctor
             Doctor doctor = doctorRepository.findById(idDoctor).get();
             int duracionCita = doctor.getDuracion_cita_minutos();
             int duracionComida = 60; // minutos
@@ -97,7 +97,10 @@ public class ReservarCitaController {
 
                 if (hora.isBefore(horaComida) || hora.isAfter(horaComida.plusMinutes(duracionComida - 1))) {
                     if (!horariosOcupados.contains(hora)) {
-                        horariosDisponibles.add(hora);
+                        HashMap<String, LocalTime> horarioDia = new HashMap<>();
+                        horarioDia.put("inicio", hora);
+                        horarioDia.put("fin", hora.plusMinutes(doctor.getDuracion_cita_minutos()));
+                        horariosDisponibles.add(horarioDia);
                     }
                 } else if (hora.isAfter(horaComida)) {
                     hora = horaComida.plusMinutes(duracionComida);
@@ -105,6 +108,7 @@ public class ReservarCitaController {
                 }
                 hora = hora.plusMinutes(duracionCita);
             }
+
             response.put("resultado", "ok");
             response.put("horarios", horariosDisponibles);
             return ResponseEntity.ok(response);
