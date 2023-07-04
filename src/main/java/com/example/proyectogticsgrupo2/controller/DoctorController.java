@@ -194,32 +194,39 @@ public class DoctorController {
         Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
         session.setAttribute("doctor", doctor_session);
 
-        if (bindingResult.hasErrors()) {
-            return "redirect:/doctor/dashboard";
-        } else {
-            // Obtener los valores de los campos hidden
-            Integer cuestionarioId = cuestionarioPorCita.getCuestionario().getId_cuestionario();
-            Integer citaId = cuestionarioPorCita.getCita().getId_cita();
 
-            // Crear instancias de las entidades relacionadas
-            Cuestionario cuestionario = new Cuestionario();
-            cuestionario.setId_cuestionario(cuestionarioId);
+        // Obtener los valores de los campos hidden
+        Integer cuestionarioId = cuestionarioPorCita.getCuestionario().getId_cuestionario();
+        Integer citaId = cuestionarioPorCita.getCita().getId_cita();
 
-            Cita cita = new Cita();
-            cita.setId_cita(citaId);
+        // Crear instancias de las entidades relacionadas
+        Cuestionario cuestionario = new Cuestionario();
+        cuestionario.setId_cuestionario(cuestionarioId);
 
-            // Establecer las relaciones entre las entidades
-            cuestionarioPorCita.setCuestionario(cuestionario);
-            cuestionarioPorCita.setCita(cita);
-            cuestionarioPorCita.getId().setIdCuestionario(cuestionarioId);
-            cuestionarioPorCita.getId().setIdCita(citaId);
-            cuestionarioPorCita.setEstado(0);
-            cuestionarioPorCita.setFecha_enviado(cuestionarioPorCitaRepository.FechaHora());
+        Cita cita = new Cita();
+        cita.setId_cita(citaId);
 
-            cuestionarioPorCitaRepository.save(cuestionarioPorCita);
+        // Establecer las relaciones entre las entidades
+        cuestionarioPorCita.setCuestionario(cuestionario);
+        cuestionarioPorCita.setCita(cita);
+        cuestionarioPorCita.getId().setIdCuestionario(cuestionarioId);
+        cuestionarioPorCita.getId().setIdCita(citaId);
+        cuestionarioPorCita.setEstado(0);
+        cuestionarioPorCita.setFecha_enviado(cuestionarioPorCitaRepository.FechaHora());
+        cuestionarioPorCita.setR1("·");
+        cuestionarioPorCita.setR2("·");
+        cuestionarioPorCita.setR3("·");
+        cuestionarioPorCita.setR4("·");
+        cuestionarioPorCita.setR5("·");
+        cuestionarioPorCita.setR6("·");
+        cuestionarioPorCita.setR7("·");
+        cuestionarioPorCita.setR8("·");
+        cuestionarioPorCita.setR9("·");
+        cuestionarioPorCita.setR10("·");
+        cuestionarioPorCita.setR11("·");
+        cuestionarioPorCitaRepository.save(cuestionarioPorCita);
 
-            return "redirect:/doctor/dashboard";
-        }
+        return "redirect:/doctor/dashboard";
     }
 
 
