@@ -20,15 +20,15 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping(method = RequestMethod.GET, value = "/Paciente/api")
-public class ReservarCitaController {
+public class PacienteAPI {
 
     final EspecialidadRepository especialidadRepository;
     final HorarioRepository horarioRepository;
     final DoctorRepository doctorRepository;
 
-    public ReservarCitaController(EspecialidadRepository especialidadRepository,
-                                  HorarioRepository horarioRepository,
-                                  DoctorRepository doctorRepository) {
+    public PacienteAPI(EspecialidadRepository especialidadRepository,
+                       HorarioRepository horarioRepository,
+                       DoctorRepository doctorRepository) {
         this.especialidadRepository = especialidadRepository;
         this.horarioRepository = horarioRepository;
         this.doctorRepository = doctorRepository;

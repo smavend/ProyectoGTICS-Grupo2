@@ -4,6 +4,8 @@ import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoCitaRegistrada;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -213,7 +215,8 @@ public class PacienteController {
 
     @PostMapping("/reservar3")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                            HttpSession session, Authentication authentication, Model model) {
+                            Model model, HttpSession session, Authentication authentication,
+                            HttpServletRequest request) {
 
        /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
@@ -245,6 +248,13 @@ public class PacienteController {
 
         citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
+
+        // Enviar correo al paciente
+        CorreoCitaRegistrada correo = new CorreoCitaRegistrada();
+        String domain = request.getServerName();
+        String host = request.getServerName()+":"+request.getLocalPort();
+
+
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
         model.addAttribute("especialidad", especialidad);
