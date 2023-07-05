@@ -82,7 +82,6 @@ public class DoctorController {
 
     @GetMapping(value = {"/dashboard", "/", ""})
     public String dashboard(Model model, HttpSession session, Authentication authentication) {
-        System.out.println("Entrando en el método dashboard");
 
         // Obtener información del usuario y la sesión
         String usuario = authentication.getName();
@@ -127,16 +126,14 @@ public class DoctorController {
         ArrayList<String> listaHorarios = new ArrayList<>();
         List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.findAll();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         optionalCita.forEach(cita -> {
             LocalDateTime fechaHora = cita.getInicio();
-            String hora1 = fechaHora.toLocalTime().toString();
+            String hora1 = fechaHora.format(formatter);
 
-            LocalDateTime fechaHora2 = cita.getFin();
-            String hora2 = fechaHora2.toLocalTime().toString();
-
-            String horaFinal = hora1 + " - " + hora2;
-            listaHorarios.add(horaFinal);
+            listaHorarios.add(hora1);
         });
+
 
         model.addAttribute("doctor", doctor);
         model.addAttribute("listaCuestionarios", listaCuestionarios);
@@ -197,31 +194,39 @@ public class DoctorController {
         Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
         session.setAttribute("doctor", doctor_session);
 
-        if (bindingResult.hasErrors()) {
-            return "redirect:/doctor/dashboard";
-        } else {
-            // Obtener los valores de los campos hidden
-            Integer cuestionarioId = cuestionarioPorCita.getCuestionario().getId_cuestionario();
-            Integer citaId = cuestionarioPorCita.getCita().getId_cita();
 
-            // Crear instancias de las entidades relacionadas
-            Cuestionario cuestionario = new Cuestionario();
-            cuestionario.setId_cuestionario(cuestionarioId);
+        // Obtener los valores de los campos hidden
+        Integer cuestionarioId = cuestionarioPorCita.getCuestionario().getId_cuestionario();
+        Integer citaId = cuestionarioPorCita.getCita().getId_cita();
 
-            Cita cita = new Cita();
-            cita.setId_cita(citaId);
+        // Crear instancias de las entidades relacionadas
+        Cuestionario cuestionario = new Cuestionario();
+        cuestionario.setId_cuestionario(cuestionarioId);
 
-            // Establecer las relaciones entre las entidades
-            cuestionarioPorCita.setCuestionario(cuestionario);
-            cuestionarioPorCita.setCita(cita);
-            cuestionarioPorCita.getId().setIdCuestionario(cuestionarioId);
-            cuestionarioPorCita.getId().setIdCita(citaId);
-            cuestionarioPorCita.setEstado(0);
+        Cita cita = new Cita();
+        cita.setId_cita(citaId);
 
-            cuestionarioPorCitaRepository.save(cuestionarioPorCita);
+        // Establecer las relaciones entre las entidades
+        cuestionarioPorCita.setCuestionario(cuestionario);
+        cuestionarioPorCita.setCita(cita);
+        cuestionarioPorCita.getId().setIdCuestionario(cuestionarioId);
+        cuestionarioPorCita.getId().setIdCita(citaId);
+        cuestionarioPorCita.setEstado(0);
+        cuestionarioPorCita.setFecha_enviado(cuestionarioPorCitaRepository.FechaHora());
+        cuestionarioPorCita.setR1("·");
+        cuestionarioPorCita.setR2("·");
+        cuestionarioPorCita.setR3("·");
+        cuestionarioPorCita.setR4("·");
+        cuestionarioPorCita.setR5("·");
+        cuestionarioPorCita.setR6("·");
+        cuestionarioPorCita.setR7("·");
+        cuestionarioPorCita.setR8("·");
+        cuestionarioPorCita.setR9("·");
+        cuestionarioPorCita.setR10("·");
+        cuestionarioPorCita.setR11("·");
+        cuestionarioPorCitaRepository.save(cuestionarioPorCita);
 
-            return "redirect:/doctor/dashboard";
-        }
+        return "redirect:/doctor/dashboard";
     }
 
 
@@ -273,8 +278,6 @@ public class DoctorController {
         } else {
             return "redirect:/doctor/recibo";
         }
-
-
     }
 
     @GetMapping("/calendario")
@@ -473,6 +476,7 @@ public class DoctorController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String horaFinReunion = horaFinCita.format(formatter);
 
+        System.out.println(horaFinReunion);
         var apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmFwcGVhci5pbiIsImF1ZCI6Imh0dHBzOi8vYXBpLmFwcGVhci5pbi92MSIsImV4cCI6OTAwNzE5OTI1NDc0MDk5MSwiaWF0IjoxNjg4MDA4NTgxLCJvcmdhbml6YXRpb25JZCI6MTg0MjM1LCJqdGkiOiI3NTYwYmMwOC05ODhmLTRjYTEtYTgyNS1mOTVhOTU0NTM4NTcifQ.jOsnLwuVcqDmAWcgo24rvZgfO5fcDJIIDQiF92ugAzg";
         var data = Map.of(
                 "endDate", horaFinReunion,
