@@ -301,9 +301,9 @@ public class DoctorController {
 
         model.addAttribute("doctor", doctor);
         model.addAttribute("citas", citasDelDoctor);
+        model.addAttribute("cantidadCitas", citasDelDoctor.size());
         model.addAttribute("horario",horarioDeDoctor );
-
-        System.out.println(horarioDeDoctor.getId_horario());
+        System.out.println(citasDelDoctor.size());
 
         return "doctor/DoctorCalendario";
     }
