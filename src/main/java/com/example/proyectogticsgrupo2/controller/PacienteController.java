@@ -250,7 +250,6 @@ public class PacienteController {
         model.addAttribute("especialidad", especialidad);
         model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
         model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
-        model.addAttribute("activarModal", true);
 
         return "paciente/confirmacion";
     }
@@ -594,9 +593,6 @@ public class PacienteController {
     public String verPerfilDoctor(@RequestParam("doc") String idDoctor,
                                   Model model, HttpSession session, Authentication authentication) {
 
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -620,8 +616,6 @@ public class PacienteController {
     public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                                   Model model, HttpSession session, Authentication authentication) {
 
-      /*  Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
