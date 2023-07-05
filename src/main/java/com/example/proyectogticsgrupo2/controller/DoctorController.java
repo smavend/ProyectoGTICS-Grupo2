@@ -480,24 +480,30 @@ public class DoctorController {
         );
 
         try {
-            var request = HttpRequest.newBuilder(
-                            URI.create("https://api.whereby.dev/v1/meetings"))
-                    .header("Authorization", "Bearer " + apiKey)
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(new ObjectMapper().writeValueAsString(data)))
-                    .build();
 
-            var response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            if (cita.getLink() == null){
+                var request = HttpRequest.newBuilder(
+                                URI.create("https://api.whereby.dev/v1/meetings"))
+                        .header("Authorization", "Bearer " + apiKey)
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(new ObjectMapper().writeValueAsString(data)))
+                        .build();
 
-            System.out.println("Status code: " + response.statusCode());
-            System.out.println("Body: " + response.body() + "\n");
+                var response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-            Reunion reunion = new Gson().fromJson(response.body(), Reunion.class);
+                System.out.println("Status code: " + response.statusCode());
+                System.out.println("Body: " + response.body() + "\n");
 
-            citaRepository.guardarLink(reunion.getRoomUrl(), idCita);
-            model.addAttribute("reunion", reunion);
+                Reunion reunion = new Gson().fromJson(response.body(), Reunion.class);
 
-            // Fin de creación y guardado de link de reunión ----------
+                citaRepository.guardarLink(reunion.getRoomUrl(), idCita);
+                model.addAttribute("link", reunion.getRoomUrl());
+            }
+            else {
+                model.addAttribute("link", cita.getLink());
+            }
+
+            // Fin de creación o obtencion y guardado de link de reunión ----------
 
             String userEmail;
             if (session.getAttribute("impersonatedUser") != null) {
