@@ -23,6 +23,16 @@
                             <i class="bi bi-search"></i>
                         </a>
                     </li><!-- End Search Icon-->
+                    <li>
+                        <div th:if="${session.superAdminLogueadoComoAdministrativo}">
+                            <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin_being_Administrativo}" method="POST">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-home"></i> Volver a SuperAdmin
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+
 
                     <li class="nav-item dropdown">
 

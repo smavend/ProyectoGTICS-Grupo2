@@ -33,6 +33,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
     @Query(nativeQuery = true, value = "select count(doctor.id_doctor) from doctor where sede_id_sede = ?1 and especialidad_id_especialidad = ?2")
     int numDoctoresSedeEspecialidad(int idSede, int idEspecialidad);
 
+    @Query(nativeQuery = true, value = "select * from doctor where especialidad_id_especialidad=?1")
+    Doctor obtenerDoctorPorIdEspecialidad(int especialidad);
     List<Doctor> findBySede_IdSedeAndEspecialidad_IdEspecialidad(int idSede, int idEspecialidad);
 
     @Query(nativeQuery = true, value = "select d.* from doctor d " +
@@ -55,4 +57,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`doctor` SET `foto` = null WHERE (`id_doctor` = ?1)")
     void quitarFoto(String idPaciente);
+
+    @Query(nativeQuery = true, value = "Select * from doctor where id_doctor=?1")
+    Doctor buscarHorarioPorDoctorId(String idDoctor);
+
 }

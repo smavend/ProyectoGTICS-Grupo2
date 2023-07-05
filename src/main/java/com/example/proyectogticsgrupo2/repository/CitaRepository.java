@@ -34,7 +34,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Query(nativeQuery = true, value = "select c.* from cita c " +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
-            "where NOW() <= c.inicio and p.id_paciente = ?1 " +
+            "where NOW() <= c.fin and p.id_paciente = ?1 " +
             "order by c.inicio DESC")
     List<Cita> buscarProximasCitas(String idPaciente);
 
@@ -43,9 +43,14 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
             "inner join doctor d on (d.id_doctor = c.doctor_id_doctor) " +
             "inner join sede_x_especialidad_x_administrativo x on (c.sede_id_sede = x.sede_id_sede) " +
-            "where NOW() <= c.inicio and x.especialidad_id_especialidad = d.especialidad_id_especialidad and p.id_paciente = ?1 " +
+            "where NOW() <= c.fin and x.especialidad_id_especialidad = d.especialidad_id_especialidad and p.id_paciente = ?1 " +
             "order by c.inicio DESC")
     List<TorreYPisoDTO> buscarTorresPisosPrecioProximasCitas(String idPaciente);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `link` =?1 WHERE (`id_cita` = ?2)")
+    void guardarLink(String link,int idCita);
 
     @Query(nativeQuery = true, value = "select c.* from cita c \n" +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) \n" +
@@ -105,4 +110,11 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "    AND cita.estado = ?2", nativeQuery = true)
     List<EncuestaDoctorDTO> listarFechaEncuesta(String idPaciente, int estado);
 
+    @Query(value = "SELECT * FROM proyectogtics.cita\n" +
+            "WHERE  paciente_id_paciente= ?1" +
+            "  AND especialidad_id_especialidad IN (4, 5, 6)",nativeQuery = true)
+    List<Cita> listarExamenes(String idPaciente);
+
+    @Query(value = "select * from cita where doctor_id_doctor=?1",nativeQuery = true)
+    List<Cita> obtenerCitasPorDoctorId(String idDoctor);
 }

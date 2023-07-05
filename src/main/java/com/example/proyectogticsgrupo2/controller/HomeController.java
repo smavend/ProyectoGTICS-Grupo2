@@ -2,6 +2,7 @@ package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoAutoregistro;
 import com.example.proyectogticsgrupo2.service.QRCodeGenerator;
 import com.google.zxing.WriterException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -140,7 +141,8 @@ public class HomeController {
                                    @RequestParam (value = "alergias", required = false) String alergias,
                                    Model model,
                                    @ModelAttribute("paciente") @Valid Paciente paciente,
-                                   BindingResult bindingResult){
+                                   BindingResult bindingResult,
+                                   HttpServletRequest request){
         List<Distrito> list = distritoRepository.findAll();
         List<Seguro> list1 = seguroRepository.findAll();
         List<Paciente> pacientes = pacienteRepository.findAll();
@@ -233,6 +235,9 @@ public class HomeController {
                 }
             }
             session.setAttribute("registro", paciente.getIdPaciente());
+            String link = request.getServerName()+":"+request.getLocalPort();
+            CorreoAutoregistro c = new CorreoAutoregistro();
+            c.props(paciente.getCorreo(), paciente, link);
             return "redirect:/signin/confirmacion";
         }
     }

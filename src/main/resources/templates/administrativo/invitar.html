@@ -85,7 +85,7 @@
 
     <section class="section">
       <div class="row align-items-center">
-        <div class="col-lg-4 container">
+        <div class="col-lg-5 container">
           <div th:if="${msg!=null}" th:text="${msg}" class="alert alert-warning" role="alert">
             A simple warning alert—check it out!
           </div>
@@ -98,15 +98,19 @@
                 <div class="row mb-3">
                   <label class="col-sm-4 col-form-label">DNI</label>
                   <div class="col-sm-8">
-                    <input type="number" maxlength="8" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}"
-                         th:errors="*{dni}" ></div>
+                    <div class="input-group">
+                      <input type="number" id="dni" maxlength="8" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" aria-describedby="consulta">
+                      <button class="btn btn-primary" type="button" id="consulta">Consulta</button>
+                      <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}"
+                           th:errors="*{dni}" ></div>
+                    </div>
+                    <div class="invalid-feedback" id="errorDni"></div>
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label class="col-sm-4 col-form-label">Nombres</label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                    <input type="text" id="nombre" class="form-control" th:field="*{nombre}" disabled="disabled" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                          th:errors="*{nombre}" ></div>
                   </div>
@@ -114,7 +118,7 @@
                 <div class="row mb-3">
                   <label class="col-sm-4 col-form-label">Apellidos</label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                    <input type="text" id="apellidos" class="form-control" th:field="*{apellidos}" disabled="disabled" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
                          th:errors="*{apellidos}" ></div>
                   </div>
@@ -188,6 +192,7 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
@@ -197,7 +202,71 @@
         $('#staticBackdropLabel').html(`Confirmación`);
         $('.modal-body').html(`¿Seguro de que deseas invitar este paciente?`);
       });
+      $('#dni').on('input', function() {
+        var dniValue = $(this).val();
+        var validCharacters = /^[0-9]{1,8}$/;
+
+        if (!validCharacters.test(dniValue)) {
+          $(this).val(dniValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
+          $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
+        }
+      });
+
+      $("#consulta").click(function (){
+        let dni = $("#dni").val();
+        $("#dni").removeClass("is-invalid");
+        $("#errorDni").hide();
+        $("#nombre").val("");
+        $("#apellidos").val("");
+        console.log("dni:" , dni);
+        if (dni === "") {
+          console.log("alert");
+          alert("Debe ingresar un DNI");
+        }else {
+          $.ajax({
+            method: "GET",
+            crossDomain: true,
+            url: getUrl()+"/validarDni/"+dni
+          }).done(function (result){
+            console.log(result);
+            if (result.msg === "Éxito"){
+              $.ajax({
+                method: "GET",
+                dataType: "json",
+                crossDomain: true,
+                headers: {"Authorization": "Bearer 43fa71cb7f05b6705d5c79c73497ea314cfec168a6a55ae740f3b5579cb24fe4"},
+                url: "https://apiperu.dev/api/dni/" + dni
+              }).done(function (info) {
+                console.log(info);
+                if (info.success === true) {
+                  console.log("exitoso");
+                  $("#nombre").val(info.data.nombres);
+                  console.log(info.data.nombres, info.data.apellido_paterno, info.data.apellido_materno);
+                  $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
+                } else {
+                  console.log("error en encontrar dni");
+                  $("#dni").addClass("is-invalid");
+                  $("#errorDni").text("El DNI ingresado no es válido");
+                  $("#errorDni").show();
+                  $("#nombre").val("");
+                  $("#apellidos").val("");
+                }
+              })
+            } else {
+              console.log("error en validacion", result.err);
+              $("#dni").addClass("is-invalid");
+              $("#errorDni").text(result.err);
+              $("#errorDni").show();
+            }
+          })
+        }
+      });
     });
+  </script>
+  <script>
+    function getUrl(){
+      return window.location.protocol+"//"+window.location.hostname+":8080";
+    }
   </script>
 
 </body>

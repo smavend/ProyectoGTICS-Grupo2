@@ -255,12 +255,14 @@
                                     <br>
 
 
+
                                     <button type="submit" class="btn btn-primary">Guardar</button>
                                 </form>
                             </div>
                         </div>
 
-
+                        <input type="hidden" th:value="${citas.get(0).getInicio()}">
+                        <input type="hidden" th:value="${citas.get(1).getInicio()}">
                         <script>
 
                             document.addEventListener('DOMContentLoaded', function () {
@@ -370,7 +372,7 @@
 
                             <!-- Top Selling -->
                             <div class="pagetitle">
-                                <h1>Establecer Horario por primera vez:</h1>
+                                <h1>Establecer Horario por primera vez: (La duración del almuerzo es de 1 hora)</h1>
                             </div>
                             <div class="card top-selling overflow-auto container">
 
@@ -408,7 +410,7 @@
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_fin_lunes')}"
                                              th:errors="*{horario.disponibilidad_fin_lunes}"></div>
 
-                                        <label for="lunes_comida">Hora de comida: (1 hora)</label>
+                                        <label for="lunes_comida">Hora de comida:</label>
                                         <input type="time" id="lunes_comida" th:field="*{horario.comida_inicio_lunes}"
                                                th:classappend="${#fields.hasErrors('horario.comida_inicio_lunes')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.comida_inicio_lunes')}"
@@ -429,7 +431,7 @@
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_fin_martes')}"
                                              th:errors="*{horario.disponibilidad_fin_martes}"></div>
 
-                                        <label for="martes_comida">Hora de comida: (1 hora)</label>
+                                        <label for="martes_comida">Hora de comida:</label>
                                         <input type="time" id="martes_comida" th:field="*{horario.comida_inicio_martes}"
                                                th:classappend="${#fields.hasErrors('horario.comida_inicio_martes')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.comida_inicio_martes')}"

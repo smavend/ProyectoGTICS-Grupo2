@@ -9,6 +9,8 @@
         <meta content="" name="description">
         <meta content="" name="keywords">
         <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet'/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
         <!-- Favicons -->
         <link th:href="@{/assets/img/logo.png}" rel="icon">
         <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
@@ -108,7 +110,6 @@
 
                                                             <td style="font-size: 1rem"
                                                                 th:text="${cita.getNombre() + ' ' + cita.getApellidos()}">
-
                                                             </td>
 
                                                             <td style="font-size: 1rem">
@@ -118,7 +119,6 @@
 
                                                             <td style="font-size: 1rem;color: black"
                                                                 th:text="${horario}">
-
                                                             </td>
 
                                                             <td style="font-size: 1rem;color: black">

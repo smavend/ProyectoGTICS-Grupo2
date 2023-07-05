@@ -18,6 +18,8 @@ public class PacienteDTO_superadmin {
     private String clinica;
     private String sede;
     private String Administrador_in_Charge;
+    private boolean showLoguearButton;  // Nueva propiedad
+
 
 
 
