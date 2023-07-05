@@ -1,8 +1,6 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
-import com.example.proyectogticsgrupo2.dto.HorarioDeDiaDTO;
-import com.example.proyectogticsgrupo2.dto.HorarioOcupadoDTO;
 import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
@@ -23,9 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -464,7 +460,6 @@ public class PacienteController {
 
         Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);
-        System.out.println("Recibido correctamente");
 
         Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
 

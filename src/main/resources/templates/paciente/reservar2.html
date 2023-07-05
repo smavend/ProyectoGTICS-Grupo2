@@ -33,7 +33,7 @@
         <!-- End Sidebar-->
 
         <main id="main" class="main site-content">
-            <h1 class="encabezado">Reservar Cita</h1>
+            <h1 class="encabezado text-center" style="width: 90%">Reservar Cita</h1>
 
             <div class="bodyReservar">
                 <div class="cardReservar py-4">
@@ -120,10 +120,10 @@
         <script th:inline="javascript">
 
             // MODIFICAR CALENDARIO PARA MOSTRAR SOLO DÍAS DISPONIBLES
-
             $(function(){
                 $("#input_fecha").datepicker({
-                    dateFormat: 'yy-mm-dd',
+                    dateFormat: 'dd-mm-yy',
+                    minDate : 0
                 });
             })
         </script>
