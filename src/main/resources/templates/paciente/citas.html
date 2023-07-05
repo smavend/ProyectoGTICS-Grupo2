@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Citas</title>
 
+        <!-- DATATABLES --->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 
         <!-- BOOTSTRAP -->
@@ -21,6 +22,9 @@
         <!-- CSS -->
         <link th:href="@{/assets/css/stylePaciente.css}" rel="stylesheet">
         <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+
+        <!-- FAVICON -->
+        <link th:href="@{/assets_home/img/favicon.png}" rel="icon">
 
     </head>
     <body>
@@ -41,7 +45,7 @@
                 <a class="btn botonTipo botonTipoSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
                 <a class="btn botonTipo botonExamenes" onclick="buscarExamenes()">Próximos exámenes</a>
 
-                <div class="table-responsive-xl">
+                <div class="table">
                     <table class="table pt-2 pb-4" id="tabla_citas">
                         <thead>
                             <tr>

@@ -49,7 +49,7 @@ function buscarHorarios(doctor, fecha){
             selectHorario.empty();
             selectHorario.append("<option value=''>-- Seleccione un horario --</option>");
             for(let i = 0; i < data.horarios.length; i++){
-                selectHorario.append("<option value='"+data.horarios[i].inicio+"'>"+data.horarios[i].inicio+" - "+data.horarios[i].fin+"</option>");
+                selectHorario.append("<option value='"+data.horarios[i].inicio+"'>"+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+"</option>");
             }
 
         }).fail(function(e){

@@ -61,7 +61,7 @@ public class ReservarCitaController {
                                                                    @PathVariable("fecha") String fechaString) {
         HashMap<String, Object> response = new HashMap<>();
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             LocalDate fecha = LocalDate.parse(fechaString, formatter);
 
             List<HorarioOcupadoDTO> horariosOcupadosDTO = horarioRepository.buscarHorariosOcupados(idDoctor, fecha); // Horarios ocupados del doctor

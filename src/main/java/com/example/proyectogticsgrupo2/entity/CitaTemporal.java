@@ -38,7 +38,7 @@ public class CitaTemporal {
 
     @NotNull(message = "Seleccione una fecha")
     @Future(message = "Seleccione una fecha válida")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate fecha;
 
     @NotNull(message = "Seleccione un horario disponible")
