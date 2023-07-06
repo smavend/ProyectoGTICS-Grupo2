@@ -5,7 +5,9 @@ import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoCitaRegistrada;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -13,9 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -322,10 +327,8 @@ public class PacienteController {
     @PostMapping("/perfil/guardar")
     public String guardarPerfil(@ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
                                 @RequestParam(name = "archivo") MultipartFile file, RedirectAttributes attr,
-                                Model model, Authentication authentication, HttpSession session) {
-
-    /*    Paciente p = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", p);*/
+                                Model model, Authentication authentication, HttpSession session,
+                                HttpServletRequest request, HttpServletResponse response) {
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -366,11 +369,12 @@ public class PacienteController {
                     if (!p.getCorreo().equals(paciente.getCorreo())) {
                         Credenciales credenciales = credencialesRepository.buscarPorId(p.getIdPaciente());
                         Credenciales nuevasCredenciales = new Credenciales(p.getIdPaciente(), paciente.getCorreo(), credenciales.getContrasena());
-                        credencialesRepository.save(nuevasCredenciales);
 
+                        credencialesRepository.save(nuevasCredenciales);
                         pacienteRepository.save(paciente);
 
-                        return "redirect:/logout";
+                        logout(request, response);
+                        return "redirect:/";
                     }
                     pacienteRepository.save(paciente);
 
@@ -460,9 +464,6 @@ public class PacienteController {
     @GetMapping("/perfil/cambiarContrasena")
     public String cambiarContrasena(HttpSession session, Authentication authentication) {
 
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -975,6 +976,30 @@ public class PacienteController {
             return doctorRepository.findBySede_IdSedeAndEspecialidad_IdEspecialidad(idSede, idEspecialidad);
         } else {
             return doctorRepository.buscarVirtualesPorSedeYEspecialidad(idSede, idEspecialidad);
+        }
+    }
+
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        boolean isSecure = false;
+        String contextPath = null;
+        if (request != null) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            isSecure = request.isSecure();
+            contextPath = request.getContextPath();
+        }
+        SecurityContext context = SecurityContextHolder.getContext();
+        SecurityContextHolder.clearContext();
+        context.setAuthentication(null);
+        if (response != null) {
+            Cookie cookie = new Cookie("JSESSIONID", null);
+            String cookiePath = StringUtils.hasText(contextPath) ? contextPath : "/";
+            cookie.setPath(cookiePath);
+            cookie.setMaxAge(0);
+            cookie.setSecure(isSecure);
+            response.addCookie(cookie);
         }
     }
 }
