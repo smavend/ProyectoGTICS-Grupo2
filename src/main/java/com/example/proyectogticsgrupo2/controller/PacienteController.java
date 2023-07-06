@@ -247,14 +247,14 @@ public class PacienteController {
         Especialidad especialidad = especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get();
 
         citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
-        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
+        int idCita = citaRepository.obtenerUltimoId();
+        pagoRepository.nuevoPago(idCita, tipoPago);
 
         // Enviar correo al paciente
-        CorreoCitaRegistrada correo = new CorreoCitaRegistrada();
-        String domain = request.getServerName();
+        Cita cita = citaRepository.findById(idCita).get();
+        CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
         String host = request.getServerName()+":"+request.getLocalPort();
-
-
+        correo.props(host, paciente.getCorreo(), cita);
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
         model.addAttribute("especialidad", especialidad);
@@ -346,6 +346,7 @@ public class PacienteController {
             }
 
             if (bindingResult.hasErrors()) {
+                System.out.println("Error: "+bindingResult.getAllErrors());
                 model.addAttribute("seguroList", seguroRepository.findAll());
                 model.addAttribute("alergiasPaciente", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
                 model.addAttribute("distritoList", distritoRepository.findAll());
@@ -366,8 +367,11 @@ public class PacienteController {
                         Credenciales credenciales = credencialesRepository.buscarPorId(p.getIdPaciente());
                         Credenciales nuevasCredenciales = new Credenciales(p.getIdPaciente(), paciente.getCorreo(), credenciales.getContrasena());
                         credencialesRepository.save(nuevasCredenciales);
-                    }
 
+                        pacienteRepository.save(paciente);
+
+                        return "redirect:/logout";
+                    }
                     pacienteRepository.save(paciente);
 
                     attr.addFlashAttribute("msgActualizacion", "Su perfil se ha actualizado correctamente");
