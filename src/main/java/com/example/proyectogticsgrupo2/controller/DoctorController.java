@@ -299,12 +299,27 @@ public class DoctorController {
         Doctor buscarHorarioDeDoctor=doctorRepository.buscarHorarioPorDoctorId(doctor_session.getId_doctor());
         Horario horarioDeDoctor=horarioRepository.buscarHorarioPorDoctorId(buscarHorarioDeDoctor.getHorario().getId_horario());
 
+        List<Cita> listaCitaPresencial = new ArrayList<>();
+        List<Cita> listaCitaVirtual= new ArrayList<>();
+
+        for (Cita cita : citasDelDoctor) {
+
+            if (cita.getModalidad()==0){
+                listaCitaPresencial.add(cita);
+            }else{
+                listaCitaVirtual.add(cita);
+            }
+        }
+
         model.addAttribute("doctor", doctor);
         model.addAttribute("citas", citasDelDoctor);
-        model.addAttribute("cantidadCitas", citasDelDoctor.size());
+        model.addAttribute("citasPresenciales", listaCitaPresencial);
+        model.addAttribute("citasVirtuales", listaCitaVirtual);
+        model.addAttribute("cantidadCitasPresenciales", listaCitaPresencial.size());
+        model.addAttribute("cantidadCitasVirtuales", listaCitaVirtual.size());
         model.addAttribute("horario",horarioDeDoctor );
-        System.out.println(citasDelDoctor.size());
-
+        System.out.println(listaCitaPresencial.size());
+        System.out.println(listaCitaVirtual.size());
         return "doctor/DoctorCalendario";
     }
 

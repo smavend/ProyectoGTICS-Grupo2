@@ -48,6 +48,9 @@ public class Cita {
     @Column(nullable = false)
     private int modalidad;
 
+    /* estado == 0 ---> Presencial
+       estado == 1 ---> Virtual */
+
     @Column(nullable = false)
     @Lob
     private byte[] reporte;

@@ -261,58 +261,72 @@
                             </div>
                         </div>
 
-                        <div th:each="cita, citaIndex : ${citas}">
-                            <input id="citaInicio" th:id="'citaInicio' + ${citaIndex.index}" type="hidden" th:value="${cita.inicio}">
+
+                        <div th:each="cita, citaIndex : ${citasPresenciales}">
+                            <input id="citaInicioPresencial" th:id="'citaInicioPresencial' + ${citaIndex.index}" type="hidden" th:value="${cita.inicio}" />
+                        </div>
+                        <div th:each="cita, citaIndex : ${citasVirtuales}">
+                            <input id="citaInicioVirtual" th:id="'citaInicioVirtual' + ${citaIndex.index}" type="hidden" th:value="${cita.inicio}" />
                         </div>
 
-                        <input id="contador" type="hidden" th:value="${cantidadCitas}">
+
+                        <input id="contadorPresencial" type="hidden" th:value="${cantidadCitasPresenciales}">
+                        <input id="contadorVirtual" type="hidden" th:value="${cantidadCitasVirtuales}">
 
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {
                                 var calendarEl = document.getElementById('calendar');
-                                var events = [];
-                                var cantidadCitas = document.getElementById('contador').value;
+                                var eventsPresencial = [];
+                                var eventsVirtual = [];
+                                var cantidadCitasPresenciales = document.getElementById('contadorPresencial').value;
+                                var cantidadCitasVirtuales = document.getElementById('contadorVirtual').value;
 
-                                for (var i = 0; i < parseInt(cantidadCitas); i++) {
-                                    events.push({
-                                        title: 'Cita',
-                                        start: document.getElementById('citaInicio' + i).value
+                                for (var i = 0; i < parseInt(cantidadCitasPresenciales); i++) {
+                                    eventsPresencial.push({
+                                        title: 'Cita médica presencial',
+                                        start: document.getElementById('citaInicioPresencial' + i).value,
+                                        color: '#86C69B'
                                     });
                                 }
 
+                                for (var j = 0; j < parseInt(cantidadCitasVirtuales); j++) {
+                                    eventsVirtual.push({
+                                        title: 'Cita médica virtual',
+                                        start: document.getElementById('citaInicioVirtual' + j).value,
+                                        color: '#379AB8'
+                                    });
+                                }
+
+                                var events = eventsPresencial.concat(eventsVirtual);
+
                                 var calendar = new FullCalendar.Calendar(calendarEl, {
+                                    eventTimeFormat: {
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        meridiem: 'short'
+                                    },
                                     headerToolbar: {
                                         left: 'prev,next today',
                                         center: 'title',
                                         right: 'dayGridMonth'
                                     },
-                                    navLinks: true, // can click day/week names to navigate views
+                                    navLinks: true,
                                     selectable: true,
                                     selectMirror: true,
                                     select: function (arg) {
-                                        var title = prompt('Event Title:');
-                                        if (title) {
-                                            calendar.addEvent({
-                                                title: title,
-                                                start: arg.start,
-                                                end: arg.end,
-                                                allDay: arg.allDay
-                                            })
-                                        }
-                                        calendar.unselect()
+
                                     },
                                     eventClick: function (arg) {
-                                        if (confirm('¿Estás seguro que deseas eliminar este evento?')) {
-                                            arg.event.remove()
-                                        }
-                                    },
-                                    editable: true,
-                                    dayMaxEvents: true, // allow "more" link when too many events
 
+                                    },
+                                    editable: false,
+                                    dayMaxEvents: true,
                                     events: events
                                 });
+
                                 calendar.render();
                             });
+
                         </script>
 
 
