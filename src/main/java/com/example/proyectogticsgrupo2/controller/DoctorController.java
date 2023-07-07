@@ -297,8 +297,12 @@ public class DoctorController {
 
         List<Cita> citasDelDoctor=citaRepository.obtenerCitasPorDoctorId(doctor_session.getId_doctor());
         Doctor buscarHorarioDeDoctor=doctorRepository.buscarHorarioPorDoctorId(doctor_session.getId_doctor());
-        Horario horarioDeDoctor=horarioRepository.buscarHorarioPorDoctorId(buscarHorarioDeDoctor.getHorario().getId_horario());
-
+        Horario horarioDeDoctor = null;
+        try {
+            horarioDeDoctor = horarioRepository.buscarHorarioPorDoctorId(buscarHorarioDeDoctor.getHorario().getId_horario());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         List<Cita> listaCitaPresencial = new ArrayList<>();
         List<Cita> listaCitaVirtual= new ArrayList<>();
 
