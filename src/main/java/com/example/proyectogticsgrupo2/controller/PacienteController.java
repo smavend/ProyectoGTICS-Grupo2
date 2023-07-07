@@ -125,12 +125,25 @@ public class PacienteController {
     }
 
     /* SECCIÓN RESERVAR CITA */
+
+    @GetMapping("/reservarTipo")
+    public String reservar(HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        return "paciente/reservar0";
+    }
+
     @GetMapping("/reservar")
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, Model model, HttpSession session, Authentication authentication) {
 
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");

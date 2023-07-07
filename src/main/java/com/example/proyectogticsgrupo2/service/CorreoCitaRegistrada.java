@@ -91,7 +91,7 @@ public class CorreoCitaRegistrada {
                                     <tbody>
                                         <tr>
                                             <td align='center'>
-                                            <h1 style='margin:0;font-family:Arial,Helvetica,sans-serif;font-size:25px;line-height:normal;font-weight:700;letter-spacing:0;color:#4c4c4c'>Estimado(a), %nombre% </h1>
+                                            <h1 style='margin:0;font-family:Arial,Helvetica,sans-serif;font-size:22px;line-height:normal;font-weight:700;letter-spacing:0;color:#4c4c4c'>Estimado(a), %nombre% </h1>
                                             </td>
                                         </tr>
                                         <tr>
@@ -120,7 +120,7 @@ public class CorreoCitaRegistrada {
 
         if (cita.getModalidad() == 0) {
             htmlContent = htmlContent + "<tr>\n" +
-                    "                     <td style='text-align: center; font-family:Arial; color:#777777'>\n" +
+                    "                     <td style='font-size: 16px; text-align: center; font-family:Arial; color:#777777'>\n" +
                     "                       <p>Modalidad: <span style='color: #4c4c4c; font-weight: 600;'>PRESENCIAL</span></p>\n" +
                     "                       <p>Especialidad: <span style='color: #4c4c4c; font-weight: 600;'>%especialidad%</span></p>\n" +
                     "                       <p>Doctor: <span style='color: #4c4c4c; font-weight: 600;'>%doctor%</span></p>\n" +
@@ -134,7 +134,7 @@ public class CorreoCitaRegistrada {
                     "                    </tr>";
         } else {
             htmlContent = htmlContent + "<tr>\n" +
-                    "                     <td style='text-align: center; font-family:Arial; color:#777777'>\n" +
+                    "                     <td style='font-size: 16px; text-align: center; font-family:Arial; color:#777777'>\n" +
                     "                      <p>Modalidad: <span style='color: #4c4c4c; font-weight: 600;'>VIRTUAL</span></p>\n" +
                     "                      <p>Especialidad: <span style='color: #4c4c4c; font-weight: 600;'>%especialidad%</span></p>\n" +
                     "                      <p>Doctor: <span style='color: #4c4c4c; font-weight: 600;'>%doctor%</span></p>\n" +
@@ -149,7 +149,7 @@ public class CorreoCitaRegistrada {
                 "                      <table border='0' cellpadding='0' cellspacing='0' style='width:220px;border-spacing:0;border-collapse:collapse' width='220'>\n" +
                 "                       <tbody>\n" +
                 "                        <tr>\n" +
-                "                         <p style='margin-bottom:15px; font-family:Arial,Helvetica,sans-serif; font-size:16px; line-height:26px; font-weight:400; letter-spacing:0; color:#777777; max-width:520px'>\n" +
+                "                         <p style='text-align: center; margin-bottom:15px; font-family:Arial,Helvetica,sans-serif; font-size:16px; line-height:26px; font-weight:400; letter-spacing:0; color:#777777; max-width:520px'>\n" +
                 "                          Puede revisar su cita en el siguiente enlace:\n" +
                 "                         </p>\n" +
                 "                        </tr>\n" +

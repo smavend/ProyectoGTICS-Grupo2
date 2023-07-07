@@ -110,7 +110,7 @@ public class SecurityConfig {
                 });
 
         http.authorizeHttpRequests()
-                .requestMatchers("/Paciente","/Paciente/***").hasAnyAuthority("paciente", "superadmin")
+                .requestMatchers("/Paciente","/Paciente/**").hasAnyAuthority("paciente", "superadmin")
                 .requestMatchers("/doctor","/doctor/***").hasAnyAuthority("doctor", "superadmin")
                 .requestMatchers("/administrativo","/administrativo/***","/validarDni/*").hasAnyAuthority("administrativo", "superadmin")
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
