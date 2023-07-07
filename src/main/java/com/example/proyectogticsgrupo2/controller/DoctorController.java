@@ -885,7 +885,6 @@ public class DoctorController {
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "doctor/DoctorPerfilEdit";
         } else {
-            try {
                 if (file.isEmpty()) {
                     Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId_doctor());
                     Doctor d = optionalDoctor.get();
@@ -893,9 +892,14 @@ public class DoctorController {
                     doctor.setFotoname(d.getFotoname());
                     doctor.setFotocontenttype(d.getFotocontenttype());
                 } else {
-                    doctor.setFoto(file.getBytes());
-                    doctor.setFotoname(fileName);
-                    doctor.setFotocontenttype(file.getContentType());
+                    try {
+                        doctor.setFoto(file.getBytes());
+                        doctor.setFotoname(fileName);
+                        doctor.setFotocontenttype(file.getContentType());
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    }
+
                 }
                 try {
                     doctorRepository.save(doctor);
@@ -904,16 +908,8 @@ public class DoctorController {
                     attr.addFlashAttribute("msgError", "No se puede subir la imagen");
                     return "redirect:/doctor/perfilid=" + doctor.getId_doctor();
                 }
-
-
                 attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
                 return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
-                return "redirect:/doctor/perfil" + doctor.getId_doctor();
-            }
 
         }
     }
