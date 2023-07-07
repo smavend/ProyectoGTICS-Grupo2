@@ -880,11 +880,12 @@ public class DoctorController {
             attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
             return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
         }
-        if (file.getSize() > 10 * 1024 * 1024) {
-            attr.addFlashAttribute("msgError", "El archivo excede el tamaño máximo permitido de 10MB");
+        // Validar el tipo de archivo
+        String contentType = file.getContentType();
+        if (!(contentType.equals("image/jpeg") || contentType.equals("image/jpg"))) {
+            attr.addFlashAttribute("msgError", "El archivo debe ser de tipo JPEG o JPG");
             return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
         }
-
         if (bindingResult.hasErrors()) {
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "doctor/DoctorPerfilEdit";
