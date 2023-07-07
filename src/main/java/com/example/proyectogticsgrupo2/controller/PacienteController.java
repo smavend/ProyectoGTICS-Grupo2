@@ -373,8 +373,9 @@ public class PacienteController {
                         credencialesRepository.save(nuevasCredenciales);
                         pacienteRepository.save(paciente);
 
-                        logout(request, response);
-                        return "redirect:/";
+                        logout(request, response); // borrando cookies
+
+                        return "redirect:/login";
                     }
                     pacienteRepository.save(paciente);
 
@@ -474,7 +475,6 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
-
         return "paciente/perfilContrasena";
     }
 
@@ -484,15 +484,13 @@ public class PacienteController {
                                     @RequestParam("nueva2") String contrasenaNueva2,
                                     RedirectAttributes attr, Authentication authentication,
                                     HttpSession session) {
-/*
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());*/
+
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
         } else {
             userEmail = authentication.getName();
         }
-
 
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
 
@@ -503,16 +501,23 @@ public class PacienteController {
 
         if (passwordEncoder.matches(contrasenaActual, credenciales.getContrasena())) {
             if (contrasenaNueva1.equals(contrasenaNueva2)) {
-                credencialesRepository.save(nuevasCredenciales);
-                attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+
+                if (!contrasenaNueva1.equals("")){
+                    credencialesRepository.save(nuevasCredenciales);
+                    attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+                    return "redirect:/Paciente/perfil";
+                }
+                else {
+                    attr.addFlashAttribute("erro2", "Ingrese una nueva contraseña válida");
+                }
+
             } else {
-                System.out.println("Contraseñas nuevas no coinciden");
+                attr.addFlashAttribute("error2", "Las contraseñas deben coincidir");
             }
         } else {
-            System.out.println("Contraseña actual no coincide");
+            attr.addFlashAttribute("error1", "La contraseña actual es incorrecta");
         }
-
-        return "redirect:/Paciente/perfil";
+        return "redirect:/Paciente/perfil/cambiarContrasena";
     }
 
     @GetMapping("/imagePaciente")
