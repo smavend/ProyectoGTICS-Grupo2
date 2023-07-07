@@ -702,37 +702,32 @@ public class DoctorController {
             model.addAttribute("cita", cita1);
             return "doctor/DoctorReporteSesion";
         } else {
+
+            cita.setEstado(4);
+            citaRepository.save(cita); // guardar cita finalizada
+
             if (cita.getEspecialidad().getIdEspecialidad()==4 || cita.getEspecialidad().getIdEspecialidad()==5 || cita.getEspecialidad().getIdEspecialidad()==6){
 
-                cita.setEstado(4);
-                citaRepository.save(cita);
-
-                Cita cita_examen= new Cita();
+                Cita cita_examen= new Cita(); // creacion de nueva cita para examenes
                 cita_examen.setPaciente(cita.getPaciente());
 
                 Doctor doctor_examen = doctorRepository.obtenerDoctorPorIdEspecialidad(cita.getEspecialidad().getIdEspecialidad());
-                cita_examen.setDoctor(doctor_examen);
+                cita_examen.setDoctor(doctor_examen); // X: puede ocurrir que se tengan mas doctores de una misma especialidad
 
-                cita_examen.setInicio(cita.getFin());
-                cita_examen.setFin(cita.getFin().plusDays(7));
+                // X: cómo agregar la fecha de inicio y fin?
+
                 cita_examen.setModalidad(cita.getModalidad());
                 cita_examen.setEstado(0);
-                cita_examen.setSede(cita.getSede());
-                cita_examen.setIdSeguro(cita.getIdSeguro());
-                cita_examen.setDiagnostico(cita.getDiagnostico());
-                cita_examen.setTratamiento(cita.getTratamiento());
-                cita_examen.setReceta(cita.getReceta());
+                cita_examen.setSede(doctor_examen.getSede()); // V
+                cita_examen.setIdSeguro(cita.getIdSeguro()); // V
+                cita_examen.setDiagnostico(cita.getDiagnostico()); // X: por qué la nueva cita tiene el mismo diagnostico
+                cita_examen.setTratamiento(cita.getTratamiento()); // X: por qué la nueva cita tiene el mismo tratamiento
+                cita_examen.setReceta(cita.getReceta()); // X: por qué la nueva cita tiene la misma receta
 
-                Optional<Cita> optionalCita = citaRepository.findById(cita.getId_cita());
-                Cita cita_previa = optionalCita.get();
-                cita_examen.setCita_previa(cita_previa);
+                cita_examen.setCita_previa(cita); // V
 
-                citaRepository.save(cita_examen);
+                //citaRepository.save(cita_examen);
 
-
-            } else {
-                cita.setEstado(4);
-                citaRepository.save(cita);
             }
 
             return "redirect:/doctor/dashboard";
