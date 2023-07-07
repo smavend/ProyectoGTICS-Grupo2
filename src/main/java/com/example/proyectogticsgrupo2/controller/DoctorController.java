@@ -878,41 +878,44 @@ public class DoctorController {
 
         if (fileName.contains("..") || fileName.contains(" ")) {
             attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
-            return "redirect:/doctor/perfil/editar?id=" + doctor.getId_doctor();
+            return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
+        }
+        if (file.getSize() > 10 * 1024 * 1024) {
+            attr.addFlashAttribute("msgError", "El archivo excede el tamaño máximo permitido de 10MB");
+            return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
         }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "doctor/DoctorPerfilEdit";
         } else {
-                if (file.isEmpty()) {
-                    Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId_doctor());
-                    Doctor d = optionalDoctor.get();
-                    doctor.setFoto(d.getFoto());
-                    doctor.setFotoname(d.getFotoname());
-                    doctor.setFotocontenttype(d.getFotocontenttype());
-                } else {
-                    try {
-                        doctor.setFoto(file.getBytes());
-                        doctor.setFotoname(fileName);
-                        doctor.setFotocontenttype(file.getContentType());
-                    } catch (IOException e){
-                        e.printStackTrace();
-                    }
-
-                }
+            if (file.isEmpty()) {
+                Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId_doctor());
+                Doctor d = optionalDoctor.get();
+                doctor.setFoto(d.getFoto());
+                doctor.setFotoname(d.getFotoname());
+                doctor.setFotocontenttype(d.getFotocontenttype());
+            } else {
                 try {
-                    doctorRepository.save(doctor);
-                } catch (Exception e) {
+                    doctor.setFoto(file.getBytes());
+                    doctor.setFotoname(fileName);
+                    doctor.setFotocontenttype(file.getContentType());
+                } catch (IOException e) {
                     e.printStackTrace();
-                    attr.addFlashAttribute("msgError", "No se puede subir la imagen");
-                    return "redirect:/doctor/perfilid=" + doctor.getId_doctor();
                 }
-                attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
+            }
+            try {
+                doctorRepository.save(doctor);
+            } catch (Exception e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("msgError", "No se puede subir la imagen");
                 return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
-
+            }
+            attr.addFlashAttribute("msgActualizacion", "Perfil actualizado correctamente");
+            return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
         }
     }
+
 
     @GetMapping("/imageDoctor")
     public ResponseEntity<byte[]> mostrarImagenDoctor(@RequestParam("idDoctor") String id) {
