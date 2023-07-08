@@ -561,7 +561,6 @@ public class DoctorController {
 
             citaRepository.actualizarEstadoEnConsulta(3,cita.getId_cita());
 
-
             return "doctor/DoctorCita";
         }
         catch (Exception e){
