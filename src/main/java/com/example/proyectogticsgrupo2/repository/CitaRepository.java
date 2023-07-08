@@ -25,7 +25,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorProxCitas(String id);
 
-    @Query(value = "SELECT MAX(c.id_cita), p.id_paciente, p.nombre, p.apellidos,p.foto,p.fotoname,p.fotocontenttype FROM proyectogtics.cita c INNER JOIN proyectogtics.doctor d ON (d.id_doctor=c.doctor_id_doctor) INNER JOIN proyectogtics.paciente p ON (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor=10304011 AND c.sede_id_sede = d.sede_id_sede  group by p.id_paciente",
+    @Query(value = "SELECT MAX(c.id_cita), p.id_paciente, p.nombre, p.apellidos,p.foto,p.fotoname,p.fotocontenttype FROM proyectogtics.cita c INNER JOIN proyectogtics.doctor d ON (d.id_doctor=c.doctor_id_doctor) INNER JOIN proyectogtics.paciente p ON (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor=?1 AND c.sede_id_sede = d.sede_id_sede  group by p.id_paciente",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorListaPacientes(String id);
 
@@ -69,7 +69,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`, `seguro_id_seguro`) VALUES (?1, ?2, ?3, ?4, ?5, 0, ?6, ?7)")
     void reservarCita(String idPaciente, String idDoctor, LocalDateTime inicio, LocalDateTime fin, int modalidad, int idSede, int idSeguro);
-
+    //@Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`diagnostico`, `receta`, `tratamiento`, `paciente_id_paciente`, `doctor_id_doctor`, `inicio`, `fin`, `modalidad`, `estado`, `sede_id_sede`, `seguro_id_seguro`) VALUES (?1, ?2, ?3, ?4, ?5, 0, ?6, ?7)")
     @Query(nativeQuery = true, value = "SELECT LAST_INSERT_ID() FROM cita")
     int obtenerUltimoId();
 

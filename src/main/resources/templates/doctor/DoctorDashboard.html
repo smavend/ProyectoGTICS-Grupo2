@@ -113,8 +113,9 @@
                                                             </td>
 
                                                             <td style="font-size: 1rem">
-                                                                <h6 th:text="${ cita.modalidad==0 ? 'Presencial' : 'Virtual'}"></h6>
+                                                                <h6 th:text="${cita.modalidad == 0 ? 'Presencial' : (cita.modalidad == 1 ? 'Virtual' : 'Examen')}"></h6>
                                                             </td>
+
 
 
                                                             <td style="font-size: 1rem;color: black"
@@ -130,18 +131,26 @@
                                                                     th:text="'En espera'"></h6>
                                                                 <h6 th:if="${cita.estado == 3}"
                                                                     th:text="'En consulta'"></h6>
+                                                                <h6 th:if="${cita.estado == 5}"
+                                                                    th:text="'Examen pendiente'"></h6>
                                                             </td>
 
 
-                                                            <td th:if="${cita.modalidad == 1}">
+                                                            <td th:if="${cita.modalidad == 1 || cita.modalidad == 2}">
                                                                 <div style="width: max-content">
-                                                                    <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
+                                                                    <a th:if="${cita.modalidad == 1}" th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
                                                                        type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Iniciar cita virtual">
                                                                         <i style="color: #ffffff"
                                                                            class="bi-play-fill"></i>
                                                                     </a>
 
-                                                                    <a th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}" style="width: max-content" data-bs-toggle="tooltip" data-bs-placement="top" title="Enviar cuestionario" class="btn btn-warning">
+                                                                    <a th:if="${cita.modalidad == 2}" th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
+                                                                       type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Subir examen">
+                                                                        <i style="color: #ffffff"
+                                                                           class="bi-play-fill"></i>
+                                                                    </a>
+
+                                                                    <a th:if="${cita.modalidad == 1}" th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}" style="width: max-content" data-bs-toggle="tooltip" data-bs-placement="top" title="Enviar cuestionario" class="btn btn-warning">
                                                                         <i class="bi-file-text-fill"></i>
                                                                     </a>
 
@@ -152,7 +161,7 @@
 
                                                                 </div>
                                                             </td>
-                                                            <td th:unless="${cita.modalidad == 1}">
+                                                            <td th:unless="${cita.modalidad == 1 || cita.modalidad == 2}">
                                                                 <h6 style="text-align: center">No apto</h6>
                                                             </td>
 
