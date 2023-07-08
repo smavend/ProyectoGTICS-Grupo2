@@ -244,6 +244,7 @@ public class PacienteController {
         LocalDateTime fin = inicio.plusHours(1);
 
         citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
+        //citaRepository.reservarCita(·,·,·paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());

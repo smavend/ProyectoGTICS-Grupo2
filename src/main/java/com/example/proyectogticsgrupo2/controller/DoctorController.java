@@ -447,7 +447,7 @@ public class DoctorController {
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
 
-        if (optionalPaciente.isPresent() & optionalCita.isPresent() && optionalCita.get().getModalidad() == 1 && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor()) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && (optionalCita.get().getModalidad() == 1 || optionalCita.get().getModalidad() == 2) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor()) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
@@ -700,7 +700,7 @@ public class DoctorController {
             model.addAttribute("paciente", paciente);
             model.addAttribute("fecha", getFecha());
             model.addAttribute("cita", cita1);
-            return "doctor/DoctorReporteSesion";
+            return "doctor/DoctorCita"; // se podria cambiar a DOctorCita
         } else {
 
             cita.setEstado(4);
@@ -711,22 +711,26 @@ public class DoctorController {
                 Cita cita_examen= new Cita(); // creacion de nueva cita para examenes
                 cita_examen.setPaciente(cita.getPaciente());
 
-                Doctor doctor_examen = doctorRepository.obtenerDoctorPorIdEspecialidad(cita.getEspecialidad().getIdEspecialidad());
-                cita_examen.setDoctor(doctor_examen); // X: puede ocurrir que se tengan mas doctores de una misma especialidad
+                List<Doctor> doctor_examen = doctorRepository.obtenerDoctorPorIdEspecialidad(cita.getEspecialidad().getIdEspecialidad(), cita.getSede().getIdSede());
+                Random random = new Random();
+                int indiceAleatorio = random.nextInt(doctor_examen.size());
+                Doctor doctorSeleccionado = doctor_examen.get(indiceAleatorio);
 
-                // X: cómo agregar la fecha de inicio y fin?
+                cita_examen.setDoctor(doctorSeleccionado); // X: puede ocurrir que se tengan mas doctores de una misma especialidad
 
-                cita_examen.setModalidad(cita.getModalidad());
-                cita_examen.setEstado(0);
-                cita_examen.setSede(doctor_examen.getSede()); // V
+                cita_examen.setInicio(cita.getFin());
+                cita_examen.setFin(cita.getFin().plusDays(7));
+                cita_examen.setModalidad(2); //
+                cita_examen.setEstado(5);
+                cita_examen.setSede(doctorSeleccionado.getSede()); // V
                 cita_examen.setIdSeguro(cita.getIdSeguro()); // V
-                cita_examen.setDiagnostico(cita.getDiagnostico()); // X: por qué la nueva cita tiene el mismo diagnostico
-                cita_examen.setTratamiento(cita.getTratamiento()); // X: por qué la nueva cita tiene el mismo tratamiento
-                cita_examen.setReceta(cita.getReceta()); // X: por qué la nueva cita tiene la misma receta
+                cita_examen.setDiagnostico(cita.getDiagnostico()); // No poner nulo pq si no sale error
+                cita_examen.setTratamiento(cita.getTratamiento()); // No poner nulo pq si no sale error
+                cita_examen.setReceta(cita.getReceta()); // No poner nulo pq si no sale error
 
                 cita_examen.setCita_previa(cita); // V
 
-                //citaRepository.save(cita_examen);
+                citaRepository.save(cita_examen);
 
             }
 
