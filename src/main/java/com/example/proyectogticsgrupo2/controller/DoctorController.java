@@ -491,7 +491,7 @@ public class DoctorController {
 
         Cita cita = citaRepository.findById(idCita).get();
 
-        LocalDateTime horaFinCita = cita.getFin().plusHours(1);
+        LocalDateTime horaFinCita = cita.getFin().plusDays(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String horaFinReunion = horaFinCita.format(formatter);
 
