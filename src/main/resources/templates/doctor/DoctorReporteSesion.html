@@ -143,7 +143,7 @@
                     <br>
 
                     <div style="text-align: center;" class=" col-12">
-                        <button type="submit" class="btn btn-primary btn-lg">Iniciar cita</button>
+                        <button th:disabled="${!(momentoActual.isAfter(cita.inicio) && momentoActual.isBefore(cita.fin))}" type="submit" class="btn btn-primary btn-lg">Iniciar cita</button>
                     </div>
 
                 </form>

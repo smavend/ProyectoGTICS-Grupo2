@@ -40,13 +40,16 @@ public class Cita {
     private String receta;
 
 
-    @Size(max=100,message = "El campo no puede tener más de 100 caracteres")
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String tratamiento;
 
     @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String bitacora;
     @Column(nullable = false)
     private int modalidad;
+
+    /* estado == 0 ---> Presencial
+       estado == 1 ---> Virtual */
 
     @Column(nullable = false)
     @Lob
