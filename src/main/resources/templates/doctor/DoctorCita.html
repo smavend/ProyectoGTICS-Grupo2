@@ -108,7 +108,7 @@
                             <div class="mb-3">
                                     <textarea oninput="autoResizeTextarea(this)" required
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                              type="text" maxlength="100" th:field="*{tratamiento}"
+                                              type="text" maxlength="500" th:field="*{tratamiento}"
                                               th:classappend="${#fields.hasErrors('tratamiento')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
@@ -209,6 +209,15 @@
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
+
+        <script>
+            function autoResizeTextarea(element) {
+                // Ajustar la altura del textarea en función del contenido
+                element.style.height = "auto";
+                element.style.height = element.scrollHeight + "px";
+            }
+
+        </script>
 
         <!-- Vendor JS Files -->
         <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
