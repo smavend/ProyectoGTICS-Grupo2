@@ -50,7 +50,7 @@ public class Cita {
 
     /* estado == 0 ---> Presencial
        estado == 1 ---> Virtual
-       esatdo == 2 ---> Examen*/
+       estado == 2 ---> Examen*/
 
     @Column(nullable = false)
     @Lob
@@ -60,11 +60,11 @@ public class Cita {
     @Column(nullable = false)
     private int estado;
 
-    /* estado == 0 ---> Próxima cita
-       estado == 1 ---> Registrado en caja
-       estado == 2 ---> En espera
+    /* estado == 0 ---> Pendiente de pago
+       estado == 1 o 2 ---> En espera
        estado == 3 ---> En consulta
-       estado == 4 ---> Consulta finalizada */
+       estado == 4 ---> Consulta finalizada
+       estado == 5 ---> Examen pendiente */
 
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)

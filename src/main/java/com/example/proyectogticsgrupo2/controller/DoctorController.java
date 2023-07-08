@@ -12,11 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,6 +55,7 @@ public class DoctorController {
     private final CredencialesRepository credencialesRepository;
     private final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
     private final CuestionarioRepository cuestionarioRepository;
+    private final PagoRepository pagoRepository;
 
     final SecurityConfig securityConfig;
 
@@ -66,7 +64,7 @@ public class DoctorController {
                             AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository,
                             SedeRepository sedeRepository, HorarioRepository horarioRepository,
-                            CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, SecurityConfig securityConfig) {
+                            CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, PagoRepository pagoRepository, SecurityConfig securityConfig) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
@@ -77,6 +75,7 @@ public class DoctorController {
         this.credencialesRepository = credencialesRepository;
         this.cuestionarioPorCitaRepository = cuestionarioPorCitaRepository;
         this.cuestionarioRepository = cuestionarioRepository;
+        this.pagoRepository = pagoRepository;
         this.securityConfig = securityConfig;
     }
 
@@ -120,14 +119,14 @@ public class DoctorController {
 
         session.setAttribute("doctor", doctor);
 
-        List<ListaBuscadorDoctor> optionalCita = citaRepository.listarPorDoctorProxCitas(doctor.getId_doctor());
-        List<ListaBuscadorDoctor> optionalCita2 = citaRepository.listarPorDoctorListaPacientes(doctor.getId_doctor());
+        List<ListaBuscadorDoctor> listaCitas = citaRepository.listarPorDoctorProxCitas(doctor.getId_doctor());
+        List<ListaBuscadorDoctor> listaPacientes = citaRepository.listarPorDoctorListaPacientes(doctor.getId_doctor());
         List<Cuestionario> listaCuestionarios = cuestionarioRepository.findAll();
         ArrayList<String> listaHorarios = new ArrayList<>();
         List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.findAll();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        optionalCita.forEach(cita -> {
+        listaCitas.forEach(cita -> {
             LocalDateTime fechaHora = cita.getInicio();
             String hora1 = fechaHora.format(formatter);
 
@@ -138,8 +137,8 @@ public class DoctorController {
         model.addAttribute("doctor", doctor);
         model.addAttribute("listaCuestionarios", listaCuestionarios);
         model.addAttribute("listaHorarios", listaHorarios);
-        model.addAttribute("listaCitas", optionalCita);
-        model.addAttribute("listaPacientes", optionalCita2);
+        model.addAttribute("listaCitas", listaCitas);
+        model.addAttribute("listaPacientes", listaPacientes);
         model.addAttribute("listaCuestionarioPorCita", cuestionarioPorCitaList);
 
         return "doctor/DoctorDashboard";
@@ -242,11 +241,11 @@ public class DoctorController {
         Doctor doctor = doctorRepository.findByCorreo(userEmail);
         session.setAttribute("doctor", doctor);
 
-        List<ListaRecibosDTO> optionalCita = citaRepository.listarRecibos(doctor.getId_doctor());
+        List<ListaRecibosDTO> listaRecibos = citaRepository.listarRecibos(doctor.getId_doctor());
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctor.getId_doctor());
         Doctor doctorDeRepositorio = doctorOptional.get();
         model.addAttribute("doctor", doctorDeRepositorio);
-        model.addAttribute("listaRecibos", optionalCita);
+        model.addAttribute("listaRecibos", listaRecibos);
 
         return "doctor/DoctorRecibos";
     }
@@ -267,6 +266,7 @@ public class DoctorController {
 
         Optional<ListaRecibosDTO> optionalListaRecibosDTO = citaRepository.buscarRecibosPorIdCitaIdDoctor(id_doctor, id_cita);
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id_doctor);
+        System.out.println(optionalListaRecibosDTO.get().getId_doctor()+" "+optionalDoctor.get().getId_doctor());
 
         if (optionalDoctor.isPresent() & optionalListaRecibosDTO.isPresent()) {
             Doctor doctor = optionalDoctor.get();
@@ -558,6 +558,11 @@ public class DoctorController {
             model.addAttribute("paciente", paciente);
             model.addAttribute("cita", cita);
             model.addAttribute("alergias", alergias);
+            cita.setEstado(3);
+            citaRepository.save(cita);
+
+
+
 
             return "doctor/DoctorCita";
         }
@@ -716,8 +721,7 @@ public class DoctorController {
                 int indiceAleatorio = random.nextInt(doctor_examen.size());
                 Doctor doctorSeleccionado = doctor_examen.get(indiceAleatorio);
 
-                cita_examen.setDoctor(doctorSeleccionado); // X: puede ocurrir que se tengan mas doctores de una misma especialidad
-
+                cita_examen.setDoctor(doctorSeleccionado);
                 cita_examen.setInicio(cita.getFin());
                 cita_examen.setFin(cita.getFin().plusDays(7));
                 cita_examen.setModalidad(2); //
@@ -727,8 +731,8 @@ public class DoctorController {
                 cita_examen.setDiagnostico(cita.getDiagnostico()); // No poner nulo pq si no sale error
                 cita_examen.setTratamiento(cita.getTratamiento()); // No poner nulo pq si no sale error
                 cita_examen.setReceta(cita.getReceta()); // No poner nulo pq si no sale error
-
-                cita_examen.setCita_previa(cita); // V
+                cita_examen.setCita_previa(cita); //
+                pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
 
                 citaRepository.save(cita_examen);
 
