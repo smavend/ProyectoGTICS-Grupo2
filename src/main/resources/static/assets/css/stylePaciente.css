@@ -82,7 +82,7 @@ transition: all 0.3s;
 }
 .contenedor figure{
     position:relative;
-    height: 500px;
+    height: 440px;
     cursor: pointer;
     width: auto;
     overflow: hidden;
@@ -1458,7 +1458,7 @@ p{
     border-radius: 10px;
 }
 
-/* Sección Citas */
+/* ---------------------------- Sección Citas ------------------------- */
 
 .botonVerMas{
     padding: 10px 15px;
@@ -1545,6 +1545,22 @@ botonTipo{
     width: 100%;
     position: fixed;
     bottom: 0;
+}
+
+.presencial{
+    padding: 9px;
+    background-color: #86C69B;
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
+}
+
+.virtual{
+    padding: 9px 19px;
+    background-color: #379AB8;
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
 }
 
 /* Consentimientos */

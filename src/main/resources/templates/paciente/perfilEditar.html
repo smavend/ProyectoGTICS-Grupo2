@@ -119,7 +119,7 @@
                                                th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
                                              th:errors="*{correo}"></div>
-                                        <div class="valid-feedback" style="display: none">Está modificando su correo electrónico, al actualizar deberá volver a iniciar sesión</div>
+                                        <div class="text-primary valid-feedback" style="display: none">Está modificando su correo electrónico, al actualizar deberá volver a iniciar sesión</div>
                                     </div>
                                 </div>
                                 <hr>
