@@ -558,10 +558,8 @@ public class DoctorController {
             model.addAttribute("paciente", paciente);
             model.addAttribute("cita", cita);
             model.addAttribute("alergias", alergias);
-            cita.setEstado(3);
-            citaRepository.save(cita);
 
-
+            citaRepository.actualizarEstadoEnConsulta(3,cita.getId_cita());
 
 
             return "doctor/DoctorCita";
