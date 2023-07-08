@@ -93,10 +93,7 @@
                                                             <th scope="col">Nombre</th>
                                                             <th scope="col">Tipo de cita</th>
                                                             <th scope="col">Horario</th>
-                                                            <th style="width: max-content" scope="col">Estado de
-                                                                consulta
-                                                            </th>
-                                                            <th scope="col"></th>
+                                                            <th style="width: max-content" scope="col">Estado</th>
                                                         </tr>
                                                     </thead>
 
@@ -112,27 +109,13 @@
                                                                 th:text="${cita.getNombre() + ' ' + cita.getApellidos()}">
                                                             </td>
 
-                                                            <td style="font-size: 1rem">
-                                                                <h6 th:text="${cita.modalidad == 0 ? 'Presencial' : (cita.modalidad == 1 ? 'Virtual' : 'Examen')}"></h6>
+                                                            <td th:text="${cita.modalidad == 0 ? 'Presencial' : (cita.modalidad == 1 ? 'Virtual' : 'Examen')}" style="font-size: 1rem">
                                                             </td>
 
 
 
                                                             <td style="font-size: 1rem;color: black"
                                                                 th:text="${horario}">
-                                                            </td>
-
-                                                            <td style="font-size: 1rem;color: black">
-                                                                <h6 th:if="${cita.estado == 0}"
-                                                                    th:text="'Próxima cita'"></h6>
-                                                                <h6 th:if="${cita.estado == 1}"
-                                                                    th:text="'Registrado en caja'"></h6>
-                                                                <h6 th:if="${cita.estado == 2}"
-                                                                    th:text="'En espera'"></h6>
-                                                                <h6 th:if="${cita.estado == 3}"
-                                                                    th:text="'En consulta'"></h6>
-                                                                <h6 th:if="${cita.estado == 5}"
-                                                                    th:text="'Examen pendiente'"></h6>
                                                             </td>
 
 
@@ -154,15 +137,17 @@
                                                                         <i class="bi-file-text-fill"></i>
                                                                     </a>
 
-                                                                    <!-- Modal -->
-
-
-
-
                                                                 </div>
                                                             </td>
-                                                            <td th:unless="${cita.modalidad == 1 || cita.modalidad == 2}">
-                                                                <h6 style="text-align: center">No apto</h6>
+                                                            <td th:unless="${cita.modalidad == 1 || cita.modalidad == 2}" style="font-size: 1rem;color: black">
+                                                                <h6 th:if="${cita.estado == 0}"
+                                                                    th:text="'Pendiente de pago'"></h6>
+                                                                <h6 th:if="${cita.estado == 1 || cita.estado==2}"
+                                                                    th:text="'En espera'"></h6>
+                                                                <h6 th:if="${cita.estado == 3}"
+                                                                    th:text="'En consulta'"></h6>
+                                                                <h6 th:if="${cita.estado == 5}"
+                                                                    th:text="'Examen pendiente'"></h6>
                                                             </td>
 
                                                         </tr>

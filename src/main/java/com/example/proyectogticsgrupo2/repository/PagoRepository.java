@@ -24,6 +24,12 @@ public interface PagoRepository extends JpaRepository<Pago, Integer> {
     @Query(nativeQuery = true, value = "INSERT INTO pago (`fecha_emitida`, `estado_pago`, `cita_id_cita`, `tipo_pago`) VALUES (NOW(), 0, ?1, ?2)")
     void nuevoPago(int idCita, String tipoPago);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO pago (`fecha_emitida`, `estado_pago`, `cita_id_cita`) VALUES (NOW(), 0, ?1)")
+    void nuevoPagoDeSoloExamen(int idCita);
+
+
     @Query(nativeQuery = true, value = "select p.*, c.inicio from pago p " +
             "inner join cita c on (p.cita_id_cita = c.id_cita) " +
             "where c.paciente_id_paciente = ?1 " +
