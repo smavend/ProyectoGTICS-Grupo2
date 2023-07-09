@@ -261,7 +261,6 @@
                             </div>
                         </div>
 
-
                         <div th:each="cita, citaIndex : ${citasPresenciales}">
                             <input id="citaInicioPresencial" th:id="'citaInicioPresencial' + ${citaIndex.index}" type="hidden" th:value="${cita.inicio}" />
                         </div>
@@ -283,7 +282,6 @@
 
                                 for (var i = 0; i < parseInt(cantidadCitasPresenciales); i++) {
                                     eventsPresencial.push({
-                                        title: 'Cita médica presencial',
                                         start: document.getElementById('citaInicioPresencial' + i).value,
                                         color: '#86C69B'
                                     });
@@ -291,7 +289,6 @@
 
                                 for (var j = 0; j < parseInt(cantidadCitasVirtuales); j++) {
                                     eventsVirtual.push({
-                                        title: 'Cita médica virtual',
                                         start: document.getElementById('citaInicioVirtual' + j).value,
                                         color: '#379AB8'
                                     });

@@ -124,7 +124,7 @@
                                                             </td>
 
 
-                                                            <td th:if="${cita.modalidad == 1 || cita.modalidad == 2}">
+                                                            <td th:if="${cita.modalidad == 1 || cita.estado == 5}">
                                                                 <div style="width: max-content">
                                                                     <a th:if="${cita.modalidad == 1}" th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
                                                                        type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Iniciar cita virtual">
@@ -144,7 +144,8 @@
 
                                                                 </div>
                                                             </td>
-                                                            <td th:unless="${cita.modalidad == 1 || cita.modalidad == 2}" style="font-size: 1rem;color: black">
+
+                                                            <td th:unless="${cita.modalidad == 1 || cita.estado == 5}" style="font-size: 1rem;color: black">
                                                                 <h6 th:if="${cita.estado == 0}"
                                                                     th:text="'Pendiente de pago'"></h6>
                                                                 <h6 th:if="${cita.estado == 1 || cita.estado==2}"
@@ -224,102 +225,83 @@
                                 <h5 class="card-title">CALENDARIO</h5>
                                 <section class="section dashboard">
                                     <pacientesdiv class="row bg-white p-3">
-                                        <script>
+                                        <div th:each="cita, citaIndex : ${citasPresenciales}">
+                                            <input id="citaInicioPresencial" th:id="'citaInicioPresencial' + ${citaIndex.index}" type="hidden" th:value="${cita.inicio}" />
+                                        </div>
+                                        <div th:each="cita, citaIndex : ${citasVirtuales}">
+                                            <input id="citaInicioVirtual" th:id="'citaInicioVirtual' + ${citaIndex.index}" type="hidden" th:value="${cita.inicio}" />
+                                        </div>
 
+                                        <div th:each="cita, citaIndex : ${citasPresenciales}">
+                                            <input id="citaFinPresencial" th:id="'citaFinPresencial' + ${citaIndex.index}" type="hidden" th:value="${cita.fin}" />
+                                        </div>
+                                        <div th:each="cita, citaIndex : ${citasVirtuales}">
+                                            <input id="citaFinVirtual" th:id="'citaFinVirtual' + ${citaIndex.index}" type="hidden" th:value="${cita.fin}" />
+                                        </div>
+
+
+                                        <input id="contadorPresencial" type="hidden" th:value="${cantidadCitasPresenciales}">
+                                        <input id="contadorVirtual" type="hidden" th:value="${cantidadCitasVirtuales}">
+
+                                        <script>
                                             document.addEventListener('DOMContentLoaded', function () {
                                                 var calendarEl = document.getElementById('calendar');
+                                                var eventsPresencial = [];
+                                                var eventsVirtual = [];
+                                                var cantidadCitasPresenciales = document.getElementById('contadorPresencial').value;
+                                                var cantidadCitasVirtuales = document.getElementById('contadorVirtual').value;
+
+                                                for (var i = 0; i < parseInt(cantidadCitasPresenciales); i++) {
+                                                    eventsPresencial.push({
+                                                        start: document.getElementById('citaInicioPresencial' + i).value,
+                                                        end: document.getElementById('citaFinPresencial' + i).value,
+                                                        color: '#86C69B'
+                                                    });
+                                                }
+
+                                                for (var j = 0; j < parseInt(cantidadCitasVirtuales); j++) {
+                                                    eventsVirtual.push({
+                                                        start: document.getElementById('citaInicioVirtual' + j).value,
+                                                        end: document.getElementById('citaFinVirtual' + j).value,
+                                                        color: '#379AB8'
+                                                    });
+                                                }
+
+                                                var events = eventsPresencial.concat(eventsVirtual);
 
                                                 var calendar = new FullCalendar.Calendar(calendarEl, {
+                                                    eventTimeFormat: {
+                                                        hour: 'numeric',
+                                                        minute: '2-digit',
+                                                        meridiem: 'short'
+                                                    },
+
                                                     headerToolbar: {
                                                         left: 'prev,next today',
                                                         center: 'title',
                                                         right: 'dayGridMonth,timeGridWeek,timeGridDay'
                                                     },
-                                                    initialDate: '2023-01-12',
-                                                    navLinks: true, // can click day/week names to navigate views
+                                                    navLinks: true,
                                                     selectable: true,
                                                     selectMirror: true,
                                                     select: function (arg) {
-                                                        var title = prompt('Event Title:');
-                                                        if (title) {
-                                                            calendar.addEvent({
-                                                                title: title,
-                                                                start: arg.start,
-                                                                end: arg.end,
-                                                                allDay: arg.allDay
-                                                            })
-                                                        }
-                                                        calendar.unselect()
+
                                                     },
                                                     eventClick: function (arg) {
-                                                        if (confirm('¿Estás seguro que deseas eliminar este evento?')) {
-                                                            arg.event.remove()
-                                                        }
+
                                                     },
-                                                    editable: true,
-                                                    dayMaxEvents: true, // allow "more" link when too many events
-                                                    events: [
-                                                        {
-                                                            title: 'All Day Event',
-                                                            start: '2023-01-01'
-                                                        },
-                                                        {
-                                                            title: 'Long Event',
-                                                            start: '2023-01-07',
-                                                            end: '2023-01-10'
-                                                        },
-                                                        {
-                                                            groupId: 999,
-                                                            title: 'Repeating Event',
-                                                            start: '2023-01-09T16:00:00'
-                                                        },
-                                                        {
-                                                            groupId: 999,
-                                                            title: 'Repeating Event',
-                                                            start: '2023-01-16T16:00:00'
-                                                        },
-                                                        {
-                                                            title: 'Conference',
-                                                            start: '2023-01-11',
-                                                            end: '2023-01-13'
-                                                        },
-                                                        {
-                                                            title: 'Meeting',
-                                                            start: '2023-01-12T10:30:00',
-                                                            end: '2023-01-12T12:30:00'
-                                                        },
-                                                        {
-                                                            title: 'Lunch',
-                                                            start: '2023-01-12T12:00:00'
-                                                        },
-                                                        {
-                                                            title: 'Meeting',
-                                                            start: '2023-01-12T14:30:00'
-                                                        },
-                                                        {
-                                                            title: 'Happy Hour',
-                                                            start: '2023-01-12T17:30:00'
-                                                        },
-                                                        {
-                                                            title: 'Dinner',
-                                                            start: '2023-01-12T20:00:00'
-                                                        },
-                                                        {
-                                                            title: 'Birthday Party',
-                                                            start: '2023-01-13T07:00:00'
-                                                        },
-                                                        {
-                                                            title: 'Click for Google',
-                                                            url: 'http://google.com/',
-                                                            start: '2023-01-28'
-                                                        }
-                                                    ]
+                                                    editable: false,
+                                                    dayMaxEvents: true,
+                                                    events: events
                                                 });
 
                                                 calendar.render();
                                             });
 
                                         </script>
+
+
+
                                         <div id='calendar'></div>
 
                                     </pacientesdiv>

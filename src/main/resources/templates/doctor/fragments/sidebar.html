@@ -43,6 +43,16 @@
             </a>
         </li><!-- End Profile Page Nav -->
     </ul>
+    <br><br><br>
+
+    <div th:if="${seleccion == 'calendario'}" style="border: 3px solid #ccc; padding: 10px; border-radius: 5px; background-color: #F5F5F5;">
+        <div class="pagetitle">
+            <h1>Leyenda:</h1>
+        </div>
+        <p><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: rgb(55, 154, 184); margin-right: 5px;"></span>Cita virtual</p>
+        <p><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #86C69B; margin-right: 5px;"></span>Cita presencial</p>
+    </div>
+
 
 </aside><!-- End Sidebar-->
 </body>
