@@ -7,7 +7,7 @@ $("#select_modalidad").click(function(){
     if(modalidad !== ""){
         $.ajax({
             method:"GET",
-            url: getUrl()+"/SERVICE_reservarCita/especialidades/"+modalidad
+            url: getUrl()+"/Paciente/api/especialidades/"+modalidad
         }).done(function(data){
             selectEsp.empty();
             selectEsp.append("<option value=''>-- Seleccione una especialidad --</option>");
@@ -29,7 +29,7 @@ $("#select_modalidad").click(function(){
     }
 });
 
-// VALIDAR SELECCIONES Y OBTENER HORARIOS
+// VALIDAR SELECCIONES Y OBTENER HORARIOS EN RESERVAR CITA
 $("#select_doctor").change(function(){
     buscarHorarios($(this).val(), $("#input_fecha").val());
 });
@@ -44,12 +44,12 @@ function buscarHorarios(doctor, fecha){
     if(doctor !== "" && fecha !== ""){
         $.ajax({
             method: "GET",
-            url: getUrl()+"/SERVICE_reservarCita/horarios/"+doctor+"/"+fecha
+            url: getUrl()+"/Paciente/api/horarios/"+doctor+"/"+fecha
         }).done(function(data){
             selectHorario.empty();
             selectHorario.append("<option value=''>-- Seleccione un horario --</option>");
             for(let i = 0; i < data.horarios.length; i++){
-                selectHorario.append("<option value='"+data.horarios[i]+"'>"+data.horarios[i]+"</option>");
+                selectHorario.append("<option value='"+data.horarios[i].inicio+"'>"+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+"</option>");
             }
 
         }).fail(function(e){
@@ -57,6 +57,9 @@ function buscarHorarios(doctor, fecha){
         });
     }
 }
+
+// OBTENER HORARIOS EN PERFIL DOCTOR
+
 
 // FUNCIONES
 function getUrl(){

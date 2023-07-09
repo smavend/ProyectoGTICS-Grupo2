@@ -6,22 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pagos</title>
 
+        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
+
         <!-- DATATABLES -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
-
-        <!-- BOOTSTRAP -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-              crossorigin="anonymous">
-
-        <!-- GOOGLE FONTS -->
-        <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-              rel="stylesheet">
-
-        <!-- CSS -->
-        <link rel="stylesheet" th:href="@{/assets/css/stylePaciente.css}">
-        <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}">
 
     </head>
     <body>
@@ -62,9 +50,9 @@
                         <tr th:each="pago: ${pagoList}" class="fila_cita"
                             th:classappend="${pago.estadoPago == 0?'cita_pendiente':'cita_cancelada'}"
                             th:attr="data-id-especialidad=${pago.cita.doctor.especialidad.idEspecialidad}">
-                            <td th:text="${pago.cita.doctor.especialidad.nombre}"></td>
-                            <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
-                            <td th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
+                            <td id="especialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.nombre}" th:text="${pago.cita.doctor.especialidad.nombre}"></td>
+                            <td id="doctor" th:attr="data-valor=${pago.cita.doctor.getNombreYApellido()}" th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                            <td id="fechaCita" th:attr="data-valor=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}" th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
                             <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'-'}">
                                 Fecha de pago
                             </td>
@@ -82,7 +70,7 @@
 
             </section>
 
-            <!-- Modal -->
+            <!-- Modal Pagar -->
             <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1"
                  aria-labelledby="modal-pago-label"
                  aria-hidden="true">
@@ -100,43 +88,34 @@
 
                         </div>
                         <div class="modal-body">
-                            <form method="post" th:action="@{/Paciente/guardarPago(filtro=${filtro})}"
-                                  th:object="${tarjetaPago}">
-                                <input type="hidden" id="idPagoTarjeta" th:value="${idPagoTarjeta}" name="idPago"/>
+                            <form method="post" id="formValidarPago" action="pagos.html">
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Nombre del titular de la tarjeta</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-person-fill"></i></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person-fill"></i></i></span>
                                         </div>
-                                        <input type="text" class="form-control" th:field="*{titular}"
-                                               th:classappend="${#fields.hasErrors('titular')?'is-invalid':''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titular')}"
-                                             th:errors="*{titular}"></div>
+                                        <input type="text" class="form-control" id="titularTarjeta">
                                     </div>
+                                    <div class="invalid-feedback" id="errorTitularTarjeta" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
                                 </div>
                                 <div class="mb-3 w-75">
                                     <label class="form-label">Número de la tarjeta</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i
-                                                                    class="bi bi-credit-card-fill"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" th:field="*{numeroTarjeta}"
-                                               th:classappend="${#fields.hasErrors('numeroTarjeta')?'is-invalid':''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroTarjeta')}"
-                                             th:errors="*{numeroTarjeta}"></div>
+                                        <input type="text" class="form-control" id="numeroTarjeta">
                                     </div>
-
+                                    <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
+                                    <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px">El número de tarjeta debe tener 16 dígitos</div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Fecha de expiración</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-calendar-event-fill"></i></span>
+                                                <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
                                             </div>
                                             <input type="text" class="form-control" placeholder="MM-yyyy"
                                                    name="fechaStr"
@@ -147,14 +126,12 @@
                                         <label class="form-label">Código de seguridad</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                        class="bi bi-lock-fill"></i></span>
+                                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" th:field="*{codigo}"
-                                                   th:classappend="${#fields.hasErrors('codigo')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}"
-                                                 th:errors="*{codigo}"></div>
+                                            <input type="text" class="form-control" id="codigoSegTarjeta">
                                         </div>
+                                        <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
+                                        <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px">El código de seguridad debe tener 3 dígitos</div>
                                     </div>
                                 </div>
                                 <div class="text-center">
@@ -166,6 +143,99 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Modal Confirmar Pago -->
+            <div class="modal fade" data-bs-target="#modal-pago" id="modal-confirmar-pago" tabindex="-1"
+                 aria-labelledby="modal-pago-label"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto">
+                            <div class="justify-content-start">
+                                <div class="d-flex align-items-center">
+                                    <img style="height: 30px;" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
+                                    <span class="fw-bold ms-2">Clínica INTERPUCP</span>
+                                    <button type="button" class="btn-close col-lg-2 fw-bold"
+                                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="justify-content-start">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-arrow-left col-lg-4" onclick="$('#modal-pago').modal('show')" style="height: 40px"></i>
+                                        <span class="ms-2">Confirmar Pago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row informacionModal">
+                                <div>
+                                    <p>doctor:<span class="informacionModalDato" id="doctorPagar">Juanchito Palacios Castro</span>
+                                    </p>
+                                    <p>fecha:<span class="informacionModalDato" id="fechaCitaPagar">Pacífico EPS</span></p>
+                                    <p>especialidad:<span class="informacionModalDato" id="especialidadPagar">934-250-488</span></p>
+                                </div>
+                            </div>
+                            <form method="post" th:action="@{/Paciente/guardarPago}">
+                                <div class="mb-3 w-75">
+                                    <label class="form-label">Nombre del titular de la tarjeta</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-person-fill"></i></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="titularTarjeta">
+                                    </div>
+                                    <div class="invalid-feedback" id="errorTitularTarjeta" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
+                                </div>
+                                <div class="mb-3 w-75">
+                                    <label class="form-label">Número de la tarjeta</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="numeroTarjeta">
+                                    </div>
+                                    <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
+                                    <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px">El número de tarjeta debe tener 16 dígitos</div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Fecha de expiración</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="MM-yyyy"
+                                                   name="fechaStr"
+                                                   th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Código de seguridad</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" id="codigoSegTarjeta">
+                                        </div>
+                                        <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
+                                        <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px">El código de seguridad debe tener 3 dígitos</div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary w-25"
+                                            style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="formPagar" method="post" th:action="@{/Paciente/guardarPago}" style="display: none">
+                <input type="hidden" id="idPagoTarjeta" th:value="${idPagoTarjeta}" name="idPago"/>
+            </form>
 
             <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
@@ -223,7 +293,12 @@
         <script>
             var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
             $('#idPagoTarjeta').val(idPagoTarjeta);
-
+            var especialidad = document.getElementById('especialidad').dataset.valor;
+            $('#especialidadPagar').text(especialidad);
+            var doctor = document.getElementById('doctor').dataset.valor;
+            $('#doctorPagar').text(doctor);
+            var fechaCita = document.getElementById('fechaCita').dataset.valor;
+            $('#fechaCitaPagar').text(fechaCita);
             $(document).ready(function () {
                 $('#tablax').DataTable({
                     language: {
@@ -286,6 +361,48 @@
                 $('.modal')
                 $('#modal-pago').modal('show');
             }
+
+            $("#formValidarPago").submit(function (event) {
+                event.preventDefault();
+                var titularTarjeta = $("#titularTarjeta").val();
+                var numeroTarjeta = $("#numeroTarjeta").val();
+                var codigoSegTarjeta = $("#codigoSegTarjeta").val();
+
+                var error = false; // Variable para verificar si se encontraron errores de validación
+
+                if (titularTarjeta === "") {
+                    $("#errorTitularTarjeta").show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si el campo está vacío
+                }
+
+                if (numeroTarjeta === "") {
+                    $("#nroTarjetaVacio").show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si el campo está vacío
+                } else if (numeroTarjeta.length !== 16) {
+                    $('#nroTarjetaDig').show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si la longitud no es 16
+                }
+
+                if (codigoSegTarjeta === "") {
+                    $("#codigoTarjetaVacio").show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si el campo está vacío
+                } else if (codigoSegTarjeta.length !== 3) {
+                    $('#codigoTarjetaDig').show(500).delay(1000).hide(500);
+                    error = true; // Se marca error como verdadero si la longitud no es 3
+                }
+
+                if (!error) {
+                    // Si no se encontraron errores, se puede enviar el formulario
+                    //$("#formValidarPago")[0].submit();
+                    /*document.addEventListener("DOMContentLoaded", function (){
+                        var form = document.getElementById("formPagar");
+                        form.submit();
+                    });*/
+                    $("#modal-pago").modal("hide");
+                    $("#modal-confirmar-pago").modal("show");
+                }
+            });
+
         </script>
 
         <!-- Script para botones filtro -->

@@ -30,4 +30,6 @@ public interface AdministrativoPorEspecialidadPorSedeRepository extends JpaRepos
     @Query(nativeQuery = true, value = "SELECT * FROM sede_x_especialidad_x_administrativo where " +
             "sede_id_sede = ?1 and especialidad_id_especialidad = ?2")
     AdministrativoPorEspecialidadPorSede buscarPorSedeYEspecialidad(Integer idSede, Integer idEspecialidad);
+
+    AdministrativoPorEspecialidadPorSede findBySedeIdIdSedeAndEspecialidadIdIdEspecialidad(int idSede, int idEspecialidad);
 }

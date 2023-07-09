@@ -82,7 +82,7 @@ transition: all 0.3s;
 }
 .contenedor figure{
     position:relative;
-    height: 500px;
+    height: 440px;
     cursor: pointer;
     width: auto;
     overflow: hidden;
@@ -740,6 +740,7 @@ color: #899bbd;
 .sidebar-nav .nav-link:hover {
 color: white;
 background: #0AA1DD;
+    transform: scale(1.04);
 }
 
 .sidebar-nav .nav-link:hover i {
@@ -1245,7 +1246,7 @@ p{
     object-fit: cover;
 }
 
-/* Reservar cita */
+/* -------------- Reservar cita ----------------- */
 
 .bodyReservar{
     margin: 20px auto 0 auto;
@@ -1260,6 +1261,45 @@ p{
     margin: auto;
     background-color: white;
     box-shadow: 0 2px 20px rgba(0, 13, 35, 0.1);
+}
+
+.cardImagen{
+    height: 170px;
+    width: 170px;
+}
+
+@media (max-width:992px){
+    .cardReservar{
+        width: 80%;
+    }
+
+    .cardImagen{
+        width: 140px;
+        height: 140px;
+    }
+}
+
+@media (max-width:768px){
+    .cardReservar{
+        width: 95%;
+    }
+
+    .cardImagen{
+        width: 100px;
+        height: 100px;
+    }
+}
+
+.cardLogo{
+    border-radius: 15px;
+    transition: all 0.3s;
+    padding: 20px;
+}
+
+.cardLogo:hover{
+    background-color: rgb(237, 237, 237);
+    cursor: pointer;
+    transform: scale(1.07);
 }
 
 .campo{
@@ -1288,10 +1328,6 @@ p{
     color: white;
 }
 
-.campoHorarioOcupado{
-
-}
-
 .informacion{
     text-align: left;
     background-image: linear-gradient(to right, #f5f5f5, #f4f4f4, #f2f3f2, #f1f1f1, #f0f0f0);
@@ -1301,7 +1337,7 @@ p{
     font-family: "Open Sans";
 }
 
-/* Sección Pagos */
+/* ------------------- Sección Pagos ------------------- */
 
 .botonVerRecibo{
     padding: 10px 15px;
@@ -1422,7 +1458,7 @@ p{
     border-radius: 10px;
 }
 
-/* Sección Citas */
+/* ---------------------------- Sección Citas ------------------------- */
 
 .botonVerMas{
     padding: 10px 15px;
@@ -1509,6 +1545,22 @@ botonTipo{
     width: 100%;
     position: fixed;
     bottom: 0;
+}
+
+.presencial{
+    padding: 9px;
+    background-color: #86C69B;
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
+}
+
+.virtual{
+    padding: 9px 19px;
+    background-color: #379AB8;
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
 }
 
 /* Consentimientos */
@@ -1662,19 +1714,6 @@ botonTipo{
     background-color: #0AA1DD;
 }
 
-.fotoDoctorPerfil{
-    height: 250px;
-    width: 250px;
-    object-fit: cover;
-    box-shadow: -7px 0px 0px 5px #0AA1DD;
-}
-
-@media(min-width: 768px){
-    .fotoDoctorPerfil{
-        margin-right: 40px;
-    }
-}
-
 /* Cuestionarios */
 
 .botonCompletar{
@@ -1711,6 +1750,18 @@ botonTipo{
 }
 
 /* Perfil Doctor */
+
+.fotoDoctorPerfil{
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+}
+
+@media(min-width: 768px){
+    .fotoDoctorPerfil{
+        margin-right: 40px;
+    }
+}
 
 .perfilDoctorFoto{
     width: 60%;
@@ -1769,6 +1820,36 @@ botonTipo{
     background-color:#197ce6;
 }
 
+.disponibilidad{
+    padding: 20px;
+    background-image: linear-gradient(to bottom, #f6f6f6, #f8f8f8, #fafafa, #fdfdfd, #ffffff);
+    border-radius: 15px;
+    height: 400px;
+}
+
+@media (min-width:1200px){
+    .disponibilidad{
+        padding: 30px 50px;
+    }
+}
+
+.burbuja{
+    display: inline-block;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    margin-right: 5px;
+    margin-bottom: 8px;
+    padding: 8px 20px;
+    transition: all 0.3s;
+    border: 1px solid rgb(202, 202, 202);
+    cursor: pointer;
+}
+
+.burbujaSeleccionada{
+    background-color: #0AA1DD;
+    color: white;
+}
+
 /* Formulario reservar cita mediante perfil del doctor */
 
 .inputPaciente{
@@ -1820,7 +1901,8 @@ botonTipo{
     display: inline-block;
     background-color: #f5f5f5;
     border-radius: 15px;
-    margin-right: 10px;
+    margin-right: 8px;
+    margin-bottom: 8px;
     padding: 8px 20px;
 }
 
