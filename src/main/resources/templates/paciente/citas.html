@@ -9,7 +9,7 @@
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
         <!-- DATATABLES --->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
 
     </head>
     <body>
@@ -48,9 +48,12 @@
                                 <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
                                 <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
                                 <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
-                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">13:00 Hrs.</td>
+                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">
+                                    13:00 Hrs.
+                                </td>
                                 <td class="text-center">
-                                    <span th:classappend="${cita.modalidad == 0? 'presencial':'virtual'}" th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
+                                    <span th:classappend="${cita.modalidad == 0? 'presencial':'virtual'}"
+                                          th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
                                 </td>
                                 <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
                                 <td class="text-center">
@@ -124,7 +127,8 @@
                                                 th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
                                         </p>
                                         <p>Piso:<span class="informacionModalDato"
-                                                      th:text="${torresPisosPrecio[i.index].getPiso()}">2 (Falta)</span></p>
+                                                      th:text="${torresPisosPrecio[i.index].getPiso()}">2 (Falta)</span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -198,11 +202,14 @@
                             </div>
                             <div class="modal-footer mx-auto">
                                 <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link != null}"
-                                   class="btn botonAceptar" th:href="@{'/Paciente/sesionVirtual?c='+${cita.id_cita}}">Acceder a sesión virtual</a>
-                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}" 
-                                   style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha sido creada</a>
-                                <a th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}" 
-                                   style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a la cita</a>
+                                   class="btn botonAceptar" th:href="@{'/Paciente/sesionVirtual?c='+${cita.id_cita}}">Acceder
+                                    a sesión virtual</a>
+                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}"
+                                   style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha sido
+                                    creada</a>
+                                <a th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}"
+                                   style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a la
+                                    cita</a>
                             </div>
                         </div>
                     </div>
@@ -228,9 +235,43 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- Script para botones filtro -->
-        <script>
+        <!-- DATATABLES CDN -->
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
+        <script>
+            var tabla = $("#tabla_citas").DataTable({
+                dom: '<"toolbar">frtrip',
+                bInfo: false,
+                pageLength: 5,
+                columns: [
+                    null,
+                    null,
+                    null,
+                    null,
+                    {orderable: false},
+                    {orderable: false},
+                    {orderable: false}
+                ],
+                columnDefs: [
+                    {
+                        searchable: false,
+                        targets: [4, 5, 6]
+                    }
+                ],
+                language: {
+                    infoEmpty: "No hay citas registradas",
+                    zeroRecords: "No hay citas registradas",
+                    sProcessing: "Cargando...",
+                    sSearch: "Buscar:",
+                    paginate: {
+                        previous: "Anterior",
+                        next: "Siguiente"
+                    }
+                }
+            });
+
+            // JS para botones filtro
             const especialidadesExam = ["Cardiología", "Cirugía cardiovascular", "Laboratorio", "Rayos X",
                 "Ecografía", "Neurología", "Gastroenterología", "Endocrinología", "Nefrología"];
             const botonExamenes = $(".botonExamenes");
@@ -246,6 +287,7 @@
                         citas[i].classList.add("d-none");
                     }
                 }
+                tabla.draw(true);
             }
 
             function buscarCitas() {
@@ -255,51 +297,9 @@
                 for (let i = 0; i < citas.length; i++) {
                     citas[i].classList.remove("d-none");
                 }
-
+                tabla.draw(true);
             }
-        </script>
 
-        <!-- DATATABLES CDN -->
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
-        </script>
-
-        <!-- BOOTSTRAP DATATABLES-->
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
-        </script>
-
-        <script>
-            $(document).ready(function () {
-                $("#tabla_citas").DataTable({
-                    dom: '<"toolbar">frtrip',
-                    bInfo: false,
-                    pageLength: 5,
-                    columns: [
-                        null,
-                        null,
-                        null,
-                        null,
-                        {orderable: false},
-                        {orderable: false},
-                        {orderable: false}
-                    ],
-                    columnDefs: [
-                        {
-                            searchable: false,
-                            targets: [4, 5, 6]
-                        }
-                    ],
-                    language: {
-                        infoEmpty: "No hay citas registradas",
-                        zeroRecords: "No hay citas registradas",
-                        sProcessing: "Cargando...",
-                        sSearch: "Buscar:",
-                        paginate: {
-                            previous: "Anterior",
-                            next: "Siguiente"
-                        }
-                    }
-                });
-            })
         </script>
 
     </body>
