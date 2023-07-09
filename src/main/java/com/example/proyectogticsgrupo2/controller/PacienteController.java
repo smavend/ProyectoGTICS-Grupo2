@@ -268,10 +268,11 @@ public class PacienteController {
         pagoRepository.nuevoPago(idCita, tipoPago);
 
         // Enviar correo al paciente
-        Cita cita = citaRepository.findById(idCita).get();
+        /*Cita cita = citaRepository.findById(idCita).get();
         CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
         String host = request.getServerName()+":"+request.getLocalPort();
         correo.props(host, paciente.getCorreo(), cita);
+         */
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
         model.addAttribute("especialidad", especialidad);

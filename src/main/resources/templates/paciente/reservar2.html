@@ -112,9 +112,14 @@
             $(function(){
                 $("#input_fecha").datepicker({
                     dateFormat: 'dd-mm-yy',
-                    minDate : 0
+                    minDate : 0,
+                    beforeShowDay: noSundays
                 });
             })
+
+            function noSundays(date) {
+                return [date.getDay() != 0, ''];
+            }
         </script>
     </body>
 </html>

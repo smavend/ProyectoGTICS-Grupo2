@@ -491,11 +491,14 @@ public class DoctorController {
 
         Cita cita = citaRepository.findById(idCita).get();
 
+        System.out.println("inicio db: "+cita.getInicio());
+        System.out.println("fin db: "+cita.getFin());
+
         LocalDateTime horaFinCita = cita.getFin().plusDays(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String horaFinReunion = horaFinCita.format(formatter);
 
-        System.out.println(horaFinReunion);
+        System.out.println("hora fin creada: "+horaFinReunion);
         var apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmFwcGVhci5pbiIsImF1ZCI6Imh0dHBzOi8vYXBpLmFwcGVhci5pbi92MSIsImV4cCI6OTAwNzE5OTI1NDc0MDk5MSwiaWF0IjoxNjg4MDA4NTgxLCJvcmdhbml6YXRpb25JZCI6MTg0MjM1LCJqdGkiOiI3NTYwYmMwOC05ODhmLTRjYTEtYTgyNS1mOTVhOTU0NTM4NTcifQ.jOsnLwuVcqDmAWcgo24rvZgfO5fcDJIIDQiF92ugAzg";
         var data = Map.of(
                 "endDate", horaFinReunion,

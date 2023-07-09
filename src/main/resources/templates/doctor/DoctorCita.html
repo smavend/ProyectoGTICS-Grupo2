@@ -146,14 +146,12 @@
                                 <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
                                 <hr>
 
-                                <div class="card text-bg-dark mb-3">
                                     <iframe
                                             th:if="${link != null}"
                                             th:src="${link}"
                                             style="width: 600px; height: 350px;"
                                             allow="camera; microphone; fullscreen; speaker; display-capture; autoplay">
                                     </iframe>
-                                </div>
 
                                 <div style="margin-top: 5px;text-align: center">
                                     <a th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}" type="button" data-bs-toggle="tooltip" data-bs-placement="left"
