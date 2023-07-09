@@ -240,36 +240,38 @@
         <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
-            var tabla = $("#tabla_citas").DataTable({
-                dom: '<"toolbar">frtrip',
-                bInfo: false,
-                pageLength: 5,
-                columns: [
-                    null,
-                    null,
-                    null,
-                    null,
-                    {orderable: false},
-                    {orderable: false},
-                    {orderable: false}
-                ],
-                columnDefs: [
-                    {
-                        searchable: false,
-                        targets: [4, 5, 6]
+            $(document).ready(function (){
+                var tabla = $("#tabla_citas").DataTable({
+                    dom: '<"toolbar">frtrip',
+                    bInfo: false,
+                    pageLength: 5,
+                    columns: [
+                        null,
+                        null,
+                        null,
+                        null,
+                        {orderable: false},
+                        {orderable: false},
+                        {orderable: false}
+                    ],
+                    columnDefs: [
+                        {
+                            searchable: false,
+                            targets: [4, 5, 6]
+                        }
+                    ],
+                    language: {
+                        infoEmpty: "No hay citas registradas",
+                        zeroRecords: "No hay citas registradas",
+                        sProcessing: "Cargando...",
+                        sSearch: "Buscar:",
+                        paginate: {
+                            previous: "Anterior",
+                            next: "Siguiente"
+                        }
                     }
-                ],
-                language: {
-                    infoEmpty: "No hay citas registradas",
-                    zeroRecords: "No hay citas registradas",
-                    sProcessing: "Cargando...",
-                    sSearch: "Buscar:",
-                    paginate: {
-                        previous: "Anterior",
-                        next: "Siguiente"
-                    }
-                }
-            });
+                });
+            })
 
             // JS para botones filtro
             const especialidadesExam = ["Cardiología", "Cirugía cardiovascular", "Laboratorio", "Rayos X",
@@ -287,7 +289,6 @@
                         citas[i].classList.add("d-none");
                     }
                 }
-                tabla.draw(true);
             }
 
             function buscarCitas() {
@@ -297,7 +298,6 @@
                 for (let i = 0; i < citas.length; i++) {
                     citas[i].classList.remove("d-none");
                 }
-                tabla.draw(true);
             }
 
         </script>
