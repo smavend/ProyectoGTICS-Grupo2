@@ -464,9 +464,6 @@ public class DoctorController {
                 }
             }
 
-            System.out.println(alergias);
-
-
             Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
             Doctor doctor = doctorOptional.get();
 
@@ -493,14 +490,11 @@ public class DoctorController {
 
         Cita cita = citaRepository.findById(idCita).get();
 
-        System.out.println("inicio db: "+cita.getInicio());
-        System.out.println("fin db: "+cita.getFin());
-
         LocalDateTime horaFinCita = cita.getFin().plusDays(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String horaFinReunion = horaFinCita.format(formatter);
 
-        System.out.println("hora fin creada: "+horaFinReunion);
+        System.out.println("id cita: "+cita.getId_cita());
         var apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmFwcGVhci5pbiIsImF1ZCI6Imh0dHBzOi8vYXBpLmFwcGVhci5pbi92MSIsImV4cCI6OTAwNzE5OTI1NDc0MDk5MSwiaWF0IjoxNjg4MDA4NTgxLCJvcmdhbml6YXRpb25JZCI6MTg0MjM1LCJqdGkiOiI3NTYwYmMwOC05ODhmLTRjYTEtYTgyNS1mOTVhOTU0NTM4NTcifQ.jOsnLwuVcqDmAWcgo24rvZgfO5fcDJIIDQiF92ugAzg";
         var data = Map.of(
                 "endDate", horaFinReunion,
@@ -524,7 +518,7 @@ public class DoctorController {
 
                 Reunion reunion = new Gson().fromJson(response.body(), Reunion.class);
 
-                citaRepository.guardarLink(reunion.getRoomUrl(), idCita);
+                citaRepository.guardarLink(reunion.getRoomUrl(), cita.getId_cita());
                 model.addAttribute("link", reunion.getRoomUrl());
             }
             else {
@@ -616,18 +610,8 @@ public class DoctorController {
             model.addAttribute("alergias", alergias);
 
             return "doctor/DoctorCita";
-
         }
-
         return "redirect:/dashboard";
-
-    }
-
-    @GetMapping("/reunion")
-    public String reunion(@RequestParam("id") String id){
-
-        citaRepository.guardarLink(id,getCitaIdLink());
-        return "doctor/reunion";
     }
 
     @GetMapping("/verCuestionario")
@@ -718,27 +702,19 @@ public class DoctorController {
                 Cita cita_examen= new Cita(); // creacion de nueva cita para examenes
                 cita_examen.setPaciente(cita.getPaciente());
 
-                List<Doctor> doctor_examen = doctorRepository.obtenerDoctorPorIdEspecialidadYIdSede(cita.getEspecialidad().getIdEspecialidad(), cita.getSede().getIdSede());
-                Random random = new Random();
-                int indiceAleatorio = random.nextInt(doctor_examen.size());
-                Doctor doctorSeleccionado = doctor_examen.get(indiceAleatorio);
+                // doctor seleccionado de manera aleatoria cuando paciente selecciona horario
+                // inicio y fin de cita serán seleccionados por el paciente
 
-                cita_examen.setDoctor(doctorSeleccionado);
-                //cita_examen.setInicio(cita.getFin());
-                //cita_examen.setFin(cita.getFin().plusDays(7));
-                cita_examen.setModalidad(2); //
+                cita_examen.setModalidad(0);
                 cita_examen.setEstado(5);
-                cita_examen.setSede(doctorSeleccionado.getSede()); // V
-                cita_examen.setIdSeguro(cita.getIdSeguro()); // V
+                cita_examen.setSede(cita.getSede()); // cita de examen en la misma sede que la original
+                cita_examen.setIdSeguro(cita.getIdSeguro());
                 cita_examen.setDiagnostico(cita.getDiagnostico()); // No poner nulo pq si no sale error
                 cita_examen.setTratamiento(cita.getTratamiento()); // No poner nulo pq si no sale error
                 cita_examen.setReceta(cita.getReceta()); // No poner nulo pq si no sale error
-                cita_examen.setCita_previa(cita); //
+                cita_examen.setCita_previa(cita);
                 citaRepository.save(cita_examen);
-                System.out.println("Cita pendiente creada");
-                pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
-                System.out.println("Pago de cita pendiente creada");
-
+                //pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
             }
 
             return "redirect:/doctor/dashboard";

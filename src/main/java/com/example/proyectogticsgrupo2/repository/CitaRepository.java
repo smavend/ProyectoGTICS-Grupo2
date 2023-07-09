@@ -50,7 +50,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `link` =?1 WHERE (`id_cita` = ?2)")
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `link` = ?1 WHERE (`id_cita` = ?2)")
     void guardarLink(String link,int idCita);
 
     @Transactional

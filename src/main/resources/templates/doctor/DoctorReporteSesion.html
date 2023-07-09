@@ -66,7 +66,7 @@
             <section class="section dashboard">
                 <form th:if="${cita.estado != 5}" method="post" th:action="@{/doctor/iniciarCita}" class="mt-2">
 
-                    <input th:value="${cita.id_cita}" name="id_cita" type="hidden"/>
+                    <input th:value="${cita.id_cita}" name="id_cita" type="hidden">
                     <input th:value="${paciente.idPaciente}" name="idPaciente" type="hidden">
 
                     <input name="cita_previa" value="" type="hidden" class="form-control d-inline">

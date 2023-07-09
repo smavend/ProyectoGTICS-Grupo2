@@ -263,11 +263,10 @@ public class PacienteController {
         Especialidad especialidad = especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get();
 
         citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
-        //citaRepository.reservarCita(·,·,·paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
         int idCita = citaRepository.obtenerUltimoId();
         pagoRepository.nuevoPago(idCita, tipoPago);
 
-        // Enviar correo al paciente
+        // Enviar correo al paciente - inhabilidado para que no demore tanto xd
         /*Cita cita = citaRepository.findById(idCita).get();
         CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
         String host = request.getServerName()+":"+request.getLocalPort();
