@@ -430,9 +430,9 @@ public class DoctorController {
 
 
     @GetMapping("/reporte")
-    public String reporte(Model model, @RequestParam("id") String id, @RequestParam("id2") int id2, HttpSession session, Authentication authentication) {
-        setIdPaciente(id);
-        setIdCita(id2);
+    public String reporte(Model model, @RequestParam("id") String idPaciente, @RequestParam("id2") int idCita, HttpSession session, Authentication authentication, RedirectAttributes redirectAttributes) {
+        setIdPaciente(idPaciente);
+        setIdCita(idCita);
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -443,11 +443,12 @@ public class DoctorController {
         Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
         session.setAttribute("doctor", doctor_session);
 
-        Optional<Cita> optionalCita = citaRepository.findById(id2);
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
-        List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(id);
+        Pago verificarPago=pagoRepository.buscarPagoPorIdcita(idCita);
+        Optional<Cita> optionalCita = citaRepository.findById(idCita);
+        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
+        List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(idPaciente);
 
-        if (optionalPaciente.isPresent() & optionalCita.isPresent() && (optionalCita.get().getModalidad() == 1 || optionalCita.get().getModalidad() == 2) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor()) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && (optionalCita.get().getModalidad() == 1 || optionalCita.get().getModalidad() == 2) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.getEstadoPago()==1) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
@@ -475,10 +476,11 @@ public class DoctorController {
             model.addAttribute("alergias", alergias);
             model.addAttribute("momentoActual", LocalDateTime.now());
 
-            setCitaIdLink(id2);
+            setCitaIdLink(idCita);
 
             return "doctor/DoctorReporteSesion";
         } else {
+            redirectAttributes.addFlashAttribute("error", "El paciente aún no realiza el pago o se intentó burlar el sistema");
             return "redirect:/doctor/dashboard";
         }
 
@@ -732,9 +734,9 @@ public class DoctorController {
                 cita_examen.setTratamiento(cita.getTratamiento()); // No poner nulo pq si no sale error
                 cita_examen.setReceta(cita.getReceta()); // No poner nulo pq si no sale error
                 cita_examen.setCita_previa(cita); //
-                pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
-
                 citaRepository.save(cita_examen);
+
+                pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
 
             }
 
@@ -758,6 +760,8 @@ public class DoctorController {
                 cita.setExamenname(fileName);
                 cita.setExamencontenttype(file.getContentType());
                 cita.setDiagnostico(descripcion);
+                cita.setReceta("·");
+                cita.setTratamiento("·");
                 cita.setExamendoc(file.getBytes());
                 cita.setEstado(4);
                 citaRepository.save(cita);

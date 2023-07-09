@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.repository;
 
+import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
 import com.example.proyectogticsgrupo2.dto.PagoYPrecioDTO;
 import com.example.proyectogticsgrupo2.entity.Cita;
 import com.example.proyectogticsgrupo2.entity.Pago;
@@ -28,6 +29,9 @@ public interface PagoRepository extends JpaRepository<Pago, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO pago (`fecha_emitida`, `estado_pago`, `cita_id_cita`) VALUES (NOW(), 0, ?1)")
     void nuevoPagoDeSoloExamen(int idCita);
+
+    @Query(value = "Select * from pago where cita_id_cita=?1", nativeQuery = true )
+    Pago buscarPagoPorIdcita(int idCita);
 
 
     @Query(nativeQuery = true, value = "select p.*, c.inicio from pago p " +

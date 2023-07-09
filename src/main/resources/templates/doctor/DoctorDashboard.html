@@ -60,6 +60,11 @@
                         <div class="pagetitle">
                             <h1>Dashboard</h1>
                         </div>
+                        <div th:if="${error}">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Error:</strong> <span th:text="${error}"></span>
+                            </div>
+                        </div>
                         <div class="card top-selling container">
 
                             <div class="card-body pb-0">
