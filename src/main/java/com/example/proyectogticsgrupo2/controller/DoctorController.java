@@ -718,7 +718,7 @@ public class DoctorController {
                 Cita cita_examen= new Cita(); // creacion de nueva cita para examenes
                 cita_examen.setPaciente(cita.getPaciente());
 
-                List<Doctor> doctor_examen = doctorRepository.obtenerDoctorPorIdEspecialidad(cita.getEspecialidad().getIdEspecialidad(), cita.getSede().getIdSede());
+                List<Doctor> doctor_examen = doctorRepository.obtenerDoctorPorIdEspecialidadYIdSede(cita.getEspecialidad().getIdEspecialidad(), cita.getSede().getIdSede());
                 Random random = new Random();
                 int indiceAleatorio = random.nextInt(doctor_examen.size());
                 Doctor doctorSeleccionado = doctor_examen.get(indiceAleatorio);
