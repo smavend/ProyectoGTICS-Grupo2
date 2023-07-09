@@ -8,7 +8,6 @@
         <title>Dashboard - Doctor</title>
         <meta content="" name="description">
         <meta content="" name="keywords">
-        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet'/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
         <!-- Favicons -->
@@ -363,7 +362,6 @@
 
         <!-- Agregar la biblioteca FullCalendar -->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
         <script th:src="@{/assets/js/index.js}"></script>
         <script th:src="@{/assets/js/datatables.js}"></script>
         <script th:src="@{/assets/js/moment.js}"></script>
@@ -382,38 +380,7 @@
                 $('#example2').DataTable();
             });
         </script>
-        <script>// Obtener una referencia al elemento HTML donde se mostrará el calendario
-        var calendarEl = document.getElementById('calendar');
 
-        // Configurar las opciones del calendario
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            events: [
-                {
-                    title: 'Evento 1',
-                    start: '2023-04-25'
-                },
-                {
-                    title: 'Evento 2',
-                    start: '2023-04-26T12:30:00',
-                    end: '2023-04-26T14:30:00'
-                },
-                {
-                    title: 'Evento 3',
-                    start: '2023-04-27T12:00:00',
-                    end: '2023-04-27T16:00:00'
-                }
-            ]
-        });
-
-        // Mostrar el calendario
-        calendar.render();
-        </script>
 
         <script>
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
