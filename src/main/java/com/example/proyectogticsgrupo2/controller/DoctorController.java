@@ -724,8 +724,8 @@ public class DoctorController {
                 Doctor doctorSeleccionado = doctor_examen.get(indiceAleatorio);
 
                 cita_examen.setDoctor(doctorSeleccionado);
-                cita_examen.setInicio(cita.getFin());
-                cita_examen.setFin(cita.getFin().plusDays(7));
+                //cita_examen.setInicio(cita.getFin());
+                //cita_examen.setFin(cita.getFin().plusDays(7));
                 cita_examen.setModalidad(2); //
                 cita_examen.setEstado(5);
                 cita_examen.setSede(doctorSeleccionado.getSede()); // V
@@ -735,8 +735,9 @@ public class DoctorController {
                 cita_examen.setReceta(cita.getReceta()); // No poner nulo pq si no sale error
                 cita_examen.setCita_previa(cita); //
                 citaRepository.save(cita_examen);
-
+                System.out.println("Cita pendiente creada");
                 pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
+                System.out.println("Pago de cita pendiente creada");
 
             }
 
