@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,18 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "where p.id_paciente = ?1 and NOW() >= c.fin and x.especialidad_id_especialidad = d.especialidad_id_especialidad " +
             "order by c.inicio DESC")
     List<TorreYPisoDTO> buscarTorresPisosPrecioHistorialCitas(String idPaciente);
+
+    @Query(nativeQuery = true, value = "select c.* from cita c \n" +
+            "inner join cita cp on (c.id_cita_previa = cp.id_cita) \n" +
+            "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() \n" +
+            "order by cp.fin desc")
+    List<Cita> buscarCitasPendientes(String idPaciente);
+
+    @Query(nativeQuery = true, value = "select date_add(cast(cp.fin as date), interval 7 day) as date from cita c \n" +
+            "inner join cita cp on (c.id_cita_previa = cp.id_cita) \n" +
+            "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() \n" +
+            "order by cp.fin desc")
+    List<LocalDate> buscarFechasLimitesDeCitasPendientes(String idPaciente);
 
     @Transactional
     @Modifying

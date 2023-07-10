@@ -1121,6 +1121,17 @@ p{
 .seccionPrincipal td{
     padding: 20px 0 20px 20px;
 }
+.bodyReservar th{
+    font-size: 1rem;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
+.bodyReservar td{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 
 @media (max-width: 1199px) {
     .seccionPrincipal{
@@ -1787,22 +1798,6 @@ botonTipo{
     font-size: 1rem;
     font-weight: 500;
     margin-bottom: 10px;
-}
-
-
-.tablaDisponibilidad{
-    width: 75%; 
-    margin-left: auto; 
-    margin-right: auto; 
-    text-align: center;
-}
-
-.tablaDisponibilidad th{
-    padding: 0;
-}
-
-.tablaDisponibilidad td{
-    padding: 14px;
 }
 
 .botonReservarCitaHorario{

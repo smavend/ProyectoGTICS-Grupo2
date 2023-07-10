@@ -67,6 +67,8 @@
                     <input th:field="*{estado}" name="estado" type="hidden"/>
                     <input th:field="*{sede.idSede}" name="sede" type="hidden"/>
                     <input th:field="*{idSeguro}" name="" type="hidden"/>
+                    <input th:field="*{especialidad}" type="hidden"/>
+                    <input th:field="*{link}" type="hidden">
 
                     <div class="row justify-content-center align-items-center">
                         <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;height: fit-content"
@@ -128,8 +130,8 @@
 
                             <h2 style="text-align: center;" for="especialidad">Orden de exámenes médicos</h2>
                             <div style="display: flex;justify-content: center;" class="select-container">
-                                <select name="especialidad" id="especialidad">
-                                    <option th:value="${doctor.especialidad.getIdEspecialidad()}">No se necesita
+                                <select name="especialidadExamenPendiente">
+                                    <option value="0">No se necesita
                                         exámenes
                                     </option>
                                     <option value="4">Laboratorio</option>
@@ -147,8 +149,8 @@
                                 <hr>
 
                                     <iframe
-                                            th:if="${link != null}"
-                                            th:src="${link}"
+                                            th:if="${cita.link != null}"
+                                            th:src="${cita.link}"
                                             style="width: 600px; height: 350px;"
                                             allow="camera; microphone; fullscreen; speaker; display-capture; autoplay">
                                     </iframe>

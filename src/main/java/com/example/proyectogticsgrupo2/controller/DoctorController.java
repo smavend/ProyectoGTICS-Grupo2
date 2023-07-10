@@ -490,11 +490,10 @@ public class DoctorController {
 
         Cita cita = citaRepository.findById(idCita).get();
 
-        LocalDateTime horaFinCita = cita.getFin().plusDays(1);
+        LocalDateTime horaFinCita = cita.getFin().plusHours(12);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String horaFinReunion = horaFinCita.format(formatter);
 
-        System.out.println("id cita: "+cita.getId_cita());
         var apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmFwcGVhci5pbiIsImF1ZCI6Imh0dHBzOi8vYXBpLmFwcGVhci5pbi92MSIsImV4cCI6OTAwNzE5OTI1NDc0MDk5MSwiaWF0IjoxNjg4MDA4NTgxLCJvcmdhbml6YXRpb25JZCI6MTg0MjM1LCJqdGkiOiI3NTYwYmMwOC05ODhmLTRjYTEtYTgyNS1mOTVhOTU0NTM4NTcifQ.jOsnLwuVcqDmAWcgo24rvZgfO5fcDJIIDQiF92ugAzg";
         var data = Map.of(
                 "endDate", horaFinReunion,
@@ -519,10 +518,7 @@ public class DoctorController {
                 Reunion reunion = new Gson().fromJson(response.body(), Reunion.class);
 
                 citaRepository.guardarLink(reunion.getRoomUrl(), cita.getId_cita());
-                model.addAttribute("link", reunion.getRoomUrl());
-            }
-            else {
-                model.addAttribute("link", cita.getLink());
+                cita.setLink(reunion.getRoomUrl());
             }
 
             // Fin de creación o obtencion y guardado de link de reunión ----------
@@ -558,7 +554,7 @@ public class DoctorController {
             model.addAttribute("cita", cita);
             model.addAttribute("alergias", alergias);
 
-            citaRepository.actualizarEstadoEnConsulta(3,cita.getId_cita());
+            citaRepository.actualizarEstadoEnConsulta(3, cita.getId_cita());
 
             return "doctor/DoctorCita";
         }
@@ -664,7 +660,8 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarReporte")
-    public String guardarReporte(HttpSession session, Authentication authentication, Model model, @Valid Cita cita, BindingResult bindingResult) {
+    public String guardarReporte(@Valid Cita cita, BindingResult bindingResult, @RequestParam("especialidadExamenPendiente") int idEspecExamenPendiente,
+                                 HttpSession session, Authentication authentication, Model model) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -697,13 +694,13 @@ public class DoctorController {
             cita.setEstado(4);
             citaRepository.save(cita); // guardar cita finalizada
 
-            if (cita.getEspecialidad().getIdEspecialidad()==4 || cita.getEspecialidad().getIdEspecialidad()==5 || cita.getEspecialidad().getIdEspecialidad()==6){
+            if (idEspecExamenPendiente ==4 || idEspecExamenPendiente == 5 || idEspecExamenPendiente == 6){
 
                 Cita cita_examen= new Cita(); // creacion de nueva cita para examenes
                 cita_examen.setPaciente(cita.getPaciente());
 
                 // doctor seleccionado de manera aleatoria cuando paciente selecciona horario
-                // inicio y fin de cita serán seleccionados por el paciente
+                // inicio y fin de cita seleccionados por el paciente
 
                 cita_examen.setModalidad(0);
                 cita_examen.setEstado(5);
@@ -713,6 +710,8 @@ public class DoctorController {
                 cita_examen.setTratamiento(cita.getTratamiento()); // No poner nulo pq si no sale error
                 cita_examen.setReceta(cita.getReceta()); // No poner nulo pq si no sale error
                 cita_examen.setCita_previa(cita);
+                Especialidad esp = especialidadRepository.findById(idEspecExamenPendiente).get();
+                cita_examen.setEspecialidad(esp);
                 citaRepository.save(cita_examen);
                 //pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
             }

@@ -234,9 +234,6 @@ public class PacienteController {
                             Model model, HttpSession session, Authentication authentication,
                             HttpServletRequest request) {
 
-       /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);
-*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -279,6 +276,26 @@ public class PacienteController {
         model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
 
         return "paciente/confirmacion";
+    }
+
+    @GetMapping("/pendientes")
+    public String citasPendientes(Model model, HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        List<Cita> citasPendientes = citaRepository.buscarCitasPendientes(paciente.getIdPaciente());
+
+        model.addAttribute("citasPendientes", citasPendientes);
+
+        return "paciente/pendientes";
     }
 
     /* SECCIÓN PERFIL */
@@ -713,8 +730,6 @@ public class PacienteController {
     @GetMapping("/citas")
     public String verCitas(Model model, HttpSession session, Authentication authentication) {
 
-       /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
