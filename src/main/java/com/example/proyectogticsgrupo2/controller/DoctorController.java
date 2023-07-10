@@ -133,8 +133,24 @@ public class DoctorController {
             listaHorarios.add(hora1);
         });
 
+        List<Cita> listaCitaPresencial = new ArrayList<>();
+        List<Cita> listaCitaVirtual= new ArrayList<>();
+        List<Cita> citasDelDoctor=citaRepository.obtenerCitasPorDoctorId(doctor.getId_doctor());
+        for (Cita cita : citasDelDoctor) {
+
+            if (cita.getModalidad()==0){
+                listaCitaPresencial.add(cita);
+            }else{
+                listaCitaVirtual.add(cita);
+            }
+        }
+
 
         model.addAttribute("doctor", doctor);
+        model.addAttribute("citasPresenciales", listaCitaPresencial);
+        model.addAttribute("citasVirtuales", listaCitaVirtual);
+        model.addAttribute("cantidadCitasPresenciales", listaCitaPresencial.size());
+        model.addAttribute("cantidadCitasVirtuales", listaCitaVirtual.size());
         model.addAttribute("listaCuestionarios", listaCuestionarios);
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", listaCitas);
@@ -443,12 +459,14 @@ public class DoctorController {
         Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
         session.setAttribute("doctor", doctor_session);
 
-        Pago verificarPago=pagoRepository.buscarPagoPorIdcita(idCita);
+        Optional<Pago> verificarPago=pagoRepository.buscarPagoPorIdcita(idCita);
         Optional<Cita> optionalCita = citaRepository.findById(idCita);
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(idPaciente);
+        //si sale error de verificar pago, añadir a la base de la fila pago de esa cita, ya que siempre estaran presentes
+        //las filas de pago de cada cita
 
-        if (optionalPaciente.isPresent() & optionalCita.isPresent() && (optionalCita.get().getModalidad() == 1 || optionalCita.get().getModalidad() == 2) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.getEstadoPago()==1) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && (optionalCita.get().getModalidad() == 1 || optionalCita.get().getModalidad() == 2) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.get().getEstadoPago()==1 ) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
