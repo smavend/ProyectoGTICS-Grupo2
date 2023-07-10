@@ -223,26 +223,187 @@
                             <div class="card-body pb-0">
                                 <h5 class="card-title">CALENDARIO</h5>
                                 <section class="section dashboard">
-                                    <pacientesdiv class="row bg-white p-3">
+                                    <div class="row bg-white p-3">
+                                        <!-- FUNCIONAMIENTO DE CALENDARIO -->
+
                                         <div th:each="cita, citaIndex : ${citasPresenciales}">
-                                            <input id="citaInicioPresencial" th:id="'citaInicioPresencial' + ${citaIndex.index}" type="hidden" th:value="${cita.inicio}" />
+                                            <input th:id="'citaInicioPresencial' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${cita.inicio}"/>
+                                            <input th:id="'citaFinPresencial' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${cita.fin}"/>
+                                            <input th:id="'citaPresencialModalidad' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${cita.modalidad}"/>
+                                            <input th:id="'citaPresencialIndex' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${citaIndex.index}"/>
                                         </div>
 
                                         <div th:each="cita, citaIndex : ${citasPresenciales}">
-                                            <input id="citaPresencialApellido" th:id="'citaPresencialApellido' + ${citaIndex.index}" type="hidden" th:value="${cita.paciente.apellidos}" />
+                                            <input th:id="'citaPresencialApellido' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${cita.paciente.apellidos}"/>
                                         </div>
 
                                         <div th:each="cita, citaIndex : ${citasVirtuales}">
-                                            <input id="citaInicioVirtual" th:id="'citaInicioVirtual' + ${citaIndex.index}" type="hidden" th:value="${cita.inicio}" />
+                                            <input th:id="'citaInicioVirtual' + ${citaIndex.index}" type="hidden"
+                                                   th:value="${cita.inicio}"/>
+                                            <input th:id="'citaFinVirtual' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${cita.fin}"/>
+                                            <input th:id="'citaVirtualModalidad' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${cita.modalidad}"/>
+                                            <input th:id="'citaVirtualIndex' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${citaIndex.index}"/>
                                         </div>
 
                                         <div th:each="cita, citaIndex : ${citasVirtuales}">
-                                            <input id="citaVirtualApellido" th:id="'citaVirtualApellido' + ${citaIndex.index}" type="hidden" th:value="${cita.paciente.apellidos}" />
+                                            <input th:id="'citaVirtualApellido' + ${citaIndex.index}"
+                                                   type="hidden" th:value="${cita.paciente.apellidos}"/>
                                         </div>
 
 
                                         <input id="contadorPresencial" type="hidden" th:value="${cantidadCitasPresenciales}">
                                         <input id="contadorVirtual" type="hidden" th:value="${cantidadCitasVirtuales}">
+
+                                        <div th:each="cita, citaIndex : ${citasPresenciales}">
+                                            <button th:id="'popupPresencial' + ${citaIndex.index}" style="display: none;" type="button" class="btn btn-primary"
+                                                    data-bs-toggle="modal" th:data-bs-target="'#myModalPresencial' + ${citaIndex.index}">
+                                                Abrir Pop-up
+                                            </button>
+
+                                            <div class="modal fade" th:id="'myModalPresencial' + ${citaIndex.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <img style="height: 60px"
+                                                                 th:src="@{/assets/img/logoClinicaPNG.png}"
+                                                                 alt="Logo de la clínica">
+                                                            <h1 class="modal-title fs-5 tituloNavBar">Clínica INTERPUCP</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row informacionModal">
+                                                                <div class="col-6">
+                                                                    <p>Nombres y apellidos:<span class="informacionModalDato"
+                                                                                                 th:text="${cita.paciente.getNombreYApellido()}"></span>
+                                                                    </p>
+                                                                    <p>Seguro:<span class="informacionModalDato"
+                                                                                    th:text="${cita.paciente.seguro.nombre}"></span></p>
+                                                                    <p>Teléfono:<span class="informacionModalDato"
+                                                                                      th:text="${cita.paciente.telefono}"></span></p>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <p>Fecha de nacimiento:<span class="informacionModalDato"
+                                                                                                 th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}"></span>
+                                                                    </p>
+                                                                    <p>Dirección:<span
+                                                                            class="informacionModalDato" th:text="${cita.paciente.direccion}"></span>
+                                                                    </p>
+                                                                    <p>Correo:<span class="informacionModalDato" th:text="${cita.paciente.correo}"></span>
+                                                                    </p>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <span class="textoModal"
+                                                                  th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                                            <div class="row informacionModal">
+                                                                <div class="col-6">
+                                                                    <p>Especialidad:<span class="informacionModalDato"
+                                                                                          th:text="${cita.doctor.especialidad.nombre}"></span>
+                                                                    </p>
+                                                                    <p>Tipo de cita:<span class="informacionModalDato"
+                                                                                          th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
+                                                                    </p>
+
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <p>Doctor:<span class="informacionModalDato"
+                                                                                    th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}"></span>
+                                                                    </p>
+                                                                    <p>Sede:<span
+                                                                            class="informacionModalDato"
+                                                                            th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}"></span>
+                                                                    </p>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div th:each="cita, citaIndex : ${citasVirtuales}">
+                                            <button th:id="'popupVirtual' + ${citaIndex.index}" style="display: none;" type="button" class="btn btn-primary"
+                                                    data-bs-toggle="modal" th:data-bs-target="'#myModalVirtual' + ${citaIndex.index}">
+                                                Abrir Pop-up
+                                            </button>
+
+                                            <div class="modal fade" th:id="'myModalVirtual' + ${citaIndex.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <img style="height: 60px"
+                                                                 th:src="@{/assets/img/logoClinicaPNG.png}"
+                                                                 alt="Logo de la clínica">
+                                                            <h1 class="modal-title fs-5 tituloNavBar">Clínica INTERPUCP</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row informacionModal">
+                                                                <div class="col-6">
+                                                                    <p>Nombres y apellidos:<span class="informacionModalDato"
+                                                                                                 th:text="${cita.paciente.getNombreYApellido()}"></span>
+                                                                    </p>
+                                                                    <p>Seguro:<span class="informacionModalDato"
+                                                                                    th:text="${cita.paciente.seguro.nombre}"></span></p>
+                                                                    <p>Teléfono:<span class="informacionModalDato"
+                                                                                      th:text="${cita.paciente.telefono}"></span></p>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <p>Fecha de nacimiento:<span class="informacionModalDato"
+                                                                                                 th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}"></span>
+                                                                    </p>
+                                                                    <p>Dirección:<span
+                                                                            class="informacionModalDato" th:text="${cita.paciente.direccion}"></span>
+                                                                    </p>
+                                                                    <p>Correo:<span class="informacionModalDato" th:text="${cita.paciente.correo}"></span>
+                                                                    </p>
+                                                                </div>
+
+                                                            </div>
+                                                            <span class="textoModal"
+                                                                  th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                                            <div class="row informacionModal">
+                                                                <div class="col-6">
+                                                                    <p>Especialidad:<span class="informacionModalDato"
+                                                                                          th:text="${cita.doctor.especialidad.nombre}"></span>
+                                                                    </p>
+                                                                    <p>Tipo de cita:<span class="informacionModalDato"
+                                                                                          th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
+                                                                    </p>
+
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <p>Doctor:<span class="informacionModalDato"
+                                                                                    th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}"></span>
+                                                                    </p>
+                                                                    <p>Sede:<span
+                                                                            class="informacionModalDato"
+                                                                            th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}"></span>
+                                                                    </p>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <script>
                                             document.addEventListener('DOMContentLoaded', function () {
@@ -255,16 +416,22 @@
                                                 for (var i = 0; i < parseInt(cantidadCitasPresenciales); i++) {
                                                     eventsPresencial.push({
                                                         start: document.getElementById('citaInicioPresencial' + i).value,
+                                                        end: document.getElementById('citaFinPresencial' + i).value,
                                                         color: '#86C69B',
-                                                        title: '- '+document.getElementById('citaPresencialApellido' + i).value
+                                                        title: '- ' + document.getElementById('citaPresencialApellido' + i).value,
+                                                        modalidad: document.getElementById('citaPresencialModalidad' + i).value,
+                                                        index: document.getElementById('citaPresencialIndex' + i).value,
                                                     });
                                                 }
 
                                                 for (var j = 0; j < parseInt(cantidadCitasVirtuales); j++) {
                                                     eventsVirtual.push({
                                                         start: document.getElementById('citaInicioVirtual' + j).value,
+                                                        end: document.getElementById('citaFinVirtual' + j).value,
                                                         color: '#379AB8',
-                                                        title: '- '+document.getElementById('citaVirtualApellido' + j).value
+                                                        title: '- ' + document.getElementById('citaVirtualApellido' + j).value,
+                                                        modalidad: document.getElementById('citaVirtualModalidad' + j).value,
+                                                        index: document.getElementById('citaVirtualIndex' + j).value,
                                                     });
                                                 }
 
@@ -276,7 +443,6 @@
                                                         minute: '2-digit',
                                                         meridiem: 'short'
                                                     },
-
                                                     headerToolbar: {
                                                         left: 'prev,next today',
                                                         center: 'title',
@@ -290,6 +456,31 @@
                                                     },
                                                     eventClick: function (arg) {
 
+                                                        var eventInfo = {
+                                                            start: arg.event.extendedProps.start,
+                                                            color: arg.event.backgroundColor,
+                                                            title: arg.event.title,
+                                                            modalidad: arg.event.extendedProps.modalidad,
+                                                            index: arg.event.extendedProps.index,
+                                                        };
+
+                                                        if(eventInfo.modalidad=== '1'){
+                                                            var indexValue = arg.event.extendedProps.index;
+                                                            var botonPrincipal = document.getElementById("popupVirtual"+indexValue);
+                                                            botonPrincipal.click();
+                                                        }else if (eventInfo.modalidad=== '0'){
+                                                            var indexValue = arg.event.extendedProps.index;
+                                                            var botonPrincipal = document.getElementById("popupPresencial"+indexValue);
+                                                            botonPrincipal.click();
+                                                        }
+
+                                                    },
+
+                                                    eventMouseEnter: function (arg) {
+                                                        arg.el.style.cursor = 'pointer';
+                                                    },
+                                                    eventMouseLeave: function (arg) {
+                                                        arg.el.style.cursor = '';
                                                     },
                                                     editable: false,
                                                     dayMaxEvents: true,
@@ -301,11 +492,11 @@
 
                                         </script>
 
-
-
                                         <div id='calendar'></div>
 
-                                    </pacientesdiv>
+                                        <!-- FIN DE FUNCIONAMIENTO DE CALENDARIO -->
+
+                                    </div>
 
                                 </section>
                             </div>

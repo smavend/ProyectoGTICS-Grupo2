@@ -105,6 +105,26 @@ textarea::-webkit-scrollbar-track {
     padding: 20px 0 20px 20px;
 }
 
+.informacionModal{
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 40px 15px;
+}
+
+.textoModal{
+    margin: 0 25px;
+}
+
+.informacionModal:first-child{
+    margin-top: 10px;
+}
+
+.informacionModalDato{
+    margin-left: 10px;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
 @media (max-width: 1199px) {
     .seccionPrincipal{
         padding: 10px 15px;

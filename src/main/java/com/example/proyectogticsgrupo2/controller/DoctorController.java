@@ -136,6 +136,7 @@ public class DoctorController {
         List<Cita> listaCitaPresencial = new ArrayList<>();
         List<Cita> listaCitaVirtual= new ArrayList<>();
         List<Cita> citasDelDoctor=citaRepository.obtenerCitasPorDoctorId(doctor.getId_doctor());
+
         for (Cita cita : citasDelDoctor) {
 
             if (cita.getModalidad()==0){
@@ -143,7 +144,10 @@ public class DoctorController {
             }else{
                 listaCitaVirtual.add(cita);
             }
+            System.out.println(cita.getPaciente().getApellidos());
+
         }
+
 
 
         model.addAttribute("doctor", doctor);
