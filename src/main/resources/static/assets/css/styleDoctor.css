@@ -90,6 +90,11 @@ textarea::-webkit-scrollbar-track {
     box-shadow: 0 2px 20px rgba(0, 13, 35, 0.1);
     overflow-x: auto;
 }
+.tituloNavBar{
+    font-weight: 700;
+    font-size: 2rem;
+    color: #012970;
+}
 
 .seccionPrincipal th{
     font-size: 1rem;
