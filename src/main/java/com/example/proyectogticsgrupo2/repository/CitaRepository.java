@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,7 +85,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "inner join cita cp on (c.id_cita_previa = cp.id_cita) \n" +
             "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() \n" +
             "order by cp.fin desc")
-    List<LocalDate> buscarFechasLimitesDeCitasPendientes(String idPaciente);
+    List<Date> buscarFechasLimitesDeCitasPendientes(String idPaciente);
 
     @Transactional
     @Modifying
@@ -146,4 +147,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Query(value = "select * from cita where doctor_id_doctor=?1",nativeQuery = true)
     List<Cita> obtenerCitasPorDoctorId(String idDoctor);
+
+    @Query(nativeQuery = true, value = "select * from cita c where c.id_cita = ?1")
+    Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes
 }

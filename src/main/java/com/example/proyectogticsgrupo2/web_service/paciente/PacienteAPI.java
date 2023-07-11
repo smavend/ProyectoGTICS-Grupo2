@@ -1,12 +1,15 @@
-package com.example.proyectogticsgrupo2.web_service;
+package com.example.proyectogticsgrupo2.web_service.paciente;
 
 import com.example.proyectogticsgrupo2.dto.HorarioDeDiaDTO;
 import com.example.proyectogticsgrupo2.dto.HorarioOcupadoDTO;
 import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Especialidad;
+import com.example.proyectogticsgrupo2.entity.pacienteAPI.HorariosRoot;
 import com.example.proyectogticsgrupo2.repository.DoctorRepository;
 import com.example.proyectogticsgrupo2.repository.EspecialidadRepository;
 import com.example.proyectogticsgrupo2.repository.HorarioRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +28,9 @@ public class PacienteAPI {
     final EspecialidadRepository especialidadRepository;
     final HorarioRepository horarioRepository;
     final DoctorRepository doctorRepository;
+
+    @Autowired
+    HorariosDao horariosDao;
 
     public PacienteAPI(EspecialidadRepository especialidadRepository,
                        HorarioRepository horarioRepository,
@@ -56,7 +62,7 @@ public class PacienteAPI {
         }
     }
 
-    @GetMapping("/horarios/{doctor}/{fecha}")
+    @GetMapping("/horarios/consulta/{doctor}/{fecha}")
     public ResponseEntity<HashMap<String, Object>> obtenerHorarios(@PathVariable("doctor") String idDoctor,
                                                                    @PathVariable("fecha") String fechaString) {
         HashMap<String, Object> response = new HashMap<>();
@@ -112,6 +118,43 @@ public class PacienteAPI {
             response.put("resultado", "ok");
             response.put("horarios", horariosDisponibles);
             return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("resultado", "error");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @GetMapping("/horarios/examen/{sede}/{especialidad}/{fecha}")
+    public ResponseEntity<HashMap<String, Object>> obtenerHorariosExamenes(@PathVariable("sede") int idSede,
+                                                                           @PathVariable("especialidad") int idEspecialidad,
+                                                                           @PathVariable("fecha") String fechaString,
+                                                                           HttpServletRequest request) {
+        HashMap<String, Object> response = new HashMap<>();
+
+        try {
+
+            // Considerando que todos los doctores de examenes estan disponibles todos los días (ya no se hace la búsqueda de acuerdo al día)
+            List<Doctor> doctoresDisponibles = doctorRepository.findBySede_IdSedeAndEspecialidad_IdEspecialidad(idSede, idEspecialidad);
+
+            for (Doctor doctor: doctoresDisponibles){
+                // Verificar si doctor tiene disponibilidad en la fecha
+                HorariosRoot horariosRoot = horariosDao.listarHorarios(doctor.getId_doctor(), fechaString, request);
+                if (horariosRoot.horarios.size() > 0){
+                    // Si es que tiene disponibilidad, retornar horarios y terminar bucle
+                    response.put("resultado", "ok");
+                    response.put("doctor", doctor.getId_doctor());
+                    response.put("horarios", horariosRoot.horarios);
+                    return ResponseEntity.ok().body(response);
+                }
+                // Si no tiene disponibilidad, pasar al siguiente doctor
+            }
+            // Si no hay horarios disponibles, retornar vacío
+            List<HashMap<String, Object>> horarios = new ArrayList<>();
+            response.put("resultado", "ok");
+            response.put("horarios", horarios);
+            return ResponseEntity.ok().body(response);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -34,6 +34,7 @@
                         <input type="hidden" name="fecha" th:value="${citaTemporal.fecha}">
                         <input type="hidden" name="inicio" th:value="${citaTemporal.inicio}">
                         <input type="hidden" name="fin" th:value="${citaTemporal.fin}">
+                        <input type="hidden" th:if="${citaPendiente}" name="citaPendiente" th:value="${citaPendiente}">
 
                         <div class="row justify-content-center">
                             <div class="col-sm-10 col-md-8 col-lg-8">

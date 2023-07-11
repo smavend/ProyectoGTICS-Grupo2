@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -192,10 +193,6 @@ public class PacienteController {
     public String reservar2Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model, HttpSession session, Authentication authentication) {
 
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
-
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -231,6 +228,7 @@ public class PacienteController {
 
     @PostMapping("/reservar3")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                            @RequestParam(name = "citaPendiente", required = false) Boolean citaPendiente,
                             Model model, HttpSession session, Authentication authentication,
                             HttpServletRequest request) {
 
@@ -242,6 +240,8 @@ public class PacienteController {
         }
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
+
+        // VALIDAR LO QUE OCURRE EN CASO SE ESTE RECIBIENDO UNA CITA PENDIENTE
 
         String tipoPago;
         if (citaTemporal.getModalidad() == 0) {
@@ -292,10 +292,73 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         List<Cita> citasPendientes = citaRepository.buscarCitasPendientes(paciente.getIdPaciente());
+        List<Date> fechasLimite = citaRepository.buscarFechasLimitesDeCitasPendientes(paciente.getIdPaciente());
 
         model.addAttribute("citasPendientes", citasPendientes);
+        model.addAttribute("fechasLimite", fechasLimite);
 
         return "paciente/pendientes";
+    }
+
+    @GetMapping("/reservaPendiente")
+    public String reservarPendiente1(@RequestParam("c") Integer idCita,
+                                        @ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                        Model model, HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        Cita cita = citaRepository.buscarPorId(idCita);
+
+        if (cita != null){
+            model.addAttribute("cita", cita);
+            return "paciente/reservarPendiente1";
+        }
+        else{
+            return "redirect:/Paciente/pendientes";
+        }
+    }
+
+    @PostMapping("/reservarPendiente")
+    public String reservarPendiente2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
+                                     Model model, HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+
+        session.setAttribute("paciente", paciente);
+
+        if (bindingResult.hasErrors()){
+            System.out.println("Error validacion: "+bindingResult.getAllErrors());
+            return "paciente/reservarPendiente1";
+        }
+        else {
+            Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
+
+            model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+            model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+            model.addAttribute("doctor", doctor);
+            Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
+            model.addAttribute("precio", precioBase*paciente.getSeguro().getCoaseguro());
+            model.addAttribute("citaPendiente", true);
+            citaTemporal.setFin(citaTemporal.getInicio().plusMinutes(doctor.getDuracion_cita_minutos()));
+
+            return "paciente/reservar3";
+
+        }
+
     }
 
     /* SECCIÓN PERFIL */

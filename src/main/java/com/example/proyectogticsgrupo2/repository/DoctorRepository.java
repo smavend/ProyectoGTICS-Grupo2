@@ -33,8 +33,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, String> {
     @Query(nativeQuery = true, value = "select count(doctor.id_doctor) from doctor where sede_id_sede = ?1 and especialidad_id_especialidad = ?2")
     int numDoctoresSedeEspecialidad(int idSede, int idEspecialidad);
 
-    @Query(nativeQuery = true, value = "select * from doctor where especialidad_id_especialidad=?1 and sede_id_sede=?2")
-    List<Doctor> obtenerDoctorPorIdEspecialidadYIdSede(int especialidad, int sede);
     List<Doctor> findBySede_IdSedeAndEspecialidad_IdEspecialidad(int idSede, int idEspecialidad);
 
     @Query(nativeQuery = true, value = "select d.* from doctor d " +

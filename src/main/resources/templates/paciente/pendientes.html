@@ -20,7 +20,7 @@
         <!-- End Sidebar-->
 
         <main id="main" class="main">
-            <h1 class="encabezado text-center" style="width: 90%">Reservar cita</h1>
+            <h1 class="encabezado text-center" style="width: 90%">Reservar</h1>
             <div class="bodyReservar">
                 <div class="cardReservar text-center w-75 py-4">
                     <span class="btn botonTipo botonTipoSeleccionado">Todos</span>
@@ -37,16 +37,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="cita:${citasPendientes}">
-                                    <td th:text="${cita.especialidad.nombre}">Traumatología</td>
-                                    <td th:text="${cita.especialidad.es_examen == 1?'Examen':'Consulta'}">Examen
-                                    </td>
-                                    <td>
+                                <tr th:each="citaPendiente, i: ${citasPendientes}">
+                                    <td th:text="${citaPendiente.especialidad.nombre}">Traumatología</td>
+                                    <td th:text="${citaPendiente.especialidad.es_examen == 1?'Examen':'Consulta'}">Examen</td>
+                                    <td th:text="${#dates.format(fechasLimite[i.index], 'dd-MM-yyyy')}">
                                         00-00-00
                                     </td>
-                                    <!-- ${cita.fin.plusDays(7).toLocalDate()} -->
                                     <td>
-                                        <a href="#" class="botonAceptar">Completar</a>
+                                        <a th:href="@{'/Paciente/reservaPendiente?c='+${citaPendiente.id_cita}}" class="botonAceptar">Completar</a>
                                     </td>
                                 </tr>
                             </tbody>

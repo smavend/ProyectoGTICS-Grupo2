@@ -44,7 +44,7 @@ function buscarHorarios(doctor, fecha){
     if(doctor !== "" && fecha !== ""){
         $.ajax({
             method: "GET",
-            url: getUrl()+"/Paciente/api/horarios/"+doctor+"/"+fecha
+            url: getUrl()+"/Paciente/api/horarios/consulta/"+doctor+"/"+fecha
         }).done(function(data){
             selectHorario.empty();
             selectHorario.append("<option value=''>-- Seleccione un horario --</option>");
@@ -57,9 +57,6 @@ function buscarHorarios(doctor, fecha){
         });
     }
 }
-
-// OBTENER HORARIOS EN PERFIL DOCTOR
-
 
 // FUNCIONES
 function getUrl(){

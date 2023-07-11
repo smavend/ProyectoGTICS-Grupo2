@@ -128,7 +128,7 @@
 
                 $("#form_fecha").val(fecha);
 
-                $.get(getUrl()+"/Paciente/api/horarios/"+doctor+"/"+fecha)
+                $.get(getUrl()+"/Paciente/api/horarios/consulta/"+doctor+"/"+fecha)
                     .done((data)=>{
                         contenedor.empty();
                         contenedor.parent().children("#boton_seleccionar_horario").remove();
