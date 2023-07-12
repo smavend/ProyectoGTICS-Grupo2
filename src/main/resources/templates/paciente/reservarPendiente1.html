@@ -31,6 +31,7 @@
 
                     <form method="post" th:action="@{/Paciente/reservarPendiente}" th:object="${citaTemporal}">
 
+                        <input type="hidden" name="id" th:value="${cita.id_cita}">
                         <input type="hidden" name="modalidad" th:value="${cita.modalidad}">
                         <input type="hidden" name="idSede" th:value="${cita.sede.idSede}">
                         <input type="hidden" name="idEspecialidad" th:value="${cita.especialidad.idEspecialidad}">

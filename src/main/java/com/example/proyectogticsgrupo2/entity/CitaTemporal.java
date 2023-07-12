@@ -18,7 +18,6 @@ import java.time.LocalTime;
 @Table(name = "cita_temporal")
 public class CitaTemporal {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cita_temporal")
     private Integer id;
 

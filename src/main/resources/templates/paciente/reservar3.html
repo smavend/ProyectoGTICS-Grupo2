@@ -27,6 +27,7 @@
 
                     <form method="post" th:action="@{/Paciente/reservar3}">
 
+                        <input type="hidden" name="id" th:value="${citaTemporal.id}">
                         <input type="hidden" name="modalidad" th:value="${citaTemporal.modalidad}">
                         <input type="hidden" name="idSede" th:value="${citaTemporal.idSede}">
                         <input type="hidden" name="idEspecialidad" th:value="${citaTemporal.idEspecialidad}">

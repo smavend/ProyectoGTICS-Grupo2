@@ -241,8 +241,6 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
-        // VALIDAR LO QUE OCURRE EN CASO SE ESTE RECIBIENDO UNA CITA PENDIENTE
-
         String tipoPago;
         if (citaTemporal.getModalidad() == 0) {
             tipoPago = "Efectivo";
@@ -259,12 +257,24 @@ public class PacienteController {
 
         Especialidad especialidad = especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get();
 
-        citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
-        int idCita = citaRepository.obtenerUltimoId();
-        pagoRepository.nuevoPago(idCita, tipoPago);
+        // VALIDAR LO QUE OCURRE EN CASO SE ESTE RECIBIENDO UNA CITA PENDIENTE
+        Cita cita;
+        if (citaPendiente){
+
+            citaRepository.reservarCitaPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getId());
+            pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago);
+            cita = citaRepository.findById(citaTemporal.getId()).get();
+        }
+        else {
+
+            citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
+            int idCita = citaRepository.obtenerUltimoId();
+            pagoRepository.nuevoPago(idCita, tipoPago);
+            cita = citaRepository.findById(idCita).get();
+        }
 
         // Enviar correo al paciente - inhabilidado para que no demore tanto xd
-        /*Cita cita = citaRepository.findById(idCita).get();
+        /*
         CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
         String host = request.getServerName()+":"+request.getLocalPort();
         correo.props(host, paciente.getCorreo(), cita);
@@ -302,8 +312,8 @@ public class PacienteController {
 
     @GetMapping("/reservaPendiente")
     public String reservarPendiente1(@RequestParam("c") Integer idCita,
-                                        @ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                        Model model, HttpSession session, Authentication authentication){
+                                     @ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                     Model model, HttpSession session, Authentication authentication){
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -353,6 +363,7 @@ public class PacienteController {
             Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
             model.addAttribute("precio", precioBase*paciente.getSeguro().getCoaseguro());
             model.addAttribute("citaPendiente", true);
+
             citaTemporal.setFin(citaTemporal.getInicio().plusMinutes(doctor.getDuracion_cita_minutos()));
 
             return "paciente/reservar3";
