@@ -694,30 +694,52 @@ public class DoctorController {
             cita.setEstado(4);
             citaRepository.save(cita); // guardar cita finalizada
 
-            if (idEspecExamenPendiente ==4 || idEspecExamenPendiente == 5 || idEspecExamenPendiente == 6){
+            System.out.println("Cita previa: "+cita.getCita_previa().getId_cita());
 
-                Cita cita_examen= new Cita(); // creacion de nueva cita para examenes
-                cita_examen.setPaciente(cita.getPaciente());
+            // flujo cuando la cita finalizada fue una cita pendiente
+            if (cita.getCita_previa() != null){ // si la cita fue una cita pendiente
 
-                // doctor seleccionado de manera aleatoria cuando paciente selecciona horario
-                // inicio y fin de cita seleccionados por el paciente
+                if (cita.getEspecialidad().getIdEspecialidad() == 4 || // si la cita pendiente fue un examen (originado por otra cita)
+                        cita.getEspecialidad().getIdEspecialidad() == 5 ||
+                        cita.getEspecialidad().getIdEspecialidad() == 6){
 
-                cita_examen.setModalidad(0);
-                cita_examen.setEstado(5);
-                cita_examen.setSede(cita.getSede()); // cita de examen en la misma sede que la original
-                cita_examen.setIdSeguro(cita.getIdSeguro());
-                cita_examen.setDiagnostico(cita.getDiagnostico()); // No poner nulo pq si no sale error
-                cita_examen.setTratamiento(cita.getTratamiento()); // No poner nulo pq si no sale error
-                cita_examen.setReceta(cita.getReceta()); // No poner nulo pq si no sale error
-                cita_examen.setCita_previa(cita);
-                Especialidad esp = especialidadRepository.findById(idEspecExamenPendiente).get();
-                cita_examen.setEspecialidad(esp);
-                citaRepository.save(cita_examen);
-                //pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
+                    Cita cita_descuento = new Cita(); //creacion de nueva cita pendiente (cita que contará con descuento)
+                    cita_descuento.setModalidad(cita.getCita_previa().getModalidad());
+                    cita_descuento.setEstado(5);
+                    cita_descuento.setSede(cita.getSede());
+                    cita_descuento.setIdSeguro(cita.getIdSeguro());
+
+                    cita_descuento.setCita_previa(cita.getCita_previa());
+                    cita_descuento.setEspecialidad(cita.getCita_previa().getEspecialidad());
+                    citaRepository.save(cita_descuento);
+                }
+                // si la cita pendiente fue de otra especialidad no hay acciones adicionales
+            }
+            // si la cita no fue una cita pendiente
+            else if (idEspecExamenPendiente == 4 || idEspecExamenPendiente == 5 || idEspecExamenPendiente == 6){ // si se le asigno un examen pendiente al paciente
+
+                    Cita cita_examen= new Cita(); // creacion de nueva cita para examenes
+                    cita_examen.setPaciente(cita.getPaciente());
+
+                    // doctor seleccionado de manera aleatoria cuando paciente selecciona horario
+                    // inicio y fin de cita seleccionados por el paciente
+
+                    cita_examen.setModalidad(0);
+                    cita_examen.setEstado(5);
+                    cita_examen.setSede(cita.getSede()); // cita de examen en la misma sede que la original
+                    cita_examen.setIdSeguro(cita.getIdSeguro());
+                    cita_examen.setDiagnostico(cita.getDiagnostico()); // No poner nulo pq si no sale error
+                    cita_examen.setTratamiento(cita.getTratamiento()); // No poner nulo pq si no sale error
+                    cita_examen.setReceta(cita.getReceta()); // No poner nulo pq si no sale error
+                    cita_examen.setCita_previa(cita);
+                    Especialidad esp = especialidadRepository.findById(idEspecExamenPendiente).get();
+                    cita_examen.setEspecialidad(esp);
+                    citaRepository.save(cita_examen);
+
             }
 
-            return "redirect:/doctor/dashboard";
         }
+        return "redirect:/doctor/dashboard";
     }
 
     @PostMapping("/guardarExamen")

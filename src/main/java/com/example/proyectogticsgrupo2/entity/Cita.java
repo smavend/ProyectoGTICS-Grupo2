@@ -48,9 +48,9 @@ public class Cita {
     @Column(nullable = false)
     private int modalidad;
 
-    /* estado == 0 ---> Presencial
-       estado == 1 ---> Virtual
-       estado == 2 ---> Examen*/
+    /* modalidad == 0 ---> Presencial
+       modalidad == 1 ---> Virtual
+       modalidad == 2 ---> Examen*/
 
     @Column(nullable = false)
     @Lob
