@@ -721,7 +721,7 @@ public class DoctorController {
             // flujo cuando la cita finalizada fue una cita pendiente
             if (cita.getCita_previa() != null){ // si la cita fue una cita pendiente
 
-                if (cita.getEspecialidad().getIdEspecialidad() == 4 || // si la cita pendiente fue un examen (originado por otra cita)
+                if (cita.getEspecialidad().getIdEspecialidad() == 4 || // si la cita pendiente fue un examen pendiente (originado por otra cita)
                         cita.getEspecialidad().getIdEspecialidad() == 5 ||
                         cita.getEspecialidad().getIdEspecialidad() == 6){
 
@@ -765,7 +765,11 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarExamen")
-    public String guardarExamen(HttpSession session, Authentication authentication, Model model, @RequestParam("archivo") MultipartFile file, @RequestParam("descripcion") String descripcion, @RequestParam("idCita") int idCita, RedirectAttributes attr) {
+    public String guardarExamen(HttpSession session, Authentication authentication, Model model,
+                                @RequestParam("archivo") MultipartFile file,
+                                @RequestParam("descripcion") String descripcion,
+                                @RequestParam("idCita") int idCita,
+                                RedirectAttributes attr) {
 
         String fileName = file.getOriginalFilename();
         if (fileName.contains("..")) {
@@ -776,7 +780,9 @@ public class DoctorController {
         try {
             Optional<Cita> optionalCita = citaRepository.findById(idCita);
             if (optionalCita.isPresent()) {
+                System.out.println("se encontro cita");
                 Cita cita = optionalCita.get();
+
                 cita.setExamenname(fileName);
                 cita.setExamencontenttype(file.getContentType());
                 cita.setDiagnostico(descripcion);
@@ -787,6 +793,7 @@ public class DoctorController {
                 citaRepository.save(cita);
                 attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
             } else {
+                System.out.println("NO se encontro cita");
                 attr.addFlashAttribute("msgError", "No se encontró la cita");
             }
         } catch (IOException e) {
