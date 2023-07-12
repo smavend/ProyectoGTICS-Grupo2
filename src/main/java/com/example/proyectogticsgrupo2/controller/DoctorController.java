@@ -144,7 +144,7 @@ public class DoctorController {
             }else{
                 listaCitaVirtual.add(cita);
             }
-            System.out.println(cita.getPaciente().getApellidos());
+            //System.out.println(cita.getPaciente().getApellidos());
 
         }
 
@@ -450,7 +450,8 @@ public class DoctorController {
 
 
     @GetMapping("/reporte")
-    public String reporte(Model model, @RequestParam("id") String idPaciente, @RequestParam("id2") int idCita, HttpSession session, Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String reporte(Model model, @RequestParam("id") String idPaciente, @RequestParam("id2") int idCita,
+                          HttpSession session, Authentication authentication, RedirectAttributes redirectAttributes) {
         setIdPaciente(idPaciente);
         setIdCita(idCita);
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
@@ -584,52 +585,6 @@ public class DoctorController {
             e.printStackTrace();
             return "redirect:/doctor/";
         }
-    }
-
-    @GetMapping("/cita")
-    public String cita(@RequestParam("id") String idPaciente,
-                       @RequestParam("id2") Integer idCita,
-                       Model model, HttpSession session, Authentication authentication){
-        String userEmail;
-        if (session.getAttribute("impersonatedUser") != null) {
-            userEmail = (String) session.getAttribute("impersonatedUser");
-        } else {
-            userEmail = authentication.getName();
-        }
-        Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
-        session.setAttribute("doctor", doctor_session);
-
-        Optional<Cita> optionalCita = citaRepository.findById(idCita);
-        Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
-        List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(idPaciente);
-
-        if (optionalPaciente.isPresent() & optionalCita.isPresent() && optionalCita.get().getModalidad() == 1 && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor()) {
-            Paciente paciente = optionalPaciente.get();
-            Cita cita = optionalCita.get();
-
-            String alergias = "";
-
-            for (int i = 0; i < alergiaList.size(); i++) {
-                if (i == alergiaList.size() - 1) {
-                    Alergia alergiaIterador = alergiaList.get(i);
-                    alergias = alergias + " " + alergiaIterador.getNombre();
-                } else {
-                    Alergia alergiaIterador = alergiaList.get(i);
-                    alergias = alergias + " " + alergiaIterador.getNombre() + ",";
-                }
-            }
-
-            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
-            Doctor doctor = doctorOptional.get();
-
-            model.addAttribute("doctor", doctor);
-            model.addAttribute("paciente", paciente);
-            model.addAttribute("cita", cita);
-            model.addAttribute("alergias", alergias);
-
-            return "doctor/DoctorCita";
-        }
-        return "redirect:/dashboard";
     }
 
     @GetMapping("/verCuestionario")
@@ -767,33 +722,46 @@ public class DoctorController {
     @PostMapping("/guardarExamen")
     public String guardarExamen(HttpSession session, Authentication authentication, Model model,
                                 @RequestParam("archivo") MultipartFile file,
-                                @RequestParam("descripcion") String descripcion,
+                                @RequestParam("diagnostico") String diagnostico,
                                 @RequestParam("idCita") int idCita,
                                 RedirectAttributes attr) {
 
-        String fileName = file.getOriginalFilename();
-        if (fileName.contains("..")) {
-            model.addAttribute("msg", "No se permiten '..' en el archivo");
-            return "doctor/DoctorReporteSesion";
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
         }
+        Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
+        session.setAttribute("doctor", doctor_session);
 
         try {
             Optional<Cita> optionalCita = citaRepository.findById(idCita);
             if (optionalCita.isPresent()) {
-                System.out.println("se encontro cita");
+
                 Cita cita = optionalCita.get();
+
+                String fileName = file.getOriginalFilename();
+                if (fileName.contains("..")) {
+                    attr.addFlashAttribute("msgError", "No se permiten '..' en el archivo");
+                    model.addAttribute("cita", cita);
+                    return "doctor/DoctorReporteSesion";
+                }
+
+                // Considerando que file puede ser empty
+                // Falta validar que diagnostico no sea nulo y que retorne a la pagina anterior
 
                 cita.setExamenname(fileName);
                 cita.setExamencontenttype(file.getContentType());
-                cita.setDiagnostico(descripcion);
-                cita.setReceta("·");
-                cita.setTratamiento("·");
                 cita.setExamendoc(file.getBytes());
-                cita.setEstado(4);
+
+                cita.setDiagnostico(diagnostico);
+
+                //cita.setEstado(4); indica que la cita ha finalizado - descomentar cuando este listo el guardado de examen
                 citaRepository.save(cita);
+
                 attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
             } else {
-                System.out.println("NO se encontro cita");
                 attr.addFlashAttribute("msgError", "No se encontró la cita");
             }
         } catch (IOException e) {

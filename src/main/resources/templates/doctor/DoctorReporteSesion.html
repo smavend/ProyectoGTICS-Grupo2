@@ -148,6 +148,7 @@
 
                 </form>
 
+
                 <div th:unless="${cita.estado != 5}" class="container-xl perfil">
                     <div class="row">
                         <div class="pagetitle">
@@ -159,21 +160,20 @@
                             <div class="card-body">
                                 <form th:action="@{/doctor/guardarExamen}" method="post" id="formExamen"
                                       enctype="multipart/form-data">
+
                                     <div class="row">
                                         <div class="col-lg-12 text-center">
                                             <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
                                                 <input type="hidden" id="idCita" name="idCita" th:value="${cita.getId_cita()}">
-                                                <input type="hidden" id="receta" name="receta" th:value="${cita.getReceta()}">
-                                                <input type="hidden" id="tratamiento" name="tratamiento" th:value="${cita.getReceta()}">
 
                                                 <h2 style="color: black;text-align: center;">Subir examen:</h2>
                                                 <input type="file" class="form-control" id="archivo" name="archivo" accept=".pdf">
                                             </div>
                                             <div class="mb-3">
-                                                <h2 style="color: black;text-align: center;">Descripción:</h2>
+                                                <h2 style="color: black;text-align: center;">Diagnóstico:</h2>
                                                 <textarea oninput="autoResizeTextarea(this)"
                                                           style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                                          name="descripcion" maxlength="500" class="form-control"></textarea>
+                                                          name="diagnostico" maxlength="500" class="form-control"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -190,7 +190,7 @@
 
                 <script>
                     document.getElementById('formExamen').addEventListener('submit', function(event) {
-                        var textarea = document.querySelector('textarea[name="diagnostico"]');
+                        var textarea = document.querySelector('textarea[name="descripcion"]');
                         if (textarea.value.trim() === '') {
                             textarea.removeAttribute('required');
                         }
