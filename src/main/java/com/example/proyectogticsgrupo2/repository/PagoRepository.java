@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PagoRepository extends JpaRepository<Pago, Integer> {
@@ -31,7 +32,7 @@ public interface PagoRepository extends JpaRepository<Pago, Integer> {
     void nuevoPagoDeSoloExamen(int idCita);
 
     @Query(value = "Select * from pago where cita_id_cita=?1", nativeQuery = true )
-    Pago buscarPagoPorIdcita(int idCita);
+    Optional<Pago> buscarPagoPorIdcita(int idCita);
 
 
     @Query(nativeQuery = true, value = "select p.*, c.inicio from pago p " +

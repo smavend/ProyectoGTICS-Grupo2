@@ -90,6 +90,11 @@ textarea::-webkit-scrollbar-track {
     box-shadow: 0 2px 20px rgba(0, 13, 35, 0.1);
     overflow-x: auto;
 }
+.tituloNavBar{
+    font-weight: 700;
+    font-size: 2rem;
+    color: #012970;
+}
 
 .seccionPrincipal th{
     font-size: 1rem;
@@ -98,6 +103,26 @@ textarea::-webkit-scrollbar-track {
 
 .seccionPrincipal td{
     padding: 20px 0 20px 20px;
+}
+
+.informacionModal{
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 40px 15px;
+}
+
+.textoModal{
+    margin: 0 25px;
+}
+
+.informacionModal:first-child{
+    margin-top: 10px;
+}
+
+.informacionModalDato{
+    margin-left: 10px;
+    font-size: 1rem;
+    font-weight: 400;
 }
 
 @media (max-width: 1199px) {
