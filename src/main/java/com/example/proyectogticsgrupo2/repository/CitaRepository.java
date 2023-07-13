@@ -125,7 +125,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
         //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorPacienteProxCitas(String id);
 
-    @Query(value = "SELECT fin, diagnostico, receta \n" +
+    @Query(value = "SELECT fin, tratamiento,diagnostico, receta \n" +
             "FROM proyectogtics.cita \n" +
             "WHERE paciente_id_paciente = ?1 and estado =?2",
             nativeQuery = true)
