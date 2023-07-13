@@ -581,7 +581,7 @@ public class DoctorController {
 
             return "doctor/DoctorCita";
         }
-        catch (Exception e){
+        catch (IOException | InterruptedException e){
             e.printStackTrace();
             return "redirect:/doctor/";
         }
@@ -671,29 +671,7 @@ public class DoctorController {
             cita.setEstado(4);
             citaRepository.save(cita); // guardar cita finalizada
 
-            System.out.println("Cita previa: "+cita.getCita_previa().getId_cita());
-
-            // flujo cuando la cita finalizada fue una cita pendiente
-            if (cita.getCita_previa() != null){ // si la cita fue una cita pendiente
-
-                if (cita.getEspecialidad().getIdEspecialidad() == 4 || // si la cita pendiente fue un examen pendiente (originado por otra cita)
-                        cita.getEspecialidad().getIdEspecialidad() == 5 ||
-                        cita.getEspecialidad().getIdEspecialidad() == 6){
-
-                    Cita cita_descuento = new Cita(); //creacion de nueva cita pendiente (cita que contará con descuento)
-                    cita_descuento.setModalidad(cita.getCita_previa().getModalidad());
-                    cita_descuento.setEstado(5);
-                    cita_descuento.setSede(cita.getSede());
-                    cita_descuento.setIdSeguro(cita.getIdSeguro());
-
-                    cita_descuento.setCita_previa(cita.getCita_previa());
-                    cita_descuento.setEspecialidad(cita.getCita_previa().getEspecialidad());
-                    citaRepository.save(cita_descuento);
-                }
-                // si la cita pendiente fue de otra especialidad no hay acciones adicionales
-            }
-            // si la cita no fue una cita pendiente
-            else if (idEspecExamenPendiente == 4 || idEspecExamenPendiente == 5 || idEspecExamenPendiente == 6){ // si se le asigno un examen pendiente al paciente
+            if (idEspecExamenPendiente == 4 || idEspecExamenPendiente == 5 || idEspecExamenPendiente == 6){ // si se le asigno un examen pendiente al paciente
 
                     Cita cita_examen= new Cita(); // creacion de nueva cita para examenes
                     cita_examen.setPaciente(cita.getPaciente());
@@ -748,25 +726,38 @@ public class DoctorController {
                     return "doctor/DoctorReporteSesion";
                 }
 
-                // Considerando que file puede ser empty
-                // Falta validar que diagnostico no sea nulo y que retorne a la pagina anterior
+                // Considerando que file puede ser empty y diagnostico no
+                if (diagnostico.equals("")){
+                    model.addAttribute("cita", cita);
+                    attr.addFlashAttribute("error", "Debe incluir un diagnóstico válido"); // no se por qué no muestra esta validacion :u
+                    return "doctor/DoctorReporteSesion";
+                }
+                else{
+                    cita.setExamenname(fileName);
+                    cita.setExamencontenttype(file.getContentType());
+                    cita.setExamendoc(file.getBytes());
 
-                cita.setExamenname(fileName);
-                cita.setExamencontenttype(file.getContentType());
-                cita.setExamendoc(file.getBytes());
+                    cita.setDiagnostico(diagnostico);
 
-                cita.setDiagnostico(diagnostico);
+                    cita.setEstado(4); // cita finalizada
+                    citaRepository.save(cita);
 
-                //cita.setEstado(4); indica que la cita ha finalizado - descomentar cuando este listo el guardado de examen
-                citaRepository.save(cita);
+                    attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
 
-                attr.addFlashAttribute("msgActualizacion", "Archivo subido correctamente");
+                    // si la cita es un examen pendiente, se debe crear la cita que ofrezca el descuento
+                    if (cita.getCita_previa() != null){
+
+                        citaRepository.guardarCitaPendiente(cita.getPaciente().getIdPaciente(), cita.getCita_previa().getModalidad(),
+                                cita.getSede().getIdSede(), cita.getCita_previa().getId_cita(), cita.getPaciente().getSeguro().getIdSeguro(),
+                                cita.getCita_previa().getEspecialidad().getIdEspecialidad());
+                    }
+                }
             } else {
-                attr.addFlashAttribute("msgError", "No se encontró la cita");
+                attr.addFlashAttribute("error", "No se encontró la cita");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            attr.addFlashAttribute("msgError", "Ocurrió un error al subir el archivo");
+            attr.addFlashAttribute("error", "Ocurrió un error al subir el archivo");
         }
 
         return "redirect:/doctor/dashboard";

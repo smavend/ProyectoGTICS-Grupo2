@@ -97,6 +97,11 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Transactional
     @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `modalidad`, `estado`, `sede_id_sede`, `id_cita_previa`, `seguro_id_seguro`, `especialidad_id_especialidad`) VALUES (?1, ?2, 5, ?3, ?4, ?5, ?6)")
+    void guardarCitaPendiente(String idPaciente, int modalidad, int idSede, int idCitaPrevia, int idSeguro, int idEspecialidad);
+
+    @Transactional
+    @Modifying
     @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `doctor_id_doctor` = ?1, `inicio` = ?2, `fin` = ?3, `estado` = 0 WHERE (`id_cita` = ?4)")
     void reservarCitaPendiente(String idDoctor, LocalDateTime inicio, LocalDateTime fin, int idCita);
 

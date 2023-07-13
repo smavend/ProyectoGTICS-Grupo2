@@ -259,7 +259,7 @@ public class PacienteController {
 
         // VALIDAR LO QUE OCURRE EN CASO SE ESTE RECIBIENDO UNA CITA PENDIENTE
         Cita cita;
-        if (citaPendiente){
+        if (citaPendiente != null){
 
             citaRepository.reservarCitaPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getId());
             pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago);
