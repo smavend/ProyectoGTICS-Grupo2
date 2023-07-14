@@ -369,7 +369,7 @@ public class PacienteController {
 
         session.setAttribute("paciente", paciente);
 
-        Cita cita = citaRepository.findById(citaTemporal.getId()).get();
+        Cita cita = citaRepository.buscarPorId(citaTemporal.getId());
 
         if (bindingResult.hasErrors()){
             System.out.println("Error validacion: "+bindingResult.getAllErrors());

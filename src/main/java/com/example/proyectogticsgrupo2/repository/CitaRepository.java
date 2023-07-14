@@ -77,7 +77,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Query(nativeQuery = true, value = "select c.* from cita c \n" +
             "inner join cita cp on (c.id_cita_previa = cp.id_cita) \n" +
-            "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() \n" +
+            "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() and c.estado = 5 \n" +
             "order by cp.fin desc")
     List<Cita> buscarCitasPendientes(String idPaciente);
 
@@ -108,7 +108,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `doctor_id_doctor` = ?1, `inicio` = ?2, `fin` = ?3, `modalidad` = ?4, `estado` = 0 WHERE (`id_cita` = ?5)")
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `doctor_id_doctor` = ?1, `inicio` = ?2, `fin` = ?3, `modalidad` = ?4, `estado` = 1 WHERE (`id_cita` = ?5)")
     void reservarCitaPendiente(String idDoctor, LocalDateTime inicio, LocalDateTime fin, int modalidad, int idCita);
 
     @Query(value = "SELECT DATE_FORMAT(pag.fecha_emitida, '%d/%m/%Y') as fecha, concat(p.nombre,' ',p.apellidos) as nombres, " +
