@@ -56,7 +56,7 @@
                             <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'-'}">
                                 Fecha de pago
                             </td>
-                            <td th:class="precio-calculado"></td>
+                            <td id="precio" th:class="precio-calculado"></td>
                             <td th:text="${pago.tipoPago}">Visa ***1234</td>
                             <!-- columna estado -->
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
@@ -165,77 +165,26 @@
                                 <div class="justify-content-start">
                                     <div class="d-flex align-items-center">
                                         <i class="bi bi-arrow-left col-lg-4" onclick="$('#modal-pago').modal('show')" style="height: 40px"></i>
-                                        <span class="ms-2">Confirmar Pago</span>
+                                        <span>Confirmar Pago</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row informacionModal">
                                 <div>
-                                    <p>doctor:<span class="informacionModalDato" id="doctorPagar">Juanchito Palacios Castro</span>
+                                    <p>doctor:<span class="informacionModalDato" id="doctorPagar"></span>
                                     </p>
-                                    <p>fecha:<span class="informacionModalDato" id="fechaCitaPagar">Pacífico EPS</span></p>
-                                    <p>especialidad:<span class="informacionModalDato" id="especialidadPagar">934-250-488</span></p>
+                                    <p>fecha:<span class="informacionModalDato" id="fechaPagar"></span></p>
+                                    <p>especialidad:<span class="informacionModalDato" id="especialidadPagar"></span></p>
+                                    <p>precio:<span class="informacionModalDato" id="precioPagar"></span></p>
                                 </div>
                             </div>
-                            <form method="post" th:action="@{/Paciente/guardarPago}">
-                                <div class="mb-3 w-75">
-                                    <label class="form-label">Nombre del titular de la tarjeta</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-person-fill"></i></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="titularTarjeta">
-                                    </div>
-                                    <div class="invalid-feedback" id="errorTitularTarjeta" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
-                                </div>
-                                <div class="mb-3 w-75">
-                                    <label class="form-label">Número de la tarjeta</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="numeroTarjeta">
-                                    </div>
-                                    <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
-                                    <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px">El número de tarjeta debe tener 16 dígitos</div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Fecha de expiración</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="MM-yyyy"
-                                                   name="fechaStr"
-                                                   th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Código de seguridad</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" id="codigoSegTarjeta">
-                                        </div>
-                                        <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
-                                        <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px">El código de seguridad debe tener 3 dígitos</div>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary w-25"
-                                            style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
-                                </div>
+                            <form id="formPagar" method="post" th:action="@{/Paciente/guardarPago}" style="display: none">
+                                <input type="hidden" id="idPagoTarjeta" th:value="${idPagoTarjeta}" name="idPago"/>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <form id="formPagar" method="post" th:action="@{/Paciente/guardarPago}" style="display: none">
-                <input type="hidden" id="idPagoTarjeta" th:value="${idPagoTarjeta}" name="idPago"/>
-            </form>
 
             <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
@@ -357,8 +306,19 @@
                     $('#modal-pago').modal('show');
                 });
             }
+            var doctorPagar;
+            var precioPagar;
+            var fechaCita;
+            var especialidadPagar;
             function mostrarModal(){
                 $('.modal')
+                var botonPagar = $(event.target);
+                var fila = botonPagar.closest('tr');
+                precioPagar = fila.find('#precio').text();
+                doctorPagar = fila.find('#doctor').text();
+                fechaCita = fila.find('#fechaCita').text();
+                especialidadPagar = fila.find('#especialidad').text();
+
                 $('#modal-pago').modal('show');
             }
 
@@ -400,6 +360,10 @@
                     });*/
                     $("#modal-pago").modal("hide");
                     $("#modal-confirmar-pago").modal("show");
+                    $('#doctorPagar').text(doctorPagar);
+                    $('#precioPagar').text(precioPagar);
+                    $('#fechaPagar').text(fechaCita);
+                    $('#especialidadPagar').text(especialidadPagar);
                 }
             });
 
