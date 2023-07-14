@@ -36,14 +36,15 @@
                         <input type="hidden" name="inicio" th:value="${citaTemporal.inicio}">
                         <input type="hidden" name="fin" th:value="${citaTemporal.fin}">
                         <input type="hidden" th:if="${citaPendiente}" name="citaPendiente" th:value="${citaPendiente}">
+                        <input type="hidden" th:if="${examenPendiente}" name="examenPendiente" th:value="${examenPendiente}">
 
                         <div class="row justify-content-center">
                             <div class="col-sm-10 col-md-8 col-lg-8">
-                                <div class="campo">
+                                <div class="campo text-center">
                                     <div class="encabezado fs-4 mb-3 text-center">
                                         Confirme los datos de su cita
                                     </div>
-                                    <div class="row informacion informacion">
+                                    <div class="row informacion">
                                         <div class="col-6 fw-semibold"><i class="bi bi-person-fill me-2"></i>Paciente
                                         </div>
                                         <div class="col-6" th:text="${session.paciente.getNombreYApellido()}">
@@ -85,12 +86,13 @@
                                         </div>
                                     </div>
                                     <div class="row informacion">
-                                        <div class="col-6 fw-semibold"><i class="bi bi-currency-exchange me-2"></i>Costo (Coaseguro)
+                                        <div class="col-6 fw-semibold" th:inline="text"><i class="bi bi-currency-exchange me-2"></i>Costo (Coaseguro)
                                         </div>
                                         <div class="col-6" th:text="'S/. '+${#numbers.formatDecimal(precio, 1, 2)}">S/.
                                             90.00
                                         </div>
                                     </div>
+                                    <div class="text-muted mt-3" th:if="${citaPendiente}">No habrá costo por la cita. Este se realizará de forma automática</div>
                                 </div>
                             </div>
                         </div>

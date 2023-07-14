@@ -97,13 +97,19 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `modalidad`, `estado`, `sede_id_sede`, `id_cita_previa`, `seguro_id_seguro`, `especialidad_id_especialidad`) VALUES (?1, ?2, 5, ?3, ?4, ?5, ?6)")
-    void guardarCitaPendiente(String idPaciente, int modalidad, int idSede, int idCitaPrevia, int idSeguro, int idEspecialidad);
+    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `modalidad`, `estado`, `sede_id_sede`, `id_cita_previa`, `seguro_id_seguro`, `especialidad_id_especialidad`) " +
+            "VALUES (?1, ?2, ?3, 5, ?4, ?5, ?6, ?7)")
+    void guardarCitaPendiente(String idPaciente, String idDoctor, int modalidad, int idSede, int idCitaPrevia, int idSeguro, int idEspecialidad);
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `doctor_id_doctor` = ?1, `inicio` = ?2, `fin` = ?3, `estado` = 0 WHERE (`id_cita` = ?4)")
-    void reservarCitaPendiente(String idDoctor, LocalDateTime inicio, LocalDateTime fin, int idCita);
+    void reservarExamenPendiente(String idDoctor, LocalDateTime inicio, LocalDateTime fin, int idCita);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `doctor_id_doctor` = ?1, `inicio` = ?2, `fin` = ?3, `modalidad` = ?4, `estado` = 0 WHERE (`id_cita` = ?5)")
+    void reservarCitaPendiente(String idDoctor, LocalDateTime inicio, LocalDateTime fin, int modalidad, int idCita);
 
     @Query(value = "SELECT DATE_FORMAT(pag.fecha_emitida, '%d/%m/%Y') as fecha, concat(p.nombre,' ',p.apellidos) as nombres, " +
             "MAX(ROUND((sea.precio_cita*seg.doctor),2)) as pago_doctor, c.id_cita, d.id_doctor, s.nombre as sede " +

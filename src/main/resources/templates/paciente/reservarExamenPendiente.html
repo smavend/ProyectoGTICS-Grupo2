@@ -31,10 +31,10 @@
 
                     <form method="post" th:action="@{/Paciente/reservarPendiente}" th:object="${citaTemporal}">
 
-                        <input type="hidden" name="id" th:value="${cita.id_cita}">
-                        <input type="hidden" name="modalidad" th:value="${cita.modalidad}">
-                        <input type="hidden" name="idSede" th:value="${cita.sede.idSede}">
-                        <input type="hidden" name="idEspecialidad" th:value="${cita.especialidad.idEspecialidad}">
+                        <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{modalidad}">
+                        <input type="hidden" th:field="*{idSede}">
+                        <input type="hidden" th:field="*{idEspecialidad}">
                         <input type="hidden" name="idDoctor">
 
                         <div class="row justify-content-center">
@@ -89,7 +89,7 @@
             $(function () {
                 $("#input_fecha").datepicker({
                     dateFormat: 'dd-mm-yy',
-                    minDate: 1,
+                    minDate: 0,
                     beforeShowDay: noSundays
                 });
             });
@@ -100,11 +100,9 @@
 
             $("#input_fecha").change(function () {
                 let selectHorario = $("#select_horario");
-                let sede = [[${cita.sede.idSede}]];
-                let especialidad = [[${cita.especialidad.idEspecialidad}]];
+                let sede = [[${citaTemporal.idSede}]];
+                let especialidad = [[${citaTemporal.idEspecialidad}]];
                 let fecha = $(this).val();
-
-                console.log(fecha);
 
                 $.get(getUrl() + "/Paciente/api/horarios/examen/" + sede + "/" + especialidad + "/" + fecha)
                     .done(function (data) {

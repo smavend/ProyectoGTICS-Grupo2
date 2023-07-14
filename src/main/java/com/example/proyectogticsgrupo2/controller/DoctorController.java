@@ -747,7 +747,7 @@ public class DoctorController {
                     // si la cita es un examen pendiente, se debe crear la cita que ofrezca el descuento
                     if (cita.getCita_previa() != null){
 
-                        citaRepository.guardarCitaPendiente(cita.getPaciente().getIdPaciente(), cita.getCita_previa().getModalidad(),
+                        citaRepository.guardarCitaPendiente(cita.getPaciente().getIdPaciente(), cita.getCita_previa().getDoctor().getId_doctor(), cita.getCita_previa().getModalidad(),
                                 cita.getSede().getIdSede(), cita.getCita_previa().getId_cita(), cita.getPaciente().getSeguro().getIdSeguro(),
                                 cita.getCita_previa().getEspecialidad().getIdEspecialidad());
                     }
