@@ -8,6 +8,9 @@
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
+        <!-- DATATABLES --->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
+
     </head>
     <body>
 
@@ -27,12 +30,12 @@
                     <span class="btn botonTipo">Citas pendientes</span>
                     <span class="btn botonTipo">Exámenes pendientes</span>
                     <div class="row p-5">
-                        <table class="table pt-2 pb-4">
+                        <table class="table pt-2 pb-4" id="tablaPendientes">
                             <thead>
                                 <tr>
-                                    <th>Especialidad</th>
-                                    <th>Tipo</th>
-                                    <th>Fecha límite</th>
+                                    <th class="text-center">Especialidad</th>
+                                    <th class="text-center">Tipo</th>
+                                    <th class="text-center">Fecha límite</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -62,8 +65,48 @@
                 integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
                 crossorigin="anonymous"></script>
 
+        <!-- JQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.4.js"
+                integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <!-- DATATABLES CDN -->
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                var tabla = $("#tablaPendientes").DataTable({
+                    dom: '<"toolbar">frtrip',
+                    bInfo: false,
+                    pageLength: 5,
+                    columns: [
+                        null,
+                        {orderable: false},
+                        null,
+                        {orderable: false}
+                    ],
+                    columnDefs: [
+                        {
+                            searchable: false,
+                            targets: [1, 3]
+                        }
+                    ],
+                    language: {
+                        infoEmpty: "No hay citas registradas",
+                        zeroRecords: "No hay citas registradas",
+                        sProcessing: "Cargando...",
+                        sSearch: "Buscar:",
+                        paginate: {
+                            previous: "Anterior",
+                            next: "Siguiente"
+                        }
+                    }
+                });
+            })
+        </script>
 
     </body>
 </html>

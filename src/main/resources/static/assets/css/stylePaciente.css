@@ -1695,11 +1695,25 @@ botonTipo{
 }
 
 .seccionDisponibilidad{
+    height: 80px;
     background-color: #f3f8fe;
     border-radius: 15px;
     box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.1);
-    padding: 15px 0;
+    padding: 10px 0;
     margin-bottom: 10px;
+}
+
+.seccionHorarioInactivo{
+    background-color: white;
+    padding: 7px 15px;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+}
+
+.seccionHorarioInactivo:hover{
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.1);
 }
 
 .seccionHorario{

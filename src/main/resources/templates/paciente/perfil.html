@@ -180,7 +180,10 @@
                                             <td th:text="${cita.doctor.getNombreYApellido()}">María Godoy</td>
                                             <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">04/01/21</td>
                                             <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">13:00 Hrs.</td>
-                                            <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Virtual</td>
+                                            <td class="text-center">
+                                                <span th:classappend="${cita.modalidad == 0? 'presencial':'virtual'}"
+                                                      th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
+                                            </td>
                                             <td class="text-center">
                                                 <a href="#" class="botonAceptar" data-bs-toggle="modal"
                                                    th:attr="data-bs-target='#citaModal'+${cita.id_cita}">Ver más</a>

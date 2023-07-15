@@ -340,12 +340,12 @@ public class PacienteController {
             citaTemporal.setIdSede(cita.getSede().getIdSede());
             citaTemporal.setIdEspecialidad(cita.getEspecialidad().getIdEspecialidad());
 
+            model.addAttribute("cita", cita);
             if(cita.getEspecialidad().getEs_examen() == 1){
                 return "paciente/reservarExamenPendiente";
             }
             else{
                 citaTemporal.setIdDoctor(cita.getDoctor().getId_doctor());
-                model.addAttribute("cita", cita);
                 return "paciente/reservarCitaPendiente";
             }
 
@@ -675,11 +675,11 @@ public class PacienteController {
 
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
-    public String verDoctores(@RequestParam("sede") int idSede, @RequestParam("esp") int idEspecialidad, @RequestParam("pag") int pagina, Model model, HttpSession session, Authentication authentication) {
+    public String verDoctores(@RequestParam("sede") int idSede,
+                              @RequestParam("esp") int idEspecialidad,
+                              @RequestParam("pag") int pagina,
+                              Model model, HttpSession session, Authentication authentication) {
 
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");

@@ -162,4 +162,12 @@ public class PacienteAPI {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    /*
+    @GetMapping("/horarios/consulta/")
+    public ResponseEntity<HashMap<String, Object>> obtenerHorariosProximos(){
+
+    }
+
+     */
 }
