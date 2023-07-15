@@ -872,21 +872,20 @@ public class PacienteController {
     }
 
     @PostMapping("/guardarPago")
-    public String guardarPago(@ModelAttribute("tarjetaPago") @Valid TarjetaPago tarjetaPago, BindingResult bindingResult,
-                              @RequestParam("idPago") int idPago, @RequestParam("fechaStr") String fechaStr,
+    public String guardarPago(@RequestParam("idPago") int idPago, @RequestParam("confirmado") String confirmado,
                               Model model, RedirectAttributes attr, HttpSession session, Authentication authentication) {
 
+        /*
         if (bindingResult.hasErrors()) {
-/*
+
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
+
             String userEmail;
             if (session.getAttribute("impersonatedUser") != null) {
                 userEmail = (String) session.getAttribute("impersonatedUser");
             } else {
                 userEmail = authentication.getName();
             }
-
             Paciente paciente = pacienteRepository.findByCorreo(userEmail);
             session.setAttribute("paciente", paciente);
             List<Pago> pagoList = pagoRepository.findAll();
@@ -896,7 +895,6 @@ public class PacienteController {
             model.addAttribute("pagoFilt",1);
             return "paciente/pagos";
         } else {
-/*
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
             String userEmail;
@@ -910,9 +908,12 @@ public class PacienteController {
             session.setAttribute("paciente", paciente);
 
             pagoRepository.guardarPago(idPago);
-            attr.addFlashAttribute("msg", "Pago realizado exitosamente");
+            List<Pago> pagoList = pagoRepository.findAll();
+            model.addAttribute("pagoList", pagoList);
+            model.addAttribute("activarModalPagado", true);
+            attr.addFlashAttribute("msg", "Pago realizado");
             return "redirect:/Paciente/pagos";
-        }
+
     }
 
     @GetMapping("/recibo")
@@ -931,7 +932,7 @@ public class PacienteController {
 
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
-
+        model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
         Optional<Pago> optionalPago = pagoRepository.findById(idPago);
         if (optionalPago.isPresent()) {
             Pago pago = optionalPago.get();

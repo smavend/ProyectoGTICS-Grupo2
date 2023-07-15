@@ -25,7 +25,7 @@
         <main id="main" class="main site-content">
 
             <h1 class="encabezado">Historial de pagos</h1>
-            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <!--<div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>-->
             <section class="seccionPrincipal">
 
                 <a id="boton_todos" class="btn botonTipo botonTipoSeleccionado" onclick="buscarPagosTodos()">Todos</a>
@@ -63,7 +63,7 @@
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
                                 <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
                             </td>
-                            <td th:if="${pago.estadoPago == 1}">Cancelado</td>
+                            <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -168,31 +168,56 @@
                             <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="row">
-                                <div class="justify-content-start">
-                                    <div class="d-flex align-items-center">
-                                        <i class="bi bi-arrow-left col-lg-4" onclick="volverModal()"></i>
-                                        <span class="fw-bold">Confirmar Pago</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-4 mb-4">
-                                <div>
-                                    <p class="infoModalPagar">Doctor:<span class="infoModalPagarDato" id="doctorPagar"></span></p>
-                                    <p class="infoModalPagar">Especialidad:<span class="infoModalPagarDato" id="especialidadPagar"></span></p>
-                                    <p class="infoModalPagar">Fecha de la cita:<span class="infoModalPagarDato" id="fechaPagar"></span></p>
-                                    <p class="infoModalPagar">Número de tarjeta:<span class="infoModalPagarDato" id="nroTarjetaPagar"></span></p>
-                                    <p class="infoModalPagar">Correo electrónico:<span class="infoModalPagarDato" id="correoTarjetaPagar"></span></p>
-                                    <p class="infoModalPrecioPagar">Precio total:<span class="infoModalPagarDato fw-bold" id="precioPagar"></span></p>
-                                </div>
-                            </div>
                             <form id="formPagar" method="post" th:action="@{/Paciente/guardarPago}">
                                 <input type="hidden" id="idPagoTarjeta" name="idPago"/>
+                                <div style="display:none;"><input type="text" class="form-control" name="confirmado" value="true"></div>
+                                <div class="row">
+                                    <div class="justify-content-start">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-arrow-left col-lg-4" onclick="volverModal()"></i>
+                                            <span class="fw-bold">Confirmar Pago</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4 mb-4">
+                                    <div>
+                                        <p class="infoModalPagar">Doctor:<span class="infoModalPagarDato" id="doctorPagar"></span></p>
+                                        <p class="infoModalPagar">Especialidad:<span class="infoModalPagarDato" id="especialidadPagar"></span></p>
+                                        <p class="infoModalPagar">Fecha de la cita:<span class="infoModalPagarDato" id="fechaPagar"></span></p>
+                                        <p class="infoModalPagar">Número de tarjeta:<span class="infoModalPagarDato" id="nroTarjetaPagar"></span></p>
+                                        <p class="infoModalPagar">Correo electrónico:<span class="infoModalPagarDato" id="correoTarjetaPagar"></span></p>
+                                        <p class="infoModalPrecioPagar">Precio total:<span class="infoModalPagarDato fw-bold" id="precioPagar"></span></p>
+                                    </div>
+                                </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary w-25"
                                             style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Pago Realizado-->
+            <div class="modal fade" id="modal-pago-realizado" tabindex="-1" aria-labelledby="modal-pago-label"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto">
+                            <button type="button" class="btn-close col-lg-2 fw-bold"
+                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="cardConfirmacion">
+                                <div class="cardTitulo">
+                                    Pago Realizado con éxito
+                                </div>
+                                <div class="cardCuerpo">
+                                    <div class="cardTexto">Para ver su recibo visite la sección PAGOS</div>
+                                    <a class="btn botonVolverInicio" th:href="@{/Paciente/pagos}">Revisar pagos</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -254,12 +279,7 @@
         <script>
             var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
             $('#idPagoTarjeta').val(idPagoTarjeta);
-            var especialidad = document.getElementById('especialidad').dataset.valor;
-            $('#especialidadPagar').text(especialidad);
-            var doctor = document.getElementById('doctor').dataset.valor;
-            $('#doctorPagar').text(doctor);
-            var fechaCita = document.getElementById('fechaCita').dataset.valor;
-            $('#fechaCitaPagar').text(fechaCita);
+
             $(document).ready(function () {
                 $('#tablax').DataTable({
                     language: {
@@ -391,6 +411,14 @@
                 $('#modal-confirmar-pago').modal('hide');
             }
 
+            var msg = /*[[${msg}]]*/ null;
+
+            if (msg !== null) {
+                $(document).ready(function() {
+                    $('#modal-pago-realizado').modal('show');
+                });
+            }
+
         </script>
 
         <!-- Script para botones filtro -->
@@ -399,7 +427,7 @@
             const botonPendientes = $("#boton_pendientes");
             const botonCancelados = $("#boton_cancelados");
             const citas = $(".fila_cita");
-            const coaseguro = document.getElementById('coaseguro').dataset.valor
+            const coaseguro = document.getElementById('coaseguro').dataset.valor;
             function buscarPagosPendientes() {
                 botonPendientes.addClass("botonTipoSeleccionado");
                 botonTodos.removeClass("botonTipoSeleccionado");
