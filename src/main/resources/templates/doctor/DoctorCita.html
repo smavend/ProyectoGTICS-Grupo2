@@ -98,9 +98,9 @@
 
                             <h2 style="color: black;text-align: center;">Diagnóstico</h2>
                             <div class="mb-3">
-                                    <textarea oninput="autoResizeTextarea(this)" required
+                                    <textarea oninput="autoResizeTextarea(this)"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                              type="text" maxlength="500" th:field="*{diagnostico}"
+                                              type="text" th:field="*{diagnostico}"
                                               th:classappend="${#fields.hasErrors('diagnostico')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
@@ -109,9 +109,9 @@
 
                             <h2 style="color: black;text-align: center;">Indicaciones de Tratamiento</h2>
                             <div class="mb-3">
-                                    <textarea oninput="autoResizeTextarea(this)" required
+                                    <textarea oninput="autoResizeTextarea(this)"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                              type="text" maxlength="500" th:field="*{tratamiento}"
+                                              type="text"  th:field="*{tratamiento}"
                                               th:classappend="${#fields.hasErrors('tratamiento')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
@@ -120,9 +120,9 @@
 
                             <h2 style="color: black;text-align: center;">Medicamentos</h2>
                             <div class="mb-3">
-                                    <textarea oninput="autoResizeTextarea(this)" required
+                                    <textarea oninput="autoResizeTextarea(this)"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                              type="text" maxlength="500" th:field="*{receta}"
+                                              type="text"  th:field="*{receta}"
                                               th:classappend="${#fields.hasErrors('receta')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
@@ -177,15 +177,12 @@
                                     <div>
                                         <textarea oninput="autoResizeTextarea(this)"
                                                   style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                                  maxlength="500" type="text" name="bitacora"
+                                                  type="text" name="bitacora"
                                                   class="form-control"></textarea>
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                     <br>
                     <div style="text-align: center;" class=" col-12">

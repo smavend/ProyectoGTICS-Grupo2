@@ -637,7 +637,7 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarReporte")
-    public String guardarReporte(@Valid Cita cita, BindingResult bindingResult, @RequestParam("especialidadExamenPendiente") int idEspecExamenPendiente,
+    public String guardarReporte(@ModelAttribute("cita")@Valid Cita cita, BindingResult bindingResult, @RequestParam("especialidadExamenPendiente") int idEspecExamenPendiente,
                                  HttpSession session, Authentication authentication, Model model) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
         String userEmail;
