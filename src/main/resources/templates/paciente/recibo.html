@@ -30,14 +30,13 @@
 
             <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
             <div id="idEspecialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.idEspecialidad}"></div>
-            <div id="precioInicial" th:attr="data-valor=${precioInicial}"></div>
 
-            <h1 class="encabezado">Recibo - 281FH19701228FG</h1>
+            <h1 class="encabezado" th:text="'Recibo - ' + ${pago.codigoRecibo}">Recibo - 281FH19701228FG</h1>
 
             <section class="seccionPrincipal recibo">
                 <div class="row encabezadoRecibo">
                     <div class="col-10">
-                        <h2 class="subEncabezado">Recibo - 13/12/2022</h2>
+                        <h2 class="subEncabezado" th:text="'Recibo - '+${#temporals.format(pago.cita.inicio, 'dd/MM/yyyy')}">Recibo - 13/12/2022</h2>
                     </div>
                     <div id="botonImp" class="col-2">
                         <button class="btn btn-secondary botonImprimir" onclick="imprimir()">Imprimir</button>
@@ -158,18 +157,6 @@
                 $('.importe-con-seguro').text('S/. ' + (precioIni*coaseguro).toFixed(2));
             });
 
-            function generarCodigoRecibo(longitud) {
-                let caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                let codigoRecibo = '';
-
-                for (let i = 0; i < longitud; i++) {
-                    let indice = Math.floor(Math.random() * caracteres.length);
-                    codigoRecibo += caracteres.charAt(indice);
-                }
-                return codigoRecibo;
-            }
-            $('.encabezado').text('Recibo - ' + generarCodigoRecibo(15));
-            $('.botonVerRecibo').val(codigoRecibo);
         </script>
     </body>
 </html>

@@ -34,4 +34,7 @@ public class Pago {
     @Column(name = "tipo_pago")
     private String tipoPago;
 
+    @Column(name = "codigo_recibo")
+    private String codigoRecibo;
+
 }

@@ -228,9 +228,10 @@ public class PacienteController {
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                             @RequestParam(name = "citaPendiente", required = false) Boolean citaPendiente,
                             @RequestParam(name = "examenPendiente", required = false) Boolean examenPendiente,
+                            @RequestParam(name = "codigoRecibo") String codigoRecibo,
                             Model model, HttpSession session, Authentication authentication,
                             HttpServletRequest request) {
-
+        
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -261,20 +262,20 @@ public class PacienteController {
         if (citaPendiente != null){
 
             citaRepository.reservarCitaPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getId());
-            pagoRepository.nuevoPagoPagado(citaTemporal.getId(), tipoPago);
+            pagoRepository.nuevoPagoPagado(citaTemporal.getId(), tipoPago, codigoRecibo);
             cita = citaRepository.findById(citaTemporal.getId()).get();
 
         } else if (examenPendiente != null) {
 
             citaRepository.reservarExamenPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getId());
-            pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago);
+            pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago, codigoRecibo);
             cita = citaRepository.findById(citaTemporal.getId()).get();
 
         } else {
 
             citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
             int idCita = citaRepository.obtenerUltimoId();
-            pagoRepository.nuevoPago(idCita, tipoPago);
+            pagoRepository.nuevoPago(idCita, tipoPago, codigoRecibo);
             cita = citaRepository.findById(idCita).get();
 
         }
@@ -951,13 +952,11 @@ public class PacienteController {
     }
 
     @GetMapping("/recibo")
-    public String verReciboPago(@RequestParam("idPago") int idPago, @RequestParam("codigoRecibo") String cod,Model model, HttpSession session, Authentication authentication) {
+    public String verReciboPago(@RequestParam("idPago") int idPago,Model model, HttpSession session, Authentication authentication) {
 
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
-        System.out.println("####");
-        System.out.println(cod);
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -968,7 +967,7 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
-        model.addAttribute("precioInicial", 100);
+
         Optional<Pago> optionalPago = pagoRepository.findById(idPago);
         if (optionalPago.isPresent()) {
             Pago pago = optionalPago.get();

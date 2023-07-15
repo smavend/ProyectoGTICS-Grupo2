@@ -63,7 +63,7 @@
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
                                 <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
                             </td>
-                            <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id},codigoRecibo=codigoRecibo)}">Ver recibo</a></td>
+                            <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -327,18 +327,6 @@
                     var precioCalculado = calcularPrecio(idEspecialidad);
                     $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
                 })
-                function generarCodigoRecibo(longitud) {
-                    let caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                    let codigoRecibo = '';
-
-                    for (let i = 0; i < longitud; i++) {
-                        let indice = Math.floor(Math.random() * caracteres.length);
-                        codigoRecibo += caracteres.charAt(indice);
-                    }
-                    return codigoRecibo;
-                }
-                codigoRecibo = generarCodigoRecibo(15);
-                $('.botonVerRecibo').val(codigoRecibo);
             });
         </script>
 
@@ -478,9 +466,6 @@
                     $(this).show();
                 })
             }
-
-
-
         </script>
     </body>
 </html>
