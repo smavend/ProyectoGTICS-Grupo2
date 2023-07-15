@@ -1590,7 +1590,7 @@ botonTipo{
     font-weight: 600;
 }
 
-/* Consentimientos */
+/* -------------- Sección Consentimientos ------------------- */
 
 .consentimiento:first-of-type{
     margin-top: 45px;
@@ -1600,7 +1600,7 @@ botonTipo{
     margin-top: 25px;
 }
 
-/* Doctores */
+/* -------------------- Sección Doctores ------------------------- */
 
 .filtroNav{
     padding: 30px 5px 50px 5px;
@@ -1711,7 +1711,6 @@ botonTipo{
 }
 
 .seccionDisponibilidad{
-    height: 80px;
     background-color: #f3f8fe;
     border-radius: 15px;
     box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.1);
@@ -1755,7 +1754,22 @@ botonTipo{
     background-color: #0AA1DD;
 }
 
-/* Cuestionarios */
+.botonVerHorarios{
+    background-color: #f3f8fe;
+    border-radius: 15px;
+    padding: 10px;
+    transition: all 0.3s;
+    color: #575757;
+    text-align: center;
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.botonVerHorarios:hover{
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.1);
+}
+
+/* ---------------------- Cuestionarios ------------------------ */
 
 .botonCompletar{
     border-radius: 20px;
@@ -1784,7 +1798,7 @@ botonTipo{
     color: black;
 }
 
-/* Cuestionario Abierto */
+/* ------------------------- Cuestionario Abierto ------------------------ */
 
 .seccionCuestionario{
     margin-top: 30px;

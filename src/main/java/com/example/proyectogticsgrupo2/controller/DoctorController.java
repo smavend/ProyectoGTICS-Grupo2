@@ -79,7 +79,7 @@ public class DoctorController {
         this.securityConfig = securityConfig;
     }
 
-    @GetMapping(value = {"/dashboard", "/", ""})
+    @GetMapping(value = {"/dashboard", "/", ""}) //actual
     public String dashboard(Model model, HttpSession session, Authentication authentication) {
 
         // Obtener información del usuario y la sesión
