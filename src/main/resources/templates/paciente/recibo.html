@@ -30,6 +30,7 @@
 
             <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
             <div id="idEspecialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.idEspecialidad}"></div>
+            <div id="precioInicial" th:attr="data-valor=${precioInicial}"></div>
 
             <h1 class="encabezado">Recibo - 281FH19701228FG</h1>
 
@@ -48,7 +49,7 @@
                     <p>
                         <span class="informacionClinicaTitulo">Clínica INTERPUC</span>
                         <br>
-                        Dirección Imaginaria
+                        <span th:text="${pago.cita.doctor.sede.direccion}">Dirección Imaginaria</span>
                         <br>
                         Lima, Perú
                         <br>
@@ -64,8 +65,8 @@
                         </p>
                         <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span>
                         </p>
-                        <p>Estado:<span class="informacionReciboDato"
-                                        th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</span></p>
+                        <p>Fecha de la cita:<span class="informacionReciboDato"
+                                        th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}">Cancelado</span></p>
                     </div>
                     <div class="col-6">
                         <p>Fecha emitida:<span class="informacionReciboDato"
@@ -125,12 +126,11 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
-
             function imprimir() {
                 window.print();
             }
             $(document).ready(function() {
-                var idEspecialidad = document.getElementById('idEspecialidad').dataset.valor;
+                var idEspecialidad = parseInt(document.getElementById('idEspecialidad').dataset.valor);
                 var coaseguro = document.getElementById('coaseguro').dataset.valor;
                 var precioIni;
                 switch (idEspecialidad) {
@@ -151,16 +151,25 @@
                     case 15: precioIni = 150; break;
                     case 16: precioIni = 90; break;
                     case 17: precioIni = 120; break;
+                    default: precioIni = 0; break;
                 }
-
-                var precioCalculado = precioIni * coaseguro;
-                $('.precio-total').text('S/ ' + precioIni.toFixed(2));
-                $('.importe-total').text(precioIni);
-                $('.importe-con-seguro').text(precioCalculado);
+                $('.precio-total').text('S/. ' + precioIni.toFixed(2));
+                $('.importe-total').text('S/. ' + precioIni.toFixed(2));
+                $('.importe-con-seguro').text('S/. ' + (precioIni*coaseguro).toFixed(2));
             });
 
+            function generarCodigoRecibo(longitud) {
+                let caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let codigoRecibo = '';
 
+                for (let i = 0; i < longitud; i++) {
+                    let indice = Math.floor(Math.random() * caracteres.length);
+                    codigoRecibo += caracteres.charAt(indice);
+                }
+                return codigoRecibo;
+            }
+            $('.encabezado').text('Recibo - ' + generarCodigoRecibo(15));
+            $('.botonVerRecibo').val(codigoRecibo);
         </script>
-
     </body>
 </html>

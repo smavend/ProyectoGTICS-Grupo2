@@ -63,7 +63,7 @@
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
                                 <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
                             </td>
-                            <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
+                            <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id},codigoRecibo=codigoRecibo)}">Ver recibo</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -279,7 +279,7 @@
         <script>
             var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
             $('#idPagoTarjeta').val(idPagoTarjeta);
-
+            var codigoRecibo;
             $(document).ready(function () {
                 $('#tablax').DataTable({
                     language: {
@@ -327,6 +327,18 @@
                     var precioCalculado = calcularPrecio(idEspecialidad);
                     $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
                 })
+                function generarCodigoRecibo(longitud) {
+                    let caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                    let codigoRecibo = '';
+
+                    for (let i = 0; i < longitud; i++) {
+                        let indice = Math.floor(Math.random() * caracteres.length);
+                        codigoRecibo += caracteres.charAt(indice);
+                    }
+                    return codigoRecibo;
+                }
+                codigoRecibo = generarCodigoRecibo(15);
+                $('.botonVerRecibo').val(codigoRecibo);
             });
         </script>
 
@@ -362,40 +374,30 @@
                 numeroTarjeta = $("#numeroTarjeta").val();
                 var codigoSegTarjeta = $("#codigoSegTarjeta").val();
                 correoTarjeta = $("#correoTarjeta").val();
-
-                var error = false; // Variable para verificar si se encontraron errores de validación
-
+                var error = false;
                 if (titularTarjeta === "") {
                     $("#errorTitularTarjeta").show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si el campo está vacío
+                    error = true;
                 }
-
                 if (numeroTarjeta === "") {
                     $("#nroTarjetaVacio").show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si el campo está vacío
+                    error = true;
                 } else if (numeroTarjeta.length !== 16) {
                     $('#nroTarjetaDig').show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si la longitud no es 16
+                    error = true;
                 }
-
                 if (codigoSegTarjeta === "") {
                     $("#codigoTarjetaVacio").show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si el campo está vacío
+                    error = true;
                 } else if (codigoSegTarjeta.length !== 3) {
                     $('#codigoTarjetaDig').show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si la longitud no es 3
+                    error = true;
                 }
                 if (correoTarjeta === "") {
                     $("#errorCorreoTarjeta").show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si el campo está vacío
+                    error = true;
                 }
                 if (!error) {
-                    // Si no se encontraron errores, se puede enviar el formulario
-                    //$("#formValidarPago")[0].submit();
-                    /*document.addEventListener("DOMContentLoaded", function (){
-                        var form = document.getElementById("formPagar");
-                        form.submit();
-                    });*/
                     $("#modal-pago").modal("hide");
                     $("#modal-confirmar-pago").modal("show");
                     $('#doctorPagar').text(doctorPagar);
@@ -476,6 +478,9 @@
                     $(this).show();
                 })
             }
+
+
+
         </script>
     </body>
 </html>

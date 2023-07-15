@@ -951,12 +951,13 @@ public class PacienteController {
     }
 
     @GetMapping("/recibo")
-    public String verReciboPago(@RequestParam("idPago") int idPago, Model model, HttpSession session, Authentication authentication) {
+    public String verReciboPago(@RequestParam("idPago") int idPago, @RequestParam("codigoRecibo") String cod,Model model, HttpSession session, Authentication authentication) {
 
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
-
+        System.out.println("####");
+        System.out.println(cod);
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -967,6 +968,7 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
+        model.addAttribute("precioInicial", 100);
         Optional<Pago> optionalPago = pagoRepository.findById(idPago);
         if (optionalPago.isPresent()) {
             Pago pago = optionalPago.get();
