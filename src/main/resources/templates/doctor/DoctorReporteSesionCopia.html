@@ -63,17 +63,28 @@
 
         <main id="main" class="main">
 
-            <section class="section dashboard">
-                <form th:if="${cita.estado != 5}" method="post" th:action="@{/doctor/iniciarCita}" class="mt-2">
 
-                    <input th:value="${cita.id_cita}" name="id_cita" type="hidden">
-                    <input th:value="${paciente.idPaciente}" name="idPaciente" type="hidden">
+            <section class="section dashboard">
+                <form th:if="${cita.estado != 5}" method="post" th:action="@{/doctor/guardarReporte}" th:object="${cita}" class="mt-2">
+
+
+                    <input th:field="*{id_cita}" name="id_cita" type="hidden"/>
+                    <input th:field="*{paciente.idPaciente}" name="paciente" type="hidden"/>
+                    <input th:field="*{doctor.id_doctor}" name="doctor" type="hidden"/>
+                    <input th:field="*{inicio}" name="inicio" type="hidden"/>
+                    <input th:field="*{fin}" name="fin" type="hidden"/>
+                    <input th:field="*{modalidad}" name="modalidad" type="hidden"/>
+                    <input th:field="*{reporte}" name="reporte" type="hidden"/>
+                    <input th:field="*{estado}" name="estado" type="hidden"/>
+                    <input th:field="*{sede.idSede}" name="sede" type="hidden"/>
+                    <input th:field="*{idSeguro}" name="" type="hidden"/>
+
 
                     <input name="cita_previa" value="" type="hidden" class="form-control d-inline">
                     <div class="row justify-content-center align-items-center">
                         <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;height: fit-content"
-                             class="container col-5 py-4">
-                            <h1 style="color: black;text-align: center;">Información de la cita</h1>
+                             class="container col-5">
+                            <h1 style="color: black;text-align: center;">Informe Médico</h1>
                             <hr>
                             <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Paciente: </strong><span
                                 style="font-size: 1.2rem"
@@ -82,40 +93,74 @@
                             <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">DNI: </strong><span
                                 style="font-size: 1.2rem" th:text="${paciente.idPaciente}"> </span>
                             <br>
-                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Edad: </strong><span
-                                style="font-size: 1.2rem" th:text="${paciente.getEdad()}"> </span>
-                            <br>
-                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Genero: </strong><span
-                                style="font-size: 1.2rem" th:text="${paciente.genero}"> </span>
-                            <br>
                             <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Alergias: </strong><span
                                 style="font-size: 1.2rem" th:text="${alergias}"> </span>
                             <br>
                             <!-- DESPUES PONER EDAD -->
 
+
                             <hr style="border-top: 3px solid #ccc">
 
-                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Especialidad: </strong><span
-                                style="font-size: 1.2rem" th:text="${doctor.especialidad.nombre}"> </span>
-                            <br>
-                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><span
-                                style="font-size: 1.2rem" th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}"> </span>
-                            <br>
-                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Horario: </strong><span
-                                style="font-size: 1.2rem" th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')}"> </span>
-                            <br>
+                            <h2 style="color: black;text-align: center;">Diagnóstico</h2>
+                            <div class="mb-3">
+                                    <textarea oninput="autoResizeTextarea(this)" required
+                                              style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
+                                              type="text" maxlength="500" th:field="*{diagnostico}"
+                                              th:classappend="${#fields.hasErrors('diagnostico')?'is-invalid':''}"
+                                              class="form-control"></textarea>
+                            </div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('diagnostico')}"
+                                 th:errors="*{diagnostico}"></div>
+
+                            <h2 style="color: black;text-align: center;">Indicaciones de Tratamiento</h2>
+                            <div class="mb-3">
+                                    <textarea oninput="autoResizeTextarea(this)" required
+                                              style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
+                                              type="text" maxlength="100" th:field="*{tratamiento}"
+                                              th:classappend="${#fields.hasErrors('tratamiento')?'is-invalid':''}"
+                                              class="form-control"></textarea>
+                            </div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('tratamiento')}"
+                                 th:errors="*{tratamiento}"></div>
+
+                            <h2 style="color: black;text-align: center;">Medicamentos</h2>
+                            <div class="mb-3">
+                                    <textarea oninput="autoResizeTextarea(this)" required
+                                              style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
+                                              type="text" maxlength="500" th:field="*{receta}"
+                                              th:classappend="${#fields.hasErrors('receta')?'is-invalid':''}"
+                                              class="form-control"></textarea>
+                            </div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('receta')}"
+                                 th:errors="*{receta}"></div>
+
+                            <h2 style="text-align: center;" for="especialidad">Orden de exámenes médicos</h2>
+                            <div style="display: flex;justify-content: center;" class="select-container">
+                                <select name="especialidad" id="especialidad">
+                                    <option th:value="${doctor.especialidad.getIdEspecialidad()}">No se necesita exámenes</option>
+                                    <option value="4">Laboratorio</option>
+                                    <option value="5">Rayos X</option>
+                                    <option value="6">Ecografía</option>
+                                </select>
+                            </div>
+
 
                         </div>
 
-                        <div style="background-color: #fff;margin-top: 1rem" class="container col-6 py-4">
 
-                            <div style="height: auto" class="text-center">
+                        <div style="background-color: #fff;margin-top: 1rem" class="container col-5">
+
+                            <div style="height: auto">
                                 <h1 style="color: black;text-align: center;">Reunión Virtual</h1>
                                 <hr>
-
-                                <div class="card text-bg-dark mb-3">
-                                    <div class="card-body text-center" style="width: 100%; height: 350px">
+                                <div class="p-4" style="background: rgb(220, 220, 220); border-radius: 15px">
+                                    <button class="btn btn-primary mb-3" onclick="crearReunion()">Crear reunión</button>
+                                    <br/>
+                                    <div class="hstack gap-2 mb-3">
+                                        <input class="form-control" type="text" id="copyInput">
+                                        <button style="white-space: nowrap" class="btn btn-primary" onclick="copiar()">Copiar link</button>
                                     </div>
+                                    <p>Copie y pegue el link para ingresar a la reunión</p>
                                 </div>
 
                                 <div style="margin-top: 5px;text-align: center">
@@ -135,44 +180,55 @@
 
                                 </div>
 
+                                <hr style="border-top: 3px solid #ccc">
+                                <div style="margin-top: 1rem;margin-bottom: 2rem">
+
+                                    <h1 style="color: black;text-align: center;">Bitácora Personal</h1>
+                                    <div>
+                                        <textarea oninput="autoResizeTextarea(this)"
+                                                  style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
+                                                  maxlength="500" type="text" name="bitacora"
+                                                  class="form-control"></textarea>
+                                    </div>
+
+
+                                </div>
                             </div>
 
                         </div>
 
                     </div>
                     <br>
-
                     <div style="text-align: center;" class=" col-12">
-                        <button th:disabled="${!(momentoActual.isAfter(cita.inicio) && momentoActual.isBefore(cita.fin))}" type="submit" class="btn btn-primary btn-lg">Iniciar cita</button>
+                        <button type="submit" class="btn btn-primary">Finalizar Reporte</button>
                     </div>
-
                 </form>
-
-
                 <div th:unless="${cita.estado != 5}" class="container-xl perfil">
                     <div class="row">
                         <div class="pagetitle">
                             <h1 for="pdf">Exámenes Médicos</h1>
                         </div>
-                        <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${msgError}"></div>
+                        <div style="border-radius: 30px" class="alert alert-success" role="alert" th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"></div>
+                        <div style="border-radius: 30px" class="alert alert-danger" role="alert" th:if="${msgError != null}" th:text="${msgError}"></div>
                         <div style="margin-bottom: 0" class="card">
                             <div class="card-body">
                                 <form th:action="@{/doctor/guardarExamen}" method="post" id="formExamen"
                                       enctype="multipart/form-data">
-
                                     <div class="row">
                                         <div class="col-lg-12 text-center">
                                             <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
                                                 <input type="hidden" id="idCita" name="idCita" th:value="${cita.getId_cita()}">
+                                                <input type="hidden" id="receta" name="receta" th:value="${cita.getReceta()}">
+                                                <input type="hidden" id="tratamiento" name="tratamiento" th:value="${cita.getReceta()}">
 
                                                 <h2 style="color: black;text-align: center;">Subir examen:</h2>
                                                 <input type="file" class="form-control" id="archivo" name="archivo" accept=".pdf">
                                             </div>
                                             <div class="mb-3">
-                                                <h2 style="color: black;text-align: center;">Diagnóstico:</h2>
+                                                <h2 style="color: black;text-align: center;">Descripción:</h2>
                                                 <textarea oninput="autoResizeTextarea(this)"
                                                           style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                                          name="diagnostico" maxlength="500" class="form-control"></textarea>
+                                                          name="descripcion" maxlength="500" class="form-control"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -188,13 +244,44 @@
                 </div>
 
                 <script>
+                    // Función crear ID de la videollamada
+                    function crearReunion() {
+                        let meetingId =  'xxxxyxxx'.replace(/[xy]/g, function(c) {
+                            let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                            return v.toString(16);
+                        });
+                        console.log("http://"+ window.location.host + "?meetingId="+ meetingId)
+                        document.getElementById("copyInput").value = window.location.host + "/doctor/reunion?id="+ meetingId;
+                    }
+
+                    // Función copiar link
+                    function copiar() {
+                        let copyText = document.getElementById("copyInput");
+                        copyText.select();
+                        copyText.setSelectionRange(0, 99999);
+
+                        try {
+                            // Intentar copiar utilizando execCommand
+                            document.execCommand('copy');
+                            console.log('Texto copiado al portapapeles');
+                        } catch (err) {
+                            console.error('Error al copiar el texto al portapapeles: ', err);
+                        }
+                    }
+                </script>
+
+                <script>
                     document.getElementById('formExamen').addEventListener('submit', function(event) {
-                        var textarea = document.querySelector('textarea[name="descripcion"]');
+                        var textarea = document.querySelector('textarea[name="diagnostico"]');
                         if (textarea.value.trim() === '') {
                             textarea.removeAttribute('required');
                         }
                     });
                 </script>
+
+
+
+
 
             </section>
 
@@ -229,7 +316,6 @@
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
-
         <script>
             function autoResizeTextarea(element) {
                 // Ajustar la altura del textarea en función del contenido
@@ -245,6 +331,7 @@
                 return new bootstrap.Tooltip(tooltipTriggerEl)
             })
         </script>
+
 
     </body>
 
