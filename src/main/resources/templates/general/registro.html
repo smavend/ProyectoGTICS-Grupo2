@@ -250,16 +250,6 @@
   </script>
   <script>
     $(document).ready(function () {
-      $('#dni').on('input', function() {
-        var dniValue = $(this).val();
-        var validCharacters = /^[0-9]{1,8}$/;
-
-        if (!validCharacters.test(dniValue)) {
-          $(this).val(dniValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
-          $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
-        }
-      });
-
       $("#consulta").click(function (){
         let dni = $("#dni").val();
         $("#dni").removeClass("is-invalid");
@@ -271,12 +261,12 @@
           console.log("alert");
           alert("Debe ingresar un DNI");
         }else {
-          console.log("validacion en curso")
           $.ajax({
             method: "GET",
             crossDomain: true,
             url: getUrl()+"/validarDni/"+dni
           }).done(function (result){
+            console.log(result);
             if (result.msg === "Éxito"){
               $.ajax({
                 method: "GET",
@@ -311,6 +301,7 @@
       })
     })
     function getUrl(){
+      console.log(window.location.hostname);
       return window.location.protocol+"//"+window.location.hostname+":8080";
     }
   </script>
