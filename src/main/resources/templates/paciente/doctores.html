@@ -59,28 +59,8 @@
                                 <div class="seccionNombre">Dr. Ronald Richard</div>
                                 <div class="seccionEspecialidad">Cirujano</div>
                             </div>
-                            <div class="seccionDisponibilidad d-flex align-items-center justify-content-center">
-                                <div class="seccionHorario seccionHorarioInactivo verHorarios">
-                                    Ver horarios
-                                </div>
-                            </div>
                             <div class="d-grid">
-                                <a href="#"
-                                   class="botonVerMasDoctor">Ver más</a>
-                            </div>
-                        </div>
-                    </div>-->
-                    <div class="ol-md-6 col-lg-4 col-xxl-3 doctor" id="10304013">
-                        <div class="cardDoctor">
-                            <div class="seccionFoto">
-                                <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
-                            </div>
-                            <div class="seccionDescripcion">
-                                <div class="seccionNombre">Dr. Ronald Richard</div>
-                                <div class="seccionEspecialidad">Cirujano</div>
-                            </div>
-                            <div class="d-grid">
-                                <a href="#" class="botonVerHorarios mb-2 text-reset">
+                                <a href="#offcanvasExample" class="botonVerHorarios mb-2 text-reset" data-bs-toggle="offcanvas">
                                     Ver horarios
                                 </a>
                             </div>
@@ -89,7 +69,7 @@
                                    class="botonVerMasDoctor">Ver más</a>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor, i: ${doctorList}" th:id="${doctor.id_doctor}">
                         <div class="cardDoctor">
                             <div class="seccionFoto">
@@ -102,10 +82,10 @@
                                 </div>
                                 <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
                             </div>
-                            <div class="seccionDisponibilidad d-flex align-items-center justify-content-center">
-                                <div class="seccionHorario seccionHorarioInactivo verHorarios">
+                            <div class="d-grid">
+                                <a href="#canvasHorarios" class="botonVerHorarios mb-2 text-reset verHorarios" data-bs-toggle="offcanvas">
                                     Ver horarios
-                                </div>
+                                </a>
                             </div>
                             <div class="d-grid">
                                 <a th:href="@{/Paciente/perfilDoctor(doc=${doctor.id_doctor})}"
@@ -140,13 +120,27 @@
 
             </section>
 
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="canvasHorarios" aria-labelledby="offcanvasWithBothOptionsLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+                    <h2 class="offcanvas-title text-dark fw-bold" id="offcanvasWithBothOptionsLabel">Próximos horarios</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                    <div class="seccionFoto">
+                        <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
+                    </div>
+                    <div class="seccionDescripcion">
+                        <div class="seccionNombre">Dr. Doctor</div>
+                        <div class="seccionEspecialidad">Especialidad</div>
+                    </div>
+                    <div class="seccionDisponibilidad" id="contenedor" style="width: 60%; margin: auto">
+                        <div class="seccionHorario">
+                            00:00 - 00:00
+                        </div>
+                        <div class="seccionHorario">
+                            00:00 - 00:00
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -163,8 +157,6 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
-        <script src="https://code.jquery.com/jquery-3.7.0.js"
-                integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
         <!-- JQuery -->
         <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
@@ -177,14 +169,20 @@
                 $("#paginacion").addClass("d-none");
             }
 
+            // mostrar horarios
             $(".verHorarios").click(function (e){
                 let caja = $(e.target);
-                let contenedor = caja.parent();
+                let canvas = $("#canvasHorarios");
+                let contenedor = $("#contenedor");
                 let doctor = caja.parents(".doctor").attr("id");
+                let foto = caja.parents(".doctor").find(".fotoDoctor").attr("src");
+                let nombre = caja.parents(".doctor").find(".seccionNombre").text();
+                let especialidad = caja.parents(".doctor").find(".seccionEspecialidad").text();
 
+                canvas.find(".fotoDoctor").attr("src", foto);
+                canvas.find(".seccionNombre").text(nombre);
+                canvas.find(".seccionEspecialidad").text(especialidad);
                 contenedor.empty();
-                contenedor.removeClass();
-                contenedor.addClass("seccionDisponibilidad");
 
                 $.get(getUrl()+"/Paciente/api/horarios/proximos/"+doctor)
                     .done(function (data){
