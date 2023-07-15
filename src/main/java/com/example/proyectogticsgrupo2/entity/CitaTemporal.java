@@ -36,7 +36,7 @@ public class CitaTemporal {
     private String idDoctor;
 
     @NotNull(message = "Seleccione una fecha")
-    @Future(message = "Seleccione una fecha válida")
+    @Future(message = "Solo se permiten fechas futuras")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate fecha;
 

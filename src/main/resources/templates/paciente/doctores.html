@@ -49,8 +49,9 @@
                 </form>
 
                 <div class="row">
-                    <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor, i: ${doctorList}">
-                        <div th:if="${i.index==0}" class="cardDoctor">
+                    <!--
+                    <div class="ol-md-6 col-lg-4 col-xxl-3 doctor" id="10304013">
+                        <div class="cardDoctor">
                             <div class="seccionFoto">
                                 <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
                             </div>
@@ -59,15 +60,17 @@
                                 <div class="seccionEspecialidad">Cirujano</div>
                             </div>
                             <div class="seccionDisponibilidad d-flex align-items-center justify-content-center">
-                                <a href="#" class="seccionHorario seccionHorarioInactivo text-reset">
-                                    Ver disponibilidad
-                                </a>
+                                <div class="seccionHorario seccionHorarioInactivo verHorarios">
+                                    Ver horarios
+                                </div>
                             </div>
                             <div class="d-grid">
                                 <a href="#"
                                    class="botonVerMasDoctor">Ver más</a>
                             </div>
                         </div>
+                    </div>-->
+                    <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor, i: ${doctorList}" th:id="${doctor.id_doctor}">
                         <div class="cardDoctor">
                             <div class="seccionFoto">
                                 <img class="fotoDoctor rounded-circle"
@@ -79,16 +82,9 @@
                                 </div>
                                 <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
                             </div>
-                            <div class="seccionDisponibilidad">
-                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i>
-                                    [[${#strings.capitalize(#temporals.dayOfWeekName(dia1))}+':
-                                    '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}+' -
-                                    '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}]]
-                                </div>
-                                <div class="seccionHorario" th:inline="text"><i class="bi bi-clock me-1"></i>
-                                    [[${#strings.capitalize(#temporals.dayOfWeekName(dia2))}+':
-                                    '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}+' -
-                                    '+${#temporals.format(doctor.horario.disponibilidad_inicio_lunes, 'HH:mm')}]]
+                            <div class="seccionDisponibilidad d-flex align-items-center justify-content-center">
+                                <div class="seccionHorario seccionHorarioInactivo verHorarios">
+                                    Ver horarios
                                 </div>
                             </div>
                             <div class="d-grid">
@@ -139,12 +135,43 @@
         <script th:src="@{/assets/js/main.js}"></script>
         <script src="https://code.jquery.com/jquery-3.7.0.js"
                 integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
         <script>
+            // mostrar mensaje de no doctores
             let num = $(".doctor").length;
             if (num === 0) {
                 $("#noDoctores").removeClass("d-none");
                 $("#paginacion").addClass("d-none");
             }
+
+            $(".verHorarios").click(function (e){
+                let caja = $(e.target);
+                let contenedor = caja.parent();
+                let doctor = caja.parents(".doctor").attr("id");
+
+                contenedor.empty();
+                contenedor.removeClass();
+                contenedor.addClass("seccionDisponibilidad");
+
+                $.get(getUrl()+"/Paciente/api/horarios/proximos/"+doctor)
+                    .done(function (data){
+                        for (let i = 0; i < data.horarios.length; i++){
+                            contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>"+
+                                data.horarios[i].dia+": "+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+
+                                "</div>")
+                        }
+                    }).fail(function (e){
+                        console.log("error");
+                })
+            })
+
+            function getUrl(){
+                return window.location.protocol+"//"+window.location.hostname+":8080";
+            }
+
         </script>
     </body>
 </html>
