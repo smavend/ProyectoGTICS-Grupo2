@@ -52,11 +52,9 @@ public class PacienteController {
     final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
     final CuestionarioRepository cuestionarioRepository;
     final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
-    final StylevistasRepository stylevistasRepository;
-
     final SecurityConfig securityConfig;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository, SecurityConfig securityConfig, StylevistasRepository stylevistasRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository, SecurityConfig securityConfig) {
 
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
@@ -74,22 +72,12 @@ public class PacienteController {
         this.cuestionarioPorCitaRepository = cuestionarioPorCitaRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.administrativoPorEspecialidadPorSedeRepository = administrativoPorEspecialidadPorSedeRepository;
-        this.stylevistasRepository = stylevistasRepository;
         this.securityConfig = securityConfig;
     }
 
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model, Authentication authentication, HttpSession session) {
-
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
@@ -154,20 +142,7 @@ public class PacienteController {
 
     @GetMapping("/reservar")
     public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-<<<<<<< HEAD
-=======
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -198,28 +173,13 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         if (bindingResult.hasErrors()) {
-            Optional<Stylevistas> style = stylevistasRepository.findById(5);
-            if (style.isPresent()) {
-                Stylevistas styleActual = style.get();
-
-                model.addAttribute("headerColorPaciente", styleActual.getHeader());
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            }
             System.out.println("Error validacion: "+bindingResult.getAllErrors());
             model.addAttribute("sedeList", sedeRepository.findAll());
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "paciente/reservar1";
 
         } else {
-            Optional<Stylevistas> style2 = stylevistasRepository.findById(5);
-            if (style2.isPresent()) {
-                Stylevistas styleActual = style2.get();
 
-                model.addAttribute("headerColorPaciente", styleActual.getHeader());
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            }
             doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
             model.addAttribute("doctoresDisponibles", doctoresDisponibles);
 
@@ -230,21 +190,7 @@ public class PacienteController {
     @PostMapping("/reservar2")
     public String reservar2Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-<<<<<<< HEAD
-=======
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
-
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -256,14 +202,6 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         if (bindingResult.hasErrors()) {
-            Optional<Stylevistas> style2 = stylevistasRepository.findById(5);
-            if (style2.isPresent()) {
-                Stylevistas styleActual = style2.get();
-
-                model.addAttribute("headerColorPaciente", styleActual.getHeader());
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            }
             System.out.println("Error validacion: "+bindingResult.getAllErrors());
             List<Doctor> doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
             model.addAttribute("doctoresDisponibles", doctoresDisponibles);
@@ -271,14 +209,6 @@ public class PacienteController {
             return "paciente/reservar2";
 
         } else {
-            Optional<Stylevistas> style3 = stylevistasRepository.findById(5);
-            if (style3.isPresent()) {
-                Stylevistas styleActual = style3.get();
-
-                model.addAttribute("headerColorPaciente", styleActual.getHeader());
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            }
 
             Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
 
@@ -296,26 +226,11 @@ public class PacienteController {
 
     @PostMapping("/reservar3")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-<<<<<<< HEAD
                             @RequestParam(name = "citaPendiente", required = false) Boolean citaPendiente,
                             @RequestParam(name = "examenPendiente", required = false) Boolean examenPendiente,
                             Model model, HttpSession session, Authentication authentication,
                             HttpServletRequest request) {
 
-=======
-                            HttpSession session, Authentication authentication, Model model) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-       /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);
-*/
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -494,14 +409,7 @@ public class PacienteController {
     /* SECCIÓN PERFIL */
     @GetMapping("/perfil")
     public String perfil(Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);*/
 
@@ -528,14 +436,7 @@ public class PacienteController {
 
     @GetMapping("/perfil/editar")
     public String editarPerfil(Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);*/
 
@@ -699,21 +600,8 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/cambiarContrasena")
-    public String cambiarContrasena(Model model,HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
+    public String cambiarContrasena(HttpSession session, Authentication authentication) {
 
-<<<<<<< HEAD
-=======
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -787,26 +675,11 @@ public class PacienteController {
 
     /* SECCIÓN DOCTORES */
     @GetMapping("/doctores")
-<<<<<<< HEAD
     public String verDoctores(@RequestParam("sede") int idSede,
                               @RequestParam("esp") int idEspecialidad,
                               @RequestParam("pag") int pagina,
                               Model model, HttpSession session, Authentication authentication) {
 
-=======
-    public String verDoctores(@RequestParam("sede") int idSede, @RequestParam("esp") int idEspecialidad, @RequestParam("pag") int pagina, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -874,24 +747,9 @@ public class PacienteController {
     }
 
     @GetMapping("/perfilDoctor")
-<<<<<<< HEAD
     public String verPerfilDoctor(@RequestParam("doc") String idDoctor,
                                   Model model, HttpSession session, Authentication authentication) {
 
-=======
-    public String verPerfilDoctor(@RequestParam("doc") String idDoctor, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -912,96 +770,9 @@ public class PacienteController {
     }
 
     @PostMapping("/reservarDoctor")
-<<<<<<< HEAD
     public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                                   Model model, HttpSession session, Authentication authentication) {
 
-=======
-    public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, @ModelAttribute("hora") String hora, HttpSession session, Authentication authentication,Model model) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
-        String userEmail;
-        if (session.getAttribute("impersonatedUser") != null) {
-            userEmail = (String) session.getAttribute("impersonatedUser");
-        } else {
-            userEmail = authentication.getName();
-        }
-
-        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
-
-        session.setAttribute("paciente", paciente);
-
-        return "paciente/reservarDoctor1";
-    }
-
-    @PostMapping("/reservarDoctor2")
-    public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult, @ModelAttribute("hora") String hora, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-        if (bindingResult.hasErrors()) {
-            return "paciente/reservarDoctor1";
-        } else {
-
-/*
-            session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
-            String userEmail;
-            if (session.getAttribute("impersonatedUser") != null) {
-                userEmail = (String) session.getAttribute("impersonatedUser");
-            } else {
-                userEmail = authentication.getName();
-            }
-
-            Paciente paciente = pacienteRepository.findByCorreo(userEmail);
-
-            session.setAttribute("paciente", paciente);
-
-            String inicioString = citaTemporal.getFecha().toString() + ' ' + hora;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
-            LocalDateTime fin = inicio.plusHours(1);
-
-            //citaTemporal.setInicio(inicio);
-            //citaTemporal.setFin(fin);
-
-            model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
-            model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
-            model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
-            model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
-
-            return "paciente/reservar4";
-        }
-
-    }
-
-    @PostMapping("/reservarDoctor3")
-    public String reserarDoctor3(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, HttpSession session, Authentication authentication, Model model) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-      /*  Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);*/
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -1027,21 +798,7 @@ public class PacienteController {
 
     @GetMapping("/confirmacion")
     public String confirmarReserva(HttpSession session, Authentication authentication, Model model) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-<<<<<<< HEAD
-=======
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
-*/
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -1080,19 +837,7 @@ public class PacienteController {
     /* SECCIÓN CITAS */
     @GetMapping("/citas")
     public String verCitas(Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-<<<<<<< HEAD
-=======
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-       /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);*/
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -1116,14 +861,7 @@ public class PacienteController {
     /* SECCIÓN PAGOS */
     @GetMapping("/pagos")
     public String pagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
@@ -1146,14 +884,7 @@ public class PacienteController {
 
     @GetMapping("/pagar")
     public String pagar(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago, @RequestParam("idPago") Integer idPago, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
@@ -1177,18 +908,8 @@ public class PacienteController {
     @PostMapping("/guardarPago")
     public String guardarPago(@RequestParam("idPago") int idPago, @RequestParam("confirmado") String confirmado,
                               Model model, RedirectAttributes attr, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-<<<<<<< HEAD
         /*
-=======
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         if (bindingResult.hasErrors()) {
 
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
@@ -1231,14 +952,7 @@ public class PacienteController {
 
     @GetMapping("/recibo")
     public String verReciboPago(@RequestParam("idPago") int idPago, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
@@ -1264,14 +978,7 @@ public class PacienteController {
     /* SECCIÓN CUESTIONARIOS */
     @GetMapping("/cuestionarios")
     public String cuestionarios(HttpSession session, Model model, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
        /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);*/
 
@@ -1295,14 +1002,7 @@ public class PacienteController {
 
     @GetMapping("/cuestionario")
     public String completarCuestionario(@RequestParam("cues") Integer idCuestionario, @RequestParam("cita") Integer idCita, @ModelAttribute("cuestionario") CuestionarioPorCita cuestionario, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
@@ -1325,14 +1025,7 @@ public class PacienteController {
 
     @PostMapping("/guardarCuestionario")
     public String guardarCuestionario(@ModelAttribute("cuestionario") @Valid CuestionarioPorCita cuestionario, BindingResult bindingResult, Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 
         if (bindingResult.hasErrors()) {
@@ -1348,14 +1041,7 @@ public class PacienteController {
     /* SECCIÓN CONSENTIMIENTOS */
     @GetMapping("/consentimientos")
     public String consentimientos(Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);*/
         String userEmail;
@@ -1376,15 +1062,7 @@ public class PacienteController {
     @PostMapping("/consentimientos/actualizar")
     public String actualizarConsentimientos(@RequestParam Map<String, Boolean> consentimientos,
                                             RedirectAttributes attr, Authentication authentication,
-                                            HttpSession session, Model model) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
+                                            HttpSession session) {
 
         /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());*/
 
@@ -1416,18 +1094,10 @@ public class PacienteController {
     /* SECCIÓN MENSAJERÍA */
 
     @GetMapping("/mensajeria")
-    public String mensajeria(HttpSession session, Authentication authentication, Model model) {
+    public String mensajeria(HttpSession session, Authentication authentication) {
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");

@@ -55,11 +55,7 @@ public class DoctorController {
     private final CredencialesRepository credencialesRepository;
     private final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
     private final CuestionarioRepository cuestionarioRepository;
-<<<<<<< HEAD
     private final PagoRepository pagoRepository;
-=======
-    final StylevistasRepository stylevistasRepository;
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
 
     final SecurityConfig securityConfig;
 
@@ -68,11 +64,7 @@ public class DoctorController {
                             AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository,
                             SedeRepository sedeRepository, HorarioRepository horarioRepository,
-<<<<<<< HEAD
                             CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, PagoRepository pagoRepository, SecurityConfig securityConfig) {
-=======
-                            CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, SecurityConfig securityConfig, StylevistasRepository stylevistasRepository) {
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
@@ -83,27 +75,12 @@ public class DoctorController {
         this.credencialesRepository = credencialesRepository;
         this.cuestionarioPorCitaRepository = cuestionarioPorCitaRepository;
         this.cuestionarioRepository = cuestionarioRepository;
-<<<<<<< HEAD
         this.pagoRepository = pagoRepository;
-=======
-        this.stylevistasRepository = stylevistasRepository;
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         this.securityConfig = securityConfig;
     }
 
     @GetMapping(value = {"/dashboard", "/", ""})
     public String dashboard(Model model, HttpSession session, Authentication authentication) {
-<<<<<<< HEAD
-=======
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
 
         // Obtener información del usuario y la sesión
         String usuario = authentication.getName();
@@ -190,14 +167,6 @@ public class DoctorController {
     @GetMapping("/enviarCuestionario")
     public String enviarCuestionario(HttpSession session, Authentication authentication, Model model, @RequestParam("id") int id) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -283,14 +252,6 @@ public class DoctorController {
     @GetMapping("/recibo")
     public String recibo(Model model, HttpSession session, Authentication authentication) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -314,14 +275,6 @@ public class DoctorController {
     public String verRecibo(Model model, @RequestParam("id") int id_cita, @RequestParam("id2") String id_doctor, HttpSession session, Authentication authentication) {
 
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -350,14 +303,6 @@ public class DoctorController {
     @GetMapping("/calendario")
     public String calendario(Model model, HttpSession session, Authentication authentication, @ModelAttribute("doctor") Doctor doctor) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -403,18 +348,10 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarHorario")
-    public String guardarHorario(Model model, HttpSession session, Authentication authentication, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String guardarHorario(HttpSession session, Authentication authentication, @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -426,14 +363,6 @@ public class DoctorController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         if (bindingResult.hasErrors()) {
-            Optional<Stylevistas> style2 = stylevistasRepository.findById(4);
-            if (style2.isPresent()) {
-                Stylevistas styleActual = style.get();
-
-                model.addAttribute("headerColorDoctor", styleActual.getHeader());
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            }
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             for (FieldError error : fieldErrors) {
                 String fieldName = error.getField();
@@ -526,14 +455,6 @@ public class DoctorController {
         setIdPaciente(idPaciente);
         setIdCita(idCita);
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -669,14 +590,6 @@ public class DoctorController {
     @GetMapping("/verCuestionario")
     public String verCuestionario(Model model, @RequestParam("id") int id, HttpSession session, Authentication authentication) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -706,14 +619,6 @@ public class DoctorController {
     @GetMapping("/mensajeria")
     public String mensajeria(Model model, HttpSession session, Authentication authentication) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -735,7 +640,6 @@ public class DoctorController {
     public String guardarReporte(@ModelAttribute("cita")@Valid Cita cita, BindingResult bindingResult, @RequestParam("especialidadExamenPendiente") int idEspecExamenPendiente,
                                  HttpSession session, Authentication authentication, Model model) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
-
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -748,14 +652,6 @@ public class DoctorController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         if (bindingResult.hasErrors()) {
-            Optional<Stylevistas> style = stylevistasRepository.findById(4);
-            if (style.isPresent()) {
-                Stylevistas styleActual = style.get();
-
-                model.addAttribute("headerColorDoctor", styleActual.getHeader());
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            }
 
             Optional<Cita> optionalCita = citaRepository.findById(getIdCita());
             Optional<Paciente> optionalPaciente = pacienteRepository.findById(getIdPaciente());
@@ -872,14 +768,6 @@ public class DoctorController {
 
     @GetMapping("/configuracion")
     public String configuracion(Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
 
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
         String userEmail;
@@ -920,14 +808,6 @@ public class DoctorController {
 
     @GetMapping("/perfil")
     public String perfilDoctor(Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -950,14 +830,7 @@ public class DoctorController {
     public String editarPerfilDoctor(HttpSession session, Authentication authentication, @ModelAttribute("doctor") Doctor doctor,
                                      @RequestParam(name = "id") String id,
                                      Model model) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
 
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -1007,14 +880,6 @@ public class DoctorController {
             return "redirect:/doctor/perfil?id=" + doctor.getId_doctor();
         }
         if (bindingResult.hasErrors()) {
-            Optional<Stylevistas> style = stylevistasRepository.findById(4);
-            if (style.isPresent()) {
-                Stylevistas styleActual = style.get();
-
-                model.addAttribute("headerColorDoctor", styleActual.getHeader());
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            }
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "doctor/DoctorPerfilEdit";
         } else {
@@ -1091,15 +956,7 @@ public class DoctorController {
     }
 
     @GetMapping("/perfil/cambiarContrasena")
-    public String cambiarContrasena(Model model, HttpSession session, Authentication authentication) {
-        Optional<Stylevistas> style = stylevistasRepository.findById(4);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorDoctor", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
+    public String cambiarContrasena(HttpSession session, Authentication authentication) {
 
       /*session.setAttribute("doctor", doctorRepository.findByCorreo(authentication.getName()));*/
         // Obtener el correo electrónico del doctor a "impersonar" desde la sesión
@@ -1204,14 +1061,6 @@ public class DoctorController {
         List<Cita> citaList=citaRepository.listarExamenes(id);
 
         if (optionalPaciente.isPresent()) {
-            Optional<Stylevistas> style = stylevistasRepository.findById(4);
-            if (style.isPresent()) {
-                Stylevistas styleActual = style.get();
-
-                model.addAttribute("headerColorDoctor", styleActual.getHeader());
-            } else {
-                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            }
             Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
             Doctor doctor = doctorOptional.get();
             Paciente paciente = optionalPaciente.get();
