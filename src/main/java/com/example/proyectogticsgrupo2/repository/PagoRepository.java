@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.repository;
 
+import com.example.proyectogticsgrupo2.dto.ListaRecibosDTO;
 import com.example.proyectogticsgrupo2.dto.PagoYPrecioDTO;
 import com.example.proyectogticsgrupo2.entity.Cita;
 import com.example.proyectogticsgrupo2.entity.Pago;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PagoRepository extends JpaRepository<Pago, Integer> {
@@ -23,6 +25,21 @@ public interface PagoRepository extends JpaRepository<Pago, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO pago (`fecha_emitida`, `estado_pago`, `cita_id_cita`, `tipo_pago`) VALUES (NOW(), 0, ?1, ?2)")
     void nuevoPago(int idCita, String tipoPago);
+
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO pago (`fecha_emitida`, `fecha_cancelada`, `estado_pago`, `cita_id_cita`, `tipo_pago`) VALUES (NOW(), NOW(), 1, ?1, ?2)")
+    void nuevoPagoPagado(int idCita, String tipoPago);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO pago (`fecha_emitida`, `estado_pago`, `cita_id_cita`) VALUES (NOW(), 0, ?1)")
+    void nuevoPagoDeSoloExamen(int idCita);
+
+    @Query(value = "Select * from pago where cita_id_cita=?1", nativeQuery = true )
+    Optional<Pago> buscarPagoPorIdcita(int idCita);
+
 
     @Query(nativeQuery = true, value = "select p.*, c.inicio from pago p " +
             "inner join cita c on (p.cita_id_cita = c.id_cita) " +

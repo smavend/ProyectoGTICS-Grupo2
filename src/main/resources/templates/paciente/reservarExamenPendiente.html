@@ -4,12 +4,13 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Reservar cita</title>
+        <title>Reservar</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
         <!-- JQUERY UI -->
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     </head>
     <body>
 
@@ -22,69 +23,49 @@
         <!-- End Sidebar-->
 
         <main id="main" class="main site-content">
-            <h1 class="encabezado text-center" style="width: 90%">Reservar Cita</h1>
+
+            <h1 class="encabezado text-center" style="width: 90%">Reservar examen</h1>
 
             <div class="bodyReservar">
                 <div class="cardReservar py-4">
 
-                    <form method="post" th:action="@{/Paciente/reservar2}" th:object="${citaTemporal}">
+                    <form method="post" th:action="@{/Paciente/reservarPendiente}" th:object="${citaTemporal}">
 
-                        <input type="hidden" th:field="*{idPaciente}">
+                        <input type="hidden" th:field="*{id}">
                         <input type="hidden" th:field="*{modalidad}">
                         <input type="hidden" th:field="*{idSede}">
                         <input type="hidden" th:field="*{idEspecialidad}">
+                        <input type="hidden" name="idDoctor">
 
                         <div class="row justify-content-center">
                             <div class="col-sm-10 col-md-8 col-lg-6">
                                 <div class="campo">
                                     <div class="fw-bold mb-1">
-                                        Doctores disponibles
-                                    </div>
-                                    <select class="form-select" id="select_doctor" th:field="*{idDoctor}"
-                                            th:classappend="${#fields.hasErrors('idDoctor')? 'is-invalid':''}">
-                                        <option value="">-- Seleccione un doctor --</option>
-                                        <option th:each="doctor: ${doctoresDisponibles}" th:value="${doctor.id_doctor}"
-                                                th:text="${doctor.nombre+' '+doctor.apellidos}">Gustavo Pardito
-                                        </option>
-                                    </select>
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('idDoctor')}"
-                                         th:errors="*{idDoctor}"></div>
-                                </div>
-                                <div class="campo">
-                                    <div class="fw-bold mb-1">
-                                        Fecha de cita
+                                        Fecha del examen
                                     </div>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="input_fecha" th:field="*{fecha}"
-                                               th:classappend="${#fields.hasErrors('fecha')?'is-invalid':''}">
+                                        <input type="text" class="form-control" id="input_fecha" th:field="*{fecha}">
                                         <span class="input-group-text" id="basic-addon2"><i class="bi bi-calendar3"></i></span>
                                     </div>
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha')}"
-                                         th:errors="*{fecha}"></div>
                                 </div>
                                 <div class="campo">
                                     <div class="fw-bold mb-1">
                                         Horarios disponibles
                                     </div>
-                                    <select class="form-select" id="select_horario" th:field="*{inicio}"
-                                            th:classappend="${#fields.hasErrors('inicio')?'is-invalid':''}">
+                                    <select class="form-select" id="select_horario" th:field="*{inicio}">
                                         <option value="">-- Seleccione un horario --</option>
                                     </select>
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('inicio')}"
-                                         th:errors="*{inicio}"></div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="d-flex justify-content-center py-3">
-                            <a th:href="@{/Paciente/reservarTipo}" class="botonCancelar">Cancelar</a>
+                            <a th:href="@{/Paciente/pendientes}" class="botonCancelar">Cancelar</a>
                             <button type="submit" class="botonAceptar ms-3">Siguiente</button>
                         </div>
-
                     </form>
-
                 </div>
             </div>
-
         </main>
 
         <!-- Bootstrap CDN JS -->
@@ -103,23 +84,45 @@
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"
                 integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
 
-        <!-- Funciones y Ajax -->
-        <script th:src="@{/assets/js/paciente_ReservarCita.js}"></script>
-
         <script th:inline="javascript">
 
-            // MODIFICAR CALENDARIO PARA MOSTRAR SOLO DÍAS DISPONIBLES
-            $(function(){
+            $(function () {
                 $("#input_fecha").datepicker({
                     dateFormat: 'dd-mm-yy',
-                    minDate : 0,
+                    minDate: 0,
                     beforeShowDay: noSundays
                 });
-            })
+            });
 
             function noSundays(date) {
                 return [date.getDay() != 0, ''];
             }
+
+            $("#input_fecha").change(function () {
+                let selectHorario = $("#select_horario");
+                let sede = [[${citaTemporal.idSede}]];
+                let especialidad = [[${citaTemporal.idEspecialidad}]];
+                let fecha = $(this).val();
+
+                $.get(getUrl() + "/Paciente/api/horarios/examen/" + sede + "/" + especialidad + "/" + fecha)
+                    .done(function (data) {
+                        selectHorario.empty();
+                        selectHorario.append("<option value=''>-- Seleccione un horario --</option>");
+                        for (let i = 0; i < data.horarios.length; i++) {
+                            selectHorario.append("<option value='" + data.horarios[i].inicio + "'>" + data.horarios[i].inicio.substring(0, 5) + " - " + data.horarios[i].fin.substring(0, 5) + "</option>");
+                        }
+
+                        $("input[name='idDoctor']").val(data.doctor);
+
+                    }).fail(function (e) {
+                    console.log("error");
+                })
+            })
+
+            function getUrl() {
+                return window.location.protocol + "//" + window.location.hostname + ":8080";
+            }
+
         </script>
     </body>
 </html>

@@ -17,19 +17,30 @@
                 display: block;
                 opacity: 1;
             }
+
             #miDiv {
                 height: 0;
                 overflow: hidden;
                 transition: height 0.3s;
             }
 
+            label {
+                display: block;
+                margin-top: 10px;
+                font-size: 18px;
+            }
+
+            input[type="time"] {
+                width: 200px;
+                margin-bottom: 10px;
+            }
         </style>
         <meta charset="utf-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="width=device-width, initial-scale=1.0" th:field="viewport">
 
         <title>Calendario - Doctor</title>
-        <meta content="" name="description">
-        <meta content="" name="keywords">
+        <meta content="" th:field="description">
+        <meta content="" th:field="keywords">
 
         <!-- Favicons -->
 
@@ -80,12 +91,25 @@
                     <div th:if="${doctor.duracion_cita_minutos != null and doctor.horario != null}"
                          class="row bg-white p-3">
 
+                        <div th:if="${error}">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Error:</strong> <span th:text="${error}"></span>
+                            </div>
+                        </div>
+
+                        <div th:if="${success_editado}">
+                            <div class="alert alert-success" role="alert">
+                                <strong>Éxito:</strong> <span th:text="${success_editado}"></span>
+                            </div>
+                        </div>
+
                         <div style="margin-left: 3%" class="col-6">
                             <button style="width: auto" onclick="toggleDiv()" class="btn btn-light">
                                 <i class="bi bi-caret-down-fill"></i>Modificar disponibilidad de horario
                             </button>
-                            <div id="miDiv" class="animated-div card top-selling container">
-                                <form th:object="${doctor}" method="post" th:action="@{/doctor/guardarHorario}" class="mt-2">
+                            <div id="miDiv" class="animated-div card top-selling container" style="width: max-content">
+                                <form th:object="${doctor}" method="post" th:action="@{/doctor/guardarHorario}"
+                                      class="mt-2">
 
                                     <input type="hidden" th:field="*{id_doctor}">
                                     <input type="hidden" th:field="*{correo}">
@@ -93,137 +117,298 @@
                                     <input type="hidden" th:field="*{nombre}">
                                     <input type="hidden" th:field="*{genero}">
 
-                                    <h5 class="card-title">Establecer inicio de disponibilidad:</h5>
-                                    <div class="mb-3">
-                                        <input th:field="*{horario.disponibilidad_inicio}"  type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio')?'is-invalid':''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_inicio')}"
-                                             th:errors="*{horario.disponibilidad_inicio}"></div>
-                                    </div>
+                                    <!-- Lunes -->
+                                    <h5 class="card-title" style="font-size:33px">Lunes</h5>
+                                    <label for="lunes_inicio1">Hora de inicio:</label>
+                                    <input style="margin-right:10px" type="time" id="lunes_inicio1"
+                                           th:field="*{horario.disponibilidad_inicio_lunes}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_lunes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_inicio_lunes')}"
+                                         th:errors="*{horario.disponibilidad_inicio_lunes}"></div>
 
-                                    <h5 class="card-title">Establecer fin de disponibilidad:</h5>
-                                    <div class="mb-3">
-                                        <input th:field="*{horario.disponibilidad_fin}"  type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.disponibilidad_fin')?'is-invalid':''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_fin')}"
-                                             th:errors="*{horario.disponibilidad_fin}"></div>
-                                    </div>
+                                    <label for="lunes_fin1">Hora de fin:</label>
+                                    <input style="margin-right:10px" type="time" id="lunes_fin1"
+                                           th:field="*{horario.disponibilidad_fin_lunes}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_lunes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_fin_lunes')}"
+                                         th:errors="*{horario.disponibilidad_fin_lunes}"></div>
 
-                                    <h5 class="card-title">Establecer horario de comida: (El tiempo de almuerzo es de 1 hora)</h5>
-                                    <div class="mb-3">
-                                        <input th:field="*{horario.comida_inicio}" type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.comida_inicio')?'is-invalid':''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.comida_inicio')}"
-                                             th:errors="*{horario.comida_inicio}"></div>
-                                    </div>
+                                    <label for="lunes_comida1">Hora de comida:</label>
+                                    <input type="time" id="lunes_comida1" th:field="*{horario.comida_inicio_lunes}"
+                                           th:classappend="${#fields.hasErrors('horario.comida_inicio_lunes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.comida_inicio_lunes')}"
+                                         th:errors="*{horario.comida_inicio_lunes}"></div>
+                                    <br><br>
 
-                                    <h5 class="card-title">Establecer duración de citas en minutos: (La duración de citas es de entre 10 y 60 minutos)</h5>
-                                    <div class="mb-3">
-                                        <input th:field="*{duracion_cita_minutos}" type="text" class="form-control" th:classappend="${#fields.hasErrors('duracion_cita_minutos')?'is-invalid':''}">
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('duracion_cita_minutos')}"
+                                    <!-- Martes -->
+                                    <h5 class="card-title" style="font-size:33px">Martes</h5>
+                                    <label for="martes_inicio1">Hora de inicio:</label>
+                                    <input style="margin-right:10px" type="time" id="martes_inicio1"
+                                           th:field="*{horario.disponibilidad_inicio_martes}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_martes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_inicio_martes')}"
+                                         th:errors="*{horario.disponibilidad_inicio_martes}"></div>
+
+                                    <label for="martes_fin1">Hora de fin:</label>
+                                    <input style="margin-right:10px" type="time" id="martes_fin1"
+                                           th:field="*{horario.disponibilidad_fin_martes}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_martes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_fin_martes')}"
+                                         th:errors="*{horario.disponibilidad_fin_martes}"></div>
+
+                                    <label for="martes_comida1">Hora de comida:</label>
+                                    <input type="time" id="martes_comida1" th:field="*{horario.comida_inicio_martes}"
+                                           th:classappend="${#fields.hasErrors('horario.comida_inicio_martes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.comida_inicio_martes')}"
+                                         th:errors="*{horario.comida_inicio_martes}"></div>
+                                    <br><br>
+
+                                    <!-- Miércoles -->
+                                    <h5 class="card-title" style="font-size:33px">Miercoles</h5>
+                                    <label for="miercoles_inicio1">Hora de inicio:</label>
+                                    <input style="margin-right:10px" type="time" id="miercoles_inicio1"
+                                           th:field="*{horario.disponibilidad_inicio_miercoles}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_miercoles')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_inicio_miercoles')}"
+                                         th:errors="*{horario.disponibilidad_inicio_miercoles}"></div>
+
+                                    <label for="miercoles_fin1">Hora de fin:</label>
+                                    <input style="margin-right:10px" type="time" id="miercoles_fin1"
+                                           th:field="*{horario.disponibilidad_fin_miercoles}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_miercoles')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_fin_miercoles')}"
+                                         th:errors="*{horario.disponibilidad_fin_miercoles}"></div>
+
+                                    <label for="miercoles_comida1">Hora de comida:</label>
+                                    <input type="time" id="miercoles_comida1"
+                                           th:field="*{horario.comida_inicio_miercoles}"
+                                           th:classappend="${#fields.hasErrors('horario.comida_inicio_miercoles')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.comida_inicio_miercoles')}"
+                                         th:errors="*{horario.comida_inicio_miercoles}"></div>
+                                    <br><br>
+
+                                    <!-- Jueves -->
+                                    <h5 class="card-title" style="font-size:33px">Jueves</h5>
+                                    <label for="jueves_inicio1">Hora de inicio:</label>
+                                    <input style="margin-right:10px" type="time" id="jueves_inicio1"
+                                           th:field="*{horario.disponibilidad_inicio_jueves}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_jueves')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_inicio_jueves')}"
+                                         th:errors="*{horario.disponibilidad_inicio_jueves}"></div>
+
+                                    <label for="jueves_fin1">Hora de fin:</label>
+                                    <input style="margin-right:10px" type="time" id="jueves_fin1"
+                                           th:field="*{horario.disponibilidad_fin_jueves}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_jueves')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_fin_jueves')}"
+                                         th:errors="*{horario.disponibilidad_fin_jueves}"></div>
+
+                                    <label for="jueves_comida1">Hora de comida:</label>
+                                    <input type="time" id="jueves_comida1" th:field="*{horario.comida_inicio_jueves}"
+                                           th:classappend="${#fields.hasErrors('horario.comida_inicio_jueves')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.comida_inicio_jueves')}"
+                                         th:errors="*{horario.comida_inicio_jueves}"></div>
+                                    <br><br>
+
+                                    <!-- Viernes -->
+                                    <h5 class="card-title" style="font-size:33px">Viernes</h5>
+                                    <label for="viernes_inicio1">Hora de inicio:</label>
+                                    <input style="margin-right:10px" type="time" id="viernes_inicio1"
+                                           th:field="*{horario.disponibilidad_inicio_viernes}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_viernes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_inicio_viernes')}"
+                                         th:errors="*{horario.disponibilidad_inicio_viernes}"></div>
+
+                                    <label for="viernes_fin1">Hora de fin:</label>
+                                    <input style="margin-right:10px" type="time" id="viernes_fin1"
+                                           th:field="*{horario.disponibilidad_fin_viernes}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_viernes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_fin_viernes')}"
+                                         th:errors="*{horario.disponibilidad_fin_viernes}"></div>
+
+                                    <label for="viernes_comida1">Hora de comida:</label>
+                                    <input type="time" id="viernes_comida1" th:field="*{horario.comida_inicio_viernes}"
+                                           th:classappend="${#fields.hasErrors('horario.comida_inicio_viernes')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.comida_inicio_viernes')}"
+                                         th:errors="*{horario.comida_inicio_viernes}"></div>
+                                    <br><br>
+
+                                    <!-- Sábado -->
+                                    <h5 class="card-title" style="font-size:33px">Sábado</h5>
+                                    <label for="sabado_inicio1">Hora de inicio:</label>
+                                    <input style="margin-right:10px" type="time" id="sabado_inicio1"
+                                           th:field="*{horario.disponibilidad_inicio_sabado}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_sabado')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_inicio_sabado')}"
+                                         th:errors="*{horario.disponibilidad_inicio_sabado}"></div>
+
+                                    <label for="sabado_fin1">Hora de fin:</label>
+                                    <input style="margin-right:10px" type="time" id="sabado_fin1"
+                                           th:field="*{horario.disponibilidad_fin_sabado}"
+                                           th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_sabado')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.disponibilidad_fin_sabado')}"
+                                         th:errors="*{horario.disponibilidad_fin_sabado}"></div>
+
+                                    <label for="sabado_comida1">Hora de comida:</label>
+                                    <input type="time" id="sabado_comida1" th:field="*{horario.comida_inicio_sabado}"
+                                           th:classappend="${#fields.hasErrors('horario.comida_inicio_sabado')?'is-invalid':''}">
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('horario.comida_inicio_sabado')}"
+                                         th:errors="*{horario.comida_inicio_sabado}"></div>
+                                    <br><br>
+
+                                    <h5 class="card-title" style="font-size:25px">Establecer duración de citas en
+                                        minutos:</h5>
+
+                                    <div class="select-container">
+                                        <select th:field="*{duracion_cita_minutos}"
+                                                style="font-size: 16px; padding: 4px;"
+                                                th:classappend="${#fields.hasErrors('duracion_cita_minutos')?'is-invalid':''}">
+                                            <option value="15" th:selected="${doctor.duracion_cita_minutos == 15}">15
+                                            </option>
+                                            <option value="30" th:selected="${doctor.duracion_cita_minutos == 30}">30
+                                            </option>
+                                        </select>
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('duracion_cita_minutos')}"
                                              th:errors="*{duracion_cita_minutos}"></div>
                                     </div>
+                                    <br>
+
 
                                     <button type="submit" class="btn btn-primary">Guardar</button>
-
                                 </form>
                             </div>
                         </div>
 
+                        <div th:each="cita, citaIndex : ${citasPresenciales}">
+                            <input id="citaInicioPresencial" th:id="'citaInicioPresencial' + ${citaIndex.index}"
+                                   type="hidden" th:value="${cita.inicio}"/>
+                        </div>
+
+                        <div th:each="cita, citaIndex : ${citasPresenciales}">
+                            <input id="citaPresencialApellido" th:id="'citaPresencialApellido' + ${citaIndex.index}"
+                                   type="hidden" th:value="${cita.paciente.apellidos}"/>
+                        </div>
+
+                        <div th:each="cita, citaIndex : ${citasVirtuales}">
+                            <input id="citaInicioVirtual" th:id="'citaInicioVirtual' + ${citaIndex.index}" type="hidden"
+                                   th:value="${cita.inicio}"/>
+                        </div>
+
+                        <div th:each="cita, citaIndex : ${citasVirtuales}">
+                            <input id="citaVirtualApellido" th:id="'citaVirtualApellido' + ${citaIndex.index}"
+                                   type="hidden" th:value="${cita.paciente.apellidos}"/>
+                        </div>
+
+
+                        <input id="contadorPresencial" type="hidden" th:value="${cantidadCitasPresenciales}">
+                        <input id="contadorVirtual" type="hidden" th:value="${cantidadCitasVirtuales}">
+
+                        <div style="display: none" id="popup">
+                            <div class="modal-backdrop fade show"></div>
+                            <div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true" style="display: block;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Pop-up</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Contenido del pop-up</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Cerrar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <script>
-
                             document.addEventListener('DOMContentLoaded', function () {
                                 var calendarEl = document.getElementById('calendar');
+                                var eventsPresencial = [];
+                                var eventsVirtual = [];
+                                var cantidadCitasPresenciales = document.getElementById('contadorPresencial').value;
+                                var cantidadCitasVirtuales = document.getElementById('contadorVirtual').value;
+
+                                for (var i = 0; i < parseInt(cantidadCitasPresenciales); i++) {
+                                    eventsPresencial.push({
+                                        start: document.getElementById('citaInicioPresencial' + i).value,
+                                        color: '#86C69B',
+                                        title: '- ' + document.getElementById('citaPresencialApellido' + i).value
+                                    });
+                                }
+
+                                for (var j = 0; j < parseInt(cantidadCitasVirtuales); j++) {
+                                    eventsVirtual.push({
+                                        start: document.getElementById('citaInicioVirtual' + j).value,
+                                        color: '#379AB8',
+                                        title: '- ' + document.getElementById('citaVirtualApellido' + j).value
+                                    });
+                                }
+
+                                var events = eventsPresencial.concat(eventsVirtual);
 
                                 var calendar = new FullCalendar.Calendar(calendarEl, {
+                                    eventTimeFormat: {
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        meridiem: 'short'
+                                    },
                                     headerToolbar: {
                                         left: 'prev,next today',
                                         center: 'title',
                                         right: 'dayGridMonth'
                                     },
-                                    initialDate: '2023-01-12',
-                                    navLinks: true, // can click day/week names to navigate views
+                                    navLinks: true,
                                     selectable: true,
                                     selectMirror: true,
                                     select: function (arg) {
-                                        var title = prompt('Event Title:');
-                                        if (title) {
-                                            calendar.addEvent({
-                                                title: title,
-                                                start: arg.start,
-                                                end: arg.end,
-                                                allDay: arg.allDay
-                                            })
-                                        }
-                                        calendar.unselect()
+
                                     },
                                     eventClick: function (arg) {
-                                        if (confirm('¿Estás seguro que deseas eliminar este evento?')) {
-                                            arg.event.remove()
-                                        }
+                                        var popup = document.getElementById("popup");
+                                        popup.style.display = "block";
                                     },
-                                    editable: true,
-                                    dayMaxEvents: true, // allow "more" link when too many events
-                                    events: [
-                                        {
-                                            title: 'All Day Event',
-                                            start: '2023-01-01'
-                                        },
-                                        {
-                                            title: 'Long Event',
-                                            start: '2023-01-07',
-                                            end: '2023-01-10'
-                                        },
-                                        {
-                                            groupId: 999,
-                                            title: 'Repeating Event',
-                                            start: '2023-01-09T16:00:00'
-                                        },
-                                        {
-                                            groupId: 999,
-                                            title: 'Repeating Event',
-                                            start: '2023-01-16T16:00:00'
-                                        },
-                                        {
-                                            title: 'Conference',
-                                            start: '2023-01-11',
-                                            end: '2023-01-13'
-                                        },
-                                        {
-                                            title: 'Meeting',
-                                            start: '2023-01-12T10:30:00',
-                                            end: '2023-01-12T12:30:00'
-                                        },
-                                        {
-                                            title: 'Lunch',
-                                            start: '2023-01-12T12:00:00'
-                                        },
-                                        {
-                                            title: 'Meeting',
-                                            start: '2023-01-12T14:30:00'
-                                        },
-                                        {
-                                            title: 'Happy Hour',
-                                            start: '2023-01-12T17:30:00'
-                                        },
-                                        {
-                                            title: 'Dinner',
-                                            start: '2023-01-12T20:00:00'
-                                        },
-                                        {
-                                            title: 'Birthday Party',
-                                            start: '2023-01-13T07:00:00'
-                                        },
-                                        {
-                                            title: 'Click for Google',
-                                            url: 'http://google.com/',
-                                            start: '2023-01-28'
-                                        }
-                                    ]
+                                    eventMouseEnter: function (arg) {
+                                        arg.el.style.cursor = 'pointer';
+                                    },
+                                    eventMouseLeave: function (arg) {
+                                        arg.el.style.cursor = '';
+                                    },
+                                    editable: false,
+                                    dayMaxEvents: true,
+                                    events: events
                                 });
 
                                 calendar.render();
                             });
 
                         </script>
+
                         <div id='calendar'></div>
 
                     </div>
@@ -237,52 +422,213 @@
 
                             <!-- Top Selling -->
                             <div class="pagetitle">
-                                <h1>Establecer Horario por primera vez:</h1>
+                                <h1>Establecer Horario por primera vez: (La duración del almuerzo es de 1 hora)</h1>
                             </div>
                             <div class="card top-selling overflow-auto container">
 
-
                                 <div class="card-body pb-0" id="RecibosTable">
-                                    <form th:object="${doctor}" method="post" th:action="@{/doctor/guardarHorario}" class="mt-2">
+                                    <form th:object="${doctor}" method="post" th:action="@{/doctor/guardarHorario}"
+                                          class="mt-2">
 
                                         <input type="hidden" th:field="*{id_doctor}">
                                         <input type="hidden" th:field="*{correo}">
                                         <input type="hidden" th:field="*{apellidos}">
                                         <input type="hidden" th:field="*{nombre}">
                                         <input type="hidden" th:field="*{genero}">
-                                        <input type="hidden" th:field="*{horario.id_horario}">
 
-                                        <h5 class="card-title">Establecer inicio de disponibilidad:</h5>
-                                        <div class="mb-3">
-                                            <input th:field="*{horario.disponibilidad_inicio}"  type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_inicio')}"
-                                                 th:errors="*{horario.disponibilidad_inicio}"></div>
+                                        <div th:if="${error}">
+                                            <div class="alert alert-danger" role="alert">
+                                                <strong>Error:</strong> <span th:text="${error}"></span>
+                                            </div>
                                         </div>
 
-                                        <h5 class="card-title">Establecer fin de disponibilidad:</h5>
-                                        <div class="mb-3">
-                                            <input th:field="*{horario.disponibilidad_fin}"  type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.disponibilidad_fin')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.disponibilidad_fin')}"
-                                                 th:errors="*{horario.disponibilidad_fin}"></div>
+                                        <div th:if="${success_creado}">
+                                            <div class="alert alert-success" role="alert">
+                                                <strong>Éxito:</strong> <span th:text="${success_creado}"></span>
+                                            </div>
                                         </div>
+                                        <!-- Lunes -->
+                                        <h5 class="card-title" style="font-size:33px">Lunes</h5>
+                                        <label for="lunes_inicio">Hora de inicio:</label>
+                                        <input style="margin-right:10px" type="time" id="lunes_inicio"
+                                               th:field="*{horario.disponibilidad_inicio_lunes}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_lunes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_inicio_lunes')}"
+                                             th:errors="*{horario.disponibilidad_inicio_lunes}"></div>
 
-                                        <h5 class="card-title">Establecer horario de comida:</h5>
-                                        <div class="mb-3">
-                                            <input th:field="*{horario.comida_inicio}" type="time" class="form-control" th:classappend="${#fields.hasErrors('horario.comida_inicio')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('horario.comida_inicio')}"
-                                                 th:errors="*{horario.comida_inicio}"></div>
-                                        </div>
+                                        <label for="lunes_fin">Hora de fin:</label>
+                                        <input style="margin-right:10px" type="time" id="lunes_fin"
+                                               th:field="*{horario.disponibilidad_fin_lunes}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_lunes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_fin_lunes')}"
+                                             th:errors="*{horario.disponibilidad_fin_lunes}"></div>
 
-                                        <h5 class="card-title">Establecer duración de citas en minutos:</h5>
-                                        <div class="mb-3">
-                                            <input th:field="*{duracion_cita_minutos}" type="text" class="form-control" th:classappend="${#fields.hasErrors('duracion_cita_minutos')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('duracion_cita_minutos')}"
+                                        <label for="lunes_comida">Hora de comida:</label>
+                                        <input type="time" id="lunes_comida" th:field="*{horario.comida_inicio_lunes}"
+                                               th:classappend="${#fields.hasErrors('horario.comida_inicio_lunes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.comida_inicio_lunes')}"
+                                             th:errors="*{horario.comida_inicio_lunes}"></div>
+                                        <br><br>
+
+                                        <!-- Martes -->
+                                        <h5 class="card-title" style="font-size:33px">Martes</h5>
+                                        <label for="martes_inicio">Hora de inicio:</label>
+                                        <input style="margin-right:10px" type="time" id="martes_inicio"
+                                               th:field="*{horario.disponibilidad_inicio_martes}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_martes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_inicio_martes')}"
+                                             th:errors="*{horario.disponibilidad_inicio_martes}"></div>
+
+                                        <label for="martes_fin">Hora de fin:</label>
+                                        <input style="margin-right:10px" type="time" id="martes_fin"
+                                               th:field="*{horario.disponibilidad_fin_martes}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_martes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_fin_martes')}"
+                                             th:errors="*{horario.disponibilidad_fin_martes}"></div>
+
+                                        <label for="martes_comida">Hora de comida:</label>
+                                        <input type="time" id="martes_comida" th:field="*{horario.comida_inicio_martes}"
+                                               th:classappend="${#fields.hasErrors('horario.comida_inicio_martes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.comida_inicio_martes')}"
+                                             th:errors="*{horario.comida_inicio_martes}"></div>
+                                        <br><br>
+
+                                        <!-- Miércoles -->
+                                        <h5 class="card-title" style="font-size:33px">Miercoles</h5>
+                                        <label for="miercoles_inicio">Hora de inicio:</label>
+                                        <input style="margin-right:10px" type="time" id="miercoles_inicio"
+                                               th:field="*{horario.disponibilidad_inicio_miercoles}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_miercoles')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_inicio_miercoles')}"
+                                             th:errors="*{horario.disponibilidad_inicio_miercoles}"></div>
+
+                                        <label for="miercoles_fin">Hora de fin:</label>
+                                        <input style="margin-right:10px" type="time" id="miercoles_fin"
+                                               th:field="*{horario.disponibilidad_fin_miercoles}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_miercoles')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_fin_miercoles')}"
+                                             th:errors="*{horario.disponibilidad_fin_miercoles}"></div>
+
+                                        <label for="miercoles_comida">Hora de comida:</label>
+                                        <input type="time" id="miercoles_comida"
+                                               th:field="*{horario.comida_inicio_miercoles}"
+                                               th:classappend="${#fields.hasErrors('horario.comida_inicio_miercoles')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.comida_inicio_miercoles')}"
+                                             th:errors="*{horario.comida_inicio_miercoles}"></div>
+                                        <br><br>
+
+                                        <!-- Jueves -->
+                                        <h5 class="card-title" style="font-size:33px">Jueves</h5>
+                                        <label for="jueves_inicio">Hora de inicio:</label>
+                                        <input style="margin-right:10px" type="time" id="jueves_inicio"
+                                               th:field="*{horario.disponibilidad_inicio_jueves}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_jueves')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_inicio_jueves')}"
+                                             th:errors="*{horario.disponibilidad_inicio_jueves}"></div>
+
+                                        <label for="jueves_fin">Hora de fin:</label>
+                                        <input style="margin-right:10px" type="time" id="jueves_fin"
+                                               th:field="*{horario.disponibilidad_fin_jueves}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_jueves')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_fin_jueves')}"
+                                             th:errors="*{horario.disponibilidad_fin_jueves}"></div>
+
+                                        <label for="jueves_comida">Hora de comida:</label>
+                                        <input type="time" id="jueves_comida" th:field="*{horario.comida_inicio_jueves}"
+                                               th:classappend="${#fields.hasErrors('horario.comida_inicio_jueves')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.comida_inicio_jueves')}"
+                                             th:errors="*{horario.comida_inicio_jueves}"></div>
+                                        <br><br>
+
+                                        <!-- Viernes -->
+                                        <h5 class="card-title" style="font-size:33px">Viernes</h5>
+                                        <label for="viernes_inicio">Hora de inicio:</label>
+                                        <input style="margin-right:10px" type="time" id="viernes_inicio"
+                                               th:field="*{horario.disponibilidad_inicio_viernes}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_viernes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_inicio_viernes')}"
+                                             th:errors="*{horario.disponibilidad_inicio_viernes}"></div>
+
+                                        <label for="viernes_fin">Hora de fin:</label>
+                                        <input style="margin-right:10px" type="time" id="viernes_fin"
+                                               th:field="*{horario.disponibilidad_fin_viernes}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_viernes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_fin_viernes')}"
+                                             th:errors="*{horario.disponibilidad_fin_viernes}"></div>
+
+                                        <label for="viernes_comida">Hora de comida:</label>
+                                        <input type="time" id="viernes_comida"
+                                               th:field="*{horario.comida_inicio_viernes}"
+                                               th:classappend="${#fields.hasErrors('horario.comida_inicio_viernes')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.comida_inicio_viernes')}"
+                                             th:errors="*{horario.comida_inicio_viernes}"></div>
+                                        <br><br>
+
+                                        <!-- Sábado -->
+                                        <h5 class="card-title" style="font-size:33px">Sábado</h5>
+                                        <label for="sabado_inicio">Hora de inicio:</label>
+                                        <input style="margin-right:10px" type="time" id="sabado_inicio"
+                                               th:field="*{horario.disponibilidad_inicio_sabado}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_inicio_sabado')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_inicio_sabado')}"
+                                             th:errors="*{horario.disponibilidad_inicio_sabado}"></div>
+
+                                        <label for="sabado_fin">Hora de fin:</label>
+                                        <input style="margin-right:10px" type="time" id="sabado_fin"
+                                               th:field="*{horario.disponibilidad_fin_sabado}"
+                                               th:classappend="${#fields.hasErrors('horario.disponibilidad_fin_sabado')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.disponibilidad_fin_sabado')}"
+                                             th:errors="*{horario.disponibilidad_fin_sabado}"></div>
+
+                                        <label for="sabado_comida">Hora de comida:</label>
+                                        <input type="time" id="sabado_comida" th:field="*{horario.comida_inicio_sabado}"
+                                               th:classappend="${#fields.hasErrors('horario.comida_inicio_sabado')?'is-invalid':''}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('horario.comida_inicio_sabado')}"
+                                             th:errors="*{horario.comida_inicio_sabado}"></div>
+                                        <br><br>
+
+                                        <h5 class="card-title" style="font-size:25px">Establecer duración de citas en
+                                            minutos:</h5>
+
+                                        <div class="select-container">
+                                            <select th:field="*{duracion_cita_minutos}"
+                                                    style="font-size: 16px; padding: 4px;"
+                                                    th:classappend="${#fields.hasErrors('duracion_cita_minutos')?'is-invalid':''}">
+                                                <option value="15" th:selected="${doctor.duracion_cita_minutos == 15}">
+                                                    15
+                                                </option>
+                                                <option value="30" th:selected="${doctor.duracion_cita_minutos == 30}">
+                                                    30
+                                                </option>
+                                            </select>
+                                            <div class="invalid-feedback"
+                                                 th:if="${#fields.hasErrors('duracion_cita_minutos')}"
                                                  th:errors="*{duracion_cita_minutos}"></div>
                                         </div>
+                                        <br>
+
 
                                         <button type="submit" class="btn btn-primary">Guardar</button>
-
                                     </form>
+
 
                                     <br>
 
