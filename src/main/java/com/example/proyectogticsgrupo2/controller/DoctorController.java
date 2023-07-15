@@ -738,6 +738,8 @@ public class DoctorController {
                     cita.setExamendoc(file.getBytes());
 
                     cita.setDiagnostico(diagnostico);
+                    cita.setTratamiento("-");
+                    cita.setReceta("-");
 
                     cita.setEstado(4); // cita finalizada
                     citaRepository.save(cita);
@@ -755,7 +757,7 @@ public class DoctorController {
             } else {
                 attr.addFlashAttribute("error", "No se encontró la cita");
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             attr.addFlashAttribute("error", "Ocurrió un error al subir el archivo");
         }
