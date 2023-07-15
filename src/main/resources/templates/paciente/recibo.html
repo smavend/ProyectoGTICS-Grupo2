@@ -28,6 +28,9 @@
 
         <main id="main" class="main site-content">
 
+            <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
+            <div id="idEspecialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.idEspecialidad}"></div>
+
             <h1 class="encabezado">Recibo - 281FH19701228FG</h1>
 
             <section class="seccionPrincipal recibo">
@@ -79,6 +82,7 @@
                         <thead>
                             <tr>
                                 <th>Por concepto de</th>
+                                <th>Doctor</th>
                                 <th>Cantidad</th>
                                 <th>Precio</th>
                                 <th>Importe total</th>
@@ -87,12 +91,12 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur
-                                </td>
+                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur</td>
+                                <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
                                 <td>1</td>
-                                <td>S/ 1300.00</td>
-                                <td>S/ 1300.00</td>
-                                <td>S/ 130.00</td>
+                                <td class="precio-total"></td>
+                                <td class="importe-total">S/ 1300.00</td>
+                                <td class="importe-con-seguro">S/ 130.00</td>
                             </tr>
                         </tbody>
                     </table>
@@ -117,10 +121,45 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
+        <!-- JQUERY -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         <script>
+
             function imprimir() {
                 window.print();
             }
+            $(document).ready(function() {
+                var idEspecialidad = document.getElementById('idEspecialidad').dataset.valor;
+                var coaseguro = document.getElementById('coaseguro').dataset.valor;
+                var precioIni;
+                switch (idEspecialidad) {
+                    case 1: precioIni = 150; break;
+                    case 2: precioIni = 120; break;
+                    case 3: precioIni = 80; break;
+                    case 4: precioIni = 90; break;
+                    case 5: precioIni = 100; break;
+                    case 6: precioIni = 130; break;
+                    case 7: precioIni = 80; break;
+                    case 8: precioIni = 90; break;
+                    case 9: precioIni = 110; break;
+                    case 10: precioIni = 120; break;
+                    case 11: precioIni = 150; break;
+                    case 12: precioIni = 140; break;
+                    case 13: precioIni = 110; break;
+                    case 14: precioIni = 100; break;
+                    case 15: precioIni = 150; break;
+                    case 16: precioIni = 90; break;
+                    case 17: precioIni = 120; break;
+                }
+
+                var precioCalculado = precioIni * coaseguro;
+                $('.precio-total').text('S/ ' + precioIni.toFixed(2));
+                $('.importe-total').text(precioIni);
+                $('.importe-con-seguro').text(precioCalculado);
+            });
+
+
         </script>
 
     </body>

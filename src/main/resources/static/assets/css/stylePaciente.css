@@ -1384,6 +1384,22 @@ p{
     background-color: #ffd52b;
 }
 
+.infoModalPagar{
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 11px;
+}
+.infoModalPrecioPagar{
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin-left: 10px;
+    margin-top: 15px;
+}
+.infoModalPagarDato{
+    margin-left: 12px;
+    font-weight: 400;
+}
+
 .seccionPrincipal.recibo{
     font-family: 'Schibsted Grotesk', sans-serif;
 }
