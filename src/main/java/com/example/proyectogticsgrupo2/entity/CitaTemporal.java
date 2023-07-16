@@ -18,7 +18,6 @@ import java.time.LocalTime;
 @Table(name = "cita_temporal")
 public class CitaTemporal {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cita_temporal")
     private Integer id;
 
@@ -37,8 +36,8 @@ public class CitaTemporal {
     private String idDoctor;
 
     @NotNull(message = "Seleccione una fecha")
-    @Future(message = "Seleccione una fecha válida")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Future(message = "Solo se permiten fechas futuras")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate fecha;
 
     @NotNull(message = "Seleccione un horario disponible")

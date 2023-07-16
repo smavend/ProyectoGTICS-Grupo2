@@ -151,8 +151,7 @@
                                             <input type="hidden" name="cita.id_cita" th:value="${cita.id_cita}">
                                             <input type="hidden" name="id.idCuestionario"
                                                    th:value="${listaCuestionarios.get(17).id_cuestionario}">
-                                            <input type="hidden" name="fecha_enviado"
-                                                   th:value="${cita.inicio}">
+
 
 
 
@@ -279,8 +278,7 @@
                                             <input type="hidden" name="cita.id_cita" th:value="${cita.id_cita}">
                                             <input type="hidden" name="id.idCuestionario"
                                                    th:value="${listaCuestionarios.get(doctor.especialidad.getIdEspecialidad()-1).id_cuestionario}">
-                                            <input type="hidden" name="cuestionario.fecha_enviado"
-                                                   th:value="${cita.inicio}">
+
 
 
 
@@ -336,16 +334,7 @@
         </footer><!-- End Footer -->ç
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
-        <script>
-            var headerColorDoctor = "[[${headerColorDoctor}]]";
-            localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
 
-            function updateHeaderColorDoctor() {
-                var color = headerColorDoctor;
-                document.getElementById('header').style.backgroundColor = color;
-            }
-            updateHeaderColorDoctor();
-        </script>
         <!-- Vendor JS Files -->
         <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
         <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>

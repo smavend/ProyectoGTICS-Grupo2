@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Paciente - Citas pendientes</title>
+
+        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
+
+        <!-- DATATABLES --->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
+
+    </head>
+    <body>
+
+        <!-- ======= Header ======= -->
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
+        <!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
+        <!-- End Sidebar-->
+
+        <main id="main" class="main">
+            <h1 class="encabezado text-center" style="width: 90%">Reservar</h1>
+            <div class="bodyReservar">
+                <div class="cardReservar text-center w-75 py-4">
+                    <span class="btn botonTipo botonTipoSeleccionado">Todos</span>
+                    <span class="btn botonTipo">Citas pendientes</span>
+                    <span class="btn botonTipo">Exámenes pendientes</span>
+                    <div class="row p-5">
+                        <table class="table pt-2 pb-4" id="tablaPendientes">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Especialidad</th>
+                                    <th class="text-center">Tipo</th>
+                                    <th class="text-center">Fecha límite</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="citaPendiente, i: ${citasPendientes}">
+                                    <td th:text="${citaPendiente.especialidad.nombre}">Traumatología</td>
+                                    <td th:text="${citaPendiente.especialidad.es_examen == 1?'Examen':'Consulta'}">Examen</td>
+                                    <td th:text="${#dates.format(fechasLimite[i.index], 'dd-MM-yyyy')}">
+                                        00-00-00
+                                    </td>
+                                    <td>
+                                        <a th:href="@{'/Paciente/reservaPendiente?c='+${citaPendiente.id_cita}}" class="botonAceptar">Completar</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center py-3">
+                        <a th:href="@{/Paciente/reservarTipo}" class="botonCancelar">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
+
+        <!-- JQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.4.js"
+                integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+
+        <!-- DATATABLES CDN -->
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                var tabla = $("#tablaPendientes").DataTable({
+                    dom: '<"toolbar">frtrip',
+                    bInfo: false,
+                    pageLength: 5,
+                    columns: [
+                        null,
+                        {orderable: false},
+                        null,
+                        {orderable: false}
+                    ],
+                    columnDefs: [
+                        {
+                            searchable: false,
+                            targets: [1, 3]
+                        }
+                    ],
+                    language: {
+                        infoEmpty: "No hay citas registradas",
+                        zeroRecords: "No hay citas registradas",
+                        sProcessing: "Cargando...",
+                        sSearch: "Buscar:",
+                        paginate: {
+                            previous: "Anterior",
+                            next: "Siguiente"
+                        }
+                    }
+                });
+            })
+        </script>
+
+    </body>
+</html>

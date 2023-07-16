@@ -4,24 +4,13 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Citas</title>
+        <title>Paciente - Citas</title>
 
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
-        <!-- BOOTSTRAP -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-              crossorigin="anonymous">
+        <!-- DATATABLES --->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
 
-        <!-- GOOGLE FONTS -->
-        <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-              rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
-        <!-- CSS -->
-        <link th:href="@{/assets/css/stylePaciente.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
 
     </head>
     <body>
@@ -37,46 +26,50 @@
         <main id="main" class="main site-content">
 
             <h1 class="encabezado">Citas agendadas</h1>
+            <div class="alert alert-primary mt-3" th:if="${msg != null}" th:text="${msg}"></div>
             <section class="seccionPrincipal">
 
                 <a class="btn botonTipo botonTipoSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
                 <a class="btn botonTipo botonExamenes" onclick="buscarExamenes()">Próximos exámenes</a>
 
-                <div class="table-responsive-xl">
-                    <table class="table pt-2 pb-4" id="tabla_citas">
-                        <thead>
-                            <tr>
-                                <th>Especialidad</th>
-                                <th>Doctor</th>
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                                <th>Tipo de cita</th>
-                                <th>Estado de pago</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="cita : ${proximasCitas}" class="filaCita">
-                                <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
-                                <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
-                                <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
-                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">13:00 Hrs.</td>
-                                <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</td>
-                                <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
-                                <td class="text-center">
-                                    <a href="#" class="botonAceptar" data-bs-toggle="modal"
-                                       th:attr="data-bs-target='#citaModal'+${cita.id_cita}"
-                                       th:text="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.modalidad == 1?'Acceder a cita': 'Ver más'}">Ver
-                                        más</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table pt-2 pb-4" id="tabla_citas">
+                    <thead>
+                        <tr>
+                            <th>Especialidad</th>
+                            <th>Doctor</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Tipo de cita</th>
+                            <th>Estado de pago</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cita : ${proximasCitas}" class="filaCita">
+                            <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
+                            <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
+                            <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
+                            <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">
+                                13:00 Hrs.
+                            </td>
+                            <td class="text-center">
+                                    <span th:classappend="${cita.modalidad == 0? 'presencial':'virtual'}"
+                                          th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
+                            </td>
+                            <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
+                            <td class="text-center">
+                                <a href="#" class="botonAceptar" data-bs-toggle="modal"
+                                   th:attr="data-bs-target='#citaModal'+${cita.id_cita}"
+                                   th:text="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.modalidad == 1?'Acceder a cita': 'Ver más'}">Ver
+                                    más</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <!-- Modal Presencial-->
                 <div th:each="cita, i : ${proximasCitas}" th:if="${cita.modalidad == 0}"
-                     th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" id="citaPresencialModal" tabindex="-1"
+                     th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" tabindex="-1"
                      aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -134,14 +127,14 @@
                                                 th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
                                         </p>
                                         <p>Piso:<span class="informacionModalDato"
-                                                      th:text="${torresPisosPrecio[i.index].getPiso()}">2 (Falta)</span></p>
+                                                      th:text="${torresPisosPrecio[i.index].getPiso()}">2 (Falta)</span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer mx-auto">
-                                <strong>Proceda a realizar el pago respectivo en caja</strong>
-                                <!--<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>-->
+                            <div class="modal-footer w-100">
+                                <a th:id="${cita.id_cita}" th:if="${cita.estado == 0}" class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
+                                <strong th:classappend="${cita.estado == 1? 'm-auto':''}" th:text="${cita.estado == 1?'Pago realizado':'Proceda a realizar el pago respectivo en caja'}">Proceda a realizar el pago respectivo en caja</strong>
                             </div>
                         </div>
                     </div>
@@ -149,7 +142,7 @@
 
                 <!-- Modal Virtual -->
                 <div th:each="cita : ${proximasCitas}" th:if="${cita.modalidad == 1}"
-                     th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" id="citaVirtualModal" tabindex="-1"
+                     th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" tabindex="-1"
                      aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -201,15 +194,40 @@
                                     </div>
                                     <div class="col-6">
                                         <p>Doctor:<span class="informacionModalDato"
-                                                        th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
+                                                        th:text="${cita.doctor.nombreYApellido}">José Perez Miranda</span>
                                         </p>
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal-footer w-100">
+                                <a th:id="${cita.id_cita}" th:if="${cita.estado == 0}" class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
+                                <a th:classappend="${cita.estado == 1? 'm-auto':''}" th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link != null}"
+                                   class="btn botonAceptar" th:href="@{'/Paciente/sesionVirtual?c='+${cita.id_cita}}">Acceder
+                                    a sesión virtual</a>
+                                <a th:classappend="${cita.estado == 1? 'm-auto':''}" th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}"
+                                   style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha sido
+                                    creada</a>
+                                <a th:classappend="${cita.estado == 1? 'm-auto':''}" th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}"
+                                   style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a la
+                                    cita</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal cancelar cita -->
+                <div class="modal fade" id="cancelarModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
+                            </div>
+                            <div class="modal-body text-center">
+                                <span class="textoModal">¿Está seguro que desea cancelar su cita?</span>
+                            </div>
                             <div class="modal-footer mx-auto">
-                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual)}"
-                                   class="btn botonAceptar">Acceder a sesión virtual</a>
-                                <a style="cursor: context-menu" th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}" class="btn botonSecundario">Aún no puede acceder a la sesión</a>
+                                <a id="confirmar" class="btn botonCancelar">Cancelar cita</a>
                             </div>
                         </div>
                     </div>
@@ -222,16 +240,7 @@
             <!-- End footer -->
 
         </main><!-- End #main -->
-        <script>
-            var headerColorPaciente = "[[${headerColorPaciente}]]";
-            localStorage.setItem('headerColorPaciente', headerColorPaciente);
 
-            function updateHeaderColorPaciente() {
-                var color = headerColorPaciente;
-                document.getElementById('header').style.backgroundColor = color;
-            }
-            updateHeaderColorPaciente();
-        </script>
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
@@ -244,48 +253,13 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- Script para botones filtro -->
-        <script>
-
-            const especialidadesExam = ["Cardiología", "Cirugía cardiovascular", "Laboratorio", "Rayos X",
-                "Ecografía", "Neurología", "Gastroenterología", "Endocrinología", "Nefrología"];
-            const botonExamenes = $(".botonExamenes");
-            const botonCitas = $(".botonCitas");
-
-            function buscarExamenes() {
-                botonExamenes.addClass("botonTipoSeleccionado");
-                botonCitas.removeClass("botonTipoSeleccionado");
-                const citas = $(".filaCita");
-                for (let i = 0; i < citas.length; i++) {
-                    let especialidad = citas[i].querySelector(".especialidad").innerText;
-                    if (!especialidadesExam.includes(especialidad)) {
-                        citas[i].classList.add("d-none");
-                    }
-                }
-            }
-
-            function buscarCitas() {
-                botonExamenes.removeClass("botonTipoSeleccionado");
-                botonCitas.addClass("botonTipoSeleccionado");
-                const citas = $(".filaCita");
-                for (let i = 0; i < citas.length; i++) {
-                    citas[i].classList.remove("d-none");
-                }
-
-            }
-        </script>
-
         <!-- DATATABLES CDN -->
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
-        </script>
-
-        <!-- BOOTSTRAP DATATABLES-->
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
-        </script>
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
             $(document).ready(function () {
-                $("#tabla_citas").DataTable({
+                var tabla = $("#tabla_citas").DataTable({
                     dom: '<"toolbar">frtrip',
                     bInfo: false,
                     pageLength: 5,
@@ -316,6 +290,45 @@
                     }
                 });
             })
+
+            // Script para cancelar cita
+            $(".botonCancelarCita").click(function (){
+                let cita = $(this).attr("id");
+                let cancelarModal = $("#cancelarModal");
+                cancelarModal.find("a").attr("href", "/Paciente/cancelarCita?idCita="+cita);
+
+                $("#citaModal"+cita).modal("hide");
+                cancelarModal.modal("show");
+
+            })
+
+            // Script para botones filtro
+            const especialidadesExam = ["Cirugía cardiovascular", "Laboratorio", "Rayos X",
+                "Ecografía"];
+            const botonExamenes = $(".botonExamenes");
+            const botonCitas = $(".botonCitas");
+
+            function buscarExamenes() {
+                botonExamenes.addClass("botonTipoSeleccionado");
+                botonCitas.removeClass("botonTipoSeleccionado");
+                const citas = $(".filaCita");
+                for (let i = 0; i < citas.length; i++) {
+                    let especialidad = citas[i].querySelector(".especialidad").innerText;
+                    if (!especialidadesExam.includes(especialidad)) {
+                        citas[i].classList.add("d-none");
+                    }
+                }
+            }
+
+            function buscarCitas() {
+                botonExamenes.removeClass("botonTipoSeleccionado");
+                botonCitas.addClass("botonTipoSeleccionado");
+                const citas = $(".filaCita");
+                for (let i = 0; i < citas.length; i++) {
+                    citas[i].classList.remove("d-none");
+                }
+            }
+
         </script>
 
     </body>

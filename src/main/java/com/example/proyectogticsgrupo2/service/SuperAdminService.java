@@ -67,7 +67,6 @@ public class SuperAdminService {
         dto.setClinica(clinica_administrador);
         return dto;
     }
-/*
     public AdministrativoDTO_superadmin toAdministrativoDTO_superadmin(Administrativo administrativo) {
         AdministrativoDTO_superadmin dto = new AdministrativoDTO_superadmin();
         dto.setIdAdministrativo(administrativo.getIdAdministrativo());
@@ -77,74 +76,21 @@ public class SuperAdminService {
         dto.setCorreo(administrativo.getCorreo());
 
         // Obtiene la sede de este administrativo usando el repositorio necesario
-*/
-/*
         AdministrativoPorEspecialidadPorSede administrativoxsede = administrativoPorEspecialidadPorSedeRepository.buscarPorAdministrativoId(administrativo.getIdAdministrativo());
-*//*
-
-        for(int i = 1; i <= 4; i++) {
-            AdministrativoPorEspecialidadPorSede administrativoxsede = administrativoPorEspecialidadPorSedeRepository.buscarPorAdministrativoIdYSedeId(administrativo.getIdAdministrativo(), i);
-            // Asegúrate de que exista un método getSede() en la clase AdministrativoPorEspecialidadPorSede que devuelva un objeto Sede
-            String sede;
-            String especialidad;
-            String clinica;
-            if (administrativoxsede != null) {
-                // Asegúrate de que exista un método getSedeId() en la clase AdministrativoPorEspecialidadPorSede que devuelva un objeto Sede
-                sede = administrativoxsede.getSedeId().getNombre();
-                especialidad = administrativoxsede.getEspecialidadId().getNombre();
-                Clinica clinicaxid  = clinicaRepository.buscarClinicaPorID(administrativoxsede.getSedeId().getClinica().getIdClinica());
-                clinica = clinicaxid.getNombre();
-            } else {
-                sede = "Sin asignar"; // Valor predeterminado si no se encuentra la sede en la base de datos
-                especialidad = "Sin asignar";
-                clinica = "Sin asignar";
-            }
-            dto.setSedeNombre(sede);
-            dto.setEspecialidad(especialidad);
-            dto.setClinica(clinica);
-        }
-        return dto;
-    }
-*/
-
-    public AdministrativoDTO_superadmin toAdministrativoDTO_superadmin(Administrativo administrativo) {
-        AdministrativoDTO_superadmin dto = new AdministrativoDTO_superadmin();
-        dto.setIdAdministrativo(administrativo.getIdAdministrativo());
-        dto.setNombre(administrativo.getNombre());
-        dto.setApellidos(administrativo.getApellidos());
-        dto.setEstado(administrativo.getEstado());
-        dto.setCorreo(administrativo.getCorreo());
-
-        String sede = "";
-        String especialidad = "";
-        String clinica = "";
-
-        for(int i = 1; i <= 4; i++) {
-            AdministrativoPorEspecialidadPorSede administrativoxsede = administrativoPorEspecialidadPorSedeRepository.buscarPorAdministrativoIdYSedeId(administrativo.getIdAdministrativo(), i);
-            if (administrativoxsede != null) {
-                sede += administrativoxsede.getSedeId().getNombre() + ", ";
-                especialidad += administrativoxsede.getEspecialidadId().getNombre() + ", ";
-                Clinica clinicaxid  = clinicaRepository.buscarClinicaPorID(administrativoxsede.getSedeId().getClinica().getIdClinica());
-                clinica += clinicaxid.getNombre() + ", ";
-            }
-        }
-
-        if(sede.isEmpty()) {
-            sede = "Sin asignar";
+        // Asegúrate de que exista un método getSede() en la clase AdministrativoPorEspecialidadPorSede que devuelva un objeto Sede
+        String sede;
+        String especialidad;
+        String clinica;
+        if (administrativoxsede != null) {
+            // Asegúrate de que exista un método getSedeId() en la clase AdministrativoPorEspecialidadPorSede que devuelva un objeto Sede
+            sede = administrativoxsede.getSedeId().getNombre();
+            especialidad = administrativoxsede.getEspecialidadId().getNombre();
+            Clinica clinicaxid  = clinicaRepository.buscarClinicaPorID(administrativoxsede.getSedeId().getClinica().getIdClinica());
+            clinica = clinicaxid.getNombre();
         } else {
-            sede = sede.substring(0, sede.length() - 2);  // Elimina la última coma y el espacio
-        }
-
-        if(especialidad.isEmpty()) {
+            sede = "Sin asignar"; // Valor predeterminado si no se encuentra la sede en la base de datos
             especialidad = "Sin asignar";
-        } else {
-            especialidad = especialidad.substring(0, especialidad.length() - 2);  // Elimina la última coma y el espacio
-        }
-
-        if(clinica.isEmpty()) {
             clinica = "Sin asignar";
-        } else {
-            clinica = clinica.substring(0, clinica.length() - 2);  // Elimina la última coma y el espacio
         }
 
         dto.setSedeNombre(sede);

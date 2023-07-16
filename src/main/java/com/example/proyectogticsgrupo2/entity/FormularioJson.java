@@ -22,8 +22,6 @@ public class FormularioJson {
     @Column(nullable = false)
     private int sent;
 
-    @Column(nullable = false)
-    private String rutaController;
     // Los getters y setters para cada campo van aquí
     // ...
 }
