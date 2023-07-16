@@ -283,9 +283,11 @@ public class PacienteController {
 
         // Enviar correo al paciente - inhabilidado para que no demore tanto xd
 
+        /*
         CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
         String host = request.getServerName()+":"+request.getLocalPort();
         correo.props(host, paciente.getCorreo(), cita);
+         */
 
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
