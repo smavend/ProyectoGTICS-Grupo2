@@ -172,7 +172,7 @@ public class PacienteAPI {
         HashMap<String, Object> response = new HashMap<>();
 
         try {
-            LocalDate fecha = LocalDate.now().plusDays(2);
+            LocalDate fecha = LocalDate.now().plusDays(1);
 
             Doctor doctor = doctorRepository.findById(idDoctor).get();
             int duracionCita = doctor.getDuracion_cita_minutos();

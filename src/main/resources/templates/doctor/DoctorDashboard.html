@@ -128,16 +128,10 @@
                                                             </td>
 
 
-                                                            <td th:if="${cita.modalidad == 1 || cita.estado == 5}">
+                                                            <td th:if="${cita.modalidad == 1 && (cita.estado ==0 || cita.estado==1 || cita.estado==2 || cita.estado ==3) }">
                                                                 <div style="width: max-content">
                                                                     <a th:if="${cita.modalidad == 1}" th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
                                                                        type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Iniciar cita virtual">
-                                                                        <i style="color: #ffffff"
-                                                                           class="bi-play-fill"></i>
-                                                                    </a>
-
-                                                                    <a th:if="${cita.modalidad == 2}" th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
-                                                                       type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Subir examen">
                                                                         <i style="color: #ffffff"
                                                                            class="bi-play-fill"></i>
                                                                     </a>
@@ -149,16 +143,26 @@
                                                                 </div>
                                                             </td>
 
-                                                            <td th:unless="${cita.modalidad == 1 || cita.estado == 5}" style="font-size: 1rem;color: black">
+                                                            <td th:if="${cita.modalidad == 0 && (cita.estado ==0 || cita.estado==1 || cita.estado==2 || cita.estado ==3)}" style="font-size: 1rem;color: black">
                                                                 <h6 th:if="${cita.estado == 0}"
                                                                     th:text="'Pendiente de pago'"></h6>
                                                                 <h6 th:if="${cita.estado == 1 || cita.estado==2}"
                                                                     th:text="'En espera'"></h6>
                                                                 <h6 th:if="${cita.estado == 3}"
                                                                     th:text="'En consulta'"></h6>
-                                                                <h6 th:if="${cita.estado == 5}"
-                                                                    th:text="'Examen pendiente'"></h6>
                                                             </td>
+
+                                                            <td th:if="${cita.modalidad == 0 && (cita.estado ==5) }">
+                                                                <div style="width: max-content">
+                                                                    <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
+                                                                       type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Subir examen">
+                                                                        <i style="color: #ffffff"
+                                                                           class="bi-play-fill"></i>
+                                                                    </a>
+
+                                                                </div>
+                                                            </td>
+
 
                                                         </tr>
                                                     </tbody>

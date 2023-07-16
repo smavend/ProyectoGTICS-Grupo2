@@ -24,7 +24,7 @@
 
         <main id="main" class="main site-content">
 
-            <h1 class="encabezado text-center" style="width: 90%">Reservar cita</h1>
+            <h1 class="encabezado text-center">Reservar cita</h1>
 
             <div class="bodyReservar">
                 <div class="cardReservar py-4">
@@ -87,6 +87,7 @@
                                         <option value="">-- Seleccione un horario --</option>
                                     </select>
                                 </div>
+                                <div class="text-muted text-center mb-2" style="display: none" id="mensaje">Mensaje</div>
                             </div>
                         </div>
 
@@ -133,6 +134,8 @@
                 let selectHorario = $("#select_horario");
                 let doctor = [[${cita.doctor.id_doctor}]];
                 let fecha = $(this).val();
+                let fechaLimite = [[${fechaLimite}]];
+                let mensaje = $("#mensaje");
 
                 $.get(getUrl()+"/Paciente/api/horarios/consulta/"+doctor+"/"+fecha)
                     .done(function (data){
@@ -145,6 +148,20 @@
                     }).fail(function (e){
                         console.log("error");
                 });
+
+                let [year, month, day] = fechaLimite.split('-');
+                let fechaLimiteFormat = new Date(+year, +month - 1, +day);
+                [day, month, year] = fecha.split('-');
+                let fechaFormat = new Date(+year, +month - 1, +day);
+
+                if (fechaFormat < fechaLimiteFormat){
+                    mensaje.text("No se aplicará cobro por la cita");
+                    mensaje.slideDown();
+                }
+                else{
+                    mensaje.text("Se aplicará el cobro estándar por la cita");
+                    mensaje.slideDown();
+                }
             });
 
             function getUrl() {
