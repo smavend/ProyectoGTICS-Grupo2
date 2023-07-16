@@ -259,13 +259,13 @@ public class PacienteController {
 
         // VALIDAR LO QUE OCURRE EN CASO SE ESTE RECIBIENDO UNA CITA PENDIENTE
         Cita cita;
-        if (citaPendiente != null){
+        if (citaPendiente != null & examenPendiente == null){
 
             citaRepository.reservarCitaPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getId());
             pagoRepository.nuevoPagoPagado(citaTemporal.getId(), tipoPago, codigoRecibo);
             cita = citaRepository.findById(citaTemporal.getId()).get();
 
-        } else if (examenPendiente != null) {
+        } else if (examenPendiente != null & citaPendiente == null) {
 
             citaRepository.reservarExamenPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getId());
             pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago, codigoRecibo);
@@ -411,15 +411,14 @@ public class PacienteController {
     public String cancelarCita(@RequestParam("idCita") int idCita,
                                RedirectAttributes attr){
 
-        System.out.println("id cita: "+idCita);
         Optional<Cita> optionalCita = citaRepository.findById(idCita);
 
         if (optionalCita.isPresent()){
             Pago pago = pagoRepository.buscarPorCita(idCita);
 
             if (pago.getEstadoPago() == 0){
-                //pagoRepository.deleteById(pago.getId());
-                //citaRepository.deleteById(idCita);
+                pagoRepository.deleteById(pago.getId());
+                citaRepository.deleteById(idCita);
                 attr.addFlashAttribute("msg", "Cita cancelada correctamente");
             }
             else{
