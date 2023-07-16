@@ -231,7 +231,7 @@ public class PacienteController {
                             @RequestParam(name = "codigoRecibo") String codigoRecibo,
                             Model model, HttpSession session, Authentication authentication,
                             HttpServletRequest request) {
-        
+
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
