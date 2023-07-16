@@ -908,6 +908,7 @@ public class PacienteController {
 
     @PostMapping("/guardarPago")
     public String guardarPago(@RequestParam("idPago") int idPago, @RequestParam("confirmado") String confirmado,
+                              @RequestParam("idCita") int idCita,
                               Model model, RedirectAttributes attr, HttpSession session, Authentication authentication) {
 
         /*
@@ -943,6 +944,7 @@ public class PacienteController {
             session.setAttribute("paciente", paciente);
 
             pagoRepository.guardarPago(idPago);
+            citaRepository.actualizarEstadoEnEspera(idCita);
             List<Pago> pagoList = pagoRepository.findAll();
             model.addAttribute("pagoList", pagoList);
             model.addAttribute("activarModalPagado", true);

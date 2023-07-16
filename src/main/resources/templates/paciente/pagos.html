@@ -62,6 +62,7 @@
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
                                 <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
+                                <button class="botonPagar botonPagarModal" id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></button>
                             </td>
                             <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
                         </tr>
@@ -171,6 +172,7 @@
                         <div class="modal-body">
                             <form id="formPagar" method="post" th:action="@{/Paciente/guardarPago}">
                                 <input type="hidden" id="idPagoTarjeta" name="idPago"/>
+                                <input type="hidden" id="idCitaPagar" name="idCita"/>
                                 <div style="display:none;"><input type="text" class="form-control" name="confirmado" value="true"></div>
                                 <div class="row">
                                     <div class="justify-content-start">
@@ -280,6 +282,8 @@
         <script>
             var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
             $('#idPagoTarjeta').val(idPagoTarjeta);
+            var idCitaPagar = document.getElementById('idCita').dataset.valor;
+            $('#idCitaPagar').val(idCitaPagar);
             var codigoRecibo;
             $(document).ready(function () {
                 $('#tablax').DataTable({
@@ -335,9 +339,7 @@
         <script th:inline="javascript">
             const activarModal = /*[[${activarModal}]]*/ false;
             if (activarModal) {
-                $(document).ready(function () {
-                    $('#modal-pago').modal('show');
-                });
+                $('#modal-pago').modal('show');
             }
             var doctorPagar;
             var precioPagar;
