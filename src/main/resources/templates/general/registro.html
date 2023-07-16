@@ -78,7 +78,7 @@
                       <div class="col-md-12">
                         <label class="form-label">DNI<span style="color:red;">*</span></label>
                         <div class="input-group">
-                          <input type="number" id="dni" class="form-control" th:field="*{idPaciente}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}" aria-describedby="consulta">
+                          <input type="number" id="idPaciente" class="form-control" th:field="*{idPaciente}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}" aria-describedby="consulta">
                           <button class="btn btn-primary" type="button" id="consulta">Consulta</button>
                           <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}"
                                th:errors="*{idPaciente}"></div>
@@ -227,6 +227,7 @@
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -251,8 +252,8 @@
   <script>
     $(document).ready(function () {
       $("#consulta").click(function (){
-        let dni = $("#dni").val();
-        $("#dni").removeClass("is-invalid");
+        let dni = $("#idPaciente").val();
+        $("#idPaciente").removeClass("is-invalid");
         $("#errorDni").hide();
         $("#nombre").val("");
         $("#apellidos").val("");
@@ -265,9 +266,9 @@
             method: "GET",
             crossDomain: true,
             url: getUrl()+"/validarDni/"+dni
-          }).done(function (result){
-            console.log(result);
-            if (result.msg === "Éxito"){
+          }).done(function (resultado){
+            console.log(dni);
+            if (resultado.msg === "Éxito"){
               $.ajax({
                 method: "GET",
                 dataType: "json",
@@ -283,7 +284,7 @@
                   $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
                 } else {
                   console.log("error en encontrar dni");
-                  $("#dni").addClass("is-invalid");
+                  $("#idPaciente").addClass("is-invalid");
                   $("#errorDni").text("El DNI ingresado no es válido");
                   $("#errorDni").show();
                   $("#nombre").val("");
@@ -291,17 +292,17 @@
                 }
               })
             } else {
-              console.log("error en validacion", result.err);
-              $("#dni").addClass("is-invalid");
-              $("#errorDni").text(result.err);
+              console.log("error en validacion", resultado.err);
+              $("#idPaciente").addClass("is-invalid");
+              $("#errorDni").text(resultado.err);
               $("#errorDni").show();
             }
           })
         }
-      })
+      });
     })
     function getUrl(){
-      console.log(window.location.hostname);
+      console.log(window.location.protocol+"//"+window.location.hostname+":8080");
       return window.location.protocol+"//"+window.location.hostname+":8080";
     }
   </script>

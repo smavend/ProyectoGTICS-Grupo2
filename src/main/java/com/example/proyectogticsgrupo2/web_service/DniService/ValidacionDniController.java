@@ -20,7 +20,7 @@ public class ValidacionDniController {
         this.temporalRepository = temporalRepository;
     }
 
-    @GetMapping("/validarDni/{dni}")
+    @GetMapping({"/validarDni/{dni}","/signin/validarDni/{dni}"})
     public HashMap<String, Object> validacion(@PathVariable("dni") String dni){
         List<Paciente> pacientes = pacienteRepository.findAll();
         boolean existDni = false;
