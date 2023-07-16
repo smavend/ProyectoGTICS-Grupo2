@@ -62,6 +62,7 @@
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
                             <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
                                 <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
+                                <button class="botonPagar botonPagarModal" id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></button>
                             </td>
                             <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
                         </tr>
@@ -107,8 +108,8 @@
                                         </div>
                                         <input type="text" class="form-control" id="numeroTarjeta">
                                     </div>
-                                    <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
-                                    <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px">El número de tarjeta debe tener 16 dígitos</div>
+                                    <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
+                                    <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El número de tarjeta debe tener 16 dígitos</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -117,10 +118,10 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="MM-yyyy"
-                                                   name="fechaStr"
-                                                   th:value="${#dates.format(tarjetaPago.fecha, 'dd-MM-yyyy')}">
+                                            <input type="text" class="form-control" placeholder="MM-yyyy" id="fechaExpiracion">
                                         </div>
+                                        <div class="invalid-feedback" id="errorFechaExpiracion" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
+                                        <div class="invalid-feedback" id="errorFechaInvalida" style="display: none;margin-top: -7px; margin-bottom: 10px">Ingrese una fecha válida MM-yyyy</div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Código de seguridad</label>
@@ -130,8 +131,8 @@
                                             </div>
                                             <input type="text" class="form-control" id="codigoSegTarjeta">
                                         </div>
-                                        <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
-                                        <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px">El código de seguridad debe tener 3 dígitos</div>
+                                        <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
+                                        <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El código debe tener 3 dígitos</div>
                                     </div>
                                 </div>
                                 <div class="mb-4 w-75">
@@ -142,7 +143,8 @@
                                         </div>
                                         <input type="text" class="form-control" id="correoTarjeta">
                                     </div>
-                                    <div class="invalid-feedback" id="errorCorreoTarjeta" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
+                                    <div class="invalid-feedback" id="errorCorreoTarjeta" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
+                                    <div class="invalid-feedback" id="errorCorreoInvalido" style="display: none;margin-top: -7px; margin-bottom: 10px">Ingrese un correo válido</div>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary w-25"
@@ -170,6 +172,7 @@
                         <div class="modal-body">
                             <form id="formPagar" method="post" th:action="@{/Paciente/guardarPago}">
                                 <input type="hidden" id="idPagoTarjeta" name="idPago"/>
+                                <input type="hidden" id="idCitaPagar" name="idCita"/>
                                 <div style="display:none;"><input type="text" class="form-control" name="confirmado" value="true"></div>
                                 <div class="row">
                                     <div class="justify-content-start">
@@ -279,7 +282,9 @@
         <script>
             var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
             $('#idPagoTarjeta').val(idPagoTarjeta);
-
+            var idCitaPagar = document.getElementById('idCita').dataset.valor;
+            $('#idCitaPagar').val(idCitaPagar);
+            var codigoRecibo;
             $(document).ready(function () {
                 $('#tablax').DataTable({
                     language: {
@@ -334,9 +339,7 @@
         <script th:inline="javascript">
             const activarModal = /*[[${activarModal}]]*/ false;
             if (activarModal) {
-                $(document).ready(function () {
-                    $('#modal-pago').modal('show');
-                });
+                $('#modal-pago').modal('show');
             }
             var doctorPagar;
             var precioPagar;
@@ -360,49 +363,107 @@
                 event.preventDefault();
                 var titularTarjeta = $("#titularTarjeta").val();
                 numeroTarjeta = $("#numeroTarjeta").val();
+                var fechaTarjeta = $("#fechaExpiracion").val();
                 var codigoSegTarjeta = $("#codigoSegTarjeta").val();
                 correoTarjeta = $("#correoTarjeta").val();
-
-                var error = false; // Variable para verificar si se encontraron errores de validación
-
+                var errorTitular, errorNumero, errorFecha, errorCodigo, errorCorreo = false;
+                function showError(elementId) {
+                    $('#' + elementId).slideDown(500);
+                }
+                function hideError(elementId) {
+                    $('#' + elementId).slideUp(400);
+                }
                 if (titularTarjeta === "") {
-                    $("#errorTitularTarjeta").show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si el campo está vacío
+                    showError("errorTitularTarjeta");
+                    //document.getElementById("errorTitularTarjeta").style.display = "block";
+                    //$("#errorTitularTarjeta").show(500).delay(1000).hide(500);
+                    errorTitular = true;
+                }else {
+                    hideError("errorTitularTarjeta");
+                    //document.getElementById("errorTitularTarjeta").style.display = "none";
+                    errorTitular = false;
                 }
-
                 if (numeroTarjeta === "") {
-                    $("#nroTarjetaVacio").show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si el campo está vacío
-                } else if (numeroTarjeta.length !== 16) {
-                    $('#nroTarjetaDig').show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si la longitud no es 16
+                    showError("nroTarjetaVacio");
+                    //document.getElementById("nroTarjetaVacio").style.display = "block";
+                    //$("#nroTarjetaVacio").show(500).delay(1000).hide(500);
+                    errorNumero = true;
+                }else {
+                    hideError("nroTarjetaVacio");
+                    //document.getElementById("nroTarjetaVacio").style.display = "none";
+                    if (numeroTarjeta.length !== 19) {
+                        showError("nroTarjetaDig");
+                        //document.getElementById("nroTarjetaDig").style.display = "block";
+                        //$('#nroTarjetaDig').show(500).delay(1000).hide(500);
+                        errorNumero = true;
+                    }else {
+                        hideError("nroTarjetaDig");
+                        //document.getElementById("nroTarjetaDig").style.display = "none";
+                        errorNumero = false;
+                    }
                 }
-
+                if (fechaTarjeta.trim() === '') {
+                    showError("errorFechaExpiracion");
+                    //document.getElementById("errorFechaExpiracion").style.display = 'block';
+                    errorFecha = true;
+                } else {
+                    hideError("errorFechaExpiracion");
+                    //document.getElementById("errorFechaExpiracion").style.display = 'none';
+                    if(fechaValida==1){
+                        showError("errorFechaInvalida");
+                        //document.getElementById("errorFechaInvalida").style.display = "block";
+                        errorFecha = true;
+                    }else {
+                        hideError("errorFechaInvalida");
+                        //document.getElementById("errorFechaInvalida").style.display = "none";
+                        errorFecha = false;
+                    }
+                }
                 if (codigoSegTarjeta === "") {
-                    $("#codigoTarjetaVacio").show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si el campo está vacío
-                } else if (codigoSegTarjeta.length !== 3) {
-                    $('#codigoTarjetaDig').show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si la longitud no es 3
+                    showError("codigoTarjetaVacio");
+                    //document.getElementById("codigoTarjetaVacio").style.display = "block";
+                    //$("#codigoTarjetaVacio").show(500).delay(1000).hide(500);
+                    errorCodigo = true;
+                }else {
+                    hideError("codigoTarjetaVacio");
+                    //document.getElementById("codigoTarjetaVacio").style.display = "none";
+                    if (codigoSegTarjeta.length !== 3) {
+                        showError("codigoTarjetaDig");
+                        //document.getElementById("codigoTarjetaDig").style.display = "block";
+                        //$('#codigoTarjetaDig').show(500).delay(1000).hide(500);
+                        errorCodigo = true;
+                    }else {
+                        hideError("codigoTarjetaDig");
+                        //document.getElementById("codigoTarjetaDig").style.display = "none";
+                        errorCodigo = false;
+                    }
                 }
                 if (correoTarjeta === "") {
-                    $("#errorCorreoTarjeta").show(500).delay(1000).hide(500);
-                    error = true; // Se marca error como verdadero si el campo está vacío
+                    showError("errorCorreoTarjeta");
+                    //document.getElementById("errorCorreoTarjeta").style.display = "block";
+                    //$("#errorCorreoTarjeta").show(500).delay(1000).hide(500);
+                    errorCorreo = true;
+                }else {
+                    hideError("errorCorreoTarjeta");
+                    //document.getElementById("errorCorreoTarjeta").style.display = "none";
+                    if(correoValido==1){
+                        showError("errorCorreoInvalido");
+                        //document.getElementById("errorCorreoInvalido").style.display = 'block';
+                        errorCorreo =true;
+                    }else{
+                        hideError("errorCorreoTarjeta");
+                        //document.getElementById("errorCorreoInvalido").style.display = 'none';
+                        errorCorreo = false;
+                    }
                 }
-                if (!error) {
-                    // Si no se encontraron errores, se puede enviar el formulario
-                    //$("#formValidarPago")[0].submit();
-                    /*document.addEventListener("DOMContentLoaded", function (){
-                        var form = document.getElementById("formPagar");
-                        form.submit();
-                    });*/
+                if (!errorTitular && !errorNumero && !errorFecha && !errorCodigo && !errorCorreo) {
                     $("#modal-pago").modal("hide");
                     $("#modal-confirmar-pago").modal("show");
                     $('#doctorPagar').text(doctorPagar);
                     $('#precioPagar').text(precioPagar);
                     $('#fechaPagar').text(fechaCita);
                     $('#especialidadPagar').text(especialidadPagar);
-                    $('#nroTarjetaPagar').text(numeroTarjeta);
+                    $('#nroTarjetaPagar').text("Visa **** **** **** "+numeroTarjeta.slice(-4));
                     $('#correoTarjetaPagar').text(correoTarjeta);
                 }
             });
@@ -418,8 +479,65 @@
                     $('#modal-pago-realizado').modal('show');
                 });
             }
-
         </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const numeroTarjetaInput = document.getElementById("numeroTarjeta");
+                numeroTarjetaInput.addEventListener("input", function() {
+                    let numeroTarjeta = this.value.replace(/-/g, '');
+                    if (numeroTarjeta.length > 4) {
+                        numeroTarjeta = numeroTarjeta.match(/.{1,4}/g).join('-');
+                    }
+                    this.value = numeroTarjeta;
+                });
+            });
+        </script>
+
+        <script>
+            var fechaValida;
+            var correoValido;
+            document.addEventListener("DOMContentLoaded", function() {
+                const numeroTarjetaInput = document.getElementById("numeroTarjeta");
+                numeroTarjetaInput.addEventListener("input", function() {
+                    let numeroTarjeta = this.value.replace(/[^\d-]/g, '');
+                    this.value = numeroTarjeta.slice(0, 19);
+                });
+                const codigoSegTarjetaInput = document.getElementById("codigoSegTarjeta");
+                codigoSegTarjetaInput.addEventListener("input", function() {
+                    let codTarjeta = this.value.replace(/[^\d-]/g, '');
+                    this.value = codTarjeta.slice(0, 3);
+                });
+
+                const fechaExpiracionInput = document.getElementById("fechaExpiracion");
+                fechaExpiracionInput.addEventListener("input", function() {
+                    let fechaExpiracion = this.value.replace(/[^\d-]/g, '');
+                    this.value = fechaExpiracion.slice(0, 7);
+                });
+                fechaExpiracionInput.addEventListener("blur", function() {
+                    const fechaExpiracion = this.value;
+                    const regex = /^(0[1-9]|1[0-2])-(20[2-9]\d)$/;
+                    if (!regex.test(fechaExpiracion)) {
+                        fechaValida = 1;
+                    } else {
+                        fechaValida = 0;
+                    }
+                });
+                const correoTarjetaInput = document.getElementById("correoTarjeta");
+
+                correoTarjetaInput.addEventListener("blur", function() {
+                    const correoTarjeta = this.value;
+                    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!regex.test(correoTarjeta)) {
+                        correoValido = 1;
+                    } else {
+                        correoValido = 0;
+                    }
+                });
+            });
+        </script>
+
+
 
         <!-- Script para botones filtro -->
         <script>
