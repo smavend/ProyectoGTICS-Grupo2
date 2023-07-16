@@ -132,8 +132,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer w-100">
-                                <a th:id="${cita.id_cita}" class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
-                                <strong th:text="${cita.estado == 1?'Pago realizado':'Proceda a realizar el pago respectivo en caja'}">Proceda a realizar el pago respectivo en caja</strong>
+                                <a th:id="${cita.id_cita}" th:if="${cita.estado == 0}" class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
+                                <strong th:classappend="${cita.estado == 1? 'm-auto':''}" th:text="${cita.estado == 1?'Pago realizado':'Proceda a realizar el pago respectivo en caja'}">Proceda a realizar el pago respectivo en caja</strong>
                             </div>
                         </div>
                     </div>
@@ -193,20 +193,20 @@
                                     </div>
                                     <div class="col-6">
                                         <p>Doctor:<span class="informacionModalDato"
-                                                        th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
+                                                        th:text="${cita.doctor.nombreYApellido}">José Perez Miranda</span>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer w-100">
-                                <a th:id="${cita.id_cita}" class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
-                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link != null}"
+                                <a th:id="${cita.id_cita}" th:if="${cita.estado == 0}" class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
+                                <a th:classappend="${cita.estado == 1? 'm-auto':''}" th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link != null}"
                                    class="btn botonAceptar" th:href="@{'/Paciente/sesionVirtual?c='+${cita.id_cita}}">Acceder
                                     a sesión virtual</a>
-                                <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}"
+                                <a th:classappend="${cita.estado == 1? 'm-auto':''}" th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}"
                                    style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha sido
                                     creada</a>
-                                <a th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}"
+                                <a th:classappend="${cita.estado == 1? 'm-auto':''}" th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}"
                                    style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a la
                                     cita</a>
                             </div>

@@ -415,10 +415,15 @@ public class PacienteController {
 
         if (optionalCita.isPresent()){
             Pago pago = pagoRepository.buscarPorCita(idCita);
-            pagoRepository.deleteById(pago.getId());
-            citaRepository.deleteById(idCita);
 
-            attr.addFlashAttribute("msg", "Cita cancelada correctamente");
+            if (pago.getEstadoPago() == 0){
+                //pagoRepository.deleteById(pago.getId());
+                //citaRepository.deleteById(idCita);
+                attr.addFlashAttribute("msg", "Cita cancelada correctamente");
+            }
+            else{
+                attr.addFlashAttribute("msg", "Cancelación de cita inválida");
+            }
 
         }
         else {
