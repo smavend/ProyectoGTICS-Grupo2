@@ -4,6 +4,7 @@ import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoCitaRegistrada;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -281,11 +282,11 @@ public class PacienteController {
         }
 
         // Enviar correo al paciente - inhabilidado para que no demore tanto xd
-        /*
+
         CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
         String host = request.getServerName()+":"+request.getLocalPort();
         correo.props(host, paciente.getCorreo(), cita);
-         */
+
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
         model.addAttribute("especialidad", especialidad);
