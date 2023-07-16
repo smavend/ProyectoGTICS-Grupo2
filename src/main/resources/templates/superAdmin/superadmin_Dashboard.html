@@ -226,9 +226,7 @@
                                     <th scope="col">Correo</th>
                                     <th scope="col">Dirección</th>
                                     <th scope="col">Distrito</th>
-                                    <th scope="col">Se atiende en</th>
                                     <th scope="col">Sede</th>
-                                    <th scope="col">Administrador a Cargo</th>
                                     <th scope="col">Accion</th>
                                 </tr>
                                 </thead>
@@ -249,9 +247,7 @@
                                     <td th:text="${paciente.correo}"></td>
                                     <td th:text="${paciente.direccion}"></td>
                                     <td th:text="${paciente.distrito}"></td>
-                                    <td th:text="${paciente.clinica}"></td>
                                     <td th:text="${paciente.sede}"></td>
-                                    <td th:text="${paciente.administrador_in_Charge}"></td>
                                     <td>
                                         <div th:if="${paciente.showLoguearButton}">
                                             <form th:action="@{/SuperAdminHomePage/switchPaciente/{id}(id=${paciente.getIdPaciente()})}" method="POST">
