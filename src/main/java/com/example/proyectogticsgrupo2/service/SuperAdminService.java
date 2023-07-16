@@ -67,7 +67,7 @@ public class SuperAdminService {
         dto.setClinica(clinica_administrador);
         return dto;
     }
-    public AdministrativoDTO_superadmin toAdministrativoDTO_superadmin(Administrativo administrativo) {
+  /*  public AdministrativoDTO_superadmin toAdministrativoDTO_superadmin(Administrativo administrativo) {
         AdministrativoDTO_superadmin dto = new AdministrativoDTO_superadmin();
         dto.setIdAdministrativo(administrativo.getIdAdministrativo());
         dto.setNombre(administrativo.getNombre());
@@ -76,7 +76,7 @@ public class SuperAdminService {
         dto.setCorreo(administrativo.getCorreo());
 
         // Obtiene la sede de este administrativo usando el repositorio necesario
-        AdministrativoPorEspecialidadPorSede administrativoxsede = administrativoPorEspecialidadPorSedeRepository.buscarPorAdministrativoId(administrativo.getIdAdministrativo());
+        AdministrativoPorEspecialidadPorSede administrativoxsede = administrativoPorEspecialidadPorSedeRepository.buscarXAdministrativoId(administrativo.getIdAdministrativo());
         // Asegúrate de que exista un método getSede() en la clase AdministrativoPorEspecialidadPorSede que devuelva un objeto Sede
         String sede;
         String especialidad;
@@ -98,7 +98,40 @@ public class SuperAdminService {
         dto.setClinica(clinica);
 
         return dto;
-    }
+    }*/
+  public AdministrativoDTO_superadmin toAdministrativoDTO_superadmin(Administrativo administrativo) {
+      AdministrativoDTO_superadmin dto = new AdministrativoDTO_superadmin();
+      dto.setIdAdministrativo(administrativo.getIdAdministrativo());
+      dto.setNombre(administrativo.getNombre());
+      dto.setApellidos(administrativo.getApellidos());
+      dto.setEstado(administrativo.getEstado());
+      dto.setCorreo(administrativo.getCorreo());
+
+      List<AdministrativoPorEspecialidadPorSede> administrativoxsedes = administrativoPorEspecialidadPorSedeRepository.buscarXAdministrativoId(administrativo.getIdAdministrativo());
+
+      List<String> nombresSedes = new ArrayList<>();
+      List<String> nombresEspecialidades = new ArrayList<>();
+      String nombreClinica = "Sin asignar";
+
+      for (AdministrativoPorEspecialidadPorSede administrativoxsede : administrativoxsedes) {
+          nombresSedes.add(administrativoxsede.getSedeId().getNombre());
+          nombresEspecialidades.add(administrativoxsede.getEspecialidadId().getNombre());
+          if (nombreClinica.equals("Sin asignar")) { // Only assign the clinic name once
+              nombreClinica = clinicaRepository.buscarClinicaPorID(administrativoxsede.getSedeId().getClinica().getIdClinica()).getNombre();
+          }
+      }
+
+      String sedes = String.join(", ", nombresSedes);
+      String especialidades = String.join(", ", nombresEspecialidades);
+
+      dto.setSedeNombre(sedes.isEmpty() ? "Sin asignar" : sedes);
+      dto.setEspecialidad(especialidades.isEmpty() ? "Sin asignar" : especialidades);
+      dto.setClinica(nombreClinica);
+
+      return dto;
+  }
+
+
     public DoctorDTO_superadmin toDoctoDTO_superadmin(Doctor doctor) {
         DoctorDTO_superadmin dto = new DoctorDTO_superadmin();
         dto.setIdDoctor(doctor.getId_doctor());
