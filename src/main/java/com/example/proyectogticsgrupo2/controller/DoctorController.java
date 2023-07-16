@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -577,7 +578,7 @@ public class DoctorController {
             model.addAttribute("cita", cita);
             model.addAttribute("alergias", alergias);
 
-            citaRepository.actualizarEstadoEnConsulta(3, cita.getId_cita());
+            citaRepository.actualizarEstadoEnConsulta(cita.getId_cita());
 
             return "doctor/DoctorCita";
         }
@@ -637,7 +638,7 @@ public class DoctorController {
     }
 
     @PostMapping("/guardarReporte")
-    public String guardarReporte(@ModelAttribute("cita")@Valid Cita cita, BindingResult bindingResult, @RequestParam("especialidadExamenPendiente") int idEspecExamenPendiente,
+    public String guardarReporte(@Validated(Cita.validacion.class) @ModelAttribute("cita") Cita cita, BindingResult bindingResult, @RequestParam("especialidadExamenPendiente") int idEspecExamenPendiente,
                                  HttpSession session, Authentication authentication, Model model) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
         String userEmail;
