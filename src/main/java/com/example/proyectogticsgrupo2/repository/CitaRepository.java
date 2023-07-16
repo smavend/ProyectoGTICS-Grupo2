@@ -60,6 +60,11 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `estado` =?1 WHERE (`id_cita` = ?2)")
     void actualizarEstadoEnConsulta(int estado,int idCita);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `estado` ='1' WHERE (`id_cita` = ?1)")
+    void actualizarEstadoEnEspera(int idCita);
+
     @Query(nativeQuery = true, value = "select c.* from cita c \n" +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) \n" +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
@@ -164,5 +169,5 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     List<Cita> obtenerCitasPorDoctorId(String idDoctor);
 
     @Query(nativeQuery = true, value = "select * from cita c where c.id_cita = ?1")
-    Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes
+    Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes xd
 }
