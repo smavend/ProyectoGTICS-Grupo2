@@ -344,8 +344,17 @@
 
         saveButton.addEventListener('click', function (e) {
             e.preventDefault(); // previene el comportamiento por defecto del botón
-            convertFormStructureToJSON(); // Convierte la estructura del formulario a JSON y guarda en los campos ocultos
-            form.submit(); // envía el formulario
+            // Realizamos la validación del formulario
+            if (!form.checkValidity()) {
+                // El formulario no es válido, informamos al usuario en el campo no válido
+                form.reportValidity();
+            } else {
+                // Si el formulario es válido, convertimos la estructura del formulario a JSON y guardamos en los campos ocultos
+                convertFormStructureToJSON();
+
+                // Enviamos el formulario
+                form.submit();
+            }
         });
     }
 
