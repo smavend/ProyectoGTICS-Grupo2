@@ -46,4 +46,8 @@ public interface PagoRepository extends JpaRepository<Pago, Integer> {
             "where c.paciente_id_paciente = ?1 " +
             "order by c.inicio DESC")
     List<Pago> buscarPorPaciente(String idPaciente);
+
+    @Query(nativeQuery = true, value = "SELECT * from PAGO WHERE cita_id_cita = ?1")
+    Pago buscarPorCita(int idCita);
+
 }

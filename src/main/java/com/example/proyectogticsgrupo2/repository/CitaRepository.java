@@ -164,5 +164,5 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     List<Cita> obtenerCitasPorDoctorId(String idDoctor);
 
     @Query(nativeQuery = true, value = "select * from cita c where c.id_cita = ?1")
-    Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes
+    Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes xd
 }

@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Citas</title>
+        <title>Paciente - Citas</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
@@ -25,6 +25,7 @@
         <main id="main" class="main site-content">
 
             <h1 class="encabezado">Citas agendadas</h1>
+            <div class="alert alert-primary mt-3" th:if="${msg != null}" th:text="${msg}"></div>
             <section class="seccionPrincipal">
 
                 <a class="btn botonTipo botonTipoSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
@@ -67,7 +68,7 @@
 
                 <!-- Modal Presencial-->
                 <div th:each="cita, i : ${proximasCitas}" th:if="${cita.modalidad == 0}"
-                     th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" id="citaPresencialModal" tabindex="-1"
+                     th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" tabindex="-1"
                      aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -130,7 +131,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer mx-auto">
+                            <div class="modal-footer w-100">
+                                <a th:id="${cita.id_cita}" class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
                                 <strong th:text="${cita.estado == 1?'Pago realizado':'Proceda a realizar el pago respectivo en caja'}">Proceda a realizar el pago respectivo en caja</strong>
                             </div>
                         </div>
@@ -139,7 +141,7 @@
 
                 <!-- Modal Virtual -->
                 <div th:each="cita : ${proximasCitas}" th:if="${cita.modalidad == 1}"
-                     th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" id="citaVirtualModal" tabindex="-1"
+                     th:attr="id='citaModal'+${cita.id_cita}" class="modal fade" tabindex="-1"
                      aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -196,7 +198,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer mx-auto">
+                            <div class="modal-footer w-100">
+                                <a th:id="${cita.id_cita}" class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
                                 <a th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link != null}"
                                    class="btn botonAceptar" th:href="@{'/Paciente/sesionVirtual?c='+${cita.id_cita}}">Acceder
                                     a sesión virtual</a>
@@ -206,6 +209,24 @@
                                 <a th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}"
                                    style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a la
                                     cita</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal cancelar cita -->
+                <div class="modal fade" id="cancelarModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
+                            </div>
+                            <div class="modal-body text-center">
+                                <span class="textoModal">¿Está seguro que desea cancelar su cita?</span>
+                            </div>
+                            <div class="modal-footer mx-auto">
+                                <a id="confirmar" class="btn botonCancelar">Cancelar cita</a>
                             </div>
                         </div>
                     </div>
@@ -269,7 +290,18 @@
                 });
             })
 
-            // JS para botones filtro
+            // Script para cancelar cita
+            $(".botonCancelarCita").click(function (){
+                let cita = $(this).attr("id");
+                let cancelarModal = $("#cancelarModal");
+                cancelarModal.find("a").attr("href", "/Paciente/cancelarCita?idCita="+cita);
+
+                $("#citaModal"+cita).modal("hide");
+                cancelarModal.modal("show");
+
+            })
+
+            // Script para botones filtro
             const especialidadesExam = ["Cirugía cardiovascular", "Laboratorio", "Rayos X",
                 "Ecografía"];
             const botonExamenes = $(".botonExamenes");

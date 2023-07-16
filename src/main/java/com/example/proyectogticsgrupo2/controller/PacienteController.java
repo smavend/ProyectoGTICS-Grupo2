@@ -406,12 +406,31 @@ public class PacienteController {
 
     }
 
+    @GetMapping("/cancelarCita")
+    public String cancelarCita(@RequestParam("idCita") int idCita,
+                               RedirectAttributes attr){
+
+        System.out.println("id cita: "+idCita);
+        Optional<Cita> optionalCita = citaRepository.findById(idCita);
+
+        if (optionalCita.isPresent()){
+            Pago pago = pagoRepository.buscarPorCita(idCita);
+            pagoRepository.deleteById(pago.getId());
+            citaRepository.deleteById(idCita);
+
+            attr.addFlashAttribute("msg", "Cita cancelada correctamente");
+
+        }
+        else {
+            attr.addFlashAttribute("msg", "Ocurrió un error al cancelar la cita");
+        }
+
+        return "redirect:/Paciente/citas";
+    }
+
     /* SECCIÓN PERFIL */
     @GetMapping("/perfil")
     public String perfil(Model model, HttpSession session, Authentication authentication) {
-
-        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);*/
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
