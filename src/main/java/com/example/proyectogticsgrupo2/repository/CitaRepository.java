@@ -23,7 +23,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "  AND c.estado <> 4 \n" +
             "  AND c.sede_id_sede = d.sede_id_sede \n" +
             "  AND c.fin > CURRENT_TIME()\n"+
-            "ORDER BY c.id_cita ASC\n",
+            "ORDER BY c.inicio ASC\n",
             nativeQuery = true)
         //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorProxCitas(String id);

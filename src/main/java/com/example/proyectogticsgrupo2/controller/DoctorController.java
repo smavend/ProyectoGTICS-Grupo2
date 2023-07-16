@@ -287,13 +287,17 @@ public class DoctorController {
 
         Optional<ListaRecibosDTO> optionalListaRecibosDTO = citaRepository.buscarRecibosPorIdCitaIdDoctor(id_doctor, id_cita);
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id_doctor);
-        System.out.println(optionalListaRecibosDTO.get().getId_doctor()+" "+optionalDoctor.get().getId_doctor());
 
         if (optionalDoctor.isPresent() & optionalListaRecibosDTO.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             ListaRecibosDTO listaRecibosDTO = optionalListaRecibosDTO.get();
+            Pago pago=pagoRepository.buscarPorCita(id_cita);
+            Optional<Cita> cita=citaRepository.findById(id_cita);
+
             model.addAttribute("doctor", doctor);
             model.addAttribute("cita", listaRecibosDTO);
+            model.addAttribute("cita2", cita.get());
+            model.addAttribute("pago", pago);
 
             return "doctor/DoctorVerRecibo";
         } else {
