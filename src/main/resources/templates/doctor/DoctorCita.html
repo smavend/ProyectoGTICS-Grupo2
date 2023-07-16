@@ -100,7 +100,8 @@
                             <div class="mb-3">
                                     <textarea oninput="autoResizeTextarea(this)"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                              type="text" th:field="*{diagnostico}"
+                                              type="text" name="diagnostico"
+                                              th:value="${cita.diagnostico != null? cita.diagnostico: ''}"
                                               th:classappend="${#fields.hasErrors('diagnostico')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
@@ -111,7 +112,8 @@
                             <div class="mb-3">
                                     <textarea oninput="autoResizeTextarea(this)"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                              type="text"  th:field="*{tratamiento}"
+                                              type="text" name="tratamiento"
+                                              th:value="${cita.tratamiento != null? cita.tratamiento: ''}"
                                               th:classappend="${#fields.hasErrors('tratamiento')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
@@ -122,7 +124,8 @@
                             <div class="mb-3">
                                     <textarea oninput="autoResizeTextarea(this)"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
-                                              type="text"  th:field="*{receta}"
+                                              type="text" name="receta"
+                                              th:value="${cita.receta != null? cita.receta: ''}"
                                               th:classappend="${#fields.hasErrors('receta')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
@@ -152,7 +155,7 @@
                                     <iframe
                                             th:if="${cita.link != null}"
                                             th:src="${cita.link}"
-                                            style="width: 600px; height: 350px;"
+                                            style="width: 600px; height: 350px; border-radius: 10px"
                                             allow="camera; microphone; fullscreen; speaker; display-capture; autoplay">
                                     </iframe>
 

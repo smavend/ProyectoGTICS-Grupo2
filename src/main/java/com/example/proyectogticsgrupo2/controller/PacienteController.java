@@ -228,6 +228,7 @@ public class PacienteController {
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                             @RequestParam(name = "citaPendiente", required = false) Boolean citaPendiente,
                             @RequestParam(name = "examenPendiente", required = false) Boolean examenPendiente,
+                            @RequestParam(name = "codigoRecibo") String codigoRecibo,
                             Model model, HttpSession session, Authentication authentication,
                             HttpServletRequest request) {
 
@@ -258,23 +259,23 @@ public class PacienteController {
 
         // VALIDAR LO QUE OCURRE EN CASO SE ESTE RECIBIENDO UNA CITA PENDIENTE
         Cita cita;
-        if (citaPendiente != null){
+        if (citaPendiente != null & examenPendiente == null){
 
             citaRepository.reservarCitaPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getId());
-            pagoRepository.nuevoPagoPagado(citaTemporal.getId(), tipoPago);
+            pagoRepository.nuevoPagoPagado(citaTemporal.getId(), tipoPago, codigoRecibo);
             cita = citaRepository.findById(citaTemporal.getId()).get();
 
-        } else if (examenPendiente != null) {
+        } else if (examenPendiente != null & citaPendiente == null) {
 
             citaRepository.reservarExamenPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getId());
-            pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago);
+            pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago, codigoRecibo);
             cita = citaRepository.findById(citaTemporal.getId()).get();
 
         } else {
 
             citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
             int idCita = citaRepository.obtenerUltimoId();
-            pagoRepository.nuevoPago(idCita, tipoPago);
+            pagoRepository.nuevoPago(idCita, tipoPago, codigoRecibo);
             cita = citaRepository.findById(idCita).get();
 
         }
@@ -406,12 +407,35 @@ public class PacienteController {
 
     }
 
+    @GetMapping("/cancelarCita")
+    public String cancelarCita(@RequestParam("idCita") int idCita,
+                               RedirectAttributes attr){
+
+        Optional<Cita> optionalCita = citaRepository.findById(idCita);
+
+        if (optionalCita.isPresent()){
+            Pago pago = pagoRepository.buscarPorCita(idCita);
+
+            if (pago.getEstadoPago() == 0){
+                pagoRepository.deleteById(pago.getId());
+                citaRepository.deleteById(idCita);
+                attr.addFlashAttribute("msg", "Cita cancelada correctamente");
+            }
+            else{
+                attr.addFlashAttribute("msg", "Cancelación de cita inválida");
+            }
+
+        }
+        else {
+            attr.addFlashAttribute("msg", "Ocurrió un error al cancelar la cita");
+        }
+
+        return "redirect:/Paciente/citas";
+    }
+
     /* SECCIÓN PERFIL */
     @GetMapping("/perfil")
     public String perfil(Model model, HttpSession session, Authentication authentication) {
-
-        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);*/
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -907,6 +931,7 @@ public class PacienteController {
 
     @PostMapping("/guardarPago")
     public String guardarPago(@RequestParam("idPago") int idPago, @RequestParam("confirmado") String confirmado,
+                              @RequestParam("idCita") int idCita,
                               Model model, RedirectAttributes attr, HttpSession session, Authentication authentication) {
 
         /*
@@ -942,6 +967,7 @@ public class PacienteController {
             session.setAttribute("paciente", paciente);
 
             pagoRepository.guardarPago(idPago);
+            citaRepository.actualizarEstadoEnEspera(idCita);
             List<Pago> pagoList = pagoRepository.findAll();
             model.addAttribute("pagoList", pagoList);
             model.addAttribute("activarModalPagado", true);
@@ -951,12 +977,11 @@ public class PacienteController {
     }
 
     @GetMapping("/recibo")
-    public String verReciboPago(@RequestParam("idPago") int idPago, Model model, HttpSession session, Authentication authentication) {
+    public String verReciboPago(@RequestParam("idPago") int idPago,Model model, HttpSession session, Authentication authentication) {
 
 /*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
-
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -967,6 +992,7 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
+
         Optional<Pago> optionalPago = pagoRepository.findById(idPago);
         if (optionalPago.isPresent()) {
             Pago pago = optionalPago.get();
