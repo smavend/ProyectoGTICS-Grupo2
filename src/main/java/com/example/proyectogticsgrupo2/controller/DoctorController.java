@@ -471,7 +471,7 @@ public class DoctorController {
         //si sale error de verificar pago, añadir a la base de la fila pago de esa cita, ya que siempre estaran presentes
         //las filas de pago de cada cita
 
-        if (optionalPaciente.isPresent() & optionalCita.isPresent() && (optionalCita.get().getModalidad() == 1 || optionalCita.get().getModalidad() == 2) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.get().getEstadoPago()==1 ) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && (optionalCita.get().getModalidad() == 1 || (optionalCita.get().getModalidad() == 0 && optionalCita.get().getEstado()==5)) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.get().getEstadoPago()==1 ) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
