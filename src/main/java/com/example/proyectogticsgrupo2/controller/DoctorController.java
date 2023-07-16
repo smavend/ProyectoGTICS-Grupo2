@@ -471,7 +471,7 @@ public class DoctorController {
         //si sale error de verificar pago, añadir a la base de la fila pago de esa cita, ya que siempre estaran presentes
         //las filas de pago de cada cita
 
-        if (optionalPaciente.isPresent() & optionalCita.isPresent() && (optionalCita.get().getModalidad() == 1 || (optionalCita.get().getModalidad() == 0 && optionalCita.get().getEstado()==5)) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.get().getEstadoPago()==1 ) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && ((optionalCita.get().getModalidad() == 1 && (optionalCita.get().getEstado()==1 || optionalCita.get().getEstado()==2 || optionalCita.get().getEstado()==3) ) || (optionalCita.get().getModalidad() == 0 && optionalCita.get().getEstado()==5)) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.get().getEstadoPago()==1 ) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
@@ -577,7 +577,7 @@ public class DoctorController {
             model.addAttribute("cita", cita);
             model.addAttribute("alergias", alergias);
 
-            //citaRepository.actualizarEstadoEnConsulta(3, cita.getId_cita());
+            citaRepository.actualizarEstadoEnConsulta(3, cita.getId_cita());
 
             return "doctor/DoctorCita";
         }
@@ -690,6 +690,8 @@ public class DoctorController {
                     Especialidad esp = especialidadRepository.findById(idEspecExamenPendiente).get();
                     cita_examen.setEspecialidad(esp);
                     citaRepository.save(cita_examen);
+
+                    //pagoRepository.nuevoPagoDeSoloExamen(citaRepository.obtenerUltimoId());
 
             }
 
