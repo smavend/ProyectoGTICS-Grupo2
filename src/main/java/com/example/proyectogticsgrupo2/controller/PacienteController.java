@@ -966,9 +966,14 @@ public class PacienteController {
 
             Paciente paciente = pacienteRepository.findByCorreo(userEmail);
             session.setAttribute("paciente", paciente);
-
             pagoRepository.guardarPago(idPago);
-            citaRepository.actualizarEstadoEnEspera(idCita);
+
+            Integer idCitaPrevia = citaRepository.buscarIdCitaPrevia(idCita);
+            if(idCitaPrevia==null){
+                citaRepository.actualizarEstadoEnEspera(1,idCita);
+            }else{
+                citaRepository.actualizarEstadoEnEspera(5, idCita);
+            }
             List<Pago> pagoList = pagoRepository.findAll();
             model.addAttribute("pagoList", pagoList);
             model.addAttribute("activarModalPagado", true);
