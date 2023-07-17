@@ -52,7 +52,7 @@
                             th:attr="data-id-especialidad=${pago.cita.doctor.especialidad.idEspecialidad}">
                             <td id="especialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.nombre}" th:text="${pago.cita.doctor.especialidad.nombre}"></td>
                             <td id="doctor" th:attr="data-valor=${pago.cita.doctor.getNombreYApellido()}" th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
-                            <td id="fechaCita" th:attr="data-valor=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}" th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
+                            <td id="fechaCita" th:attr="data-valor=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}" th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy  /  HH:mm')}+' Hrs.'"></td>
                             <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'Por cancelar'}"></td>
                             <td id="precio" th:class="precio-calculado"></td>
                             <td th:text="${pago.cita.modalidad == 0? 'Presencial':'Virtual'}"></td>
@@ -298,7 +298,7 @@
                                     Pago inválido
                                 </div>
                                 <div class="cardCuerpo">
-                                    <div class="cardTexto">Se debió pagar como máximo 1 hora antes de su cita programada</div>
+                                    <div class="cardTexto">Se debió pagar como máximo 1 hora antes del inicio de su cita programada</div>
                                     <a class="btn botonVolverInicio" onclick="$('#modal-pago-invalido').modal('hide')">Volver</a>
                                 </div>
                             </div>
@@ -435,12 +435,27 @@
             if (activarModal) {
                 $('#modal-pago').modal('show');
             }
+
+            var doctorPagar;
+            var precioPagar;
+            var fechaCita;
+            var especialidadPagar;
+            var numeroTarjeta;
+            var correoTarjeta;
             function mostrarTipoDePago(){
                 var idPagoValue = $(event.target).data('valor');
                 var inicioCitaStr = $(event.target).data('valor-inicio');
                 var fechaHoraActual = new Date();
                 var inicioCita = new Date(inicioCitaStr.slice(6, 10) + "-" + inicioCitaStr.slice(3, 5) + "-" + inicioCitaStr.slice(0, 2) + " " + inicioCitaStr.slice(11));
                 var diferenciaMinutos = (inicioCita.getTime() - fechaHoraActual.getTime()) / 60000;
+
+                var botonPagar = $(event.target);
+
+                var fila = botonPagar.closest('tr');
+                precioPagar = fila.find('#precio').text();
+                doctorPagar = fila.find('#doctor').text();
+                fechaCita = fila.find('#fechaCita').text();
+                especialidadPagar = fila.find('#especialidad').text();
 
                 if(diferenciaMinutos>60){
                     $('#modal-link').attr('href', '/Paciente/recibo?idPago=' + idPagoValue);
@@ -450,21 +465,9 @@
                 }
 
             }
-            var doctorPagar;
-            var precioPagar;
-            var fechaCita;
-            var especialidadPagar;
-            var numeroTarjeta;
-            var correoTarjeta;
+
             function mostrarModalPago(){
                 $('.modal')
-                var botonPagar = $(event.target);
-                var fila = botonPagar.closest('tr');
-                precioPagar = fila.find('#precio').text();
-                doctorPagar = fila.find('#doctor').text();
-                fechaCita = fila.find('#fechaCita').text();
-                especialidadPagar = fila.find('#especialidad').text();
-
                 $('#modal-tipo-pago').modal('hide');
                 $('#modal-pago').modal('show');
             }
