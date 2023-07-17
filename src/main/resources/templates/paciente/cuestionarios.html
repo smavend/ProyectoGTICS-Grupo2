@@ -88,9 +88,9 @@
         <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js">
         </script>
 
-        <!-- Funciones -->
-        <script th:src="@{/assets/js/paciente_Funciones.js}"></script>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
+        <!-- Datatables -->
         <script>
             $(document).ready(function () {
                 $("#tabla_cuestionarios").DataTable({

@@ -253,13 +253,13 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- Funciones -->
-        <script th:src="@{/assets/js/paciente_Funciones.js}"></script>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
         <!-- DATATABLES CDN -->
         <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
+        <!-- Datatables -->
         <script>
             $(document).ready(function () {
                 var tabla = $("#tabla_citas").DataTable({

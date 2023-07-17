@@ -23,7 +23,7 @@
 
         <main id="main" class="main site-content py-1 px-3">
             <div id="cometchat" style="width: 100%; height: 628px">
-                Chat
+
             </div>
         </main><!-- End #main -->
 
@@ -35,12 +35,11 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- Funciones -->
-        <script th:src="@{/assets/js/paciente_Funciones.js}"></script>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
         <!-- Script para iniciar chat -->
         <script>
-            /*
+
             window.addEventListener("DOMContentLoaded", function (){
                 CometChatWidget.init({
                     "appID": `${config.CometChatAppId}`,
@@ -49,7 +48,17 @@
                 }).then(response => {
                     CometChatWidget.CometChat.getLoggedinUser().then(
                         user => {
-
+                            if (user && user.uid) {
+                                CometChatWidget.launch({
+                                    "widgetID": `${config.CometChatWidgetId}`,
+                                    "target": "#cometchat",
+                                    "roundedCorners": "true",
+                                    "height": "100%",
+                                    "width": "100%",
+                                    "defaultID": `${user.uid}`, //default UID (user) or GUID (group) to show,
+                                    "defaultType": 'user' //user or group
+                                });
+                            }
                         },error => {
 
                         }
@@ -57,7 +66,6 @@
                 });
             })
 
-             */
         </script>
 
     </body>

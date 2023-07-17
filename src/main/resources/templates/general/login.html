@@ -60,7 +60,7 @@
                         class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column align-items-center justify-content-center">
 
                                 <div class="d-flex justify-content-center py-4">
                                     <a th:href="@{/}" class="logo d-flex align-items-center w-auto">
@@ -82,7 +82,7 @@
                                         </div>
 
                                         <form class="row g-3 needs-validation" method="post"
-                                              th:action="@{/login/credenciales}" novalidate>
+                                              th:action="@{/login/credenciales}" novalidate id="loginForm">
                                             <div class="col-12">
                                                 <label for="username" class="form-label">Correo electrónico</label>
                                                 <div class="input-group has-validation">
@@ -102,8 +102,8 @@
                                                     contraseña?</a>
                                             </div>
                                             <div class="col-12">
-                                                <button class="btn btn-primary w-100" type="submit" id="botonIngresar">Ingresar</button>
-                                                <a class="btn btn-danger" id="botonSalir">Salir</a>
+                                                <a class="btn btn-primary w-100" type="submit" id="botonIngresar">Ingresar</a>
+                                                <!--<button class="btn btn-primary w-100" type="submit" id="botonIngresar">Ingresar</button>-->
                                             </div>
                                             <div class="col-12">
                                                 <p class="small mb-0">¿Aún no tienes una cuenta? <a
@@ -144,7 +144,7 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- CDN utilizados para CHAT -->
+        <!-- CDN LOGUEO CHAT -->
         <script
                 src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"
                 integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ=="
@@ -167,7 +167,6 @@
         <script th:src="@{/chatSetup/config.js}"></script>
         <script th:src="@{/chatSetup/firebase.js}"></script>
 
-        <!--
         <script>
             // Logueo en Firebase y CometChat
             const emailLoginInputElement = document.getElementById("username");
@@ -199,6 +198,7 @@
                                     }).then(response => {
                                         CometChatWidget.login({uid: user.id}).then((loggedInUser) => {
                                            console.log("CometChat: Usuario logueado");
+                                           document.getElementById("loginForm").submit();
                                         });
                                     });
                                 }else {
@@ -215,18 +215,11 @@
                 }
             });
 
-            logoutButon.addEventListener("click", function (){
-                CometChatWidget.logout().then(response => {
-                    console.log("CometChat: Deslogueado");
-                });
-            })
-
             function isUserCredentialsValid({email, password}) {
                 return email && password && validator.isEmail(email) && validator.isLength(password, {min: 6});
             }
 
         </script>
-        -->
     </body>
 
 </html>
