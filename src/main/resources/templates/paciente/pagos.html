@@ -58,7 +58,7 @@
                             <td th:text="${pago.cita.modalidad == 0? 'Presencial':'Virtual'}"></td>
                             <!-- columna estado -->
                             <td th:if="${pago.estadoPago == 0}">
-                                <button class="botonPagar" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarTipoDePago()">Pagar</button>
+                                <button class="botonPagar" id="idPagar" th:attr="data-valor=${pago.id}, data-valor-inicio=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}" onclick="mostrarTipoDePago()">Pagar</button>
                                 <div id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></div>
                             </td>
                             <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
@@ -93,13 +93,10 @@
                                         <div class="cardLogo me-sm-2">
                                             <span class="d-inline-block align-middle">
                                                 <i class="bi bi-credit-card"></i>
-                                                <p class="d-inline-block align-middle mb-0 ms-2 fw-bold">Tarjeta</p>
+                                                <p class="d-inline-block align-middle mb-0 ms-2 fw-semibold">Tarjeta</p>
                                             </span>
-                                            <div class="mt-4 fw-semibold fs-4">
+                                            <div class="mt-4 fw-semibold fs-4 text-center">
                                                 Realiza tu pago vía web
-                                            </div>
-                                            <div class="mt-2">
-                                                Llena los campos de tu tarjeta y realiza tu pago
                                             </div>
                                         </div>
                                     </a>
@@ -109,23 +106,24 @@
                                         <div class="cardLogo me-sm-2">
                                             <span class="d-inline-block align-middle">
                                                 <i class="bi bi-cash-coin"></i>
-                                                <p class="d-inline-block align-middle mb-0 ms-2 fw-bold">Efectivo</p>
+                                                <p class="d-inline-block align-middle mb-0 ms-2 fw-semibold">Efectivo</p>
                                             </span>
-                                            <div class="mt-4 fw-semibold fs-4">
+                                            <div class="mt-4 fw-semibold fs-4 text-center">
                                                 Realiza tu pago en caja
-                                            </div>
-                                            <div class="mt-2">
-                                                Imprime tu recibo y realiza el pago en caja
                                             </div>
                                         </div>
                                     </a>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-10 text-center fs-6">
+                                    <span>Recuerde realizar su pago como máximo 1 hora antes del inicio de su cita programada</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <!-- Modal Pagar -->
             <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1"
@@ -282,6 +280,33 @@
                 </div>
             </div>
 
+            <!-- Modal Pago Inválido-->
+            <div class="modal fade" id="modal-pago-invalido" tabindex="-1" aria-labelledby="modal-pago-label"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto justify-content-between" style="background-color: gainsboro">
+                            <div class="d-flex align-items-center">
+                                <img style="height: 30px;" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
+                                <span class="fw-semibold ms-2" style="font-size: 1.3rem">Clínica INTERPUCP</span>
+                            </div>
+                            <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="cardConfirmacion">
+                                <div class="cardTitulo">
+                                    Pago inválido
+                                </div>
+                                <div class="cardCuerpo">
+                                    <div class="cardTexto">Se debió pagar como máximo 1 hora antes de su cita programada</div>
+                                    <a class="btn botonVolverInicio" onclick="$('#modal-pago-invalido').modal('hide')">Volver</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
 
@@ -412,8 +437,18 @@
             }
             function mostrarTipoDePago(){
                 var idPagoValue = $(event.target).data('valor');
-                $('#modal-link').attr('href', '/Paciente/recibo?idPago=' + idPagoValue);
-                $('#modal-tipo-pago').modal('show');
+                var inicioCitaStr = $(event.target).data('valor-inicio');
+                var fechaHoraActual = new Date();
+                var inicioCita = new Date(inicioCitaStr.slice(6, 10) + "-" + inicioCitaStr.slice(3, 5) + "-" + inicioCitaStr.slice(0, 2) + " " + inicioCitaStr.slice(11));
+                var diferenciaMinutos = (inicioCita.getTime() - fechaHoraActual.getTime()) / 60000;
+
+                if(diferenciaMinutos>60){
+                    $('#modal-link').attr('href', '/Paciente/recibo?idPago=' + idPagoValue);
+                    $('#modal-tipo-pago').modal('show');
+                }else{
+                    $('#modal-pago-invalido').modal('show');
+                }
+
             }
             var doctorPagar;
             var precioPagar;
