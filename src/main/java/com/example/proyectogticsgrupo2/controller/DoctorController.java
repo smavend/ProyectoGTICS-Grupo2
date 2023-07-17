@@ -55,11 +55,9 @@ public class DoctorController {
     private final CredencialesRepository credencialesRepository;
     private final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
     private final CuestionarioRepository cuestionarioRepository;
-<<<<<<< HEAD
     private final PagoRepository pagoRepository;
-=======
+
     final StylevistasRepository stylevistasRepository;
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
 
     final SecurityConfig securityConfig;
 
@@ -68,11 +66,8 @@ public class DoctorController {
                             AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository,
                             SedeRepository sedeRepository, HorarioRepository horarioRepository,
-<<<<<<< HEAD
-                            CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, PagoRepository pagoRepository, SecurityConfig securityConfig) {
-=======
-                            CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, SecurityConfig securityConfig, StylevistasRepository stylevistasRepository) {
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
+                            CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, PagoRepository pagoRepository, SecurityConfig securityConfig,StylevistasRepository stylevistasRepository) {
+
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
@@ -83,18 +78,14 @@ public class DoctorController {
         this.credencialesRepository = credencialesRepository;
         this.cuestionarioPorCitaRepository = cuestionarioPorCitaRepository;
         this.cuestionarioRepository = cuestionarioRepository;
-<<<<<<< HEAD
         this.pagoRepository = pagoRepository;
-=======
         this.stylevistasRepository = stylevistasRepository;
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
         this.securityConfig = securityConfig;
     }
 
     @GetMapping(value = {"/dashboard", "/", ""})
     public String dashboard(Model model, HttpSession session, Authentication authentication) {
-<<<<<<< HEAD
-=======
+
         Optional<Stylevistas> style = stylevistasRepository.findById(4);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
@@ -103,7 +94,6 @@ public class DoctorController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
->>>>>>> 7b5b7c97d998bf753f07266b1a398cd32bee182d
 
         // Obtener información del usuario y la sesión
         String usuario = authentication.getName();
