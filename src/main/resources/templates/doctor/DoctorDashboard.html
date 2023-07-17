@@ -26,6 +26,7 @@
         <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
         <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
         <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+        <script th:src="@{/assets/js/paciente_ReservarCita.js}"></script>
 
         <!-- Template Main CSS File -->
         <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
@@ -93,7 +94,7 @@
 
                                         <div class="d-flex flex-column"
                                              style="height: auto;width: max-content;overflow: hidden">
-                                            <input id="citasSize" type="hidden" th:value="${listaCitasSize}">
+
                                             <div class="table-responsive">
 
                                                 <table id="example" class="table ">
@@ -140,9 +141,8 @@
                                                                            class="bi-play-fill"></i>
                                                                     </a>
 
-                                                                    <a th:id="'btnEnviarCuestionario' + ${obj.index}"
-                                                                       th:if="${cita.modalidad == 1}"
-                                                                       style="display: block"
+                                                                    <a th:if="${cita.modalidad == 1}"
+                                                                       style="width: max-content"
                                                                        data-bs-toggle="tooltip"
                                                                        data-bs-placement="top"
                                                                        title="Enviar cuestionario"
@@ -151,8 +151,7 @@
                                                                        >
                                                                         <i class="bi-file-text-fill"></i>
                                                                     </a>
-                                                                    <input th:id="'correo' + ${obj.index}"
-                                                                           type="hidden" th:value="${cita.getCorreo()}"/>
+
 
 
 
@@ -187,55 +186,7 @@
                                                     </tbody>
                                                 </table>
                                                 <input id="link" type="hidden" th:value="${url}">
-                                                <script>
-                                                    function verificarTabla() {
-                                                        var citasSize = parseInt($('#citasSize').val());
-                                                        var link = $('#link').val();
-                                                        var url = link + "/obtenerSesion";
 
-                                                        var vector = []; // Crear un vector vacío
-
-                                                        $.ajax({
-                                                            url: url,
-                                                            method: "GET",
-                                                            dataType: "json",
-                                                            success: function (response) {
-                                                                // Obtener la lista de correos electrónicos recibida en la respuesta
-                                                                response.forEach(function (correo) {
-                                                                    console.log("Iteraciones del correo controlador:", correo);
-
-                                                                    // Iterar sobre cada correo en la lista
-                                                                    for (var i = 0; i < citasSize; i++) {
-                                                                        if (vector.indexOf(i) !== -1) {
-                                                                            // Si i ya está en el vector, omitir la iteración
-                                                                            continue;
-                                                                        }
-                                                                        var enlaceCuestionario = $('#btnEnviarCuestionario' + i);
-                                                                        var correoCita = $('#correo' + i).val();
-
-                                                                        console.log("correoCitaScript:", correoCita);
-
-                                                                        if (correoCita === correo) {
-                                                                            console.log("iguales");
-                                                                            enlaceCuestionario.css('display', 'block');
-                                                                            vector.push(i); // Agregar i al vector
-                                                                        } else {
-                                                                            console.log("no iguales");
-                                                                            enlaceCuestionario.css('display', 'none');
-                                                                        }
-                                                                    }
-                                                                });
-
-                                                                // Vaciar el vector después de terminar el bucle forEach
-                                                                vector.length = 0;
-                                                            },
-                                                            error: function () {
-                                                                console.log("Error al obtener la lista de correos electrónicos");
-                                                            }
-                                                        });
-                                                    }
-
-                                                </script>
 
 
                                             </div>
@@ -643,16 +594,6 @@
         <script th:src="@{/assets/js/jsPaginarDoctorNueva.js}"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
         <!--  FIN PAGINACION  -->
-        <script>
-            $(document).ready(function() {
-                // Llamar a la función inicialmente
-                verificarTabla();
-
-                setInterval(verificarTabla, 1000);
-            });
-
-        </script>
-
         <script>
             $(document).ready(function () {
                 $('#example').DataTable();
