@@ -14,5 +14,7 @@ public interface ListaBuscadorDoctor {
     String getFotoname();
     String getFotocontenttype();
     byte[] getFoto();
+    String getCorreo();
+
 
 }

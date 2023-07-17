@@ -5,6 +5,7 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.core.io.ByteArrayResource;
@@ -41,6 +42,7 @@ public class DoctorController {
     final DoctorRepository doctorRepository;
     final PacienteRepository pacienteRepository;
     final CitaRepository citaRepository;
+    final SpringSessionRepository springSessionRepository;
 
     private String idPaciente;
 
@@ -62,13 +64,14 @@ public class DoctorController {
 
 
     public DoctorController(DoctorRepository doctorRepository, PacienteRepository pacienteRepository, CitaRepository citaRepository,
-                            AlergiaRepository alergiaRepository,
+                            SpringSessionRepository springSessionRepository, AlergiaRepository alergiaRepository,
                             EspecialidadRepository especialidadRepository,
                             SedeRepository sedeRepository, HorarioRepository horarioRepository,
                             CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, PagoRepository pagoRepository, SecurityConfig securityConfig) {
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
+        this.springSessionRepository = springSessionRepository;
         this.alergiaRepository = alergiaRepository;
         this.especialidadRepository = especialidadRepository;
         this.sedeRepository = sedeRepository;
@@ -81,7 +84,7 @@ public class DoctorController {
     }
 
     @GetMapping(value = {"/dashboard", "/", ""}) //actual
-    public String dashboard(Model model, HttpSession session, Authentication authentication) {
+    public String dashboard(Model model, HttpSession session, Authentication authentication, HttpServletRequest request) {
 
         // Obtener información del usuario y la sesión
         String usuario = authentication.getName();
@@ -145,12 +148,14 @@ public class DoctorController {
             }else{
                 listaCitaVirtual.add(cita);
             }
-            //System.out.println(cita.getPaciente().getApellidos());
-
         }
 
+        StringBuffer path = request.getRequestURL();
 
+        String[] partes = path.toString().split("/");
+        String url = partes[0] + "//" + partes[2] + "/" + "doctor";
 
+        model.addAttribute("url", url);
         model.addAttribute("doctor", doctor);
         model.addAttribute("citasPresenciales", listaCitaPresencial);
         model.addAttribute("citasVirtuales", listaCitaVirtual);
@@ -159,11 +164,37 @@ public class DoctorController {
         model.addAttribute("listaCuestionarios", listaCuestionarios);
         model.addAttribute("listaHorarios", listaHorarios);
         model.addAttribute("listaCitas", listaCitas);
+        model.addAttribute("listaCitasSize", listaCitas.size());
         model.addAttribute("listaPacientes", listaPacientes);
         model.addAttribute("listaCuestionarioPorCita", cuestionarioPorCitaList);
 
         return "doctor/DoctorDashboard";
     }
+
+    @GetMapping(value = {"/obtenerSesion"})
+    @ResponseBody
+    public List<String> obtenerSesion(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
+        session.setAttribute("doctor", doctor_session);
+        List<String> listaCorreos = new ArrayList<>();
+
+        List<SpringSession> sesiones=springSessionRepository.buscarSesiones();
+
+        for (int i=0; i<sesiones.size(); i++) {
+            listaCorreos.add(sesiones.get(i).getPrincipalName());
+        }
+        //verificar cuando es nulo
+
+        return listaCorreos;
+    }
+
 
     @GetMapping("/enviarCuestionario")
     public String enviarCuestionario(HttpSession session, Authentication authentication, Model model, @RequestParam("id") int id) {

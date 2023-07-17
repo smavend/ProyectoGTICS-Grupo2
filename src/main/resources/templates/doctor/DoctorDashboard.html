@@ -4,7 +4,6 @@
     <head>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
         <title>Dashboard - Doctor</title>
         <meta content="" name="description">
         <meta content="" name="keywords">
@@ -94,7 +93,9 @@
 
                                         <div class="d-flex flex-column"
                                              style="height: auto;width: max-content;overflow: hidden">
+                                            <input id="citasSize" type="hidden" th:value="${listaCitasSize}">
                                             <div class="table-responsive">
+
                                                 <table id="example" class="table ">
                                                     <thead style="text-align: left">
                                                         <tr>
@@ -109,7 +110,8 @@
 
                                                     <tbody style="text-align: left">
                                                         <tr th:each="cita,obj: ${listaCitas}"
-                                                            th:with="horario=${listaHorarios[obj.index]}">
+                                                            th:with="horario=${listaHorarios[obj.index]}"
+                                                        >
 
                                                             <td th:text="${obj.index+1}"></td>
 
@@ -136,9 +138,24 @@
                                                                            class="bi-play-fill"></i>
                                                                     </a>
 
-                                                                    <a th:if="${cita.modalidad == 1}" th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}" style="width: max-content" data-bs-toggle="tooltip" data-bs-placement="top" title="Enviar cuestionario" class="btn btn-warning">
+                                                                    <a th:id="'btnEnviarCuestionario' + ${obj.index}"
+                                                                       th:if="${cita.modalidad == 1}"
+                                                                       style="display: block"
+                                                                       data-bs-toggle="tooltip"
+                                                                       data-bs-placement="top"
+                                                                       title="Enviar cuestionario"
+                                                                       class="btn btn-warning"
+                                                                       th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}"
+                                                                       >
                                                                         <i class="bi-file-text-fill"></i>
                                                                     </a>
+                                                                    <input th:id="'correo' + ${obj.index}"
+                                                                           type="hidden" th:value="${cita.getCorreo()}"/>
+
+
+
+
+
 
                                                                 </div>
                                                             </td>
@@ -167,6 +184,58 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                                <input id="link" type="hidden" th:value="${url}">
+                                                <script>
+                                                    function verificarTabla() {
+                                                        var citasSize = parseInt($('#citasSize').val());
+                                                        var link = $('#link').val();
+                                                        var url = link + "/obtenerSesion";
+
+                                                        var vector = []; // Crear un vector vacío
+
+                                                        $.ajax({
+                                                            url: url,
+                                                            method: "GET",
+                                                            dataType: "json",
+                                                            success: function (response) {
+                                                                // Obtener la lista de correos electrónicos recibida en la respuesta
+                                                                response.forEach(function (correo) {
+                                                                    console.log("Iteraciones del correo controlador:", correo);
+
+                                                                    // Iterar sobre cada correo en la lista
+                                                                    for (var i = 0; i < citasSize; i++) {
+                                                                        if (vector.indexOf(i) !== -1) {
+                                                                            // Si i ya está en el vector, omitir la iteración
+                                                                            continue;
+                                                                        }
+                                                                        var enlaceCuestionario = $('#btnEnviarCuestionario' + i);
+                                                                        var correoCita = $('#correo' + i).val();
+
+                                                                        console.log("correoCitaScript:", correoCita);
+
+                                                                        if (correoCita === correo) {
+                                                                            console.log("iguales");
+                                                                            enlaceCuestionario.css('display', 'block');
+                                                                            vector.push(i); // Agregar i al vector
+                                                                        } else {
+                                                                            console.log("no iguales");
+                                                                            enlaceCuestionario.css('display', 'none');
+                                                                        }
+                                                                    }
+                                                                });
+
+                                                                // Vaciar el vector después de terminar el bucle forEach
+                                                                vector.length = 0;
+                                                            },
+                                                            error: function () {
+                                                                console.log("Error al obtener la lista de correos electrónicos");
+                                                            }
+                                                        });
+                                                    }
+
+                                                </script>
+
+
                                             </div>
                                         </div>
 
@@ -568,10 +637,20 @@
         <script th:src="@{/assets/js/datatables.js}"></script>
         <script th:src="@{/assets/js/moment.js}"></script>
         <!-- PAGINACION -->
-        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script th:src="@{/assets/js/jsPaginarDoctorNueva.js}"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
         <!--  FIN PAGINACION  -->
+        <script>
+            $(document).ready(function() {
+                // Llamar a la función inicialmente
+                verificarTabla();
+
+                setInterval(verificarTabla, 1000);
+            });
+
+        </script>
+
         <script>
             $(document).ready(function () {
                 $('#example').DataTable();
