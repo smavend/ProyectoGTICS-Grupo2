@@ -24,7 +24,7 @@
 
         <main id="main" class="main site-content">
 
-            <h1 class="encabezado text-center" style="width: 90%">Reservar examen</h1>
+            <h1 class="encabezado text-center">Reservar examen</h1>
 
             <div class="bodyReservar">
                 <div class="cardReservar py-4">
@@ -39,6 +39,26 @@
 
                         <div class="row justify-content-center">
                             <div class="col-sm-10 col-md-8 col-lg-6">
+                                <div class="campo">
+                                    <div class="fw-bold mb-1">
+                                        Especialidad
+                                    </div>
+                                    <div class="input-group">
+                                        <select class="form-select" disabled>
+                                            <option th:text="${cita.especialidad.nombre}" selected>Especialidad</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="campo">
+                                    <div class="fw-bold mb-1">
+                                        Modalidad
+                                    </div>
+                                    <div class="input-group">
+                                        <select class="form-select" disabled>
+                                            <option th:text="${cita.modalidad == 1? 'Virtual':'Presencial'}">Modalidad</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="campo">
                                     <div class="fw-bold mb-1">
                                         Fecha del examen

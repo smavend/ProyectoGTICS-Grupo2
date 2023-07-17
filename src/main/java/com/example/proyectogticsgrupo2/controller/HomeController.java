@@ -54,7 +54,7 @@ public class HomeController {
     @GetMapping("/")
     public String principal(Model model, HttpServletRequest request){
         String server = request.getServerName();
-        String link = server+":"+request.getLocalPort()+"/signin";
+        String link = "http://"+server+":"+request.getLocalPort()+"/signin";
 
         byte[] image = new byte[0];
         try {

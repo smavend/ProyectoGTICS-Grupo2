@@ -28,7 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -283,9 +286,11 @@ public class PacienteController {
 
         // Enviar correo al paciente - inhabilidado para que no demore tanto xd
 
+        /*
         CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
         String host = request.getServerName()+":"+request.getLocalPort();
         correo.props(host, paciente.getCorreo(), cita);
+         */
 
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
@@ -337,6 +342,10 @@ public class PacienteController {
 
         if (cita != null){
 
+            ZoneId zoneId = ZoneId.of("America/Lima");
+            Date fechaLimiteDate = citaRepository.buscarFechaLimiteDeCitaPendiente(cita.getId_cita());
+            LocalDate fechaLimite = Instant.ofEpochMilli(fechaLimiteDate.getTime()).atZone(zoneId).toLocalDate();
+
             citaTemporal.setId(cita.getId_cita());
             citaTemporal.setModalidad(cita.getModalidad());
             citaTemporal.setIdSede(cita.getSede().getIdSede());
@@ -348,6 +357,7 @@ public class PacienteController {
             }
             else{
                 citaTemporal.setIdDoctor(cita.getDoctor().getId_doctor());
+                model.addAttribute("fechaLimite", fechaLimite);
                 return "paciente/reservarCitaPendiente";
             }
 
@@ -373,6 +383,10 @@ public class PacienteController {
 
         Cita cita = citaRepository.buscarPorId(citaTemporal.getId());
 
+        ZoneId zoneId = ZoneId.of("America/Lima");
+        Date fechaLimiteDate = citaRepository.buscarFechaLimiteDeCitaPendiente(cita.getId_cita());
+        LocalDate fechaLimite = Instant.ofEpochMilli(fechaLimiteDate.getTime()).atZone(zoneId).toLocalDate();
+
         if (bindingResult.hasErrors()){
             System.out.println("Error validacion: "+bindingResult.getAllErrors());
             model.addAttribute("cita", cita);
@@ -380,10 +394,12 @@ public class PacienteController {
                 return "paciente/reservarExamenPendiente";
             }
             else{
+                model.addAttribute("fechaLimite", fechaLimite);
                 return "paciente/reservarCitaPendiente";
             }
         }
         else {
+
             Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
 
             model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
@@ -396,8 +412,15 @@ public class PacienteController {
                 model.addAttribute("examenPendiente", true);
             }
             else{
-                model.addAttribute("precio", 0);
-                model.addAttribute("citaPendiente", true);
+
+                // validar lo que ocurre si reserva fuera del plazo de 7 días
+                if (citaTemporal.getFecha().isAfter(fechaLimite)){
+                    model.addAttribute("precio", precioBase*paciente.getSeguro().getCoaseguro());
+                }
+                else {
+                    model.addAttribute("precio", 0);
+                    model.addAttribute("citaPendiente", true); // el valor de citaPendiente es utilizado para validar el descuento
+                }
             }
 
             citaTemporal.setFin(citaTemporal.getInicio().plusMinutes(doctor.getDuracion_cita_minutos()));
@@ -887,9 +910,6 @@ public class PacienteController {
     @GetMapping("/pagos")
     public String pagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago, Model model, HttpSession session, Authentication authentication) {
 
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
