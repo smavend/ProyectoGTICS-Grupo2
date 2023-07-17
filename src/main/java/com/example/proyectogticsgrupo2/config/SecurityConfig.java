@@ -112,12 +112,12 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
                 .requestMatchers("/Paciente","/Paciente/***").hasAnyAuthority("paciente", "superadmin")
                 .requestMatchers("/doctor","/doctor/***").hasAnyAuthority("doctor", "superadmin")
-                .requestMatchers("/administrativo","/administrativo/***","/validarDni/*").hasAnyAuthority("administrativo", "superadmin")
+                .requestMatchers("/administrativo","/administrativo/***").hasAnyAuthority("administrativo", "superadmin")
                 .requestMatchers("/SuperAdminHomePage","/SuperAdminHomePage/***").hasAuthority("superadmin")
 
                 .requestMatchers("/administrador","/administrador/***").hasAnyAuthority("administrador", "superadmin")
 
-                .requestMatchers("/","/validarDni/**","/login","/login/**","/signin","/signin/**").anonymous()
+                .requestMatchers("/","/login","/login/**","/signin","/signin/**").anonymous()
 
                 .anyRequest().permitAll();
 

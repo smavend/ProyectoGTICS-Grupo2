@@ -22,6 +22,12 @@ public interface AdministrativoPorEspecialidadPorSedeRepository extends JpaRepos
     @Query(nativeQuery = true, value = "select sede_id_sede from administrador where id_administrador = ?1")
     int obteneSedePorAdministradorId(String id);
 
+    @Query(nativeQuery = true, value = "select * from sede_x_especialidad_x_administrativo where administrativo_id_administrativo = ?1")
+    List<AdministrativoPorEspecialidadPorSede> buscarXAdministrativoId(String id);
+
+
+
+
     @Transactional
     @Modifying
     @Query(value = "INSERT INTO sede_x_especialidad_x_administrativo (sede_id_sede, especialidad_id_especialidad, administrativo_id_administrativo, torre, piso, precio_cita) VALUES (:idSede,:especialidad,:dni,:torre,:piso,0.0)", nativeQuery = true)
