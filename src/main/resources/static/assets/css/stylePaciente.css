@@ -1302,9 +1302,11 @@ p{
 }
 
 .cardLogo{
+    font-size: 1.1rem;
     border-radius: 15px;
     transition: all 0.3s;
     padding: 20px;
+    margin-top: -60px;
 }
 
 .cardLogo:hover{
@@ -1351,6 +1353,8 @@ p{
 /* ------------------- Sección Pagos ------------------- */
 
 .botonVerRecibo{
+    margin-top: 5px;
+    margin-bottom: 5px;
     padding: 10px 15px;
     font-weight: 700;
     color: black;
@@ -1368,20 +1372,22 @@ p{
 }
 
 .botonPagar{
-    padding: 10px 15px;
+    padding: 10px 18px;
+    margin-top: -10px;
+    margin-bottom: -10px;
     font-weight: 700;
-    color: black;
-    background-color: #ffe26f;
+    color: #373b3e;
+    background-color: #34bef5;
     border-radius: 20px;
     border: none;
-    box-shadow: 0 0 5px rgb(105, 105, 105);
+    box-shadow: 0 0 5px #34bef5;
     transition: all 0.3s;
 }
 
 .botonPagar:hover{
     cursor: pointer;
     color: black;
-    background-color: #ffd52b;
+    background-color: #2d99c3;
 }
 
 .infoModalPagar{

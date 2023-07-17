@@ -42,7 +42,7 @@
                             <th>Fecha de cita</th>
                             <th>Fecha de pago</th>
                             <th>Precio</th>
-                            <th>Tipo de pago</th>
+                            <th>Tipo de cita</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
@@ -53,16 +53,13 @@
                             <td id="especialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.nombre}" th:text="${pago.cita.doctor.especialidad.nombre}"></td>
                             <td id="doctor" th:attr="data-valor=${pago.cita.doctor.getNombreYApellido()}" th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
                             <td id="fechaCita" th:attr="data-valor=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}" th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
-                            <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'-'}">
-                                Fecha de pago
-                            </td>
+                            <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'Por cancelar'}"></td>
                             <td id="precio" th:class="precio-calculado"></td>
-                            <td th:text="${pago.tipoPago}">Visa ***1234</td>
+                            <td th:text="${pago.cita.modalidad == 0? 'Presencial':'Virtual'}"></td>
                             <!-- columna estado -->
-                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
-                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
-                                <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
-                                <button class="botonPagar botonPagarModal" id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></button>
+                            <td th:if="${pago.estadoPago == 0}">
+                                <button class="botonPagar" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarTipoDePago()">Pagar</button>
+                                <div id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></div>
                             </td>
                             <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
                         </tr>
@@ -70,6 +67,65 @@
                 </table>
 
             </section>
+
+            <!-- Modal Tipo de Pago -->
+            <div class="modal fade" data-bs-target="#modal-pago" id="modal-tipo-pago" tabindex="-1"
+                 aria-labelledby="modal-pago-label"
+                 aria-hidden="true" style="font-size: 1.3rem">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto justify-content-between" style="background-color: gainsboro">
+                            <div class="d-flex align-items-center">
+                                <img style="height: 30px;" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
+                                <span class="fw-semibold ms-2">Clínica INTERPUCP</span>
+                            </div>
+                            <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row my-4">
+                                <div class="col-12 text-center">
+                                    <span>Seleccione el tipo de pago</span>
+                                </div>
+                            </div>
+                            <div class="row py-5 px-5">
+                                <div class="col-sm-6" onclick="mostrarModalPago()">
+                                    <a class="text-reset">
+                                        <div class="cardLogo me-sm-2">
+                                            <span class="d-inline-block align-middle">
+                                                <i class="bi bi-credit-card"></i>
+                                                <p class="d-inline-block align-middle mb-0 ms-2 fw-bold">Tarjeta</p>
+                                            </span>
+                                            <div class="mt-4 fw-semibold fs-4">
+                                                Realiza tu pago vía web
+                                            </div>
+                                            <div class="mt-2">
+                                                Llena los campos de tu tarjeta y realiza tu pago
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 mt-3 mt-sm-0">
+                                    <a class="text-reset" th:href="@{/Paciente/recibo(idPago=)}" id="modal-link">
+                                        <div class="cardLogo me-sm-2">
+                                            <span class="d-inline-block align-middle">
+                                                <i class="bi bi-cash-coin"></i>
+                                                <p class="d-inline-block align-middle mb-0 ms-2 fw-bold">Efectivo</p>
+                                            </span>
+                                            <div class="mt-4 fw-semibold fs-4">
+                                                Realiza tu pago en caja
+                                            </div>
+                                            <div class="mt-2">
+                                                Imprime tu recibo y realiza el pago en caja
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Modal Pagar -->
             <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1"
@@ -141,7 +197,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="correoTarjeta">
+                                        <input type="text" class="form-control" id="correoTarjeta" placeholder="user@example.com">
                                     </div>
                                     <div class="invalid-feedback" id="errorCorreoTarjeta" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
                                     <div class="invalid-feedback" id="errorCorreoInvalido" style="display: none;margin-top: -7px; margin-bottom: 10px">Ingrese un correo válido</div>
@@ -341,13 +397,18 @@
             if (activarModal) {
                 $('#modal-pago').modal('show');
             }
+            function mostrarTipoDePago(){
+                var idPagoValue = $(event.target).data('valor');
+                $('#modal-link').attr('href', '/Paciente/recibo?idPago=' + idPagoValue);
+                $('#modal-tipo-pago').modal('show');
+            }
             var doctorPagar;
             var precioPagar;
             var fechaCita;
             var especialidadPagar;
             var numeroTarjeta;
             var correoTarjeta;
-            function mostrarModal(){
+            function mostrarModalPago(){
                 $('.modal')
                 var botonPagar = $(event.target);
                 var fila = botonPagar.closest('tr');
@@ -356,6 +417,7 @@
                 fechaCita = fila.find('#fechaCita').text();
                 especialidadPagar = fila.find('#especialidad').text();
 
+                $('#modal-tipo-pago').modal('hide');
                 $('#modal-pago').modal('show');
             }
 

@@ -34,6 +34,12 @@
                     </a>
                 </li><!-- End Cuestionarios Nav -->
                 <li class="nav-item">
+                    <a class="nav-link" th:classappend="${seleccion == 'mensajeria'? '':'collapsed'}" th:href="@{/Paciente/mensajeria}">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>Mensajería</span>
+                    </a>
+                </li><!-- End Mensajería Nav -->
+                <li class="nav-item">
                     <a class="nav-link" th:classappend="${seleccion == 'consentimientos'? '':'collapsed'}" th:href="@{/Paciente/consentimientos}">
                         <i class="bi bi-card-list"></i>
                         <span>Consentimientos</span>
