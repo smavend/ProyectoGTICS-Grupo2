@@ -1,5 +1,6 @@
 package com.example.proyectogticsgrupo2.metodos;
 
+import com.example.proyectogticsgrupo2.dto.AdministradorEgresos;
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.repository.AdministradorRepository;
 import com.itextpdf.text.Document;
@@ -160,6 +161,74 @@ public class ReporteExcel {
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    public ResponseEntity<Resource> generarInformeEgresosExcel(List<AdministradorEgresos> egresos, String nombreDoc) {
+        // Crear un nuevo libro de Excel
+        Workbook workbook = new XSSFWorkbook();
+        // Crear una hoja de Excel
+        Sheet sheet = workbook.createSheet("Egresos");
+        // Crear estilos para las celdas
+        CellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        CellStyle dateStyle = workbook.createCellStyle();
+        dateStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("dd/MM/yyyy"));
+
+        CellStyle currencyStyle = workbook.createCellStyle();
+        currencyStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("$#,##0.00"));
+        // Crear el encabezado de la hoja
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Concepto");
+        headerRow.createCell(1).setCellValue("Monto");
+        headerRow.createCell(2).setCellValue("Nombre");
+        headerRow.createCell(3).setCellValue("Especialidad");
+        headerRow.createCell(4).setCellValue("Seguro");
+        headerRow.createCell(5).setCellValue("Fecha");
+        headerRow.createCell(6).setCellValue("Categoría de Pago");
+        // Aplicar estilos a las celdas del encabezado
+        for (int i = 0; i < 7; i++) {
+            Cell headerCell = headerRow.getCell(i);
+            headerCell.setCellStyle(headerStyle);}
+        // Llenar los datos de ingresos en la hoja
+        int rowNum = 1;
+        for (AdministradorEgresos ingreso : egresos) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(ingreso.getConcepto());
+            row.createCell(1).setCellValue(ingreso.getPagodoctor());
+            row.createCell(2).setCellValue(ingreso.getNombreuser());
+            row.createCell(3).setCellValue(ingreso.getEspecialidadcita());
+            row.createCell(4).setCellValue(ingreso.getNombreseguro());
+            row.createCell(5).setCellValue(ingreso.getFecha());
+            row.createCell(6).setCellValue(ingreso.getCategoriagasto());
+            // Aplicar estilos a las celdas de fecha y precio
+            Cell dateCell = row.getCell(0);
+            dateCell.setCellStyle(dateStyle);
+
+            Cell priceCell = row.getCell(5);
+            priceCell.setCellStyle(currencyStyle);}
+        // Ajustar automáticamente el ancho de las columnas
+        for (int i = 0; i < 7; i++) {
+            sheet.autoSizeColumn(i);}
+        // Crear un flujo de bytes en memoria para el archivo
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            // Escribir el libro de Excel en el flujo de bytes
+            workbook.write(outputStream);
+            workbook.close();
+        } catch (IOException e) {e.printStackTrace();}
+        // Crear un recurso de tipo ByteArrayResource con los bytes del archivo
+        ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
+        // Configurar las cabeceras de la respuesta HTTP
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreDoc + ".xlsx\"");
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        // Devolver la respuesta con el archivo adjunto y las cabeceras
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
+
     }
 
 

@@ -87,6 +87,20 @@ public interface AdministradorRepository extends JpaRepository<Administrador, St
             "order by p.fecha_cancelada desc")
     List<AdministradorIngresos> obtenerIgresosPorTipoPago(String tipo);
 
+    @Query(nativeQuery = true, value = "select case when e.es_examen=1 then 'Consulta' else 'Examen' end  as concepto,\n" +
+            "\ttruncate(sxexa.precio_cita*s.doctor,2) as pagodoctor, concat(d.nombre,' ',d.apellidos) as nombreuser,\n" +
+            "\te.nombre as especialidadcita, s.nombre as nombreseguro,  \n" +
+            "\tp.fecha_cancelada as fecha, 'Gastos de personal médico' as categoriagasto\n" +
+            "from pago p\n" +
+            "inner join cita c on (p.cita_id_cita=c.id_cita)\n" +
+            "inner join paciente paci on (c.paciente_id_paciente=paci.id_paciente)\n" +
+            "inner join doctor d on (c.doctor_id_doctor=d.id_doctor)\n" +
+            "inner join especialidad e on (d.especialidad_id_especialidad=e.id_especialidad)\n" +
+            "left join sede_x_especialidad_x_administrativo sxexa on (sxexa.especialidad_id_especialidad=e.id_especialidad)\n" +
+            "inner join seguro s on (paci.seguro_id_seguro=s.id_seguro)\n" +
+            "order by p.fecha_cancelada desc")
+    List<AdministradorEgresos> obtenerEgresos();
+
     @Query(nativeQuery = true,value = "select a.nombre as nombrealergia\n" +
             "from alergias a\n" +
             "where a.paciente_id_paciente = ?1")

@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
+import com.example.proyectogticsgrupo2.dto.AdministradorEgresos;
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.metodos.ReporteExcel;
@@ -9,8 +10,6 @@ import com.example.proyectogticsgrupo2.service.CorreoNuevoPaciente;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,10 +29,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,11 +52,13 @@ public class AdministradorController {
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
     final SecurityConfig securityConfig;
-
+    final MensajeRepository mensajeRepository;
     final StylevistasRepository stylevistasRepository;
+    final CitaRepository citaRepository;
+    final HorarioRepository horarioRepository;
 
 
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig,StylevistasRepository stylevistasRepository) {
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, MensajeRepository mensajeRepository, StylevistasRepository stylevistasRepository, CitaRepository citaRepository, HorarioRepository horarioRepository) {
 
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
@@ -70,7 +71,10 @@ public class AdministradorController {
         this.credencialesRepository = credencialesRepository;
         this.temporalRepository = temporalRepository;
         this.securityConfig = securityConfig;
+        this.mensajeRepository = mensajeRepository;
         this.stylevistasRepository = stylevistasRepository;
+        this.citaRepository = citaRepository;
+        this.horarioRepository = horarioRepository;
     }
     //#####################################33
    //Comentado por Gustavo
@@ -136,7 +140,9 @@ public class AdministradorController {
     @GetMapping("/finanzas")
     public String finanzas(Model model){
         List<AdministradorIngresos> listaIngresos = administradorRepository.obtenerIgresos();
+        List<AdministradorEgresos> listaEgresos = administradorRepository.obtenerEgresos();
         model.addAttribute("listaIngresos",listaIngresos);
+        model.addAttribute("listaEgresos",listaEgresos);
         //###########################################################
         model.addAttribute("listaSeguros", seguroRepository.findAll());
         model.addAttribute("listaEspecialidades", especialidadRepository.findAll());
@@ -523,9 +529,38 @@ public class AdministradorController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+        /*Doctor doctor_session = doctorRepository.findByCorereo(authentication.getName());*/
+
+
+        //List<Doctor> doctor = doctorRepository.findAll();
+
+
+        List<Cita> citasDelDoctor=citaRepository.obtenerTodasLasCitas(1);
+        List<Cita> listaCitaPresencial = new ArrayList<>();
+        List<Cita> listaCitaVirtual= new ArrayList<>();
+
+        for (Cita cita : citasDelDoctor) {
+
+            if (cita.getModalidad()==0){
+                listaCitaPresencial.add(cita);
+            }else{
+                listaCitaVirtual.add(cita);
+            }
+        }
+
+        //model.addAttribute("doctor", doctor);
+        model.addAttribute("citas", citasDelDoctor);
+        model.addAttribute("citasPresenciales", listaCitaPresencial);
+        model.addAttribute("citasVirtuales", listaCitaVirtual);
+        model.addAttribute("cantidadCitasPresenciales", listaCitaPresencial.size());
+        model.addAttribute("cantidadCitasVirtuales", listaCitaVirtual.size());
+        //model.addAttribute("horario",horarioDeDoctor );
+        System.out.println(listaCitaPresencial.size());
+        System.out.println(listaCitaVirtual.size());
+
         return "administrador/calendario";}
     @GetMapping("/mensajeria")
-    public String mensajeria(Model model){
+    public String mensajeria(@RequestParam("id") String id, Model model){
         //En onstruccion
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
@@ -535,7 +570,47 @@ public class AdministradorController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
-        return "administrador/mensajeria";}
+        Optional<Administrador> adminOpt = administradorRepository.findById(id);
+        if (adminOpt.isPresent()){
+            Administrador admin = adminOpt.get();
+            List<Mensaje> mensajesAdmin = mensajeRepository.mensajes(admin.getIdAdministrador());
+
+            return "administrador/mensajeria";
+        }else {
+            Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+            if(optionalDoctor.isPresent()){
+                Doctor doc = optionalDoctor.get();
+                System.out.println("el desitno es: "+doc.getId_doctor());
+                model.addAttribute("doc",doc);
+
+            }
+            Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
+            if (optionalPaciente.isPresent()) {
+                Paciente paci = optionalPaciente.get();
+                System.out.println("el desitno es: "+paci.getIdPaciente());
+                model.addAttribute("paci",paci);
+            }
+            return "administrador/mensajeria";
+        }
+
+
+    }
+
+    /*@PostMapping("/guardarMensaje")
+    @ResponseBody
+    public ResponseEntity<String> guardarMensaje(@RequestBody MensajeDatosDto mensajesRecibidos) {
+        Mensaje mensaje = new Mensaje();
+        mensaje.setId_emisor(mensajesRecibidos.getId_emisor());
+        mensaje.setId_receptor(mensajesRecibidos.getId_receptor());
+        mensaje.setMensaje(mensajesRecibidos.getContenido());
+        mensaje.setFecha(LocalDateTime.now());
+        mensaje.setVisto(0);
+        mensajeRepository.save(mensaje);
+
+        return ResponseEntity.ok("Mensaje guardado exitosamente");
+    }*/
+
+
     @GetMapping("/historialPaciente")
     public String historialPaciente(@RequestParam("id") String id, Model model){
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
@@ -570,36 +645,6 @@ public class AdministradorController {
             Paciente p = opt.get();
 
             byte[] imagenComoBytes = p.getFoto();
-            /*//agregue desde aca
-            if(imagenComoBytes==null){
-                try {
-                    File foto = new File("source/userPorDefecto.jpg");
-                    FileInputStream input = new FileInputStream(foto);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) !=-1){
-                        output.write(buffer,0,length);
-                    }
-                    input.close();;
-                    output.close();
-                    byte[] bytes = output.toByteArray();
-                    HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.setContentType(
-                            MediaType.parseMediaType("image/jpg"));
-
-                    return new ResponseEntity<>(
-                            bytes,
-                            httpHeaders,
-                            HttpStatus.OK);
-
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-            }else {
-
-            } //agregue hasta aca*/
-
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
                     MediaType.parseMediaType(p.getFotocontenttype()));
@@ -616,44 +661,14 @@ public class AdministradorController {
     public String invitacion (){
         return "administrador/invitar";
     }
-    @GetMapping("/imageDoc/{id}")
+    @GetMapping("/imageUser/{id}")
     public ResponseEntity<byte[]> mostrarImagenDoc(@PathVariable("id") String dni) {
-        Optional<Doctor> opt = doctorRepository.findById(dni);
-
-        if (opt.isPresent()) {
-            Doctor doc = opt.get();
+        Optional<Doctor> optDoc = doctorRepository.findById(dni);
+        Optional<Paciente> optPaci = pacienteRepository.findById(dni);
+        if (optDoc.isPresent()) {
+            Doctor doc = optDoc.get();
 
             byte[] imagenComoBytes = doc.getFoto();
-            //agregue desde aca
-            /*if(imagenComoBytes==null){
-                try {
-                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-                    FileInputStream input = new FileInputStream(foto);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) !=-1){
-                        output.write(buffer,0,length);
-                    }
-                    input.close();;
-                    output.close();
-                    byte[] bytes = output.toByteArray();
-                    HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.setContentType(
-                            MediaType.parseMediaType("image/jpg"));
-
-                    return new ResponseEntity<>(
-                            bytes,
-                            httpHeaders,
-                            HttpStatus.OK);
-
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-            }else {
-
-            } //agregue hasta aca*/
-
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
                     MediaType.parseMediaType(doc.getFotocontenttype()));
@@ -662,7 +677,19 @@ public class AdministradorController {
                     imagenComoBytes,
                     httpHeaders,
                     HttpStatus.OK);
-        } else {
+        }else if(optPaci.isPresent()){
+            Paciente p = optPaci.get();
+
+            byte[] imagenComoBytes = p.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(p.getFotocontenttype()));
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        }else {
             return null;
         }
     }

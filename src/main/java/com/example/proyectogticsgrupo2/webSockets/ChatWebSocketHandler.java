@@ -13,14 +13,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class ChatWebSocketHandler implements WebSocketHandler {
-    @Autowired
-    MensajeRepository mensajeRepository;
+
+
 
     private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     private HashMap<WebSocketSession, String> Session_IdSesion = new HashMap<>();
     private HashMap<String,String> user_IDsesion = new HashMap<>();
-
-
 
     /*Se ejecuta cuando se establece una nueva coneccion webSocket
       se agrega la sesion del cliente a la lista de sesiones activas*/
@@ -38,16 +36,22 @@ public class ChatWebSocketHandler implements WebSocketHandler {
         // Obtener el mensaje enviado por el cliente
         String messageText = message.getPayload().toString();
 
-        if (messageText.startsWith("OPEN:")) {
-            String user = messageText.substring(5);
-            System.out.println("LocalStorage recibido: "+user);
-            Session_IdSesion.put(session,user);
-        }
+        if (messageText.startsWith("CLICK:")) {
+            System.out.println("Contenido del mensaje enviado: " + messageText);
 
-        for (Map.Entry<WebSocketSession,String> entry: Session_IdSesion.entrySet()){
-            WebSocketSession session1 = entry.getKey();
-            String user = entry.getValue();
-            System.out.println("El user: "+user+", la sesion: "+session1);
+            /*se divide el mensaje en partes utilizando el carácter ":" como separador.
+                El número 3 indica que se dividirá el mensaje en máximo 4 partes. */
+            String[] parts = messageText.split(":", 4);
+
+            /* parts[0] contendrá "CLICK", parts[1] contendrá el destinatario y parts[2] contendrá el remitente, parts[3] el contenido del mensaje.*/
+            String destinatario = parts[1];
+            String remitente = parts[2];
+            String contenido = parts[3];
+            System.out.println("el remitente es: "+remitente);
+            System.out.println("el destinaraios es: "+destinatario);
+            System.out.println("el contenido es: "+contenido);
+
+
         }
 
 

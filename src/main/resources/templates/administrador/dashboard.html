@@ -291,7 +291,7 @@
       </a>
     </li><!-- End Profile Page Nav -->
     <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/administrador/mensajeria}">
+      <a class="nav-link collapsed" th:href="@{/administrador/mensajeria(id=${session.administrador.idAdministrador})}">
         <i class="bi bi-wechat"></i>
         <span>Mensajería</span>
       </a>
@@ -334,7 +334,7 @@
                       <td>
                         <div class="row gx-5">
                           <div class="col-sm-3">
-                            <img th:if="${doctor.foto!=null}" th:src="@{|/administrador/imageDoc/${doctor.id_doctor}|}" alt="#" width="70" height="70" class="rounded-circle"/>
+                            <img th:if="${doctor.foto!=null}" th:src="@{|/administrador/imageUser/${doctor.id_doctor}|}" alt="#" width="70" height="70" class="rounded-circle"/>
                             <img th:unless="${doctor.foto!=null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="#" width="70" height="70" class="rounded-circle"/>
                           </div>
                           <div class="col d-flex justify-content-between align-items-center">
@@ -346,7 +346,10 @@
                         </div>
                       </td>
                       <td>
-                        <span class="text-muted text-end ms-2 float-end"><h6 th:text="${doctor.especialidad.nombre}"></h6></span>
+                        <div class="d-flex flex-column align-items-center">
+                          <span class="text-muted text-end ms-2 float-end"><h6 th:text="${doctor.especialidad.nombre}"></h6></span>
+                          <a th:href="@{/administrador/mensajeria(id=${doctor.id_doctor})}"><i class="bi bi-wechat"></i></a>
+                        </div>
                       </td>
                     </tr>
 
@@ -376,7 +379,7 @@
 
                         <div class="row gx-5">
                           <div class="col-sm-3">
-                            <img th:if="${paciente.foto!=null}" th:src="@{|/administrador/imagePaci/${paciente.idPaciente}|}" alt="#" width="70" height="70" class="rounded-circle"/>
+                            <img th:if="${paciente.foto!=null}" th:src="@{|/administrador/imageUser/${paciente.idPaciente}|}" alt="#" width="70" height="70" class="rounded-circle"/>
                             <img th:unless="${paciente.foto!=null}" th:src="@{/assets/img/userPorDefecto.jpg}"  alt="#" width="70" height="70" class="rounded-circle"/>
 
                           </div>
@@ -390,7 +393,13 @@
 
                       </td>
                         <td>
-                          <span class="text-muted text-end ms-2 float-end"><h6 th:if="${paciente.estado == 1}" th:text="Activo"></h6></span>
+                          <div class="d-flex flex-column align-items-center">
+                            <span class="text-muted text-end ms-2 float-end">
+                                <h6 th:if="${paciente.estado == 1}" th:text="Activo"></h6>
+                                <h6 th:if="${paciente.estado == 3}" th:text="Registrado"></h6>
+                            </span>
+                            <a th:href="@{/administrador/mensajeria(id=${paciente.idPaciente})}"><i class="bi bi-wechat"></i></a>
+                          </div>
 
                         </td>
                     </tr>

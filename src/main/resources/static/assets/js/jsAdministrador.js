@@ -83,6 +83,9 @@ $(document).ready(function() {
 function openFilterModal() {
   $('#filterModal').modal('show');
 }
+function openFilterModal() {
+  $('#filterModal2').modal('show');
+}
 //funcion para abrir el popu de descarga completada
 
 
