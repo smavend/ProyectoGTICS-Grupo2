@@ -414,8 +414,16 @@
         ctx.drawImage(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height);
         return canvas.toDataURL();
     }
-
-    async function genPDF() {
+    // Función para agregar imágenes a la página
+    async function addImagesToPage(doc, pageWidth, logoUrl) {
+        var logo = await loadImageAndAdjustOpacity(logoUrl, 0.3);
+        // Añade la imagen al fondo
+        doc.addImage(logo, 'PNG', 0, pageWidth / 4, pageWidth, pageWidth);
+        // Ahora añade la segunda imagen en la esquina superior izquierda
+        var logoCorner = await getImageBase64(logoUrl);
+        doc.addImage(logoCorner, 'PNG', 10, 10, 25, 25);
+    }
+  /*  async function genPDF() {
         var doc = new jsPDF();
         var logoUrl = '/assets/img/logoClinicaPNG.png'; // Cambia esto a la URL de tu imagen
         var logo = await loadImageAndAdjustOpacity(logoUrl, 0.3);
@@ -520,8 +528,126 @@
         }
 
         doc.save('InformeMedico_' + nombrePaciente + '.pdf');
+    }*/
+    async function genPDF() {
+        var doc = new jsPDF();
+        var logoUrl = '/assets/img/logoClinicaPNG.png'; // Cambia esto a la URL de tu imagen
+        var logo = await loadImageAndAdjustOpacity(logoUrl, 0.3);
 
+        // Añade la imagen al fondo
+        var pageWidth = doc.internal.pageSize.width;
+        var pageHeight = doc.internal.pageSize.height;
+        doc.addImage(logo, 'PNG', 0, pageWidth / 4, pageWidth, pageWidth);
 
+        // Ahora añade la segunda imagen en la esquina superior izquierda
+        var logoCorner = await getImageBase64(logoUrl);
+        doc.addImage(logoCorner, 'PNG', 10, 10, 25, 25);
+
+        // Añadir texto al lado de la imagen
+        doc.setFontSize(22);
+        doc.setFontType("bold")
+        doc.text(35, 25, 'Clínica InterPucp'); // Asegúrate de ajustar las coordenadas 'x' e 'y' para posicionar correctamente este texto
+        doc.setFontSize(18);
+        doc.setFontType("bold")
+        doc.text(85, 50, 'Informe Médico');
+        doc.text(84, 51, '______________')
+
+        // Capturar los datos del paciente de la página HTML
+        var nombrePaciente = document.getElementById('NombrePaciente').textContent; // Obtener el texto del nombre del paciente
+        var seguroMedico = document.getElementById('SeguroMedico').textContent; // Obtener el texto del seguro médico
+        var telefono = document.getElementById('telefono').textContent;
+        var correo = document.getElementById('correo').textContent;
+        var direccion = document.getElementById('direccion').textContent;
+        var distrito = document.getElementById('distrito').textContent;
+        var birthday = document.getElementById('birthday').textContent;
+        var genero = document.getElementById('genero').textContent;
+
+        doc.setFontSize(14);
+        doc.setFontType("bold");
+        doc.text(20, 65, 'Información del Paciente'); // Empieza más abajo para evitar la superposición con la imagen
+        doc.text(19, 66, '______________________')
+        doc.setFontSize(12);
+        doc.setFontType("normal");
+        doc.text(20, 75, 'Nombre de Paciente: ' + nombrePaciente);
+        doc.text(20, 85, 'Seguro médico: ' + seguroMedico);
+        doc.text(20, 95, 'Teléfono: ' + telefono);
+        doc.text(20, 105, 'Correo: ' + correo);
+        doc.text(20, 115, 'Dirección: ' + direccion);
+        doc.text(20, 125, 'Distrito: ' + distrito);
+        doc.text(20, 135, 'Fecha de Nacimiento: ' + birthday);
+        doc.text(20, 145, 'Género: ' + genero);
+
+        var tablaAlergias = document.getElementById('tablaAlergias'); // Asegúrate de tener el id correcto de la tabla de alergias
+        var filasAlergia = tablaAlergias.rows;
+        var alergias = [];
+
+        // Empezar desde el índice 1, no desde el índice 0, para saltar el encabezado de la tabla
+        for (var i = 1; i < filasAlergia.length; i++) {
+            var celdas = filasAlergia[i].cells;
+            alergias.push(celdas[1].innerText); // Solo se toma el nombre de la alergia, la columna 1
+        }
+
+        var textoAlergias = alergias.join(', ');
+
+        doc.setFontSize(14);
+        doc.setFontType("bold");
+        doc.text(20, 160, 'Lista de Alergias');
+        doc.text(19, 161, '_______________');
+        doc.setFontType("normal");
+        doc.setFontSize(12);
+        doc.text(20, 168, 'Alergias: ' + textoAlergias); // Escribe todas las alergias en una línea
+
+        doc.setFontSize(14);
+        doc.setFontType("bold");
+        doc.text(20, 184, 'Tratamientos'); // Empieza más abajo para evitar la superposición con la imagen
+        doc.text(19, 185, '____________')
+        doc.setFontType("normal");
+        doc.setFontSize(12);
+        var tablaTratamiento = document.getElementById('tablaTratamiento');
+        var filas = tablaTratamiento.rows;
+        var datosTabla = [];
+
+        // Empezar desde el índice 1, no desde el índice 0, para saltar el encabezado de la tabla
+        for (var i = 1; i < filas.length; i++) {
+            var celdas = filas[i].cells;
+            var fila = [];
+            for (var j = 0; j < celdas.length; j++) {
+                fila.push(celdas[j].innerText);
+            }
+            datosTabla.push(fila);
+        }
+
+        var y = 195; // Asegúrate de que 'y' se inicialice a la posición vertical correcta
+        var pageHeight = doc.internal.pageSize.height; // Altura de la página
+
+        for (var i = 0; i < datosTabla.length; i++) {
+            var x = 20; // Reset x position for each row
+            for (var j = 0; j < datosTabla[i].length; j++) {
+                var texto = titulosColumnas[j] + ': ' + datosTabla[i][j]; // Combine column title and cell value
+
+                // Verificar si la próxima línea va a estar fuera de la página
+                if (y + 10 > pageHeight) {
+                    doc.addPage(); // Agregar una nueva página
+                    doc.addImage(logo, 'PNG', 0, pageWidth / 4, pageWidth, pageWidth); // Añadir imagen de fondo a la nueva página
+                    doc.addImage(logoCorner, 'PNG', 10, 10, 25, 25); // Añadir imagen de esquina a la nueva página
+                    y = 20; // Reset y position to the top of the new page
+                }
+
+                doc.text(x, y, texto); // Write each cell on a new line
+                y += 10; // Move down after each cell
+            }
+            y += 10; // Leave a blank line after each row
+
+            // Verificar de nuevo si la próxima línea va a estar fuera de la página
+            if (y + 10 > pageHeight) {
+                doc.addPage(); // Agregar una nueva página
+                doc.addImage(logo, 'PNG', 0, pageWidth / 4, pageWidth, pageWidth); // Añadir imagen de fondo a la nueva página
+                doc.addImage(logoCorner, 'PNG', 10, 10, 25, 25); // Añadir imagen de esquina a la nueva página
+                y = 20; // Reset y position to the top of the new page
+            }
+        }
+
+        doc.save('InformeMedico_' + nombrePaciente + '.pdf');
     }
 </script>
 
