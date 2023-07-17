@@ -182,8 +182,8 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "  AND especialidad_id_especialidad IN (4, 5, 6)",nativeQuery = true)
     List<Cita> listarExamenes(String idPaciente);
 
-    @Query(value = "select * from cita where doctor_id_doctor=?1",nativeQuery = true)
-    List<Cita> obtenerCitasPorDoctorId(String idDoctor);
+    @Query(value = "select * from cita where doctor_id_doctor=?1 and sede_id_sede=?2",nativeQuery = true)
+    List<Cita> obtenerCitasPorDoctorId(String idDoctor,int idSede);
 
     @Query(nativeQuery = true, value = "select * from cita c where c.id_cita = ?1")
     Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes xd

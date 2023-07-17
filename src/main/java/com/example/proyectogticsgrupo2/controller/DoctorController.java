@@ -139,7 +139,7 @@ public class DoctorController {
 
         List<Cita> listaCitaPresencial = new ArrayList<>();
         List<Cita> listaCitaVirtual= new ArrayList<>();
-        List<Cita> citasDelDoctor=citaRepository.obtenerCitasPorDoctorId(doctor.getId_doctor());
+        List<Cita> citasDelDoctor=citaRepository.obtenerCitasPorDoctorId(doctor.getId_doctor(),doctor.getSede().getIdSede());
 
         for (Cita cita : citasDelDoctor) {
 
@@ -351,7 +351,7 @@ public class DoctorController {
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
         doctor = doctorOptional.get();
 
-        List<Cita> citasDelDoctor=citaRepository.obtenerCitasPorDoctorId(doctor_session.getId_doctor());
+        List<Cita> citasDelDoctor=citaRepository.obtenerCitasPorDoctorId(doctor_session.getId_doctor(),doctor_session.getSede().getIdSede());
         Doctor buscarHorarioDeDoctor=doctorRepository.buscarHorarioPorDoctorId(doctor_session.getId_doctor());
         Horario horarioDeDoctor = null;
         try {

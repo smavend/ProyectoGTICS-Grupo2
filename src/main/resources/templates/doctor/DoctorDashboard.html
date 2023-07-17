@@ -140,7 +140,7 @@
 
                                                                     <a th:id="'btnEnviarCuestionario' + ${obj.index}"
                                                                        th:if="${cita.modalidad == 1}"
-                                                                       style="display: block"
+                                                                       style="width: max-content;display: block"
                                                                        data-bs-toggle="tooltip"
                                                                        data-bs-placement="top"
                                                                        title="Enviar cuestionario"
@@ -149,15 +149,10 @@
                                                                        >
                                                                         <i class="bi-file-text-fill"></i>
                                                                     </a>
-                                                                    <input th:id="'correo' + ${obj.index}"
-                                                                           type="hidden" th:value="${cita.getCorreo()}"/>
-
-
-
-
-
 
                                                                 </div>
+                                                                <input th:id="'correo' + ${obj.index}"
+                                                                       type="hidden" th:value="${cita.getCorreo()}"/>
                                                             </td>
 
                                                             <td th:if="${cita.modalidad == 0 && (cita.estado ==0 || cita.estado==1 || cita.estado==2 || cita.estado ==3)}" style="font-size: 1rem;color: black">
@@ -646,6 +641,7 @@
                 // Llamar a la función inicialmente
                 verificarTabla();
 
+                // Llamar a la función cada 5 segundos (5000 milisegundos)
                 setInterval(verificarTabla, 1000);
             });
 
