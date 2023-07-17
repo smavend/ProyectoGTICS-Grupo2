@@ -82,7 +82,7 @@
                             <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="row my-4">
+                            <div class="row my-2">
                                 <div class="col-12 text-center">
                                     <span>Seleccione el tipo de pago</span>
                                 </div>
@@ -162,7 +162,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="numeroTarjeta">
+                                        <input type="text" class="form-control" id="numeroTarjeta" placeholder="XXXX-XXXX-XXXX-XXXX">
                                     </div>
                                     <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
                                     <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El número de tarjeta debe tener 16 dígitos</div>
@@ -185,7 +185,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" id="codigoSegTarjeta">
+                                            <input type="text" class="form-control" id="codigoSegTarjeta" placeholder="XXX">
                                         </div>
                                         <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
                                         <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El código debe tener 3 dígitos</div>
@@ -341,8 +341,9 @@
             var idCitaPagar = document.getElementById('idCita').dataset.valor;
             $('#idCitaPagar').val(idCitaPagar);
             var codigoRecibo;
+            var table;
             $(document).ready(function () {
-                $('#tablax').DataTable({
+                table = $('#tablax').DataTable({
                     language: {
                         processing: "Tratamiento en curso...",
                         search: "Buscar&nbsp;:",
@@ -372,9 +373,9 @@
                         null,
                         null,
                         null,
-                        {orderable: false},
-                        {orderable: false},
-                        {orderable: false}
+                        { orderable: false },
+                        { orderable: false },
+                        { orderable: false }
                     ],
                     columnDefs: [
                         {
@@ -383,12 +384,21 @@
                         }
                     ]
                 });
-                $(".fila_cita").each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                })
+                function calcularPreciosEnTodasLasPaginas() {
+                    $(".fila_cita").each(function () {
+                        var idEspecialidad = $(this).data('id-especialidad');
+                        var precioCalculado = calcularPrecio(idEspecialidad);
+                        $(this).find('.precio-calculado').text('S/. ' + precioCalculado.toFixed(2));
+                    })
+                }
+                calcularPreciosEnTodasLasPaginas();
+                table.on('draw.dt', function () {
+                    calcularPreciosEnTodasLasPaginas();
+                });
             });
+            function updateTable(data) {
+                table.clear().rows.add(data).draw();
+            }
         </script>
 
         <!--Script para Modal-->
@@ -608,22 +618,14 @@
             const botonCancelados = $("#boton_cancelados");
             const citas = $(".fila_cita");
             const coaseguro = document.getElementById('coaseguro').dataset.valor;
+
             function buscarPagosPendientes() {
                 botonPendientes.addClass("botonTipoSeleccionado");
                 botonTodos.removeClass("botonTipoSeleccionado");
                 botonCancelados.removeClass("botonTipoSeleccionado");
 
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    if ($(this).hasClass("cita_pendiente")){
-                        $(this).show();
-                    }
-                    else{
-                        $(this).hide();
-                    }
-                })
+                const pagosPendientes = citas.filter('.cita_pendiente').toArray();
+                updateTable(pagosPendientes);
             }
 
             function buscarPagosCancelados() {
@@ -631,17 +633,8 @@
                 botonTodos.removeClass("botonTipoSeleccionado");
                 botonPendientes.removeClass("botonTipoSeleccionado");
 
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    if ($(this).hasClass("cita_cancelada")){
-                        $(this).show();
-                    }
-                    else{
-                        $(this).hide();
-                    }
-                })
+                const pagosCancelados = citas.filter('.cita_cancelada').toArray();
+                updateTable(pagosCancelados);
             }
 
             function buscarPagosTodos() {
@@ -649,12 +642,7 @@
                 botonPendientes.removeClass("botonTipoSeleccionado");
                 botonCancelados.removeClass("botonTipoSeleccionado");
 
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    $(this).show();
-                })
+                updateTable(citas.toArray());
             }
         </script>
     </body>
