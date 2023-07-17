@@ -101,7 +101,7 @@
 
             </section>
 
-            <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="canvasHorarios" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="canvasHorarios" aria-labelledby="offcanvasWithBothOptionsLabel" style="transition: transform .4s ease-in-out">
                 <div class="offcanvas-header">
                     <h2 class="offcanvas-title text-dark fw-bold" id="offcanvasWithBothOptionsLabel">Próximos horarios</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -167,10 +167,17 @@
 
                 $.get(getUrl()+"/Paciente/api/horarios/proximos/"+doctor)
                     .done(function (data){
-                        for (let i = 0; i < data.horarios.length; i++){
-                            contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>"+
-                                data.horarios[i].dia+": "+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+
-                                "</div>")
+
+                        if(data.horarios.length === 0){
+                            contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>" +
+                                data.horarios[i].dia + ": No hay horarios disponibles</div>")
+                        }
+                        else{
+                            for (let i = 0; i < data.horarios.length; i++){
+                                contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>"+
+                                    data.horarios[i].dia+": "+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+
+                                    "</div>")
+                            }
                         }
                     }).fail(function (e){
                         console.log("error");

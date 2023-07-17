@@ -31,15 +31,15 @@ public class Cita {
     @Column(nullable = false)
     private LocalDateTime fin;
 
-    @NotBlank(message = "El campo no puede estar vacío")
+    @NotBlank(message = "El campo no puede estar vacío", groups = validacion.class)
     @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String diagnostico;
 
-    @NotBlank(message = "El campo no puede estar vacío")
+    @NotBlank(message = "El campo no puede estar vacío", groups = validacion.class)
     @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String receta;
 
-    @NotBlank(message = "El campo no puede estar vacío")
+    @NotBlank(message = "El campo no puede estar vacío", groups = validacion.class)
     @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String tratamiento;
 
@@ -87,5 +87,7 @@ public class Cita {
     private String examencontenttype;
 
     private String link;
+
+    public interface validacion{}
 
 }
