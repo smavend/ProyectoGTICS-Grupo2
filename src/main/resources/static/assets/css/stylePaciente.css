@@ -1302,12 +1302,9 @@ p{
 }
 
 .cardLogo{
-    font-size: 1.1rem;
     border-radius: 15px;
     transition: all 0.3s;
     padding: 20px;
-    background-color: #f5f5f5;
-    margin-top: -30px;
 }
 
 .cardLogo:hover{
