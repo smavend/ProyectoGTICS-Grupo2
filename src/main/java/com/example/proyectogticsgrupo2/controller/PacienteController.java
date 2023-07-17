@@ -448,7 +448,6 @@ public class PacienteController {
             else{
                 attr.addFlashAttribute("msg", "Cancelación de cita inválida");
             }
-
         }
         else {
             attr.addFlashAttribute("msg", "Ocurrió un error al cancelar la cita");

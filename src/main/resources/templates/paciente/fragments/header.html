@@ -9,11 +9,13 @@
             <!-- Clínica y Botón Cita -->
             <div class="d-flex align-items-center justify-content-between">
                 <a th:href="@{/Paciente/}" class="logo d-flex align-items-center">
-                    <img th:src="@{/assets/img/logoClinicaPNG.png}" class="d-none d-lg-block logoNavBar" alt="Logo de la clínica">
+                    <img th:src="@{/assets/img/logoClinicaPNG.png}" class="d-none d-lg-block logoNavBar"
+                         alt="Logo de la clínica">
                     <span class="d-none d-lg-block tituloNavBar">Clínica INTERPUCP</span>
                 </a>
                 <i class="bi bi-list toggle-sidebar-btn botonToggle ms-sm-2"></i>
-                <a class="botonNavBar botonReservarCita ms-2 ms-sm-3" th:href="@{/Paciente/reservarTipo}">Reservar cita</a>
+                <a class="botonNavBar botonReservarCita ms-2 ms-sm-3" th:href="@{/Paciente/reservarTipo}">Reservar
+                    cita</a>
             </div>
 
             <!-- Íconos y Perfil -->
@@ -24,7 +26,8 @@
                     <li class="nav-item dropdown me-3">
                         <div th:if="${session.superAdminLogueadoComoPaciente}">
                             <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin_being_Paciente}" method="POST">
-                                <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Volver a SuperAdmin">
+                                <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" title="Volver a SuperAdmin">
                                     <i class="fas fa-home"></i>
                                 </button>
                             </form>
@@ -152,15 +155,21 @@
                     <!-- Perfil -->
                     <li class="nav-item dropdown pe-3">
 
-                        <a style="cursor: pointer" class="nav-link nav-profile d-flex align-items-center pe-0" data-bs-toggle="dropdown">
-                            <img th:if="${paciente.foto != null}" th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="fotoPerfil" class="rounded-circle fotoNavBar">
-                            <img th:unless="${paciente.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="fotoPerfil" class="rounded-circle fotoNavBar">
-                            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="'Paciente '+${paciente.nombre}+' '+${paciente.apellidos.substring(0,1)}+'.'">Juanchito P.</span>
+                        <a style="cursor: pointer" class="nav-link nav-profile d-flex align-items-center pe-0"
+                           data-bs-toggle="dropdown">
+                            <img th:if="${paciente.foto != null}"
+                                 th:src="@{/Paciente/imagePaciente(idPaciente=${paciente.idPaciente})}" alt="fotoPerfil"
+                                 class="rounded-circle fotoNavBar">
+                            <img th:unless="${paciente.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}"
+                                 alt="fotoPerfil" class="rounded-circle fotoNavBar">
+                            <span class="d-none d-md-block dropdown-toggle ps-2"
+                                  th:text="'Paciente '+${paciente.nombre}+' '+${paciente.apellidos.substring(0,1)}+'.'">Juanchito P.</span>
                         </a><!-- End Profile Image Icon -->
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6 th:text="${paciente.nombre}+' '+${paciente.apellidos.substring(0,1)}+'.'">Juanchito P.</h6>
+                                <h6 th:text="${paciente.nombre}+' '+${paciente.apellidos.substring(0,1)}+'.'">Juanchito
+                                    P.</h6>
                                 <span>Paciente</span>
                             </li>
                             <li>
