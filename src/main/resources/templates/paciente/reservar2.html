@@ -103,8 +103,8 @@
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"
                 integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
 
-        <!-- Funciones y Ajax -->
-        <script th:src="@{/assets/js/paciente_ReservarCita.js}"></script>
+        <!-- Funciones -->
+        <script th:src="@{/assets/js/paciente_Funciones.js}"></script>
 
         <script th:inline="javascript">
 
@@ -119,6 +119,35 @@
 
             function noSundays(date) {
                 return [date.getDay() != 0, ''];
+            }
+
+            // VALIDAR SELECCIONES Y OBTENER HORARIOS EN RESERVAR CITA
+            $("#select_doctor").change(function(){
+                buscarHorarios($(this).val(), $("#input_fecha").val());
+            });
+
+            $("#input_fecha").change(function(){
+                buscarHorarios($("#select_doctor").val(), $(this).val());
+            })
+
+            function buscarHorarios(doctor, fecha){
+                let selectHorario = $("#select_horario");
+
+                if(doctor !== "" && fecha !== ""){
+                    $.ajax({
+                        method: "GET",
+                        url: getUrl()+"/Paciente/api/horarios/consulta/"+doctor+"/"+fecha
+                    }).done(function(data){
+                        selectHorario.empty();
+                        selectHorario.append("<option value=''>-- Seleccione un horario --</option>");
+                        for(let i = 0; i < data.horarios.length; i++){
+                            selectHorario.append("<option value='"+data.horarios[i].inicio+"'>"+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+"</option>");
+                        }
+
+                    }).fail(function(e){
+                        console.log("error");
+                    });
+                }
             }
         </script>
     </body>

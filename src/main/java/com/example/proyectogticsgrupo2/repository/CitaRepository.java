@@ -75,7 +75,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(nativeQuery = true, value = "select c.* from cita c " +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) " +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
-            "where p.id_paciente = ?1 and NOW() >= c.fin and c.estado != 4" +
+            "where p.id_paciente = ?1 and NOW() >= c.fin and c.estado != 4 " +
             "order by c.inicio DESC")
     List<Cita> buscarHistorialDeCitas(String idPaciente);
 

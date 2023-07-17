@@ -38,6 +38,9 @@
             }
         </style>
 
+        <!-- CDN para CHAT -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+
         <!-- =======================================================
         * Template Name: NiceAdmin
         * Updated: Mar 09 2023 with Bootstrap v5.2.3
@@ -99,7 +102,8 @@
                                                     contraseña?</a>
                                             </div>
                                             <div class="col-12">
-                                                <button class="btn btn-primary w-100" type="submit">Ingresar</button>
+                                                <a class="btn btn-primary w-100" type="submit" id="botonIngresar">Ingresar</a>
+                                                <a class="btn btn-danger" id="botonSalir">Salir</a>
                                             </div>
                                             <div class="col-12">
                                                 <p class="small mb-0">¿Aún no tienes una cuenta? <a
@@ -140,6 +144,87 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
+        <!-- CDN utilizados para CHAT -->
+        <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"
+                integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ=="
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer"
+        ></script>
+        <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/validator/13.6.0/validator.min.js"
+                integrity="sha512-xYHcfaQeUiKHs9YsHqjpyLaHnh+q7y8kYuOGdh5FkJeK7Z+dZct7Yoa7h+PtsrKRh03t8eJZuSeCN7b0dkrFwA=="
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer"
+        ></script>
+        <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.0/firebase.js"
+                integrity="sha512-7NBxPO/qRUrKc+Wi9GbYz0YEzMpi2UMP3mtLcswnvzI0vUFP5Jb7HNVd1V8NmEhXpSe3ZLsoGEhwRHpAZDpYPQ=="
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer"
+        ></script>
+
+        <script th:src="@{/chatSetup/config.js}"></script>
+        <script th:src="@{/chatSetup/firebase.js}"></script>
+
+        <script>
+            // Logueo en Firebase y CometChat
+            const emailLoginInputElement = document.getElementById("username");
+            const passwordLoginInputElement = document.getElementById("password");
+            const loginBtn = document.getElementById("botonIngresar");
+            const logoutButon = document.getElementById("botonSalir");
+
+            loginBtn.addEventListener("click", function (){
+                const email = emailLoginInputElement ? emailLoginInputElement.value : null;
+                const password = passwordLoginInputElement ? passwordLoginInputElement.value : null;
+
+                if(isUserCredentialsValid({email, password})) {
+                    console.log("Validator: Ok");
+
+                    auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
+                        const userEmail = userCredential.user.email;
+                        realTimeDb.ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+                            const val = snapshot.val();
+
+                            if (val){
+                                const keys = Object.keys(val);
+                                const user = val[keys[0]];
+
+                                if (user && user.id) {
+                                    CometChatWidget.init({
+                                        "appID": `${config.CometChatAppId}`,
+                                        "appRegion": `${config.CometChatRegion}`,
+                                        "authKey": `${config.CometChatAuthKey}`
+                                    }).then(response => {
+                                        CometChatWidget.login({uid: user.id}).then((loggedInUser) => {
+                                           console.log("CometChat: Usuario logueado");
+                                        });
+                                    });
+                                }else {
+                                    console.log("Búsqueda: Error");
+                                }
+                            }
+                        });
+                    })
+                        .catch((error) => {
+                            console.log("Firebase: Error")
+                        });
+                }else{
+                    console.log("Validator: Error")
+                }
+            });
+
+            logoutButon.addEventListener("click", function (){
+                CometChatWidget.logout().then(response => {
+                    console.log("CometChat: Deslogueado");
+                });
+            })
+
+            function isUserCredentialsValid({email, password}) {
+                return email && password && validator.isEmail(email) && validator.isLength(password, {min: 6});
+            }
+
+        </script>
     </body>
 
 </html>

@@ -485,9 +485,6 @@ public class PacienteController {
     @GetMapping("/perfil/editar")
     public String editarPerfil(Model model, HttpSession session, Authentication authentication) {
 
-        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);*/
-
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
