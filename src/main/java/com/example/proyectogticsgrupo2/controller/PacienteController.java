@@ -4,7 +4,6 @@ import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import com.example.proyectogticsgrupo2.service.CorreoCitaRegistrada;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,9 +56,10 @@ public class PacienteController {
     final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
     final CuestionarioRepository cuestionarioRepository;
     final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
+    final NotificacionRepository notificacionRepository;
     final SecurityConfig securityConfig;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository, SecurityConfig securityConfig) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository, NotificacionRepository notificacionRepository, SecurityConfig securityConfig) {
 
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
@@ -76,6 +77,7 @@ public class PacienteController {
         this.cuestionarioPorCitaRepository = cuestionarioPorCitaRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.administrativoPorEspecialidadPorSedeRepository = administrativoPorEspecialidadPorSedeRepository;
+        this.notificacionRepository = notificacionRepository;
         this.securityConfig = securityConfig;
     }
 
@@ -1204,4 +1206,170 @@ public class PacienteController {
             response.addCookie(cookie);
         }
     }
+
+    // Notificaciones
+
+    @GetMapping(value = {"/notificacionNoVistos"})
+    @ResponseBody
+    public Integer notificacionNoVistos(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificacionesNoLeidas(paciente.getIdPaciente());
+        List<Integer> listaNoVistos = new ArrayList<>();
+
+        /*List<SpringSession> sesiones=springSessionRepository.buscarSesiones();*/
+
+        for (int i=0; i<listaNotificaciones.size(); i++) {
+            listaNoVistos.add(listaNotificaciones.get(i).getRevisado());
+        }
+        //verificar cuando es nulo
+
+        return listaNoVistos.size();
+    }
+
+    @GetMapping(value = {"/notificacionListaTitulo"})
+    @ResponseBody
+    public List<String> notificacionLista(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
+        List<String> listaTitulos = new ArrayList<>();
+
+        for (int i=0; i<listaNotificaciones.size(); i++) {
+            listaTitulos.add(listaNotificaciones.get(i).getTitulo());
+            System.out.println(listaNotificaciones.get(i).getTitulo());
+        }
+
+        return listaTitulos;
+    }
+
+    @GetMapping(value = {"/notificacionListaDescripcion"})
+    @ResponseBody
+    public List<String> notificacionListaDescripcion(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
+        List<String> listaTitulos = new ArrayList<>();
+
+        for (int i=0; i<listaNotificaciones.size(); i++) {
+            listaTitulos.add(listaNotificaciones.get(i).getDescripcion());
+            System.out.println(listaNotificaciones.get(i).getTitulo());
+        }
+
+        return listaTitulos;
+    }
+
+    public String obtenerTiempoTranscurrido(int segundos) {
+        if (segundos < 60) {
+            return "Hace " + segundos + " segundos";
+        } else if (segundos < 3600) {
+            int minutos = segundos / 60;
+            return "Hace " + minutos + " minutos";
+        } else if (segundos < 86400) {
+            int horas = segundos / 3600;
+            return "Hace " + horas + " horas";
+        } else {
+            int dias = segundos / 86400;
+            return "Hace " + dias + " días";
+        }
+    }
+
+    @GetMapping(value = {"/notificacionListaHora"})
+    @ResponseBody
+    public List<String> notificacionListaHora(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
+        System.out.println(listaNotificaciones.size());
+
+        List<String> listaTiempo = new ArrayList<>();
+        Integer diferencia=0 ;
+        for (int i=0; i<listaNotificaciones.size(); i++) {
+            diferencia=notificacionRepository.fechaActual(listaNotificaciones.get(i).getFecha());
+            System.out.println(diferencia);
+            listaTiempo.add(obtenerTiempoTranscurrido(diferencia));
+        }
+
+        return listaTiempo;
+    }
+
+    @GetMapping(value = {"/SetearRevisadoA1"})
+    @ResponseBody
+    void SetearRevisadoA1(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificacionesNoLeidas(paciente.getIdPaciente());
+
+        for (int i=0; i<=listaNotificaciones.size(); i++) {
+            notificacionRepository.SetearA1(listaNotificaciones.get(i).getId_notificacion());
+        }
+
+    }
+
+    @GetMapping(value = {"/notificacionCuestionario"})
+    @ResponseBody
+    public List<String> notificacionCuestionario(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
+        List<String> listaTitulos = new ArrayList<>();
+
+        for (int i=0; i<listaNotificaciones.size(); i++) {
+            listaTitulos.add(listaNotificaciones.get(i).getDescripcion());
+            System.out.println(listaNotificaciones.get(i).getTitulo());
+        }
+
+        return listaTitulos;
+    }
+
+
+    //Fin notificaciones
 }

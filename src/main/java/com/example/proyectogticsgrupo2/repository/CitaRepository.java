@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
-    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado,c.seguro_id_seguro \n" +
+    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado,c.seguro_id_seguro,p.correo \n" +
             "FROM cita c \n" +
             "INNER JOIN doctor d ON d.id_doctor = c.doctor_id_doctor \n" +
             "INNER JOIN paciente p ON p.id_paciente = c.paciente_id_paciente \n" +
@@ -23,7 +23,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "  AND c.estado <> 4 \n" +
             "  AND c.sede_id_sede = d.sede_id_sede \n" +
             "  AND c.fin > CURRENT_TIME()\n"+
-            "ORDER BY c.id_cita ASC\n",
+            "ORDER BY c.inicio ASC\n",
             nativeQuery = true)
         //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorProxCitas(String id);
@@ -32,6 +32,10 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(value = "SELECT MAX(c.id_cita), p.id_paciente, p.nombre, p.apellidos,p.foto,p.fotoname,p.fotocontenttype FROM proyectogtics.cita c INNER JOIN proyectogtics.doctor d ON (d.id_doctor=c.doctor_id_doctor) INNER JOIN proyectogtics.paciente p ON (p.id_paciente=c.paciente_id_paciente) WHERE doctor_id_doctor=?1 AND c.sede_id_sede = d.sede_id_sede  group by p.id_paciente",
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorListaPacientes(String id);
+
+    @Query(value = " select * FROM proyectogtics.cita WHERE doctor_id_doctor=?1 AND c.sede_id_sede =?2",
+            nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
+    List<Cita> listaCitasSesion(String id,int sede);
 
 
     @Query(nativeQuery = true, value = "select c.* from cita c " +
@@ -181,8 +185,8 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "  AND especialidad_id_especialidad IN (4, 5, 6)",nativeQuery = true)
     List<Cita> listarExamenes(String idPaciente);
 
-    @Query(value = "select * from cita where doctor_id_doctor=?1",nativeQuery = true)
-    List<Cita> obtenerCitasPorDoctorId(String idDoctor);
+    @Query(value = "select * from cita where doctor_id_doctor=?1 and sede_id_sede=?2",nativeQuery = true)
+    List<Cita> obtenerCitasPorDoctorId(String idDoctor,int idSede);
 
     @Query(nativeQuery = true, value = "select * from cita c where c.id_cita = ?1")
     Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes xd

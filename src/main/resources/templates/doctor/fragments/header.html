@@ -15,6 +15,167 @@
                 </a>
                 <i class="bi bi-list toggle-sidebar-btn botonToggle ms-sm-2"></i>
             </div>
+<<<<<<< HEAD
+=======
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-x-circle text-danger"></i>
+            <div>
+              <h4>Atque rerum nesciunt</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>1 hr. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-check-circle text-success"></i>
+            <div>
+              <h4>Sit rerum fuga</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>2 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-info-circle text-primary"></i>
+            <div>
+              <h4>Dicta reprehenderit</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>4 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li class="dropdown-footer">
+            <a href="#">Show all notifications</a>
+          </li>
+
+        </ul><!-- End Notification Dropdown Items -->
+
+      </li><!-- End Notification Nav -->
+
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+          <i class="bi bi-chat-left-text"></i>
+          <span class="badge bg-success badge-number">3</span>
+        </a><!-- End Messages Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+          <li class="dropdown-header">
+            You have 3 new messages
+            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>Maria Hudson</h4>
+                <p>Estimado administrador, quisiera solicitar su autorización para realizar una
+                  cirugía ...</p>
+                <p>4 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>Anna Nelson</h4>
+                <p>Hola, quisiera informarle que hay un problema en la plataforma que está
+                  impidiendo ...</p>
+                <p>6 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a href="#">
+              <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>David Muldon</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>8 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="dropdown-footer">
+            <a href="#">Show all messages</a>
+          </li>
+
+        </ul><!-- End Messages Dropdown Items -->
+
+      </li><!-- End Messages Nav -->
+
+      <h6 th:text="'Sede: '+${doctor.sede.nombre}" style="color: white;margin-right: 15px;margin-top: 10px"></h6>
+      <li class="nav-item dropdown pe-3">
+
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+           data-bs-toggle="dropdown">
+          <img th:if="${doctor.foto != null}" style="width: 50px;height: 50px" th:src="@{'/usuario/foto/'+${doctor.getId_doctor()}}" alt="Profile" class="rounded-circle">
+          <img th:unless="${doctor.foto != null}" style="width: 50px;height: 50px" th:src="@{/assets/img/userPorDefecto.jpg}" alt="Profile" class="rounded-circle">
+          <span th:text="'Dr. '+${doctor.nombre}+' '+${doctor.apellidos}" class="d-none d-md-block dropdown-toggle ps-2"></span>
+        </a><!-- End Profile Iamge Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li  class="dropdown-header">
+            <h6 th:text="${doctor.nombre}+' '+${doctor.apellidos}"></h6>
+            <span>Doctor</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{'/doctor/perfil'+ '?id=' + ${doctor.id_doctor}}">
+              <i class="bi bi-person"></i>
+              <span>Mi Perfil</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/doctor/configuracion}"   >
+              <i class="bi bi-gear"></i>
+              <span>Configuraciones</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+>>>>>>> 71a0f416c60b6d9765521507a877ffd5a7b256d3
 
 
             <nav class="header-nav ms-auto">

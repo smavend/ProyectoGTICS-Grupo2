@@ -49,6 +49,7 @@
 
         <!-- CDN CometChat -->
         <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     </head>
     <body>
@@ -58,7 +59,7 @@
         <main id="main" class="main">
             <section class="section dashboard">
 
-                <form th:if="${cita.estado != 5}" method="post" th:action="@{/doctor/guardarReporte}"
+                <form th:if="${cita.estado != 5}" method="post" th:action="@{/doctor/guardarReporte}" id="formDoc"
                       th:object="${cita}" class="mt-2">
 
                     <input th:field="*{id_cita}" name="id_cita" type="hidden"/>
@@ -102,39 +103,38 @@
 
                             <h2 style="color: black;text-align: center;">Diagnóstico</h2>
                             <div class="mb-3">
-                                    <textarea oninput="autoResizeTextarea(this)"
+                                    <textarea oninput="autoResizeTextarea(this)" id="diagnostico"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
                                               type="text" name="diagnostico"
                                               th:value="${cita.diagnostico != null? cita.diagnostico: ''}"
                                               th:classappend="${#fields.hasErrors('diagnostico')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('diagnostico')}"
-                                 th:errors="*{diagnostico}"></div>
+                            <div class="invalid-feedback" id="errordiagnostico" style="display: none"></div>
+
 
                             <h2 style="color: black;text-align: center;">Indicaciones de Tratamiento</h2>
                             <div class="mb-3">
-                                    <textarea oninput="autoResizeTextarea(this)"
+                                    <textarea oninput="autoResizeTextarea(this)" id="tratamiento"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
                                               type="text" name="tratamiento"
                                               th:value="${cita.tratamiento != null? cita.tratamiento: ''}"
                                               th:classappend="${#fields.hasErrors('tratamiento')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('tratamiento')}"
-                                 th:errors="*{tratamiento}"></div>
+                            <div class="invalid-feedback" id="errortratamiento" style="display: none"></div>
+
 
                             <h2 style="color: black;text-align: center;">Medicamentos</h2>
                             <div class="mb-3">
-                                    <textarea oninput="autoResizeTextarea(this)"
+                                    <textarea oninput="autoResizeTextarea(this)" id="medicamento"
                                               style="height: fit-content; overflow-y: scroll; resize: none; font-family: inherit;"
                                               type="text" name="receta"
                                               th:value="${cita.receta != null? cita.receta: ''}"
                                               th:classappend="${#fields.hasErrors('receta')?'is-invalid':''}"
                                               class="form-control"></textarea>
                             </div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('receta')}"
-                                 th:errors="*{receta}"></div>
+                            <div class="invalid-feedback" id="errormedicamento" style="display: none"></div>
 
                             <h2 style="text-align: center;" for="especialidad">Orden de exámenes médicos</h2>
                             <div style="display: flex;justify-content: center;" class="select-container">
@@ -223,6 +223,58 @@
                 element.style.height = element.scrollHeight + "px";
             }
 
+        </script>
+        <script>
+            $(document).ready(function (){
+                //validar form
+                $("#formDoc").submit(function (event){
+                    event.preventDefault();
+                    var diagnostico = $("#diagnostico").val();
+                    var medicamento = $("#medicamento").val();
+                    var tratamiento =$("#tratamiento").val();
+
+
+                    if(diagnostico==""){
+                        $("#diagnostico").addClass('is-invalid');
+                        $("#errordiagnostico").text("Ingrese el diagnostico del paciente").show(500).delay(1000);
+                    }else if (diagnostico.length >= 500) {
+                        $("#diagnostico").addClass("is-invalid");
+                        $("#errordiagnostico").text("El diagnostico no debe tener más de 500 caractéres").show(500).delay(1000);
+                    }else {
+                        $("#diagnostico").removeClass('is-invalid');
+                        $("#diagnostico").addClass('is-valid');
+
+                    }
+                    if(tratamiento==""){
+                        $("#tratamiento").addClass('is-invalid');
+                        $("#errortratamiento").text("Ingrese el tratamiento del paciente").show(500).delay(1000);
+                    }else if (tratamiento.length >= 500) {
+                        $("#tratamiento").addClass("is-invalid");
+                        $("#errortratamiento").text("Las indicaciones del tratamiento no debe tener más de 500 caractéres").show(500).delay(1000);
+                    }else {
+                        $("#tratamiento").removeClass('is-invalid');
+                        $("#tratamiento").addClass('is-valid');
+
+                    }
+                    if(medicamento==""){
+                        $("#medicamento").addClass('is-invalid');
+                        $("#errormedicamento").text("Ingrese el medicamento del paciente").show(500).delay(1000);
+                    }else if (medicamento.length >= 500) {
+                        $("#medicamento").addClass("is-invalid");
+                        $("#errormedicamento").text("Las indicaciones de los medicamentos no debe tener más de 500 caractéres").show(500).delay(1000);
+                    }else {
+                        $("#medicamento").removeClass('is-invalid');
+                        $("#medicamento").addClass('is-valid');
+
+                    }
+
+                    if ($("#diagnostico").hasClass("is-valid") && $("#medicamento").hasClass("is-valid") &&
+                        $("#tratamiento").hasClass('is-valid')) {
+                        this.submit();
+                    }
+                });
+
+            });
         </script>
 
         <!-- Vendor JS Files -->

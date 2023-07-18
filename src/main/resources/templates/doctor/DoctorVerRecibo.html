@@ -53,17 +53,16 @@
 
         <main id="main" class="main">
 
-            <h1 style="font-size: 2.5rem;font-weight: 700; width: 50%; margin: 0 50px; color: #435067">Recibo -
-                281FH19701228FG</h1>
+            <h1 th:text="'Recibo - '+${pago.codigoRecibo}" style="font-size: 2.5rem;font-weight: 700; width: 50%; margin: 0 50px; color: #435067"></h1>
             <div style="margin-top: 10px;border-radius: 20px;" class="card top-selling overflow-auto container">
 
                 <section style="margin: 30px">
                     <div class="row encabezadoRecibo">
                         <div class="col-10">
-                            <h2 th:text="'Recibo - '+${cita.getFecha()}" class="subEncabezado"></h2>
+                            <h2 th:text="'Recibo - '+${#temporals.format(pago.fechaCancelada, 'dd-MM-yyyy')}"></h2>
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-secondary botonImprimir">Imprimir</button>
+                            <button class="btn btn-secondary " onclick="imprimir()">Imprimir</button>
                         </div>
                     </div>
 
@@ -72,8 +71,7 @@
                         <p>
                             <span style="font-size: 1.6rem;line-height: 2">Clínica INTERPUC</span>
                             <br>
-                            Dirección Imaginaria
-                            <br>
+                            <p style="margin-bottom: 0px" th:text="${cita2.sede.direccion}"></p>
                             Lima, Perú
                             <br>
                             www.interpucp.com.pe
@@ -87,20 +85,18 @@
                                                   style="font-weight: 400; margin-left: 13px;"
                                                   class="informacionReciboDato"></span></strong>
                             <br>
-                            <strong>Estado:<span style="font-weight: 400; margin-left: 13px;"
-                                                 class="informacionReciboDato">Cancelado</span></strong>
-                            <br>
-                            <strong>Fecha emitida:<span th:text="${cita.getFecha()}"
-                                                        style="font-weight: 400; margin-left: 13px;"
-                                                        class="informacionReciboDato"></span></strong>
+                            <strong>Fecha de la cita:<span th:text="${cita2.inicio}"
+                                                           style="font-weight: 400; margin-left: 13px;"
+                                                           class="informacionReciboDato"></span></strong>
+
+
                         </div>
                         <div class="col-6">
-                            <strong>Fecha cancelada:<span th:text="${cita.getFecha()}"
+                            <strong>Fecha cancelada:<span th:text="${pago.fechaCancelada}"
                                                           style="font-weight: 400; margin-left: 13px;"
                                                           class="informacionReciboDato"></span></strong>
                             <br>
-                            <strong>Tipo de pago:<span style="font-weight: 400; margin-left: 13px;"
-                                                       class="informacionReciboDato">Visa ***1234</span></strong>
+
                         </div>
                     </div>
 
@@ -111,16 +107,16 @@
                             <thead>
                                 <tr>
                                     <th>Por concepto de</th>
+                                    <th>Paciente</th>
                                     <th>Cantidad</th>
-                                    <th>Precio</th>
                                     <th>Importe total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Revisión médica</td>
+                                    <td th:text="${doctor.especialidad.nombre}"></td>
+                                    <td th:text="${cita2.paciente.nombre+' '+cita2.paciente.apellidos}"></td>
                                     <td>1</td>
-                                    <td th:text="${'S/.'+cita.getPago_doctor()}"></td>
                                     <td th:text="${'S/.'+cita.getPago_doctor()}"></td>
                                 </tr>
                             </tbody>
@@ -155,6 +151,12 @@
         </main>
 
         <div id="loading"></div>
+        <script>
+            function imprimir() {
+                window.print();
+            }
+
+        </script>
 
         <!-- ======= Footer ======= -->
         <footer id="footer" class="footer">
