@@ -6,9 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Paciente - Inicio</title>
 
-
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
-
 
     </head>
     <body>
@@ -76,6 +74,49 @@
                 integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
         <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+        <!-- SCRIPT QUE DEBE IR EN SUPERADMIN Y ADMINISTRATIVO -->
+        <script th:inline="javascript" th:if="${credenciales != null}">
+            let credenciales = [[${credenciales}]];
+            for(let i = 0; i < credenciales.length; i++){
+                let email = credenciales[i].correo;
+                let password = credenciales[i].pass;
+                let userAvatar = "url";
+                let userUuid = "uuid.v4()";
+                auth.createUserWithEmailAndPassword(email, password).then((userCrendentials) => { // guardar en FB
+                    if (userCrendentials) {
+                        realTimeDb.ref(`users/${userUuid}`).set({
+                            id: userUuid,
+                            email,
+                            avatar: userAvatar
+                        }).then(() => { // guardar en CC
+                            let user = new CometChatWidget.CometChat.User(userUuid);
+                            user.setName(email);
+                            user.setAvatar(userAvatar);
+
+                            CometChatWidget.init({
+                                "appID": `${config.CometChatAppId}`,
+                                "appRegion": `${config.CometChatRegion}`,
+                                "authKey": `${config.CometChatAuthKey}`
+                            }).then(response =>{
+                                CometChatWidget.createOrUpdateUser(user).then(user => {
+                                    //ocultarLoading();
+                                },error => {
+                                    //ocultarLoading();
+                                });
+                            }, error => {
+                                //ocultarLoading();
+                            });
+                            // fin registro
+                        });
+                    }
+                }).catch((error)=>{
+                    //ocultarLoading();
+                    console.log("error al registrar en FB");
+                });
+
+            }
+        </script>
 
     </body>
 </html>
