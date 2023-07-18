@@ -1538,6 +1538,7 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.buscarPorPaciente(paciente.getIdPaciente());
+        List<Notificacion> notificacionList=notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
         int verificar=0;
         int idCuestionario=0;
         int idCita=0;
@@ -1548,7 +1549,14 @@ public class PacienteController {
                 verificar = 1;
                 idCuestionario = cuestionarioPorCitaList.get(i).getCuestionario().getId_cuestionario();
                 idCita = cuestionarioPorCitaList.get(i).getCita().getId_cita();
-                notificacionRepository.crearNotificacionDeCuestionario(paciente.getIdPaciente());
+
+                if(Objects.equals(notificacionList.get(i).getTitulo(), "Cuestionario de cita (IMPORTANTE)")){
+                    int a=0;
+                }else{
+                    notificacionRepository.crearNotificacionDeCuestionario(paciente.getIdPaciente());
+                }
+
+
                 cuestionarioPorCitaRepository.actualizarOpcionSesion(idCita,idCuestionario);
 
                 ListaIdCitayIdCuestionario.add(idCuestionario);
