@@ -34,8 +34,18 @@ public interface NotificacionRepository extends JpaRepository<Notificacion, Inte
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`notificacion` (`id_paciente`, `titulo`, `descripcion`, `fecha`, `revisado`, `tipo_notificacion`) VALUES (?1, 'Cuestionario de cita (IMPORTANTE)', 'Dé click aquí para redirigirlo a su encuesta', now(), '0', '0')")
+    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`notificacion` (`id_paciente`, `titulo`, `descripcion`, `fecha`, `revisado`, `tipo_notificacion`) VALUES (?1, 'Cuestionario de cita (IMPORTANTE)', 'Dé click aquí para redirigirlo a su encuesta', now(), '0', '1')")
     void crearNotificacionDeCuestionario(String idPaciente);
+
+    @Query(nativeQuery = true, value = "select * from notificacion where tipo_notificacion=1")
+    List<Notificacion> BuscarporTipoNoti();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM `proyectogtics`.`notificacion` WHERE (`id_notificacion` = ?1);")
+    void eliminarNotificacionDeCuestionario(int idNotificacion);
+
+
 
 
 }

@@ -1340,7 +1340,7 @@ public class PacienteController {
 
         List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificacionesNoLeidas(paciente.getIdPaciente());
 
-        for (int i=0; i<=listaNotificaciones.size(); i++) {
+        for (int i=0; i<listaNotificaciones.size(); i++) {
             notificacionRepository.SetearA1(listaNotificaciones.get(i).getId_notificacion());
         }
 
@@ -1381,6 +1381,27 @@ public class PacienteController {
         }
 
         return ListaIdCitayIdCuestionario;
+    }
+
+    @GetMapping(value = {"/eliminarNotificacionCuestionario"})
+    @ResponseBody
+    void eliminarNotificacionDeCuestionario(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+        List<Notificacion> notificacionList=notificacionRepository.BuscarporTipoNoti();
+
+        for (int i = 0; i < notificacionList.size(); i++) {
+            notificacionRepository.eliminarNotificacionDeCuestionario(notificacionList.get(0).getId_notificacion());
+        }
+
+
     }
 
 

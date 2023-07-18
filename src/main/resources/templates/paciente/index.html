@@ -211,29 +211,37 @@
                         $("#guardarValor0").val(response[0]);
                         $("#guardarValor1").val(response[1]);
                         $("#guardarValor2").val(response[2]);
+                        localStorage.setItem("guardarValor0", valorCues);
+                        localStorage.setItem("guardarValor1", valorCita);
                     }
 
                     if (titulo0 === "Cuestionario de cita (IMPORTANTE)") {
                         $("#click0").click(function() {
                             var valorCues = $("#guardarValor0").val();
                             var valorCita = $("#guardarValor1").val();
-                            window.location.href = url6 + '/Paciente/cuestionario?cues=' + valorCues + '&cita=' + valorCita;
+
+                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + localStorage.getItem("guardarValor0") + '&cita=' + localStorage.getItem("guardarValor1");
+                            eliminarNotiCuestio();
                         });
                     }
 
                     if (titulo1 === "Cuestionario de cita (IMPORTANTE)") {
                         var valorCues = $("#guardarValor0").val();
                         var valorCita = $("#guardarValor1").val();
+
                         $("#click1").click(function() {
-                            window.location.href = url6 + '/Paciente/cuestionario?cues=' + valorCues + '&cita=' + valorCita;
+                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + localStorage.getItem("guardarValor0") + '&cita=' + localStorage.getItem("guardarValor1");
+                            eliminarNotiCuestio();
                         });
                     }
 
                     if (titulo2 === "Cuestionario de cita (IMPORTANTE)") {
                         var valorCues = $("#guardarValor0").val();
                         var valorCita = $("#guardarValor1").val();
+
                         $("#click2").click(function() {
-                            window.location.href = url6 + '/Paciente/cuestionario?cues=' + valorCues+ '&cita=' + valorCita;
+                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + localStorage.getItem("guardarValor0")+ '&cita=' + localStorage.getItem("guardarValor1");
+                            eliminarNotiCuestio();
                         });
                     }
 
@@ -242,7 +250,20 @@
                     console.log("Error al obtener las notificaciones de cuestionarios");
                 }
             });
+
+
         }
+
+        function eliminarNotiCuestio() {
+            var url7 = getUrl() + "/Paciente/eliminarNotificacionCuestionario";
+            $.ajax({
+                url: url7,
+                method: "GET",
+                dataType: "json",
+            });
+        }
+
+
         function handleClick() {
             SetearRevisadoA1();
         }
