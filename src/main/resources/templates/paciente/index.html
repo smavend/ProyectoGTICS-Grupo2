@@ -176,36 +176,36 @@
                         $("#guardarValor0").val(response[0]);
                         $("#guardarValor1").val(response[1]);
                         $("#guardarValor2").val(response[2]);
-                        localStorage.setItem("guardarValor0", valorCues);
-                        localStorage.setItem("guardarValor1", valorCita);
+                        localStorage.setItem("guardarValor0", response[0]); // Corregir aquí
+                        localStorage.setItem("guardarValor1", response[1]); // Corregir aquí
                     }
 
                     if (titulo0 === "Cuestionario de cita (IMPORTANTE)") {
-                        $("#click0").click(function() {
-                            var valorCues = $("#guardarValor0").val();
-                            var valorCita = $("#guardarValor1").val();
+                        $("#click0").click(function () {
+                            var valorCues = $("#guardarValor0").val(); // Mover aquí
+                            var valorCita = $("#guardarValor1").val(); // Mover aquí
 
-                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + localStorage.getItem("guardarValor0") + '&cita=' + localStorage.getItem("guardarValor1");
+                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + valorCues + '&cita=' + valorCita;
                             eliminarNotiCuestio();
                         });
                     }
 
                     if (titulo1 === "Cuestionario de cita (IMPORTANTE)") {
-                        var valorCues = $("#guardarValor0").val();
-                        var valorCita = $("#guardarValor1").val();
+                        $("#click1").click(function () {
+                            var valorCues = $("#guardarValor0").val(); // Mover aquí
+                            var valorCita = $("#guardarValor1").val(); // Mover aquí
 
-                        $("#click1").click(function() {
-                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + localStorage.getItem("guardarValor0") + '&cita=' + localStorage.getItem("guardarValor1");
+                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + valorCues + '&cita=' + valorCita;
                             eliminarNotiCuestio();
                         });
                     }
 
                     if (titulo2 === "Cuestionario de cita (IMPORTANTE)") {
-                        var valorCues = $("#guardarValor0").val();
-                        var valorCita = $("#guardarValor1").val();
+                        $("#click2").click(function () {
+                            var valorCues = $("#guardarValor0").val(); // Mover aquí
+                            var valorCita = $("#guardarValor1").val(); // Mover aquí
 
-                        $("#click2").click(function() {
-                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + localStorage.getItem("guardarValor0")+ '&cita=' + localStorage.getItem("guardarValor1");
+                            window.location.href = getUrl() + '/Paciente/cuestionario?cues=' + valorCues + '&cita=' + valorCita;
                             eliminarNotiCuestio();
                         });
                     }
@@ -215,9 +215,8 @@
                     console.log("Error al obtener las notificaciones de cuestionarios");
                 }
             });
-
-
         }
+
 
         function eliminarNotiCuestio() {
             var url7 = getUrl() + "/Paciente/eliminarNotificacionCuestionario";

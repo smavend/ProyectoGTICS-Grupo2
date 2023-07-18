@@ -29,6 +29,8 @@
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
+  <!-- CDN CometChat -->
+  <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -95,20 +97,16 @@
             <form method="post" th:action="@{/administrativo/guardar/invitado}" class="row g-3" th:object="${temporal}">
               <input type="hidden" name="id_temporal" th:value="*{id_temporal}">
               <input type="hidden" name="dni" th:value="*{dni}">
-              <div class="col-md-6">
-                <label class="form-label">Nombre</label>
-                <input type="text" class="form-control" th:field="*{nombre}">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Apellidos</label>
-                <input type="text" class="form-control" th:field="*{apellidos}">
-              </div>
+              <input type="hidden" name="nombre" th:value="*{nombre}">
+              <input type="hidden" name="apellidos" th:value="*{apellidos}">
               <div class="col-md-6">
                 <label class="form-label">Correo</label>
-                <input type="email" class="form-control" th:field="*{correo}">
+                <input type="email" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
+                     th:errors="*{correo}"></div>
               </div>
               <div class="text-center">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Guardar cambios</button>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 <a type="button" class="btn btn-secondary" th:href="@{/administrativo}">Cancelar</a>
               </div>
 
@@ -152,6 +150,7 @@
 </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <th:block th:replace="~{paciente/fragments/scripts.html::chatGeneral}"></th:block>
 <script>
   var headerColorAdministrtivo = "[[${headerColorAdministrativo}]]";
   localStorage.setItem('headerColorAdministrativo', headerColorAdministrtivo);

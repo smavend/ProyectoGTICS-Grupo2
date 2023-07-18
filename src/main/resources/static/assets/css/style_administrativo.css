@@ -219,6 +219,14 @@ h6 {
     background-color: #e2e3e5;
     border-color: #e2e3e5;
 }
+.alergia{
+    display: inline-block;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    padding: 8px 20px;
+}
 
 .bg-success-light {
     background-color: #d1e7dd;
@@ -293,6 +301,15 @@ h6 {
 /* Close Button */
 .btn-close {
     background-size: 25%;
+}
+.botonAgregarAlergia{
+    background-color: #0AA1DD;
+    color: white;
+}
+.botonAgregarAlergia:hover{
+    background-color: #197ce6;
+    color: white;
+    border: none;
 }
 
 .btn-close:focus {

@@ -95,7 +95,7 @@
                       <div class="col-md-12">
                         <label class="form-label">Apellidos<span style="color:red;">*</span></label>
                         <input style="background-color: #e9ecef;opacity: 1;" type="text" class="form-control" id="apellidos" th:field="*{apellidos}" readonly="readonly" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
                              th:errors="*{apellidos}"></div>
                       </div>
                       <div class="col-md-12">

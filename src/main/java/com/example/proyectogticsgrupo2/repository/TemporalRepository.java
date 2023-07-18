@@ -17,8 +17,8 @@ public interface TemporalRepository extends JpaRepository<Temporal, Integer> {
     List<TemporalDiasDto> obtenerDias();
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE temporal SET nombre = ?1, apellidos = ?2, correo = ?3 WHERE (id_usuario_temporal = ?4)")
-    void actualizarInvitado(String nombre, String apellidos, String correo, int idTemporal);
+    @Query(nativeQuery = true, value = "UPDATE temporal SET correo = ?1 WHERE (id_usuario_temporal = ?2)")
+    void actualizarInvitado(String correo, int idTemporal);
 
     public List<Temporal> findByAdministrativo_IdAdministrativo(String idAdministrativo);
 

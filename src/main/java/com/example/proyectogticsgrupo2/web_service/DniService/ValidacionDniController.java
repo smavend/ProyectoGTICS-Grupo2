@@ -47,4 +47,31 @@ public class ValidacionDniController {
         }
         return hashMap;
     }
+    @GetMapping({"/validarDniAdmin/{dni}","/signin/validarDni/{dni}"})
+    public HashMap<String, Object> validacion1(@PathVariable("dni") String dni){
+        List<Paciente> pacientes = pacienteRepository.findAll();
+        boolean existDni = false;
+        for (Paciente p : pacientes) {
+            if (p.getIdPaciente().equals(dni)) {
+                existDni = true;
+                break;
+            }
+        }
+        List<Temporal> temp = temporalRepository.findAll();
+        for (Temporal t : temp) {
+            if (t.getDni().equals(dni)) {
+                existDni = true;
+                break;
+            }
+        }
+        HashMap<String, Object> hashMap = new HashMap<>();
+        if (dni.length()!=8){
+            hashMap.put("err","Debe ingresar un número de 8 dígitos");
+        }else if(existDni){
+            hashMap.put("err","El DNI ya está registrado");
+        }else {
+            hashMap.put("msg","Éxito");
+        }
+        return hashMap;
+    }
 }

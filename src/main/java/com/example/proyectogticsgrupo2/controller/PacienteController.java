@@ -1523,7 +1523,14 @@ public class PacienteController {
         }
 
     }
-
+    private boolean tieneCuestionarioCitaImportante(List<Notificacion> notificaciones) {
+        for (Notificacion notificacion : notificaciones) {
+            if (Objects.equals(notificacion.getTitulo(), "Cuestionario de cita (IMPORTANTE)")) {
+                return true;
+            }
+        }
+        return false;
+    }
     @GetMapping(value = {"/notificacionCuestionario"})
     @ResponseBody
     public List<Integer> notificacionCuestionario(Model model, HttpSession session, Authentication authentication) {
@@ -1538,9 +1545,10 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
 
         List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.buscarPorPaciente(paciente.getIdPaciente());
-        int verificar=0;
-        int idCuestionario=0;
-        int idCita=0;
+        List<Notificacion> notificacionList = notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
+        int verificar = 0;
+        int idCuestionario = 0;
+        int idCita = 0;
         List<Integer> ListaIdCitayIdCuestionario = new ArrayList<>();
 
         for (int i = 0; i < cuestionarioPorCitaList.size(); i++) {
@@ -1548,8 +1556,12 @@ public class PacienteController {
                 verificar = 1;
                 idCuestionario = cuestionarioPorCitaList.get(i).getCuestionario().getId_cuestionario();
                 idCita = cuestionarioPorCitaList.get(i).getCita().getId_cita();
-                notificacionRepository.crearNotificacionDeCuestionario(paciente.getIdPaciente());
-                cuestionarioPorCitaRepository.actualizarOpcionSesion(idCita,idCuestionario);
+
+                if (notificacionList == null || notificacionList.isEmpty() || !tieneCuestionarioCitaImportante(notificacionList)) {
+                    notificacionRepository.crearNotificacionDeCuestionario(paciente.getIdPaciente());
+                }
+
+                cuestionarioPorCitaRepository.actualizarOpcionSesion(idCita, idCuestionario);
 
                 ListaIdCitayIdCuestionario.add(idCuestionario);
                 ListaIdCitayIdCuestionario.add(idCita);
@@ -1559,6 +1571,7 @@ public class PacienteController {
 
         return ListaIdCitayIdCuestionario;
     }
+
 
     @GetMapping(value = {"/eliminarNotificacionCuestionario"})
     @ResponseBody

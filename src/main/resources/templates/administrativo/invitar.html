@@ -30,6 +30,8 @@
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
+  <!-- CDN CometChat -->
+  <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
 
   <!-- DataTables -->
@@ -180,6 +182,7 @@
 </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<th:block th:replace="~{paciente/fragments/scripts.html::chatGeneral}"></th:block>
 <script>
   var headerColorAdministrtivo = "[[${headerColorAdministrativo}]]";
   localStorage.setItem('headerColorAdministrativo', headerColorAdministrtivo);
@@ -241,7 +244,7 @@
         $.ajax({
           method: "GET",
           crossDomain: true,
-          url: getUrl()+"/validarDni/"+dni
+          url: getUrl()+"/validarDniAdmin/"+dni
         }).done(function (result){
           console.log(result);
           if (result.msg === "Éxito"){
@@ -255,9 +258,9 @@
               console.log(info);
               if (info.success === true) {
                 console.log("exitoso");
-                $("#nombre").val(info.data.nombres);
+                $("#nombre").val(info.data.nombres.replace(/[Ñ]/, 'N'));
                 console.log(info.data.nombres, info.data.apellido_paterno, info.data.apellido_materno);
-                $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
+                $("#apellidos").val(info.data.apellido_paterno.replace(/[Ñ]/, 'N') + " " + info.data.apellido_materno.replace(/[Ñ]/, 'N'));
 
                 $("#consulta").removeAttr("disabled");
                 $("#consulta").html("Consultar");

@@ -174,7 +174,7 @@
                                                                     </a>
                                                                 </div>
                                                             </td>
-                                                            <td th:if="${cita.modalidad == 0 && (cita.estado ==0 || cita.estado==1 || cita.estado ==5) }">
+                                                            <td th:if="${cita.modalidad == 0 && (cita.estado ==0 || cita.estado ==5) }">
                                                                 <div style="width: max-content">
                                                                     <a th:if="${cita.modalidad == 0}" th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
                                                                        type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Iniciar cita examen">
