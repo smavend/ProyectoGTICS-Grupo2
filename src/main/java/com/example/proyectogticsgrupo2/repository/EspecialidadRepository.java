@@ -24,4 +24,9 @@ public interface EspecialidadRepository extends JpaRepository<Especialidad, Inte
             "inner join sede_x_especialidad_x_administrativo m on (esp.id_especialidad = m.especialidad_id_especialidad) \n" +
             "where m.sede_id_sede = ?1 and esp.es_examen = 0;")
     List<Especialidad> buscarVirtualesPorSede(int idSede);
+
+
+    @Query(nativeQuery = true, value = "SELECT * FROM especialidad e " +
+            "WHERE e.es_examen = 0")
+    List<Especialidad> buscarEspecialidadesVirtuales();
 }

@@ -4,10 +4,11 @@
 
 body {
     font-family: "Open Sans", sans-serif;
-    background-image: linear-gradient(to right top, #dbe3e8, #e5eaee, #eff0f4, #f7f8f9, #ffffff);
-    color: #444444;
+    background-image: linear-gradient(to right, #ebf0f2, #f1f4f6, #f6f7f9, #fbfbfc, #ffffff);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     min-height: 100vh;
-    height: 100%;
+    color: #444444;
 }
 html {
     height: 100%;
@@ -81,7 +82,7 @@ transition: all 0.3s;
 }
 .contenedor figure{
     position:relative;
-    height: 500px;
+    height: 440px;
     cursor: pointer;
     width: auto;
     overflow: hidden;
@@ -390,54 +391,6 @@ color: #3e4f6f;
 font-size: 15px;
 }
 
-/* Breadcrumbs */
-.breadcrumb {
-font-size: 14px;
-font-family: "Nunito", sans-serif;
-color: #899bbd;
-font-weight: 600;
-}
-
-.breadcrumb a {
-color: #899bbd;
-transition: 0.3s;
-}
-
-.breadcrumb a:hover {
-color: #51678f;
-}
-
-.breadcrumb .breadcrumb-item::before {
-color: #899bbd;
-}
-
-.breadcrumb .active {
-color: #51678f;
-font-weight: 600;
-}
-
-/* Bordered Tabs */
-.nav-tabs-bordered {
-border-bottom: 2px solid #ebeef4;
-}
-
-.nav-tabs-bordered .nav-link {
-margin-bottom: -2px;
-border: none;
-color: #2c384e;
-}
-
-.nav-tabs-bordered .nav-link:hover,
-.nav-tabs-bordered .nav-link:focus {
-color: #4154f1;
-}
-
-.nav-tabs-bordered .nav-link.active {
-background-color: #fff;
-color: #4154f1;
-border-bottom: 2px solid #4154f1;
-}
-
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
@@ -711,7 +664,7 @@ background-color: #aab7cf;
 
 #main,
 #footer {
-    margin-left: 265px;
+    margin-left: 275px;
 }
 }
 
@@ -787,6 +740,7 @@ color: #899bbd;
 .sidebar-nav .nav-link:hover {
 color: white;
 background: #0AA1DD;
+    transform: scale(1.04);
 }
 
 .sidebar-nav .nav-link:hover i {
@@ -992,85 +946,6 @@ color: #777777;
 margin-left: 95px;
 }
 
-/* Recent Sales */
-.dashboard .recent-sales {
-font-size: 14px;
-}
-
-.dashboard .recent-sales .table thead {
-background: #f6f6fe;
-}
-
-.dashboard .recent-sales .table thead th {
-border: 0;
-}
-
-.dashboard .recent-sales .dataTable-top {
-padding: 0 0 10px 0;
-}
-
-.dashboard .recent-sales .dataTable-bottom {
-padding: 10px 0 0 0;
-}
-
-/* Top Selling */
-.dashboard .top-selling {
-font-size: 14px;
-}
-
-.dashboard .top-selling .table thead {
-background: #f6f6fe;
-}
-
-.dashboard .top-selling .table thead th {
-border: 0;
-}
-
-.dashboard .top-selling .table tbody td {
-vertical-align: middle;
-}
-
-.dashboard .top-selling img {
-border-radius: 5px;
-max-width: 60px;
-}
-
-/*--------------------------------------------------------------
-# Icons list page
---------------------------------------------------------------*/
-.iconslist {
-display: grid;
-max-width: 100%;
-grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-gap: 1.25rem;
-padding-top: 15px;
-}
-
-.iconslist .icon {
-background-color: #fff;
-border-radius: 0.25rem;
-text-align: center;
-color: #012970;
-padding: 15px 0;
-}
-
-.iconslist i {
-margin: 0.25rem;
-font-size: 2.5rem;
-}
-
-.iconslist .label {
-font-family: var(--bs-font-monospace);
-display: inline-block;
-width: 100%;
-overflow: hidden;
-padding: 0.25rem;
-font-size: 12px;
-text-overflow: ellipsis;
-white-space: nowrap;
-color: #666;
-}
-
 /*--------------------------------------------------------------
 # Profie Page
 --------------------------------------------------------------*/
@@ -1123,129 +998,6 @@ color: rgba(1, 41, 112, 0.6);
 
 .profile .profile-edit img {
 max-width: 120px;
-}
-
-/*--------------------------------------------------------------
-# F.A.Q Page
---------------------------------------------------------------*/
-.faq .basic h6 {
-font-size: 18px;
-font-weight: 600;
-color: #4154f1;
-}
-
-.faq .basic p {
-color: #6980aa;
-}
-
-/*--------------------------------------------------------------
-# Contact
---------------------------------------------------------------*/
-.contact .info-box {
-padding: 28px 30px;
-}
-
-.contact .info-box i {
-font-size: 38px;
-line-height: 0;
-color: #4154f1;
-}
-
-.contact .info-box h3 {
-font-size: 20px;
-color: #012970;
-font-weight: 700;
-margin: 20px 0 10px 0;
-}
-
-.contact .info-box p {
-padding: 0;
-line-height: 24px;
-font-size: 14px;
-margin-bottom: 0;
-}
-
-.contact .php-email-form .error-message {
-display: none;
-color: #fff;
-background: #ed3c0d;
-text-align: left;
-padding: 15px;
-margin-bottom: 24px;
-font-weight: 600;
-}
-
-.contact .php-email-form .sent-message {
-display: none;
-color: #fff;
-background: #18d26e;
-text-align: center;
-padding: 15px;
-margin-bottom: 24px;
-font-weight: 600;
-}
-
-.contact .php-email-form .loading {
-display: none;
-background: #fff;
-text-align: center;
-padding: 15px;
-margin-bottom: 24px;
-}
-
-.contact .php-email-form .loading:before {
-content: "";
-display: inline-block;
-border-radius: 50%;
-width: 24px;
-height: 24px;
-margin: 0 10px -6px 0;
-border: 3px solid #18d26e;
-border-top-color: #eee;
-animation: animate-loading 1s linear infinite;
-}
-
-.contact .php-email-form input,
-.contact .php-email-form textarea {
-border-radius: 0;
-box-shadow: none;
-font-size: 14px;
-}
-
-.contact .php-email-form input:focus,
-.contact .php-email-form textarea:focus {
-border-color: #4154f1;
-}
-
-.contact .php-email-form input {
-padding: 10px 15px;
-}
-
-.contact .php-email-form textarea {
-padding: 12px 15px;
-}
-
-.contact .php-email-form button[type=submit] {
-background: #4154f1;
-border: 0;
-padding: 10px 30px;
-color: #fff;
-transition: 0.4s;
-border-radius: 4px;
-}
-
-.contact .php-email-form button[type=submit]:hover {
-background: #5969f3;
-}
-
-@keyframes animate-loading {
-0% {
-    transform: rotate(0deg);
-}
-
-100% {
-    transform: rotate(360deg);
-}
 }
 
 /*--------------------------------------------------------------
@@ -1368,6 +1120,17 @@ p{
 
 .seccionPrincipal td{
     padding: 20px 0 20px 20px;
+}
+.bodyReservar th{
+    font-size: 1rem;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
+.bodyReservar td{
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 @media (max-width: 1199px) {
@@ -1494,7 +1257,98 @@ p{
     object-fit: cover;
 }
 
-/* Sección Pagos */
+/* -------------- Reservar cita ----------------- */
+
+.bodyReservar{
+    margin: 20px auto 0 auto;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.cardReservar{
+    border-radius: 15px;
+    width: 65%;
+    margin: auto;
+    background-color: white;
+    box-shadow: 0 2px 20px rgba(0, 13, 35, 0.1);
+}
+
+.cardImagen{
+    height: 170px;
+    width: 170px;
+}
+
+@media (max-width:992px){
+    .cardReservar{
+        width: 80%;
+    }
+
+    .cardImagen{
+        width: 140px;
+        height: 140px;
+    }
+}
+
+@media (max-width:768px){
+    .cardReservar{
+        width: 95%;
+    }
+
+    .cardImagen{
+        width: 100px;
+        height: 100px;
+    }
+}
+
+.cardLogo{
+    border-radius: 15px;
+    transition: all 0.3s;
+    padding: 20px;
+}
+
+.cardLogo:hover{
+    background-color: rgb(237, 237, 237);
+    cursor: pointer;
+    transform: scale(1.07);
+}
+
+.campo{
+    margin: 30px;
+}
+
+.campoHorario{
+    padding: 8px 20px;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    border: solid 4px #e1e1e1;
+    color: #4f4f4f;
+    font-weight: 600;
+    transition: all 0.3s;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.campoHorario:hover{
+    background-color: #0AA1DD;
+    color: white;
+}
+
+.campoHorario:visited{
+    background-color: #0AA1DD;
+    color: white;
+}
+
+.informacion{
+    text-align: left;
+    background-image: linear-gradient(to right, #f5f5f5, #f4f4f4, #f2f3f2, #f1f1f1, #f0f0f0);
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    font-family: "Open Sans";
+}
+
+/* ------------------- Sección Pagos ------------------- */
 
 .botonVerRecibo{
     padding: 10px 15px;
@@ -1528,6 +1382,22 @@ p{
     cursor: pointer;
     color: black;
     background-color: #ffd52b;
+}
+
+.infoModalPagar{
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 11px;
+}
+.infoModalPrecioPagar{
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin-left: 10px;
+    margin-top: 15px;
+}
+.infoModalPagarDato{
+    margin-left: 12px;
+    font-weight: 400;
 }
 
 .seccionPrincipal.recibo{
@@ -1615,7 +1485,7 @@ p{
     border-radius: 10px;
 }
 
-/* Sección Citas */
+/* ---------------------------- Sección Citas ------------------------- */
 
 .botonVerMas{
     padding: 10px 15px;
@@ -1704,7 +1574,23 @@ botonTipo{
     bottom: 0;
 }
 
-/* Consentimientos */
+.presencial{
+    padding: 9px;
+    background-color: #86C69B;
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
+}
+
+.virtual{
+    padding: 9px 19px;
+    background-color: #379AB8;
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
+}
+
+/* -------------- Sección Consentimientos ------------------- */
 
 .consentimiento:first-of-type{
     margin-top: 45px;
@@ -1714,7 +1600,7 @@ botonTipo{
     margin-top: 25px;
 }
 
-/* Doctores */
+/* -------------------- Sección Doctores ------------------------- */
 
 .filtroNav{
     padding: 30px 5px 50px 5px;
@@ -1828,8 +1714,21 @@ botonTipo{
     background-color: #f3f8fe;
     border-radius: 15px;
     box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.1);
-    padding: 15px 0;
+    padding: 10px 0;
     margin-bottom: 10px;
+}
+
+.seccionHorarioInactivo{
+    background-color: white;
+    padding: 7px 15px;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+}
+
+.seccionHorarioInactivo:hover{
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.1);
 }
 
 .seccionHorario{
@@ -1855,20 +1754,22 @@ botonTipo{
     background-color: #0AA1DD;
 }
 
-.fotoDoctorPerfil{
-    height: 250px;
-    width: 250px;
-    object-fit: cover;
-    box-shadow: -7px 0px 0px 5px #0AA1DD;
+.botonVerHorarios{
+    background-color: #f3f8fe;
+    border-radius: 15px;
+    padding: 10px;
+    transition: all 0.3s;
+    color: #575757;
+    text-align: center;
+    font-weight: 600;
+    font-size: .9rem;
 }
 
-@media(min-width: 768px){
-    .fotoDoctorPerfil{
-        margin-right: 40px;
-    }
+.botonVerHorarios:hover{
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.1);
 }
 
-/* Cuestionarios */
+/* ---------------------- Cuestionarios ------------------------ */
 
 .botonCompletar{
     border-radius: 20px;
@@ -1897,13 +1798,25 @@ botonTipo{
     color: black;
 }
 
-/* Cuestionario Abierto */
+/* ------------------------- Cuestionario Abierto ------------------------ */
 
 .seccionCuestionario{
     margin-top: 30px;
 }
 
 /* Perfil Doctor */
+
+.fotoDoctorPerfil{
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+}
+
+@media(min-width: 768px){
+    .fotoDoctorPerfil{
+        margin-right: 40px;
+    }
+}
 
 .perfilDoctorFoto{
     width: 60%;
@@ -1931,22 +1844,6 @@ botonTipo{
     margin-bottom: 10px;
 }
 
-
-.tablaDisponibilidad{
-    width: 75%; 
-    margin-left: auto; 
-    margin-right: auto; 
-    text-align: center;
-}
-
-.tablaDisponibilidad th{
-    padding: 0;
-}
-
-.tablaDisponibilidad td{
-    padding: 14px;
-}
-
 .botonReservarCitaHorario{
     border-radius: 20px;
     padding: 10px 20px;
@@ -1960,6 +1857,36 @@ botonTipo{
 .botonReservarCitaHorario:hover{
     color: white;
     background-color:#197ce6;
+}
+
+.disponibilidad{
+    padding: 20px;
+    background-image: linear-gradient(to bottom, #f6f6f6, #f8f8f8, #fafafa, #fdfdfd, #ffffff);
+    border-radius: 15px;
+    height: 400px;
+}
+
+@media (min-width:1200px){
+    .disponibilidad{
+        padding: 30px 50px;
+    }
+}
+
+.burbuja{
+    display: inline-block;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    margin-right: 5px;
+    margin-bottom: 8px;
+    padding: 8px 20px;
+    transition: all 0.3s;
+    border: 1px solid rgb(202, 202, 202);
+    cursor: pointer;
+}
+
+.burbujaSeleccionada{
+    background-color: #0AA1DD;
+    color: white;
 }
 
 /* Formulario reservar cita mediante perfil del doctor */
@@ -2013,7 +1940,8 @@ botonTipo{
     display: inline-block;
     background-color: #f5f5f5;
     border-radius: 15px;
-    margin-right: 10px;
+    margin-right: 8px;
+    margin-bottom: 8px;
     padding: 8px 20px;
 }
 

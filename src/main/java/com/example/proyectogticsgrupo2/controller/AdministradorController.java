@@ -1,6 +1,7 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
+import com.example.proyectogticsgrupo2.dto.AdministradorEgresos;
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.metodos.ReporteExcel;
@@ -9,13 +10,12 @@ import com.example.proyectogticsgrupo2.service.CorreoNuevoPaciente;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +29,11 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,11 +53,13 @@ public class AdministradorController {
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
     final SecurityConfig securityConfig;
-
+    final MensajeRepository mensajeRepository;
     final StylevistasRepository stylevistasRepository;
+    final CitaRepository citaRepository;
+    final HorarioRepository horarioRepository;
 
 
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig,StylevistasRepository stylevistasRepository) {
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, MensajeRepository mensajeRepository, StylevistasRepository stylevistasRepository, CitaRepository citaRepository, HorarioRepository horarioRepository) {
 
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
@@ -69,11 +72,58 @@ public class AdministradorController {
         this.credencialesRepository = credencialesRepository;
         this.temporalRepository = temporalRepository;
         this.securityConfig = securityConfig;
+        this.mensajeRepository = mensajeRepository;
         this.stylevistasRepository = stylevistasRepository;
+        this.citaRepository = citaRepository;
+        this.horarioRepository = horarioRepository;
     }
     //#####################################33
-    @GetMapping("/dashboard")
+   //Comentado por Gustavo
+    /* @GetMapping("/dashboard")
     public String dashboard (Model model){
+        List<Paciente> listaPaciente =pacienteRepository.findAll();
+        List<Doctor> listaDoctores = doctorRepository.findAll();
+        model.addAttribute("listaDoctores",listaDoctores);
+        model.addAttribute("listaPaciente", listaPaciente);
+
+        Optional<Stylevistas> style = stylevistasRepository.findById(2);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+            *//*model.addAttribute("sidebarColor", styleActual.getSidebar());*//*
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+        }
+        return "administrador/dashboard";
+    }*/
+    @GetMapping("/dashboard")
+    public String dashboard (Model model, HttpSession session, Authentication authentication){
+        // Check if superadmin is logged in as administrador
+        Boolean superAdminLogueadoComoAdministrador = (Boolean) session.getAttribute("superAdminLogueadoComoAdministrador");
+        if (superAdminLogueadoComoAdministrador == null) {
+            superAdminLogueadoComoAdministrador = false;
+        }
+        model.addAttribute("superAdminLogueadoComoAdministrador", superAdminLogueadoComoAdministrador);
+
+        Administrador administrador;
+
+        // Obtener el correo electrónico del administrador a "impersonar" desde la sesión
+        String impersonatedUser = (String) session.getAttribute("impersonatedUser");
+        if (impersonatedUser != null) {
+            // Si hay un usuario "impersonado", buscar al administrador por ese correo electrónico
+            administrador = administradorRepository.findByCorreo(impersonatedUser);
+        } else {
+            administrador = administradorRepository.findByCorreo(authentication.getName());
+            if (administrador == null) {
+                return "redirect:/error";
+            }
+        }
+
+        session.setAttribute("administrador", administrador);
+
         List<Paciente> listaPaciente =pacienteRepository.findAll();
         List<Doctor> listaDoctores = doctorRepository.findAll();
         model.addAttribute("listaDoctores",listaDoctores);
@@ -86,14 +136,15 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/dashboard";
     }
     @GetMapping("/finanzas")
     public String finanzas(Model model){
         List<AdministradorIngresos> listaIngresos = administradorRepository.obtenerIgresos();
+        List<AdministradorEgresos> listaEgresos = administradorRepository.obtenerEgresos();
         model.addAttribute("listaIngresos",listaIngresos);
+        model.addAttribute("listaEgresos",listaEgresos);
         //###########################################################
         model.addAttribute("listaSeguros", seguroRepository.findAll());
         model.addAttribute("listaEspecialidades", especialidadRepository.findAll());
@@ -104,7 +155,6 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
 
         return "administrador/finanzas";}
@@ -185,6 +235,65 @@ public class AdministradorController {
                 return null;
         }
     }
+    @RequestMapping("/reportesEgresos")
+    public ResponseEntity<Resource> generarReportesEgresos(@RequestParam("tiporeporte") String tiporeporte,
+                                                    @RequestParam("seguro") String seguro, @RequestParam("especialidad") String especialidad,
+                                                    @RequestParam("todo") String todo, @RequestParam("formato") String formato){
+
+
+        ReporteExcel reporte = new ReporteExcel();
+        switch (tiporeporte){
+            case "5":
+                if (todo.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorEgresos> lista = administradorRepository.obtenerEgresos();
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarEgresosExcel(lista,"ReporteEgresosGeneral");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generarEgresosPDF(lista,"ReporteEgresosGeneral");
+                            return responsePdf;
+                    }
+                }
+            case "1":
+                if (seguro.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorEgresos> listaEgresosPorSeguro = administradorRepository.obtenerEgresosPorSeguro(Integer.parseInt(seguro));
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarEgresosExcel(listaEgresosPorSeguro,"ReporteEgresosPorSeguro");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generarEgresosPDF(listaEgresosPorSeguro,"ReporteEgresosPorSeguro");
+                            return responsePdf;
+                    }
+                }
+
+
+            case "2":
+                if (especialidad.isEmpty())  {
+                    // Al menos uno de los campos está vacío, realiza alguna acción de manejo de errores o retorna una respuesta adecuada.
+                    return ResponseEntity.badRequest().build();
+                }else {
+                    List<AdministradorEgresos> listaEgresosPorEspecialidad = administradorRepository.obtenerEgresosPorEspecialidad(Integer.parseInt(especialidad));
+                    switch (formato){
+                        case "1":
+                            ResponseEntity<Resource> responseExcel = reporte.generarEgresosExcel(listaEgresosPorEspecialidad,"ReporteEgresosEspecialidad");
+                            return responseExcel;
+                        case "2":
+                            ResponseEntity<Resource> responsePdf = reporte.generarEgresosPDF(listaEgresosPorEspecialidad,"ReporteEgresosEspecialidad");
+                            return responsePdf;
+                    }
+                }
+            default:
+                return null;
+        }
+    }
     @GetMapping("/config")
     public String config(Model model){
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
@@ -194,7 +303,6 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/config";
     }
@@ -209,12 +317,12 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/rptaForm";}
     @PostMapping("/guardarTemporales")
-    public String guardarTemporales(HttpServletRequest request, @RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr) throws UnknownHostException {
+    public String guardarTemporales(HttpServletRequest request, Model model,@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr) throws UnknownHostException {
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
+        HashMap<String,String> credenciales = new HashMap<>();
             //Cuanto funcione perfectamente los temporales, entonces los filtro por llenado 1
             // y usare el datablindig
             for (Temporal pacitemp : pacientesTemp){
@@ -257,11 +365,19 @@ public class AdministradorController {
                 String link = request.getServerName()+":"+request.getLocalPort();
 
                 correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
-                attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
+
+                //Envio de credenciales a la vista
+                credenciales.put(passRandom,paciente.getCorreo());
+
 
             }
-
-            return "redirect:/administrador/dashboard";
+        List<Paciente> listaPaciente =pacienteRepository.findAll();
+        List<Doctor> listaDoctores = doctorRepository.findAll();
+        model.addAttribute("listaDoctores",listaDoctores);
+        model.addAttribute("listaPaciente", listaPaciente);
+        model.addAttribute("credencial",credenciales);
+        model.addAttribute("msgPaci","Pacientes creados exitosamente");
+            return "administrador/dashboard";
 
     }
     @GetMapping("/perfil")
@@ -288,7 +404,6 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/crearPaciente";}
     @PostMapping("/guardarPaciente")
@@ -296,13 +411,22 @@ public class AdministradorController {
                                   @RequestParam("archivo") MultipartFile file,
                                   @ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
                                   Model model, RedirectAttributes attr) throws UnknownHostException {
+        Optional<Stylevistas> style = stylevistasRepository.findById(2);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+
+            model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+            /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+        }
         Optional<Paciente> opt = pacienteRepository.findById(paciente.getIdPaciente());
         Paciente pacienteCorreoExist = pacienteRepository.findByCorreo(paciente.getCorreo());
         if(bindingResult.hasErrors() || opt.isPresent() || pacienteCorreoExist!=null ||
                 paciente.getSeguro()==null || paciente.getDistrito()==null || paciente.getFechanacimiento()==null){
             if(opt.isPresent()){
-                bindingResult.rejectValue("id_doctor","errorDoctor","Este DNI ya se encuentra registrado");
-                bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
+                bindingResult.rejectValue("idPaciente","errorDoctor","Este DNI ya se encuentra registrado");
+
             }
             if (pacienteCorreoExist!=null) {
                 bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
@@ -361,10 +485,18 @@ public class AdministradorController {
                 sIPAddress += unsignedByte;
             }
             String link = request.getServerName()+":"+request.getLocalPort();
-
             correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
-            attr.addFlashAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
-            return "redirect:/administrador/dashboard";
+
+            //Envio de credenciales a la vista
+            HashMap<String,String> credenciales = new HashMap<>();
+            credenciales.put(passRandom,paciente.getCorreo());
+            List<Paciente> listaPaciente =pacienteRepository.findAll();
+            List<Doctor> listaDoctores = doctorRepository.findAll();
+            model.addAttribute("listaDoctores",listaDoctores);
+            model.addAttribute("listaPaciente", listaPaciente);
+            model.addAttribute("credencial",credenciales);
+            model.addAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
+            return "administrador/dashboard";
         }
     }
     //###########################################################################
@@ -381,7 +513,6 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
         return "administrador/crearDoctor";}
     @PostMapping("/guardarDoctor")
@@ -453,8 +584,28 @@ public class AdministradorController {
             System.out.println(link);
             System.out.println("servername:"+domain);
             correoService.props(doctor.getCorreo(),passRandom, link);
-            attr.addFlashAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
-            return "redirect:/administrador/dashboard";
+
+            //Envio de credenciales a la vista
+            HashMap<String,String> credenciales = new HashMap<>();
+            credenciales.put(passRandom,doctor.getCorreo());
+            List<Paciente> listaPaciente =pacienteRepository.findAll();
+            List<Doctor> listaDoctores = doctorRepository.findAll();
+            model.addAttribute("listaDoctores",listaDoctores);
+            model.addAttribute("listaPaciente", listaPaciente);
+            model.addAttribute("credencial",credenciales);
+            model.addAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
+
+
+            Optional<Stylevistas> style = stylevistasRepository.findById(2);
+            if (style.isPresent()) {
+                Stylevistas styleActual = style.get();
+
+                model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+                /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+            } else {
+                // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+            }
+            return "administrador/dashboard";
         }
     }
     @GetMapping("/calendario")
@@ -466,11 +617,39 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
+        /*Doctor doctor_session = doctorRepository.findByCorereo(authentication.getName());*/
+
+
+        //List<Doctor> doctor = doctorRepository.findAll();
+
+
+        List<Cita> citasDelDoctor=citaRepository.obtenerTodasLasCitas(1);
+        List<Cita> listaCitaPresencial = new ArrayList<>();
+        List<Cita> listaCitaVirtual= new ArrayList<>();
+
+        for (Cita cita : citasDelDoctor) {
+
+            if (cita.getModalidad()==0){
+                listaCitaPresencial.add(cita);
+            }else{
+                listaCitaVirtual.add(cita);
+            }
+        }
+
+        //model.addAttribute("doctor", doctor);
+        model.addAttribute("citas", citasDelDoctor);
+        model.addAttribute("citasPresenciales", listaCitaPresencial);
+        model.addAttribute("citasVirtuales", listaCitaVirtual);
+        model.addAttribute("cantidadCitasPresenciales", listaCitaPresencial.size());
+        model.addAttribute("cantidadCitasVirtuales", listaCitaVirtual.size());
+        //model.addAttribute("horario",horarioDeDoctor );
+        System.out.println(listaCitaPresencial.size());
+        System.out.println(listaCitaVirtual.size());
+
         return "administrador/calendario";}
     @GetMapping("/mensajeria")
-    public String mensajeria(Model model){
+    public String mensajeria(@RequestParam("id") String id, Model model){
         //En onstruccion
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
         if (style.isPresent()) {
@@ -479,9 +658,45 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
-        return "administrador/mensajeria";}
+        Optional<Administrador> adminOpt = administradorRepository.findById(id);
+        if (adminOpt.isPresent()){
+            Administrador admin = adminOpt.get();
+            List<Mensaje> mensajesAdmin = mensajeRepository.mensajes(admin.getIdAdministrador());
+
+            return "administrador/mensajeria";
+        }else {
+            Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+            if(optionalDoctor.isPresent()){
+                Doctor doc = optionalDoctor.get();
+                System.out.println("el desitno es: "+doc.getId_doctor());
+                model.addAttribute("doc",doc);
+
+            }
+            Optional<Paciente> optionalPaciente = pacienteRepository.findById(id);
+            if (optionalPaciente.isPresent()) {
+                Paciente paci = optionalPaciente.get();
+                System.out.println("el desitno es: "+paci.getIdPaciente());
+                model.addAttribute("paci",paci);
+            }
+            return "administrador/mensajeria";
+        }
+
+
+    }
+    /*@PostMapping("/guardarMensaje")
+    public void guardarMensaje(@RequestParam("remintente") String remintente,
+                                @RequestParam("remintente") String desitno,
+                                @RequestParam("remintente") String contenido,) {
+        Mensaje mensaje = new Mensaje();
+        mensaje.setId_emisor(remintente);
+        mensaje.setId_receptor(desitno);
+        mensaje.setMensaje(contenido);
+        mensaje.setFecha(LocalDateTime.now());
+        mensaje.setVisto(0);
+        mensajeRepository.save(mensaje);
+
+    }*/
     @GetMapping("/historialPaciente")
     public String historialPaciente(@RequestParam("id") String id, Model model){
         Optional<Stylevistas> style = stylevistasRepository.findById(2);
@@ -491,7 +706,6 @@ public class AdministradorController {
             /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-            System.out.println("No se encontró stylevistas con el id proporcionado");
         }
 
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
@@ -517,36 +731,6 @@ public class AdministradorController {
             Paciente p = opt.get();
 
             byte[] imagenComoBytes = p.getFoto();
-            /*//agregue desde aca
-            if(imagenComoBytes==null){
-                try {
-                    File foto = new File("source/userPorDefecto.jpg");
-                    FileInputStream input = new FileInputStream(foto);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) !=-1){
-                        output.write(buffer,0,length);
-                    }
-                    input.close();;
-                    output.close();
-                    byte[] bytes = output.toByteArray();
-                    HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.setContentType(
-                            MediaType.parseMediaType("image/jpg"));
-
-                    return new ResponseEntity<>(
-                            bytes,
-                            httpHeaders,
-                            HttpStatus.OK);
-
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-            }else {
-
-            } //agregue hasta aca*/
-
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
                     MediaType.parseMediaType(p.getFotocontenttype()));
@@ -563,44 +747,14 @@ public class AdministradorController {
     public String invitacion (){
         return "administrador/invitar";
     }
-    @GetMapping("/imageDoc/{id}")
+    @GetMapping("/imageUser/{id}")
     public ResponseEntity<byte[]> mostrarImagenDoc(@PathVariable("id") String dni) {
-        Optional<Doctor> opt = doctorRepository.findById(dni);
-
-        if (opt.isPresent()) {
-            Doctor doc = opt.get();
+        Optional<Doctor> optDoc = doctorRepository.findById(dni);
+        Optional<Paciente> optPaci = pacienteRepository.findById(dni);
+        if (optDoc.isPresent()) {
+            Doctor doc = optDoc.get();
 
             byte[] imagenComoBytes = doc.getFoto();
-            //agregue desde aca
-            /*if(imagenComoBytes==null){
-                try {
-                    File foto = new File("src/main/resources/static/assets/img/userPorDefecto.jpg");
-                    FileInputStream input = new FileInputStream(foto);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) !=-1){
-                        output.write(buffer,0,length);
-                    }
-                    input.close();;
-                    output.close();
-                    byte[] bytes = output.toByteArray();
-                    HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.setContentType(
-                            MediaType.parseMediaType("image/jpg"));
-
-                    return new ResponseEntity<>(
-                            bytes,
-                            httpHeaders,
-                            HttpStatus.OK);
-
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-            }else {
-
-            } //agregue hasta aca*/
-
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(
                     MediaType.parseMediaType(doc.getFotocontenttype()));
@@ -609,7 +763,19 @@ public class AdministradorController {
                     imagenComoBytes,
                     httpHeaders,
                     HttpStatus.OK);
-        } else {
+        }else if(optPaci.isPresent()){
+            Paciente p = optPaci.get();
+
+            byte[] imagenComoBytes = p.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(
+                    MediaType.parseMediaType(p.getFotocontenttype()));
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        }else {
             return null;
         }
     }

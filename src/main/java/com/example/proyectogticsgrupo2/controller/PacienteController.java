@@ -1,11 +1,12 @@
 package com.example.proyectogticsgrupo2.controller;
 
 import com.example.proyectogticsgrupo2.config.SecurityConfig;
-import com.example.proyectogticsgrupo2.dto.HorarioDeDiaDTO;
-import com.example.proyectogticsgrupo2.dto.HorarioOcupadoDTO;
 import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -13,18 +14,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -51,15 +54,7 @@ public class PacienteController {
     final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
     final SecurityConfig securityConfig;
 
-    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository,
-                              SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository,
-                              DistritoRepository distritoRepository, DoctorRepository doctorRepository,
-                              PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository,
-                              PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository,
-                              HorarioRepository horarioRepository, CredencialesRepository credencialesRepository,
-                              CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository,
-                              AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository,
-                              SecurityConfig securityConfig) {
+    public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository, DistritoRepository distritoRepository, DoctorRepository doctorRepository, PacientePorConsentimientoRepository pacientePorConsentimientoRepository, CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository, CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository, SecurityConfig securityConfig) {
 
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
@@ -83,8 +78,29 @@ public class PacienteController {
     /* INICIO */
     @GetMapping(value = {"", "/", "/index"})
     public String index(Model model, Authentication authentication, HttpSession session) {
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String impersonatedUser = (String) session.getAttribute("impersonatedUser");
+        Boolean superAdminLogueadoComoPaciente = (Boolean) session.getAttribute("superAdminLogueadoComoPaciente");
+        if (superAdminLogueadoComoPaciente == null) {
+            superAdminLogueadoComoPaciente = false;
+        }
+        model.addAttribute("superAdminLogueadoComoPaciente", superAdminLogueadoComoPaciente);
 
+        Paciente paciente;
+
+        if (impersonatedUser != null) {
+            // Si hay un usuario "impersonado", buscar al paciente por ese correo electrónico
+            paciente = pacienteRepository.findByCorreo(impersonatedUser);
+        } else {
+            paciente = pacienteRepository.findByCorreo(authentication.getName());
+            if (paciente == null) {
+                return "redirect:/error";
+            }
+        }
+
+        session.setAttribute("paciente", paciente);
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
 
@@ -100,39 +116,64 @@ public class PacienteController {
             Sede sede = optionalSede.get();
             byte[] imagenComoBytes = sede.getFoto();
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(
-                    MediaType.parseMediaType(sede.getFotocontenttype()));
-            return new ResponseEntity<>(
-                    imagenComoBytes,
-                    httpHeaders,
-                    HttpStatus.OK);
+            httpHeaders.setContentType(MediaType.parseMediaType(sede.getFotocontenttype()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
         } else {
             return null;
         }
     }
 
-    /* RESERVAR CITA */
-    @GetMapping("/reservar")
-    public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                              Model model, HttpSession session, Authentication authentication) {
+    /* SECCIÓN RESERVAR CITA */
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+    @GetMapping("/reservarTipo")
+    public String reservar(HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        return "paciente/reservar0";
+    }
+
+    @GetMapping("/reservar")
+    public String reservarGet(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal, Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         model.addAttribute("sedeList", sedeRepository.findAll());
-        model.addAttribute("especialidadList", especialidadRepository.findAll());
 
         return "paciente/reservar1";
     }
 
     @PostMapping("/reservar1")
-    public String reservar1Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
+    public String reservar1Post(@Validated(CitaTemporal.validacion1.class) @ModelAttribute("citaTemporal") CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model, HttpSession session, Authentication authentication) {
 
         List<Doctor> doctoresDisponibles;
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 
-        if (bindingResult.hasFieldErrors("modalidad") || bindingResult.hasFieldErrors("idSede") || bindingResult.hasFieldErrors("idEspecialidad")) {
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
+        if (bindingResult.hasErrors()) {
+            System.out.println("Error validacion: "+bindingResult.getAllErrors());
             model.addAttribute("sedeList", sedeRepository.findAll());
             model.addAttribute("especialidadList", especialidadRepository.findAll());
             return "paciente/reservar1";
@@ -150,116 +191,53 @@ public class PacienteController {
     public String reservar2Post(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
                                 Model model, HttpSession session, Authentication authentication) {
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+
+        session.setAttribute("paciente", paciente);
 
         if (bindingResult.hasErrors()) {
-
+            System.out.println("Error validacion: "+bindingResult.getAllErrors());
             List<Doctor> doctoresDisponibles = buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad());
             model.addAttribute("doctoresDisponibles", doctoresDisponibles);
 
             return "paciente/reservar2";
 
-        } else if (buscarDoctores(citaTemporal.getModalidad(), citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).size() == 0) {
-            // * Validar lo que ocurre si no hay doctores disponibles para ciertos casos
-            return "paciente/reservar2";
-
         } else {
 
-            // PROCESO DE OBTENCIÓN DE HORARIOS ------
-
-            List<LocalTime> horariosTotal = new ArrayList<>();
-
             Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
-            int duracionCita = doctor.getDuracion_cita_minutos();
-            int duracionComida = 60; // minutos
 
-            HorarioDeDiaDTO horarioDeDia = null;
-            LocalTime hora;
-            LocalTime horaFin;
-            LocalTime horaComida;
+            model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+            model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+            model.addAttribute("doctor", doctor);
+            Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
+            model.addAttribute("precio", precioBase*paciente.getSeguro().getCoaseguro());
 
-            switch (citaTemporal.getFecha().getDayOfWeek().getValue()) {
-                case 1 -> horarioDeDia = horarioRepository.buscarHorarioLunes(citaTemporal.getIdDoctor());
-                case 2 -> horarioDeDia = horarioRepository.buscarHorarioMartes(citaTemporal.getIdDoctor());
-                case 3 -> horarioDeDia = horarioRepository.buscarHorarioMiercoles(citaTemporal.getIdDoctor());
-                case 4 -> horarioDeDia = horarioRepository.buscarHorarioJueves(citaTemporal.getIdDoctor());
-                case 5 -> horarioDeDia = horarioRepository.buscarHorarioViernes(citaTemporal.getIdDoctor());
-                case 6 -> horarioDeDia = horarioRepository.buscarHorarioSabado(citaTemporal.getIdDoctor());
-            }
-
-            hora = horarioDeDia.getInicio();
-            horaFin = horarioDeDia.getFin();
-            horaComida = horarioDeDia.getComidaInicio();
-
-            while (hora.isBefore(horaFin)) {
-
-                if (hora.isBefore(horaComida) || hora.isAfter(horaComida.plusMinutes(duracionComida - 1))) {
-                    horariosTotal.add(hora);
-                } else if (hora.isAfter(horaComida)) {
-                    hora = horaComida.plusMinutes(duracionComida);
-                    continue;
-                }
-
-                hora = hora.plusMinutes(duracionCita);
-            }
-
-            // OBTENCIÓN DE HORARIOS OCUPADOS
-            List<HorarioOcupadoDTO> horariosOcupados = horarioRepository.buscarHorariosOcupados(doctor.getId_doctor(), citaTemporal.getFecha());
-            HashMap<LocalTime, String> horarios = new HashMap<>();
-
-
-            if (horariosOcupados.size() > 0) {
-                for (LocalTime horario : horariosTotal) {
-                    for (HorarioOcupadoDTO ocupado : horariosOcupados) {
-                        if (horario.equals(ocupado.getHorario())) {
-                            horarios.put(horario, "Ocupado");
-                            break;
-                        } else {
-                            horarios.put(horario, "Disponible");
-                        }
-                    }
-                }
-            } else {
-                for (LocalTime horario : horariosTotal) {
-                    horarios.put(horario, "Disponible");
-                }
-            }
-
-            model.addAttribute("horariosDisponibles", horarios);
+            citaTemporal.setFin(citaTemporal.getInicio().plusMinutes(doctor.getDuracion_cita_minutos()));
 
             return "paciente/reservar3";
         }
     }
 
     @PostMapping("/reservar3")
-    public String reservar3Post(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                @RequestParam("hora") String hora,
-                                Model model, HttpSession session, Authentication authentication) {
-
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);
-
-        String inicioString = citaTemporal.getFecha().toString() + ' ' + hora;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
-        LocalDateTime fin = inicio.plusHours(1);
-
-        citaTemporal.setInicio(inicio);
-        citaTemporal.setFin(fin);
-
-        model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
-        model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
-        model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
-        model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
-
-        return "paciente/reservar4";
-    }
-
-    @PostMapping("/reservar4")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                            HttpSession session, Authentication authentication, Model model) {
+                            @RequestParam(name = "citaPendiente", required = false) Boolean citaPendiente,
+                            @RequestParam(name = "examenPendiente", required = false) Boolean examenPendiente,
+                            Model model, HttpSession session, Authentication authentication,
+                            HttpServletRequest request) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         String tipoPago;
@@ -269,29 +247,189 @@ public class PacienteController {
             tipoPago = "Tarjeta";
         }
 
-        citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
-        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), tipoPago);
+        Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
+
+        String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getInicio().toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
+        LocalDateTime fin = inicio.plusMinutes(doctor.getDuracion_cita_minutos());
+
+        Especialidad especialidad = especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get();
+
+        // VALIDAR LO QUE OCURRE EN CASO SE ESTE RECIBIENDO UNA CITA PENDIENTE
+        Cita cita;
+        if (citaPendiente != null){
+
+            citaRepository.reservarCitaPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getId());
+            pagoRepository.nuevoPagoPagado(citaTemporal.getId(), tipoPago);
+            cita = citaRepository.findById(citaTemporal.getId()).get();
+
+        } else if (examenPendiente != null) {
+
+            citaRepository.reservarExamenPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getId());
+            pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago);
+            cita = citaRepository.findById(citaTemporal.getId()).get();
+
+        } else {
+
+            citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
+            int idCita = citaRepository.obtenerUltimoId();
+            pagoRepository.nuevoPago(idCita, tipoPago);
+            cita = citaRepository.findById(idCita).get();
+
+        }
+
+        // Enviar correo al paciente - inhabilidado para que no demore tanto xd
+        /*
+        CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
+        String host = request.getServerName()+":"+request.getLocalPort();
+        correo.props(host, paciente.getCorreo(), cita);
+         */
 
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
-        model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+        model.addAttribute("especialidad", especialidad);
         model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
         model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
-        model.addAttribute("activarModal", true);
+
         return "paciente/confirmacion";
+    }
+
+    @GetMapping("/pendientes")
+    public String citasPendientes(Model model, HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        List<Cita> citasPendientes = citaRepository.buscarCitasPendientes(paciente.getIdPaciente());
+        List<Date> fechasLimite = citaRepository.buscarFechasLimitesDeCitasPendientes(paciente.getIdPaciente());
+
+        model.addAttribute("citasPendientes", citasPendientes);
+        model.addAttribute("fechasLimite", fechasLimite);
+
+        return "paciente/pendientes";
+    }
+
+    @GetMapping("/reservaPendiente")
+    public String reservarPendiente1(@RequestParam("c") Integer idCita,
+                                     @ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+                                     Model model, HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        Cita cita = citaRepository.buscarPorId(idCita);
+
+        if (cita != null){
+
+            citaTemporal.setId(cita.getId_cita());
+            citaTemporal.setModalidad(cita.getModalidad());
+            citaTemporal.setIdSede(cita.getSede().getIdSede());
+            citaTemporal.setIdEspecialidad(cita.getEspecialidad().getIdEspecialidad());
+
+            model.addAttribute("cita", cita);
+            if(cita.getEspecialidad().getEs_examen() == 1){
+                return "paciente/reservarExamenPendiente";
+            }
+            else{
+                citaTemporal.setIdDoctor(cita.getDoctor().getId_doctor());
+                return "paciente/reservarCitaPendiente";
+            }
+
+        }
+        else{
+            return "redirect:/Paciente/pendientes";
+        }
+    }
+
+    @PostMapping("/reservarPendiente")
+    public String reservarPendiente2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
+                                     Model model, HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+
+        session.setAttribute("paciente", paciente);
+
+        Cita cita = citaRepository.buscarPorId(citaTemporal.getId());
+
+        if (bindingResult.hasErrors()){
+            System.out.println("Error validacion: "+bindingResult.getAllErrors());
+            model.addAttribute("cita", cita);
+            if (cita.getEspecialidad().getEs_examen() == 1){
+                return "paciente/reservarExamenPendiente";
+            }
+            else{
+                return "paciente/reservarCitaPendiente";
+            }
+        }
+        else {
+            Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
+
+            model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+            model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+            model.addAttribute("doctor", doctor);
+            Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
+
+            if (cita.getEspecialidad().getEs_examen() == 1){
+                model.addAttribute("precio", precioBase*paciente.getSeguro().getCoaseguro());
+                model.addAttribute("examenPendiente", true);
+            }
+            else{
+                model.addAttribute("precio", 0);
+                model.addAttribute("citaPendiente", true);
+            }
+
+            citaTemporal.setFin(citaTemporal.getInicio().plusMinutes(doctor.getDuracion_cita_minutos()));
+
+            return "paciente/reservar3";
+
+        }
+
     }
 
     /* SECCIÓN PERFIL */
     @GetMapping("/perfil")
     public String perfil(Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         List<Alergia> alergiasPaciente = alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente());
         List<Cita> historialCitas = citaRepository.buscarHistorialDeCitas(paciente.getIdPaciente());
+        List<TorreYPisoDTO> torresPisosPrecio = citaRepository.buscarTorresPisosPrecioHistorialCitas(paciente.getIdPaciente());
+
         model.addAttribute("alergiasPaciente", alergiasPaciente);
         model.addAttribute("paciente", paciente);
         model.addAttribute("historialCitas", historialCitas);
+        model.addAttribute("torresPisosPrecio", torresPisosPrecio);
 
         return "paciente/perfil";
     }
@@ -299,7 +437,16 @@ public class PacienteController {
     @GetMapping("/perfil/editar")
     public String editarPerfil(Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         List<Seguro> seguroList = seguroRepository.findAll();
@@ -315,14 +462,20 @@ public class PacienteController {
     }
 
     @PostMapping("/perfil/guardar")
-    public String guardarPerfil(@ModelAttribute("paciente") @Valid Paciente paciente,
-                                BindingResult bindingResult,
-                                @RequestParam(name = "archivo") MultipartFile file,
-                                RedirectAttributes attr,
-                                Model model, Authentication authentication, HttpSession session) {
+    public String guardarPerfil(@ModelAttribute("paciente") @Valid Paciente paciente, BindingResult bindingResult,
+                                @RequestParam(name = "archivo") MultipartFile file, RedirectAttributes attr,
+                                Model model, Authentication authentication, HttpSession session,
+                                HttpServletRequest request, HttpServletResponse response) {
 
-        Paciente p = pacienteRepository.findByCorreo(authentication.getName());
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente p = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", p);
+
         String fileName = file.getOriginalFilename();
 
         if (p.getIdPaciente().equals(paciente.getIdPaciente())) {
@@ -333,6 +486,7 @@ public class PacienteController {
             }
 
             if (bindingResult.hasErrors()) {
+                System.out.println("Error: "+bindingResult.getAllErrors());
                 model.addAttribute("seguroList", seguroRepository.findAll());
                 model.addAttribute("alergiasPaciente", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
                 model.addAttribute("distritoList", distritoRepository.findAll());
@@ -352,9 +506,14 @@ public class PacienteController {
                     if (!p.getCorreo().equals(paciente.getCorreo())) {
                         Credenciales credenciales = credencialesRepository.buscarPorId(p.getIdPaciente());
                         Credenciales nuevasCredenciales = new Credenciales(p.getIdPaciente(), paciente.getCorreo(), credenciales.getContrasena());
-                        credencialesRepository.save(nuevasCredenciales);
-                    }
 
+                        credencialesRepository.save(nuevasCredenciales);
+                        pacienteRepository.save(paciente);
+
+                        logout(request, response); // borrando cookies
+
+                        return "redirect:/login";
+                    }
                     pacienteRepository.save(paciente);
 
                     attr.addFlashAttribute("msgActualizacion", "Su perfil se ha actualizado correctamente");
@@ -375,10 +534,18 @@ public class PacienteController {
     }
 
     @PostMapping("/perfil/guardarAlergia")
-    public String guardarAlergia(Alergia alergia, RedirectAttributes attr, Authentication authentication) {
+    public String guardarAlergia(Alergia alergia, RedirectAttributes attr, Authentication authentication, HttpSession session) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        if (paciente.getIdPaciente().equals(alergia.getPaciente().getIdPaciente())) {
+      /*  Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        if (paciente.getIdPaciente().equals(alergia.getPaciente().getIdPaciente())){
             alergiaRepository.save(alergia);
             return "redirect:/Paciente/perfil/editar";
         } else {
@@ -388,10 +555,18 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/borrarAlergia")
-    public String borrarAlergia(@RequestParam(name = "idAlergia") int idAlergia,
-                                Authentication authentication, HttpSession session) {
+    public String borrarAlergia(@RequestParam(name = "idAlergia") int idAlergia, Authentication authentication, HttpSession session) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         Optional<Alergia> optionalAlergia = alergiaRepository.findById(idAlergia);
@@ -402,9 +577,17 @@ public class PacienteController {
     }
 
     @GetMapping("/perfil/quitarFoto")
-    public String quitarFoto(Authentication authentication) {
+    public String quitarFoto(HttpSession session, Authentication authentication) {
 
-        String idPaciente = pacienteRepository.findByCorreo(authentication.getName()).getIdPaciente();
+      /*  String idPaciente = pacienteRepository.findByCorreo(authentication.getName()).getIdPaciente();*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        String idPaciente = pacienteRepository.findByCorreo(userEmail).getIdPaciente();
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
         if (optionalPaciente.isPresent()) {
@@ -419,7 +602,15 @@ public class PacienteController {
     @GetMapping("/perfil/cambiarContrasena")
     public String cambiarContrasena(HttpSession session, Authentication authentication) {
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         return "paciente/perfilContrasena";
     }
@@ -428,9 +619,17 @@ public class PacienteController {
     public String guardarContrasena(@RequestParam("actual") String contrasenaActual,
                                     @RequestParam("nueva1") String contrasenaNueva1,
                                     @RequestParam("nueva2") String contrasenaNueva2,
-                                    RedirectAttributes attr, Authentication authentication) {
+                                    RedirectAttributes attr, Authentication authentication,
+                                    HttpSession session) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
 
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
 
@@ -439,16 +638,23 @@ public class PacienteController {
 
         if (passwordEncoder.matches(contrasenaActual, credenciales.getContrasena())) {
             if (contrasenaNueva1.equals(contrasenaNueva2)) {
-                credencialesRepository.save(nuevasCredenciales);
-                attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+
+                if (!contrasenaNueva1.equals("")){
+                    credencialesRepository.save(nuevasCredenciales);
+                    attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+                    return "redirect:/Paciente/perfil";
+                }
+                else {
+                    attr.addFlashAttribute("erro2", "Ingrese una nueva contraseña válida");
+                }
+
             } else {
-                System.out.println("Contraseñas nuevas no coinciden");
+                attr.addFlashAttribute("error2", "Las contraseñas deben coincidir");
             }
         } else {
-            System.out.println("Contraseña actual no coincide");
+            attr.addFlashAttribute("error1", "La contraseña actual es incorrecta");
         }
-
-        return "redirect:/Paciente/perfil";
+        return "redirect:/Paciente/perfil/cambiarContrasena";
     }
 
     @GetMapping("/imagePaciente")
@@ -460,12 +666,8 @@ public class PacienteController {
             Paciente paciente = optionalPaciente.get();
             byte[] imagenComoBytes = paciente.getFoto();
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(
-                    MediaType.parseMediaType(paciente.getFotocontenttype()));
-            return new ResponseEntity<>(
-                    imagenComoBytes,
-                    httpHeaders,
-                    HttpStatus.OK);
+            httpHeaders.setContentType(MediaType.parseMediaType(paciente.getFotocontenttype()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
         } else {
             return null;
         }
@@ -478,7 +680,14 @@ public class PacienteController {
                               @RequestParam("pag") int pagina,
                               Model model, HttpSession session, Authentication authentication) {
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         List<Doctor> doctorList;
         int totalPaginas;
@@ -512,56 +721,7 @@ public class PacienteController {
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
 
-        // Obtener dos próximos horarios disponibles
-
-        /*
-        Set<LocalTime> horariosTotal = new HashSet<>();
-        LocalDateTime momentoActual = LocalDateTime.now().plusDays(1);
-
-        HorarioDeDiaDTO horarioDeDia = null;
-        LocalTime hora;
-        LocalTime horaFin;
-        LocalTime horaComida;
-
-        for (Doctor doctor: doctorList){
-            int duracionCita = doctor.getDuracion_cita_minutos();
-            int duracionComida = 60;
-
-            switch (momentoActual.getDayOfWeek().getValue()){
-                case 1 -> horarioDeDia = horarioRepository.buscarHorarioLunes(doctor.getId_doctor());
-                case 2 -> horarioDeDia = horarioRepository.buscarHorarioMartes(doctor.getId_doctor());
-                case 3 -> horarioDeDia = horarioRepository.buscarHorarioMiercoles(doctor.getId_doctor());
-                case 4 -> horarioDeDia = horarioRepository.buscarHorarioJueves(doctor.getId_doctor());
-                case 5 -> horarioDeDia = horarioRepository.buscarHorarioViernes(doctor.getId_doctor());
-                case 6 -> horarioDeDia = horarioRepository.buscarHorarioSabado(doctor.getId_doctor());
-            }
-
-            hora = horarioDeDia.getInicio();
-            horaFin = horarioDeDia.getFin();
-            horaComida = horarioDeDia.getComidaInicio();
-
-            while (hora.isBefore(horaFin)) {
-
-                if (hora.isBefore(horaComida) || hora.isAfter(horaComida.plusMinutes(duracionComida - 1))) {
-                    horariosTotal.add(hora);
-                } else if (hora.isAfter(horaComida)) {
-                    hora = horaComida.plusMinutes(duracionComida);
-                    continue;
-                }
-
-                hora = hora.plusMinutes(duracionCita);
-            }
-
-            List<HorarioOcupadoDTO> horariosOcupadosDTO = horarioRepository.buscarHorariosOcupados(doctor.getId_doctor(), momentoActual.toLocalDate());
-            Set<LocalTime> horariosOcupados = new HashSet<>();
-            for (HorarioOcupadoDTO horarioOcupado: horariosOcupadosDTO){
-                horariosOcupados.add(horarioOcupado.getHorario());
-            }
-
-            horariosTotal.removeAll(horariosOcupados);
-
-        }
-        */
+        // Obtener disponibilidad de los próximos dos días
 
         model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
         model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
@@ -579,12 +739,8 @@ public class PacienteController {
             Doctor doctor = optionalDoctor.get();
             byte[] imagenComoBytes = doctor.getFoto();
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(
-                    MediaType.parseMediaType(doctor.getFotocontenttype()));
-            return new ResponseEntity<>(
-                    imagenComoBytes,
-                    httpHeaders,
-                    HttpStatus.OK);
+            httpHeaders.setContentType(MediaType.parseMediaType(doctor.getFotocontenttype()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
         } else {
             return null;
         }
@@ -594,82 +750,87 @@ public class PacienteController {
     public String verPerfilDoctor(@RequestParam("doc") String idDoctor,
                                   Model model, HttpSession session, Authentication authentication) {
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
 
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             model.addAttribute("doctor", doctor);
-            model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
-            model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
+        } else {
+            return "redirect:/Paciente/doctores";
         }
         return "paciente/doctorPerfil";
     }
 
     @PostMapping("/reservarDoctor")
     public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                  @ModelAttribute("hora") String hora,
-                                  HttpSession session, Authentication authentication) {
-
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
-        return "paciente/reservarDoctor1";
-    }
-
-    @PostMapping("/reservarDoctor2")
-    public String reservarDoctor2(@ModelAttribute("citaTemporal") @Valid CitaTemporal citaTemporal, BindingResult bindingResult,
-                                  @ModelAttribute("hora") String hora,
                                   Model model, HttpSession session, Authentication authentication) {
 
-        if (bindingResult.hasErrors()) {
-            return "paciente/reservarDoctor1";
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
         } else {
-
-            session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
-            String inicioString = citaTemporal.getFecha().toString() + ' ' + hora;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
-            LocalDateTime fin = inicio.plusHours(1);
-
-            citaTemporal.setInicio(inicio);
-            citaTemporal.setFin(fin);
-
-            model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
-            model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
-            model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
-            model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
-
-            return "paciente/reservar4";
+            userEmail = authentication.getName();
         }
 
-    }
-
-    @PostMapping("/reservarDoctor3")
-    public String reserarDoctor3(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-                                 HttpSession session, Authentication authentication, Model model) {
-
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
-        citaRepository.reservarCita(citaTemporal.getIdPaciente(), citaTemporal.getIdDoctor(), citaTemporal.getInicio(), citaTemporal.getFin(), citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro());
-        pagoRepository.nuevoPago(citaRepository.obtenerUltimoId(), "Efectivo");
-        model.addAttribute("activarModal", true);
+        Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
 
-        return "paciente/confirmacion";
+        model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+        model.addAttribute("especialidad", especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get());
+        model.addAttribute("doctor", doctor);
+        Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
+        model.addAttribute("precio", precioBase*paciente.getSeguro().getCoaseguro());
+
+        citaTemporal.setFin(citaTemporal.getInicio().plusMinutes(doctor.getDuracion_cita_minutos()));
+
+        return "paciente/reservar3";
     }
 
     @GetMapping("/confirmacion")
-    public String confirmarReserva(HttpSession session, Authentication authentication,Model model) {
+    public String confirmarReserva(HttpSession session, Authentication authentication, Model model) {
 
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
         model.addAttribute("activarModal", true);
+
         return "paciente/confirmacion";
     }
 
     @GetMapping("/sesionVirtual")
-    public String sesionVirtual(HttpSession session, Authentication authentication) {
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+    public String sesion(@RequestParam("c") Integer idCita,
+                         Model model, HttpSession session, Authentication authentication){
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        Cita cita = citaRepository.findById(idCita).get();
+
+        model.addAttribute("link", cita.getLink());
+
         return "paciente/sesionVirtual";
     }
 
@@ -677,96 +838,135 @@ public class PacienteController {
     @GetMapping("/citas")
     public String verCitas(Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
         List<Cita> proximasCitas = citaRepository.buscarProximasCitas(paciente.getIdPaciente());
-        List<TorreYPisoDTO> torresYPisos = citaRepository.buscarTorresYPisos(paciente.getIdPaciente());
+        List<TorreYPisoDTO> torresPisosPrecio = citaRepository.buscarTorresPisosPrecioProximasCitas(paciente.getIdPaciente());
 
         model.addAttribute("proximasCitas", proximasCitas);
-        model.addAttribute("torresYPisos", torresYPisos);
+        model.addAttribute("torresPisosPrecio", torresPisosPrecio);
+        model.addAttribute("momentoActual", LocalDateTime.now());
 
         return "paciente/citas";
     }
 
     /* SECCIÓN PAGOS */
     @GetMapping("/pagos")
-    public String pagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
-                        Model model, HttpSession session, Authentication authentication) {
+    public String pagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-        List<Pago> pagoList = pagoRepository.findAll();
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+        model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
+
+        List<Pago> pagoList = pagoRepository.buscarPorPaciente(paciente.getIdPaciente());
+
         model.addAttribute("pagoList", pagoList);
-        return "paciente/pagos";
-    }
-
-    @GetMapping("/filtrarPagos")
-    public String filtrarPagos(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
-                               @RequestParam("filtro") Integer filtro, Model model, HttpSession session, Authentication authentication) {
-
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
-        List<Pago> pagoList = pagoRepository.findAll();
-        model.addAttribute("pagoList", pagoList);
-        model.addAttribute("filtro", filtro);
         return "paciente/pagos";
     }
 
     @GetMapping("/pagar")
-    public String pagar(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago,
-                        @RequestParam("idPago") Integer idPago,@RequestParam("filtro") Integer filtro,
-                        Model model, HttpSession session, Authentication authentication) {
+    public String pagar(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago, @RequestParam("idPago") Integer idPago, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         List<Pago> pagoList = pagoRepository.findAll();
         model.addAttribute("idPagar", idPago);
         model.addAttribute("pagoList", pagoList);
-        model.addAttribute("filtro", filtro);
-        model.addAttribute("activarModal", true);
+        //model.addAttribute("activarModal", true);
         return "paciente/pagos";
     }
 
     @PostMapping("/guardarPago")
-    public String guardarPago(@ModelAttribute("tarjetaPago") @Valid TarjetaPago tarjetaPago, BindingResult bindingResult,
-                              @RequestParam("idPago") int idPago, @RequestParam("fechaStr") String fechaStr,
-                              @RequestParam("filtro") int filtro, Model model, RedirectAttributes attr,
-                              HttpSession session, Authentication authentication) {
+    public String guardarPago(@RequestParam("idPago") int idPago, @RequestParam("confirmado") String confirmado,
+                              Model model, RedirectAttributes attr, HttpSession session, Authentication authentication) {
 
+        /*
         if (bindingResult.hasErrors()) {
+
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-            if (filtro == 0) {
-                List<Pago> pagoList = pagoRepository.findAll();
-                model.addAttribute("pagoList", pagoList);
-                model.addAttribute("idPagar", idPago);
-                model.addAttribute("filtro", filtro);
-                model.addAttribute("activarModal", true);
-                return "paciente/pagos";
+
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
             } else {
-                if (filtro == 1) {
-                    List<Pago> pagoList = pagoRepository.findAll();
-                    model.addAttribute("pagoList", pagoList);
-                    model.addAttribute("idPagar", idPago);
-                    model.addAttribute("filtro", filtro);
-                    model.addAttribute("activarModal", true);
-                    return "paciente/pagos";
-                }
+                userEmail = authentication.getName();
             }
+            Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+            session.setAttribute("paciente", paciente);
+            List<Pago> pagoList = pagoRepository.findAll();
+            model.addAttribute("pagoList", pagoList);
+            model.addAttribute("idPagar", idPago);
+            model.addAttribute("activarModal", true);
+            model.addAttribute("pagoFilt",1);
+            return "paciente/pagos";
         } else {
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
+
+            Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+            session.setAttribute("paciente", paciente);
+
             pagoRepository.guardarPago(idPago);
-            attr.addFlashAttribute("msg", "Pago realizado exitosamente");
+            List<Pago> pagoList = pagoRepository.findAll();
+            model.addAttribute("pagoList", pagoList);
+            model.addAttribute("activarModalPagado", true);
+            attr.addFlashAttribute("msg", "Pago realizado");
             return "redirect:/Paciente/pagos";
-        }
-        return "redirect:/Paciente/pagos";
+
     }
 
     @GetMapping("/recibo")
-    public String verReciboPago(@RequestParam("idPago") int idPago,
-                                Model model, HttpSession session, Authentication authentication) {
+    public String verReciboPago(@RequestParam("idPago") int idPago, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
 
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+        model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
         Optional<Pago> optionalPago = pagoRepository.findById(idPago);
         if (optionalPago.isPresent()) {
             Pago pago = optionalPago.get();
@@ -779,8 +979,19 @@ public class PacienteController {
     @GetMapping("/cuestionarios")
     public String cuestionarios(HttpSession session, Model model, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+       /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
+
 
         List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.buscarPorPaciente(paciente.getIdPaciente());
 
@@ -790,12 +1001,21 @@ public class PacienteController {
     }
 
     @GetMapping("/cuestionario")
-    public String completarCuestionario(@RequestParam("cues") Integer idCuestionario,
-                                        @RequestParam("cita") Integer idCita,
-                                        @ModelAttribute("cuestionario") CuestionarioPorCita cuestionario,
-                                        Model model, HttpSession session, Authentication authentication) {
+    public String completarCuestionario(@RequestParam("cues") Integer idCuestionario, @RequestParam("cita") Integer idCita, @ModelAttribute("cuestionario") CuestionarioPorCita cuestionario, Model model, HttpSession session, Authentication authentication) {
 
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
 
         model.addAttribute("cuestionario", cuestionarioPorCitaRepository.findByIdIdCuestionarioAndIdIdCita(idCuestionario, idCita));
         model.addAttribute("preguntas", cuestionarioRepository.buscarPorId(idCuestionario));
@@ -804,8 +1024,7 @@ public class PacienteController {
     }
 
     @PostMapping("/guardarCuestionario")
-    public String guardarCuestionario(@ModelAttribute("cuestionario") @Valid CuestionarioPorCita cuestionario, BindingResult bindingResult,
-                                      Model model, HttpSession session, Authentication authentication) {
+    public String guardarCuestionario(@ModelAttribute("cuestionario") @Valid CuestionarioPorCita cuestionario, BindingResult bindingResult, Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 
@@ -814,9 +1033,7 @@ public class PacienteController {
             return "paciente/cuestionariosCompletar";
         }
 
-        cuestionarioPorCitaRepository.guardarCuestionario(cuestionario.getR1(), cuestionario.getR2(), cuestionario.getR3(), cuestionario.getR4(), cuestionario.getR5(),
-                cuestionario.getR6(), cuestionario.getR7(), cuestionario.getR8(), cuestionario.getR9(), cuestionario.getR10(), cuestionario.getR11(),
-                cuestionario.getCuestionario().getId_cuestionario(), cuestionario.getCita().getId_cita());
+        cuestionarioPorCitaRepository.guardarCuestionario(cuestionario.getR1(), cuestionario.getR2(), cuestionario.getR3(), cuestionario.getR4(), cuestionario.getR5(), cuestionario.getR6(), cuestionario.getR7(), cuestionario.getR8(), cuestionario.getR9(), cuestionario.getR10(), cuestionario.getR11(), cuestionario.getCuestionario().getId_cuestionario(), cuestionario.getCita().getId_cita());
 
         return "redirect:/Paciente/cuestionarios";
     }
@@ -825,9 +1042,17 @@ public class PacienteController {
     @GetMapping("/consentimientos")
     public String consentimientos(Model model, HttpSession session, Authentication authentication) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
 
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
         List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(paciente.getIdPaciente());
 
         model.addAttribute("consentimientos", consentimientos);
@@ -836,9 +1061,23 @@ public class PacienteController {
 
     @PostMapping("/consentimientos/actualizar")
     public String actualizarConsentimientos(@RequestParam Map<String, Boolean> consentimientos,
-                                            RedirectAttributes attr, Authentication authentication) {
+                                            RedirectAttributes attr, Authentication authentication,
+                                            HttpSession session) {
 
-        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+
+        session.setAttribute("paciente", paciente);
+
+
 
         pacientePorConsentimientoRepository.actualizarConsentimientosANegativo(paciente.getIdPaciente());
         for (String key : consentimientos.keySet()) {
@@ -856,7 +1095,19 @@ public class PacienteController {
 
     @GetMapping("/mensajeria")
     public String mensajeria(HttpSession session, Authentication authentication) {
+/*
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
         return "paciente/mensajeria";
     }
 
@@ -866,6 +1117,30 @@ public class PacienteController {
             return doctorRepository.findBySede_IdSedeAndEspecialidad_IdEspecialidad(idSede, idEspecialidad);
         } else {
             return doctorRepository.buscarVirtualesPorSedeYEspecialidad(idSede, idEspecialidad);
+        }
+    }
+
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        boolean isSecure = false;
+        String contextPath = null;
+        if (request != null) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            isSecure = request.isSecure();
+            contextPath = request.getContextPath();
+        }
+        SecurityContext context = SecurityContextHolder.getContext();
+        SecurityContextHolder.clearContext();
+        context.setAuthentication(null);
+        if (response != null) {
+            Cookie cookie = new Cookie("JSESSIONID", null);
+            String cookiePath = StringUtils.hasText(contextPath) ? contextPath : "/";
+            cookie.setPath(cookiePath);
+            cookie.setMaxAge(0);
+            cookie.setSecure(isSecure);
+            response.addCookie(cookie);
         }
     }
 }

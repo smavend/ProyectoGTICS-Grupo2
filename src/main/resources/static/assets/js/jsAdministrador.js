@@ -96,12 +96,49 @@ function validateForm() {
 }*/
 =======
 }
+function validateForm2() {
+  var tiporeporte = document.getElementById("tiporeporte2").value;
+  var seguro = document.getElementById("insuranceInput2").value;
+  var especialidad = document.getElementById("specialtyInput2").value;
+  var todo = document.getElementById("porfechareporte2").value;
+  var isValid = true;
 
+<<<<<<< HEAD
 >>>>>>> develop
+=======
+  switch (tiporeporte) {
+    case "1":
+      if (seguro === "") {
+        document.getElementById("insuranceInput2").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("insuranceInput2").classList.remove("is-invalid");
+      }
+      break;
+    case "2":
+      if (especialidad === "") {
+        document.getElementById("specialtyInput2").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("specialtyInput2").classList.remove("is-invalid");
+      }
+      break;
+    case "5":
+      if (todo === "") {
+        document.getElementById("porfechareporte2").classList.add("is-invalid");
+        isValid = false;
+      } else {
+        document.getElementById("porfechareporte2").classList.remove("is-invalid");
+      }
+      break;
+    default:
+      isValid = false;
+      break;
+  }
+>>>>>>> administrador
 
-//fin validar form descarga
-
-//validar dni
+  return isValid;
+}
 $(document).ready(function() {
   $('#dni').on('input', function() {
     var dniValue = $(this).val();
@@ -127,6 +164,9 @@ $(document).ready(function() {
 // Función para abrir el pop-up de filtrado
 function openFilterModal() {
   $('#filterModal').modal('show');
+}
+function openFilterModal2() {
+  $('#filterModal2').modal('show');
 }
 //funcion para abrir el popu de descarga completada
 
@@ -160,12 +200,31 @@ function toggleFilterOptions() {
 // Al cargar la página, llamar a toggleFilterOptions() para mostrar los campos correctos según la opción seleccionada inicialmente
 window.onload = function () {
   toggleFilterOptions();
+  toggleFilterOptions2();
 };
 
-// Función para generar el reporte
-function generateReport() {
-  // Código para generar el reporte
+function toggleFilterOptions2() {
+  const tiporeporte = document.getElementById('tiporeporte2');
+  const porSeguro = document.getElementById('porSeguro2');
+  const porEspecialidad = document.getElementById('porEspecialidad2');
+  const porFecha = document.getElementById('porFecha2');
+
+  // Ocultar todos los campos de filtrado
+  porSeguro.style.display = 'none';
+  porEspecialidad.style.display = 'none';
+  porFecha.style.display = 'none';
+
+  // Mostrar el campo de filtrado correspondiente según la opción seleccionada
+  if (tiporeporte.value === '1') {
+    porSeguro.style.display = 'block';
+  } else if (tiporeporte.value === '2') {
+    porEspecialidad.style.display = 'block';
+  } else if (tiporeporte.value === '5') {
+    porFecha.style.display = 'block';
+  }
 }
+// Al cargar la página, llamar a toggleFilterOptions() para mostrar los campos correctos según la opción seleccionada inicialmente
+
 /*fin de mis js */
 (function() {
   "use strict";

@@ -35,6 +35,12 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
     void actualizarPaciente(String correo, String direccion, int idDistrito, String idPaciente);
     List<Paciente> findByIdPaciente(Integer id);
 
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE paciente SET estado = ?1 WHERE (idPaciente = ?2)")
+    void cambiarEstado(int estado, String idPaciente);
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`paciente` SET `foto` = null WHERE (`id_paciente` = ?1)")
@@ -43,4 +49,6 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
     Paciente findByCorreo(String correo);
 
 
+    @Query(nativeQuery = true, value = "select * from paciente where estado = ?1")
+    List<Paciente> buscarPorEstado(int i);
 }

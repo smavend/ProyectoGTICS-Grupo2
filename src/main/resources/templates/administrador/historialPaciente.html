@@ -331,8 +331,10 @@
 
               <div class="container my-4">
                 <div class="row">
-                  <div class="col-sm-5">
-                    <img th:src="@{|/administrador/imagePaci/${paciente.idPaciente}|}" alt="Foto de paciente" width="200px"  class="rounded img-thumbnail">
+                  <div class="col-sm-3">
+                    <img th:if="${paciente.foto!=null}" th:src="@{|/administrador/imageUser/${paciente.idPaciente}|}" alt="Foto de paciente" width="200px"  class="rounded img-thumbnail">
+                    <img th:unless="${paciente.foto!=null}" th:src="@{/assets/img/userPorDefecto.jpg}"  alt="Foto de paciente" width="200px"  class="rounded img-thumbnail"/>
+
                   </div>
                   <div class="col-sm-7">
                     <h1 class="mb-4" th:text="${paciente.nombre}+' '+${paciente.apellidos}">JHON RICHETTI JUSHEPI</h1>
@@ -411,92 +413,32 @@
                       <td>Hola, me gustaría programar una cita para revisar mi condición médica.</td>
                       <td>Enviado</td>
                     </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>2023-04-06 15:45:00</td>
-                      <td>Dr. María Gómez</td>
-                      <td>Quisiera saber si el medicamento que me recetaron tiene algún efecto secundario.</td>
-                      <td>Leído</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>2023-04-05 08:00:00</td>
-                      <td>Dr. Juan Pérez</td>
-                      <td>¿Ya están listos los resultados de mi examen? ¿Cómo puedo obtenerlos?</td>
-                      <td>Recibido</td>
-                    </tr>
                     </tbody>
                   </table>
                 </div>
                 <div class="tab-pane fade" id="nav-cuestionarios" role="tabpanel" aria-labelledby="nav-cuestionarios-tab">
                   <h2>Cuestionarios</h2>
-                  <p>Aquí se muestra la información de los cuestionarios del paciente.</p>
+                  <hr>
                 </div>
                 <div class="tab-pane fade" id="nav-formularios" role="tabpanel" aria-labelledby="nav-formularios-tab">
                   <h2>Formularios</h2>
-                  <p>Aquí se muestra la información de los formularios del paciente.</p>
+                  <hr>
                 </div>
                 <div class="tab-pane fade" id="nav-tratamiento" role="tabpanel" aria-labelledby="nav-tratamiento-tab">
                   <h2>Tratamiento</h2>
                   <table class="table table-striped ">
                     <thead>
                     <tr>
-                      <th>Fecha del tratamiento</th>
-                      <th>Medicamento</th>
-                      <th>Dosis</th>
-                      <th>Doctor</th>
                       <th>Diagnóstico</th>
-                      <th>Observaciones</th>
+                      <th>Tratamiento</th>
+                      <th>Receta</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td>2023-04-01</td>
-                      <td>Ibuprofeno</td>
-                      <td>400mg</td>
-                      <td>Dr. Pérez</td>
-                      <td>Dolor de cabeza</td>
-                      <td>Tomar con comida</td>
-                    </tr>
-                    <tr>
-                      <td>2023-04-03</td>
-                      <td>Amoxicilina</td>
-                      <td>500mg</td>
-                      <td>Dra. Gómez</td>
-                      <td>Infección de garganta</td>
-                      <td>Tomar cada 8 horas</td>
-                    </tr>
-                    <tr>
-                      <td>2023-04-04</td>
-                      <td>Paracetamol</td>
-                      <td>1g</td>
-                      <td>Dr. Pérez</td>
-                      <td>Fiebre</td>
-                      <td>Tomar con abundante agua</td>
-                    </tr>
-                    <tr>
-                      <td>2023-04-05</td>
-                      <td>Omeprazol</td>
-                      <td>20mg</td>
-                      <td>Dra. Gómez</td>
-                      <td>Gastritis</td>
-                      <td>Tomar antes del desayuno</td>
-                    </tr>
-                    <tr>
-                      <td>2023-04-06</td>
-                      <td>Aspirina</td>
-                      <td>500mg</td>
-                      <td>Dr. Pérez</td>
-                      <td>Dolor de cuerpo</td>
-                      <td>Tomar después de la comida</td>
-                    </tr>
-                    <tr>
-                      <td>2023-04-07</td>
-                      <td>Lorazepam</td>
-                      <td>1mg</td>
-                      <td>Dra. Gómez</td>
-                      <td>Ansiedad</td>
-                      <td>No conducir después de tomar</td>
+                    <tr th:each="trata : ${tratamiento}">
+                      <td th:text="${trata.diagnosticopaci}"></td>
+                      <td th:text="${trata.tratamientopaci}"></td>
+                      <td th:text="${trata.recetapaci}"></td>
                     </tr>
                     </tbody>
                   </table>
@@ -506,31 +448,12 @@
                   <table class="table table-striped ">
                     <thead>
                     <tr>
-                      <th scope="col">ID del documento</th>
                       <th scope="col">Nombre del documento</th>
                       <th scope="col">Tipo de documento</th>
                       <th scope="col">Fecha de carga</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Informe médico</td>
-                      <td>PDF</td>
-                      <td>2023-02-25</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Resultados de análisis de sangre</td>
-                      <td>PDF</td>
-                      <td>2022-11-30</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Recetas médicas</td>
-                      <td>Imagen</td>
-                      <td>2022-08-05</td>
-                    </tr>
                     </tbody>
                   </table>
                 </div>
@@ -540,35 +463,35 @@
                     <tbody>
                     <tr>
                       <th scope="row">Nombre completo:</th>
-                      <td>John Doe</td>
+                      <td th:text="${paciente.nombre}+' '+${paciente.apellidos}"></td>
                     </tr>
                     <tr>
                       <th scope="row">Fecha de nacimiento:</th>
-                      <td>1990-03-15</td>
+                      <td th:text="${#temporals.format((paciente.fechanacimiento),'dd-MM-yyyy')}"></td>
                     </tr>
                     <tr>
                       <th scope="row">Edad:</th>
-                      <td>33</td>
+                      <td th:text="${paciente.edad}"></td>
                     </tr>
                     <tr>
                       <th scope="row">Género:</th>
-                      <td>Masculino</td>
+                      <td th:text="${paciente.genero}"></td>
                     </tr>
                     <tr>
-                      <th scope="row">Número de identificación:</th>
-                      <td>1234567890</td>
+                      <th scope="row">DNI:</th>
+                      <td th:text="${paciente.idPaciente}"></td>
                     </tr>
                     <tr>
                       <th scope="row">Dirección:</th>
-                      <td>123 Main St, Anytown USA</td>
+                      <td th:text="${paciente.direccion}"></td>
                     </tr>
                     <tr>
                       <th scope="row">Número de teléfono:</th>
-                      <td>(123) 456-7890</td>
+                      <td th:text="${paciente.telefono}"></td>
                     </tr>
                     <tr>
                       <th scope="row">Correo electrónico:</th>
-                      <td>johndoe@gmail.com</td>
+                      <td th:text="${paciente.correo}"></td>
                     </tr>
                     </tbody>
                   </table>
@@ -578,36 +501,12 @@
                   <table class="table ">
                     <tbody>
                     <tr>
-                      <th scope="row">ID del paciente:</th>
-                      <td>12345</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Nombre del paciente:</th>
-                      <td>John Doe</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Fecha de admisión:</th>
-                      <td>2023-03-01</td>
+                      <th scope="row">Fecha de registro:</th>
+                      <td th:text="${#temporals.format((paciente.fecharegistro),'dd-MM-yyyy')}"></td>
                     </tr>
                     <tr>
                       <th scope="row">Estado actual:</th>
-                      <td>En tratamiento</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Última consulta:</th>
-                      <td>2023-04-01</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Próxima consulta:</th>
-                      <td>2023-04-15</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Médico tratante:</th>
-                      <td>Dr. Jane Smith</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Departamento:</th>
-                      <td>Cardiología</td>
+                      <td th:text="${paciente.estado} ? 'Activo' : 'Registrador'"></td>
                     </tr>
                     </tbody>
                   </table>
@@ -617,43 +516,18 @@
                   <table class="table table-striped">
                     <thead>
                     <tr>
-                      <th scope="col">Fecha</th>
-                      <th scope="col">Hora</th>
+                      <th scope="col">Inicio</th>
+                      <th scope="col">Fin</th>
                       <th scope="col">Doctor</th>
-                      <th scope="col">Departamento</th>
-                      <th scope="col">Tipo de cita</th>
-                      <th scope="col">Duración</th>
-                      <th scope="col">Estado</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td>13/04/2023</td>
-                      <td>10:30 am</td>
-                      <td>Dr. Juan Pérez</td>
-                      <td>Pediatría</td>
-                      <td>Consulta</td>
-                      <td>30 min</td>
-                      <td>Confirmada</td>
+                    <tr th:each="citas : ${prximascitas}">
+                      <td th:text="${#temporals.format((citas.iniciocita),'dd-MM-yyyy HH:mm')}"></td>
+                      <td th:text="${#temporals.format((citas.fincita),'dd-MM-yyyy HH:mm')}"></td>
+                      <td th:text="${citas.nombredoctor}"></td>
                     </tr>
-                    <tr>
-                      <td>15/04/2023</td>
-                      <td>2:00 pm</td>
-                      <td>Dra. Ana Gómez</td>
-                      <td>Cardiología</td>
-                      <td>Seguimiento</td>
-                      <td>60 min</td>
-                      <td>Pendiente</td>
-                    </tr>
-                    <tr>
-                      <td>20/04/2023</td>
-                      <td>9:00 am</td>
-                      <td>Dr. Carlos López</td>
-                      <td>Oftalmología</td>
-                      <td>Examen</td>
-                      <td>45 min</td>
-                      <td>Confirmada</td>
-                    </tr>
+
                     </tbody>
                   </table>
                 </div>

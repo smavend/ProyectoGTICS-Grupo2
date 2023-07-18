@@ -40,13 +40,17 @@ public class Cita {
     private String receta;
 
     @NotBlank(message = "El campo no puede estar vacío")
-    @Size(max=100,message = "El campo no puede tener más de 100 caracteres")
+    @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String tratamiento;
 
     @Size(max=500,message = "El campo no puede tener más de 500 caracteres")
     private String bitacora;
     @Column(nullable = false)
     private int modalidad;
+
+    /* modalidad == 0 ---> Presencial
+       modalidad == 1 ---> Virtual
+       modalidad == 2 ---> Examen*/
 
     @Column(nullable = false)
     @Lob
@@ -56,11 +60,11 @@ public class Cita {
     @Column(nullable = false)
     private int estado;
 
-    /* estado == 0 ---> Próxima cita
-       estado == 1 ---> Registrado en caja
-       estado == 2 ---> En espera
+    /* estado == 0 ---> Pendiente de pago
+       estado == 1 o 2 ---> En espera
        estado == 3 ---> En consulta
-       estado == 4 ---> Consulta finalizada */
+       estado == 4 ---> Consulta finalizada
+       estado == 5 ---> Examen pendiente */
 
     @ManyToOne
     @JoinColumn(name = "sede_id_sede", nullable = false)
@@ -76,5 +80,12 @@ public class Cita {
     @ManyToOne
     @JoinColumn(name = "especialidad_id_especialidad")
     private Especialidad especialidad;
+
+    @Lob
+    private byte[] examendoc;
+    private String examenname;
+    private String examencontenttype;
+
+    private String link;
 
 }

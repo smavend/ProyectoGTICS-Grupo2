@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +18,12 @@ public interface CuestionarioPorCitaRepository extends JpaRepository<Cuestionari
     @Query(nativeQuery = true, value = "select x.* from cuestionario_x_cita x " +
             "inner join cita c on (x.cita_id_cita = c.id_cita) " +
             "inner join paciente p on (p.id_paciente = c.paciente_id_paciente) " +
-            "WHERE p.id_paciente = ?1")
+            "WHERE p.id_paciente = ?1 " +
+            "order by c.inicio DESC")
     List<CuestionarioPorCita> buscarPorPaciente(String idPaciente);
 
+    @Query(nativeQuery = true, value = "SELECT CURRENT_TIMESTAMP")
+    LocalDateTime FechaHora();
     CuestionarioPorCita findByIdIdCuestionarioAndIdIdCita(int idCuestionario, int idCita);
 
     @Transactional

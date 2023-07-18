@@ -37,7 +37,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 
 <body>
@@ -319,76 +319,86 @@
             <br>
             <h5 class="card-title text-center">Crear Nuevo Paciente</h5>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-danger" role="alert"></div>
-              <form method="post" th:action="@{/administrador/guardarPaciente}" th:object="${paciente}" enctype="multipart/form-data">
+              <form method="post" id="formPaci" th:action="@{/administrador/guardarPaciente}" th:object="${paciente}" enctype="multipart/form-data">
               <div class="row">
                 <div class="col-md-6">
                   <div class="col-md-12 mb-3">
                     <label>DNI</label>
                     <input type="text" id="dni" class="form-control" th:field="*{idPaciente}" th:classappend="${#fields.hasErrors('idPaciente')? 'is-invalid':''}" >
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}" th:errors="*{idPaciente}" ></div>
+                    <div class="invalid-feedback" id="errordni"></div>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label >Nombre</label>
-                    <input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')? 'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" ></div>
+                    <input type="text" class="form-control" id="nombre" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')? 'is-invalid':''}">
+                    <!-- <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" ></div>-->
+                    <div class="invalid-feedback" id="errornombre" style="display: none"></div>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label >Teléfono</label>
                     <input type="text" id="telefono" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')? 'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" ></div>
-                  </div>
+                    <!--<div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" ></div>-->
+                   <div class="invalid-feedback" id="errortelefon" style="display: none"></div>
+                 </div>
 
 
-                  <div class="col-md-12 mb-3">
-                    <label >Nombre del Seguro</label>
-                    <select class="form-select" th:field="*{seguro}"  th:classappend="${#fields.hasErrors('seguro')? 'is-invalid':''}">
-                      <option value="">Seleccionar</option>
-                      <option th:each="seguro: ${listaSeguro}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}" ></option>
-                    </select>
-                    <div th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}" class="text-danger" ></div>
+                 <div class="col-md-12 mb-3">
+                   <label >Nombre del Seguro</label>
+                   <select class="form-select" id ="seguro" th:field="*{seguro}"  th:classappend="${#fields.hasErrors('seguro')? 'is-invalid':''}">
+                     <option value="">Seleccionar</option>
+                     <option th:each="seguro: ${listaSeguro}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}" ></option>
+                   </select>
+                   <!--<div th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}" class="text-danger" ></div>-->
+                   <div class="invalid-feedback" id="errorseguro" style="display: none"></div>
 
-                  </div>
-                  <div class="col-md-12 mb-3">
-                    <label >Género</label>
-                    <label >Sexo</label>
-                    <select class="form-select" th:field="*{genero}" th:classappend="${#fields.hasErrors('genero')? 'is-invalid':''}">
-                      <option value="">Seleccionar</option>
-                      <option value="Masculino">Masculino</option>
-                      <option value="Femenino">Femenino</option>
-                    </select>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}" ></div>
+                 </div>
+                 <div class="col-md-12 mb-3">
+                   <label >Género</label>
+                   <label >Sexo</label>
+                   <select class="form-select" id="genero" th:field="*{genero}" th:classappend="${#fields.hasErrors('genero')? 'is-invalid':''}">
+                     <option value="">Seleccionar</option>
+                     <option value="Masculino">Masculino</option>
+                     <option value="Femenino">Femenino</option>
+                   </select>
+                   <!--<div class="invalid-feedback" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}" ></div>-->
+                    <div class="invalid-feedback" id="errorgenero" style="display: none"></div>
                   </div>
 
                   <div class="col-md-12 mb-3">
                     <label >Correo electrónico</label>
-                    <input type="text" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')? 'is-invalid':''}">
+                    <input type="text" class="form-control" id="correo" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')? 'is-invalid':''}">
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" ></div>
-                  </div>
+                   <div class="invalid-feedback" id="errorcorreo" style="display: none"></div>
+                 </div>
 
-                </div>
-                <div class="col-md-6">
-                  <div class="col-md-12 mb-3">
-                    <label >Apellido</label>
-                    <input type="text" class="form-control" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')? 'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" ></div>
+               </div>
+               <div class="col-md-6">
+                 <div class="col-md-12 mb-3">
+                   <label >Apellido</label>
+                   <input type="text" class="form-control" id="apellido" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')? 'is-invalid':''}">
+                   <!-- <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" ></div>-->
+                    <div class="invalid-feedback" id="errorapellido" style="display: none"></div>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label >Dirección</label>
-                    <input type="text" class="form-control" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')? 'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" ></div>
+                    <input type="text" class="form-control" id="direccion" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')? 'is-invalid':''}">
+                    <!--<div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" ></div>-->
+                    <div class="invalid-feedback" id="errordireccion" style="display: none"></div>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label >Fecha Nacimiento</label>
-                    <input type="date" class="form-control" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')? 'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fechanacimiento')}" th:errors="*{fechanacimiento}" ></div>
-                  </div>
-                  <div class="col-md-12 mb-3">
-                    <label>Distrito</label>
-                    <select class="form-select" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito')? 'is-invalid':''}" >
-                      <option value="">Seleccionar</option>
-                      <option th:each="distrito:${listaDistrito}" th:value="${distrito.idDistrito}" th:text="${distrito.nombre}"></option>
-                    </select>
-                    <div th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}" class="text-danger" ></div>
+                    <input type="date" class="form-control" id="fechanacimiento" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')? 'is-invalid':''}">
+                    <!--<div class="invalid-feedback" th:if="${#fields.hasErrors('fechanacimiento')}" th:errors="*{fechanacimiento}" ></div>-->
+                   <div class="invalid-feedback" id="errornacimiento" style="display: none"></div>
+                 </div>
+                 <div class="col-md-12 mb-3">
+                   <label>Distrito</label>
+                   <select class="form-select" id="distrito" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito')? 'is-invalid':''}" >
+                     <option value="">Seleccionar</option>
+                     <option th:each="distrito:${listaDistrito}" th:value="${distrito.idDistrito}" th:text="${distrito.nombre}"></option>
+                   </select>
+                   <!--<div th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}" class="text-danger" ></div>-->
+                    <div class="invalid-feedback" id="errordistrito" style="display: none"></div>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="archivo" class="form-label">Subir foto</label>
@@ -436,6 +446,116 @@
 
   updateHeaderColorAdministrador();
 </script>
+<script>
+  $(document).ready(function (){
+    //validar form
+    $("#formPaci").submit(function (event){
+      event.preventDefault();
+      var dni = $("#dni").val();
+      var nombre = $("#nombre").val();
+      var apellido =$("#apellido").val();
+      var genero =$("#genero").val();
+      var correo = $("#correo").val();
+      var seguro = $("#seguro").val();
+      var distrito = $("#distrito").val();
+      var direccion = $("#direccion").val();
+      var fechanaci = $("#fechanacimiento").val();
+      var telefono = $("#telefono").val();
+      var correoRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+
+      if(dni==""){
+        $("#dni").addClass('is-invalid');
+        $("#errordni").text("Ingrese su número de DNI").show(500).delay(1000);
+      }else if (dni.length !== 8) {
+        $("#dni").addClass("is-invalid");
+        $("#errordni").text("El DNI debe tener 8 dígitos").show(500).delay(1000);
+      }else {
+        $("#dni").removeClass('is-invalid');
+        $("#dni").addClass('is-valid');
+
+      }
+      if(telefono==""){
+        $("#telefono").addClass('is-invalid');
+        $("#errortelefon").text("Ingrese su número de teléfono").show(500).delay(1000);
+      }else if (telefono.length !==9) {
+        $("#telefono").addClass("is-invalid");
+        $("#errortelefono").text("El teléfono debe tener 9 dígitos").show(500).delay(1000);
+      }else {
+        $("#telefono").removeClass('is-invalid');
+        $("#telefono").addClass('is-valid');
+      }
+      if(nombre==""){
+        $("#nombre").addClass('is-invalid');
+        $("#errornombre").text("Este campo no puede estar vacío").show(500).delay(1000);
+      }else {
+        $("#nombre").removeClass('is-invalid');
+        $("#nombre").addClass('is-valid');
+
+      }
+      if(apellido==""){
+        $("#apellido").addClass('is-invalid');
+        $("#errorapellido").text("Este campo no puede estar vacío").show(500).delay(1000);
+      }else {
+        $("#apellido").removeClass('is-invalid');
+        $("#apellido").addClass('is-valid');
+
+      }
+      if(correo==""){
+        $("#correo").addClass('is-invalid');
+        $("#errorcorreo").text("Este campo no puede estar vacío").show(500).delay(1000);
+      }else if(!correoRegex.test(correo)){
+        $("#correo").addClass("is-invalid");
+        $("#errorcorreo").text("Ingrese un correo electrónico válido").show(500).delay(1000);
+      }else {
+        $("#correo").removeClass('is-invalid');
+        $("#correo").addClass('is-valid');
+      }
+      if(genero==""){
+        $("#genero").addClass('is-invalid');
+        $("#errorgenero").text("Seleccione un género").show(500).delay(1000);
+      }else {
+        $("#genero").removeClass('is-invalid');
+        $("#genero").addClass('is-valid');
+      }
+      if(seguro==""){
+        $("#seguro").addClass('is-invalid');
+        $("#errorseguro").text("Seleccione un seguro").show(500).delay(1000);
+      }else {
+        $("#seguro").removeClass('is-invalid');
+        $("#seguro").addClass('is-valid');
+      }
+      if(distrito==""){
+        $("#distrito").addClass('is-invalid');
+        $("#errordistrito").text("Seleccione un distrito").show(500).delay(1000);
+      }else {
+        $("#distrito").removeClass('is-invalid');
+        $("#distrito").addClass('is-valid');
+      }
+      if(direccion==""){
+        $("#direccion").addClass('is-invalid');
+        $("#errordireccion").text("Seleccione un distrito").show(500).delay(1000);
+      }else {
+        $("#direccion").removeClass('is-invalid');
+        $("#direccion").addClass('is-valid');
+      }
+      if(fechanaci==""){
+        $("#fechanacimiento").addClass('is-invalid');
+        $("#errornacimiento").text("Seleccione un distrito").show(500).delay(1000);
+      }else {
+        $("#fechanacimiento").removeClass('is-invalid');
+        $("#fechanacimiento").addClass('is-valid');
+      }
+      if ($("#dni").hasClass("is-valid") && $("#nombre").hasClass("is-valid") &&
+              $("#apellido").hasClass('is-valid') && $("#genero").hasClass('is-valid') && $("#correo").hasClass('is-valid') &&
+              $("#seguro").hasClass('is-valid') && $("#distrito").hasClass('is-valid') && $("#direccion").hasClass('is-valid')
+              && $("#fechanacimiento").hasClass('is-valid') && $("#telefono").hasClass('is-valid')) {
+        this.submit();
+      }
+    });
+
+  });
+</script>
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
@@ -447,7 +567,7 @@
 <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
 <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
 
 <!-- Agregamos las librerías de jQuery UI para crear el calendario -->
 
