@@ -324,7 +324,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">INGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                                        <button type="button" id="reporteingresos" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
                                             Generar reporte
                                         </button>
 
@@ -411,37 +411,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Pop-up de okok reporte -->
-                                    <!-- Pop-up de generación de reporte-->
-                                    <div class="modal fade" id="generado" tabindex="-1" aria-labelledby="generadoLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-
-                                                    <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="pt-4 pb-2">
-                                                        <h5 class="card-title text-center pb-0 fs-4">Descarga completa </h5>
-                                                        <p class="text-center small">La descarga se ha realizado con exito.<br> Verifique en su explorador de archivos</p>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer mb-1">
-                                                    <!--<button type="button" class="btn btn-primary " data-bs-dismiss="modal" aria-label="Close">OK</button>-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <!--  -->
                                 </div>
-
+                                <div class="table-responsive">
                                     <table class="table table-striped" id="datatable">
                                         <thead>
                                         <tr>
                                             <th>Concepto</th>
-                                            <th>Monto</th>
+                                            <th>Monto <br> (Soles)</th>
                                             <th>Paciente</th>
                                             <th>Especialidad</th>
                                             <th>Seguro</th>
@@ -453,7 +429,7 @@
                                         <tbody>
                                         <tr th:each="ingreso : ${listaIngresos}">
                                             <td th:text="${ingreso.getConcepto()}"></td>
-                                            <td th:text="'$'+${ingreso.getPreciocita()}"></td>
+                                            <td th:text="${ingreso.getPreciocita()}"></td>
                                             <td th:text="${ingreso.getNombreuser()}"></td>
                                             <td th:text="${ingreso.getEspecialidadcita()}"></td>
                                             <td th:text="${ingreso.getNombreseguro()}"></td>
@@ -464,6 +440,7 @@
 
                                         </tbody>
                                     </table>
+                                </div>
                                     <br>
                         </div>
 
@@ -471,84 +448,110 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title">EGRESOS <span>| Sede San Isidro</span></h5>
                                     <div>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                                        <button type="button" id="reporteegresos" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal2">
                                             Generar reporte
                                         </button>
-
                                     </div>
+                                    <!-- Pop-up de filtrado -->
+                                    <div class="modal fade" id="filterModal2" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="filterModalLabel2">Filtrar reporte</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" th:action="@{/administrador/reportesEgresos}" novalidate onsubmit="return validateForm2()">
+                                                    <div class="modal-body">
+
+                                                        <div class="mb-3">
+                                                            <label for="tiporeporte" class="form-label">Tipo de reporte</label>
+                                                            <select class="form-select" id="tiporeporte2" name="tiporeporte" onchange="toggleFilterOptions2()">
+                                                                <option value="5" selected>Todo</option>
+                                                                <option value="1">Por seguro</option>
+                                                                <option value="2">Por especialidad</option>
+                                                            </select>
+                                                        </div>
+                                                        <div id="porSeguro2" class="mb-3" style="display: none;">
+                                                            <label for="insuranceInput" class="form-label">Seguro</label>
+                                                            <select class="form-select" id="insuranceInput2" name="seguro" required>
+                                                                <option value="">Seleccionar seguro</option>
+                                                                <option  th:each="seguro : ${listaSeguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
+                                                            </select>
+                                                            <div class="invalid-feedback">
+                                                                Por favor seleccione una opción
+                                                            </div>
+
+                                                        </div>
+                                                        <div id="porEspecialidad2" class="mb-3" style="display: none;">
+                                                            <label for="specialtyInput" class="form-label">Especialidad</label>
+                                                            <select class="form-select" id="specialtyInput2" name="especialidad">
+                                                                <option value="">Seleccionar especialidad</option>
+                                                                <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"></option>
+                                                            </select>
+                                                            <div class="invalid-feedback">
+                                                                Por favor seleccione una opción
+                                                            </div>
+                                                        </div>
+                                                        <div id="porFecha2" class="mb-3" style="display: none;">
+                                                            <label for="porfechareporte" class="form-label">Todo</label>
+                                                            <select class="form-select" id="porfechareporte2" name="todo">
+                                                                <option value="">Seleccionar</option>
+                                                                <option value="1">Última semana</option>
+                                                                <option value="2">Último mes</option>
+                                                                <option value="3">Últimos tres meses</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">
+                                                                Por favor seleccione una opción
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <button class="btn btn-primary me-1" type="submit" >Descargar</button>
+                                                            <select class="form-select" name="formato">
+                                                                <option value="1">Excel</option>
+                                                                <option value="2">PDF </option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
 
-
+                            <div class="table-responsive">
                                     <table class="table table-striped " id="datatable2">
                                         <thead>
                                         <tr>
-                                            <th>Fecha</th>
                                             <th>Concepto</th>
-                                            <th>Monto</th>
-                                            <th>Forma de Pago</th>
-                                            <th>Proveedor</th>
+                                            <th>Monto <br> (Soles)</th>
+                                            <th>Nombre</th>
+                                            <th>Especialidad</th>
+                                            <th>Seguro</th>
+                                            <th>Fecha</th>
                                             <th>Categoría de Gasto</th>
-                                            <th>Descripción</th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>01/01/2023</td>
-                                            <td>Pago de renta de local</td>
-                                            <td>$1,000.00</td>
-                                            <td>Transferencia bancaria</td>
-                                            <td>Propietario del local</td>
-                                            <td>Gastos Generales</td>
-                                            <td>Pago de la renta del mes de enero</td>
+                                        <tr th:each="egreso : ${listaEgresos}">
+                                            <td th:text="${egreso.getConcepto()}"></td>
+                                            <td th:text="${egreso.getPagodoctor()}"></td>
+                                            <td th:text="${egreso.getNombreuser()}"></td>
+                                            <td th:text="${egreso.getEspecialidadcita()}"></td>
+                                            <td th:text="${egreso.getNombreseguro()}"></td>
+                                            <td th:text="${#temporals.format(egreso.getFecha(), 'dd-MM-yyyy')}"></td>
+                                            <td th:text="${egreso.getCategoriagasto()}"></td>
+
                                         </tr>
-                                        <tr>
-                                            <td>05/01/2023</td>
-                                            <td>Compra de suministros médicos</td>
-                                            <td>$500.00</td>
-                                            <td>Tarjeta de crédito</td>
-                                            <td>Proveedor de suministros</td>
-                                            <td>Gastos de Suministros</td>
-                                            <td>Compra de suministros médicos para el mes de enero</td>
-                                        </tr>
-                                        <tr>
-                                            <td>10/01/2023</td>
-                                            <td>Pago de servicios de limpieza</td>
-                                            <td>$150.00</td>
-                                            <td>Efectivo</td>
-                                            <td>Compañía de limpieza</td>
-                                            <td>Gastos de Limpieza</td>
-                                            <td>Pago de servicios de limpieza para el mes de enero</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/01/2023</td>
-                                            <td>Pago de renta de local</td>
-                                            <td>$1,000.00</td>
-                                            <td>Transferencia bancaria</td>
-                                            <td>Propietario del local</td>
-                                            <td>Gastos Generales</td>
-                                            <td>Pago de la renta del mes de enero</td>
-                                        </tr>
-                                        <tr>
-                                            <td>05/01/2023</td>
-                                            <td>Compra de suministros médicos</td>
-                                            <td>$500.00</td>
-                                            <td>Tarjeta de crédito</td>
-                                            <td>Proveedor de suministros</td>
-                                            <td>Gastos de Suministros</td>
-                                            <td>Compra de suministros médicos para el mes de enero</td>
-                                        </tr>
-                                        <tr>
-                                            <td>10/01/2023</td>
-                                            <td>Pago de servicios de limpieza</td>
-                                            <td>$150.00</td>
-                                            <td>Efectivo</td>
-                                            <td>Compañía de limpieza</td>
-                                            <td>Gastos de Limpieza</td>
-                                            <td>Pago de servicios de limpieza para el mes de enero</td>
-                                        </tr>
-                                        <!-- Puedes agregar más filas con información sobre los egresos de la clínica -->
                                         </tbody>
                                     </table>
+                            </div>
                                     <br>
 
                             </div>
@@ -557,19 +560,6 @@
 
 </main><!-- End #main -->
 
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-
-    <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-
-    </div>
-</footer><!-- End Footer -->
-
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 <script>
     var headerColorAdministrador = "[[${headerColorAdministrador}]]";
     localStorage.setItem('headerColorAdministrador', headerColorAdministrador);
@@ -631,8 +621,8 @@
     $(document).ready(function () {
         $('#datatable2').DataTable({
             lengthMenu: [
-                [5,10,20],
-                [5,10,20],
+                [8,10,20],
+                [8,10,20],
             ],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
@@ -649,395 +639,13 @@
                     "previous": "Anterior",
                 }
             },
-            "pageLength": 5,
+            "pageLength": 8,
             "columnDefs": [
                 {"margin-bottom": "10px"}
             ]
         });
     });
 </script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const series = {
-            "monthDataSeries1": {
-                "prices": [
-                    8107.85,
-                    8128.0,
-                    8122.9,
-                    8165.5,
-                    8340.7,
-                    8423.7,
-                    8423.5,
-                    8514.3,
-                    8481.85,
-                    8487.7,
-                    8506.9,
-                    8626.2,
-                    8668.95,
-                    8602.3,
-                    8607.55,
-                    8512.9,
-                    8496.25,
-                    8600.65,
-                    8881.1,
-                    9340.85
-                ],
-                "dates": [
-                    "13 Nov 2017",
-                    "14 Nov 2017",
-                    "15 Nov 2017",
-                    "16 Nov 2017",
-                    "17 Nov 2017",
-                    "20 Nov 2017",
-                    "21 Nov 2017",
-                    "22 Nov 2017",
-                    "23 Nov 2017",
-                    "24 Nov 2017",
-                    "27 Nov 2017",
-                    "28 Nov 2017",
-                    "29 Nov 2017",
-                    "30 Nov 2017",
-                    "01 Dec 2017",
-                    "04 Dec 2017",
-                    "05 Dec 2017",
-                    "06 Dec 2017",
-                    "07 Dec 2017",
-                    "08 Dec 2017"
-                ]
-            },
-            "monthDataSeries2": {
-                "prices": [
-                    8423.7,
-                    8423.5,
-                    8514.3,
-                    8481.85,
-                    8487.7,
-                    8506.9,
-                    8626.2,
-                    8668.95,
-                    8602.3,
-                    8607.55,
-                    8512.9,
-                    8496.25,
-                    8600.65,
-                    8881.1,
-                    9040.85,
-                    8340.7,
-                    8165.5,
-                    8122.9,
-                    8107.85,
-                    8128.0
-                ],
-                "dates": [
-                    "13 Nov 2017",
-                    "14 Nov 2017",
-                    "15 Nov 2017",
-                    "16 Nov 2017",
-                    "17 Nov 2017",
-                    "20 Nov 2017",
-                    "21 Nov 2017",
-                    "22 Nov 2017",
-                    "23 Nov 2017",
-                    "24 Nov 2017",
-                    "27 Nov 2017",
-                    "28 Nov 2017",
-                    "29 Nov 2017",
-                    "30 Nov 2017",
-                    "01 Dec 2017",
-                    "04 Dec 2017",
-                    "05 Dec 2017",
-                    "06 Dec 2017",
-                    "07 Dec 2017",
-                    "08 Dec 2017"
-                ]
-            },
-            "monthDataSeries3": {
-                "prices": [
-                    7114.25,
-                    7126.6,
-                    7116.95,
-                    7203.7,
-                    7233.75,
-                    7451.0,
-                    7381.15,
-                    7348.95,
-                    7347.75,
-                    7311.25,
-                    7266.4,
-                    7253.25,
-                    7215.45,
-                    7266.35,
-                    7315.25,
-                    7237.2,
-                    7191.4,
-                    7238.95,
-                    7222.6,
-                    7217.9,
-                    7359.3,
-                    7371.55,
-                    7371.15,
-                    7469.2,
-                    7429.25,
-                    7434.65,
-                    7451.1,
-                    7475.25,
-                    7566.25,
-                    7556.8,
-                    7525.55,
-                    7555.45,
-                    7560.9,
-                    7490.7,
-                    7527.6,
-                    7551.9,
-                    7514.85,
-                    7577.95,
-                    7592.3,
-                    7621.95,
-                    7707.95,
-                    7859.1,
-                    7815.7,
-                    7739.0,
-                    7778.7,
-                    7839.45,
-                    7756.45,
-                    7669.2,
-                    7580.45,
-                    7452.85,
-                    7617.25,
-                    7701.6,
-                    7606.8,
-                    7620.05,
-                    7513.85,
-                    7498.45,
-                    7575.45,
-                    7601.95,
-                    7589.1,
-                    7525.85,
-                    7569.5,
-                    7702.5,
-                    7812.7,
-                    7803.75,
-                    7816.3,
-                    7851.15,
-                    7912.2,
-                    7972.8,
-                    8145.0,
-                    8161.1,
-                    8121.05,
-                    8071.25,
-                    8088.2,
-                    8154.45,
-                    8148.3,
-                    8122.05,
-                    8132.65,
-                    8074.55,
-                    7952.8,
-                    7885.55,
-                    7733.9,
-                    7897.15,
-                    7973.15,
-                    7888.5,
-                    7842.8,
-                    7838.4,
-                    7909.85,
-                    7892.75,
-                    7897.75,
-                    7820.05,
-                    7904.4,
-                    7872.2,
-                    7847.5,
-                    7849.55,
-                    7789.6,
-                    7736.35,
-                    7819.4,
-                    7875.35,
-                    7871.8,
-                    8076.5,
-                    8114.8,
-                    8193.55,
-                    8217.1,
-                    8235.05,
-                    8215.3,
-                    8216.4,
-                    8301.55,
-                    8235.25,
-                    8229.75,
-                    8201.95,
-                    8164.95,
-                    8107.85,
-                    8128.0,
-                    8122.9,
-                    8165.5,
-                    8340.7,
-                    8423.7,
-                    8423.5,
-                    8514.3,
-                    8481.85,
-                    8487.7,
-                    8506.9,
-                    8626.2
-                ],
-                "dates": [
-                    "02 Jun 2017",
-                    "05 Jun 2017",
-                    "06 Jun 2017",
-                    "07 Jun 2017",
-                    "08 Jun 2017",
-                    "09 Jun 2017",
-                    "12 Jun 2017",
-                    "13 Jun 2017",
-                    "14 Jun 2017",
-                    "15 Jun 2017",
-                    "16 Jun 2017",
-                    "19 Jun 2017",
-                    "20 Jun 2017",
-                    "21 Jun 2017",
-                    "22 Jun 2017",
-                    "23 Jun 2017",
-                    "27 Jun 2017",
-                    "28 Jun 2017",
-                    "29 Jun 2017",
-                    "30 Jun 2017",
-                    "03 Jul 2017",
-                    "04 Jul 2017",
-                    "05 Jul 2017",
-                    "06 Jul 2017",
-                    "07 Jul 2017",
-                    "10 Jul 2017",
-                    "11 Jul 2017",
-                    "12 Jul 2017",
-                    "13 Jul 2017",
-                    "14 Jul 2017",
-                    "17 Jul 2017",
-                    "18 Jul 2017",
-                    "19 Jul 2017",
-                    "20 Jul 2017",
-                    "21 Jul 2017",
-                    "24 Jul 2017",
-                    "25 Jul 2017",
-                    "26 Jul 2017",
-                    "27 Jul 2017",
-                    "28 Jul 2017",
-                    "31 Jul 2017",
-                    "01 Aug 2017",
-                    "02 Aug 2017",
-                    "03 Aug 2017",
-                    "04 Aug 2017",
-                    "07 Aug 2017",
-                    "08 Aug 2017",
-                    "09 Aug 2017",
-                    "10 Aug 2017",
-                    "11 Aug 2017",
-                    "14 Aug 2017",
-                    "16 Aug 2017",
-                    "17 Aug 2017",
-                    "18 Aug 2017",
-                    "21 Aug 2017",
-                    "22 Aug 2017",
-                    "23 Aug 2017",
-                    "24 Aug 2017",
-                    "28 Aug 2017",
-                    "29 Aug 2017",
-                    "30 Aug 2017",
-                    "31 Aug 2017",
-                    "01 Sep 2017",
-                    "04 Sep 2017",
-                    "05 Sep 2017",
-                    "06 Sep 2017",
-                    "07 Sep 2017",
-                    "08 Sep 2017",
-                    "11 Sep 2017",
-                    "12 Sep 2017",
-                    "13 Sep 2017",
-                    "14 Sep 2017",
-                    "15 Sep 2017",
-                    "18 Sep 2017",
-                    "19 Sep 2017",
-                    "20 Sep 2017",
-                    "21 Sep 2017",
-                    "22 Sep 2017",
-                    "25 Sep 2017",
-                    "26 Sep 2017",
-                    "27 Sep 2017",
-                    "28 Sep 2017",
-                    "29 Sep 2017",
-                    "03 Oct 2017",
-                    "04 Oct 2017",
-                    "05 Oct 2017",
-                    "06 Oct 2017",
-                    "09 Oct 2017",
-                    "10 Oct 2017",
-                    "11 Oct 2017",
-                    "12 Oct 2017",
-                    "13 Oct 2017",
-                    "16 Oct 2017",
-                    "17 Oct 2017",
-                    "18 Oct 2017",
-                    "19 Oct 2017",
-                    "23 Oct 2017",
-                    "24 Oct 2017",
-                    "25 Oct 2017",
-                    "26 Oct 2017",
-                    "27 Oct 2017",
-                    "30 Oct 2017",
-                    "31 Oct 2017",
-                    "01 Nov 2017",
-                    "02 Nov 2017",
-                    "03 Nov 2017",
-                    "06 Nov 2017",
-                    "07 Nov 2017",
-                    "08 Nov 2017",
-                    "09 Nov 2017",
-                    "10 Nov 2017",
-                    "13 Nov 2017",
-                    "14 Nov 2017",
-                    "15 Nov 2017",
-                    "16 Nov 2017",
-                    "17 Nov 2017",
-                    "20 Nov 2017",
-                    "21 Nov 2017",
-                    "22 Nov 2017",
-                    "23 Nov 2017",
-                    "24 Nov 2017",
-                    "27 Nov 2017",
-                    "28 Nov 2017"
-                ]
-            }
-        }
-        new ApexCharts(document.querySelector("#areaChart"), {
-            series: [{
-                name: "INGRESOS",
-                data: series.monthDataSeries1.prices
-            }],
-            chart: {
-                type: 'area',
-                height: 350,
-                zoom: {
-                    enabled: false
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'straight'
-            },
-
-            labels: series.monthDataSeries1.dates,
-            xaxis: {
-                type: 'datetime',
-            },
-            yaxis: {
-                opposite: true
-            },
-            legend: {
-                horizontalAlign: 'left'
-            }
-        }).render();
-    });
-</script>
-
-
 </body>
 
 </html>
