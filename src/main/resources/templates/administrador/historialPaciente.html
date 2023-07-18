@@ -243,7 +243,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/perfil}">
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/config}">
               <i class="bi bi-gear"></i>
               <span>Configuraciones</span>
             </a>
@@ -258,10 +258,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Cerrar Sesión</span>
-            </a>
+            <form th:action="@{/logout}" method="post">  <button type="submit" class="dropdown-item d-flex align-items-center" href="#">                 <i class="bi bi-box-arrow-right"></i>                 <span>Cerrar Sesión</span>               </button>             </form>
           </li>
 
         </ul><!-- End Profile Dropdown Items -->
