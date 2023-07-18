@@ -30,7 +30,7 @@
                         <div class="col-md-4 col-lg-4 filtro d-flex justify-content-start">
                             <label class="labelFiltro">Sede</label>
                             <select class="form-select" name="sede">
-                                <option th:each="sede: ${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}"
+                                <option th:each="sede, iterStat: ${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}" th:if="${iterStat.index} &lt; 3"
                                         th:selected="${sede.idSede == idSede}"></option>
                             </select>
                         </div>
