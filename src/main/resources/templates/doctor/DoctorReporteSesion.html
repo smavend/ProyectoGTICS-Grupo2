@@ -69,7 +69,7 @@
         <main id="main" class="main">
 
             <section class="section dashboard">
-                <form th:if="${cita.estado != 5}" method="post" th:action="@{/doctor/iniciarCita}" class="mt-2">
+                <form th:if="${cita.estado != 5 && cita.modalidad==1}" method="post" th:action="@{/doctor/iniciarCita}" class="mt-2">
 
                     <input th:value="${cita.id_cita}" name="id_cita" type="hidden">
                     <input th:value="${paciente.idPaciente}" name="idPaciente" type="hidden">
@@ -153,7 +153,54 @@
 
                 </form>
 
+                <form th:if="${cita.estado != 5 && cita.modalidad==0}" method="post" th:action="@{/doctor/iniciarCitaPresencial}" class="mt-2">
 
+                    <input th:value="${cita.id_cita}" name="id_cita" type="hidden">
+                    <input th:value="${paciente.idPaciente}" name="idPaciente" type="hidden">
+
+                    <input name="cita_previa" value="" type="hidden" class="form-control d-inline">
+                    <div class="row justify-content-center align-items-center">
+                        <div style="background-color: #fff;margin-top: 1rem;margin-bottom: 2rem;height: fit-content"
+                             class="container col-5 py-4">
+                            <h1 style="color: black;text-align: center;">Información de la cita</h1>
+                            <hr>
+                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Paciente: </strong><span
+                                style="font-size: 1.2rem"
+                                th:text="${paciente.nombre+ ' ' + paciente.apellidos}"> </span>
+                            <br>
+                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">DNI: </strong><span
+                                style="font-size: 1.2rem" th:text="${paciente.idPaciente}"> </span>
+                            <br>
+                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Edad: </strong><span
+                                style="font-size: 1.2rem" th:text="${paciente.getEdad()}"> </span>
+                            <br>
+                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Genero: </strong><span
+                                style="font-size: 1.2rem" th:text="${paciente.genero}"> </span>
+                            <br>
+                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Alergias: </strong><span
+                                style="font-size: 1.2rem" th:text="${alergias}"> </span>
+                            <br>
+                            <!-- DESPUES PONER EDAD -->
+
+                            <hr style="border-top: 3px solid #ccc">
+
+                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Especialidad: </strong><span
+                                style="font-size: 1.2rem" th:text="${doctor.especialidad.nombre}"> </span>
+                            <br>
+                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Fecha: </strong><span
+                                style="font-size: 1.2rem" th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}"> </span>
+                            <br>
+                            <strong style="font-size: 1.2rem;line-height: 1.5;margin-left: 20px;">Horario: </strong><span
+                                style="font-size: 1.2rem" th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')}"> </span>
+                            <br>
+
+                        </div>
+                    </div>
+                    <br>
+                    <div style="text-align: center;" class=" col-12">
+                        <button th:disabled="${!(momentoActual.isAfter(cita.inicio) && momentoActual.isBefore(cita.fin))}" type="submit" class="btn btn-primary btn-lg">Iniciar cita</button>
+                    </div>
+                </form>
                 <div th:unless="${cita.estado != 5}" class="container-xl perfil">
                     <div class="row">
                         <div class="pagetitle">

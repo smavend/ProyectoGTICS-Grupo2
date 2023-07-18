@@ -507,7 +507,7 @@ public class DoctorController {
         //si sale error de verificar pago, añadir a la base de la fila pago de esa cita, ya que siempre estaran presentes
         //las filas de pago de cada cita
 
-        if (optionalPaciente.isPresent() & optionalCita.isPresent() && ((optionalCita.get().getModalidad() == 1 && (optionalCita.get().getEstado()==1 || optionalCita.get().getEstado()==2 || optionalCita.get().getEstado()==3) ) || (optionalCita.get().getModalidad() == 0 && optionalCita.get().getEstado()==5)) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.get().getEstadoPago()==1 ) {
+        if (optionalPaciente.isPresent() & optionalCita.isPresent() && ((optionalCita.get().getModalidad() == 1 && (optionalCita.get().getEstado()==1 || optionalCita.get().getEstado()==2 || optionalCita.get().getEstado()==3) ) || (optionalCita.get().getModalidad() == 0 && (optionalCita.get().getEstado()==2 ||optionalCita.get().getEstado()==1 || optionalCita.get().getEstado()==5))) && optionalCita.get().getDoctor().getId_doctor() == doctor_session.getId_doctor() && verificarPago.get().getEstadoPago()==1 ) {
             Paciente paciente = optionalPaciente.get();
             Cita cita = optionalCita.get();
 
@@ -621,6 +621,58 @@ public class DoctorController {
             e.printStackTrace();
             return "redirect:/doctor/";
         }
+    }
+    @PostMapping("/iniciarCitaPresencial")
+    public String iniciarCitaPresencial(@RequestParam("id_cita") Integer idCita,
+                              @RequestParam("idPaciente") String idPaciente,
+                              Model model, HttpSession session, Authentication authentication){
+
+        Cita cita = citaRepository.findById(idCita).get();
+
+        LocalDateTime horaFinCita = cita.getFin().plusHours(12);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String horaFinReunion = horaFinCita.format(formatter);
+
+        try {
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
+            Doctor doctor_session = doctorRepository.findByCorreo(userEmail);
+            session.setAttribute("doctor", doctor_session);
+
+            Paciente paciente = pacienteRepository.findById(idPaciente).get();
+            List<Alergia> alergiaList = alergiaRepository.buscarPorPacienteId(idPaciente);
+            String alergias = "";
+
+            for (int i = 0; i < alergiaList.size(); i++) {
+                if (i == alergiaList.size() - 1) {
+                    Alergia alergiaIterador = alergiaList.get(i);
+                    alergias = alergias + " " + alergiaIterador.getNombre();
+                } else {
+                    Alergia alergiaIterador = alergiaList.get(i);
+                    alergias = alergias + " " + alergiaIterador.getNombre() + ",";
+                }
+            }
+
+            Optional<Doctor> doctorOptional = doctorRepository.findById(doctor_session.getId_doctor());
+            Doctor doctor = doctorOptional.get();
+
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("cita", cita);
+            model.addAttribute("alergias", alergias);
+
+            citaRepository.actualizarEstadoEnConsulta(cita.getId_cita());
+
+            return "doctor/DoctorCitaPresencial";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/doctor/";
+        }
+
     }
 
     @GetMapping("/verCuestionario")
