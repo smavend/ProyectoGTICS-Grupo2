@@ -122,19 +122,6 @@ public class PacienteController {
             }
         }
 
-        List<HashMap<String, String>> credenciales = new ArrayList<>();
-        HashMap<String, String> user1 = new HashMap<>();
-        user1.put("correo", "lucas@gmail.com");
-        user1.put("pass", "123");
-        HashMap<String, String> user2 = new HashMap<>();
-        user2.put("correo", "jhon@gmail.com");
-        user2.put("pass", "123");
-
-        credenciales.add(user1);
-        credenciales.add(user2);
-
-        model.addAttribute("credenciales", credenciales);
-
         session.setAttribute("paciente", paciente);
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
