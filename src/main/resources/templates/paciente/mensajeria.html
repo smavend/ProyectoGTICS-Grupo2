@@ -20,7 +20,7 @@
         <!-- End Sidebar-->
 
         <main id="main" class="main site-content py-1 px-3">
-            <div id="cometchat" style="width: 100%; height: 628px">
+            <div id="cometchat" style="width: 80%; height: 628px">
 
             </div>
         </main><!-- End #main -->
@@ -59,60 +59,24 @@
 
         </script>
 
-    </body>
-    =======
-    <img th:src="@{/assets/img/profile-img.jpg}" width="70" height="70"
-         class=" rounded-circle align-self-end"/>
-    <div class="flex flex-col col-lg-6 col-md-9 col-sm-11">
-        <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-            <p class="mb-1 fw-bold" th:text="${session.paciente.getNombreYApellido()}">
-                Alexandra Manrique</p>
-            <small class=" ">
-                El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco
-                sobre él. Al menos, mucho menos de lo que podríamos.
-            </small>
-        </div>
-        <div class="text-end">
-            <small class="ms-2">09:55 am</small>
-        </div>
-    </div>
-    </div>
-    </div>
-    <div class="p-3  d-flex align-items-center">
-        <input type="text" class="form-control me-2  border-0" placeholder="Escribe tu mensaje...">
-        <button type="button" class="btn btn-primary">Enviar</button>
-    </div>
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
 
-    </div>
-    </div>
-    </section>
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
 
-    <!-- ====== Footer ====== -->
-    <footer class="site-footer">
-        <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-    </footer>
-    <!-- End footer -->
+            updateHeaderColorPaciente();
+        </script>
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
 
-    </main><!-- End #main -->
-    <script>
-        var headerColorPaciente = "[[${headerColorPaciente}]]";
-        localStorage.setItem('headerColorPaciente', headerColorPaciente);
-
-        function updateHeaderColorPaciente() {
-            var color = headerColorPaciente;
-            document.getElementById('header').style.backgroundColor = color;
-        }
-
-        updateHeaderColorPaciente();
-    </script>
-    <!-- Bootstrap CDN JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-            crossorigin="anonymous"></script>
-
-    <!-- Template Main JS File -->
-    <script th:src="@{/assets/js/main.js}"></script>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
 
     </body>
-    >>>>>>> develop
 </html>
