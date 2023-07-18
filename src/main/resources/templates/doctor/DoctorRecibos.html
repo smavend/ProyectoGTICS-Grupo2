@@ -44,6 +44,9 @@
         <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+
     </head>
 
     <!-- =======================================================
@@ -152,6 +155,7 @@
 
 
         </main><!-- End #main -->
+        <div id="loading"></div>
 
         <!-- ======= Footer ======= -->
         <footer id="footer" class="footer">
@@ -197,6 +201,8 @@
                 $('#example').DataTable();
             });
         </script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
     </body>
 

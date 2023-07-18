@@ -1,201 +1,209 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Dashboard - Doctor</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet'/>
-    <!-- Favicons -->
-    <link th:href="@{/assets/img/logo.png}" rel="icon">
-    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+        <title>Dashboard - Doctor</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet'/>
+        <!-- Favicons -->
+        <link th:href="@{/assets/img/logo.png}" rel="icon">
+        <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-          rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <!-- Google Fonts -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-    <!-- Vendor CSS Files -->
-    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+        <!-- Vendor CSS Files -->
+        <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
-    <!-- Template Main CSS File -->
-    <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
-    <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Template Main CSS File -->
+        <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+        <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!--Links para mensajeria-->
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
-    <!--End link mensajeria-->
+        <!--Links para mensajeria-->
 
-    <!-- =======================================================
-    * Template Name: NiceAdmin
-    * Updated: Mar 09 2023 with Bootstrap v5.2.3
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+        <!--End link mensajeria-->
 
-</head>
-<body>
-<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
-<div th:replace="~{doctor/fragments/sidebar.html :: sidebar('')}"></div>
-<main style="padding-top: 0;" id="main" class="main">
+        <!-- =======================================================
+        * Template Name: NiceAdmin
+        * Updated: Mar 09 2023 with Bootstrap v5.2.3
+        * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+        * Author: BootstrapMade.com
+        * License: https://bootstrapmade.com/license/
+        ======================================================== -->
 
-    <div class="container-xl perfil">
-        <div class="row">
+    </head>
+    <body>
+        <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+        <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('')}"></div>
+        <main style="padding-top: 0;" id="main" class="main">
 
-            <!-- Editar información del perfil-->
-            <div style="margin-bottom: 0" class="card">
-                <div class="card-body">
+            <div class="container-xl perfil">
+                <div class="row">
 
-                    <form th:action="@{/doctor/perfil/guardar}" method="post" th:object="${doctor}"
-                          id="formDoctor" enctype="multipart/form-data">
-                        <div class="row">
-                            <!-- Editar foto perfil -->
-                            <div class="col-lg-12 text-center">
-                                <img th:if="${doctor.foto != null}" th:src="@{'/usuario/foto/'+${doctor.getId_doctor()}}" alt="avatar"
-                                     class="img-fluid" style="width: 200px; border-radius: 60px">
-                                <img th:unless="${doctor.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="avatar"
-                                     class="img-fluid" style="width: 200px; border-radius: 60px">
-                                <h5 class="mt-3 mb-1 fw-semibold" th:text="${doctor.getNombreYApellido()}">
-                                    Juanchito Palacios</h5>
-                                <p class="text-muted mb-3">Doctor</p>
+                    <!-- Editar información del perfil-->
+                    <div style="margin-bottom: 0" class="card">
+                        <div class="card-body">
 
-                                <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
-                                    <input class="form-control" type="file" name="archivo">
-                                    <a th:href="@{'/doctor/perfil/quitarFoto?id='+${session.doctor.id_doctor}}"
-                                       style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
+                            <form th:action="@{/doctor/perfil/guardar}" method="post" th:object="${doctor}"
+                                  id="formDoctor" enctype="multipart/form-data">
+                                <div class="row">
+                                    <!-- Editar foto perfil -->
+                                    <div class="col-lg-12 text-center">
+                                        <img th:if="${doctor.foto != null}"
+                                             th:src="@{'/usuario/foto/'+${doctor.getId_doctor()}}" alt="avatar"
+                                             class="img-fluid" style="width: 200px; border-radius: 60px">
+                                        <img th:unless="${doctor.foto != null}"
+                                             th:src="@{/assets/img/userPorDefecto.jpg}" alt="avatar"
+                                             class="img-fluid" style="width: 200px; border-radius: 60px">
+                                        <h5 class="mt-3 mb-1 fw-semibold" th:text="${doctor.getNombreYApellido()}">
+                                            Juanchito Palacios</h5>
+                                        <p class="text-muted mb-3">Doctor</p>
+
+                                        <div class="vstack gap-3 col-sm-7 col-md-5 col-lg-4 mb-xl-4 mb-3 mt-4 mx-auto my-auto">
+                                            <input class="form-control" type="file" name="archivo">
+                                            <a th:href="@{'/doctor/perfil/quitarFoto?id='+${session.doctor.id_doctor}}"
+                                               style="border-radius: 20px" class="btn btn-secondary">Quitar foto</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <input type="hidden" th:field="*{id_doctor}">
-                        <input type="hidden" th:field="*{estado}">
-                        <input type="hidden" th:field="*{genero}">
-                        <input type="hidden" th:field="*{sede}">
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Nombres</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input class="form-control mb-0" type="text" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
-                                     th:errors="*{nombre}"></div>
-                            </div>
+                                <input type="hidden" th:field="*{id_doctor}">
+                                <input type="hidden" th:field="*{estado}">
+                                <input type="hidden" th:field="*{genero}">
+                                <input type="hidden" th:field="*{sede}">
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Nombres</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" th:field="*{nombre}"
+                                               th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
+                                             th:errors="*{nombre}"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Apellidos</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" th:field="*{apellidos}"
+                                               th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
+                                             th:errors="*{apellidos}"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Especialidad</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <select class="form-select" name="especialidad" id="especialidad">
+                                            <option th:each="especialidad: ${especialidadList}"
+                                                    th:value="${especialidad.idEspecialidad}"
+                                                    th:text="${especialidad.nombre}"
+                                                    th:selected="${doctor.especialidad.nombre == especialidad.nombre}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Pregrado</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" th:field="*{pregrado}"
+                                               th:classappend="${#fields.hasErrors('pregrado')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('pregrado')}"
+                                             th:errors="*{pregrado}"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Posgrado</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" th:field="*{posgrado}"
+                                               th:classappend="${#fields.hasErrors('posgrado')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('posgrado')}"
+                                             th:errors="*{posgrado}"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Correo</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" value="juanpc@gmail.com"
+                                               th:field="*{correo}"
+                                               th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
+                                             th:errors="*{correo}"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Colegiatura(CMP)</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input class="form-control mb-0" type="text" value="965123"
+                                               th:field="*{colegiatura}"
+                                               th:classappend="${#fields.hasErrors('colegiatura')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('colegiatura')}"
+                                             th:errors="*{colegiatura}"></div>
+                                    </div>
+                                </div>
+                            </form>
+                            <button type="submit" style="margin: 40px 0 0 0;"
+                                    class="btn btn-primary botonActualizarConsentimientos" form="formDoctor">
+                                Actualizar
+                            </button>
+                            <a style="margin: 40px 10px 0 10px;" th:href="@{/doctor/perfil}"
+                               class="btn btn-danger botonCancelar">Cancelar
+                            </a>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Apellidos</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input class="form-control mb-0" type="text" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
-                                     th:errors="*{apellidos}"></div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Especialidad</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <select class="form-select" name="especialidad" id="especialidad">
-                                    <option th:each="especialidad: ${especialidadList}"
-                                            th:value="${especialidad.idEspecialidad}"
-                                            th:text="${especialidad.nombre}"
-                                            th:selected="${doctor.especialidad.nombre == especialidad.nombre}"></option>
-                                </select>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Pregrado</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input class="form-control mb-0" type="text" th:field="*{pregrado}" th:classappend="${#fields.hasErrors('pregrado')?'is-invalid':''}">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('pregrado')}"
-                                     th:errors="*{pregrado}"></div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Posgrado</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input class="form-control mb-0" type="text" th:field="*{posgrado}" th:classappend="${#fields.hasErrors('posgrado')?'is-invalid':''}">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('posgrado')}"
-                                     th:errors="*{posgrado}"></div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Correo</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input class="form-control mb-0" type="text" value="juanpc@gmail.com"
-                                       th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
-                                     th:errors="*{correo}"></div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Colegiatura(CMP)</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input class="form-control mb-0" type="text" value="965123"
-                                       th:field="*{colegiatura}" th:classappend="${#fields.hasErrors('colegiatura')?'is-invalid':''}">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('colegiatura')}"
-                                     th:errors="*{colegiatura}"></div>
-                            </div>
-                        </div>
-                    </form>
-                    <button type="submit" style="margin: 40px 0 0 0;"
-                            class="btn btn-primary botonActualizarConsentimientos" form="formDoctor">
-                        Actualizar
-                    </button>
-                    <a style="margin: 40px 10px 0 10px;" th:href="@{/doctor/perfil}"
-                       class="btn btn-danger botonCancelar">Cancelar
-                    </a>
+                    </div>
+
                 </div>
             </div>
 
-        </div>
-    </div>
+        </main>
+        <div id="loading"></div>
 
-</main>
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
+        <!-- JQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.4.js"
+                integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
-<!-- Bootstrap CDN JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
-<!-- JQuery CDN -->
-<script src="https://code.jquery.com/jquery-3.6.4.js"
-        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
 
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/main.js}"></script>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
-<!-- Proximamente para mejorar la vista de subida de fotos
-<script>
-
-</script>
--->
-
-</body>
+    </body>
 </html>

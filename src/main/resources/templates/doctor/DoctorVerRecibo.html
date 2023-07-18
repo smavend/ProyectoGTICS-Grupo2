@@ -31,6 +31,8 @@
         <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
         <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
 
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
         <!--Links para mensajeria-->
 
@@ -152,6 +154,8 @@
 
         </main>
 
+        <div id="loading"></div>
+
         <!-- ======= Footer ======= -->
         <footer id="footer" class="footer">
 
@@ -193,6 +197,7 @@
         <!-- Agregar la biblioteca FullCalendar -->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
 
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
     </body>
 
