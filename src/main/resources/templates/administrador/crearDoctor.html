@@ -38,7 +38,8 @@
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  = --><!-- CDN CometChat -->
+    <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 </head>
@@ -399,7 +400,7 @@
     </div>
   </section>
 
-</main><!-- End #main -->
+</main><!-- End #main --><th:block th:replace="~{paciente/fragments/scripts.html::chatGeneral}"></th:block>
 <script>
   var headerColorAdministrador = "[[${headerColorAdministrador}]]";
   localStorage.setItem('headerColorAdministrador', headerColorAdministrador);
