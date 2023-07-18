@@ -338,7 +338,16 @@
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
+<script>
+    var headerColorDoctor = "[[${headerColorDoctor}]]";
+    localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
 
+    function updateHeaderColorDoctor() {
+        var color = headerColorDoctor;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorDoctor();
+</script>
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
 <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -425,12 +434,12 @@
         var pageHeight = doc.internal.pageSize.height;
         await addImagesToPage(doc, pageWidth, logoUrl); // Agregar imágenes a la primera página
 
-     /*   doc.addImage(logo, 'PNG', 0, pageWidth / 4, pageWidth, pageWidth);
+        /*   doc.addImage(logo, 'PNG', 0, pageWidth / 4, pageWidth, pageWidth);
 
-        // Ahora añade la segunda imagen en la esquina superior izquierda
-        var logoCorner = await getImageBase64(logoUrl);
-        doc.addImage(logoCorner, 'PNG', 10, 10, 25, 25);
-        // Añadir texto al lado de la imagen*/
+           // Ahora añade la segunda imagen en la esquina superior izquierda
+           var logoCorner = await getImageBase64(logoUrl);
+           doc.addImage(logoCorner, 'PNG', 10, 10, 25, 25);
+           // Añadir texto al lado de la imagen*/
         doc.setFontSize(22);
         doc.setFontType("bold")
         doc.text(35, 25, 'Clínica InterPucp'); // Asegúrate de ajustar las coordenadas 'x' e 'y' para posicionar correctamente este texto
@@ -486,7 +495,7 @@
         doc.setFontType("normal");
         doc.setFontSize(12);
         doc.text(20, 165, 'Alergias: ' + textoAlergias); // Escribe todas las alergias en una línea
-        
+
         doc.setFontSize(14);
         doc.setFontType("bold");
         doc.text(20, 177, 'Tratamientos'); // Empieza más abajo para evitar la superposición con la imagen
