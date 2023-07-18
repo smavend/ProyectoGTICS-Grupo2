@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
-    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado,c.seguro_id_seguro \n" +
+    @Query(value = "SELECT c.id_cita, p.id_paciente, p.nombre, p.apellidos, c.modalidad, c.inicio, c.fin, c.estado,c.seguro_id_seguro,p.correo \n" +
             "FROM cita c \n" +
             "INNER JOIN doctor d ON d.id_doctor = c.doctor_id_doctor \n" +
             "INNER JOIN paciente p ON p.id_paciente = c.paciente_id_paciente \n" +
@@ -24,7 +23,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "  AND c.estado <> 4 \n" +
             "  AND c.sede_id_sede = d.sede_id_sede \n" +
             "  AND c.fin > CURRENT_TIME()\n"+
-            "ORDER BY c.id_cita ASC\n",
+            "ORDER BY c.inicio ASC\n",
             nativeQuery = true)
         //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorProxCitas(String id);
@@ -34,10 +33,14 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<ListaBuscadorDoctor> listarPorDoctorListaPacientes(String id);
 
+    @Query(value = " select * FROM proyectogtics.cita WHERE doctor_id_doctor=?1 AND c.sede_id_sede =?2",
+            nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
+    List<Cita> listaCitasSesion(String id,int sede);
+
 
     @Query(nativeQuery = true, value = "select c.* from cita c " +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
-            "where NOW() <= c.fin and p.id_paciente = ?1 " +
+            "where NOW() <= c.fin and p.id_paciente = ?1 and c.estado != 4 " +
             "order by c.inicio DESC")
     List<Cita> buscarProximasCitas(String idPaciente);
 
@@ -46,7 +49,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
             "inner join doctor d on (d.id_doctor = c.doctor_id_doctor) " +
             "inner join sede_x_especialidad_x_administrativo x on (c.sede_id_sede = x.sede_id_sede) " +
-            "where NOW() <= c.fin and x.especialidad_id_especialidad = d.especialidad_id_especialidad and p.id_paciente = ?1 " +
+            "where NOW() <= c.fin and x.especialidad_id_especialidad = d.especialidad_id_especialidad and p.id_paciente = ?1 and c.estado != 4 " +
             "order by c.inicio DESC")
     List<TorreYPisoDTO> buscarTorresPisosPrecioProximasCitas(String idPaciente);
 
@@ -57,13 +60,26 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Transactional
     @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `estado` ='3' WHERE (`id_cita` = ?1)")
+    void actualizarEstadoEnConsulta(int idCita);
+
+    /*
+    @Transactional
+    @Modifying
     @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `estado` =?1 WHERE (`id_cita` = ?2)")
     void actualizarEstadoEnConsulta(int estado,int idCita);
 
-    @Query(nativeQuery = true, value = "select c.* from cita c \n" +
-            "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) \n" +
-            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) \n" +
-            "where p.id_paciente = ?1 and NOW() >= c.fin " +
+     */
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `estado` =?1 WHERE (`id_cita` = ?2)")
+    void actualizarEstadoEnEspera(int nuevoEstado, Integer idCita);
+
+    @Query(nativeQuery = true, value = "select c.* from cita c " +
+            "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) " +
+            "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
+            "where p.id_paciente = ?1 and NOW() >= c.fin and c.estado != 4 " +
             "order by c.inicio DESC")
     List<Cita> buscarHistorialDeCitas(String idPaciente);
 
@@ -71,21 +87,27 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
             "inner join doctor d on (d.id_doctor = c.doctor_id_doctor) " +
             "inner join sede_x_especialidad_x_administrativo x on (c.sede_id_sede = x.sede_id_sede) " +
-            "where p.id_paciente = ?1 and NOW() >= c.fin and x.especialidad_id_especialidad = d.especialidad_id_especialidad " +
+            "where p.id_paciente = ?1 and NOW() >= c.fin and c.estado = 4 and x.especialidad_id_especialidad = d.especialidad_id_especialidad " +
             "order by c.inicio DESC")
     List<TorreYPisoDTO> buscarTorresPisosPrecioHistorialCitas(String idPaciente);
 
-    @Query(nativeQuery = true, value = "select c.* from cita c \n" +
-            "inner join cita cp on (c.id_cita_previa = cp.id_cita) \n" +
-            "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() and c.estado = 5 \n" +
+    @Query(nativeQuery = true, value = "select c.* from cita c " +
+            "inner join cita cp on (c.id_cita_previa = cp.id_cita) " +
+            "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() and c.estado = 5 " +
             "order by cp.fin desc")
     List<Cita> buscarCitasPendientes(String idPaciente);
 
-    @Query(nativeQuery = true, value = "select date_add(cast(cp.fin as date), interval 7 day) as date from cita c \n" +
-            "inner join cita cp on (c.id_cita_previa = cp.id_cita) \n" +
-            "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() \n" +
+    @Query(nativeQuery = true, value = "select date_add(cast(cp.fin as date), interval 7 day) as date from cita c " +
+            "inner join cita cp on (c.id_cita_previa = cp.id_cita) " +
+            "where c.paciente_id_paciente = ?1 and date_add(cast(cp.fin as date), interval 7 day) >= now() and c.estado = 5 " +
             "order by cp.fin desc")
     List<Date> buscarFechasLimitesDeCitasPendientes(String idPaciente);
+
+
+    @Query(nativeQuery = true, value = "select date_add(cast(cp.fin as date), interval 7 day) as date from cita c " +
+            "inner join cita cp on (c.id_cita_previa = cp.id_cita) " +
+            "where c.id_cita = ?1 and c.estado = 5")
+    Date buscarFechaLimiteDeCitaPendiente(int idCita);
 
     @Transactional
     @Modifying
@@ -95,6 +117,9 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(nativeQuery = true, value = "SELECT LAST_INSERT_ID() FROM cita")
     int obtenerUltimoId();
 
+    @Query(nativeQuery = true, value = "select id_cita_previa from proyectogtics.cita where id_cita = ?1")
+    Integer buscarIdCitaPrevia(int idCita);
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`cita` (`paciente_id_paciente`, `doctor_id_doctor`, `modalidad`, `estado`, `sede_id_sede`, `id_cita_previa`, `seguro_id_seguro`, `especialidad_id_especialidad`) " +
@@ -103,7 +128,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `doctor_id_doctor` = ?1, `inicio` = ?2, `fin` = ?3, `estado` = 0 WHERE (`id_cita` = ?4)")
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `doctor_id_doctor` = ?1, `inicio` = ?2, `fin` = ?3, `estado` = 5 WHERE (`id_cita` = ?4)")
     void reservarExamenPendiente(String idDoctor, LocalDateTime inicio, LocalDateTime fin, int idCita);
 
     @Transactional
@@ -160,9 +185,9 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "  AND especialidad_id_especialidad IN (4, 5, 6)",nativeQuery = true)
     List<Cita> listarExamenes(String idPaciente);
 
-    @Query(value = "select * from cita where doctor_id_doctor=?1",nativeQuery = true)
-    List<Cita> obtenerCitasPorDoctorId(String idDoctor);
+    @Query(value = "select * from cita where doctor_id_doctor=?1 and sede_id_sede=?2",nativeQuery = true)
+    List<Cita> obtenerCitasPorDoctorId(String idDoctor,int idSede);
 
     @Query(nativeQuery = true, value = "select * from cita c where c.id_cita = ?1")
-    Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes
+    Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes xd
 }

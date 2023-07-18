@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Doctor</title>
+        <title>Paciente - Perfil doctor</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
@@ -80,7 +80,8 @@
                             <h3 class="perfilDoctorEspecialidad mb-4">Disponibilidad</h3>
                             <div class="overflow-auto" style="max-height: 300px;">
                                 <div class="horarios mb-3" id="contenedor">
-                                    <p class="mb-3">Aquí encontrará la disponibilidad del doctor para la fecha seleccionada</p>
+                                    <p class="mb-3">Aquí encontrará la disponibilidad del doctor para la fecha
+                                        seleccionada</p>
                                 </div>
                             </div>
                         </div>
@@ -93,16 +94,9 @@
             <!-- End footer -->
 
         </main>
-        <script>
-            var headerColorPaciente = "[[${headerColorPaciente}]]";
-            localStorage.setItem('headerColorPaciente', headerColorPaciente);
 
-            function updateHeaderColorPaciente() {
-                var color = headerColorPaciente;
-                document.getElementById('header').style.backgroundColor = color;
-            }
-            updateHeaderColorPaciente();
-        </script>
+        <div id="loading"></div>
+
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
@@ -111,17 +105,33 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
         <!-- JQuery -->
-        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"
+                integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
         <!-- JQuery UI -->
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"
+                integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
+
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+
+            updateHeaderColorPaciente();
+        </script>
 
         <script th:inline="javascript">
-            $( function() {
-                $( "#input_fecha" ).datepicker({
+            $(function () {
+                $("#input_fecha").datepicker({
                     dateFormat: 'dd-mm-yy',
-                    minDate : 0,
+                    minDate: 0,
                     beforeShowDay: noSundays
                 });
             });
@@ -130,48 +140,41 @@
                 return [date.getDay() != 0, ''];
             }
 
-            $("#input_fecha").change(function(){
+            $("#input_fecha").change(function () {
                 let contenedor = $("#contenedor");
                 let doctor = [[${doctor.id_doctor}]];
                 let fecha = $(this).val();
 
                 $("#form_fecha").val(fecha);
 
-                $.get(getUrl()+"/Paciente/api/horarios/consulta/"+doctor+"/"+fecha)
-                    .done((data)=>{
+                $.get(getUrl() + "/Paciente/api/horarios/consulta/" + doctor + "/" + fecha)
+                    .done((data) => {
                         contenedor.empty();
                         contenedor.parent().children("#boton_seleccionar_horario").remove();
-                        if(data.horarios.length === 0){
-                            contenedor.append("<p class='mb-3'>No hay horarios disponibles para el día "+fecha+"</p>")
-                        }
-                        else{
-                            contenedor.append("<p class='mb-3'>Horarios disponibles para el día "+fecha+"</p>")
-                            for(let i = 0; i < data.horarios.length; i++){
-                                contenedor.append("<p value='"+data.horarios[i].inicio+"' class='burbuja opt_horario'>"+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+"</p>")
+                        if (data.horarios.length === 0) {
+                            contenedor.append("<p class='mb-3'>No hay horarios disponibles para el día " + fecha + "</p>")
+                        } else {
+                            contenedor.append("<p class='mb-3'>Horarios disponibles para el día " + fecha + "</p>")
+                            for (let i = 0; i < data.horarios.length; i++) {
+                                contenedor.append("<p value='" + data.horarios[i].inicio + "' class='burbuja opt_horario'>" + data.horarios[i].inicio.substring(0, 5) + " - " + data.horarios[i].fin.substring(0, 5) + "</p>")
                             }
                             contenedor.parent().append("<button type='submit' form='form' class='botonAceptar'>Reservar horario</button>")
                         }
-                    }).fail((e)=>{
+                    }).fail((e) => {
                     console.log("error");
                 })
             })
 
             // CSS de seleccion de botones
-            $("body").on("click", ".opt_horario", (e)=>{
-                if($(e.target).hasClass("burbujaSeleccionada")){ // Deseleccionar
+            $("body").on("click", ".opt_horario", (e) => {
+                if ($(e.target).hasClass("burbujaSeleccionada")) { // Deseleccionar
                     $(".opt_horario").removeClass("burbujaSeleccionada");
-                }
-                else{ // Seleccionar
+                } else { // Seleccionar
                     $("#form_inicio").val($(e.target).attr("value"));
                     $(".opt_horario").removeClass("burbujaSeleccionada");
                     $(e.target).toggleClass("burbujaSeleccionada");
                 }
             })
-
-            function getUrl(){
-                return window.location.protocol+"//"+window.location.hostname+":8080";
-            }
-
         </script>
     </body>
 </html>

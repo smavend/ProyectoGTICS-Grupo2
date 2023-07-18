@@ -2,9 +2,11 @@ package com.example.proyectogticsgrupo2.web_service.paciente;
 
 import com.example.proyectogticsgrupo2.dto.HorarioDeDiaDTO;
 import com.example.proyectogticsgrupo2.dto.HorarioOcupadoDTO;
+import com.example.proyectogticsgrupo2.entity.Cita;
 import com.example.proyectogticsgrupo2.entity.Doctor;
 import com.example.proyectogticsgrupo2.entity.Especialidad;
 import com.example.proyectogticsgrupo2.entity.pacienteAPI.HorariosRoot;
+import com.example.proyectogticsgrupo2.repository.CitaRepository;
 import com.example.proyectogticsgrupo2.repository.DoctorRepository;
 import com.example.proyectogticsgrupo2.repository.EspecialidadRepository;
 import com.example.proyectogticsgrupo2.repository.HorarioRepository;
@@ -31,16 +33,19 @@ public class PacienteAPI {
     final EspecialidadRepository especialidadRepository;
     final HorarioRepository horarioRepository;
     final DoctorRepository doctorRepository;
+    final CitaRepository citaRepository;
 
     @Autowired
     HorariosDao horariosDao;
 
     public PacienteAPI(EspecialidadRepository especialidadRepository,
                        HorarioRepository horarioRepository,
-                       DoctorRepository doctorRepository) {
+                       DoctorRepository doctorRepository,
+                       CitaRepository citaRepository) {
         this.especialidadRepository = especialidadRepository;
         this.horarioRepository = horarioRepository;
         this.doctorRepository = doctorRepository;
+        this.citaRepository = citaRepository;
     }
 
     @GetMapping("/especialidades/{modalidad}")
@@ -166,13 +171,12 @@ public class PacienteAPI {
         }
     }
 
-
     @GetMapping("/horarios/proximos/{doctor}")
     public ResponseEntity<HashMap<String, Object>> obtenerHorariosProximos(@PathVariable("doctor") String idDoctor) {
         HashMap<String, Object> response = new HashMap<>();
 
         try {
-            LocalDate fecha = LocalDate.now().plusDays(2);
+            LocalDate fecha = LocalDate.now().plusDays(1);
 
             Doctor doctor = doctorRepository.findById(idDoctor).get();
             int duracionCita = doctor.getDuracion_cita_minutos();
@@ -243,6 +247,26 @@ public class PacienteAPI {
             response.put("resultado", "error");
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+    @GetMapping("/citas/pendientes/{paciente}")
+    public ResponseEntity<HashMap<String, Object>> obtenerCitasPendientes(@PathVariable("paciente") String idPaciente){
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<Cita> citasPendientes = citaRepository.buscarCitasPendientes(idPaciente);
+        List<HashMap<String, String>> citas = new ArrayList<>();
+
+        response.put("resultado", "ok");
+        for (Cita c: citasPendientes){
+            HashMap<String, String> infoCita = new HashMap<>();
+            infoCita.put("id", String.valueOf(c.getId_cita()));
+            infoCita.put("especialidad", c.getEspecialidad().getNombre());
+            infoCita.put("doctor", c.getDoctor().getNombreYApellido());
+            citas.add(infoCita);
+        }
+        response.put("citas", citas);
+
+        return ResponseEntity.ok().body(response);
     }
 
 }

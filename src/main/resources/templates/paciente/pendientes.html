@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Citas pendientes</title>
+        <title>Paciente - Citas pendientes</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
@@ -42,12 +42,15 @@
                             <tbody>
                                 <tr th:each="citaPendiente, i: ${citasPendientes}">
                                     <td th:text="${citaPendiente.especialidad.nombre}">Traumatología</td>
-                                    <td th:text="${citaPendiente.especialidad.es_examen == 1?'Examen':'Consulta'}">Examen</td>
+                                    <td th:text="${citaPendiente.especialidad.es_examen == 1?'Examen':'Consulta'}">
+                                        Examen
+                                    </td>
                                     <td th:text="${#dates.format(fechasLimite[i.index], 'dd-MM-yyyy')}">
                                         00-00-00
                                     </td>
                                     <td>
-                                        <a th:href="@{'/Paciente/reservaPendiente?c='+${citaPendiente.id_cita}}" class="botonAceptar">Completar</a>
+                                        <a th:href="@{'/Paciente/reservaPendiente?c='+${citaPendiente.id_cita}}"
+                                           class="botonAceptar">Completar</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -59,6 +62,19 @@
                 </div>
             </div>
         </main>
+        <div id="loading"></div>
+
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
+
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+
+            updateHeaderColorPaciente();
+        </script>
 
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -71,6 +87,12 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+        <!-- DATATABLES CDN -->
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
         <!-- DATATABLES CDN -->
         <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
@@ -107,6 +129,5 @@
                 });
             })
         </script>
-
     </body>
 </html>

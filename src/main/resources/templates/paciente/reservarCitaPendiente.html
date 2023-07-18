@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Reservar</title>
+        <title>Paciente - Reservar</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
@@ -24,7 +24,7 @@
 
         <main id="main" class="main site-content">
 
-            <h1 class="encabezado text-center" style="width: 90%">Reservar cita</h1>
+            <h1 class="encabezado text-center">Reservar cita</h1>
 
             <div class="bodyReservar">
                 <div class="cardReservar py-4">
@@ -54,7 +54,8 @@
                                     </div>
                                     <div class="input-group">
                                         <select class="form-select" disabled>
-                                            <option th:text="${cita.doctor.getNombreYApellido()}" selected>Doctor</option>
+                                            <option th:text="${cita.doctor.getNombreYApellido()}" selected>Doctor
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -87,6 +88,8 @@
                                         <option value="">-- Seleccione un horario --</option>
                                     </select>
                                 </div>
+                                <div class="text-muted text-center mb-2" style="display: none" id="mensaje">Mensaje
+                                </div>
                             </div>
                         </div>
 
@@ -98,7 +101,18 @@
                 </div>
             </div>
         </main>
+        <div id="loading"></div>
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
 
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+
+            updateHeaderColorPaciente();
+        </script>
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
@@ -106,6 +120,12 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.0.js"
+                integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
         <!-- JQuery -->
         <script src="https://code.jquery.com/jquery-3.7.0.js"
@@ -133,24 +153,33 @@
                 let selectHorario = $("#select_horario");
                 let doctor = [[${cita.doctor.id_doctor}]];
                 let fecha = $(this).val();
+                let fechaLimite = [[${fechaLimite}]];
+                let mensaje = $("#mensaje");
 
-                $.get(getUrl()+"/Paciente/api/horarios/consulta/"+doctor+"/"+fecha)
-                    .done(function (data){
+                $.get(getUrl() + "/Paciente/api/horarios/consulta/" + doctor + "/" + fecha)
+                    .done(function (data) {
                         selectHorario.empty();
                         selectHorario.append("<option value=''>-- Seleccione un horario --</option>");
-                        for(let i = 0; i < data.horarios.length; i++){
-                            selectHorario.append("<option value='"+data.horarios[i].inicio+"'>"+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+"</option>");
+                        for (let i = 0; i < data.horarios.length; i++) {
+                            selectHorario.append("<option value='" + data.horarios[i].inicio + "'>" + data.horarios[i].inicio.substring(0, 5) + " - " + data.horarios[i].fin.substring(0, 5) + "</option>");
                         }
-
-                    }).fail(function (e){
-                        console.log("error");
+                    }).fail(function (e) {
+                    console.log("error");
                 });
+
+                let [year, month, day] = fechaLimite.split('-');
+                let fechaLimiteFormat = new Date(+year, +month - 1, +day);
+                [day, month, year] = fecha.split('-');
+                let fechaFormat = new Date(+year, +month - 1, +day);
+
+                if (fechaFormat < fechaLimiteFormat) {
+                    mensaje.text("No se aplicará cobro por la cita");
+                    mensaje.slideDown();
+                } else {
+                    mensaje.text("Se aplicará el cobro estándar por la cita");
+                    mensaje.slideDown();
+                }
             });
-
-            function getUrl() {
-                return window.location.protocol + "//" + window.location.hostname + ":8080";
-            }
-
         </script>
 
     </body>

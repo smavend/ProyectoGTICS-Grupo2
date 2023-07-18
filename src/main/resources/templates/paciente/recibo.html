@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Recibo</title>
+        <title>Paciente - Recibo</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
@@ -14,6 +14,12 @@
         <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap"
               rel="stylesheet">
 
+        <!-- GOOGLE FONTS -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
     </head>
     <body>
@@ -31,12 +37,14 @@
             <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
             <div id="idEspecialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.idEspecialidad}"></div>
 
-            <h1 class="encabezado">Recibo - 281FH19701228FG</h1>
+            <h1 class="encabezado" th:text="'Recibo - ' + ${pago.codigoRecibo}">Recibo - 281FH19701228FG</h1>
 
             <section class="seccionPrincipal recibo">
                 <div class="row encabezadoRecibo">
                     <div class="col-10">
-                        <h2 class="subEncabezado">Recibo - 13/12/2022</h2>
+                        <h2 class="subEncabezado"
+                            th:text="'Cita '+${pago.cita.modalidad == 0? 'Presencial':'Virtual'}+' - '+${#temporals.format(pago.cita.inicio, 'dd/MM/yyyy')}">
+                            Recibo - 13/12/2022</h2>
                     </div>
                     <div id="botonImp" class="col-2">
                         <button class="btn btn-secondary botonImprimir" onclick="imprimir()">Imprimir</button>
@@ -48,7 +56,7 @@
                     <p>
                         <span class="informacionClinicaTitulo">Clínica INTERPUC</span>
                         <br>
-                        Dirección Imaginaria
+                        <span th:text="${pago.cita.doctor.sede.direccion}">Dirección Imaginaria</span>
                         <br>
                         Lima, Perú
                         <br>
@@ -65,15 +73,16 @@
                         <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span>
                         </p>
                         <p>Estado:<span class="informacionReciboDato"
-                                        th:text="${pago.estadoPago == 1? 'Cancelado':'Pendiente'}">Cancelado</span></p>
+                                        th:text="${pago.estadoPago==0?'Pago pendiente':'Cancelado'}"></span></p>
                     </div>
                     <div class="col-6">
                         <p>Fecha emitida:<span class="informacionReciboDato"
-                                               th:text="${pago.fechaEmitida}">13/12/2022</span></p>
-                        <p>Fecha cancelada:<span class="informacionReciboDato" th:text="${pago.fechaCancelada}">13/12/2022</span>
+                                               th:text="${#temporals.format(pago.fechaEmitida, 'dd-MM-yyyy')}">13/12/2022</span>
                         </p>
-                        <p>Tipo de pago:<span class="informacionReciboDato"
-                                              th:text="${pago.tipoPago}">Visa ***1234</span></p>
+                        <p>Fecha cancelada:<span class="informacionReciboDato" th:if="${pago.fechaCancelada!=null}"
+                                                 th:text="${#temporals.format(pago.fechaCancelada, 'dd-MM-yyyy')}"></span>
+                            <span class="informacionReciboDato" th:if="${pago.fechaCancelada==null}">Por cancelar</span>
+                        </p>
                     </div>
                 </div>
 
@@ -91,7 +100,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur</td>
+                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur
+                                </td>
                                 <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
                                 <td>1</td>
                                 <td class="precio-total"></td>
@@ -107,11 +117,8 @@
                 </div>
             </section>
 
-            <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            <!-- End footer -->
-
         </main>
+        <div id="loading"></div>
         <script>
             var headerColorPaciente = "[[${headerColorPaciente}]]";
             localStorage.setItem('headerColorPaciente', headerColorPaciente);
@@ -120,6 +127,7 @@
                 var color = headerColorPaciente;
                 document.getElementById('header').style.backgroundColor = color;
             }
+
             updateHeaderColorPaciente();
         </script>
         <!-- Bootstrap CDN JS -->
@@ -130,46 +138,83 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+
         <!-- JQUERY -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
-
             function imprimir() {
                 window.print();
             }
-            $(document).ready(function() {
-                var idEspecialidad = document.getElementById('idEspecialidad').dataset.valor;
+
+            $(document).ready(function () {
+                var idEspecialidad = parseInt(document.getElementById('idEspecialidad').dataset.valor);
                 var coaseguro = document.getElementById('coaseguro').dataset.valor;
                 var precioIni;
                 switch (idEspecialidad) {
-                    case 1: precioIni = 150; break;
-                    case 2: precioIni = 120; break;
-                    case 3: precioIni = 80; break;
-                    case 4: precioIni = 90; break;
-                    case 5: precioIni = 100; break;
-                    case 6: precioIni = 130; break;
-                    case 7: precioIni = 80; break;
-                    case 8: precioIni = 90; break;
-                    case 9: precioIni = 110; break;
-                    case 10: precioIni = 120; break;
-                    case 11: precioIni = 150; break;
-                    case 12: precioIni = 140; break;
-                    case 13: precioIni = 110; break;
-                    case 14: precioIni = 100; break;
-                    case 15: precioIni = 150; break;
-                    case 16: precioIni = 90; break;
-                    case 17: precioIni = 120; break;
+                    case 1:
+                        precioIni = 150;
+                        break;
+                    case 2:
+                        precioIni = 120;
+                        break;
+                    case 3:
+                        precioIni = 80;
+                        break;
+                    case 4:
+                        precioIni = 90;
+                        break;
+                    case 5:
+                        precioIni = 100;
+                        break;
+                    case 6:
+                        precioIni = 130;
+                        break;
+                    case 7:
+                        precioIni = 80;
+                        break;
+                    case 8:
+                        precioIni = 90;
+                        break;
+                    case 9:
+                        precioIni = 110;
+                        break;
+                    case 10:
+                        precioIni = 120;
+                        break;
+                    case 11:
+                        precioIni = 150;
+                        break;
+                    case 12:
+                        precioIni = 140;
+                        break;
+                    case 13:
+                        precioIni = 110;
+                        break;
+                    case 14:
+                        precioIni = 100;
+                        break;
+                    case 15:
+                        precioIni = 150;
+                        break;
+                    case 16:
+                        precioIni = 90;
+                        break;
+                    case 17:
+                        precioIni = 120;
+                        break;
+                    default:
+                        precioIni = 0;
+                        break;
                 }
-
-                var precioCalculado = precioIni * coaseguro;
-                $('.precio-total').text('S/ ' + precioIni.toFixed(2));
-                $('.importe-total').text(precioIni);
-                $('.importe-con-seguro').text(precioCalculado);
+                $('.precio-total').text('S/. ' + precioIni.toFixed(2));
+                $('.importe-total').text('S/. ' + precioIni.toFixed(2));
+                $('.importe-con-seguro').text('S/. ' + (precioIni * coaseguro).toFixed(2));
             });
-
-
         </script>
-
     </body>
 </html>

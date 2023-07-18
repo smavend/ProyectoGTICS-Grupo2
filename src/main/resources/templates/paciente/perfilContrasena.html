@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Perfil</title>
+        <title>Paciente - Perfil</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
@@ -53,8 +53,10 @@
                                             <p class="mb-0">Contraseña actual</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input class="form-control mb-0" type="password" name="actual" th:classappend="${error1 != null? 'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${error1 != null}" th:text="${error1}"></div>
+                                            <input class="form-control mb-0" type="password" name="actual"
+                                                   th:classappend="${error1 != null? 'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${error1 != null}"
+                                                 th:text="${error1}"></div>
                                         </div>
                                     </div>
                                     <hr>
@@ -63,8 +65,10 @@
                                             <p class="mb-0">Contraseña nueva</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input id="input_pass1" class="form-control mb-0" type="password" name="nueva1" th:classappend="${error2 != null? 'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${error2 != null}" th:text="${error2}"></div>
+                                            <input id="input_pass1" class="form-control mb-0" type="password"
+                                                   name="nueva1" th:classappend="${error2 != null? 'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${error2 != null}"
+                                                 th:text="${error2}"></div>
                                         </div>
                                     </div>
                                     <hr>
@@ -73,9 +77,12 @@
                                             <p class="mb-0">Confirmar contraseña nueva</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input id="input_pass2" class="form-control mb-0" type="password" name="nueva2" th:classappend="${error2 != null? 'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${error2 != null}" th:text="${error2}"></div>
-                                            <div id="val_pass2" class="invalid-feedback" th:if="${error2 == null}" style="display: none"></div>
+                                            <input id="input_pass2" class="form-control mb-0" type="password"
+                                                   name="nueva2" th:classappend="${error2 != null? 'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${error2 != null}"
+                                                 th:text="${error2}"></div>
+                                            <div id="val_pass2" class="invalid-feedback" th:if="${error2 == null}"
+                                                 style="display: none"></div>
                                         </div>
                                     </div>
                                     <button type="submit" class="botonAceptar mt-5">
@@ -88,8 +95,9 @@
                     </div>
                 </div>
             </div>
-
         </main>
+        <div id="loading"></div>
+
         <script>
             var headerColorPaciente = "[[${headerColorPaciente}]]";
             localStorage.setItem('headerColorPaciente', headerColorPaciente);
@@ -98,6 +106,7 @@
                 var color = headerColorPaciente;
                 document.getElementById('header').style.backgroundColor = color;
             }
+
             updateHeaderColorPaciente();
         </script>
         <!-- Bootstrap CDN JS -->
@@ -108,14 +117,15 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
         <!-- JQuery -->
         <script src="https://code.jquery.com/jquery-3.7.0.js"
                 integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
         <!-- JS para mostrar errores -->
         <script>
-            function mostrarValidacion(pass1, pass2){
-
+            function mostrarValidacion(pass1, pass2) {
             }
         </script>
 

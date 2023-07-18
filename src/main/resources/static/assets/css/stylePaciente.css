@@ -32,6 +32,43 @@ font-family: "Nunito", sans-serif;
 }
 
 /*--------------------------------------------------------------
+# Preloader
+--------------------------------------------------------------*/
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    overflow: hidden;
+    background: rgb(0, 0, 0, 0.3);
+}
+
+#loading:before {
+    content: "";
+    position: fixed;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    border: 6px solid #1977cc;
+    border-top-color: #d1e6f9;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: animate-loading 1s linear infinite;
+}
+
+@keyframes animate-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*--------------------------------------------------------------
 # Main
 --------------------------------------------------------------*/
 #main {
@@ -153,39 +190,6 @@ font-size: 24px;
 margin-bottom: 0;
 font-weight: 600;
 color: #012970;
-}
-
-/*--------------------------------------------------------------
-# Back to top button
---------------------------------------------------------------*/
-.back-to-top {
-position: fixed;
-visibility: hidden;
-opacity: 0;
-right: 15px;
-bottom: 15px;
-z-index: 99999;
-background: #4154f1;
-width: 40px;
-height: 40px;
-border-radius: 4px;
-transition: all 0.4s;
-}
-
-.back-to-top i {
-font-size: 24px;
-color: #fff;
-line-height: 0;
-}
-
-.back-to-top:hover {
-background: #6776f4;
-color: #fff;
-}
-
-.back-to-top.active {
-visibility: visible;
-opacity: 1;
 }
 
 /*--------------------------------------------------------------
@@ -1077,8 +1081,8 @@ p{
 .encabezado{
     font-size: 2.5rem;
     font-weight: 700;
-    width: 80%;
-    margin: 0 50px;
+    width: auto;
+    margin: 0 50px 0 10px;
     color: #435067;
 }
 
@@ -1351,6 +1355,8 @@ p{
 /* ------------------- Sección Pagos ------------------- */
 
 .botonVerRecibo{
+    margin-top: 5px;
+    margin-bottom: 5px;
     padding: 10px 15px;
     font-weight: 700;
     color: black;
@@ -1368,20 +1374,22 @@ p{
 }
 
 .botonPagar{
-    padding: 10px 15px;
+    padding: 10px 18px;
+    margin-top: -10px;
+    margin-bottom: -10px;
     font-weight: 700;
-    color: black;
-    background-color: #ffe26f;
+    color: #373b3e;
+    background-color: #34bef5;
     border-radius: 20px;
     border: none;
-    box-shadow: 0 0 5px rgb(105, 105, 105);
+    box-shadow: 0 0 5px #34bef5;
     transition: all 0.3s;
 }
 
 .botonPagar:hover{
     cursor: pointer;
     color: black;
-    background-color: #ffd52b;
+    background-color: #2d99c3;
 }
 
 .infoModalPagar{
@@ -1391,7 +1399,7 @@ p{
 }
 .infoModalPrecioPagar{
     font-weight: 800;
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     margin-left: 10px;
     margin-top: 15px;
 }
@@ -1590,7 +1598,7 @@ botonTipo{
     font-weight: 600;
 }
 
-/* Consentimientos */
+/* -------------- Sección Consentimientos ------------------- */
 
 .consentimiento:first-of-type{
     margin-top: 45px;
@@ -1600,7 +1608,7 @@ botonTipo{
     margin-top: 25px;
 }
 
-/* Doctores */
+/* -------------------- Sección Doctores ------------------------- */
 
 .filtroNav{
     padding: 30px 5px 50px 5px;
@@ -1711,7 +1719,6 @@ botonTipo{
 }
 
 .seccionDisponibilidad{
-    height: 80px;
     background-color: #f3f8fe;
     border-radius: 15px;
     box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.1);
@@ -1755,7 +1762,22 @@ botonTipo{
     background-color: #0AA1DD;
 }
 
-/* Cuestionarios */
+.botonVerHorarios{
+    background-color: #f3f8fe;
+    border-radius: 15px;
+    padding: 10px;
+    transition: all 0.3s;
+    color: #575757;
+    text-align: center;
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.botonVerHorarios:hover{
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.1);
+}
+
+/* ---------------------- Cuestionarios ------------------------ */
 
 .botonCompletar{
     border-radius: 20px;
@@ -1784,7 +1806,7 @@ botonTipo{
     color: black;
 }
 
-/* Cuestionario Abierto */
+/* ------------------------- Cuestionario Abierto ------------------------ */
 
 .seccionCuestionario{
     margin-top: 30px;

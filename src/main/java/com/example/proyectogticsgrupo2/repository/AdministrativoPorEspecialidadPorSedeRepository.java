@@ -16,15 +16,17 @@ public interface AdministrativoPorEspecialidadPorSedeRepository extends JpaRepos
     @Query(nativeQuery = true, value = "select * from sede_x_especialidad_x_administrativo where administrativo_id_administrativo = ?1")
     AdministrativoPorEspecialidadPorSede buscarPorAdministrativoId(String id);
 
-    @Query(nativeQuery = true, value = "select * from sede_x_especialidad_x_administrativo where administrativo_id_administrativo = ?1 and sede_id_sede = ?2")
-    AdministrativoPorEspecialidadPorSede buscarPorAdministrativoIdYSedeId(String id, int sedeId);
-
-
     @Query(nativeQuery = true, value = "select * from sede_x_especialidad_x_administrativo where sede_id_sede = ?1")
     List<AdministrativoPorEspecialidadPorSede> buscarPorSedeId(String id);
 
     @Query(nativeQuery = true, value = "select sede_id_sede from administrador where id_administrador = ?1")
     int obteneSedePorAdministradorId(String id);
+
+    @Query(nativeQuery = true, value = "select * from sede_x_especialidad_x_administrativo where administrativo_id_administrativo = ?1")
+    List<AdministrativoPorEspecialidadPorSede> buscarXAdministrativoId(String id);
+
+
+
 
     @Transactional
     @Modifying

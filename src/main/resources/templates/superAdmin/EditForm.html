@@ -114,7 +114,7 @@
                                             <label class="col-form-label" contentEditable="false">Ruta al Controlador</label>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" name="ruta" required>
+                                            <input type="text" class="form-control" name="ruta" th:value="${formulario.rutaController}" required>
                                         </div>
                                     </div>
                                     <div id="form-rows">
@@ -477,11 +477,11 @@
 
     // Actualizar estado de botones de eliminación
     function updateRemoveButtons() {
-       /* if($('.remove-row').length <= 1) { // Si solo hay un conjunto de "+ -"
-            $('.remove-row').prop('disabled', true); // Deshabilitar botón de eliminación
-        } else {
-            $('.remove-row').prop('disabled', false); // Habilitar botones de eliminación
-        }*/
+        /* if($('.remove-row').length <= 1) { // Si solo hay un conjunto de "+ -"
+             $('.remove-row').prop('disabled', true); // Deshabilitar botón de eliminación
+         } else {
+             $('.remove-row').prop('disabled', false); // Habilitar botones de eliminación
+         }*/
     }
 
     // Inicializar estado de botones de eliminación

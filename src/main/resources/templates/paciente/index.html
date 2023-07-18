@@ -4,13 +4,10 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Inicio</title>
-
+        <title>Paciente - Inicio</title>
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
-
     </head>
     <body>
-
         <!-- ======= Header ======= -->
         <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}">
 
@@ -49,7 +46,6 @@
                             </figure>
                         </a>
                     </div>
-
                 </div>
             </section>
 
@@ -59,6 +55,7 @@
 
         </main>
         <!-- End #main -->
+        <div id="loading"></div>
 
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -67,15 +64,65 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <!-- JQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.4.js"
+                integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+        <!-- SCRIPT QUE DEBE IR EN SUPERADMIN Y ADMINISTRATIVO -->
+        <script th:inline="javascript" th:if="${credenciales != null}">
+            let credenciales = [[${credenciales}]];
+            for (let i = 0; i < credenciales.length; i++) {
+                let email = credenciales[i].correo;
+                let password = credenciales[i].pass;
+                let userAvatar = "url";
+                let userUuid = "uuid.v4()";
+                auth.createUserWithEmailAndPassword(email, password).then((userCrendentials) => { // guardar en FB
+                    if (userCrendentials) {
+                        realTimeDb.ref(`users/${userUuid}`).set({
+                            id: userUuid,
+                            email,
+                            avatar: userAvatar
+                        }).then(() => { // guardar en CC
+                            let user = new CometChatWidget.CometChat.User(userUuid);
+                            user.setName(email);
+                            user.setAvatar(userAvatar);
+
+                            CometChatWidget.init({
+                                "appID": `${config.CometChatAppId}`,
+                                "appRegion": `${config.CometChatRegion}`,
+                                "authKey": `${config.CometChatAuthKey}`
+                            }).then(response => {
+                                CometChatWidget.createOrUpdateUser(user).then(user => {
+                                    //ocultarLoading();
+                                }, error => {
+                                    //ocultarLoading();
+                                });
+                            }, error => {
+                                //ocultarLoading();
+                            });
+                            // fin registro
+                        });
+                    }
+                }).catch((error) => {
+                    //ocultarLoading();
+                    console.log("error al registrar en FB");
+                });
+
+            }
+        </script>
+
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+            updateHeaderColorPaciente();
+        </script>
+
     </body>
 </html>
-<script>
-    var headerColorPaciente = "[[${headerColorPaciente}]]";
-    localStorage.setItem('headerColorPaciente', headerColorPaciente);
-
-    function updateHeaderColorPaciente() {
-        var color = headerColorPaciente;
-        document.getElementById('header').style.backgroundColor = color;
-    }
-    updateHeaderColorPaciente();
-</script>

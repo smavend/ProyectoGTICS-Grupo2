@@ -35,7 +35,7 @@ public class AdministrativoController {
     final StylevistasRepository stylevistasRepository;
 
 
-    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, TokenRepository tokenRepository, FormularioJsonRepository formularioJsonRepository, StylevistasRepository stylevistasRepository) {
+    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, TokenRepository tokenRepository,StylevistasRepository stylevistasRepository, FormularioJsonRepository formularioJsonRepository) {
         this.pacienteRepository = pacienteRepository;
         this.aesRepository = aesRepository;
         this.alergiaRepository = alergiaRepository;
@@ -44,8 +44,8 @@ public class AdministrativoController {
         this.temporalRepository = temporalRepository;
         this.administrativoRepository = administrativoRepository;
         this.tokenRepository = tokenRepository;
-        this.formularioJsonRepository = formularioJsonRepository;
         this.stylevistasRepository = stylevistasRepository;
+        this.formularioJsonRepository = formularioJsonRepository;
     }
     @GetMapping("/administrativo")
     public String dashboard(Model model, HttpSession session){
@@ -93,7 +93,6 @@ public class AdministrativoController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
-
         return "administrativo/index";
     }
 
@@ -118,10 +117,11 @@ public class AdministrativoController {
         }
         Administrativo admi = administrativoRepository.findByCorreo(userEmail);
         session.setAttribute("administrativo", admi);
+
         String idAdmi = admi.getIdAdministrativo();
+
         model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
         model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
-
         Optional<Stylevistas> style = stylevistasRepository.findById(3);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
@@ -145,6 +145,7 @@ public class AdministrativoController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+
         Optional<Paciente> optPaciente = pacienteRepository.findById(id);
         if(optPaciente.isPresent()){
             Paciente paciente = optPaciente.get();
@@ -170,6 +171,7 @@ public class AdministrativoController {
     public String vistaEditarInvitado(HttpSession session,
                                       @RequestParam(name = "id") Integer id,
                                       Model model,Authentication authentication){
+
         Optional<Stylevistas> style = stylevistasRepository.findById(3);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
@@ -182,7 +184,7 @@ public class AdministrativoController {
         Optional<Temporal> optTemp = temporalRepository.findById(id);
         if(optTemp.isPresent()){
             Temporal temp = optTemp.get();
-/*          Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+            /*          Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
             String userEmail;
             if (session.getAttribute("impersonatedUser") != null) {
                 userEmail = (String) session.getAttribute("impersonatedUser");
@@ -203,7 +205,7 @@ public class AdministrativoController {
     }
     @GetMapping("/administrativo/mensajeria")
     public String mostrarMensajeria(HttpSession session, Model model,Authentication authentication){
-/*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+        /*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
         Optional<Stylevistas> style = stylevistasRepository.findById(3);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
@@ -212,6 +214,7 @@ public class AdministrativoController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -241,7 +244,8 @@ public class AdministrativoController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
-/*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+
+        /*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -263,6 +267,7 @@ public class AdministrativoController {
             } else {
                 // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             }
+
             return "administrativo/invitar";
         }
         else{
@@ -320,6 +325,7 @@ public class AdministrativoController {
                                      @ModelAttribute("temporal") @Valid Temporal temporal,
                                      BindingResult bindingResult,
                                      Authentication authentication){
+        /*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
         Optional<Stylevistas> style = stylevistasRepository.findById(3);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
@@ -328,7 +334,7 @@ public class AdministrativoController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
-/*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
+
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -355,8 +361,6 @@ public class AdministrativoController {
                 paciente.getDistrito().getIdDistrito(), paciente.getIdPaciente());
         return "redirect:/administrativo";
     }
-
-
     @GetMapping("/administrativo/elegirFormulario")
     public String elegirFormulario(Model model, HttpSession session, Authentication authentication){
         Optional<Stylevistas> style = stylevistasRepository.findById(3);
@@ -393,4 +397,5 @@ public class AdministrativoController {
 
         return "administrativo/elegirFormulario";
     }
+
 }

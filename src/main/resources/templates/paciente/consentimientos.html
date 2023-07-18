@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Consentimientos</title>
+        <title>Paciente - Consentimientos</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
@@ -74,14 +74,24 @@
             <!-- End footer -->
 
         </main><!-- End #main -->
+        <div id="loading"></div>
+
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
+
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+
         <script>
             var headerColorPaciente = "[[${headerColorPaciente}]]";
             localStorage.setItem('headerColorPaciente', headerColorPaciente);
-
             function updateHeaderColorPaciente() {
                 var color = headerColorPaciente;
                 document.getElementById('header').style.backgroundColor = color;
             }
+
             updateHeaderColorPaciente();
         </script>
 
@@ -92,6 +102,7 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
     </body>
 </html>

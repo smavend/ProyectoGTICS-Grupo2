@@ -16,6 +16,7 @@
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
           rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
     <!-- Vendor CSS Files -->
     <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -178,6 +179,7 @@
     </div>
 
 </main>
+    <div id="loading"></div>
 <script>
     var headerColorDoctor = "[[${headerColorDoctor}]]";
     localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
@@ -196,14 +198,10 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"
         integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/main.js}"></script>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
 
-<!-- Proximamente para mejorar la vista de subida de fotos
-<script>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
-</script>
--->
-
-</body>
+    </body>
 </html>
