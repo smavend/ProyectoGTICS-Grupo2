@@ -261,7 +261,7 @@
                                             <div><strong>Distrito:</strong> <span
                                                     th:text="${paciente.getDistrito().getNombre()}"></span></div>
                                             <div><strong>Fecha de nacimiento:</strong> <span
-                                                    th:text="${paciente.getFechanacimiento()}"></span></div>
+                                                    th:text="${#temporals.format(paciente.getFechanacimiento(), 'dd-MM-yyyy')}"></span></div>
                                             <div><strong>Género:</strong> <span
                                                     th:text="${paciente.getGenero()}"></span></div>
                                         </div>
@@ -284,13 +284,13 @@
                                                         <td style="font-size: 1rem">
                                                             <h6 th:text="${ cita.modalidad==0 ? 'Presencial' : 'Virtual'}"></h6>
                                                         </td>
-                                                        <td th:text="${cita.getInicio()}"></td>
+                                                        <td th:text="${#temporals.format(cita.getInicio(), 'dd-MM-yyyy')}"></td>
                                                         <td style="font-size: 1rem;color: black">
                                                             <h6 th:if="${cita.estado == 0}"
                                                                 th:text="'En cita'"></h6>
                                                             <h6 th:if="${cita.estado == 1}"
                                                                 th:text="'En espera'"></h6>
-                                                            <h6 th:if="${cita.estado == 2}"
+                                                            <h6 th:if="${cita.estado == 4}"
                                                                 th:text="'Finalizado'"></h6>
                                                             <h6 th:if="${cita.estado == 3}"
                                                                 th:text="'Cancelado'"></h6>
