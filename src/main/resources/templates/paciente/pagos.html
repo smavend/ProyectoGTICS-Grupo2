@@ -62,10 +62,7 @@
                             <td th:text="${pago.cita.modalidad == 0? 'Presencial':'Virtual'}"></td>
                             <!-- columna estado -->
                             <td th:if="${pago.estadoPago == 0}">
-                                <button class="botonPagar" id="idPagar"
-                                        th:attr="data-valor=${pago.id}, data-valor-inicio=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}"
-                                        onclick="mostrarTipoDePago()">Pagar
-                                </button>
+                                <button class="botonPagar" id="idPagar" th:attr="data-valor=${pago.id}, data-valor-inicio=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}, data-valor-id-cita=${pago.cita.id_cita}" onclick="mostrarTipoDePago()">Pagar</button>
                                 <div id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></div>
                             </td>
                             <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo"
