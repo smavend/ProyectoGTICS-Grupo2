@@ -35,11 +35,14 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 
-    <style>
-        .modal-content {
-            border-radius: 0;
-        }
-    </style>
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+
+        <style>
+            .modal-content {
+                border-radius: 0;
+            }
+        </style>
 
 
 
@@ -137,7 +140,8 @@
         </div>
     </section>-->
 
-</main>
+    </main>
+        <div id="loading"></div>
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 <script>
@@ -170,6 +174,8 @@
     })
 </script>
 
-</body>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+    </body>
 
 </html>

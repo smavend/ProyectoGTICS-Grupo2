@@ -38,6 +38,14 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
 
     @Transactional
     @Modifying
+    @Query(nativeQuery = true, value = "DELETE c , p, ct\n" +
+            "FROM proyectogtics.pago p  left join proyectogtics.cita c on (p.cita_id_cita = c.id_cita) \n" +
+            "left join proyectogtics.cuestionario_x_cita ct on (ct.cita_id_cita = p.cita_id_cita)\n" +
+            "WHERE (c.inicio<now() and p.estado_pago='0')")
+    void anularCitaNoCancelada();
+
+    @Transactional
+    @Modifying
     @Query(nativeQuery = true, value = "UPDATE paciente SET estado = ?1 WHERE (idPaciente = ?2)")
     void cambiarEstado(int estado, String idPaciente);
 

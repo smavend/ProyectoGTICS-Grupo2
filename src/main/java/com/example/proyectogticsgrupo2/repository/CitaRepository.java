@@ -73,13 +73,13 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `estado` ='1' WHERE (`id_cita` = ?1)")
-    void actualizarEstadoEnEspera(int idCita);
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `estado` =?1 WHERE (`id_cita` = ?2)")
+    void actualizarEstadoEnEspera(int nuevoEstado, Integer idCita);
 
     @Query(nativeQuery = true, value = "select c.* from cita c " +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) " +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
-            "where p.id_paciente = ?1 and NOW() >= c.fin and c.estado != 4" +
+            "where p.id_paciente = ?1 and NOW() >= c.fin and c.estado != 4 " +
             "order by c.inicio DESC")
     List<Cita> buscarHistorialDeCitas(String idPaciente);
 
@@ -116,6 +116,9 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT LAST_INSERT_ID() FROM cita")
     int obtenerUltimoId();
+
+    @Query(nativeQuery = true, value = "select id_cita_previa from proyectogtics.cita where id_cita = ?1")
+    Integer buscarIdCitaPrevia(int idCita);
 
     @Transactional
     @Modifying

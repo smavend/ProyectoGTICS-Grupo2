@@ -53,13 +53,18 @@ public class AdministradorController {
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
     final SecurityConfig securityConfig;
+
     final MensajeRepository mensajeRepository;
+
+    final PacientePorConsentimientoRepository ppcRepository;
+
     final StylevistasRepository stylevistasRepository;
     final CitaRepository citaRepository;
     final HorarioRepository horarioRepository;
 
 
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, MensajeRepository mensajeRepository, StylevistasRepository stylevistasRepository, CitaRepository citaRepository, HorarioRepository horarioRepository) {
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, MensajeRepository mensajeRepository, PacientePorConsentimientoRepository ppcRepository, StylevistasRepository stylevistasRepository, CitaRepository citaRepository, HorarioRepository horarioRepository) {
+
 
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
@@ -73,6 +78,7 @@ public class AdministradorController {
         this.temporalRepository = temporalRepository;
         this.securityConfig = securityConfig;
         this.mensajeRepository = mensajeRepository;
+        this.ppcRepository = ppcRepository;
         this.stylevistasRepository = stylevistasRepository;
         this.citaRepository = citaRepository;
         this.horarioRepository = horarioRepository;
@@ -343,6 +349,12 @@ public class AdministradorController {
                 paciente.setFotocontenttype(null);
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
+
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 1,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 2,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 3,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 4,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 5,1);
 
                 String passRandom= securityConfig.generateRandomPassword();
                 PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();

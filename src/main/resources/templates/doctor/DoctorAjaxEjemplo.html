@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Dashboard - Doctor</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/logo.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+    <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- CSS PAGINACION -->
+
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('dashboard')}"></div>
+    <main id="main" class="main">
+
+
+      <!-- End Page Title -->
+
+      <section class="section dashboard">
+
+
+        <!-- Left side columns -->
+
+        <div class="row justify-content-center align-items-center">
+
+
+          <!-- Top Selling -->
+          <div style="width: auto" class="col-6">
+            <div class="pagetitle">
+              <h1>Dashboard</h1>
+            </div>
+            <div th:if="${error}">
+              <div class="alert alert-danger" role="alert">
+                <strong>Error:</strong> <span th:text="${error}"></span>
+              </div>
+            </div>
+            <div th:if="${msgActualizacion}">
+              <div class="alert alert-primary" role="alert">
+                <span th:text="${msgActualizacion}"></span>
+              </div>
+            </div>
+            <div class="card top-selling container">
+
+              <div class="card-body pb-0">
+                <ul class="nav nav-tabs nav-tabs-bordered">
+                  <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab"
+                            data-bs-target="#citas">Próximas Citas
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab"
+                            data-bs-target="#pacientes">Pacientes
+                    </button>
+                  </li>
+                </ul>
+
+                <div class="tab-content pt-2" style="margin-top: -25px">
+                  <div class="tab-pane fade show active citas pt-3" id="citas">
+                    <h5 style="margin-bottom:-10px" class="card-title">
+                      PRÓXIMAS CITAS
+                    </h5>
+                    <br>
+
+                    <div class="d-flex flex-column"
+                         style="height: auto;width: max-content;overflow: hidden">
+                      <input id="citasSize" type="hidden" th:value="${listaCitasSize}">
+                      <div class="table-responsive">
+
+                        <table id="example" class="table ">
+                          <thead style="text-align: left">
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Nombre</th>
+                              <th scope="col">Tipo de cita</th>
+                              <th scope="col">Horario</th>
+                              <th scope="col">Estado</th>
+                              <th style="width: max-content" scope="col">Iniciar Consulta</th>
+
+                            </tr>
+                          </thead>
+
+
+                          <tbody style="text-align: left">
+                            <tr th:each="cita,obj: ${listaCitas}"
+                                th:with="horario=${listaHorarios[obj.index]}"
+                            >
+
+                              <td th:text="${obj.index+1}"></td>
+
+
+                              <td style="font-size: 1rem"
+                                  th:text="${cita.getNombre() + ' ' + cita.getApellidos()}">
+                              </td>
+
+                              <td th:text="${cita.modalidad == 0 ? 'Presencial' : (cita.modalidad == 1 ? 'Virtual' : 'Examen')}" style="font-size: 1rem">
+                              </td>
+
+
+
+                              <td style="font-size: 1rem;color: black"
+                                  th:text="${horario}">
+                              </td>
+
+
+                              <td th:if="${cita.modalidad == 1 && (cita.estado ==0 || cita.estado==1 || cita.estado==2 || cita.estado ==3) }">
+                                <div style="width: max-content">
+                                  <a th:if="${cita.modalidad == 1}" th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
+                                     type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Iniciar cita virtual">
+                                    <i style="color: #ffffff"
+                                       class="bi-play-fill"></i>
+                                  </a>
+
+                                  <a th:id="'btnEnviarCuestionario' + ${obj.index}"
+                                     th:if="${cita.modalidad == 1}"
+                                     style="display: block"
+                                     data-bs-toggle="tooltip"
+                                     data-bs-placement="top"
+                                     title="Enviar cuestionario"
+                                     class="btn btn-warning"
+                                     th:href="@{'/doctor/enviarCuestionario?id=' + ${cita.getId_cita()}}"
+                                  >
+                                    <i class="bi-file-text-fill"></i>
+                                  </a>
+                                  <input th:id="'correo' + ${obj.index}"
+                                         type="hidden" th:value="${cita.getCorreo()}"/>
+
+
+
+
+
+
+                                </div>
+                              </td>
+
+                              <td th:if="${cita.modalidad == 0 && (cita.estado ==0 || cita.estado==1 || cita.estado==2 || cita.estado ==3)}" style="font-size: 1rem;color: black">
+                                <h6 th:if="${cita.estado == 0}"
+                                    th:text="'Pendiente de pago'"></h6>
+                                <h6 th:if="${cita.estado == 1 || cita.estado==2}"
+                                    th:text="'En espera'"></h6>
+                                <h6 th:if="${cita.estado == 3}"
+                                    th:text="'En consulta'"></h6>
+                              </td>
+
+                              <td th:if="${cita.modalidad == 0 && (cita.estado ==5) }">
+                                <div style="width: max-content">
+                                  <a th:href="@{'/doctor/reporte?id=' + ${cita.getId_paciente()}+ '&id2=' + ${cita.getId_cita()}}"
+                                     type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Subir examen">
+                                    <i style="color: #ffffff"
+                                       class="bi-play-fill"></i>
+                                  </a>
+
+                                </div>
+                              </td>
+
+
+                            </tr>
+                          </tbody>
+                        </table>
+                        <input id="link" type="hidden" th:value="${url}">
+                        <script>
+                          function verificarTabla() {
+                            var citasSize = parseInt($('#citasSize').val());
+                            var url = getUrl()+"/doctor/obtenerSesion";
+
+                            var vector = []; // Crear un vector vacío
+
+                            $.ajax({
+                              url: url,
+                              method: "GET",
+                              dataType: "json",
+                              success: function (response) {
+                                // Obtener la lista de correos electrónicos recibida en la respuesta
+                                response.forEach(function (correo) {
+                                  console.log("Iteraciones del correo controlador:", correo);
+
+                                  // Iterar sobre cada correo en la lista
+                                  for (var i = 0; i < citasSize; i++) {
+                                    if (vector.indexOf(i) !== -1) {
+                                      // Si i ya está en el vector, omitir la iteración
+                                      continue;
+                                    }
+                                    var enlaceCuestionario = $('#btnEnviarCuestionario' + i);
+                                    var correoCita = $('#correo' + i).val();
+
+                                    console.log("correoCitaScript:", correoCita);
+
+                                    if (correoCita === correo) {
+                                      console.log("iguales");
+                                      enlaceCuestionario.css('display', 'block');
+                                      vector.push(i); // Agregar i al vector
+                                    } else {
+                                      console.log("no iguales");
+                                      enlaceCuestionario.css('display', 'none');
+                                    }
+                                  }
+                                });
+
+                                // Vaciar el vector después de terminar el bucle forEach
+                                vector.length = 0;
+                              },
+                              error: function () {
+                                console.log("Error al obtener la lista de correos electrónicos");
+                              }
+                            });
+                          }
+
+                        </script>
+
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div style="width: max-content" class="tab-pane fade pacientes pt-3" id="pacientes">
+
+
+                    <h5 style="margin-bottom:-10px" class="card-title">
+                      PACIENTES
+                    </h5>
+                    <br>
+
+                    <div class="d-flex flex-column" style="height: auto; overflow: auto;">
+                      <div class="table-responsive">
+                        <table style="text-align: left" id="example2"
+                               class="table ">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col" style="width: min-content">Foto</th>
+                              <th scope="col" style="text-align: left">Nombres</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr style="height: fit-content"
+                                th:each="paciente,obj: ${listaPacientes}">
+                              <td th:text="${obj.index+1}"></td>
+                              <td style="text-align: left;">
+                                <div style="display: inline-block; border-radius: 50%; border: none; overflow: hidden;">
+                                  <img th:if="${paciente.foto != null}" th:src="@{'/usuario/foto/'+${paciente.getId_paciente()}}" style="width: 65px; height: 65px; object-fit: cover;"
+                                       alt="Foto del paciente">
+                                  <img th:unless="${paciente.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" style="width: 65px; height: 65px; object-fit: cover;"
+                                       alt="Foto del paciente">
+                                </div>
+                              </td>
+                              <td style="font-size: 1.2rem; color: black">
+                                <a th:href="@{'/doctor/historialClinico' + '?id=' + ${paciente.id_paciente}}"
+                                   th:text="${paciente.getNombre() + ' ' + paciente.getApellidos()}"></a>
+                              </td>
+
+                            </tr>
+
+
+                          </tbody>
+                        </table>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                </div>
+
+
+              </div>
+
+            </div>
+          </div><!-- End Top Selling -->
+
+          <div class="col-5  justify-content-center align-items-start">
+            <div class="card top-selling overflow-auto container" style="height: 553px; overflow: auto;">
+              <div class="card-body pb-0">
+                <h5 class="card-title">CALENDARIO</h5>
+                <section class="section dashboard">
+                  <div class="row bg-white p-3">
+                    <!-- FUNCIONAMIENTO DE CALENDARIO -->
+
+                    <div th:each="cita, citaIndex : ${citasPresenciales}">
+                      <input th:id="'citaInicioPresencial' + ${citaIndex.index}"
+                             type="hidden" th:value="${cita.inicio}"/>
+                      <input th:id="'citaFinPresencial' + ${citaIndex.index}"
+                             type="hidden" th:value="${cita.fin}"/>
+                      <input th:id="'citaPresencialModalidad' + ${citaIndex.index}"
+                             type="hidden" th:value="${cita.modalidad}"/>
+                      <input th:id="'citaPresencialIndex' + ${citaIndex.index}"
+                             type="hidden" th:value="${citaIndex.index}"/>
+                    </div>
+
+                    <div th:each="cita, citaIndex : ${citasPresenciales}">
+                      <input th:id="'citaPresencialApellido' + ${citaIndex.index}"
+                             type="hidden" th:value="${cita.paciente.apellidos}"/>
+                    </div>
+
+                    <div th:each="cita, citaIndex : ${citasVirtuales}">
+                      <input th:id="'citaInicioVirtual' + ${citaIndex.index}" type="hidden"
+                             th:value="${cita.inicio}"/>
+                      <input th:id="'citaFinVirtual' + ${citaIndex.index}"
+                             type="hidden" th:value="${cita.fin}"/>
+                      <input th:id="'citaVirtualModalidad' + ${citaIndex.index}"
+                             type="hidden" th:value="${cita.modalidad}"/>
+                      <input th:id="'citaVirtualIndex' + ${citaIndex.index}"
+                             type="hidden" th:value="${citaIndex.index}"/>
+                    </div>
+
+                    <div th:each="cita, citaIndex : ${citasVirtuales}">
+                      <input th:id="'citaVirtualApellido' + ${citaIndex.index}"
+                             type="hidden" th:value="${cita.paciente.apellidos}"/>
+                    </div>
+
+
+                    <input id="contadorPresencial" type="hidden" th:value="${cantidadCitasPresenciales}">
+                    <input id="contadorVirtual" type="hidden" th:value="${cantidadCitasVirtuales}">
+
+                    <div th:each="cita, citaIndex : ${citasPresenciales}">
+                      <button th:id="'popupPresencial' + ${citaIndex.index}" style="display: none;" type="button" class="btn btn-primary"
+                              data-bs-toggle="modal" th:data-bs-target="'#myModalPresencial' + ${citaIndex.index}">
+                        Abrir Pop-up
+                      </button>
+
+                      <div class="modal fade" th:id="'myModalPresencial' + ${citaIndex.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <img style="height: 60px"
+                                   th:src="@{/assets/img/logoClinicaPNG.png}"
+                                   alt="Logo de la clínica">
+                              <h1 class="modal-title fs-5 tituloNavBar">Clínica INTERPUCP</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="row informacionModal">
+                                <div class="col-6">
+                                  <p>Nombres y apellidos:<span class="informacionModalDato"
+                                                               th:text="${cita.paciente.getNombreYApellido()}"></span>
+                                  </p>
+                                  <p>Seguro:<span class="informacionModalDato"
+                                                  th:text="${cita.paciente.seguro.nombre}"></span></p>
+                                  <p>Teléfono:<span class="informacionModalDato"
+                                                    th:text="${cita.paciente.telefono}"></span></p>
+                                </div>
+                                <div class="col-6">
+                                  <p>Fecha de nacimiento:<span class="informacionModalDato"
+                                                               th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}"></span>
+                                  </p>
+                                  <p>Dirección:<span
+                                          class="informacionModalDato" th:text="${cita.paciente.direccion}"></span>
+                                  </p>
+                                  <p>Correo:<span class="informacionModalDato" th:text="${cita.paciente.correo}"></span>
+                                  </p>
+                                </div>
+
+                              </div>
+
+                              <span class="textoModal"
+                                    th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                              <div class="row informacionModal">
+                                <div class="col-6">
+                                  <p>Especialidad:<span class="informacionModalDato"
+                                                        th:text="${cita.doctor.especialidad.nombre}"></span>
+                                  </p>
+                                  <p>Tipo de cita:<span class="informacionModalDato"
+                                                        th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
+                                  </p>
+
+                                </div>
+                                <div class="col-6">
+                                  <p>Doctor:<span class="informacionModalDato"
+                                                  th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}"></span>
+                                  </p>
+                                  <p>Sede:<span
+                                          class="informacionModalDato"
+                                          th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}"></span>
+                                  </p>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div th:each="cita, citaIndex : ${citasVirtuales}">
+                      <button th:id="'popupVirtual' + ${citaIndex.index}" style="display: none;" type="button" class="btn btn-primary"
+                              data-bs-toggle="modal" th:data-bs-target="'#myModalVirtual' + ${citaIndex.index}">
+                        Abrir Pop-up
+                      </button>
+
+                      <div class="modal fade" th:id="'myModalVirtual' + ${citaIndex.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <img style="height: 60px"
+                                   th:src="@{/assets/img/logoClinicaPNG.png}"
+                                   alt="Logo de la clínica">
+                              <h1 class="modal-title fs-5 tituloNavBar">Clínica INTERPUCP</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="row informacionModal">
+                                <div class="col-6">
+                                  <p>Nombres y apellidos:<span class="informacionModalDato"
+                                                               th:text="${cita.paciente.getNombreYApellido()}"></span>
+                                  </p>
+                                  <p>Seguro:<span class="informacionModalDato"
+                                                  th:text="${cita.paciente.seguro.nombre}"></span></p>
+                                  <p>Teléfono:<span class="informacionModalDato"
+                                                    th:text="${cita.paciente.telefono}"></span></p>
+                                </div>
+                                <div class="col-6">
+                                  <p>Fecha de nacimiento:<span class="informacionModalDato"
+                                                               th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}"></span>
+                                  </p>
+                                  <p>Dirección:<span
+                                          class="informacionModalDato" th:text="${cita.paciente.direccion}"></span>
+                                  </p>
+                                  <p>Correo:<span class="informacionModalDato" th:text="${cita.paciente.correo}"></span>
+                                  </p>
+                                </div>
+
+                              </div>
+                              <span class="textoModal"
+                                    th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                              <div class="row informacionModal">
+                                <div class="col-6">
+                                  <p>Especialidad:<span class="informacionModalDato"
+                                                        th:text="${cita.doctor.especialidad.nombre}"></span>
+                                  </p>
+                                  <p>Tipo de cita:<span class="informacionModalDato"
+                                                        th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
+                                  </p>
+
+                                </div>
+                                <div class="col-6">
+                                  <p>Doctor:<span class="informacionModalDato"
+                                                  th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}"></span>
+                                  </p>
+                                  <p>Sede:<span
+                                          class="informacionModalDato"
+                                          th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}"></span>
+                                  </p>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <script>
+                      document.addEventListener('DOMContentLoaded', function () {
+                        var calendarEl = document.getElementById('calendar');
+                        var eventsPresencial = [];
+                        var eventsVirtual = [];
+                        var cantidadCitasPresenciales = document.getElementById('contadorPresencial').value;
+                        var cantidadCitasVirtuales = document.getElementById('contadorVirtual').value;
+
+                        for (var i = 0; i < parseInt(cantidadCitasPresenciales); i++) {
+                          eventsPresencial.push({
+                            start: document.getElementById('citaInicioPresencial' + i).value,
+                            end: document.getElementById('citaFinPresencial' + i).value,
+                            color: '#86C69B',
+                            title: '- ' + document.getElementById('citaPresencialApellido' + i).value,
+                            modalidad: document.getElementById('citaPresencialModalidad' + i).value,
+                            index: document.getElementById('citaPresencialIndex' + i).value,
+                          });
+                        }
+
+                        for (var j = 0; j < parseInt(cantidadCitasVirtuales); j++) {
+                          eventsVirtual.push({
+                            start: document.getElementById('citaInicioVirtual' + j).value,
+                            end: document.getElementById('citaFinVirtual' + j).value,
+                            color: '#379AB8',
+                            title: '- ' + document.getElementById('citaVirtualApellido' + j).value,
+                            modalidad: document.getElementById('citaVirtualModalidad' + j).value,
+                            index: document.getElementById('citaVirtualIndex' + j).value,
+                          });
+                        }
+
+                        var events = eventsPresencial.concat(eventsVirtual);
+
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                          eventTimeFormat: {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            meridiem: 'short'
+                          },
+                          headerToolbar: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                          },
+                          navLinks: true,
+                          selectable: true,
+                          selectMirror: true,
+                          select: function (arg) {
+
+                          },
+                          eventClick: function (arg) {
+
+                            var eventInfo = {
+                              start: arg.event.extendedProps.start,
+                              color: arg.event.backgroundColor,
+                              title: arg.event.title,
+                              modalidad: arg.event.extendedProps.modalidad,
+                              index: arg.event.extendedProps.index,
+                            };
+
+                            if(eventInfo.modalidad=== '1'){
+                              var indexValue = arg.event.extendedProps.index;
+                              var botonPrincipal = document.getElementById("popupVirtual"+indexValue);
+                              botonPrincipal.click();
+                            }else if (eventInfo.modalidad=== '0'){
+                              var indexValue = arg.event.extendedProps.index;
+                              var botonPrincipal = document.getElementById("popupPresencial"+indexValue);
+                              botonPrincipal.click();
+                            }
+
+                          },
+
+                          eventMouseEnter: function (arg) {
+                            arg.el.style.cursor = 'pointer';
+                          },
+                          eventMouseLeave: function (arg) {
+                            arg.el.style.cursor = '';
+                          },
+                          editable: false,
+                          dayMaxEvents: true,
+                          events: events
+                        });
+
+                        calendar.render();
+                      });
+
+                    </script>
+
+                    <div id='calendar'></div>
+
+                    <!-- FIN DE FUNCIONAMIENTO DE CALENDARIO -->
+
+                  </div>
+
+                </section>
+              </div>
+            </div>
+
+
+          </div>
+          <div class="col-6">
+
+
+          </div><!-- End Left side columns -->
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+
+
+        </div>
+
+
+        </div><!-- End Website Traffic -->
+
+      </section>
+
+    </main><!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+
+      <div class="credits">
+
+      </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+    <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+    <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+    <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+    <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+    <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+    <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+    <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
+
+
+    <!-- Template Main JS File -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script th:src="@{/assets/js/jsDoctor.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+    <!-- Agregar la biblioteca FullCalendar -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
+    <script th:src="@{/assets/js/index.js}"></script>
+    <script th:src="@{/assets/js/datatables.js}"></script>
+    <script th:src="@{/assets/js/moment.js}"></script>
+    <!-- PAGINACION -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script th:src="@{/assets/js/jsPaginarDoctorNueva.js}"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <!--  FIN PAGINACION  -->
+    <script>
+      $(document).ready(function() {
+        // Llamar a la función inicialmente
+        verificarTabla();
+
+        setInterval(verificarTabla, 1000);
+      });
+
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        $('#example').DataTable();
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        $('#example2').DataTable();
+      });
+    </script>
+
+
+    <script>
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+      })
+    </script>
+    <script>
+      function toggleDiv() {
+        var div = document.getElementById("miDiv");
+        div.style.display = div.style.display === "none" ? "block" : "none";
+      }
+    </script>
+  </body>
+
+
+</html>

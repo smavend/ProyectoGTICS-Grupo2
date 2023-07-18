@@ -223,6 +223,8 @@
     });
 
     $("#consulta").click(function (){
+      $("#consulta").attr("disabled","disabled");
+      $("#consulta").html("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>");
       let dni = $("#dni").val();
       $("#dni").removeClass("is-invalid");
       $("#errorDni").hide();
@@ -232,6 +234,9 @@
       if (dni === "") {
         console.log("alert");
         alert("Debe ingresar un DNI");
+
+        $("#consulta").removeAttr("disabled");
+        $("#consulta").html("Consultar");
       }else {
         $.ajax({
           method: "GET",
@@ -244,7 +249,7 @@
               method: "GET",
               dataType: "json",
               crossDomain: true,
-              headers: {"Authorization": "Bearer 43fa71cb7f05b6705d5c79c73497ea314cfec168a6a55ae740f3b5579cb24fe4"},
+              headers: {"Authorization": "Bearer 5fe50f076dafad000ed90cd7d442fdd13381fe61cef4bddfb583614504a6b6de"},
               url: "https://apiperu.dev/api/dni/" + dni
             }).done(function (info) {
               console.log(info);
@@ -253,6 +258,9 @@
                 $("#nombre").val(info.data.nombres);
                 console.log(info.data.nombres, info.data.apellido_paterno, info.data.apellido_materno);
                 $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
+
+                $("#consulta").removeAttr("disabled");
+                $("#consulta").html("Consultar");
               } else {
                 console.log("error en encontrar dni");
                 $("#dni").addClass("is-invalid");
@@ -260,6 +268,9 @@
                 $("#errorDni").show();
                 $("#nombre").val("");
                 $("#apellidos").val("");
+
+                $("#consulta").removeAttr("disabled");
+                $("#consulta").html("Consultar");
               }
             })
           } else {
@@ -267,6 +278,9 @@
             $("#dni").addClass("is-invalid");
             $("#errorDni").text(result.err);
             $("#errorDni").show();
+
+            $("#consulta").removeAttr("disabled");
+            $("#consulta").html("Consultar");
           }
         })
       }

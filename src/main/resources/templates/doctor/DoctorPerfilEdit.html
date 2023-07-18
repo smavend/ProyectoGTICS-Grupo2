@@ -179,6 +179,7 @@
     </div>
 
 </main>
+    <div id="loading"></div>
 <script>
     var headerColorDoctor = "[[${headerColorDoctor}]]";
     localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
@@ -197,14 +198,10 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"
         integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/main.js}"></script>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
 
-<!-- Proximamente para mejorar la vista de subida de fotos
-<script>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
-</script>
--->
-
-</body>
+    </body>
 </html>

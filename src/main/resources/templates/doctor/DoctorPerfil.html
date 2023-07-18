@@ -1,273 +1,282 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - Doctor</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-  <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet'/>
-  <!-- Favicons -->
-  <link th:href="@{/assets/img/logo.png}" rel="icon">
-  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+        <title>Dashboard - Doctor</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet'/>
+        <!-- Favicons -->
+        <link th:href="@{/assets/img/logo.png}" rel="icon">
+        <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <!-- Google Fonts -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-  <!-- Vendor CSS Files -->
-  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+        <!-- Vendor CSS Files -->
+        <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
-  <!-- Template Main CSS File -->
-  <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
-  <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- CSS PAGINACION -->
+        <!-- Template Main CSS File -->
+        <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+        <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- CSS PAGINACION -->
 
-  <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-  <!-- FIN CSS PAGINACION -->
+        <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+        <!-- FIN CSS PAGINACION -->
 
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
-  <!--Links para mensajeria-->
+        <!--Links para mensajeria-->
 
-  <!--End link mensajeria-->
+        <!--End link mensajeria-->
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Updated: Mar 09 2023 with Bootstrap v5.2.3
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-</head>
-<body>
+        <!-- =======================================================
+        * Template Name: NiceAdmin
+        * Updated: Mar 09 2023 with Bootstrap v5.2.3
+        * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+        * Author: BootstrapMade.com
+        * License: https://bootstrapmade.com/license/
+        ======================================================== -->
+    </head>
+    <body>
 
-<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
-<div th:replace="~{doctor/fragments/sidebar.html :: sidebar('')}"></div>
-<main style="padding-top: 0;" id="main" class="main">
+        <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+        <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('')}"></div>
+        <main style="padding-top: 0;" id="main" class="main">
 
-  <div class="container-xl perfil">
+            <div class="container-xl perfil">
 
-    <div class="row">
-      <!-- Foto y botones editar -->
-      <div class="col-lg-4 pb-4">
-        <div style="height: 100%" class="card mb-4">
-          <div class="card-body text-center mt-4">
-            <img th:if="${doctor.foto != null}" th:src="@{'/usuario/foto/'+${doctor.getId_doctor()}}" alt="avatar" class="img-fluid" style="width: 200px; border-radius: 60px">
-            <img th:unless="${doctor.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="avatar" class="img-fluid" style="width: 200px; border-radius: 60px">
-            <h5 class="mt-3 mb-1 fw-semibold" th:text="${doctor.getNombre() + ' ' + doctor.getApellidos()}">Jhon Pardo</h5>
-            <p class="text-muted mb-3">Doctor</p>
-            <div class="vstack gap-2 col-sm-6 col-md-5 col-lg-8 mx-auto mb-xl-4 mb-3 mt-4">
-              <a th:href="@{'/doctor/perfil/editar?id='+${doctor.id_doctor}}" class="btn btn-primary botonEditar">Editar perfil</a>
-              <a th:href="@{/doctor/perfil/cambiarContrasena}" class="btn btn-primary botonEditar">Cambiar contraseña</a>
+                <div class="row">
+                    <!-- Foto y botones editar -->
+                    <div class="col-lg-4 pb-4">
+                        <div style="height: 100%" class="card mb-4">
+                            <div class="card-body text-center mt-4">
+                                <img th:if="${doctor.foto != null}"
+                                     th:src="@{'/usuario/foto/'+${doctor.getId_doctor()}}" alt="avatar"
+                                     class="img-fluid" style="width: 200px; border-radius: 60px">
+                                <img th:unless="${doctor.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}"
+                                     alt="avatar" class="img-fluid" style="width: 200px; border-radius: 60px">
+                                <h5 class="mt-3 mb-1 fw-semibold"
+                                    th:text="${doctor.getNombre() + ' ' + doctor.getApellidos()}">Jhon Pardo</h5>
+                                <p class="text-muted mb-3">Doctor</p>
+                                <div class="vstack gap-2 col-sm-6 col-md-5 col-lg-8 mx-auto mb-xl-4 mb-3 mt-4">
+                                    <a th:href="@{'/doctor/perfil/editar?id='+${doctor.id_doctor}}"
+                                       class="btn btn-primary botonEditar">Editar perfil</a>
+                                    <a th:href="@{/doctor/perfil/cambiarContrasena}"
+                                       class="btn btn-primary botonEditar">Cambiar contraseña</a>
+                                </div>
+                                <div style="border-radius: 30px" class="alert alert-success" role="alert"
+                                     th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"></div>
+                                <div style="border-radius: 30px" class="alert alert-danger" role="alert"
+                                     th:if="${msgError != null}" th:text="${msgError}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información perfil -->
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Nombre completo</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${doctor.nombre+' '+doctor.apellidos}">
+                                            Jhon Pardo</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">DNI</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${doctor.id_doctor}">72157734</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Género</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${doctor.genero}">Otro</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Correo</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${doctor.correo}">juanpc@gmail.com</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Especialidad</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${doctor.especialidad.nombre}">
+                                            cardiologia</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Pregrado</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${doctor.pregrado}">UNMSM</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Posgrado</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${doctor.posgrado}">Pacífico EPS</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Colegiatura</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${doctor.colegiatura}">965-790-551</p>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="row">
+
+                  <div class="col-12">
+                    <div id="HistorialDeCitas" class="card mb-0">
+                      <div class="card-body">
+                        <p style="margin-left: 7px;" class="mb-4"><span
+                                class="fs-4 font-italic me-1 fw-semibold">Historial de citas</span></p>
+
+                        <a style="margin-top: 0;" class="btn filtro filtroSeleccionado fs-6">Recientes</a>
+                        <a style="margin-top: 0;" class="btn filtro fs-6">Antiguas</a>
+
+                        <table class="table">
+                          <thead>
+                          <tr>
+                            <th>Especialidad</th>
+                            <th>Doctor</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Tipo de cita</th>
+                            <th></th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr th:each="cita: ${historialCitas}">
+                            <td th:text="${cita.doctor.especialidad.nombre}">Psicología</td>
+                            <td th:text="${cita.doctor.nombre}">María Godoy</td>
+                            <td th:text="${#temporals.format(cita.inicio, 'dd/MM/yyyy')}">04/01/21</td>
+                            <td th:text="${#temporals.format(cita.inicio, 'HH:mm')}">18:30 Hrs.</td>
+                            <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Virtual</td>
+                            <td>
+                              <a class="botonVerMasPerfil" data-bs-toggle="modal" th:attr="data-bs-target='#citaModal'+${cita.id_cita}">Ver más</a>
+                            </td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                -->
             </div>
-            <div style="border-radius: 30px" class="alert alert-success" role="alert" th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"></div>
-            <div style="border-radius: 30px" class="alert alert-danger" role="alert" th:if="${msgError != null}" th:text="${msgError}"></div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Información perfil -->
-      <div class="col-lg-8">
-        <div class="card mb-4">
-          <div class="card-body">
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Nombre completo</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${doctor.nombre+' '+doctor.apellidos}">
-                  Jhon Pardo</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">DNI</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${doctor.id_doctor}">72157734</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Género</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${doctor.genero}">Otro</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Correo</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${doctor.correo}">juanpc@gmail.com</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Especialidad</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${doctor.especialidad.nombre}">cardiologia</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Pregrado</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${doctor.pregrado}">UNMSM</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Posgrado</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${doctor.posgrado}">Pacífico EPS</p>
+            <!-- Modal Cita
+            <div th:each="cita: ${historialCitas}" th:id="'citaModal'+${cita.id_cita}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <img class="logoNavBar" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
+                    <h1 class="modal-title fs-5 tituloNavBar" id="exampleModalLabel">Clínica INTERPUCP</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            style="width: 40px"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row informacionModal">
+                      <div class="col-6">
+                        <p>Nombres y apellidos:<span
+                                class="informacionModalDato" th:text="${cita.paciente.nombre}+' '+${cita.paciente.apellidos}">Juanchito Palacios Castro</span></p>
+                        <p>Seguro:<span class="informacionModalDato" th:text="${cita.paciente.seguro.nombre}">Pacífico EPS</span></p>
+                        <p>Teléfono:<span class="informacionModalDato" th:text="${cita.paciente.telefono}">934-250-488</span></p>
+                      </div>
+                      <div class="col-6">
+                        <p>Fecha de nacimiento:<span class="informacionModalDato" th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span></p>
+                        <p>Dirección:<span class="informacionModalDato" th:text="${cita.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
+                        </p>
+                        <p>Correo:<span class="informacionModalDato" th:text="${cita.paciente.correo}">juanpc@gmail.com</span></p>
+                      </div>
+                    </div>
+                    <div class="row informacionModal">
+                      <div class="col-6">
+                        <p>Especialidad:<span class="informacionModalDato" th:text="${cita.doctor.especialidad.nombre}">Cardiología</span></p>
+                        <p>Tipo de cita:<span class="informacionModalDato" th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span></p>
+                        <p>Torre:<span class="informacionModalDato">B (Falta)</span></p>
+                      </div>
+                      <div class="col-6">
+                        <p>Doctor:<span class="informacionModalDato" th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span></p>
+                        <p>Sede:<span class="informacionModalDato" th:text="${cita.sede.nombre}+' '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
+                        </p>
+                        <p>Piso:<span class="informacionModalDato">2 (Falta)</span></p>
+                      </div>
+                    </div>
+                    <div class="row informacionModal">
+                      <div class="col-6">
+                        <p>Diagnóstico:<span class="informacionModalDato">Arrítmia cardiaca (Falta)</span></p>
+                      </div>
+                      <div class="col-6">
+                        <p>Fecha:<span class="informacionModalDato" th:text="${#temporals.format(cita.fin, 'dd/MM/yyyy')}">15/09/22</span></p>
+                      </div>
+                    </div>
+                    <div class="row informacionModal">
+                      <p class="mb-2">Receta:</p>
+                      <span class="informacionModalDato">
+                                    <ul>
+                                      <li>Cefalexina 150mg (Septilisin 500mg)</li>
+                                      <li>Comprimidos 1 (una) Caja</li>
+                                      <li>Tomar vía oral 1 (uno) c/6 horas por 7 días</li>
+                                    </ul>
+                                  </span>
+                    </div>
+                    <div class="row informacionModal">
+                      <p>Firma:</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Colegiatura</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${doctor.colegiatura}">965-790-551</p>
-              </div>
-            </div>
-            <hr>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--<div class="row">
-
-      <div class="col-12">
-        <div id="HistorialDeCitas" class="card mb-0">
-          <div class="card-body">
-            <p style="margin-left: 7px;" class="mb-4"><span
-                    class="fs-4 font-italic me-1 fw-semibold">Historial de citas</span></p>
-
-            <a style="margin-top: 0;" class="btn filtro filtroSeleccionado fs-6">Recientes</a>
-            <a style="margin-top: 0;" class="btn filtro fs-6">Antiguas</a>
-
-            <table class="table">
-              <thead>
-              <tr>
-                <th>Especialidad</th>
-                <th>Doctor</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Tipo de cita</th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="cita: ${historialCitas}">
-                <td th:text="${cita.doctor.especialidad.nombre}">Psicología</td>
-                <td th:text="${cita.doctor.nombre}">María Godoy</td>
-                <td th:text="${#temporals.format(cita.inicio, 'dd/MM/yyyy')}">04/01/21</td>
-                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')}">18:30 Hrs.</td>
-                <td th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Virtual</td>
-                <td>
-                  <a class="botonVerMasPerfil" data-bs-toggle="modal" th:attr="data-bs-target='#citaModal'+${cita.id_cita}">Ver más</a>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-    -->
-  </div>
-
-  <!-- Modal Cita
-  <div th:each="cita: ${historialCitas}" th:id="'citaModal'+${cita.id_cita}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <img class="logoNavBar" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
-          <h1 class="modal-title fs-5 tituloNavBar" id="exampleModalLabel">Clínica INTERPUCP</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                  style="width: 40px"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row informacionModal">
-            <div class="col-6">
-              <p>Nombres y apellidos:<span
-                      class="informacionModalDato" th:text="${cita.paciente.nombre}+' '+${cita.paciente.apellidos}">Juanchito Palacios Castro</span></p>
-              <p>Seguro:<span class="informacionModalDato" th:text="${cita.paciente.seguro.nombre}">Pacífico EPS</span></p>
-              <p>Teléfono:<span class="informacionModalDato" th:text="${cita.paciente.telefono}">934-250-488</span></p>
-            </div>
-            <div class="col-6">
-              <p>Fecha de nacimiento:<span class="informacionModalDato" th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd/MM/yyyy')}">25 años</span></p>
-              <p>Dirección:<span class="informacionModalDato" th:text="${cita.paciente.direccion}">Av. Las Nuevas Lomas, Lima</span>
-              </p>
-              <p>Correo:<span class="informacionModalDato" th:text="${cita.paciente.correo}">juanpc@gmail.com</span></p>
-            </div>
-          </div>
-          <div class="row informacionModal">
-            <div class="col-6">
-              <p>Especialidad:<span class="informacionModalDato" th:text="${cita.doctor.especialidad.nombre}">Cardiología</span></p>
-              <p>Tipo de cita:<span class="informacionModalDato" th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span></p>
-              <p>Torre:<span class="informacionModalDato">B (Falta)</span></p>
-            </div>
-            <div class="col-6">
-              <p>Doctor:<span class="informacionModalDato" th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span></p>
-              <p>Sede:<span class="informacionModalDato" th:text="${cita.sede.nombre}+' '+${cita.sede.direccion}">San Miguel - Av. La Marina 2945</span>
-              </p>
-              <p>Piso:<span class="informacionModalDato">2 (Falta)</span></p>
-            </div>
-          </div>
-          <div class="row informacionModal">
-            <div class="col-6">
-              <p>Diagnóstico:<span class="informacionModalDato">Arrítmia cardiaca (Falta)</span></p>
-            </div>
-            <div class="col-6">
-              <p>Fecha:<span class="informacionModalDato" th:text="${#temporals.format(cita.fin, 'dd/MM/yyyy')}">15/09/22</span></p>
-            </div>
-          </div>
-          <div class="row informacionModal">
-            <p class="mb-2">Receta:</p>
-            <span class="informacionModalDato">
-                          <ul>
-                            <li>Cefalexina 150mg (Septilisin 500mg)</li>
-                            <li>Comprimidos 1 (una) Caja</li>
-                            <li>Tomar vía oral 1 (uno) c/6 horas por 7 días</li>
-                          </ul>
-                        </span>
-          </div>
-          <div class="row informacionModal">
-            <p>Firma:</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  -->
-</main>
-<script>
-  var headerColorDoctor = "[[${headerColorDoctor}]]";
-  localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
+            -->
+        </main>
+        <div id="loading"></div>
 
   function updateHeaderColorDoctor() {
     var color = headerColorDoctor;
@@ -280,8 +289,10 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
 
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/main.js}"></script>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
 
-</body>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+    </body>
 </html>

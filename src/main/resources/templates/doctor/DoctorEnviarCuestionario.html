@@ -38,13 +38,16 @@
     <!-- Template Main CSS File -->
     <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
 
-</head>
-<body>
-<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
-<div th:replace="~{doctor/fragments/sidebar.html :: sidebar('dashboard')}"></div>
-<main id="main" class="main">
-    <strong style="font-size: 2.5rem">Cuestionarios disponibles</strong>
-    <section class="seccionPrincipal">
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+
+    </head>
+    <body>
+        <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+        <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('dashboard')}"></div>
+        <main id="main" class="main">
+            <strong style="font-size: 2.5rem">Cuestionarios disponibles</strong>
+            <section class="seccionPrincipal">
 
         <strong style="font-size: 1.5rem">Seleccionar el cuestionario a
             enviar: </strong>
@@ -320,9 +323,10 @@
         </div>
 
 
-    </section>
-</main>
-<footer id="footer" class="footer">
+            </section>
+        </main>
+        <div id="loading"></div>
+        <footer id="footer" class="footer">
 
     <div class="credits">
         <!-- All the links in the footer should remain intact. -->
@@ -379,17 +383,20 @@
     }
 </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var buttons = document.querySelectorAll('.text-center button[data-bs-toggle="modal"]');
-        buttons.forEach(function(button) {
-            var tooltip = new bootstrap.Tooltip(button, {
-                title: "Enviar cuestionario",
-                placement: "bottom",
-                container: "body"
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var buttons = document.querySelectorAll('.text-center button[data-bs-toggle="modal"]');
+                buttons.forEach(function(button) {
+                    var tooltip = new bootstrap.Tooltip(button, {
+                        title: "Enviar cuestionario",
+                        placement: "bottom",
+                        container: "body"
+                    });
+                });
             });
-        });
-    });
-</script>
-</body>
+        </script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+    </body>
 </html>

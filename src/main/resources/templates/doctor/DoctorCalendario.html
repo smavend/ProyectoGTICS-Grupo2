@@ -67,7 +67,10 @@
     <!--<link href="assets/css/style.css" rel="stylesheet"> -->
     <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
 
-</head>
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+
+    </head>
 
 <!-- =======================================================
 * Template Name: NiceAdmin
@@ -808,7 +811,8 @@
 
     </section>
 
-</main><!-- End #main -->
+        </main><!-- End #main -->
+        <div id="loading"></div>
 
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
@@ -869,6 +873,8 @@
     }
 </script>
 
-</body>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+    </body>
 
 </html>

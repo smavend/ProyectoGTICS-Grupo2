@@ -32,6 +32,43 @@ font-family: "Nunito", sans-serif;
 }
 
 /*--------------------------------------------------------------
+# Preloader
+--------------------------------------------------------------*/
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    overflow: hidden;
+    background: rgb(0, 0, 0, 0.3);
+}
+
+#loading:before {
+    content: "";
+    position: fixed;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    border: 6px solid #1977cc;
+    border-top-color: #d1e6f9;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: animate-loading 1s linear infinite;
+}
+
+@keyframes animate-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*--------------------------------------------------------------
 # Main
 --------------------------------------------------------------*/
 #main {
@@ -153,39 +190,6 @@ font-size: 24px;
 margin-bottom: 0;
 font-weight: 600;
 color: #012970;
-}
-
-/*--------------------------------------------------------------
-# Back to top button
---------------------------------------------------------------*/
-.back-to-top {
-position: fixed;
-visibility: hidden;
-opacity: 0;
-right: 15px;
-bottom: 15px;
-z-index: 99999;
-background: #4154f1;
-width: 40px;
-height: 40px;
-border-radius: 4px;
-transition: all 0.4s;
-}
-
-.back-to-top i {
-font-size: 24px;
-color: #fff;
-line-height: 0;
-}
-
-.back-to-top:hover {
-background: #6776f4;
-color: #fff;
-}
-
-.back-to-top.active {
-visibility: visible;
-opacity: 1;
 }
 
 /*--------------------------------------------------------------
@@ -1351,6 +1355,8 @@ p{
 /* ------------------- Sección Pagos ------------------- */
 
 .botonVerRecibo{
+    margin-top: 5px;
+    margin-bottom: 5px;
     padding: 10px 15px;
     font-weight: 700;
     color: black;
@@ -1368,20 +1374,22 @@ p{
 }
 
 .botonPagar{
-    padding: 10px 15px;
+    padding: 10px 18px;
+    margin-top: -10px;
+    margin-bottom: -10px;
     font-weight: 700;
-    color: black;
-    background-color: #ffe26f;
+    color: #373b3e;
+    background-color: #34bef5;
     border-radius: 20px;
     border: none;
-    box-shadow: 0 0 5px rgb(105, 105, 105);
+    box-shadow: 0 0 5px #34bef5;
     transition: all 0.3s;
 }
 
 .botonPagar:hover{
     cursor: pointer;
     color: black;
-    background-color: #ffd52b;
+    background-color: #2d99c3;
 }
 
 .infoModalPagar{

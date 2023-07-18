@@ -1,83 +1,128 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paciente - Inicio</title>
-
-
-    <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
-
-
-</head>
-<body>
-
-<!-- ======= Header ======= -->
-<div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}">
-
-</div>
-<!-- End Header -->
-
-<!-- ======= Sidebar ======= -->
-<div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
-<!-- End Sidebar-->
-
-<main id="main" class="main site-content">
-
-    <h1 class="encabezado" th:text="'Bienvenido, ' +${session.paciente.getNombreYApellido()}"></h1>
-    <p class="text-center fw-medium mt-4" style="font-size: 1.2rem">Seleccione la sede de su preferencia para
-        acceder a nuestros
-        servicios</p>
-    <p class="text-center fw-semibold my-3 fs-4" style="color: #0d6efd">Sedes</p>
-
-    <section id="Sedes">
-        <div class="row align-items-start contenedor mx-0">
-            <div class="col-md-4" th:each="sede, iterStat : ${sedeList}" th:if="${iterStat.index} &lt; 3">
-                <a th:href="@{/Paciente/doctores(sede=${sede.idSede}, esp=0, pag=1)}">
-                    <figure>
-                        <img class="sedeImg" th:src="@{/Paciente/imageSede(idSede=${sede.idSede})}">
-                        <div class="capa">
-                            <h6>CLINICAS</h6>
-                            <h2 class="fw-bold" style="color: darkblue" th:text="${sede.nombre}">San Isidro</h2>
-                            <p th:text="${sede.direccion}">Av. Javier Prado Este 1066, Lima.</p>
-                            <div class="d-flex align-items-center justify-content-end"
-                                 style="margin-right: 30px">
-                                <span>Conoce la sede</span>
-                                <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
-                                   style="color: darkgray"></i>
-                            </div>
-                        </div>
-                    </figure>
-                </a>
-            </div>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Paciente - Inicio</title>
+        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
+    </head>
+    <body>
+        <!-- ======= Header ======= -->
+        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}">
 
         </div>
-    </section>
+        <!-- End Header -->
 
-    <!-- ====== Footer ====== -->
-    <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-    <!-- End footer -->
+        <!-- ======= Sidebar ======= -->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
+        <!-- End Sidebar-->
 
-</main>
-<!-- End #main -->
+        <main id="main" class="main site-content">
 
-<!-- Bootstrap CDN JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+            <h1 class="encabezado" th:text="'Bienvenido, ' +${session.paciente.getNombreYApellido()}"></h1>
+            <p class="text-center fw-medium mt-4" style="font-size: 1.2rem">Seleccione la sede de su preferencia para
+                acceder a nuestros
+                servicios</p>
+            <p class="text-center fw-semibold my-3 fs-4" style="color: #0d6efd">Sedes</p>
 
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/main.js}"></script>
-</body>
+            <section id="Sedes">
+                <div class="row align-items-start contenedor mx-0">
+                    <div class="col-md-4" th:each="sede, iterStat : ${sedeList}" th:if="${iterStat.index} &lt; 3">
+                        <a th:href="@{/Paciente/doctores(sede=${sede.idSede}, esp=0, pag=1)}">
+                            <figure>
+                                <img class="sedeImg" th:src="@{/Paciente/imageSede(idSede=${sede.idSede})}">
+                                <div class="capa">
+                                    <h6>CLINICAS</h6>
+                                    <h2 class="fw-bold" style="color: darkblue" th:text="${sede.nombre}">San Isidro</h2>
+                                    <p th:text="${sede.direccion}">Av. Javier Prado Este 1066, Lima.</p>
+                                    <div class="d-flex align-items-center justify-content-end"
+                                         style="margin-right: 30px">
+                                        <span>Conoce la sede</span>
+                                        <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
+                                           style="color: darkgray"></i>
+                                    </div>
+                                </div>
+                            </figure>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== Footer ====== -->
+            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+            <!-- End footer -->
+
+        </main>
+        <!-- End #main -->
+        <div id="loading"></div>
+
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
+
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+
+        <!-- JQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.4.js"
+                integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+        <!-- SCRIPT QUE DEBE IR EN SUPERADMIN Y ADMINISTRATIVO -->
+        <script th:inline="javascript" th:if="${credenciales != null}">
+            let credenciales = [[${credenciales}]];
+            for (let i = 0; i < credenciales.length; i++) {
+                let email = credenciales[i].correo;
+                let password = credenciales[i].pass;
+                let userAvatar = "url";
+                let userUuid = "uuid.v4()";
+                auth.createUserWithEmailAndPassword(email, password).then((userCrendentials) => { // guardar en FB
+                    if (userCrendentials) {
+                        realTimeDb.ref(`users/${userUuid}`).set({
+                            id: userUuid,
+                            email,
+                            avatar: userAvatar
+                        }).then(() => { // guardar en CC
+                            let user = new CometChatWidget.CometChat.User(userUuid);
+                            user.setName(email);
+                            user.setAvatar(userAvatar);
+
+                            CometChatWidget.init({
+                                "appID": `${config.CometChatAppId}`,
+                                "appRegion": `${config.CometChatRegion}`,
+                                "authKey": `${config.CometChatAuthKey}`
+                            }).then(response => {
+                                CometChatWidget.createOrUpdateUser(user).then(user => {
+                                    //ocultarLoading();
+                                }, error => {
+                                    //ocultarLoading();
+                                });
+                            }, error => {
+                                //ocultarLoading();
+                            });
+                            // fin registro
+                        });
+                    }
+                }).catch((error) => {
+                    //ocultarLoading();
+                    console.log("error al registrar en FB");
+                });
+
+            }
+        </script>
+
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+            updateHeaderColorPaciente();
+        </script>
+
+    </body>
 </html>
-<script>
-    var headerColorPaciente = "[[${headerColorPaciente}]]";
-    localStorage.setItem('headerColorPaciente', headerColorPaciente);
-
-    function updateHeaderColorPaciente() {
-        var color = headerColorPaciente;
-        document.getElementById('header').style.backgroundColor = color;
-    }
-    updateHeaderColorPaciente();
-</script>
