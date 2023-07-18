@@ -74,7 +74,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cita` SET `estado` =?1 WHERE (`id_cita` = ?2)")
-    void actualizarEstadoEnEspera(int nuevoEstado, int idCita);
+    void actualizarEstadoEnEspera(int nuevoEstado, Integer idCita);
 
     @Query(nativeQuery = true, value = "select c.* from cita c " +
             "inner join doctor d on (c.doctor_id_doctor = d.id_doctor) " +
@@ -187,6 +187,9 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Query(value = "select * from cita where doctor_id_doctor=?1 and sede_id_sede=?2",nativeQuery = true)
     List<Cita> obtenerCitasPorDoctorId(String idDoctor,int idSede);
+
+    @Query(value = "select * from cita where sede_id_sede=?1",nativeQuery = true)
+    List<Cita> obtenerTodasLasCitas(Integer idSede);
 
     @Query(nativeQuery = true, value = "select * from cita c where c.id_cita = ?1")
     Cita buscarPorId(Integer idCita); // tuve que crearla porque no me buscaba las citas pendientes xd

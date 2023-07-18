@@ -74,7 +74,7 @@ public class Paciente implements Serializable {
 
     @Column (nullable = false)
     @NotNull(message = "Seleccione una fecha")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate fechanacimiento;
 
     @Column (nullable = false)

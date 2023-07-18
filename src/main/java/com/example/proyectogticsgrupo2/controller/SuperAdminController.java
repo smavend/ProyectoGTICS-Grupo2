@@ -3,6 +3,7 @@ package com.example.proyectogticsgrupo2.controller;
 import com.example.proyectogticsgrupo2.dto.*;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoService;
 import com.example.proyectogticsgrupo2.service.CorreoServiceSuperAdmin;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -95,58 +98,58 @@ public class SuperAdminController {
 
     }
 
- @GetMapping("")
- public String HomePageSuperAdmin(Model model) throws IOException {
-     List<Credenciales> credencialesDoctorIds = credencialesRepository.findAll();
-     List<String> listaCredenciales = new ArrayList<>();
-     for (Credenciales credencial : credencialesDoctorIds) {
-         listaCredenciales.add(credencial.getId_credenciales());
-     }
+    @GetMapping("")
+    public String HomePageSuperAdmin(Model model) throws IOException {
+        List<Credenciales> credencialesDoctorIds = credencialesRepository.findAll();
+        List<String> listaCredenciales = new ArrayList<>();
+        for (Credenciales credencial : credencialesDoctorIds) {
+            listaCredenciales.add(credencial.getId_credenciales());
+        }
 
-     List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
+        List<AdministrativoDTO_superadmin> listaAdministrativoDTO_superadmin = superAdminService.obtenerTodosLosAdministrativosDTO();
 
-     List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
-     List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
-     List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
-     List<Clinica> listaClinicas = clinicaRepository.findAll();
-     List<Sede> listaSedes = sedeRepository.findAll();
-     List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
+        List<PacienteDTO_superadmin> listaPacienteDTO_superadmin = superAdminService.obtenerTodosLosPacientesDTO();
+        List<DoctorDTO_superadmin> listaDoctorDTO_superadmin = superAdminService.obtenerTodosLosDoctoresDTO();
+        List<AdministradorDTO_superadmin> listaAdministradoresDTO_superadmin = superAdminService.obtenerTodosLosAdministradoresDTO();
+        List<Clinica> listaClinicas = clinicaRepository.findAll();
+        List<Sede> listaSedes = sedeRepository.findAll();
+        List<Especialidad> listaEspecialidad = especialidadRepository.findAll();
 
-     // Para cada DoctorDTO_superadmin, comprueba si su id está en listaCredenciales y establece showLoguearButton en consecuencia
-     for (DoctorDTO_superadmin doctorDTO : listaDoctorDTO_superadmin) {
-         doctorDTO.setShowLoguearButton(listaCredenciales.contains(doctorDTO.getIdDoctor()));
-     }
-     for (AdministradorDTO_superadmin administradoresDTO : listaAdministradoresDTO_superadmin){
-         administradoresDTO.setShowLoguearButton(listaCredenciales.contains(administradoresDTO.getIdAdministrador()));
-     }
-     for (AdministrativoDTO_superadmin administrativoDTO : listaAdministrativoDTO_superadmin){
-         administrativoDTO.setShowLoguearButton(listaCredenciales.contains(administrativoDTO.getIdAdministrativo()));
-     }
-     for (PacienteDTO_superadmin pacienteDTO : listaPacienteDTO_superadmin){
-         pacienteDTO.setShowLoguearButton(listaCredenciales.contains(pacienteDTO.getIdPaciente()));
-     }
-     model.addAttribute("listaClinicas", listaClinicas);
-     model.addAttribute("listaSedes", listaSedes);
-     model.addAttribute("listaEspecialidad", listaEspecialidad);
+        // Para cada DoctorDTO_superadmin, comprueba si su id está en listaCredenciales y establece showLoguearButton en consecuencia
+        for (DoctorDTO_superadmin doctorDTO : listaDoctorDTO_superadmin) {
+            doctorDTO.setShowLoguearButton(listaCredenciales.contains(doctorDTO.getIdDoctor()));
+        }
+        for (AdministradorDTO_superadmin administradoresDTO : listaAdministradoresDTO_superadmin){
+            administradoresDTO.setShowLoguearButton(listaCredenciales.contains(administradoresDTO.getIdAdministrador()));
+        }
+        for (AdministrativoDTO_superadmin administrativoDTO : listaAdministrativoDTO_superadmin){
+            administrativoDTO.setShowLoguearButton(listaCredenciales.contains(administrativoDTO.getIdAdministrativo()));
+        }
+        for (PacienteDTO_superadmin pacienteDTO : listaPacienteDTO_superadmin){
+            pacienteDTO.setShowLoguearButton(listaCredenciales.contains(pacienteDTO.getIdPaciente()));
+        }
+        model.addAttribute("listaClinicas", listaClinicas);
+        model.addAttribute("listaSedes", listaSedes);
+        model.addAttribute("listaEspecialidad", listaEspecialidad);
 
-     model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
+        model.addAttribute("listaAdministrativoDTO_superadmin", listaAdministrativoDTO_superadmin);
 
-     model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
-     model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
-     model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
+        model.addAttribute("listaPacienteDTO_superadmin", listaPacienteDTO_superadmin);
+        model.addAttribute("listaDoctorDTO_superadmin", listaDoctorDTO_superadmin);
+        model.addAttribute("listaAdministradoresDTO_superadmin", listaAdministradoresDTO_superadmin);
 
-     Optional<Stylevistas> style = stylevistasRepository.findById(1);
-     if (style.isPresent()) {
-         Stylevistas styleActual = style.get();
-         System.out.println("El color del encabezado es: " + styleActual.getHeader());
-         model.addAttribute("headerColor", styleActual.getHeader());
-         model.addAttribute("backgroundColor", styleActual.getBackground());
-     } else {
-         System.out.println("No se encontró stylevistas con el id proporcionado");
-     }
+        Optional<Stylevistas> style = stylevistasRepository.findById(1);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            System.out.println("El color del encabezado es: " + styleActual.getHeader());
+            model.addAttribute("headerColor", styleActual.getHeader());
+            model.addAttribute("backgroundColor", styleActual.getBackground());
+        } else {
+            System.out.println("No se encontró stylevistas con el id proporcionado");
+        }
 
-     return "superAdmin/superadmin_Dashboard";
- }
+        return "superAdmin/superadmin_Dashboard";
+    }
 
 
     @GetMapping("/administradores")
@@ -272,11 +275,13 @@ public class SuperAdminController {
     public String guardarFormulario(
             @RequestParam("titulo") String titulo,
             @RequestParam("estructura_formulario") String estructuraFormulario,
+            @RequestParam("rutaController") String rutaController,  // Nuevo parámetro
             Model model) {
 
         FormularioJson formularioJson = new FormularioJson();
         formularioJson.setTitulo(titulo);
         formularioJson.setEstructura_formulario(estructuraFormulario);
+        formularioJson.setRutaController(rutaController);  // Añade la ruta del controlador
         formularioJson.setSent(0); // Seteamos el valor en 1 siempre.
 
         try {
@@ -447,7 +452,7 @@ public class SuperAdminController {
         return "redirect:/Paciente";
     }
 
-////////////////// returns desde los otros roles
+    ////////////////// returns desde los otros roles
     @PostMapping("/returnToSuperAdmin")
     public String returnToSuperAdmin(HttpSession session) {
         session.removeAttribute("doctor");  // Elimina el atributo de sesión del doctor
@@ -502,11 +507,13 @@ public class SuperAdminController {
             @PathVariable("id") Integer id,
             @RequestParam("titulo") String titulo,
             @RequestParam("estructura_formulario") String estructuraFormulario,
+            @RequestParam("rutaController") String rutaController,  // Nuevo parámetro
             Model model) {
         FormularioJson formularioJson = formularioJsonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid formulario Id:" + id));
         formularioJson.setTitulo(titulo);
         formularioJson.setEstructura_formulario(estructuraFormulario);
+        formularioJson.setRutaController(rutaController);  // Añade la ruta del controlador
         formularioJson.setSent(0); // Seteamos el valor en 0 siempre.
 
         try {
@@ -520,15 +527,50 @@ public class SuperAdminController {
     }
 
     @PostMapping("/GuardarPacientes")
-    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds) {
+    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds,HttpServletRequest request, RedirectAttributes attr) {
+        List<HashMap<String, String>> credenciales = new ArrayList<>();
         for(String id : pacientesIds) {
-            Optional<Paciente> optPaciente = pacienteRepository.findById(id);
-            if (optPaciente.isPresent()) {
-                Paciente paciente = optPaciente.get();
+            pacienteRepository.findById(id).ifPresent(paciente -> {
+                HashMap<String, String> user = new HashMap<>();
+
                 paciente.setEstado(1);
                 pacienteRepository.save(paciente);
-            }
+                String passRandom = securityConfig.generateRandomPassword();
+                PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+                String encodedPassword = passwordEncoder.encode(passRandom);
+                // Asegúrate de tener los métodos getIdPaciente y getCorreo en tu clase Paciente
+                credencialesRepository.crearCredenciales(paciente.getIdPaciente(), paciente.getCorreo(), encodedPassword);
+                CorreoService correoService = new CorreoService();
+                InetAddress address = null;
+                try {
+                    address = InetAddress.getLocalHost();
+                } catch (UnknownHostException e) {
+                    throw new RuntimeException(e);
+                }
+                String domain = request.getServerName();
+                byte[] bIPAddress = address.getAddress();
+                String sIPAddress = "";
+                for (int i = 0; i < bIPAddress.length; i++){
+                    if (i>0) {
+                        sIPAddress += ".";
+                    }
+                    int unsignedByte = bIPAddress[i] & 0xFF;
+                    sIPAddress += unsignedByte;
+                }
+                String link = request.getServerName()+":"+request.getLocalPort();
+                System.out.println(link);
+                System.out.println("servername:"+domain);
+                correoService.props(paciente.getCorreo(),passRandom, link);
+
+                user.put("correo", paciente.getCorreo());
+                user.put("pass", passRandom);
+                credenciales.add(user);
+
+            });
         }
+
+        attr.addFlashAttribute("credenciales", credenciales);
+
         return "redirect:/SuperAdminHomePage/TareaPacientes";
     }
 
@@ -842,6 +884,14 @@ public class SuperAdminController {
             CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
             correoService.props(administrador.get().getCorreo(), passRandom);
 
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String, String> user = new HashMap<>();
+            user.put("correo", administrador.get().getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
+            redirectAttributes.addFlashAttribute("credenciales", credenciales);
+
 
         } else if (selectUsuario.equals("administrativo")) {
             Administrativo administrativonuevo = new Administrativo();
@@ -872,8 +922,16 @@ public class SuperAdminController {
             CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
             correoService.props(administrativonuevo.getCorreo(), passRandom);
 
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String, String> user = new HashMap<>();
+            user.put("correo", administrativonuevo.getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
+            redirectAttributes.addFlashAttribute("credenciales", credenciales);
 
         }
+
         // ... (por ejemplo, guarda el usuario en la base de datos)
         return "redirect:/SuperAdminHomePage";
 

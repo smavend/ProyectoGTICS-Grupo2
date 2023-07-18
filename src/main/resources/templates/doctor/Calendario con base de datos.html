@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-  <head>
-    <style>
-      .mi-div:hover {
-        background-color: #f2f2f2;
-      }
+<head>
+  <style>
+    .mi-div:hover {
+      background-color: #f2f2f2;
+    }
 
-      .animated-div {
-        display: none;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
+    .animated-div {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-      .animated-div.show {
-        display: block;
-        opacity: 1;
-      }
-      #miDiv {
-        height: 0;
-        overflow: hidden;
-        transition: height 0.3s;
-      }
+    .animated-div.show {
+      display: block;
+      opacity: 1;
+    }
+    #miDiv {
+      height: 0;
+      overflow: hidden;
+      transition: height 0.3s;
+    }
 
-      label {
-        display: block;
-        margin-top: 10px;
-        font-size: 18px;
-      }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 18px;
+    }
 
-      input[type="time"] {
-        width: 200px;
-        margin-bottom: 10px;
-      }
-    </style>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" th:field="viewport">
+    input[type="time"] {
+      width: 200px;
+      margin-bottom: 10px;
+    }
+  </style>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" th:field="viewport">
 
-    <title>Calendario - Doctor</title>
-    <meta content="" th:field="description">
-    <meta content="" th:field="keywords">
+  <title>Calendario - Doctor</title>
+  <meta content="" th:field="description">
+  <meta content="" th:field="keywords">
 
-    <!-- Favicons -->
+  <!-- Favicons -->
 
     <link th:href="@{/assets/img/favicon.png}" rel="icon">
     <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
@@ -514,7 +514,16 @@
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
+    <script>
+      var headerColorDoctor = "[[${headerColorDoctor}]]";
+      localStorage.setItem('headerColorDoctor', headerColorDoctor);
 
+      function updateHeaderColorDoctor() {
+        var color = headerColorDoctor;
+        document.getElementById('header').style.backgroundColor = color;
+      }
+      updateHeaderColorDoctor();
+    </script>
     <!-- Vendor JS Files -->
     <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
     <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>

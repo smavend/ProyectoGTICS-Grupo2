@@ -16,6 +16,9 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Properties;
 public class CorreoAutoregistro {
     public void props(String correo, Paciente paciente, String link) {
@@ -278,7 +281,7 @@ public class CorreoAutoregistro {
         htmlContent = htmlContent.replace("%distrito%", paciente.getDistrito().getNombre());
         htmlContent = htmlContent.replace("%direccion%", paciente.getDireccion());
         htmlContent = htmlContent.replace("%dni%", paciente.getIdPaciente());
-        htmlContent = htmlContent.replace("%fecha%", paciente.getFechanacimiento().toString());
+        htmlContent = htmlContent.replace("%fecha%", paciente.getFechanacimiento().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
         htmlContent = htmlContent.replace("%link%", link);
 
         return htmlContent;

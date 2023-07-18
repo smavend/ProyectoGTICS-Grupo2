@@ -13,7 +13,6 @@
 
     </head>
     <body>
-
         <!-- ======= Header ======= -->
         <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${paciente})}"></div>
         <!-- End Header -->
@@ -25,7 +24,6 @@
         <main style="padding-top: 0;" id="main" class="main">
 
             <div class="container-xl perfil">
-
                 <div class="row">
                     <!-- Foto y botones editar -->
                     <div class="col-lg-4 pb-4">
@@ -179,7 +177,9 @@
                                             <td th:text="${cita.doctor.especialidad.nombre}">Psicología</td>
                                             <td th:text="${cita.doctor.getNombreYApellido()}">María Godoy</td>
                                             <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">04/01/21</td>
-                                            <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">13:00 Hrs.</td>
+                                            <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">
+                                                13:00 Hrs.
+                                            </td>
                                             <td class="text-center">
                                                 <span th:classappend="${cita.modalidad == 0? 'presencial':'virtual'}"
                                                       th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
@@ -283,10 +283,24 @@
         </main>
         <div id="loading"></div>
 
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
+
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+
+            updateHeaderColorPaciente();
+        </script>
+
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
                 crossorigin="anonymous"></script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
         <!-- JQuery CDN -->
         <script src="https://code.jquery.com/jquery-3.6.4.js"
@@ -294,8 +308,6 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
-
-        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
         <!-- DATATABLES CDN -->
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
@@ -336,6 +348,18 @@
                     }
                 });
             })
+        </script>
+
+        <script th:inline="javascript" th:if="${pass != null}">
+            let email = [[${session.paciente.correo}]];
+            let password = [[${pass}]];
+
+            auth.updatePassword(email, password).then(()=>{
+                console.log("actualizado correctamente");
+            }).catch((error)=>{
+                console.log("error al actualizar");
+            })
+
         </script>
 
     </body>

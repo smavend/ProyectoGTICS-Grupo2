@@ -10,7 +10,6 @@
 
     </head>
     <body>
-
         <!-- ======= Header ======= -->
         <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
         <!-- End Header -->
@@ -24,7 +23,6 @@
 
             <div class="bodyReservar">
                 <div class="cardReservar py-4">
-
                     <div class="row justify-content-center">
                         <div class="col-sm-10 col-md-8 col-lg-8">
                             <div class="campo">
@@ -88,47 +86,57 @@
             </div>
         </main>
 
-        <!-- Modal -->
-        <div class="modal fade" id="modal-cita" tabindex="-1" aria-labelledby="modal-pago-label"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header row-cols-auto">
-                        <button type="button" class="btn-close col-lg-2 fw-bold"
-                                data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="cardConfirmacion">
-                            <div class="cardTitulo">
-                                Cita agendada
-                            </div>
-                            <div class="cardCuerpo">
-                                <div class="cardTexto">Para más detalles visite la sección CITAS</div>
-                                <a class="btn botonVolverInicio" th:href="@{/Paciente/citas}">Revisar citas</a>
+            <!-- Modal -->
+            <div class="modal fade" id="modal-cita" tabindex="-1" aria-labelledby="modal-pago-label"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto">
+                            <button type="button" class="btn-close col-lg-2 fw-bold"
+                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="cardConfirmacion">
+                                <div class="cardTitulo">
+                                    Cita agendada
+                                </div>
+                                <div class="cardCuerpo">
+                                    <div class="cardTexto">Para más detalles visite la sección CITAS</div>
+                                    <a class="btn botonVolverInicio" th:href="@{/Paciente/citas}">Revisar citas</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="loading"></div>
+            <div id="loading"></div>
 
-        <!-- Bootstrap CDN JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-                crossorigin="anonymous"></script>
+            <!-- Bootstrap CDN JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                    crossorigin="anonymous"></script>
 
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
+            <!-- Template Main JS File -->
+            <script th:src="@{/assets/js/main.js}"></script>
 
-        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+            <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                $('#modal-cita').modal('show');
-            });
-        </script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#modal-cita').modal('show');
+                });
+
+                var headerColorPaciente = "[[${headerColorPaciente}]]";
+                localStorage.setItem('headerColorPaciente', headerColorPaciente);
+
+                function updateHeaderColorPaciente() {
+                    var color = headerColorPaciente;
+                    document.getElementById('header').style.backgroundColor = color;
+                }
+
+                updateHeaderColorPaciente();
+            </script>
     </body>
 </html>
