@@ -335,6 +335,7 @@
         <h3 class=" m-3">PACIENTES POR REGISTRAR</h3>
 
           <form method="POST" th:action="@{/administrador/guardarTemporales}">
+            <div class="table-responsive">
             <table class="table table-striped" id="datatable">
               <thead>
               <tr>
@@ -361,6 +362,7 @@
               </tr>
               </tbody>
             </table>
+            </div>
             <div class="mt-2">
               <button type="submit" class="btn btn-primary">Guardar usuarios</button>
             </div>

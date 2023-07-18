@@ -325,6 +325,7 @@
                   <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
                 </div>
                 <div th:if="${msgDoc != null}" th:text="${msgDoc}" class="alert alert-success" role="alert"></div>
+              <div class="table-responsive">
                   <table class="table" id="datatable">
                     <thead>
                     <tr>
@@ -358,6 +359,7 @@
 
                     </tbody>
                   </table>
+              </div>
                   <br>
 
 
@@ -369,8 +371,8 @@
                   <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
                 </div>
                 <div th:if="${msgPaci != null}" th:text="${msgPaci}" class="alert alert-success" role="alert"></div>
-              <div th:if="${credencial != null}" th:text="'Credenciales guardaas'" class="alert alert-success" role="alert"></div>
-                  <table class="table table-hover" id="datatable2">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="datatable2">
                     <thead>
                     <tr>
                       <th scope="col">Pacientes</th>
@@ -409,6 +411,7 @@
                     </tr>
                     </tbody>
                   </table>
+                  </div>
                   <br>
 
               </div>
