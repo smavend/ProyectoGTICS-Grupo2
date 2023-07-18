@@ -13,8 +13,8 @@ import java.util.List;
 
 @Repository
 public interface NotificacionRepository extends JpaRepository<Notificacion, Integer> {
-    @Query(nativeQuery = true, value = "select * from notificacion where id_usuario = ?1 and fecha-now()>0")
-    List<Notificacion> buscarPorUsuarioYActual(String id);
+    @Query(nativeQuery = true, value = "select * from notificacion where id_administrativo = ?1 and fecha-now()>0")
+    List<Notificacion> buscarPorAdministrativoYActual(String id);
 
     @Query(nativeQuery = true, value = "select * from notificacion where id_paciente=?1 and revisado=0")
     List<Notificacion> buscarNotificacionesNoLeidas(String id);

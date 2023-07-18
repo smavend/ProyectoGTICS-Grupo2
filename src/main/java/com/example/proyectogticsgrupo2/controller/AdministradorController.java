@@ -61,9 +61,10 @@ public class AdministradorController {
     final StylevistasRepository stylevistasRepository;
     final CitaRepository citaRepository;
     final HorarioRepository horarioRepository;
+    final TokenRepository tokenRepository;
 
 
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, MensajeRepository mensajeRepository, PacientePorConsentimientoRepository ppcRepository, StylevistasRepository stylevistasRepository, CitaRepository citaRepository, HorarioRepository horarioRepository) {
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, MensajeRepository mensajeRepository, PacientePorConsentimientoRepository ppcRepository, StylevistasRepository stylevistasRepository, CitaRepository citaRepository, HorarioRepository horarioRepository, TokenRepository tokenRepository) {
 
 
         this.pacienteRepository = pacienteRepository;
@@ -82,6 +83,7 @@ public class AdministradorController {
         this.stylevistasRepository = stylevistasRepository;
         this.citaRepository = citaRepository;
         this.horarioRepository = horarioRepository;
+        this.tokenRepository = tokenRepository;
     }
     //#####################################33
    //Comentado por Gustavo
@@ -353,6 +355,7 @@ public class AdministradorController {
                 paciente.setFotocontenttype(null);
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
+                tokenRepository.deleteById(paciente.getIdPaciente());
 
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 1,1);
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 2,1);
