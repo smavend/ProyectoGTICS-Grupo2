@@ -884,6 +884,14 @@ public class SuperAdminController {
             CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
             correoService.props(administrador.get().getCorreo(), passRandom);
 
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String, String> user = new HashMap<>();
+            user.put("correo", administrador.get().getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
+            redirectAttributes.addFlashAttribute("credenciales", credenciales);
+
 
         } else if (selectUsuario.equals("administrativo")) {
             Administrativo administrativonuevo = new Administrativo();
@@ -914,8 +922,16 @@ public class SuperAdminController {
             CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
             correoService.props(administrativonuevo.getCorreo(), passRandom);
 
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String, String> user = new HashMap<>();
+            user.put("correo", administrativonuevo.getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
+            redirectAttributes.addFlashAttribute("credenciales", credenciales);
 
         }
+
         // ... (por ejemplo, guarda el usuario en la base de datos)
         return "redirect:/SuperAdminHomePage";
 
