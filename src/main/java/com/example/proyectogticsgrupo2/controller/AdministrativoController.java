@@ -76,7 +76,7 @@ public class AdministrativoController {
 
         AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
         model.addAttribute("datos", aes);
-        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
         model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
 
         List<Paciente> lista = pacienteRepository.buscarPorIdAdministrativo(idAdmi);
@@ -120,7 +120,7 @@ public class AdministrativoController {
 
         String idAdmi = admi.getIdAdministrativo();
 
-        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
         model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
         Optional<Stylevistas> style = stylevistasRepository.findById(3);
         if (style.isPresent()) {
@@ -158,7 +158,7 @@ public class AdministrativoController {
                     model.addAttribute("alergias", alergiaRepository.buscarPorPacienteId(id));
                     model.addAttribute("listaDistritos", distritoRepository.findAll());
 
-                    model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+                    model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
                     model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
                     return "administrativo/editar";
                 }
@@ -196,7 +196,7 @@ public class AdministrativoController {
             String idAdmi = admi.getIdAdministrativo();
             if(temp.getAdministrativo().getIdAdministrativo().equals(idAdmi)) {
                 model.addAttribute("temporal", temp);
-                model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+                model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
                 model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
                 return "administrativo/editarTemp";
             }
@@ -225,7 +225,7 @@ public class AdministrativoController {
         session.setAttribute("administrativo", admi);
         String idAdmi = admi.getIdAdministrativo();
 
-        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
         model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
         return "administrativo/mensajeria";
     }
@@ -257,7 +257,7 @@ public class AdministrativoController {
         String idAdmi = admi.getIdAdministrativo();
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
             model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             Optional<Stylevistas> style2 = stylevistasRepository.findById(3);
             if (style2.isPresent()) {
@@ -346,7 +346,7 @@ public class AdministrativoController {
         String idAdmi = admi.getIdAdministrativo();
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
             model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             return "administrativo/editarTemp";
         }else {
@@ -386,7 +386,7 @@ public class AdministrativoController {
 
         AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
         model.addAttribute("datos", aes);
-        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorUsuarioYActual(idAdmi));
+        model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
         model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
 
         List<Paciente> lista = pacienteRepository.buscarPorIdAdministrativo(idAdmi);
