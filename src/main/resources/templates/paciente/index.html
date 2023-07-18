@@ -71,7 +71,7 @@
 
         <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
-        <!-- SCRIPT QUE DEBE IR EN SUPERADMIN Y ADMINISTRATIVO -->
+        <!-- SCRIPT QUE DEBE IR EN SUPERADMIN Y ADMINISTRATIVO
         <script th:inline="javascript" th:if="${credenciales != null}">
             let credenciales = [[${credenciales}]];
             for (let i = 0; i < credenciales.length; i++) {
@@ -112,7 +112,7 @@
                 });
 
             }
-        </script>
+        </script>-->
 
         <script>
             var headerColorPaciente = "[[${headerColorPaciente}]]";
