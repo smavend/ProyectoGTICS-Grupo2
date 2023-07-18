@@ -695,6 +695,24 @@ public class AdministradorController {
 
 
     }
+
+    @GetMapping("/mensajeria2")
+    public String mensajeria2(Model model){
+        //En onstruccion
+        Optional<Stylevistas> style = stylevistasRepository.findById(2);
+        if (style.isPresent()) {
+            Stylevistas styleActual = style.get();
+            model.addAttribute("headerColorAdministrador", styleActual.getHeader());
+            /*model.addAttribute("sidebarColor", styleActual.getSidebar());*/
+        } else {
+            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
+        }
+
+        return "administrador/mensajeria2";
+
+
+
+    }
     /*@PostMapping("/guardarMensaje")
     public void guardarMensaje(@RequestParam("remintente") String remintente,
                                 @RequestParam("remintente") String desitno,
