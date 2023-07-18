@@ -51,7 +51,8 @@
                 </form>
 
                 <div class="row">
-                    <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor, i: ${doctorList}" th:id="${doctor.id_doctor}">
+                    <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor, i: ${doctorList}"
+                         th:id="${doctor.id_doctor}">
                         <div class="cardDoctor">
                             <div class="seccionFoto">
                                 <img class="fotoDoctor rounded-circle"
@@ -64,7 +65,8 @@
                                 <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
                             </div>
                             <div class="d-grid">
-                                <a href="#canvasHorarios" class="botonVerHorarios mb-2 text-reset verHorarios" data-bs-toggle="offcanvas">
+                                <a href="#canvasHorarios" class="botonVerHorarios mb-2 text-reset verHorarios"
+                                   data-bs-toggle="offcanvas">
                                     Ver horarios
                                 </a>
                             </div>
@@ -98,39 +100,44 @@
                         </li>
                     </ul>
                 </nav>
-
             </section>
+        </main>
+        <div id="loading"></div>
 
-            <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="canvasHorarios" aria-labelledby="offcanvasWithBothOptionsLabel" style="transition: transform .4s ease-in-out">
-                <div class="offcanvas-header">
-                    <h2 class="offcanvas-title text-dark fw-bold" id="offcanvasWithBothOptionsLabel">Próximos horarios</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="canvasHorarios"
+             aria-labelledby="offcanvasWithBothOptionsLabel" style="transition: transform .4s ease-in-out">
+            <div class="offcanvas-header">
+                <h2 class="offcanvas-title text-dark fw-bold" id="offcanvasWithBothOptionsLabel">Próximos horarios</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="seccionFoto">
+                    <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
                 </div>
-                <div class="offcanvas-body">
-                    <div class="seccionFoto">
-                        <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
+                <div class="seccionDescripcion">
+                    <div class="seccionNombre">Dr. Doctor</div>
+                    <div class="seccionEspecialidad">Especialidad</div>
+                </div>
+                <div class="seccionDisponibilidad" id="contenedor" style="width: 60%; margin: auto">
+                    <div class="seccionHorario">
+                        00:00 - 00:00
                     </div>
-                    <div class="seccionDescripcion">
-                        <div class="seccionNombre">Dr. Doctor</div>
-                        <div class="seccionEspecialidad">Especialidad</div>
-                    </div>
-                    <div class="seccionDisponibilidad" id="contenedor" style="width: 60%; margin: auto">
-                        <div class="seccionHorario">
-                            00:00 - 00:00
-                        </div>
-                        <div class="seccionHorario">
-                            00:00 - 00:00
-                        </div>
+                    <div class="seccionHorario">
+                        00:00 - 00:00
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            <!-- End footer -->
+        <!-- ====== Footer ====== -->
+        <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+        <!-- End footer -->
 
-        </main>
-        <div id="loading"></div>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.0.js"
+                integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -140,10 +147,21 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
 
-        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
-
         <!-- JQuery -->
-        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"
+                integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
+
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+
+            updateHeaderColorPaciente();
+        </script>
 
         <script>
             // mostrar mensaje de no doctores
@@ -154,7 +172,7 @@
             }
 
             // mostrar horarios
-            $(".verHorarios").click(function (e){
+            $(".verHorarios").click(function (e) {
                 let caja = $(e.target);
                 let canvas = $("#canvasHorarios");
                 let contenedor = $("#contenedor");
@@ -168,24 +186,26 @@
                 canvas.find(".seccionEspecialidad").text(especialidad);
                 contenedor.empty();
 
-                $.get(getUrl()+"/Paciente/api/horarios/proximos/"+doctor)
-                    .done(function (data){
+                $.get(getUrl() + "/Paciente/api/horarios/proximos/" + doctor)
+                    .done(function (data) {
 
-                        if(data.horarios.length === 0){
-                            contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>" +
-                                data.horarios[i].dia + ": No hay horarios disponibles</div>")
-                        }
-                        else{
-                            for (let i = 0; i < data.horarios.length; i++){
-                                contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>"+
-                                    data.horarios[i].dia+": "+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+
-                                    "</div>")
+                        if (data.horarios.length === 0) {
+                            contenedor.append(" <div class='seccionHorario'><i class='bi bi-clock me-1'></i>" +
+                                data.horarios[i].dia + ": No hay horarios disponibles </div>")
+                        } else {
+                            for (let i = 0; i < data.horarios.length; i++) {
+                                contenedor.append(" <div class='seccionHorario'><i class='bi bi-clock me-1'></i>" +
+                                    data.horarios[i].dia + ": " + data.horarios[i].inicio.substring(0, 5) + " - " + data.horarios[i].fin.substring(0, 5) + " </div>")
                             }
                         }
-                    }).fail(function (e){
-                        console.log("error");
+                    }).fail(function (e) {
+                    console.log("error");
                 })
             })
+
+            function getUrl() {
+                return window.location.protocol + "//" + window.location.hostname + ":8080";
+            }
 
         </script>
     </body>

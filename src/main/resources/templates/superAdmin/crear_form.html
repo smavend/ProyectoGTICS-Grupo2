@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
 
 
-
     <!-- Vendor CSS Files -->
     <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
@@ -86,97 +85,7 @@
         </nav>
     </div>
     <!-- End Page Title -->
-    <!--<section class="section">
-        <div class="row align-items-center">
-            &lt;!&ndash; Fila para los botones &ndash;&gt;
-            <div class="row mb-3">
-                <div class="col-lg-12 d-flex justify-content-start">
-                    <button id="add-row" type="button" class="btn btn-danger me-2">Añadir fila</button>
-                    <button id="remove-row" type="button" class="btn btn-danger me-2">Eliminar fila</button>
-                    &lt;!&ndash; Espacio entre los botones &ndash;&gt;
-                    <div style="flex-grow: 1"></div>
-                    &lt;!&ndash; Botón para guardar formulario &ndash;&gt;
-                    <button id="save-form" type="button" class="btn btn-primary">Guardar formulario</button>
-                </div>
-            </div>
-            <div class="col-lg-4 container" id="my-container">
-                &lt;!&ndash; Fila para el formulario &ndash;&gt;
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title" contentEditable="true">Titulo de formulario</h5>
 
-                                &lt;!&ndash; General Form Elements &ndash;&gt;
-                           &lt;!&ndash;     <form id="dynamic-form" method="post" action="/administrativo/invitar">
-                                    <div id="form-rows">
-                                        &lt;!&ndash; Las filas del formulario se agregarán aquí &ndash;&gt;
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="button" class="btn btn-primary">Enviar invitación</button>
-                                        <a type="button" class="btn btn-secondary" href="#">Cancelar</a>
-                                    </div>
-                                </form>&lt;!&ndash; End General Form Elements &ndash;&gt;
-&ndash;&gt;
-                                <form id="my-form" th:action="@{/SuperAdminHomePage/guardarFormulario}" method="POST">
-                                    <label for="titulo">Título:</label><br>
-                                    <input type="text" id="titulo" name="titulo" required><br>
-                                    <label for="estructura_formulario">Estructura del formulario (max 5000 caracteres):</label><br>
-                                    <textarea id="estructura_formulario" name="estructura_formulario" maxlength="5000" required></textarea><br>
-                                    <input type="hidden" id="sent" name="sent" value="1">
-&lt;!&ndash;
-                                    <input id="save-form" type="button" value="Guardar">
-&ndash;&gt;
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>-->
-   <!-- <section class="section">
-        <div class="row align-items-center">
-            &lt;!&ndash; Fila para los botones &ndash;&gt;
-            <div class="row mb-3">
-                <div class="col-lg-12 d-flex justify-content-start">
-                    <button id="add-row" type="button" class="btn btn-danger me-2">Añadir fila</button>
-                    <button id="remove-row" type="button" class="btn btn-danger me-2">Eliminar fila</button>
-                    &lt;!&ndash; Espacio entre los botones &ndash;&gt;
-                    <div style="flex-grow: 1"></div>
-                    &lt;!&ndash; Botón para guardar formulario &ndash;&gt;
-                    <button id="save-form" type="button" class="btn btn-primary">Guardar formulario</button>
-                </div>
-            </div>
-            <div class="col-lg-4 container" id="my-container">
-                &lt;!&ndash; Fila para el formulario &ndash;&gt;
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title" contentEditable="true">Titulo de formulario</h5>
-                                &lt;!&ndash; General Form Elements &ndash;&gt;
-                                <form id="my-form" th:action="@{/SuperAdminHomePage/guardarFormulario}" method="POST">
-                                    <div id="form-rows">
-                                        &lt;!&ndash; Las filas del formulario se agregarán aquí &ndash;&gt;
-                                    </div>
-                                    <input type="hidden" id="titulo" name="titulo" required>
-                                    <input type="hidden" id="estructura_formulario" name="estructura_formulario" maxlength="5000" required>
-&lt;!&ndash;
-                                    <input type="hidden" id="sent" name="sent" value="true">
-&ndash;&gt;
-                                  &lt;!&ndash;  <div class="text-center">
-                                        <button type="button" class="btn btn-primary">Enviar invitación</button>
-                                        <a type="button" class="btn btn-secondary" href="#">Cancelar</a>
-                                    </div>&ndash;&gt;
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>-->
     <section class="section">
         <div class="row align-items-center">
             <!-- Fila para los botones -->
@@ -188,35 +97,38 @@
                     <button id="save-form" type="button" class="btn btn-primary">Guardar formulario</button>
                 </div>
             </div>
-            <div class="col-lg-5 container" id="my-container">
+            <div class="col-lg-6 container" id="my-container">
                 <!-- Fila para el formulario -->
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title" contentEditable="true">Titulo de formulario</h5>
+                                <!-- Botón Agregar Consulta -->
+                                <button id="add-query" type="button" class="btn btn-primary mb-3">Agregar consulta
+                                </button>
+                                <button id="add-field" type="button" class="btn btn-primary mb-3 ml-3">Agregar campo
+                                </button>
                                 <!-- General Form Elements -->
                                 <form id="my-form" th:action="@{/SuperAdminHomePage/guardarFormulario}" method="POST">
                                     <div id="form-rows">
                                         <!-- Un campo de formulario por defecto -->
                                         <div class="row mb-3">
                                             <div class="col-sm-3">
-                                                <label class="col-form-label" contentEditable="true">Nuevo Campo</label>
+                                                <label class="col-form-label" contentEditable="false">Ruta al Controlador</label>
                                             </div>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-sm-1">
-                                                <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
-                                            </div>
-                                            <div class="col-sm-1">
-                                                <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo" disabled><i class="fas fa-minus"></i></button>
+                                                <input type="text" class="form-control" name="ruta" required>
                                             </div>
                                         </div>
                                         <!-- Las filas adicionales del formulario se agregarán aquí -->
                                     </div>
+                                    <!-- Un campo de formulario por defecto -->
+                                    <!-- Las filas adicionales del formulario se agregarán aquí -->
                                     <input type="hidden" id="titulo" name="titulo" required>
-                                    <input type="hidden" id="estructura_formulario" name="estructura_formulario" maxlength="5000" required>
+                                    <input type="hidden" id="estructura_formulario" name="estructura_formulario"
+                                           maxlength="5000" required>
+                                    <input type="hidden" id="rutaController" name="rutaController" required>
                                 </form>
                             </div>
                         </div>
@@ -298,236 +210,92 @@
     });
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<!--<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var title = document.querySelector('.card-title');
-        title.addEventListener('focus', function() {
-            if (this.textContent === 'Titulo de formulario') {
-                this.textContent = '';
-            }
-        });
-    });
 
-    document.getElementById('add-row').addEventListener('click', function () {
-        var formRows = document.getElementById('form-rows');
-
-        var newRow = document.createElement('div');
-        newRow.className = 'row mb-3';
-
-        var label = document.createElement('label');
-        label.className = 'col-sm-4 col-form-label';
-        label.contentEditable = 'true';
-        label.textContent = 'Nuevo campo';
-        label.addEventListener('focus', function () {
-            if (this.textContent === 'Nuevo campo') {
-                this.textContent = '';
-            }
-        });
-
-        var inputContainer = document.createElement('div');
-        inputContainer.className = 'col-sm-8';
-
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'form-control';
-
-        inputContainer.appendChild(input);
-        newRow.appendChild(label);
-        newRow.appendChild(inputContainer);
-
-        formRows.appendChild(newRow);
-    });
-
-    document.getElementById('remove-row').addEventListener('click', function () {
-        var formRows = document.getElementById('form-rows');
-        var rows = formRows.getElementsByClassName('row mb-3');
-        var lastRow = rows[rows.length - 1];
-        if (lastRow) {
-            formRows.removeChild(lastRow);
-        }
-    });
-</script>-->
-<!--<script>
-    document.getElementById('save-form').addEventListener('click', function (event) {
-        event.preventDefault();
-        // Obtiene el título del formulario
-        var title = document.querySelector('.card-title').textContent;
-        // Guarda el título en el campo de entrada correspondiente
-        document.getElementById('titulo').value = title;
-        // Obtiene las filas del formulario
-        var formRows = document.getElementById('form-rows');
-        var rows = formRows.getElementsByClassName('row mb-3');
-        // Recopila la información de los campos de entrada
-        var fields = Array.from(rows).map(row => {
-            var label = row.querySelector('.col-form-label').textContent;
-            var input = row.querySelector('.form-control');
-            return {
-                type: input.type,
-                label: label,
-                id: input.id,
-                name: input.name
-            };
-        });
-        // Convierte los datos recopilados a formato JSON y los añade a un objeto con la clave "fields"
-        var formStructureJSON = JSON.stringify({ fields: fields });
-        // Guarda la estructura del formulario en el campo de entrada correspondiente
-        document.getElementById('estructura_formulario').value = formStructureJSON;
-        // Envía el formulario
-        document.getElementById('my-form').submit();
-    });
-</script>-->
-<!--<script>
-    document.addEventListener('click', function(e) {
-        var formRows = document.getElementById('form-rows');
-        var buttons = formRows.getElementsByClassName('remove-row');
-
-        if (e.target && e.target.classList.contains('add-row')) {
-            // Código para agregar fila
-            var newRow = document.createElement('div');
-            newRow.className = 'row mb-3';
-            newRow.innerHTML = `
-            <div class="col-sm-3">
-                <label class="col-form-label" contentEditable="true">New Field</label>
-            </div>
-            <div class="col-sm-6">
-                <input type="text" class="form-control">
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
-            </div>`;
-            formRows.appendChild(newRow);
-
-            // Habilita todos los botones de eliminación si hay más de un campo
-            if (buttons.length > 1) {
-                for (var i = 0; i < buttons.length; i++) {
-                    buttons[i].disabled = false;
-                }
-            }
-        }
-
-        if (e.target && e.target.classList.contains('remove-row')) {
-            // Código para eliminar fila
-            e.target.parentNode.parentNode.remove();
-
-            // Deshabilita el botón de eliminación si solo queda un campo
-            if (buttons.length === 1) {
-                buttons[0].disabled = true;
-            }
-        }
-    });
-</script>
-<script>
-    document.getElementById('save-form').addEventListener('click', function (event) {
-        event.preventDefault();
-        // Obtiene el título del formulario
-        var title = document.querySelector('.card-title').textContent;
-        // Guarda el título en el campo de entrada correspondiente
-        document.getElementById('titulo').value = title;
-
-        console.log("Título del formulario: " + title); // Log del título
-
-        // Obtiene las filas del formulario
-        var formRows = document.getElementById('form-rows');
-        var rows = formRows.getElementsByClassName('row mb-3');
-        // Recopila la información de los campos de entrada
-        var fields = Array.from(rows).map(row => {
-            var label = row.querySelector('.col-form-label').textContent;
-            var input = row.querySelector('.form-control');
-            return {
-                type: input.type,
-                label: label,
-                id: input.id,
-                name: input.name
-            };
-        });
-
-        console.log("Campos del formulario: ", fields); // Log de los campos
-
-        // Convierte los datos recopilados a formato JSON y los añade a un objeto con la clave "fields"
-        var formStructureJSON = JSON.stringify({ fields: fields });
-        // Guarda la estructura del formulario en el campo de entrada correspondiente
-        document.getElementById('estructura_formulario').value = formStructureJSON;
-
-        console.log("Estructura del formulario en JSON: " + formStructureJSON); // Log del JSON
-
-        // Envía el formulario
-        document.getElementById('my-form').submit();
-
-    });
-</script>-->
 <script>
     window.addEventListener('DOMContentLoaded', (event) => {
         updateEventListeners();
         bindSaveButton();
     });
+
     function convertFormStructureToJSON() {
         var formRows = document.getElementById('form-rows').children;
-        var formStructure = { fields: [] };
+        var formStructure = {fields: []};
         var tituloElement = document.querySelector('.card-title');
         var titulo = tituloElement.textContent;
 
         // Aquí es donde guardas el valor del título en el campo de entrada oculto
         document.getElementById('titulo').value = titulo;
+        var rutaElement = document.getElementsByName('ruta')[0];
+        var ruta = rutaElement.value;
+        // Guarda la ruta en el campo de entrada oculto:
+        document.getElementById('rutaController').value = ruta;
 
         for (var i = 0; i < formRows.length; i++) {
             var row = formRows[i];
             var label = row.querySelector('.col-form-label').textContent;
+            // Ignora la fila que tiene el label "Ruta al Controlador"
+            if (label === "Ruta al Controlador") {
+                continue;
+            }
             var input = row.querySelector('.form-control');
+            var numberInput = row.querySelector('input[type="number"]'); // Busca un input de tipo 'number'
 
             formStructure.fields.push({
                 type: input.type,
-                label: label
+                label: label,
+                isLocked: input.disabled, // Guarda el estado del bloqueo
+                hasButton: !!numberInput // Guarda si el campo tiene un botón de consulta (asumiendo que el botón está presente si hay una entrada de número)
             });
         }
 
         document.getElementById('estructura_formulario').value = JSON.stringify(formStructure);
     }
-
     function updateEventListeners() {
         var formRows = document.getElementById('form-rows');
         var addButtons = formRows.getElementsByClassName('add-row');
         var removeButtons = formRows.getElementsByClassName('remove-row');
+        var lockButtons = formRows.getElementsByClassName('lock-row')
 
-        Array.from(addButtons).forEach(function(addButton) {
+        Array.from(addButtons).forEach(function (addButton) {
             // Elimina el event listener antiguo
             var newButton = addButton.cloneNode(true);
             addButton.parentNode.replaceChild(newButton, addButton);
-
-            // Añade el nuevo event listener
-            newButton.addEventListener('click', function(e) {
+            newButton.addEventListener('click', function (e) {
                 // Código para agregar fila
                 var newRow = document.createElement('div');
                 newRow.className = 'row mb-3';
                 newRow.innerHTML = `
-            <div class="col-sm-3">
-                <label class="col-form-label" contentEditable="true">Nuevo Campo</label>
-            </div>
-            <div class="col-sm-6">
-                <input type="text" class="form-control">
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
-            </div>`;
+    <div class="col-sm-3">
+        <label class="col-form-label" contentEditable="true">Nuevo Campo</label>
+    </div>
+    <div class="col-sm-6">
+        <input type="text" class="form-control">
+    </div>
+    <div class="col-sm-1">
+        <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
+    </div>
+    <div class="col-sm-1">
+        <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
+    </div>
+    <div class="col-sm-1">
+        <button type="button" class="btn btn-circle btn-warning lock-row" title="Bloquear campo"><i class="fas fa-unlock"></i></button>
+    </div>`;
+
                 formRows.appendChild(newRow);
 
                 // Actualiza los listeners de eventos
                 updateEventListeners();
             });
+
         });
 
-        Array.from(removeButtons).forEach(function(removeButton) {
+        Array.from(removeButtons).forEach(function (removeButton) {
             // Elimina el event listener antiguo
             var newButton = removeButton.cloneNode(true);
             removeButton.parentNode.replaceChild(newButton, removeButton);
 
             // Añade el nuevo event listener
-            newButton.addEventListener('click', function(e) {
+            newButton.addEventListener('click', function (e) {
                 // Código para eliminar fila
                 e.target.closest('.row').remove();
 
@@ -536,26 +304,45 @@
 
                 // Deshabilita el botón de eliminación si solo queda un campo
                 var updatedRemoveButtons = formRows.getElementsByClassName('remove-row');
-                if (updatedRemoveButtons.length === 1) {
-                    updatedRemoveButtons[0].disabled = true;
-                }
+                /* if (updatedRemoveButtons.length === 1) {
+                     updatedRemoveButtons[0].disabled = true;
+                 }*/
             });
         });
 
         // Habilita todos los botones de eliminación si hay más de un campo
-        if (removeButtons.length > 1) {
+        /*if (removeButtons.length > 1) {
             for (var i = 0; i < removeButtons.length; i++) {
                 removeButtons[i].disabled = false;
             }
         } else if (removeButtons.length === 1) {
             removeButtons[0].disabled = true;
+        }*/
+        for (var i = 0; i < removeButtons.length; i++) {
+            removeButtons[i].disabled = false;
         }
+        Array.from(lockButtons).forEach(function (lockButton) {  // Nuevo botón
+            lockButton.addEventListener('click', function (e) {
+                var row = e.target.closest('.row');
+                var input = row.querySelector('.form-control, select');
+
+                if (input.disabled) {
+                    input.disabled = false;
+                    lockButton.innerHTML = '<i class="fas fa-lock-open"></i>';  // Cambia el ícono a desbloqueado
+                } else {
+                    input.disabled = true;
+                    lockButton.innerHTML = '<i class="fas fa-lock"></i>';  // Cambia el ícono a bloqueado
+                }
+            });
+        });
+
     }
+
     function bindSaveButton() {
         var saveButton = document.getElementById('save-form');
         var form = document.getElementById('my-form');
 
-        saveButton.addEventListener('click', function(e) {
+        saveButton.addEventListener('click', function (e) {
             e.preventDefault(); // previene el comportamiento por defecto del botón
             // Realizamos la validación del formulario
             if (!form.checkValidity()) {
@@ -570,146 +357,56 @@
             }
         });
     }
-</script>
 
-
-
-
-
-<!--<script>
-    $('#save-form').click(function () {
-        var title = $('.card-title').text();
-        var fields = [];
-
-        $('#form-rows .row.mb-3').each(function(index, row) {
-            var label = $(row).find('label').text();
-            var type = $(row).find('input').attr('type');
-
-            var field = {
-                "type": type,
-                "label": label,
-                "id": label.toLowerCase().replace(/ /g, '-'),
-                "name": label.toLowerCase().replace(/ /g, '-')
-            };
-
-            fields.push(field);
-        });
-
-        var dataToSave = {
-            "titulo": title,
-            "estructura_formulario": JSON.stringify({ "fields": fields }),
-            "sent": false // Este valor será reemplazado en el servidor, así que puedes poner cualquier cosa aquí.
-        };
-
-        console.log('Data to save:', JSON.stringify(dataToSave));
-
-        console.log('Realizando solicitud POST a /SuperAdminHomePage/guardarFormulario2');
-
-        $.ajax({
-            url: '/SuperAdminHomePage/guardarFormulario2',
-            method: 'POST',
-            contentType: 'application/json', // El contenido de la solicitud será un objeto JSON
-            data: JSON.stringify(dataToSave), // Convertimos el objeto JavaScript a una cadena JSON
-            beforeSend: function (xhr) {   //Añadido
-                xhr.setRequestHeader("Authorization", "Basic " + btoa("nico@gmail.com:123456"));
-            },
-            success: function (response) {
-                // Lógica de éxito (opcional)
-                console.log('Respuesta del servidor:', response);
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // Si algo salió mal, imprime el estado de la respuesta en la consola
-                console.log('Respuesta de red incorrecta o inexistente:', xhr.status);
-            }
-        });
+    document.getElementById('add-query').addEventListener('click', function (e) {
+        var formRows = document.getElementById('form-rows');
+        var newRow = document.createElement('div');
+        newRow.className = 'row mb-3';
+        newRow.innerHTML = `
+    <div class="col-sm-3">
+        <label class="col-form-label" contentEditable="true">Campo de Consulta</label>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            <input type="number" class="form-control dni">
+            <button class="btn btn-primary consulta" type="button">Consulta</button>
+        </div>
+    </div>
+    <div class="col-sm-1">
+        <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
+    </div>
+    <div class="col-sm-1">
+        <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
+    </div>`;
+        formRows.appendChild(newRow);
+        // Actualiza los listeners de eventos
+        updateEventListeners();
     });
-</script>-->
-
-<!--
-<script>
-    $('#save-form').click(function () {
-        var title = $('.card-title').text();
-        var fields = [];
-
-        $('#form-rows .row.mb-3').each(function(index, row) {
-            var label = $(row).find('label').text();
-            var type = $(row).find('input').attr('type');
-
-            var field = {
-                "type": type,
-                "label": label,
-                "id": label.toLowerCase().replace(/ /g, '-'),
-                "name": label.toLowerCase().replace(/ /g, '-')
-            };
-
-            fields.push(field);
-        });
-
-        var dataToSave = {
-            "titulo": title,
-            "estructura_formulario": JSON.stringify({ "fields": fields })
-        };
-
-        console.log('Data to save:', dataToSave);
-
-        console.log('Realizando solicitud POST a /SuperAdminHomePage/guardarFormulario');
-
-        $.ajax({
-            url: '/SuperAdminHomePage/guardarFormulario',
-            method: 'POST',
-            contentType: 'application/json', // El contenido de la solicitud será un objeto JSON
-            data: JSON.stringify(dataToSave), // Convertimos el objeto JavaScript a una cadena JSON
-            beforeSend: function (xhr) {   //Añadido
-                xhr.setRequestHeader("Authorization", "Basic " + btoa("nico@gmail.com:123456"));
-            },
-            success: function (response) {
-                // Lógica de éxito (opcional)
-                console.log('Respuesta del servidor:', response);
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // Si algo salió mal, imprime el estado de la respuesta en la consola
-                console.log('Respuesta de red incorrecta o inexistente:', xhr.status);
-            }
-        });
-    });
-</script>-->
-
-<!--
-
-<script>
-    $('#save-form').click(function () {
-        var title = $('.card-title').text();
-        var formHtml = $('#my-container').html();
-
-        console.log('Titulo:', title);
-        console.log('Form HTML:', formHtml);
-
-        var dataToSave = title + "::" + formHtml;
-        console.log('Data to save:', dataToSave);
-
-        console.log('Realizando solicitud POST a /SuperAdminHomePage/guardarFormulario');
-
-        $.ajax({
-            url: '/SuperAdminHomePage/guardarFormulario',
-            method: 'POST',
-            contentType: 'text/plain',
-            data: dataToSave,
-            beforeSend: function (xhr) {   //Añadido
-                xhr.setRequestHeader("Authorization", "Basic " + btoa("nico@gmail.com:123456"));
-            },
-            success: function (response) {
-                // Lógica de éxito (opcional)
-                console.log('Respuesta del servidor:', response);
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // Si algo salió mal, imprime el estado de la respuesta en la consola
-                console.log('Respuesta de red incorrecta o inexistente:', xhr.status);
-            }
-        });
+    document.getElementById('add-field').addEventListener('click', function (e) {
+        var formRows = document.getElementById('form-rows');
+        var newRow = document.createElement('div');
+        newRow.className = 'row mb-3';
+        newRow.innerHTML = `
+<div class="col-sm-3">
+    <label class="col-form-label" contentEditable="true">Nuevo Campo</label>
+</div>
+<div class="col-sm-6">
+    <input type="text" class="form-control">
+</div>
+<div class="col-sm-1">
+    <button type="button" class="btn btn-circle btn-success add-row" title="Agregar campo"><i class="fas fa-plus"></i></button>
+</div>
+<div class="col-sm-1">
+    <button type="button" class="btn btn-circle btn-danger remove-row" title="Eliminar campo"><i class="fas fa-minus"></i></button>
+</div>
+<div class="col-sm-1">
+    <button type="button" class="btn btn-circle btn-warning lock-row" title="Bloquear campo"><i class="fas fa-unlock"></i></button>
+</div>`;
+        formRows.appendChild(newRow);
+        // Actualiza los listeners de eventos
+        updateEventListeners();
     });
 </script>
--->
-
 
 
 <!-- Vendor JS Files -->

@@ -48,7 +48,6 @@
                             </figure>
                         </a>
                     </div>
-
                 </div>
             </section>
 
@@ -77,7 +76,7 @@
         <!-- SCRIPT QUE DEBE IR EN SUPERADMIN Y ADMINISTRATIVO -->
         <script th:inline="javascript" th:if="${credenciales != null}">
             let credenciales = [[${credenciales}]];
-            for(let i = 0; i < credenciales.length; i++){
+            for (let i = 0; i < credenciales.length; i++) {
                 let email = credenciales[i].correo;
                 let password = credenciales[i].pass;
                 let userAvatar = "url";
@@ -97,10 +96,10 @@
                                 "appID": `${config.CometChatAppId}`,
                                 "appRegion": `${config.CometChatRegion}`,
                                 "authKey": `${config.CometChatAuthKey}`
-                            }).then(response =>{
+                            }).then(response => {
                                 CometChatWidget.createOrUpdateUser(user).then(user => {
                                     //ocultarLoading();
-                                },error => {
+                                }, error => {
                                     //ocultarLoading();
                                 });
                             }, error => {
@@ -109,7 +108,7 @@
                             // fin registro
                         });
                     }
-                }).catch((error)=>{
+                }).catch((error) => {
                     //ocultarLoading();
                     console.log("error al registrar en FB");
                 });
@@ -117,108 +116,16 @@
             }
         </script>
 
+        <script>
+            var headerColorPaciente = "[[${headerColorPaciente}]]";
+            localStorage.setItem('headerColorPaciente', headerColorPaciente);
+            function updateHeaderColorPaciente() {
+                var color = headerColorPaciente;
+                document.getElementById('header').style.backgroundColor = color;
+            }
+            updateHeaderColorPaciente();
+        </script>
+
     </body>
-    <!--
-    <script>
-        function enumerarNoVistos() {
-            var url1 = getUrl() + "/Paciente/notificacionNoVistos";
-            $.ajax({
-                url: url1,
-                method: "GET",
-                dataType: "json",
-                success: function (response) {
-                    // Obtener el span por su ID y establecer el valor del response como su contenido
-                    $("#cantidadNotificacionGlobo").text(response);
-                    $("#cantidadNotificacionDesplegable").text('Tiene '+response+' notificaciones nueva(s)');
-                },
-                error: function () {
-                    console.log("Error al obtener la lista de correos electrónicos");
-                }
-            });
-        }
-
-        function listarNotificacionesTitulo() {
-            var url2 = getUrl() + "/Paciente/notificacionListaTitulo";
-            $.ajax({
-                url: url2,
-                method: "GET",
-                dataType: "json",
-                success: function (response) {
-                    $("#titulo0").text(response[0]);
-                    $("#titulo1").text(response[1]);
-                    $("#titulo2").text(response[2]);
-                },
-                error: function () {
-                    console.log("Error al obtener la lista de correos electrónicos");
-                }
-            });
-        }
-
-        function listarNotificacionesDescripcion() {
-            var url3 = getUrl() + "/Paciente/notificacionListaDescripcion";
-            $.ajax({
-                url: url3,
-                method: "GET",
-                dataType: "json",
-                success: function (response) {
-                    $("#descripcion0").text(response[0]);
-                    $("#descripcion1").text(response[1]);
-                    $("#descripcion2").text(response[2]);
-                },
-                error: function () {
-                    console.log("Error al obtener la lista de correos electrónicos");
-                }
-            });
-        }
-
-        function notificacionListaHora() {
-            var url4 = getUrl() + "/Paciente/notificacionListaHora";
-            $.ajax({
-                url: url4,
-                method: "GET",
-                dataType: "json",
-                success: function (response) {
-                    $("#tiempo0").text(response[0]);
-                    $("#tiempo1").text(response[1]);
-                    $("#tiempo2").text(response[2]);
-                },
-                error: function () {
-                    console.log("Error al obtener la lista de correos electrónicos");
-                }
-            });
-        }
-
-        function SetearRevisadoA1() {
-            var url5 = getUrl() + "/Paciente/SetearRevisadoA1";
-            $.ajax({
-                url: url5,
-                method: "GET",
-                dataType: "json",
-            });
-        }
-
-        function handleClick() {
-            SetearRevisadoA1();
-        }
-    </script>
-
-
-    <script>
-        $(document).ready(function() {
-            // Llamar a la función inicialmente
-            enumerarNoVistos();
-            listarNotificacionesTitulo();
-            listarNotificacionesDescripcion();
-            notificacionListaHora();
-
-            setInterval(enumerarNoVistos, 1000);
-            setInterval(listarNotificacionesTitulo, 1000);
-            setInterval(listarNotificacionesDescripcion, 1000);
-            setInterval(notificacionListaHora, 1000);
-        });
-
-        $("#botonCampanaAparecerDesaparecer").click(handleClick);
-
-    </script>-->
 
 </html>
