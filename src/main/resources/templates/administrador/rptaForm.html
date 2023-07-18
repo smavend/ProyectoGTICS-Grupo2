@@ -251,12 +251,7 @@
             <hr class="dropdown-divider">
           </li>
 
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-              <i class="bi bi-gear"></i>
-              <span>Configuraciones</span>
-            </a>
-          </li>
+          th:href="@{/administrador/registro}"
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -267,10 +262,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Cerrar Sesión</span>
-            </a>
+            <form th:action="@{/logout}" method="post">  <button type="submit" class="dropdown-item d-flex align-items-center" href="#">                 <i class="bi bi-box-arrow-right"></i>                 <span>Cerrar Sesión</span>               </button>             </form>
           </li>
 
         </ul><!-- End Profile Dropdown Items -->
@@ -335,6 +327,7 @@
         <h3 class=" m-3">PACIENTES POR REGISTRAR</h3>
 
           <form method="POST" th:action="@{/administrador/guardarTemporales}">
+            <div class="table-responsive">
             <table class="table table-striped" id="datatable">
               <thead>
               <tr>
@@ -361,6 +354,7 @@
               </tr>
               </tbody>
             </table>
+            </div>
             <div class="mt-2">
               <button type="submit" class="btn btn-primary">Guardar usuarios</button>
             </div>
