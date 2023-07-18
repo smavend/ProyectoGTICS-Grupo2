@@ -58,7 +58,7 @@
                             <td th:text="${pago.cita.modalidad == 0? 'Presencial':'Virtual'}"></td>
                             <!-- columna estado -->
                             <td th:if="${pago.estadoPago == 0}">
-                                <button class="botonPagar" id="idPagar" th:attr="data-valor=${pago.id}, data-valor-inicio=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}" onclick="mostrarTipoDePago()">Pagar</button>
+                                <button class="botonPagar" id="idPagar" th:attr="data-valor=${pago.id}, data-valor-inicio=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}, data-valor-id-cita=${pago.cita.id_cita}" onclick="mostrarTipoDePago()">Pagar</button>
                                 <div id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></div>
                             </td>
                             <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
@@ -364,10 +364,6 @@
 
         <!-- DATATABLES SCRIPT -->
         <script>
-            var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
-            $('#idPagoTarjeta').val(idPagoTarjeta);
-            var idCitaPagar = document.getElementById('idCita').dataset.valor;
-            $('#idCitaPagar').val(idCitaPagar);
             var codigoRecibo;
             var table;
             $(document).ready(function () {
@@ -444,6 +440,9 @@
             var correoTarjeta;
             function mostrarTipoDePago(){
                 var idPagoValue = $(event.target).data('valor');
+                $('#idPagoTarjeta').val(idPagoValue);
+                var idCitaPagar = $(event.target).data('valor-id-cita');
+                $('#idCitaPagar').val(idCitaPagar);
                 var inicioCitaStr = $(event.target).data('valor-inicio');
                 var fechaHoraActual = new Date();
                 var inicioCita = new Date(inicioCitaStr.slice(6, 10) + "-" + inicioCitaStr.slice(3, 5) + "-" + inicioCitaStr.slice(0, 2) + " " + inicioCitaStr.slice(11));

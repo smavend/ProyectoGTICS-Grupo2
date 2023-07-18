@@ -91,7 +91,7 @@ public class PacienteController {
             superAdminLogueadoComoPaciente = false;
         }
         model.addAttribute("superAdminLogueadoComoPaciente", superAdminLogueadoComoPaciente);
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente;
 
         if (impersonatedUser != null) {
@@ -115,7 +115,7 @@ public class PacienteController {
     public ResponseEntity<byte[]> mostrarImagenSede(@RequestParam("idSede") int idSede) {
 
         Optional<Sede> optionalSede = sedeRepository.findById(idSede);
-
+        pacienteRepository.anularCitaNoCancelada();
         if (optionalSede.isPresent()) {
             Sede sede = optionalSede.get();
             byte[] imagenComoBytes = sede.getFoto();
@@ -138,6 +138,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -153,6 +154,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -173,6 +175,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -201,6 +204,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
 
         session.setAttribute("paciente", paciente);
@@ -242,6 +246,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -296,7 +301,9 @@ public class PacienteController {
         model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
         model.addAttribute("especialidad", especialidad);
         model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
-        model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
+        //model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
+        Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
+        model.addAttribute("precio", precioBase*paciente.getSeguro().getCoaseguro());
 
         return "paciente/confirmacion";
     }
@@ -310,7 +317,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -334,7 +341,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -377,6 +384,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
 
         session.setAttribute("paciente", paciente);
@@ -436,7 +444,7 @@ public class PacienteController {
                                RedirectAttributes attr){
 
         Optional<Cita> optionalCita = citaRepository.findById(idCita);
-
+        pacienteRepository.anularCitaNoCancelada();
         if (optionalCita.isPresent()){
             Pago pago = pagoRepository.buscarPorCita(idCita);
 
@@ -466,6 +474,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -490,6 +499,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -517,6 +527,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente p = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", p);
 
@@ -587,7 +598,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         if (paciente.getIdPaciente().equals(alergia.getPaciente().getIdPaciente())){
             alergiaRepository.save(alergia);
@@ -610,6 +621,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -630,7 +642,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         String idPaciente = pacienteRepository.findByCorreo(userEmail).getIdPaciente();
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
@@ -652,7 +664,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -672,7 +684,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
 
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
@@ -705,7 +717,7 @@ public class PacienteController {
     public ResponseEntity<byte[]> mostrarImagenPaciente(@RequestParam("idPaciente") String idPaciente) {
 
         Optional<Paciente> optionalPaciente = pacienteRepository.findById(idPaciente);
-
+        pacienteRepository.anularCitaNoCancelada();
         if (optionalPaciente.isPresent()) {
             Paciente paciente = optionalPaciente.get();
             byte[] imagenComoBytes = paciente.getFoto();
@@ -730,6 +742,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -778,7 +791,7 @@ public class PacienteController {
     public ResponseEntity<byte[]> mostrarImagenDoctor(@RequestParam("idDoctor") String idDoctor) {
 
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
-
+        pacienteRepository.anularCitaNoCancelada();
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             byte[] imagenComoBytes = doctor.getFoto();
@@ -800,7 +813,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         Optional<Doctor> optionalDoctor = doctorRepository.findById(idDoctor);
@@ -823,7 +836,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -849,7 +862,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         model.addAttribute("activarModal", true);
@@ -867,7 +880,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -888,7 +901,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -912,7 +925,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
@@ -935,7 +948,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -979,7 +992,7 @@ public class PacienteController {
             } else {
                 userEmail = authentication.getName();
             }
-
+            pacienteRepository.anularCitaNoCancelada();
             Paciente paciente = pacienteRepository.findByCorreo(userEmail);
             session.setAttribute("paciente", paciente);
             pagoRepository.guardarPago(idPago);
@@ -1010,7 +1023,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
@@ -1036,7 +1049,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -1061,7 +1074,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -1075,7 +1088,7 @@ public class PacienteController {
     public String guardarCuestionario(@ModelAttribute("cuestionario") @Valid CuestionarioPorCita cuestionario, BindingResult bindingResult, Model model, HttpSession session, Authentication authentication) {
 
         session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-
+        pacienteRepository.anularCitaNoCancelada();
         if (bindingResult.hasErrors()) {
             model.addAttribute("preguntas", cuestionarioRepository.buscarPorId(cuestionario.getCuestionario().getId_cuestionario()));
             return "paciente/cuestionariosCompletar";
@@ -1098,7 +1111,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
         List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(paciente.getIdPaciente());
@@ -1120,7 +1133,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
 
         session.setAttribute("paciente", paciente);
@@ -1152,7 +1165,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
-
+        pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 

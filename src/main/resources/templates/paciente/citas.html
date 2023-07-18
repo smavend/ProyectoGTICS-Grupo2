@@ -261,6 +261,7 @@
         <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
         <!-- Datatables -->
+        <!--
         <script>
             $(document).ready(function () {
                 var tabla = $("#tabla_citas").DataTable({
@@ -332,7 +333,89 @@
                     citas[i].classList.remove("d-none");
                 }
             }
+        </script>
+        -->
 
+        <!-- Datatables -->
+        <script>
+            $(document).ready(function () {
+                var tabla = $("#tabla_citas").DataTable({
+                    dom: '<"toolbar">frtip',
+                    bInfo: false,
+                    pageLength: 5,
+                    columns: [
+                        null,
+                        null,
+                        null,
+                        null,
+                        {orderable: false},
+                        {orderable: false},
+                        {orderable: false}
+                    ],
+                    columnDefs: [
+                        {
+                            searchable: false,
+                            targets: [4, 5, 6]
+                        }
+                    ],
+                    language: {
+                        infoEmpty: "No hay citas registradas",
+                        zeroRecords: "No hay citas registradas",
+                        sProcessing: "Cargando...",
+                        sSearch: "Buscar:",
+                        paginate: {
+                            previous: "Anterior",
+                            next: "Siguiente"
+                        }
+                    }
+                });
+
+                // Almacenar los datos originales de la tabla
+                var datosOriginales = tabla.data().toArray();
+
+                // Función para actualizar la tabla con los datos filtrados
+                function updateTable(data) {
+                    tabla.clear().draw();
+                    tabla.rows.add(data).draw();
+                }
+
+                // Script para cancelar cita
+                $(".botonCancelarCita").click(function (){
+                    let cita = $(this).attr("id");
+                    let cancelarModal = $("#cancelarModal");
+                    cancelarModal.find("a").attr("href", "/Paciente/cancelarCita?idCita="+cita);
+
+                    $("#citaModal"+cita).modal("hide");
+                    cancelarModal.modal("show");
+                });
+
+                // Script para botones filtro
+                const especialidadesExam = ["Cirugía cardiovascular", "Laboratorio", "Rayos X", "Ecografía"];
+                const botonExamenes = $(".botonExamenes");
+                const botonCitas = $(".botonCitas");
+
+                function buscarExamenes() {
+                    botonExamenes.addClass("botonTipoSeleccionado");
+                    botonCitas.removeClass("botonTipoSeleccionado");
+                    const citas = $(".filaCita");
+                    for (let i = 0; i < citas.length; i++) {
+                        let especialidad = citas[i].querySelector(".especialidad").innerText;
+                        if (!especialidadesExam.includes(especialidad)) {
+                            citas[i].classList.add("d-none");
+                        }
+                    }
+                    updateTable(citas.filter(':not(.d-none)').toArray());
+                }
+
+                function buscarCitas() {
+                    botonExamenes.removeClass("botonTipoSeleccionado");
+                    botonCitas.addClass("botonTipoSeleccionado");
+                    updateTable(datosOriginales);
+                }
+
+                $(".botonExamenes").click(buscarExamenes);
+                $(".botonCitas").click(buscarCitas);
+            });
         </script>
 
     </body>
