@@ -275,6 +275,7 @@ public class DoctorController {
         cuestionarioPorCita.setR9("·");
         cuestionarioPorCita.setR10("·");
         cuestionarioPorCita.setR11("·");
+        cuestionarioPorCita.setOpcion_inicio_sesion(0);
         cuestionarioPorCitaRepository.save(cuestionarioPorCita);
 
         return "redirect:/doctor/dashboard";

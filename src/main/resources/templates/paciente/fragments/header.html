@@ -39,16 +39,21 @@
                     <li class="nav-item dropdown">
 
                         <!-- Ícono de notificaciones -->
-                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <a id="botonCampanaAparecerDesaparecer" class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                             <i class="bi bi-bell"></i>
-                            <span class="badge bg-primary badge-number">3</span>
+                            <!-- Numero de notifaciones -->
+                            <span id="cantidadNotificacionGlobo" class="badge bg-primary badge-number"></span>
+                            <!-- Numero de notifaciones -->
                         </a>
 
                         <!-- Items de notificaciones -->
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                            <li class="dropdown-header">
-                                Tiene 3 notificaciones nuevas
+
+                            <!-- Numero de notifaciones -->
+                            <li id="cantidadNotificacionDesplegable" class="dropdown-header">
                             </li>
+                            <!-- Numero de notifaciones -->
+
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -56,9 +61,9 @@
                             <li class="notification-item">
                                 <i class="bi bi-exclamation-circle text-warning"></i>
                                 <div>
-                                    <h4>Lorem Ipsum</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>Hace 30 minutos</p>
+                                    <h4 id="titulo0">Aquí no hay notificaciones</h4>
+                                    <p id="descripcion0">Aquí no hay notificaciones</p>
+                                    <p id="tiempo0"></p>
                                 </div>
                             </li>
 
@@ -69,9 +74,9 @@
                             <li class="notification-item">
                                 <i class="bi bi-exclamation-circle text-warning "></i>
                                 <div>
-                                    <h4>Atque rerum nesciunt</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>Hace 1 hora</p>
+                                    <h4 id="titulo1">Aquí no hay notificaciones</h4>
+                                    <p id="descripcion1">Aquí no hay notificaciones</p>
+                                    <p id="tiempo1"></p>
                                 </div>
                             </li>
 
@@ -82,9 +87,9 @@
                             <li class="notification-item">
                                 <i class="bi bi-check-circle text-success"></i>
                                 <div>
-                                    <h4>Sit rerum fuga</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>Hace 2 horas</p>
+                                    <h4 id="titulo2">Aquí no hay notificaciones</h4>
+                                    <p id="descripcion2">Aquí no hay notificaciones</p>
+                                    <p id="tiempo2"></p>
                                 </div>
                             </li>
 
@@ -210,9 +215,13 @@
 
                 </ul>
             </nav>
+
             <!-- End Icons Navigation -->
+
 
         </header>
         <!-- End Header -->
     </body>
+
+
 </html>

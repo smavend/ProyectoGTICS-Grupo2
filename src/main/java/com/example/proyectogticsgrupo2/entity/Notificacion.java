@@ -14,7 +14,7 @@ public class Notificacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_notificacion", nullable = false)
-    private int idNotificacion;
+    private int id_notificacion;
 
     @ManyToOne
     @JoinColumn(name = "id_doctor")
@@ -32,18 +32,18 @@ public class Notificacion {
     @JoinColumn(name = "id_administrativo", nullable = false)
     private Administrativo administrativo;
 
-    @Column(nullable = false)
+    @Column(name = "titulo",nullable = false)
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(name = "descripcion",nullable = false)
     private String descripcion;
 
-    @Column(nullable = false)
+    @Column(name = "fecha",nullable = false)
     private LocalDateTime fecha;
 
-    @Column()
+    @Column(name = "revisado",nullable = false)
     private int revisado; //0: no revisado, 1: revisado
 
-    @Column()
+    @Column(name = "tipo_notificacion")
     private int tipo_notificacion;
 }
