@@ -36,9 +36,10 @@ public class HomeController {
     final AlergiaRepository alergiaRepository;
     final TareaRepository tareaRepository;
     final TokenRepository tokenRepository;
+    final PacientePorConsentimientoRepository ppcRepository;
 
 
-    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository, TokenRepository tokenRepository) {
+    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository, TokenRepository tokenRepository, PacientePorConsentimientoRepository ppcRepository) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.administradorRepository = administradorRepository;
@@ -49,6 +50,7 @@ public class HomeController {
         this.alergiaRepository = alergiaRepository;
         this.tareaRepository = tareaRepository;
         this.tokenRepository = tokenRepository;
+        this.ppcRepository = ppcRepository;
     }
 
     @GetMapping("/")
@@ -139,6 +141,7 @@ public class HomeController {
     public String guardarRegistro (HttpSession session,
                                    @RequestParam (value = "radios", required = false) String radio,
                                    @RequestParam (value = "alergias", required = false) String alergias,
+                                   @RequestParam (value = "consentimientos") List<Integer> ids,
                                    Model model,
                                    @ModelAttribute("paciente") @Valid Paciente paciente,
                                    BindingResult bindingResult,
@@ -232,6 +235,15 @@ public class HomeController {
                             alergiaRepository.save(alergia1);
                         }
                     }
+                }
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(),1,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(),2,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(),3,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(),4,1);
+                if (ids.contains(5)){
+                    ppcRepository.cargarConsentimentos(paciente.getIdPaciente(),5,1);
+                }else {
+                    ppcRepository.cargarConsentimentos(paciente.getIdPaciente(),5,0);
                 }
             }
             session.setAttribute("registro", paciente.getIdPaciente());
