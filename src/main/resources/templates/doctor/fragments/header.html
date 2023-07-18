@@ -39,15 +39,17 @@
                 </a>
             </li><!-- End Search Icon-->
 
-            <li>
+            <li class="nav-item dropdown me-3">
                 <div th:if="${session.superAdminLogueadoComoDoctor}">
                     <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin}" method="POST">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-home"></i> Volver a SuperAdmin
+                        <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" title="Volver a SuperAdmin">
+                            <i class="fas fa-home"></i>
                         </button>
                     </form>
                 </div>
             </li>
+
 
             <li class="nav-item dropdown">
 
