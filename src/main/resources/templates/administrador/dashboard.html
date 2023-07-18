@@ -366,6 +366,7 @@
                   <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
                 </div>
                 <div th:if="${msgPaci != null}" th:text="${msgPaci}" class="alert alert-success" role="alert"></div>
+              <div th:if="${credencial != null}" th:text="'Credenciales guardaas'" class="alert alert-success" role="alert"></div>
                   <table class="table table-hover" id="datatable2">
                     <thead>
                     <tr>
@@ -428,17 +429,7 @@
 <script th:src="@{/assets/js/sockets/socketManagerAdministrador.js}"></script>
 <script>
   $(document).ready(function () {
-    /*var socket = getWebSocketInstance();
-    if (socket) {
-      console.log("Conexión existente en dashboard");
-      // Realiza operaciones adicionales con el socket si es necesario
-    } else {
-      socket = connectWebSocket();
-      if (socket) {
-        console.log("Nueva conexión establecida en dashboard");
-        // Realiza operaciones adicionales con el socket si es necesario
-      }
-    }*/
+    $(".alert").delay(1000).hide(2500);
   });
 </script>
 

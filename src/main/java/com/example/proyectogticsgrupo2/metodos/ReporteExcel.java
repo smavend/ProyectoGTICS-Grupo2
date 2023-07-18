@@ -3,13 +3,12 @@ package com.example.proyectogticsgrupo2.metodos;
 import com.example.proyectogticsgrupo2.dto.AdministradorEgresos;
 import com.example.proyectogticsgrupo2.dto.AdministradorIngresos;
 import com.example.proyectogticsgrupo2.repository.AdministradorRepository;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
@@ -41,7 +40,7 @@ public class ReporteExcel {
         dateStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("dd/MM/yyyy"));
 
         CellStyle currencyStyle = workbook.createCellStyle();
-        currencyStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("$#,##0.00"));
+
         // Crear el encabezado de la hoja
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(0).setCellValue("Fecha Cancelada");
@@ -49,7 +48,7 @@ public class ReporteExcel {
         headerRow.createCell(2).setCellValue("Especialidad Cita");
         headerRow.createCell(3).setCellValue("Concepto");
         headerRow.createCell(4).setCellValue("Nombre Seguro");
-        headerRow.createCell(5).setCellValue("Precio Cita");
+        headerRow.createCell(5).setCellValue("Precio Cita (Soles)");
         headerRow.createCell(6).setCellValue("Tipo Pago");
         // Aplicar estilos a las celdas del encabezado
         for (int i = 0; i < 7; i++) {
@@ -102,22 +101,31 @@ public class ReporteExcel {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try {
+            // Configurar orientación de página horizontal
+            document.setPageSize(PageSize.A4.rotate());
+
             // Crear el escritor PDF y asociarlo con el flujo de bytes
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
 
             // Abrir el documento
             document.open();
 
-            // Agregar el encabezado del informe
-            Paragraph header = new Paragraph("Informe de ingresos\n");
-            document.add(header);
-
             // Crear la tabla de ingresos
             PdfPTable table = new PdfPTable(7); // Número de columnas
 
+            // Crear el encabezado del informe con formato atractivo
+            PdfPCell headerCell = new PdfPCell();
+            headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            headerCell.addElement(new Paragraph("Informe de ingresos", FontFactory.getFont(FontFactory.HELVETICA, 18, BaseColor.BLUE)));
+            headerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setPadding(10);
+            headerCell.setColspan(7);
+            table.addCell(headerCell);
+
             // Agregar las cabeceras de columna
             table.addCell("Fecha");
-            table.addCell("Monto");
+            table.addCell("Monto\n(Soles)");
             table.addCell("Concepto");
             table.addCell("Paciente");
             table.addCell("Tipo de Pago");
@@ -126,8 +134,8 @@ public class ReporteExcel {
 
             // Agregar los datos de la tabla de ingresos
             for (AdministradorIngresos income : incomes) {
-                PdfPCell fechacanceladaCell = new PdfPCell(new Paragraph(income.getFechacancelada().toString()));
-                PdfPCell preciocitaCell = new PdfPCell(new Paragraph(String.valueOf(income.getPreciocita())));
+                PdfPCell fechacanceladaCell = new PdfPCell(new Paragraph(income.getFechacancelada().toString(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                PdfPCell preciocitaCell = new PdfPCell(new Paragraph(String.valueOf(income.getPreciocita()), FontFactory.getFont(FontFactory.HELVETICA, 10)));
                 table.addCell(fechacanceladaCell);
                 table.addCell(preciocitaCell);
                 table.addCell(income.getConcepto());
@@ -163,7 +171,7 @@ public class ReporteExcel {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    public ResponseEntity<Resource> generarInformeEgresosExcel(List<AdministradorEgresos> egresos, String nombreDoc) {
+    public ResponseEntity<Resource> generarEgresosExcel(List<AdministradorEgresos> ingresos, String nombreDoc) {
         // Crear un nuevo libro de Excel
         Workbook workbook = new XSSFWorkbook();
         // Crear una hoja de Excel
@@ -177,27 +185,27 @@ public class ReporteExcel {
         dateStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("dd/MM/yyyy"));
 
         CellStyle currencyStyle = workbook.createCellStyle();
-        currencyStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("$#,##0.00"));
+
         // Crear el encabezado de la hoja
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(0).setCellValue("Concepto");
-        headerRow.createCell(1).setCellValue("Monto");
-        headerRow.createCell(2).setCellValue("Nombre");
-        headerRow.createCell(3).setCellValue("Especialidad");
-        headerRow.createCell(4).setCellValue("Seguro");
+        headerRow.createCell(1).setCellValue("Nombre Usuario");
+        headerRow.createCell(2).setCellValue("Monto (Soles)");
+        headerRow.createCell(3).setCellValue("Especialidad ");
+        headerRow.createCell(4).setCellValue("Nombre Seguro");
         headerRow.createCell(5).setCellValue("Fecha");
-        headerRow.createCell(6).setCellValue("Categoría de Pago");
+        headerRow.createCell(6).setCellValue("Categoria de Pago");
         // Aplicar estilos a las celdas del encabezado
         for (int i = 0; i < 7; i++) {
             Cell headerCell = headerRow.getCell(i);
             headerCell.setCellStyle(headerStyle);}
         // Llenar los datos de ingresos en la hoja
         int rowNum = 1;
-        for (AdministradorEgresos ingreso : egresos) {
+        for (AdministradorEgresos ingreso : ingresos) {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(ingreso.getConcepto());
-            row.createCell(1).setCellValue(ingreso.getPagodoctor());
-            row.createCell(2).setCellValue(ingreso.getNombreuser());
+            row.createCell(1).setCellValue(ingreso.getNombreuser());
+            row.createCell(2).setCellValue(ingreso.getPagodoctor());
             row.createCell(3).setCellValue(ingreso.getEspecialidadcita());
             row.createCell(4).setCellValue(ingreso.getNombreseguro());
             row.createCell(5).setCellValue(ingreso.getFecha());
@@ -231,5 +239,82 @@ public class ReporteExcel {
 
     }
 
+    public ResponseEntity<Resource> generarEgresosPDF(List<AdministradorEgresos> incomes, String nombreDoc) {
+        Document document = new Document();
+
+        // Crear un flujo de bytes en memoria para el archivo PDF
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try {
+            // Configurar orientación de página horizontal
+            document.setPageSize(PageSize.A4.rotate());
+
+            // Crear el escritor PDF y asociarlo con el flujo de bytes
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+
+            // Abrir el documento
+            document.open();
+
+            // Crear la tabla de ingresos
+            PdfPTable table = new PdfPTable(7); // Número de columnas
+
+            // Crear el encabezado del informe con formato atractivo
+            PdfPCell headerCell = new PdfPCell();
+            headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            headerCell.addElement(new Paragraph("Informe de ingresos", FontFactory.getFont(FontFactory.HELVETICA, 18, BaseColor.BLUE)));
+            headerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setPadding(10);
+            headerCell.setColspan(7);
+            table.addCell(headerCell);
+
+            // Agregar las cabeceras de columna
+            table.addCell("Concepto");
+            table.addCell("Monto\n(Soles)");
+            table.addCell("Nombre");
+            table.addCell("Seguro");
+            table.addCell("Especialidad");
+            table.addCell("Fecha");
+            table.addCell("Categoria de Pago");
+
+
+            // Agregar los datos de la tabla de ingresos
+            for (AdministradorEgresos income : incomes) {
+                PdfPCell fechacanceladaCell = new PdfPCell(new Paragraph(income.getFecha().toString(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                PdfPCell preciocitaCell = new PdfPCell(new Paragraph(String.valueOf(income.getPagodoctor()), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(income.getConcepto());
+                table.addCell(preciocitaCell);
+                table.addCell(income.getNombreuser());
+                table.addCell(income.getEspecialidadcita());
+                table.addCell(income.getNombreseguro());
+                table.addCell(fechacanceladaCell);
+                table.addCell(income.getCategoriagasto());
+            }
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+
+            // Configurar las cabeceras de la respuesta HTTP
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreDoc + ".pdf\"");
+            headers.setContentType(MediaType.APPLICATION_PDF);
+
+            // Crear un recurso de tipo ByteArrayResource con los bytes del archivo PDF
+            ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
+
+            // Devolver la respuesta con el archivo adjunto y las cabeceras
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(resource);
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 
 }
