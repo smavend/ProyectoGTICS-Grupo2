@@ -119,6 +119,7 @@
 
     </body>
     <script>
+
         function enumerarNoVistos() {
             var url1 = getUrl() + "/Paciente/notificacionNoVistos";
             $.ajax({
@@ -202,9 +203,47 @@
                 url: url6,
                 method: "GET",
                 dataType: "json",
+                success: function (response) {
+                    console.log(responseValues[1];
+                    var titulo0 = $("#titulo0").text();
+                    var titulo1 = $("#titulo1").text();
+                    var titulo2 = $("#titulo2").text();
+                    if (response.length > 2) {
+                        $("#guardarValor0").val(response[0]);
+                        $("#guardarValor1").val(response[1]);
+                        $("#guardarValor2").val(response[2]);
+                    }
+
+                    if (titulo0 === "Cuestionario de cita (IMPORTANTE)") {
+                        $("#click0").click(function() {
+                            var valorCues = $("#guardarValor0").val();
+                            var valorCita = $("#guardarValor1").val();
+                            window.location.href = url6 + '/Paciente/cuestionario?cues=' + valorCues + '&cita=' + valorCita;
+                        });
+                    }
+
+                    if (titulo1 === "Cuestionario de cita (IMPORTANTE)") {
+                        var valorCues = $("#guardarValor0").val();
+                        var valorCita = $("#guardarValor1").val();
+                        $("#click1").click(function() {
+                            window.location.href = url6 + '/Paciente/cuestionario?cues=' + valorCues + '&cita=' + valorCita;
+                        });
+                    }
+
+                    if (titulo2 === "Cuestionario de cita (IMPORTANTE)") {
+                        var valorCues = $("#guardarValor0").val();
+                        var valorCita = $("#guardarValor1").val();
+                        $("#click2").click(function() {
+                            window.location.href = url6 + '/Paciente/cuestionario?cues=' + valorCues+ '&cita=' + valorCita;
+                        });
+                    }
+
+                },
+                error: function () {
+                    console.log("Error al obtener las notificaciones de cuestionarios");
+                }
             });
         }
-
         function handleClick() {
             SetearRevisadoA1();
         }

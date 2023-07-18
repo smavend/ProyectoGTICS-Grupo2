@@ -1376,6 +1376,7 @@ public class PacienteController {
 
                 ListaIdCitayIdCuestionario.add(idCuestionario);
                 ListaIdCitayIdCuestionario.add(idCita);
+                ListaIdCitayIdCuestionario.add(verificar);
             }
         }
 
