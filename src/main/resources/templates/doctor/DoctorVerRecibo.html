@@ -170,37 +170,46 @@
             </div>
         </footer><!-- End Footer -->
 
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-                class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+<script>
+    var headerColorDoctor = "[[${headerColorDoctor}]]";
+    localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
 
-        <!-- Vendor JS Files -->
-        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-        <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
+    function updateHeaderColorDoctor() {
+        var color = headerColorDoctor;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorDoctor();
+</script>
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
 
 
-        <!-- Template Main JS File -->
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                crossorigin="anonymous"></script>
-        <script th:src="@{/assets/js/jsDoctor.js}"></script>
+<!-- Template Main JS File -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script th:src="@{/assets/js/jsDoctor.js}"></script>
 
         <!-- Scripts Calendario -->
 
 
-        <!-- Agregar la biblioteca FullCalendar -->
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
+<!-- Agregar la biblioteca FullCalendar -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
 
         <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
-    </body>
+</body>
 
 </html>

@@ -1,274 +1,297 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Dashboard Administrativo</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+  <title>Dashboard Administrativo</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 
-    <!-- Favicons -->
-    <link th:href="@{/assets/img/favicon.png}" rel="icon">
-    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
-
-    <!-- Vendor CSS Files -->
-    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
-
-    <!-- Template Main CSS File -->
-    <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
 
-    <!-- DataTables -->
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
-    <!-- =======================================================
-    * Template Name: NiceAdmin
-    * Updated: Mar 09 2023 with Bootstrap v5.2.3
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
-  </head>
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
+
+
+  <!-- DataTables -->
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Updated: Mar 09 2023 with Bootstrap v5.2.3
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <div th:replace="~{administrativo/fragments/header.html :: header}"></div>
-  <!-- End Header -->
+<!-- ======= Header ======= -->
+<div th:replace="~{administrativo/fragments/header.html :: header}"></div>
+<!-- End Header -->
 
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
 
-    <ul class="sidebar-nav" id="sidebar-nav">
+  <ul class="sidebar-nav" id="sidebar-nav">
 
-      <li class="nav-item">
-        <a class="nav-link " th:href="@{/administrativo}">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" th:href="@{/administrativo/mensajeria}">
-          <i class="bi bi-people"></i>
-          <span>Mensajería</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+    <li class="nav-item">
+      <a class="nav-link " th:href="@{/administrativo}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/administrativo/mensajeria}">
+        <i class="bi bi-people"></i>
+        <span>Mensajería</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
 
-    </ul>
+  </ul>
 
-  </aside><!-- End Sidebar-->
+</aside><!-- End Sidebar-->
 
-  <main id="main" class="main">
+<main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Invitar nuevo paciente</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a>Administrativo</a></li>
-          <li class="breadcrumb-item"><a th:href="@{/administrativo}">Dashboard</a></li>
-          <li class="breadcrumb-item active">Invitar</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+  <div class="pagetitle">
+    <h1>Invitar nuevo paciente</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a>Administrativo</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/administrativo}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Invitar</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
 
-    <section class="section">
-      <div class="row align-items-center">
-        <div class="col-lg-5 container">
-          <div th:if="${msg!=null}" th:text="${msg}" class="alert alert-warning" role="alert">
-            A simple warning alert—check it out!
-          </div>
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Formulario de invitación</h5>
-
-              <!-- General Form Elements -->
-              <form method="post" th:action="@{/administrativo/invitar}" th:object="${temporal}">
-                <div class="row mb-3">
-                  <label class="col-sm-4 col-form-label">DNI</label>
-                  <div class="col-sm-8">
-                    <div class="input-group">
-                      <input type="number" id="dni" maxlength="8" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" aria-describedby="consulta">
-                      <button class="btn btn-primary" type="button" id="consulta">Consulta</button>
-                      <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}"
-                           th:errors="*{dni}" ></div>
-                    </div>
-                    <div class="invalid-feedback" id="errorDni"></div>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label class="col-sm-4 col-form-label">Nombres</label>
-                  <div class="col-sm-8">
-                    <input type="text" id="nombre" class="form-control" th:field="*{nombre}" disabled="disabled" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
-                         th:errors="*{nombre}" ></div>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label class="col-sm-4 col-form-label">Apellidos</label>
-                  <div class="col-sm-8">
-                    <input type="text" id="apellidos" class="form-control" th:field="*{apellidos}" disabled="disabled" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
-                         th:errors="*{apellidos}" ></div>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label class="col-sm-4 col-form-label">Correo</label>
-                  <div class="col-sm-8">
-                    <input type="email" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
-                         th:errors="*{correo}" ></div>
-                  </div>
-                </div>
-
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Enviar invitación</button>
-                  <a type="button" class="btn btn-secondary" th:href="@{/administrativo}">Cancelar</a>
-                </div>
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <div class="modal-title" id="staticBackdropLabel"></div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                      </div>
-                      <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Invitar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </form><!-- End General Form Elements -->
-
-            </div>
-          </div>
-
+  <section class="section">
+    <div class="row align-items-center">
+      <div class="col-lg-5 container">
+        <div th:if="${msg!=null}" th:text="${msg}" class="alert alert-warning" role="alert">
+          A simple warning alert—check it out!
         </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Formulario de invitación</h5>
+
+            <!-- General Form Elements -->
+            <form method="post" th:action="@{/administrativo/invitar}" th:object="${temporal}">
+              <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">DNI</label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <input type="number" id="dni" maxlength="8" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" aria-describedby="consulta">
+                    <button class="btn btn-primary" type="button" id="consulta">Consulta</button>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}"
+                         th:errors="*{dni}" ></div>
+                  </div>
+                  <div class="invalid-feedback" id="errorDni"></div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Nombres</label>
+                <div class="col-sm-8">
+                  <input type="text" id="nombre" class="form-control" th:field="*{nombre}" disabled="disabled" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
+                       th:errors="*{nombre}" ></div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Apellidos</label>
+                <div class="col-sm-8">
+                  <input type="text" id="apellidos" class="form-control" th:field="*{apellidos}" disabled="disabled" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}"
+                       th:errors="*{apellidos}" ></div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Correo</label>
+                <div class="col-sm-8">
+                  <input type="email" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
+                       th:errors="*{correo}" ></div>
+                </div>
+              </div>
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Enviar invitación</button>
+                <a type="button" class="btn btn-secondary" th:href="@{/administrativo}">Cancelar</a>
+              </div>
+              <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <div class="modal-title" id="staticBackdropLabel"></div>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Invitar</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </form><!-- End General Form Elements -->
+
+          </div>
+        </div>
+
       </div>
-    </section>
-
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-    <div class="copyright">
-      &copy; Copyright <strong><span>Clínica</span></strong>. All Rights Reserved
     </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </footer><!-- End Footer -->
+  </section>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+</main><!-- End #main -->
 
-  <!-- Vendor JS Files -->
-  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="copyright">
+    &copy; Copyright <strong><span>Clínica</span></strong>. All Rights Reserved
+  </div>
+  <div class="credits">
+    <!-- All the links in the footer should remain intact. -->
+    <!-- You can delete the links only if you purchased the pro version. -->
+    <!-- Licensing information: https://bootstrapmade.com/license/ -->
+    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+  </div>
+</footer><!-- End Footer -->
 
-  <!-- Template Main JS File -->
-  <script th:src="@{/assets/js/main.js}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#staticBackdrop').on('show.bs.modal', function(event) {
-        var button = event.relatedTarget;
-        var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
-        $('#staticBackdropLabel').html(`Confirmación`);
-        $('.modal-body').html(`¿Seguro de que deseas invitar este paciente?`);
-      });
-      $('#dni').on('input', function() {
-        var dniValue = $(this).val();
-        var validCharacters = /^[0-9]{1,8}$/;
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<script>
+  var headerColorAdministrtivo = "[[${headerColorAdministrativo}]]";
+  localStorage.setItem('headerColorAdministrativo', headerColorAdministrtivo);
 
-        if (!validCharacters.test(dniValue)) {
-          $(this).val(dniValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
-          $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
-        }
-      });
+  function updateHeaderColorAdministrador() {
+    var color = headerColorAdministrtivo;
+    document.getElementById('header').style.backgroundColor = color;
+  }
+  updateHeaderColorAdministrador();
+</script>
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
-      $("#consulta").click(function (){
-        let dni = $("#dni").val();
-        $("#dni").removeClass("is-invalid");
-        $("#errorDni").hide();
-        $("#nombre").val("");
-        $("#apellidos").val("");
-        console.log("dni:" , dni);
-        if (dni === "") {
-          console.log("alert");
-          alert("Debe ingresar un DNI");
-        }else {
-          $.ajax({
-            method: "GET",
-            crossDomain: true,
-            url: getUrl()+"/validarDni/"+dni
-          }).done(function (result){
-            console.log(result);
-            if (result.msg === "Éxito"){
-              $.ajax({
-                method: "GET",
-                dataType: "json",
-                crossDomain: true,
-                headers: {"Authorization": "Bearer 43fa71cb7f05b6705d5c79c73497ea314cfec168a6a55ae740f3b5579cb24fe4"},
-                url: "https://apiperu.dev/api/dni/" + dni
-              }).done(function (info) {
-                console.log(info);
-                if (info.success === true) {
-                  console.log("exitoso");
-                  $("#nombre").val(info.data.nombres);
-                  console.log(info.data.nombres, info.data.apellido_paterno, info.data.apellido_materno);
-                  $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
-                } else {
-                  console.log("error en encontrar dni");
-                  $("#dni").addClass("is-invalid");
-                  $("#errorDni").text("El DNI ingresado no es válido");
-                  $("#errorDni").show();
-                  $("#nombre").val("");
-                  $("#apellidos").val("");
-                }
-              })
-            } else {
-              console.log("error en validacion", result.err);
-              $("#dni").addClass("is-invalid");
-              $("#errorDni").text(result.err);
-              $("#errorDni").show();
-            }
-          })
-        }
-      });
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#staticBackdrop').on('show.bs.modal', function(event) {
+      var button = event.relatedTarget;
+      var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
+      $('#staticBackdropLabel').html(`Confirmación`);
+      $('.modal-body').html(`¿Seguro de que deseas invitar este paciente?`);
     });
-  </script>
-  <script>
-    function getUrl(){
-      return window.location.protocol+"//"+window.location.hostname+":8080";
-    }
-  </script>
+    $('#dni').on('input', function() {
+      var dniValue = $(this).val();
+      var validCharacters = /^[0-9]{1,8}$/;
+
+      if (!validCharacters.test(dniValue)) {
+        $(this).val(dniValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
+        $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
+      }
+    });
+
+    $("#consulta").click(function (){
+      $("#consulta").attr("disabled","disabled");
+      $("#consulta").html("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>");
+      let dni = $("#dni").val();
+      $("#dni").removeClass("is-invalid");
+      $("#errorDni").hide();
+      $("#nombre").val("");
+      $("#apellidos").val("");
+      console.log("dni:" , dni);
+      if (dni === "") {
+        console.log("alert");
+        alert("Debe ingresar un DNI");
+
+        $("#consulta").removeAttr("disabled");
+        $("#consulta").html("Consultar");
+      }else {
+        $.ajax({
+          method: "GET",
+          crossDomain: true,
+          url: getUrl()+"/validarDni/"+dni
+        }).done(function (result){
+          console.log(result);
+          if (result.msg === "Éxito"){
+            $.ajax({
+              method: "GET",
+              dataType: "json",
+              crossDomain: true,
+              headers: {"Authorization": "Bearer 5fe50f076dafad000ed90cd7d442fdd13381fe61cef4bddfb583614504a6b6de"},
+              url: "https://apiperu.dev/api/dni/" + dni
+            }).done(function (info) {
+              console.log(info);
+              if (info.success === true) {
+                console.log("exitoso");
+                $("#nombre").val(info.data.nombres);
+                console.log(info.data.nombres, info.data.apellido_paterno, info.data.apellido_materno);
+                $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
+
+                $("#consulta").removeAttr("disabled");
+                $("#consulta").html("Consultar");
+              } else {
+                console.log("error en encontrar dni");
+                $("#dni").addClass("is-invalid");
+                $("#errorDni").text("El DNI ingresado no es válido");
+                $("#errorDni").show();
+                $("#nombre").val("");
+                $("#apellidos").val("");
+
+                $("#consulta").removeAttr("disabled");
+                $("#consulta").html("Consultar");
+              }
+            })
+          } else {
+            console.log("error en validacion", result.err);
+            $("#dni").addClass("is-invalid");
+            $("#errorDni").text(result.err);
+            $("#errorDni").show();
+
+            $("#consulta").removeAttr("disabled");
+            $("#consulta").html("Consultar");
+          }
+        })
+      }
+    });
+  });
+</script>
+<script>
+  function getUrl(){
+    return window.location.protocol+"//"+window.location.hostname+":8080";
+  }
+</script>
 
 </body>
 

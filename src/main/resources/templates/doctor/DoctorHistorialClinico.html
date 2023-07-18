@@ -40,11 +40,12 @@
         <link th:href="@{/assets/img/favicon.png}" rel="icon">
         <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-        <!-- Google Fonts -->
-        <link href="https://fonts.gstatic.com}" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
-              rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com}" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
         <!-- Vendor CSS Files -->
         <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -103,22 +104,27 @@
                                     </button>
                                 </li>
 
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab"
-                                            data-bs-target="#encuesta">Encuesta
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab"
-                                            data-bs-target="#informacion-personal">Información Personal
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab"
-                                            data-bs-target="#proximas-citas">Próximas citas
-                                    </button>
-                                </li>
-                            </ul>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab"
+                                    data-bs-target="#encuesta">Encuesta
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab"
+                                    data-bs-target="#informacion-personal">Información Personal
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab"
+                                    data-bs-target="#proximas-citas">Próximas citas
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab"
+                                    data-bs-target="#descargar-informe">Descargar Informe
+                            </button>
+                        </li>
+                    </ul>
 
 
                             <div class="tab-content pt-2">
@@ -126,27 +132,27 @@
                                 <div class="tab-pane fade show active alergias"
                                      id="alergias">
 
-                                    <h5 class="card-title">Lista de alergias</h5>
-                                    <div class="row">
-                                        <div class="col-lg-9 col-md-8">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">#</th>
-                                                        <th scope="col">Alergia</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <!-- Iterar sobre las alergias del paciente -->
-                                                    <tr th:each="alergia, i : ${alergiaList}">
-                                                        <th scope="row" th:text="${i.index + 1}"></th>
-                                                        <td th:text="${alergia.getNombre()}"></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                            <h5 class="card-title">Lista de alergias</h5>
+                            <div class="row">
+                                <div class="col-lg-9 col-md-8">
+                                    <table class="table" id="tablaAlergias">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Alergia</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!-- Iterar sobre las alergias del paciente -->
+                                        <tr th:each="alergia, i : ${alergiaList}">
+                                            <th scope="row" th:text="${i.index + 1}"></th>
+                                            <td th:text="${alergia.getNombre()}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
+                            </div>
+                        </div>
 
                                 <div class="tab-pane fade encuesta pt-3" id="encuesta">
                                     <h5 class="card-title">Cuestionarios</h5>
@@ -182,126 +188,136 @@
                                 </div>
 
 
-                                <div class="tab-pane fade tratamiento pt-3" id="tratamiento">
-                                    <h5 class="card-title">Información de consultas</h5>
-                                    <div class="row">
-                                        <div class="col-lg-9 col-md-8">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Diagnóstico</th>
-                                                        <th>Tratamiento</th>
-                                                        <th>Receta</th>
-                                                        <th>Fecha de emisión</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr th:each="tratamiento, i : ${ListaTratamiento}">
-                                                        <td th:text="${i.index + 1}"></td>
-                                                        <td th:text="${tratamiento.getDiagnostico()}"></td>
-                                                        <td th:text="${tratamiento.getTratamiento()}"></td>
-                                                        <td th:text="${tratamiento.getReceta()}"></td>
-                                                        <td th:text="${#temporals.format(tratamiento.getFin(), 'dd/MM/yyy')}"></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tab-pane fade documentos-anexados pt-3" id="documentos-anexados">
-                                    <h5 class="card-title">Documentos del Paciente</h5>
-                                    <table class="table">
+                        <div class="tab-pane fade tratamiento pt-3" id="tratamiento">
+                            <h5 class="card-title">Información de consultas</h5>
+                            <div class="row">
+                                <div class="col-lg-9 col-md-8">
+                                    <table class="table" id="tablaTratamiento">
                                         <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Especialidad</th>
-                                                <th>Fecha</th>
-                                                <th style="text-align: left">Examen</th>
-                                            </tr>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Diagnóstico</th>
+                                            <th>Tratamiento</th>
+                                            <th>Receta</th>
+                                            <th>Fecha de emisión</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="cita, info : ${listCitas}">
-                                                <td th:text="${info.index + 1}"></td>
-                                                <td th:text="${cita.especialidad.getNombre()}"></td>
-                                                <td th:text="${#temporals.format(cita.getFin(), 'dd-MM-yyyy')}"></td>
-                                                <td style="text-align: left">
-                                                    <a th:href="@{'/doctor/downloadFile/' + ${cita.getId_cita()}}"
-                                                       class="button-icon" target="_blank">
-                                                        <i style="font-size: 180%"
-                                                           class="bi bi-file-earmark-pdf-fill"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                        <tr th:each="tratamiento, i : ${ListaTratamiento}">
+                                            <td th:text="${i.index + 1}"></td>
+                                            <td th:text="${tratamiento.getDiagnostico()}"></td>
+                                            <td th:text="${tratamiento.getTratamiento()}"></td>
+                                            <td th:text="${tratamiento.getReceta()}"></td>
+                                            <td th:text="${#temporals.format(tratamiento.getFin(), 'dd/MM/yyy')}"></td>
+                                        </tr>
                                         </tbody>
                                     </table>
-                                    <!-- seccion doc anexados -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade documentos-anexados pt-3" id="documentos-anexados">
+                            <h5 class="card-title">Documentos del Paciente</h5>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Especialidad</th>
+                                    <th>Fecha</th>
+                                    <th style="text-align: left">Examen</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="cita, info : ${listCitas}">
+                                    <td th:text="${info.index + 1}"></td>
+                                    <td th:text="${cita.especialidad.getNombre()}"></td>
+                                    <td th:text="${#temporals.format(cita.getFin(), 'dd-MM-yyyy')}"></td>
+                                    <td style="text-align: left">
+                                        <a th:href="@{'/doctor/downloadFile/' + ${cita.getId_cita()}}"
+                                           class="button-icon" target="_blank">
+                                            <i style="font-size: 180%" class="bi bi-file-earmark-pdf-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- seccion doc anexados -->
+                        </div>
+
+                        <div class="tab-pane fade informacion-personal pt-3" id="informacion-personal">
+                            <div class="row">
+                                <h5 class="card-title">Información Personal</h5>
+                                <div class="col-lg-3 col-md-4 d-flex align-items-center justify-content-center">
+                                    <img th:src="@{'/usuario/foto/'+${paciente.getIdPaciente()}}"
+                                         alt="Foto del paciente" class="img-fluid mx-auto d-block"
+                                         style="max-width: 207px; max-height: 276px;">
                                 </div>
 
-                                <div class="tab-pane fade informacion-personal pt-3" id="informacion-personal">
-                                    <div class="row">
-                                        <h5 class="card-title">Información Personal</h5>
-                                        <div class="col-lg-3 col-md-4 d-flex align-items-center justify-content-center">
-                                            <img th:src="@{'/usuario/foto/'+${paciente.getIdPaciente()}}"
-                                                 alt="Foto del paciente" class="img-fluid mx-auto d-block"
-                                                 style="max-width: 207px; max-height: 276px;">
-                                        </div>
-
-                                        <div class="col-lg-9 col-md-8">
-                                            <h4 th:text="${paciente.getNombre()} +' '+ ${paciente.getApellidos()}"></h4>
-                                            <div><strong>Seguro médico:</strong> <span
-                                                    th:text="${paciente.seguro.getNombre()}"></span></div>
-                                            <div><strong>Teléfono:</strong> <span
-                                                    th:text="${paciente.getTelefono()}"></span></div>
-                                            <div><strong>Correo:</strong> <span
-                                                    th:text="${paciente.getCorreo()}"></span></div>
-                                            <div><strong>Dirección:</strong> <span
-                                                    th:text="${paciente.getDireccion()}"></span></div>
-                                            <div><strong>Distrito:</strong> <span
-                                                    th:text="${paciente.getDistrito().getNombre()}"></span></div>
-                                            <div><strong>Fecha de nacimiento:</strong> <span
-                                                    th:text="${#temporals.format(paciente.getFechanacimiento(), 'dd-MM-yyyy')}"></span></div>
-                                            <div><strong>Género:</strong> <span
-                                                    th:text="${paciente.getGenero()}"></span></div>
-                                        </div>
+                                <div class="col-lg-9 col-md-8">
+                                    <h4 id="NombrePaciente"
+                                        th:text="${paciente.getNombre()} +' '+ ${paciente.getApellidos()}"></h4>
+                                    <div><strong>Seguro médico:</strong> <span id="SeguroMedico"
+                                                                               th:text="${paciente.seguro.getNombre()}"></span>
                                     </div>
-                                </div>
-                                <div class="tab-pane fade pt-3" id="proximas-citas">
-                                    <h5 class="card-title">Próximas citas</h5>
-                                    <div class="row">
-                                        <div class="col-lg-9 col-md-8">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Tipo de cita</th>
-                                                        <th>Horario</th>
-                                                        <th>Estado de consulta</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr th:each="cita : ${lisProxCitas}">
-                                                        <td style="font-size: 1rem">
-                                                            <h6 th:text="${ cita.modalidad==0 ? 'Presencial' : 'Virtual'}"></h6>
-                                                        </td>
-                                                        <td th:text="${#temporals.format(cita.getInicio(), 'dd-MM-yyyy HH:mm')}"></td>
-                                                        <td style="font-size: 1rem;color: black">
-                                                            <h6 th:if="${cita.estado == 0}"
-                                                                th:text="'En cita'"></h6>
-                                                            <h6 th:if="${cita.estado == 1}"
-                                                                th:text="'En espera'"></h6>
-                                                            <h6 th:if="${cita.estado == 4}"
-                                                                th:text="'Finalizado'"></h6>
-                                                            <h6 th:if="${cita.estado == 3}"
-                                                                th:text="'Cancelado'"></h6>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                    <div><strong>Teléfono:</strong> <span id="telefono"
+                                                                          th:text="${paciente.getTelefono()}"></span>
                                     </div>
+                                    <div><strong>Correo:</strong> <span id="correo"
+                                                                        th:text="${paciente.getCorreo()}"></span></div>
+                                    <div><strong>Dirección:</strong> <span id="direccion"
+                                                                           th:text="${paciente.getDireccion()}"></span>
+                                    </div>
+                                    <div><strong>Distrito:</strong> <span id="distrito"
+                                                                          th:text="${paciente.getDistrito().getNombre()}"></span>
+                                    </div>
+                                    <div><strong>Fecha de nacimiento:</strong> <span id="birthday"
+                                                                                     th:text="${paciente.getFechanacimiento()}"></span>
+                                    </div>
+                                    <div><strong>Género:</strong> <span id="genero"
+                                                                        th:text="${paciente.getGenero()}"></span></div>
                                 </div>
-                            </div><!-- End Bordered Tabs -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade pt-3" id="proximas-citas">
+                            <h5 class="card-title">Próximas citas</h5>
+                            <div class="row">
+                                <div class="col-lg-9 col-md-8">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Tipo de cita</th>
+                                            <th>Horario</th>
+                                            <th>Estado de consulta</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="cita : ${lisProxCitas}">
+                                            <td style="font-size: 1rem">
+                                                <h6 th:text="${ cita.modalidad==0 ? 'Presencial' : 'Virtual'}"></h6>
+                                            </td>
+                                            <td th:text="${cita.getInicio()}"></td>
+                                            <td style="font-size: 1rem;color: black">
+                                                <h6 th:if="${cita.estado == 0}"
+                                                    th:text="'En cita'"></h6>
+                                                <h6 th:if="${cita.estado == 1}"
+                                                    th:text="'En espera'"></h6>
+                                                <h6 th:if="${cita.estado == 2}"
+                                                    th:text="'Finalizado'"></h6>
+                                                <h6 th:if="${cita.estado == 3}"
+                                                    th:text="'Cancelado'"></h6>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="descargar-informe">
+                            <h5 class="card-title">Descargar Informe Médico</h5>
+                            <button id="descargarInforme" class="btn btn-primary" onclick="genPDF()">Descargar informe
+                            </button>
+                        </div>
+                    </div><!-- End Bordered Tabs -->
 
                         </div>
                     </div>
@@ -325,34 +341,233 @@
             </div>
         </footer><!-- End Footer -->
 
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-                class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+<script>
+    var headerColorDoctor = "[[${headerColorDoctor}]]";
+    localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
 
-        <!-- Vendor JS Files -->
-        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-        <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
+    function updateHeaderColorDoctor() {
+        var color = headerColorDoctor;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorDoctor();
+</script>
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
 
 
-        <!-- Template Main JS File -->
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                crossorigin="anonymous"></script>
-        <script th:src="@{/assets/js/jsDoctor.js}"></script>
-        <script>
-            function autoResizeTextarea(element) {
-                // Ajustar la altura del textarea en función del contenido
-                element.style.height = "auto";
-                element.style.height = element.scrollHeight + "px";
+<!-- Template Main JS File -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script th:src="@{/assets/js/jsDoctor.js}"></script>
+<script>
+    function autoResizeTextarea(element) {
+        // Ajustar la altura del textarea en función del contenido
+        element.style.height = "auto";
+        element.style.height = element.scrollHeight + "px";
+    }
+</script>
+<!--<script>
+  document.getElementById('descargarInforme').addEventListener('click', function() {
+    const doc = new jsPDF();
+
+    // Datos harcodeados
+    const nombre = "Juan";
+    const apellidos = "Pérez";
+    const telefono = "123456789";
+    const direccion = "Calle Principal 123";
+    // Puedes agregar más datos según tus necesidades
+
+    // Agregar los datos al PDF
+    doc.text(`Nombre: ${nombre}`, 10, 10);
+    doc.text(`Apellidos: ${apellidos}`, 10, 20);
+    doc.text(`Teléfono: ${telefono}`, 10, 30);
+    doc.text(`Dirección: ${direccion}`, 10, 40);
+    // Agrega más campos según tus necesidades
+
+    // Guardar el PDF como archivo para descargar
+    doc.save('InformeMedico.pdf');
+  });
+</script>-->
+<script type="text/javascript" th:src="@{/assets/js/jspdf.min.js}"></script>
+
+<script type="text/javascript" th:inline="none">
+    // Función para obtener una imagen como Base64
+    async function getImageBase64(url) {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    async function loadImageAndAdjustOpacity(url, opacity) {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const imageBitmap = await createImageBitmap(blob);
+        const canvas = document.createElement('canvas');
+        canvas.width = imageBitmap.width;
+        canvas.height = imageBitmap.height;
+        const ctx = canvas.getContext('2d');
+        ctx.globalAlpha = opacity;
+        ctx.drawImage(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height);
+        return canvas.toDataURL();
+    }
+
+    async function genPDF() {
+        var doc = new jsPDF();
+        var logoUrl = '/assets/img/logoClinicaPNG.png'; // Cambia esto a la URL de tu imagen
+        var logo = await loadImageAndAdjustOpacity(logoUrl, 0.3);
+
+        // Añade la imagen al fondo
+        var pageWidth = doc.internal.pageSize.width;
+        var pageHeight = doc.internal.pageSize.height;
+        await addImagesToPage(doc, pageWidth, logoUrl); // Agregar imágenes a la primera página
+
+        /*   doc.addImage(logo, 'PNG', 0, pageWidth / 4, pageWidth, pageWidth);
+
+           // Ahora añade la segunda imagen en la esquina superior izquierda
+           var logoCorner = await getImageBase64(logoUrl);
+           doc.addImage(logoCorner, 'PNG', 10, 10, 25, 25);
+           // Añadir texto al lado de la imagen*/
+        doc.setFontSize(22);
+        doc.setFontType("bold")
+        doc.text(35, 25, 'Clínica InterPucp'); // Asegúrate de ajustar las coordenadas 'x' e 'y' para posicionar correctamente este texto
+        doc.setFontSize(18);
+        doc.setFontType("bold")
+        doc.text(85, 50, 'Informe Médico');
+        doc.text(84, 51, '______________')
+
+        // Capturar los datos del paciente de la página HTML
+        var nombrePaciente = document.getElementById('NombrePaciente').textContent; // Obtener el texto del nombre del paciente
+        var seguroMedico = document.getElementById('SeguroMedico').textContent; // Obtener el texto del seguro médico
+        var telefono = document.getElementById('telefono').textContent;
+        var correo = document.getElementById('correo').textContent;
+        var direccion = document.getElementById('direccion').textContent;
+        var distrito = document.getElementById('distrito').textContent;
+        var birthday = document.getElementById('birthday').textContent;
+        var genero = document.getElementById('genero').textContent;
+
+        doc.setFontSize(14);
+        doc.setFontType("bold");
+        doc.text(20, 65, 'Información del Paciente'); // Empieza más abajo para evitar la superposición con la imagen
+        doc.text(19, 66, '______________________')
+        doc.setFontSize(12);
+        doc.setFontType("normal");
+        doc.text(20, 75, 'Nombre de Paciente: ' + nombrePaciente);
+        doc.text(20, 85, 'Seguro médico: ' + seguroMedico);
+        doc.text(20, 95, 'Teléfono: ' + telefono);
+        doc.text(20, 105, 'Correo: ' + correo);
+        doc.text(20, 115, 'Dirección: ' + direccion);
+        doc.text(20, 125, 'Distrito: ' + distrito);
+        doc.text(20, 135, 'Fecha de Nacimiento: ' + birthday);
+        doc.text(20, 145, 'Género: ' + genero);
+
+        ////////////////////////
+        var tablaAlergias = document.getElementById('tablaAlergias'); // Asegúrate de tener el id correcto de la tabla de alergias
+        var filasAlergia = tablaAlergias.rows;
+        var alergias = [];
+
+// Empezar desde el índice 1, no desde el índice 0, para saltar el encabezado de la tabla
+        for (var i = 1; i < filasAlergia.length; i++) {
+            var celdas = filasAlergia[i].cells;
+            alergias.push(celdas[1].innerText); // Solo se toma el nombre de la alergia, la columna 1
+        }
+
+// Ahora une todas las alergias con una coma y un espacio
+        var textoAlergias = alergias.join(', ');
+
+// Ahora añade las alergias al documento PDF
+        doc.setFontSize(14);
+        doc.setFontType("bold");
+        doc.text(20, 157, 'Lista de Alergias');
+        doc.text(19, 158, '_______________');
+        doc.setFontType("normal");
+        doc.setFontSize(12);
+        doc.text(20, 165, 'Alergias: ' + textoAlergias); // Escribe todas las alergias en una línea
+
+        doc.setFontSize(14);
+        doc.setFontType("bold");
+        doc.text(20, 177, 'Tratamientos'); // Empieza más abajo para evitar la superposición con la imagen
+        doc.text(19, 178, '____________')
+        doc.setFontType("normal");
+        doc.setFontSize(12);
+        var tablaTratamiento = document.getElementById('tablaTratamiento');
+        var filas = tablaTratamiento.rows;
+        var datosTabla = [];
+
+// Empezar desde el índice 1, no desde el índice 0, para saltar el encabezado de la tabla
+        for (var i = 1; i < filas.length; i++) {
+            var celdas = filas[i].cells;
+            var fila = [];
+            for (var j = 0; j < celdas.length; j++) {
+                fila.push(celdas[j].innerText);
             }
+            datosTabla.push(fila);
+        }
+
+        var titulosColumnas = ['Tratamiento #', 'Diagnóstico', 'Tratamiento', 'Receta', 'Fecha de emisión']; // Asegúrate de que estos títulos coincidan con las columnas de tu tabla
+        var y = 188; // Posición vertical inicial
+
+        for (var i = 0; i < datosTabla.length; i++) {
+            var x = 20; // Reset x position for each row
+            for (var j = 0; j < datosTabla[i].length; j++) {
+                var texto = titulosColumnas[j] + ': ' + datosTabla[i][j]; // Combine column title and cell value
+
+                // Verificar si la próxima línea va a estar fuera de la página
+                if (y + 10 > pageHeight) {
+                    doc.addPage(); // Agregar una nueva página
+                    await addImagesToPage(doc, pageWidth, logoUrl); // Agregar imágenes a la nueva página
+                    doc.setFontSize(12)
+                    y = 65; // Reset y position to the top of the new page
+                }
+
+                doc.text(x, y, texto); // Write each cell on a new line
+                y += 10; // Move down after each cell
+            }
+            y += 5; // Leave a blank line after each row
+
+            // Verificar de nuevo si la próxima línea va a estar fuera de la página
+            if (y + 10 > pageHeight) {
+                doc.addPage(); // Agregar una nueva página
+                await addImagesToPage(doc, pageWidth, logoUrl); // Agregar imágenes a la nueva página
+                doc.setFontSize(12)
+                y = 65; // Reset y position to the top of the new page
+            }
+        }
+        doc.save('InformeMedico_' + nombrePaciente + '.pdf');
+    }
+    async function addImagesToPage(doc, pageWidth, logoUrl) {
+        var logo = await loadImageAndAdjustOpacity(logoUrl, 0.3);
+        doc.addImage(logo, 'PNG', 0, pageWidth / 4, pageWidth, pageWidth);
+
+        var logoCorner = await getImageBase64(logoUrl);
+        doc.addImage(logoCorner, 'PNG', 10, 10, 25, 25);
+
+        doc.setFontSize(22);
+        doc.setFontType("bold")
+        doc.text(35, 25, 'Clínica InterPucp');
+        doc.setFontSize(18);
+        doc.setFontType("bold")
+        doc.text(85, 50, 'Informe Médico');
+        doc.text(84, 51, '______________');
+        doc.setFontType("normal")
+    }
 
         </script>
 

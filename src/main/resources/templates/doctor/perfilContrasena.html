@@ -152,19 +152,28 @@
         </main>
         <div id="loading"></div>
 
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-                class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+<script>
+    var headerColorDoctor = "[[${headerColorDoctor}]]";
+    localStorage.setItem('headerColorAdministrativo', headerColorDoctor);
 
-        <!-- Vendor JS Files -->
-        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-        <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
+    function updateHeaderColorDoctor() {
+        var color = headerColorDoctor;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorDoctor();
+</script>
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
 
 
         <!-- Template Main JS File -->
