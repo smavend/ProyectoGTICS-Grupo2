@@ -54,9 +54,11 @@ public class Doctor implements Serializable {
     private String posgrado;
 
 
-    @Size(max = 10, message = "La colegiatura no puede tener más de 10 caracteres")
+    @Size(min = 6, max = 6, message = "La colegiatura debe tener exactamente 6 caracteres")
     @Pattern(regexp = "\\d+", message = "La colegiatura debe contener solo números")
     private String colegiatura;
+
+
 
     @ManyToOne
     @JoinColumn(name = "horario_id_horario")
