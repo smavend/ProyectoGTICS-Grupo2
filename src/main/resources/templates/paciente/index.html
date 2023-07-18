@@ -196,6 +196,15 @@
             });
         }
 
+        function notificacionCuestionario() {
+            var url6 = getUrl() + "/Paciente/notificacionCuestionario";
+            $.ajax({
+                url: url6,
+                method: "GET",
+                dataType: "json",
+            });
+        }
+
         function handleClick() {
             SetearRevisadoA1();
         }
@@ -209,11 +218,13 @@
             listarNotificacionesTitulo();
             listarNotificacionesDescripcion();
             notificacionListaHora();
+            notificacionCuestionario();
 
             setInterval(enumerarNoVistos, 1000);
             setInterval(listarNotificacionesTitulo, 1000);
             setInterval(listarNotificacionesDescripcion, 1000);
             setInterval(notificacionListaHora, 1000);
+            setInterval(notificacionCuestionario, 1000);
         });
 
         $("#botonCampanaAparecerDesaparecer").click(handleClick);

@@ -1348,7 +1348,7 @@ public class PacienteController {
 
     @GetMapping(value = {"/notificacionCuestionario"})
     @ResponseBody
-    public List<String> notificacionCuestionario(Model model, HttpSession session, Authentication authentication) {
+    public List<Integer> notificacionCuestionario(Model model, HttpSession session, Authentication authentication) {
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -1359,15 +1359,27 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
-        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
-        List<String> listaTitulos = new ArrayList<>();
+        List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.buscarPorPaciente(paciente.getIdPaciente());
+        int verificar=0;
+        int idCuestionario=0;
+        int idCita=0;
+        List<Integer> ListaIdCitayIdCuestionario = new ArrayList<>();
 
-        for (int i=0; i<listaNotificaciones.size(); i++) {
-            listaTitulos.add(listaNotificaciones.get(i).getDescripcion());
-            System.out.println(listaNotificaciones.get(i).getTitulo());
+
+        for (int i = 0; i < cuestionarioPorCitaList.size(); i++) {
+            if (cuestionarioPorCitaList.get(i).getOpcion_inicio_sesion() == 0) {
+                verificar = 1;
+                idCuestionario = cuestionarioPorCitaList.get(i).getCuestionario().getId_cuestionario();
+                idCita = cuestionarioPorCitaList.get(i).getCita().getId_cita();
+                notificacionRepository.crearNotificacionDeCuestionario(paciente.getIdPaciente());
+                cuestionarioPorCitaRepository.actualizarOpcionSesion(idCita,idCuestionario);
+
+                ListaIdCitayIdCuestionario.add(idCuestionario);
+                ListaIdCitayIdCuestionario.add(idCita);
+            }
         }
 
-        return listaTitulos;
+        return ListaIdCitayIdCuestionario;
     }
 
 
