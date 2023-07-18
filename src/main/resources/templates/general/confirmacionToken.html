@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Token Expirado</title>
+  <title>Pages / Login - NiceAdmin Bootstrap Template</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -69,28 +69,12 @@
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Token expirado</h5>
-                    <p class="text-center small">El link enviado por correo ha expirado dado que ya se cumplieron las 48 horas de plazo.<br> Para continuar, puedes generar uno nuevo con el siguiente botón:</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Token generado</h5>
+                    <p class="text-center small">Se te ha enviado un correo con el enlace a tu nuevo token.<br> En las próximas 48 horas se volverá a invalidar, por lo que te sugerimos completar los pasos en la brevedad posible. Agradecemos tu interés en la clínica</p>
                   </div>
-                  <form class="row g-3 needs-validation" novalidate method="post" th:action="@{/newToken}">
-
-                    <div class="col-12">
-                      <label class="form-label">Correo electrónico</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="email" name="correo" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Por favor ingrese su correo válido.</div>
-                      </div>
-                    </div>
-
-                    <div class="col-6 text-end">
-                      <button class="btn btn-primary" type="submit">Generar nuevo token</button>
-                    </div>
-                    <div class="col-6 text-start">
-                      <a type="button" class="btn btn-secondary" th:href="@{/login}" >Cancelar</a>
-                    </div>
-                  </form>
-
+                  <div class="text-center">
+                    <a type="button" class="btn btn-primary" th:href="@{/}" >Volver al Inicio</a>
+                  </div>
 
                 </div>
               </div>

@@ -72,19 +72,19 @@
                     <h5 class="card-title text-center pb-0 fs-4">Olvidé mi contraseña</h5>
                     <p class="text-center small">Ingresa el correo afiliado a tu cuenta para continuar:</p>
                   </div>
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form class="row g-3 needs-validation" method="post" th:action="@{/login/olvidepassw/correo}" novalidate>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Correo electrónico</label>
+                      <label class="form-label">Correo electrónico</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
+                        <input type="text" name="correo" class="form-control" id="correo" required>
                         <div class="invalid-feedback">Por favor ingrese su correo.</div>
                       </div>
                     </div>
 
                     <div class="col-6 text-end">
-                        <a class="btn btn-primary" type="button" th:href="@{/login/olvidepassw/confirmacion}">Continuar</a>
+                        <button class="btn btn-primary" type="submit">Continuar</button>
                     </div>
                     <div class="col-6 text-start">
                       <a type="button" class="btn btn-secondary" th:href="@{/login}" >Volver</a>

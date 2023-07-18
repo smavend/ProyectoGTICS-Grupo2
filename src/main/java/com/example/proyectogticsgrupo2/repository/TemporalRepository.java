@@ -24,6 +24,8 @@ public interface TemporalRepository extends JpaRepository<Temporal, Integer> {
 
     Optional<Temporal> findByDni(String dni);
 
+    Temporal findByCorreo(String correo);
+
     @Query(nativeQuery = true,value = "SELECT * FROM temporal\n" +
             "where llenado = 1;")
     List<Temporal> listatemporalesLlenados ();

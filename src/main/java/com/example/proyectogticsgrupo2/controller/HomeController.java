@@ -1,15 +1,16 @@
 package com.example.proyectogticsgrupo2.controller;
 
+import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
-import com.example.proyectogticsgrupo2.service.CorreoAutoregistro;
-import com.example.proyectogticsgrupo2.service.QRCodeGenerator;
+import com.example.proyectogticsgrupo2.service.*;
 import com.google.zxing.WriterException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -37,9 +38,10 @@ public class HomeController {
     final TareaRepository tareaRepository;
     final TokenRepository tokenRepository;
     final PacientePorConsentimientoRepository ppcRepository;
+     final SecurityConfig securityConfig;
 
 
-    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository, TokenRepository tokenRepository, PacientePorConsentimientoRepository ppcRepository) {
+    public HomeController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, DistritoRepository distritoRepository, SeguroRepository seguroRepository, TemporalRepository temporalRepository, AlergiaRepository alergiaRepository, TareaRepository tareaRepository, TokenRepository tokenRepository, PacientePorConsentimientoRepository ppcRepository, SecurityConfig securityConfig) {
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
         this.administradorRepository = administradorRepository;
@@ -51,6 +53,7 @@ public class HomeController {
         this.tareaRepository = tareaRepository;
         this.tokenRepository = tokenRepository;
         this.ppcRepository = ppcRepository;
+        this.securityConfig = securityConfig;
     }
 
     @GetMapping("/")
@@ -90,9 +93,76 @@ public class HomeController {
     public String pedirCorreo(){
         return "general/pedirCorreo";
     }
+    @PostMapping("/login/olvidepassw/correo")
+    public String enviarCorreo(@RequestParam(name = "correo") String correo,
+                               HttpServletRequest request){
+        List<Paciente> lista = pacienteRepository.findAll();
+        boolean validar = false;
+        for(Paciente p: lista){
+            if (p.getCorreo().equals(correo)){
+                validar= true;
+            }
+        }
+        if (validar){
+            TokenService tokenService = new TokenService();
+
+            Paciente paciente = pacienteRepository.findByCorreo(correo);
+            Token token = new Token();
+            token.setIdPaciente(paciente.getIdPaciente());
+            token.setToken(tokenService.generateToken());
+            token.setFechaExpiracion(LocalDateTime.now().plusDays(2));
+            token.setTabla(3);
+            tokenRepository.save(token);
+            CorreoPacientePassw correoPacienteService = new CorreoPacientePassw();
+            String link = request.getServerName()+":"+request.getLocalPort();
+            correoPacienteService.enviarCorreo(paciente.getCorreo(),paciente.getNombre(), link, token.getIdPaciente(), token.getToken());
+
+            return "redirect:/login/olvidepassw/confirmacion";
+        }
+        return "/login/cambiarpassw/failed";
+    }
+
+    @GetMapping("/login/{id}/{token}")
+    public String cambiarPassw(@PathVariable("id") String id,
+                               @PathVariable("token") String token,
+                               HttpServletRequest request){
+        List<Token> tokens = tokenRepository.findAll();
+        boolean validar = false;
+        for (Token t: tokens){
+            if (t.getToken().equals(token)){
+                if (t.getIdPaciente().equals(id)){
+                    validar=true;
+                    break;
+                }
+            }
+        }
+        if (validar){
+            return "general/cambiarPassw";
+        }
+        else{
+            return "redirect:/login";
+        }
+    }
+
+    @PostMapping("/login/cambiarPassw")
+    public String cambiando (@RequestParam("password") String password,
+                             @RequestParam("password2") String password2,
+                             @RequestParam("id") String id){
+        if (password2.equals(password) && password.length()>=6){
+            Credenciales credenciales = credencialesRepository.buscarPorId(id);
+            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+            // Ahora puedes usar el passwordEncoder para codificar una contraseña
+            String encodedPassword = passwordEncoder.encode(password);
+            credenciales.setContrasena(encodedPassword);
+            credencialesRepository.save(credenciales);
+            return "redirect:/login/cambiarpassw/success";
+        }else{
+            return "general/cambiarPassw";
+        }
+    }
     @GetMapping("/login/olvidepassw/confirmacion")
     public String mensajeCambioContrasenia(){
-        return "general/mensajeSolicitudContrasenia";
+        return "general/confirmacionTokenPassw";
     }
     @GetMapping("/login/cambiarpassw")
     public String cambiarContrasenia(){
@@ -102,6 +172,11 @@ public class HomeController {
     public String cambioPasswExitoso(){
         return "general/confirmacioncontrasenia";
     }
+    @GetMapping("/login/cambiarpassw/failed")
+    public String cambioPasswMal(){
+        return "general/CorreoInvalido2";
+    }
+
 
 
     @GetMapping(value = {"/signin/{id}/{token}","/signin", "/signin/save"})
@@ -282,6 +357,41 @@ public class HomeController {
             Doctor doctor = optDoctor.get();
             InputStream is = new ByteArrayInputStream(doctor.getFoto());
             IOUtils.copy(is, response.getOutputStream());
+        }
+    }
+
+    @PostMapping("/newToken")
+    public String generarToken (@RequestParam(name = "correo") String correo,
+                               HttpServletRequest request){
+        List<Temporal> temporals = temporalRepository.findAll();
+        boolean validar = false;
+        for (Temporal t: temporals){
+            if (correo.equals(t.getCorreo())){
+                validar = true;
+            }
+        }
+        if (validar){
+            TokenService tokenService = new TokenService();
+            Temporal temporal = temporalRepository.findByCorreo(correo);
+
+            Optional<Token> token1 = tokenRepository.findById(temporal.getDni());
+            if (token1.isPresent()){
+                Token token = token1.get();
+                token.setIdPaciente(temporal.getDni());
+                token.setToken(tokenService.generateToken());
+                token.setFechaExpiracion(LocalDateTime.now().plusDays(2));
+                token.setTabla(1);
+                tokenRepository.save(token);
+
+                CorreoPacienteService correoPacienteService = new CorreoPacienteService();
+                String link = request.getServerName()+":"+request.getLocalPort();
+                correoPacienteService.enviarCorreo(temporal.getCorreo(),temporal.getNombre(), link, token.getIdPaciente(), token.getToken());
+                return "/general/confirmacionToken";
+            }
+            return "general/CorreoInvalido";
+        }
+        else {
+            return "general/CorreoInvalido";
         }
     }
 }
