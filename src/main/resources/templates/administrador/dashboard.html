@@ -32,6 +32,8 @@
   <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
   <!-- DataTables -->
   <link rel="stylesheet" th:href="@{/assets/css/datatables.min.css}"/>
+  <!-- CDN para CHAT -->
+  <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
 
   <!-- =======================================================
@@ -253,13 +255,13 @@
             <hr class="dropdown-divider">
           </li>
 
-          <li>
-            <form th:action="@{/logout}" method="post">
+          <li id="botonLogout">
+            <form th:action="@{/logout}" method="post" id="logoutForm">
+            </form>
             <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
               <i class="bi bi-box-arrow-right"></i>
               <span>Cerrar Sesión</span>
             </button>
-            </form>
           </li>
 
         </ul><!-- End Profile Dropdown Items -->
@@ -420,6 +422,74 @@
   </section>
 
 </main><!-- End #main -->
+
+  <!-- JQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.4.js"
+          integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+
+  <!-- CDN LOGUEO CHAT -->
+  <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"
+          integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+  ></script>
+  <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.0/firebase.js"
+          integrity="sha512-7NBxPO/qRUrKc+Wi9GbYz0YEzMpi2UMP3mtLcswnvzI0vUFP5Jb7HNVd1V8NmEhXpSe3ZLsoGEhwRHpAZDpYPQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+  ></script>
+
+  <script th:src="@{/chatSetup/config.js}"></script>
+  <script th:src="@{/chatSetup/firebase.js}"></script>
+  <script th:src="@{/assets/js/funciones_chat.js}"></script>
+
+  <script th:inline="javascript" th:if="${credenciales != null}">
+    let credenciales = [[${credenciales}]];
+    for (let i = 0; i < credenciales.length; i++) {
+      let email = credenciales[i].correo;
+      let password = credenciales[i].pass;
+      let userAvatar = "https://data-us.cometchat.io/assets/images/avatars/spiderman.png";
+      let userUuid = uuid.v4();
+
+      auth.createUserWithEmailAndPassword(email, password).then((userCrendentials) => { // guardar en FB
+        console.log("guardado en FB");
+        if (userCrendentials) {
+          realTimeDb.ref(`users/${userUuid}`).set({
+            id: userUuid,
+            email,
+            avatar: userAvatar
+          }).then(() => { // guardar en CC
+            let user = new CometChatWidget.CometChat.User(userUuid);
+            user.setName(email);
+            user.setAvatar(userAvatar);
+            console.log("guardando en CC");
+            CometChatWidget.init({
+              "appID": `${config.CometChatAppId}`,
+              "appRegion": `${config.CometChatRegion}`,
+              "authKey": `${config.CometChatAuthKey}`
+            }).then(response => {
+              CometChatWidget.createOrUpdateUser(user).then(user => {
+                console.log("guardado en CC");
+                //ocultarLoading();
+              }, error => {
+                //ocultarLoading();
+              });
+            }, error => {
+              //ocultarLoading();
+            });
+            // fin registro
+          });
+        }
+      }).catch((error) => {
+        //ocultarLoading();
+        console.log("error al registrar en FB");
+      });
+
+    }
+  </script>
 
 <script>
   var headerColorAdministrador = "[[${headerColorAdministrador}]]";

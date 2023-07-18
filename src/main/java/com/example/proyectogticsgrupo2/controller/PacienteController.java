@@ -122,19 +122,6 @@ public class PacienteController {
             }
         }
 
-        List<HashMap<String, String>> credenciales = new ArrayList<>();
-        HashMap<String, String> user1 = new HashMap<>();
-        user1.put("correo", "lucas@gmail.com");
-        user1.put("pass", "123");
-        HashMap<String, String> user2 = new HashMap<>();
-        user2.put("correo", "jhon@gmail.com");
-        user2.put("pass", "123");
-
-        credenciales.add(user1);
-        credenciales.add(user2);
-
-        model.addAttribute("credenciales", credenciales);
-
         session.setAttribute("paciente", paciente);
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("sedeList", sedeList);
@@ -187,6 +174,10 @@ public class PacienteController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+/*
+        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
+*/
+
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -311,6 +302,7 @@ public class PacienteController {
 
     @PostMapping("/reservar3")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
+
                             @RequestParam(name = "citaPendiente", required = false) Boolean citaPendiente,
                             @RequestParam(name = "examenPendiente", required = false) Boolean examenPendiente,
                             @RequestParam(name = "codigoRecibo") String codigoRecibo,
@@ -325,6 +317,7 @@ public class PacienteController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -777,7 +770,7 @@ public class PacienteController {
     public String guardarContrasena(@RequestParam("actual") String contrasenaActual,
                                     @RequestParam("nueva1") String contrasenaNueva1,
                                     @RequestParam("nueva2") String contrasenaNueva2,
-                                    RedirectAttributes attr, Authentication authentication,
+                                    Model model, RedirectAttributes attr, Authentication authentication,
                                     HttpSession session) {
 
         String userEmail;
@@ -798,11 +791,19 @@ public class PacienteController {
             if (contrasenaNueva1.equals(contrasenaNueva2)) {
 
                 if (!contrasenaNueva1.equals("")) {
-                    credencialesRepository.save(nuevasCredenciales);
-                    attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
-                    return "redirect:/Paciente/perfil";
+
+                    if (contrasenaNueva1.length()>=6){
+                        credencialesRepository.save(nuevasCredenciales);
+                        attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+                        attr.addFlashAttribute("pass", contrasenaNueva1);
+                        return "redirect:/Paciente/perfil";
+                    }
+                    else{
+                        attr.addFlashAttribute("error2", "La contraseña debe tener como mínimo 6 dígitos");
+                    }
+
                 } else {
-                    attr.addFlashAttribute("erro2", "Ingrese una nueva contraseña válida");
+                    attr.addFlashAttribute("error2", "Ingrese una nueva contraseña válida");
                 }
 
             } else {
@@ -837,6 +838,7 @@ public class PacienteController {
                               @RequestParam("pag") int pagina,
                               Model model, HttpSession session, Authentication authentication) {
 
+
         Optional<Stylevistas> style = stylevistasRepository.findById(5);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
@@ -845,6 +847,7 @@ public class PacienteController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -886,11 +889,6 @@ public class PacienteController {
         model.addAttribute("doctorList", doctorList);
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
-
-        // Obtener disponibilidad de los próximos dos días
-
-        model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
-        model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
 
         return "paciente/doctores";
 
@@ -949,14 +947,17 @@ public class PacienteController {
     public String reservarDoctor1(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
                                   Model model, HttpSession session, Authentication authentication) {
 
+
         Optional<Stylevistas> style = stylevistasRepository.findById(5);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
+
 
             model.addAttribute("headerColorPaciente", styleActual.getHeader());
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -964,7 +965,9 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+
         pacienteRepository.anularCitaNoCancelada();
+
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
@@ -992,6 +995,7 @@ public class PacienteController {
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -1037,10 +1041,12 @@ public class PacienteController {
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
 
+
             model.addAttribute("headerColorPaciente", styleActual.getHeader());
         } else {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
+
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
             userEmail = (String) session.getAttribute("impersonatedUser");
@@ -1512,7 +1518,7 @@ public class PacienteController {
 
         List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificacionesNoLeidas(paciente.getIdPaciente());
 
-        for (int i = 0; i <= listaNotificaciones.size(); i++) {
+        for (int i=0; i<listaNotificaciones.size(); i++) {
             notificacionRepository.SetearA1(listaNotificaciones.get(i).getId_notificacion());
         }
 
@@ -1520,7 +1526,7 @@ public class PacienteController {
 
     @GetMapping(value = {"/notificacionCuestionario"})
     @ResponseBody
-    public List<String> notificacionCuestionario(Model model, HttpSession session, Authentication authentication) {
+    public List<Integer> notificacionCuestionario(Model model, HttpSession session, Authentication authentication) {
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -1531,15 +1537,48 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
-        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
-        List<String> listaTitulos = new ArrayList<>();
+        List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.buscarPorPaciente(paciente.getIdPaciente());
+        int verificar=0;
+        int idCuestionario=0;
+        int idCita=0;
+        List<Integer> ListaIdCitayIdCuestionario = new ArrayList<>();
 
-        for (int i = 0; i < listaNotificaciones.size(); i++) {
-            listaTitulos.add(listaNotificaciones.get(i).getDescripcion());
-            System.out.println(listaNotificaciones.get(i).getTitulo());
+        for (int i = 0; i < cuestionarioPorCitaList.size(); i++) {
+            if (cuestionarioPorCitaList.get(i).getOpcion_inicio_sesion() == 0) {
+                verificar = 1;
+                idCuestionario = cuestionarioPorCitaList.get(i).getCuestionario().getId_cuestionario();
+                idCita = cuestionarioPorCitaList.get(i).getCita().getId_cita();
+                notificacionRepository.crearNotificacionDeCuestionario(paciente.getIdPaciente());
+                cuestionarioPorCitaRepository.actualizarOpcionSesion(idCita,idCuestionario);
+
+                ListaIdCitayIdCuestionario.add(idCuestionario);
+                ListaIdCitayIdCuestionario.add(idCita);
+                ListaIdCitayIdCuestionario.add(verificar);
+            }
         }
 
-        return listaTitulos;
+        return ListaIdCitayIdCuestionario;
+    }
+
+    @GetMapping(value = {"/eliminarNotificacionCuestionario"})
+    @ResponseBody
+    void eliminarNotificacionDeCuestionario(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+        List<Notificacion> notificacionList=notificacionRepository.BuscarporTipoNoti();
+
+        for (int i = 0; i < notificacionList.size(); i++) {
+            notificacionRepository.eliminarNotificacionDeCuestionario(notificacionList.get(0).getId_notificacion());
+        }
+
+
     }
     //Fin notificaciones
 

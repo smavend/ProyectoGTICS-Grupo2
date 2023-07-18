@@ -527,9 +527,12 @@ public class SuperAdminController {
     }
 
     @PostMapping("/GuardarPacientes")
-    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds,HttpServletRequest request) {
+    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds,HttpServletRequest request, RedirectAttributes attr) {
+        List<HashMap<String, String>> credenciales = new ArrayList<>();
         for(String id : pacientesIds) {
             pacienteRepository.findById(id).ifPresent(paciente -> {
+                HashMap<String, String> user = new HashMap<>();
+
                 paciente.setEstado(1);
                 pacienteRepository.save(paciente);
                 String passRandom = securityConfig.generateRandomPassword();
@@ -558,8 +561,15 @@ public class SuperAdminController {
                 System.out.println(link);
                 System.out.println("servername:"+domain);
                 correoService.props(paciente.getCorreo(),passRandom, link);
+
+                user.put("correo", paciente.getCorreo());
+                user.put("pass", passRandom);
+                credenciales.add(user);
+
             });
         }
+
+        attr.addFlashAttribute("credenciales", credenciales);
 
         return "redirect:/SuperAdminHomePage/TareaPacientes";
     }
@@ -874,6 +884,14 @@ public class SuperAdminController {
             CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
             correoService.props(administrador.get().getCorreo(), passRandom);
 
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String, String> user = new HashMap<>();
+            user.put("correo", administrador.get().getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
+            redirectAttributes.addFlashAttribute("credenciales", credenciales);
+
 
         } else if (selectUsuario.equals("administrativo")) {
             Administrativo administrativonuevo = new Administrativo();
@@ -904,8 +922,16 @@ public class SuperAdminController {
             CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
             correoService.props(administrativonuevo.getCorreo(), passRandom);
 
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String, String> user = new HashMap<>();
+            user.put("correo", administrativonuevo.getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
+            redirectAttributes.addFlashAttribute("credenciales", credenciales);
 
         }
+
         // ... (por ejemplo, guarda el usuario en la base de datos)
         return "redirect:/SuperAdminHomePage";
 

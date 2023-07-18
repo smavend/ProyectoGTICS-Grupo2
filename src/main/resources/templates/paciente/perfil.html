@@ -350,5 +350,17 @@
             })
         </script>
 
+        <script th:inline="javascript" th:if="${pass != null}">
+            let email = [[${session.paciente.correo}]];
+            let password = [[${pass}]];
+
+            auth.updatePassword(email, password).then(()=>{
+                console.log("actualizado correctamente");
+            }).catch((error)=>{
+                console.log("error al actualizar");
+            })
+
+        </script>
+
     </body>
 </html>

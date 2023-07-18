@@ -13,8 +13,8 @@ import java.util.List;
 
 @Repository
 public interface NotificacionRepository extends JpaRepository<Notificacion, Integer> {
-    @Query(nativeQuery = true, value = "select * from notificacion where id_usuario = ?1 and fecha-now()>0")
-    List<Notificacion> buscarPorUsuarioYActual(String id);
+    @Query(nativeQuery = true, value = "select * from notificacion where id_administrativo = ?1 and fecha-now()>0")
+    List<Notificacion> buscarPorAdministrativoYActual(String id);
 
     @Query(nativeQuery = true, value = "select * from notificacion where id_paciente=?1 and revisado=0")
     List<Notificacion> buscarNotificacionesNoLeidas(String id);
@@ -29,8 +29,23 @@ public interface NotificacionRepository extends JpaRepository<Notificacion, Inte
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`notificacion` SET `revisado` = '1' WHERE (`id_notificacion` =?1);")
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`notificacion` SET `revisado` = '1' WHERE (`id_notificacion` =?1)")
     void SetearA1(int id_notificacion);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO `proyectogtics`.`notificacion` (`id_paciente`, `titulo`, `descripcion`, `fecha`, `revisado`, `tipo_notificacion`) VALUES (?1, 'Cuestionario de cita (IMPORTANTE)', 'Dé click aquí para redirigirlo a su encuesta', now(), '0', '1')")
+    void crearNotificacionDeCuestionario(String idPaciente);
+
+    @Query(nativeQuery = true, value = "select * from notificacion where tipo_notificacion=1")
+    List<Notificacion> BuscarporTipoNoti();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM `proyectogtics`.`notificacion` WHERE (`id_notificacion` = ?1);")
+    void eliminarNotificacionDeCuestionario(int idNotificacion);
+
+
 
 
 }
