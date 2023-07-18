@@ -140,6 +140,7 @@ public class SuperAdminService {
         dto.setEstado(String.valueOf(doctor.getEstado()));
         dto.setEspecialidad(doctor.getEspecialidad().getNombre());
         dto.setSede(doctor.getSede().getNombre());
+        dto.setHorario(doctor.getHorario().getId_horario());
         /*if(doctor.getHorario()==null){
             dto.setHorario(0);
         }else{
