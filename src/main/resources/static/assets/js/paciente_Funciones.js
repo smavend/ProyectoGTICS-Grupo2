@@ -25,9 +25,10 @@ document.getElementById("botonLogout").addEventListener("click", function (){
                     });
                 }else{
                     console.log("Sesión no encontrada");
+                    document.getElementById("logoutForm").submit();
+                    ocultarLoading();
                 }
             }, error => {
-
             }
         );
     });

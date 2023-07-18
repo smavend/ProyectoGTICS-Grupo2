@@ -1,164 +1,204 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paciente - Recibo</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Paciente - Recibo</title>
 
-    <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
+        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
-    <!-- GOOGLE FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+        <!-- GOOGLE FONTS -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap"
+              rel="stylesheet">
 
 
-</head>
-<body>
+    </head>
+    <body>
 
-<!-- ======= Header ======= -->
-<div id="header" th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
-<!-- End Header -->
+        <!-- ======= Header ======= -->
+        <div id="header" th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
+        <!-- End Header -->
 
-<!-- ======= Sidebar ======= -->
-<div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
-<!-- End Sidebar-->
+        <!-- ======= Sidebar ======= -->
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
+        <!-- End Sidebar-->
 
-<main id="main" class="main site-content">
+        <main id="main" class="main site-content">
 
-    <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
-    <div id="idEspecialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.idEspecialidad}"></div>
+            <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
+            <div id="idEspecialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.idEspecialidad}"></div>
 
-    <h1 class="encabezado" th:text="'Recibo - ' + ${pago.codigoRecibo}">Recibo - 281FH19701228FG</h1>
+            <h1 class="encabezado" th:text="'Recibo - ' + ${pago.codigoRecibo}">Recibo - 281FH19701228FG</h1>
 
-    <section class="seccionPrincipal recibo">
-        <div class="row encabezadoRecibo">
-            <div class="col-10">
-                <h2 class="subEncabezado" th:text="'Cita '+${pago.cita.modalidad == 0? 'Presencial':'Virtual'}+' - '+${#temporals.format(pago.cita.inicio, 'dd/MM/yyyy')}">Recibo - 13/12/2022</h2>
-            </div>
-            <div id="botonImp" class="col-2">
-                <button class="btn btn-secondary botonImprimir" onclick="imprimir()">Imprimir</button>
-            </div>
-        </div>
+            <section class="seccionPrincipal recibo">
+                <div class="row encabezadoRecibo">
+                    <div class="col-10">
+                        <h2 class="subEncabezado"
+                            th:text="'Cita '+${pago.cita.modalidad == 0? 'Presencial':'Virtual'}+' - '+${#temporals.format(pago.cita.inicio, 'dd/MM/yyyy')}">
+                            Recibo - 13/12/2022</h2>
+                    </div>
+                    <div id="botonImp" class="col-2">
+                        <button class="btn btn-secondary botonImprimir" onclick="imprimir()">Imprimir</button>
+                    </div>
+                </div>
 
-        <!-- Información de la clínica -->
-        <div class="informacionClinica">
-            <p>
-                <span class="informacionClinicaTitulo">Clínica INTERPUC</span>
-                <br>
-                <span th:text="${pago.cita.doctor.sede.direccion}">Dirección Imaginaria</span>
-                <br>
-                Lima, Perú
-                <br>
-                www.interpucp.com.pe
-            </p>
-        </div>
+                <!-- Información de la clínica -->
+                <div class="informacionClinica">
+                    <p>
+                        <span class="informacionClinicaTitulo">Clínica INTERPUC</span>
+                        <br>
+                        <span th:text="${pago.cita.doctor.sede.direccion}">Dirección Imaginaria</span>
+                        <br>
+                        Lima, Perú
+                        <br>
+                        www.interpucp.com.pe
+                    </p>
+                </div>
 
-        <!-- Informacion recibo y pago -->
-        <div class="row informacionRecibo">
-            <div class="col-6">
-                <p>Paciente:<span class="informacionReciboDato"
-                                  th:text="${session.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
-                </p>
-                <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span>
-                </p>
-                <p>Estado:<span class="informacionReciboDato"
-                                th:text="${pago.estadoPago==0?'Pago pendiente':'Cancelado'}"></span></p>
-            </div>
-            <div class="col-6">
-                <p>Fecha emitida:<span class="informacionReciboDato"
-                                       th:text="${#temporals.format(pago.fechaEmitida, 'dd-MM-yyyy')}">13/12/2022</span></p>
-                <p>Fecha cancelada:<span class="informacionReciboDato" th:if="${pago.fechaCancelada!=null}" th:text="${#temporals.format(pago.fechaCancelada, 'dd-MM-yyyy')}"></span>
-                    <span class="informacionReciboDato" th:if="${pago.fechaCancelada==null}">Por cancelar</span>
-                </p>
-            </div>
-        </div>
+                <!-- Informacion recibo y pago -->
+                <div class="row informacionRecibo">
+                    <div class="col-6">
+                        <p>Paciente:<span class="informacionReciboDato"
+                                          th:text="${session.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
+                        </p>
+                        <p>Seguro:<span class="informacionReciboDato" th:text="${session.paciente.seguro.nombre}">Pacífico EPS</span>
+                        </p>
+                        <p>Estado:<span class="informacionReciboDato"
+                                        th:text="${pago.estadoPago==0?'Pago pendiente':'Cancelado'}"></span></p>
+                    </div>
+                    <div class="col-6">
+                        <p>Fecha emitida:<span class="informacionReciboDato"
+                                               th:text="${#temporals.format(pago.fechaEmitida, 'dd-MM-yyyy')}">13/12/2022</span>
+                        </p>
+                        <p>Fecha cancelada:<span class="informacionReciboDato" th:if="${pago.fechaCancelada!=null}"
+                                                 th:text="${#temporals.format(pago.fechaCancelada, 'dd-MM-yyyy')}"></span>
+                            <span class="informacionReciboDato" th:if="${pago.fechaCancelada==null}">Por cancelar</span>
+                        </p>
+                    </div>
+                </div>
 
-        <section class="informacionPago">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Por concepto de</th>
-                    <th>Doctor</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Importe total</th>
-                    <th>Importe con seguro</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur</td>
-                    <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
-                    <td>1</td>
-                    <td class="precio-total"></td>
-                    <td class="importe-total">S/ 1300.00</td>
-                    <td class="importe-con-seguro">S/ 130.00</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-        <div id="botonVolver" class="d-flex justify-content-end"
-             style="margin-top: 70px; margin-right: 80px; margin-bottom: 20px">
-            <a th:href="@{/Paciente/pagos}" class="btn botonVolverPagos ms-3">Volver</a>
-        </div>
-    </section>
+                <section class="informacionPago">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Por concepto de</th>
+                                <th>Doctor</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Importe total</th>
+                                <th>Importe con seguro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td th:text="${pago.cita.doctor.especialidad.nombre}">Lorem ipsum dol amet consectetur
+                                </td>
+                                <td th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                                <td>1</td>
+                                <td class="precio-total"></td>
+                                <td class="importe-total">S/ 1300.00</td>
+                                <td class="importe-con-seguro">S/ 130.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <div id="botonVolver" class="d-flex justify-content-end"
+                     style="margin-top: 70px; margin-right: 80px; margin-bottom: 20px">
+                    <a th:href="@{/Paciente/pagos}" class="btn botonVolverPagos ms-3">Volver</a>
+                </div>
+            </section>
 
         </main>
         <div id="loading"></div>
 
-</main>
+        </main>
 
-<!-- Bootstrap CDN JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+        <!-- Bootstrap CDN JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                crossorigin="anonymous"></script>
 
-<<<<<<< HEAD
         <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
-=======
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/main.js}"></script>
->>>>>>> c1500849ba7063de90a938d04f3c13da0291067f
 
-<!-- JQUERY -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
 
-<script>
-    function imprimir() {
-        window.print();
-    }
-    $(document).ready(function() {
-        var idEspecialidad = parseInt(document.getElementById('idEspecialidad').dataset.valor);
-        var coaseguro = document.getElementById('coaseguro').dataset.valor;
-        var precioIni;
-        switch (idEspecialidad) {
-            case 1: precioIni = 150; break;
-            case 2: precioIni = 120; break;
-            case 3: precioIni = 80; break;
-            case 4: precioIni = 90; break;
-            case 5: precioIni = 100; break;
-            case 6: precioIni = 130; break;
-            case 7: precioIni = 80; break;
-            case 8: precioIni = 90; break;
-            case 9: precioIni = 110; break;
-            case 10: precioIni = 120; break;
-            case 11: precioIni = 150; break;
-            case 12: precioIni = 140; break;
-            case 13: precioIni = 110; break;
-            case 14: precioIni = 100; break;
-            case 15: precioIni = 150; break;
-            case 16: precioIni = 90; break;
-            case 17: precioIni = 120; break;
-            default: precioIni = 0; break;
-        }
-        $('.precio-total').text('S/. ' + precioIni.toFixed(2));
-        $('.importe-total').text('S/. ' + precioIni.toFixed(2));
-        $('.importe-con-seguro').text('S/. ' + (precioIni*coaseguro).toFixed(2));
-    });
+        <!-- JQUERY -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-</script>
-</body>
+        <script>
+            function imprimir() {
+                window.print();
+            }
+
+            $(document).ready(function () {
+                var idEspecialidad = parseInt(document.getElementById('idEspecialidad').dataset.valor);
+                var coaseguro = document.getElementById('coaseguro').dataset.valor;
+                var precioIni;
+                switch (idEspecialidad) {
+                    case 1:
+                        precioIni = 150;
+                        break;
+                    case 2:
+                        precioIni = 120;
+                        break;
+                    case 3:
+                        precioIni = 80;
+                        break;
+                    case 4:
+                        precioIni = 90;
+                        break;
+                    case 5:
+                        precioIni = 100;
+                        break;
+                    case 6:
+                        precioIni = 130;
+                        break;
+                    case 7:
+                        precioIni = 80;
+                        break;
+                    case 8:
+                        precioIni = 90;
+                        break;
+                    case 9:
+                        precioIni = 110;
+                        break;
+                    case 10:
+                        precioIni = 120;
+                        break;
+                    case 11:
+                        precioIni = 150;
+                        break;
+                    case 12:
+                        precioIni = 140;
+                        break;
+                    case 13:
+                        precioIni = 110;
+                        break;
+                    case 14:
+                        precioIni = 100;
+                        break;
+                    case 15:
+                        precioIni = 150;
+                        break;
+                    case 16:
+                        precioIni = 90;
+                        break;
+                    case 17:
+                        precioIni = 120;
+                        break;
+                    default:
+                        precioIni = 0;
+                        break;
+                }
+                $('.precio-total').text('S/. ' + precioIni.toFixed(2));
+                $('.importe-total').text('S/. ' + precioIni.toFixed(2));
+                $('.importe-con-seguro').text('S/. ' + (precioIni * coaseguro).toFixed(2));
+            });
+
+        </script>
+    </body>
 </html>
