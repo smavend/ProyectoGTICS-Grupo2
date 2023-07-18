@@ -241,7 +241,7 @@
         $.ajax({
           method: "GET",
           crossDomain: true,
-          url: getUrl()+"/validarDni/"+dni
+          url: getUrl()+"/validarDniAdmin/"+dni
         }).done(function (result){
           console.log(result);
           if (result.msg === "Éxito"){
@@ -255,9 +255,9 @@
               console.log(info);
               if (info.success === true) {
                 console.log("exitoso");
-                $("#nombre").val(info.data.nombres);
+                $("#nombre").val(info.data.nombres.replace(/[Ñ]/, 'N'));
                 console.log(info.data.nombres, info.data.apellido_paterno, info.data.apellido_materno);
-                $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
+                $("#apellidos").val(info.data.apellido_paterno.replace(/[Ñ]/, 'N') + " " + info.data.apellido_materno.replace(/[Ñ]/, 'N'));
 
                 $("#consulta").removeAttr("disabled");
                 $("#consulta").html("Consultar");

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, String> {
@@ -33,7 +34,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, String> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE paciente SET correo = ?1, direccion = ?2, distrito_id_distrito = ?3 WHERE (id_paciente = ?4)")
     void actualizarPaciente(String correo, String direccion, int idDistrito, String idPaciente);
-    List<Paciente> findByIdPaciente(Integer id);
+    Optional<Paciente> findByIdPaciente(String id);
 
 
     @Transactional

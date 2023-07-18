@@ -7,6 +7,10 @@ import com.example.proyectogticsgrupo2.service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,9 +37,11 @@ public class AdministrativoController {
     final TokenRepository tokenRepository;
     final FormularioJsonRepository formularioJsonRepository;
     final StylevistasRepository stylevistasRepository;
+    final CredencialesRepository credencialesRepository;
+    final SedeRepository sedeRepository;
 
 
-    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, TokenRepository tokenRepository,StylevistasRepository stylevistasRepository, FormularioJsonRepository formularioJsonRepository) {
+    public AdministrativoController(PacienteRepository pacienteRepository, AdministrativoPorEspecialidadPorSedeRepository aesRepository, AlergiaRepository alergiaRepository, DistritoRepository distritoRepository, NotificacionRepository notificacionRepository, TemporalRepository temporalRepository, AdministrativoRepository administrativoRepository, TokenRepository tokenRepository, StylevistasRepository stylevistasRepository, FormularioJsonRepository formularioJsonRepository, CredencialesRepository credencialesRepository, SedeRepository sedeRepository) {
         this.pacienteRepository = pacienteRepository;
         this.aesRepository = aesRepository;
         this.alergiaRepository = alergiaRepository;
@@ -46,6 +52,8 @@ public class AdministrativoController {
         this.tokenRepository = tokenRepository;
         this.stylevistasRepository = stylevistasRepository;
         this.formularioJsonRepository = formularioJsonRepository;
+        this.credencialesRepository = credencialesRepository;
+        this.sedeRepository = sedeRepository;
     }
     @GetMapping("/administrativo")
     public String dashboard(Model model, HttpSession session){
@@ -320,10 +328,12 @@ public class AdministrativoController {
     }
 
     @PostMapping("/administrativo/guardar/invitado")
-    public String actualizarInvitado(HttpSession session,
+    public String actualizarInvitado(HttpServletRequest request,
+                                     HttpSession session,
                                      Model model,
                                      @ModelAttribute("temporal") @Valid Temporal temporal,
                                      BindingResult bindingResult,
+                                     RedirectAttributes attr,
                                      Authentication authentication){
         /*      Administrativo admi = (Administrativo) session.getAttribute("administrativo");*/
         Optional<Stylevistas> style = stylevistasRepository.findById(3);
@@ -345,21 +355,80 @@ public class AdministrativoController {
         session.setAttribute("administrativo", admi);
         String idAdmi = admi.getIdAdministrativo();
 
-        if(bindingResult.hasErrors()){
+        List<Paciente> pacientes = pacienteRepository.findAll();
+        boolean existDni = false;
+        for (Paciente p : pacientes) {
+            if (p.getCorreo().equals(temporal.getCorreo())) {
+                existDni = true;
+                break;
+            }
+        }
+        List<Temporal> temp = temporalRepository.findAll();
+        for (Temporal t : temp) {
+            if (t.getCorreo().equals(temporal.getCorreo())) {
+                existDni = true;
+                break;
+            }
+        }
+
+        if(bindingResult.hasErrors() || existDni){
+            if (existDni){
+                bindingResult.rejectValue("correo", "errorCorreo", "El correo ingresado ya está registrado");
+            }
             model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
             model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             return "administrativo/editarTemp";
         }else {
-            temporalRepository.actualizarInvitado(temporal.getNombre(), temporal.getApellidos(), temporal.getCorreo(), temporal.getId_temporal());
+            temporalRepository.actualizarInvitado(temporal.getCorreo(), temporal.getId_temporal());
+            Optional<Token> tokenOpt = tokenRepository.findById(temporal.getDni());
+            Token token = tokenOpt.get();
+            TokenService tokenService = new TokenService();
+            token.setToken(tokenService.generateToken());
+            token.setFechaExpiracion(LocalDateTime.now().plusDays(2));
+            tokenRepository.save(token);
+
+            CorreoPacienteService correoPacienteService = new CorreoPacienteService();
+            String link = request.getServerName()+":"+request.getLocalPort();
+            correoPacienteService.enviarCorreo(temporal.getCorreo(),temporal.getNombre(), link, token.getIdPaciente(), token.getToken());
+            attr.addFlashAttribute("msg","Paciente temporal "+temporal.getNombre()+" "+temporal.getApellidos()+" actualizado exitosamente.");
             return "redirect:/administrativo";
         }
     }
 
     @PostMapping("/administrativo/guardar")
-    public String actualizarPaciente(Paciente paciente){
-        pacienteRepository.actualizarPaciente(paciente.getCorreo(), paciente.getDireccion(),
-                paciente.getDistrito().getIdDistrito(), paciente.getIdPaciente());
-        return "redirect:/administrativo";
+    public String actualizarPaciente(@ModelAttribute("paciente") @Valid Paciente paciente,
+                                     BindingResult bindingResult){
+        List<Paciente> pacientes = pacienteRepository.findAll();
+        boolean existDni = false;
+        for (Paciente p : pacientes) {
+            if (p.getCorreo().equals(paciente.getCorreo())) {
+                existDni = true;
+                break;
+            }
+        }
+        List<Temporal> temp = temporalRepository.findAll();
+        for (Temporal t : temp) {
+            if (t.getCorreo().equals(paciente.getCorreo())) {
+                existDni = true;
+                break;
+            }
+        }
+        if (bindingResult.hasErrors() || existDni){
+            if (existDni){
+                bindingResult.rejectValue("correo", "errorCorreo", "El correo ingresado ya está registrado");
+            }
+            return "administrativo/editar";
+        }
+        else {
+            pacienteRepository.actualizarPaciente(paciente.getCorreo(), paciente.getDireccion(),
+                    paciente.getDistrito().getIdDistrito(), paciente.getIdPaciente());
+
+            Credenciales credenciales = credencialesRepository.buscarPorId(paciente.getIdPaciente());
+
+            credenciales.setCorreo(paciente.getCorreo());
+
+            return "redirect:/administrativo";
+        }
     }
     @GetMapping("/administrativo/elegirFormulario")
     public String elegirFormulario(Model model, HttpSession session, Authentication authentication){
@@ -398,4 +467,67 @@ public class AdministrativoController {
         return "administrativo/elegirFormulario";
     }
 
+    @PostMapping("/administrativo/guardarAlergia")
+    public String guardarAlergia(RedirectAttributes attr, Authentication authentication, HttpSession session,
+                                 @RequestParam ("idPaciente") String idPaciente,
+                                 @RequestParam ("nombre") String alergia) {
+
+        /*  Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());*/
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        Optional<Paciente> paciente1 = pacienteRepository.findByIdPaciente(idPaciente);
+        if (paciente1.isPresent()){
+            Alergia alergia1 = new Alergia();
+            alergia1.setPaciente(paciente1.get());
+            alergia1.setNombre(alergia);
+            alergiaRepository.save(alergia1);
+            return "redirect:/administrativo/editar?id="+idPaciente;
+        } else {
+            attr.addFlashAttribute("msgError", "Ocurrió un error al eliminar las alergias");
+            return "redirect:/administrativo/editar?id="+idPaciente;
+        }
+    }
+    @GetMapping("/administrativo/borrarAlergia")
+    public String borrarAlergia(@RequestParam(name = "idAlergia") int idAlergia,
+                                Authentication authentication, HttpSession session,
+                                RedirectAttributes attr) {
+
+        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
+        session.setAttribute("paciente", paciente);*/
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+
+        Optional<Alergia> optionalAlergia = alergiaRepository.findById(idAlergia);
+        if (optionalAlergia.isPresent()) {
+            alergiaRepository.deleteById(idAlergia);
+            attr.addFlashAttribute("msg", "Se eliminó la alergia seleccionada con éxito");
+        }
+        return "redirect:/administrativo";
+    }
+    @GetMapping("administrativo/imageSede")
+    public ResponseEntity<byte[]> mostrarImagenSede(@RequestParam("idSede") int idSede) {
+
+        Optional<Sede> optionalSede = sedeRepository.findById(idSede);
+        if (optionalSede.isPresent()) {
+            Sede sede = optionalSede.get();
+            byte[] imagenComoBytes = sede.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(sede.getFotocontenttype()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
 }
