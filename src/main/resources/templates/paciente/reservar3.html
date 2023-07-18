@@ -79,10 +79,15 @@
                                         <div class="col-6" th:text="${doctor.getNombreYApellido()}">Dr. Dom</div>
                                     </div>
                                     <div class="row informacion">
-                                        <div class="col-6 fw-semibold"><i class="bi bi-calendar-event-fill me-2"></i>Fecha y Hora
+                                        <div class="col-6 fw-semibold"><i class="bi bi-person-heart me-2"></i>Fecha
+                                        </div>
+                                        <div class="col-6" th:text="${#temporals.format(citaTemporal.inicio, 'dd-MM-yyyy') }">00-00-00</div>
+                                    </div>
+                                    <div class="row informacion">
+                                        <div class="col-6 fw-semibold"><i class="bi bi-alarm-fill"></i>Hora
                                         </div>
                                         <div class="col-6"
-                                             th:text="${#temporals.format(citaTemporal.inicio, 'dd-MM-yyyy / HH:mm') +' - '+#temporals.format(citaTemporal.fin, 'HH:mm') + ' Hrs.'}">
+                                             th:text="${#temporals.format(citaTemporal.inicio, 'HH:mm') +' - '+#temporals.format(citaTemporal.fin, 'HH:mm') + ' Hrs.'}">
                                             10:00 - 11:00
                                         </div>
                                     </div>
