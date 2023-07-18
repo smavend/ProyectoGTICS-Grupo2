@@ -32,6 +32,8 @@
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
+  <!-- CDN CometChat -->
+  <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -156,6 +158,7 @@
 </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <th:block th:replace="~{paciente/fragments/scripts.html::chatGeneral}"></th:block>
 <script>
   var headerColorAdministrtivo = "[[${headerColorAdministrativo}]]";
   localStorage.setItem('headerColorAdministrativo', headerColorAdministrtivo);
