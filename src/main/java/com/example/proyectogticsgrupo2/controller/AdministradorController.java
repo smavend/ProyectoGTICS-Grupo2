@@ -329,10 +329,14 @@ public class AdministradorController {
     @PostMapping("/guardarTemporales")
     public String guardarTemporales(HttpServletRequest request, Model model,@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr) throws UnknownHostException {
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
-        HashMap<String,String> credenciales = new HashMap<>();
+
+        List<HashMap<String, String>> credenciales = new ArrayList<>(); //Envio de credenciales a la vista
+
             //Cuanto funcione perfectamente los temporales, entonces los filtro por llenado 1
             // y usare el datablindig
             for (Temporal pacitemp : pacientesTemp){
+                HashMap<String,String> user = new HashMap<>();
+
                 paciente.setIdPaciente(pacitemp.getDni());
                 paciente.setNombre(pacitemp.getNombre());
                 paciente.setApellidos(pacitemp.getApellidos());
@@ -381,15 +385,16 @@ public class AdministradorController {
                 correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
 
                 //Envio de credenciales a la vista
-                credenciales.put(passRandom,paciente.getCorreo());
-
+                user.put("correo", paciente.getCorreo());
+                user.put("pass", passRandom);
+                credenciales.add(user);
 
             }
         List<Paciente> listaPaciente =pacienteRepository.findAll();
         List<Doctor> listaDoctores = doctorRepository.findAll();
         model.addAttribute("listaDoctores",listaDoctores);
         model.addAttribute("listaPaciente", listaPaciente);
-        model.addAttribute("credencial",credenciales);
+        model.addAttribute("credenciales",credenciales);
         model.addAttribute("msgPaci","Pacientes creados exitosamente");
             return "administrador/dashboard";
 
@@ -502,13 +507,17 @@ public class AdministradorController {
             correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
 
             //Envio de credenciales a la vista
-            HashMap<String,String> credenciales = new HashMap<>();
-            credenciales.put(passRandom,paciente.getCorreo());
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String,String> user = new HashMap<>();
+            user.put("correo", paciente.getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
             List<Paciente> listaPaciente =pacienteRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
             model.addAttribute("listaDoctores",listaDoctores);
             model.addAttribute("listaPaciente", listaPaciente);
-            model.addAttribute("credencial",credenciales);
+            model.addAttribute("credenciales",credenciales);
             model.addAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
             return "administrador/dashboard";
         }
@@ -600,13 +609,17 @@ public class AdministradorController {
             correoService.props(doctor.getCorreo(),passRandom, link);
 
             //Envio de credenciales a la vista
-            HashMap<String,String> credenciales = new HashMap<>();
-            credenciales.put(passRandom,doctor.getCorreo());
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String,String> user = new HashMap<>();
+            user.put("correo", doctor.getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
             List<Paciente> listaPaciente =pacienteRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
             model.addAttribute("listaDoctores",listaDoctores);
             model.addAttribute("listaPaciente", listaPaciente);
-            model.addAttribute("credencial",credenciales);
+            model.addAttribute("credenciales",credenciales);
             model.addAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
 
 
