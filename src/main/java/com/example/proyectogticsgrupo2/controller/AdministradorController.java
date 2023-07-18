@@ -61,9 +61,10 @@ public class AdministradorController {
     final StylevistasRepository stylevistasRepository;
     final CitaRepository citaRepository;
     final HorarioRepository horarioRepository;
+    final TokenRepository tokenRepository;
 
 
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, MensajeRepository mensajeRepository, PacientePorConsentimientoRepository ppcRepository, StylevistasRepository stylevistasRepository, CitaRepository citaRepository, HorarioRepository horarioRepository) {
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, MensajeRepository mensajeRepository, PacientePorConsentimientoRepository ppcRepository, StylevistasRepository stylevistasRepository, CitaRepository citaRepository, HorarioRepository horarioRepository, TokenRepository tokenRepository) {
 
 
         this.pacienteRepository = pacienteRepository;
@@ -82,6 +83,7 @@ public class AdministradorController {
         this.stylevistasRepository = stylevistasRepository;
         this.citaRepository = citaRepository;
         this.horarioRepository = horarioRepository;
+        this.tokenRepository = tokenRepository;
     }
     //#####################################33
    //Comentado por Gustavo
@@ -327,10 +329,14 @@ public class AdministradorController {
     @PostMapping("/guardarTemporales")
     public String guardarTemporales(HttpServletRequest request, Model model,@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr) throws UnknownHostException {
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
-        HashMap<String,String> credenciales = new HashMap<>();
+
+        List<HashMap<String, String>> credenciales = new ArrayList<>(); //Envio de credenciales a la vista
+
             //Cuanto funcione perfectamente los temporales, entonces los filtro por llenado 1
             // y usare el datablindig
             for (Temporal pacitemp : pacientesTemp){
+                HashMap<String,String> user = new HashMap<>();
+
                 paciente.setIdPaciente(pacitemp.getDni());
                 paciente.setNombre(pacitemp.getNombre());
                 paciente.setApellidos(pacitemp.getApellidos());
@@ -349,6 +355,7 @@ public class AdministradorController {
                 paciente.setFotocontenttype(null);
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
+                tokenRepository.deleteById(paciente.getIdPaciente());
 
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 1,1);
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 2,1);
@@ -378,15 +385,16 @@ public class AdministradorController {
                 correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
 
                 //Envio de credenciales a la vista
-                credenciales.put(passRandom,paciente.getCorreo());
-
+                user.put("correo", paciente.getCorreo());
+                user.put("pass", passRandom);
+                credenciales.add(user);
 
             }
         List<Paciente> listaPaciente =pacienteRepository.findAll();
         List<Doctor> listaDoctores = doctorRepository.findAll();
         model.addAttribute("listaDoctores",listaDoctores);
         model.addAttribute("listaPaciente", listaPaciente);
-        model.addAttribute("credencial",credenciales);
+        model.addAttribute("credenciales",credenciales);
         model.addAttribute("msgPaci","Pacientes creados exitosamente");
             return "administrador/dashboard";
 
@@ -499,13 +507,17 @@ public class AdministradorController {
             correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
 
             //Envio de credenciales a la vista
-            HashMap<String,String> credenciales = new HashMap<>();
-            credenciales.put(passRandom,paciente.getCorreo());
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String,String> user = new HashMap<>();
+            user.put("correo", paciente.getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
             List<Paciente> listaPaciente =pacienteRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
             model.addAttribute("listaDoctores",listaDoctores);
             model.addAttribute("listaPaciente", listaPaciente);
-            model.addAttribute("credencial",credenciales);
+            model.addAttribute("credenciales",credenciales);
             model.addAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
             return "administrador/dashboard";
         }
@@ -597,13 +609,17 @@ public class AdministradorController {
             correoService.props(doctor.getCorreo(),passRandom, link);
 
             //Envio de credenciales a la vista
-            HashMap<String,String> credenciales = new HashMap<>();
-            credenciales.put(passRandom,doctor.getCorreo());
+            List<HashMap<String, String>> credenciales = new ArrayList<>();
+            HashMap<String,String> user = new HashMap<>();
+            user.put("correo", doctor.getCorreo());
+            user.put("pass", passRandom);
+            credenciales.add(user);
+
             List<Paciente> listaPaciente =pacienteRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
             model.addAttribute("listaDoctores",listaDoctores);
             model.addAttribute("listaPaciente", listaPaciente);
-            model.addAttribute("credencial",credenciales);
+            model.addAttribute("credenciales",credenciales);
             model.addAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
 
 
