@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    </style>
 </head>
 <body>
 <header id="header" class="header fixed-top d-flex align-items-center" th:fragment="header(doctor)">
@@ -181,12 +195,14 @@
             <h6 th:text="'Sede: '+${doctor.sede.nombre}" style="color: white;margin-right: 15px;margin-top: 10px"></h6>
             <li class="nav-item dropdown pe-3">
 
-                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
-                   data-bs-toggle="dropdown">
-                    <img th:if="${doctor.foto != null}" style="width: 50px;height: 50px" th:src="@{'/usuario/foto/'+${doctor.getId_doctor()}}" alt="Profile" class="rounded-circle">
-                    <img th:unless="${doctor.foto != null}" style="width: 50px;height: 50px" th:src="@{/assets/img/userPorDefecto.jpg}" alt="Profile" class="rounded-circle">
-                    <span th:text="'Dr. '+${doctor.nombre}+' '+${doctor.apellidos}" class="d-none d-md-block dropdown-toggle ps-2"></span>
-                </a><!-- End Profile Iamge Icon -->
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <div class="profile-image">
+                        <img th:if="${doctor.foto != null}" th:src="@{'/usuario/foto/' + ${doctor.getId_doctor()}}" alt="Profile" class="rounded-circle">
+                        <img th:unless="${doctor.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="Profile" class="rounded-circle">
+                    </div>
+                    <span th:text="'Dr. ' + ${doctor.nombre} + ' ' + ${doctor.apellidos}" class="d-none d-md-block dropdown-toggle ps-2"></span>
+                </a><!-- End Profile Image Icon -->
+
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li  class="dropdown-header">
