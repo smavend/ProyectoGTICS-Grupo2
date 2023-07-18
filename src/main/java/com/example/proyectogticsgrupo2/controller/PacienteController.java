@@ -1518,7 +1518,7 @@ public class PacienteController {
 
         List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificacionesNoLeidas(paciente.getIdPaciente());
 
-        for (int i = 0; i <= listaNotificaciones.size(); i++) {
+        for (int i=0; i<listaNotificaciones.size(); i++) {
             notificacionRepository.SetearA1(listaNotificaciones.get(i).getId_notificacion());
         }
 
@@ -1526,7 +1526,7 @@ public class PacienteController {
 
     @GetMapping(value = {"/notificacionCuestionario"})
     @ResponseBody
-    public List<String> notificacionCuestionario(Model model, HttpSession session, Authentication authentication) {
+    public List<Integer> notificacionCuestionario(Model model, HttpSession session, Authentication authentication) {
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -1537,15 +1537,48 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
 
-        List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificaciones(paciente.getIdPaciente());
-        List<String> listaTitulos = new ArrayList<>();
+        List<CuestionarioPorCita> cuestionarioPorCitaList = cuestionarioPorCitaRepository.buscarPorPaciente(paciente.getIdPaciente());
+        int verificar=0;
+        int idCuestionario=0;
+        int idCita=0;
+        List<Integer> ListaIdCitayIdCuestionario = new ArrayList<>();
 
-        for (int i = 0; i < listaNotificaciones.size(); i++) {
-            listaTitulos.add(listaNotificaciones.get(i).getDescripcion());
-            System.out.println(listaNotificaciones.get(i).getTitulo());
+        for (int i = 0; i < cuestionarioPorCitaList.size(); i++) {
+            if (cuestionarioPorCitaList.get(i).getOpcion_inicio_sesion() == 0) {
+                verificar = 1;
+                idCuestionario = cuestionarioPorCitaList.get(i).getCuestionario().getId_cuestionario();
+                idCita = cuestionarioPorCitaList.get(i).getCita().getId_cita();
+                notificacionRepository.crearNotificacionDeCuestionario(paciente.getIdPaciente());
+                cuestionarioPorCitaRepository.actualizarOpcionSesion(idCita,idCuestionario);
+
+                ListaIdCitayIdCuestionario.add(idCuestionario);
+                ListaIdCitayIdCuestionario.add(idCita);
+                ListaIdCitayIdCuestionario.add(verificar);
+            }
         }
 
-        return listaTitulos;
+        return ListaIdCitayIdCuestionario;
+    }
+
+    @GetMapping(value = {"/eliminarNotificacionCuestionario"})
+    @ResponseBody
+    void eliminarNotificacionDeCuestionario(Model model, HttpSession session, Authentication authentication) {
+
+        String userEmail;
+        if (session.getAttribute("impersonatedUser") != null) {
+            userEmail = (String) session.getAttribute("impersonatedUser");
+        } else {
+            userEmail = authentication.getName();
+        }
+        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        session.setAttribute("paciente", paciente);
+        List<Notificacion> notificacionList=notificacionRepository.BuscarporTipoNoti();
+
+        for (int i = 0; i < notificacionList.size(); i++) {
+            notificacionRepository.eliminarNotificacionDeCuestionario(notificacionList.get(0).getId_notificacion());
+        }
+
+
     }
     //Fin notificaciones
 

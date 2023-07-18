@@ -74,13 +74,13 @@
         </div>
       </li>
 
-      <li class="nav-item dropdown">
+      <!--<li class="nav-item dropdown">
 			<div class="form-check form-switch">
 			<input class="form-check-input" type="checkbox" id="darkModeSwitch">
 			<label class="form-check-label" for="darkModeSwitch"></label>
 			</div>
 
-		</li>
+		</li>-->
       <li class="nav-item dropdown">
 
         <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
@@ -215,7 +215,7 @@
           </li>
 
           <li class="dropdown-footer">
-            <a th:href="@{/administrador/mensajeria}">Ver todos los mensajes</a>
+            <a th:href="@{/administrador/mensajeria2}">Ver todos los mensajes</a>
           </li>
 
         </ul><!-- End Messages Dropdown Items -->
@@ -225,7 +225,7 @@
       <li class="nav-item dropdown pe-3">
 
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+          <img th:src="@{/assets/img/userPorDefecto.jpg}" alt="Profile" class="rounded-circle">
           <span class="d-none d-md-block dropdown-toggle ps-2" th:text="'Admin, '+${session.administrador.nombre}">J. Dominguez</span>
         </a><!-- End Profile Iamge Icon -->
 
@@ -255,13 +255,13 @@
             <hr class="dropdown-divider">
           </li>
 
-          <li>
-            <form th:action="@{/logout}" method="post">
+          <li id="botonLogout">
+            <form th:action="@{/logout}" method="post" id="logoutForm">
+            </form>
             <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
               <i class="bi bi-box-arrow-right"></i>
               <span>Cerrar Sesión</span>
             </button>
-            </form>
           </li>
 
         </ul><!-- End Profile Dropdown Items -->
@@ -296,7 +296,7 @@
       </a>
     </li><!-- End Profile Page Nav -->
     <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/administrador/mensajeria(id=${session.administrador.idAdministrador})}">
+      <a class="nav-link collapsed" th:href="@{/administrador/mensajeria2}">
         <i class="bi bi-wechat"></i>
         <span>Mensajería</span>
       </a>
@@ -444,6 +444,7 @@
 
   <script th:src="@{/chatSetup/config.js}"></script>
   <script th:src="@{/chatSetup/firebase.js}"></script>
+  <script th:src="@{/assets/js/funciones_chat.js}"></script>
 
   <script th:inline="javascript" th:if="${credenciales != null}">
     let credenciales = [[${credenciales}]];
