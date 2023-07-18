@@ -1,205 +1,203 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Inicio</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paciente - Doctores</title>
 
-        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
-    </head>
-    <body>
+    <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
-        <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
-        <!-- End Header -->
 
-        <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
-        <!-- End Sidebar-->
+</head>
+<body>
 
-        <main id="main" class="main">
-            <h1 class="encabezado">Doctores</h1>
-            <section class="seccionPrincipal">
-                <!-- Filtros -->
-                <form method="get" th:action="@{/Paciente/doctores}">
-                    <div class="row filtroNav">
-                        <div class="col-md-4 col-lg-4 filtro d-flex justify-content-start">
-                            <label class="labelFiltro">Sede</label>
-                            <select class="form-select" name="sede">
-                                <option th:each="sede: ${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}"
-                                        th:selected="${sede.idSede == idSede}"></option>
-                            </select>
-                        </div>
-                        <div class="col-md-5 col-lg-6 filtro d-flex justify-content-start">
-                            <label class="labelFiltro">Especialidad</label>
-                            <select class="form-select" name="esp">
-                                <option value="0" th:selected="${idEspecialidad == 0}">Todas las especialidades</option>
-                                <option th:each="especialidad : ${especialidadList}"
-                                        th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"
-                                        th:selected="${especialidad.idEspecialidad == idEspecialidad}"></option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-lg-2 d-flex justify-content-center">
-                            <input type="hidden" name="pag" value="1">
-                            <button class="botonFiltro" type="submit"><i class="bi bi-search"></i> Buscar</button>
-                        </div>
-                    </div>
-                </form>
+<!-- ======= Header ======= -->
+<div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
+<!-- End Header -->
 
-                <div class="row">
-                    <!--
-                    <div class="ol-md-6 col-lg-4 col-xxl-3 doctor" id="10304013">
-                        <div class="cardDoctor">
-                            <div class="seccionFoto">
-                                <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
-                            </div>
-                            <div class="seccionDescripcion">
-                                <div class="seccionNombre">Dr. Ronald Richard</div>
-                                <div class="seccionEspecialidad">Cirujano</div>
-                            </div>
-                            <div class="d-grid">
-                                <a href="#offcanvasExample" class="botonVerHorarios mb-2 text-reset" data-bs-toggle="offcanvas">
-                                    Ver horarios
-                                </a>
-                            </div>
-                            <div class="d-grid">
-                                <a href="#"
-                                   class="botonVerMasDoctor">Ver más</a>
-                            </div>
-                        </div>
-                    </div>-->
-                    <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor, i: ${doctorList}" th:id="${doctor.id_doctor}">
-                        <div class="cardDoctor">
-                            <div class="seccionFoto">
-                                <img class="fotoDoctor rounded-circle"
-                                     th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
-                            </div>
-                            <div class="seccionDescripcion">
-                                <div class="seccionNombre" th:text="'Dr. '+ ${doctor.nombre} +' '+ ${doctor.apellidos}">
-                                    Ronald Richard
-                                </div>
-                                <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
-                            </div>
-                            <div class="d-grid">
-                                <a href="#canvasHorarios" class="botonVerHorarios mb-2 text-reset verHorarios" data-bs-toggle="offcanvas">
-                                    Ver horarios
-                                </a>
-                            </div>
-                            <div class="d-grid">
-                                <a th:href="@{/Paciente/perfilDoctor(doc=${doctor.id_doctor})}"
-                                   class="botonVerMasDoctor">Ver más</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mensajeDeContenidoVacio d-none" id="noDoctores">
-                        No se encontraron doctores disponibles
-                    </div>
+<!-- ======= Sidebar ======= -->
+<div th:replace="~{paciente/fragments/sidebar.html :: sidebar('inicio')}"></div>
+<!-- End Sidebar-->
+
+<main id="main" class="main">
+    <h1 class="encabezado">Doctores</h1>
+    <section class="seccionPrincipal">
+        <!-- Filtros -->
+        <form method="get" th:action="@{/Paciente/doctores}">
+            <div class="row filtroNav">
+                <div class="col-md-4 col-lg-4 filtro d-flex justify-content-start">
+                    <label class="labelFiltro">Sede</label>
+                    <select class="form-select" name="sede">
+                        <option th:each="sede: ${sedeList}" th:value="${sede.idSede}" th:text="${sede.nombre}"
+                                th:selected="${sede.idSede == idSede}"></option>
+                    </select>
                 </div>
-
-                <nav class="mt-2" id="paginacion">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item" th:classappend="${paginaPrevia == 0? 'disabled': ''}">
-                            <a class="page-link"
-                               th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaPrevia}}">Anterior</a>
-                        </li>
-                        <li class="page-item" th:each="pagina: ${paginas}"
-                            th:classappend="${paginaActual == pagina? 'active': ''}">
-                            <a class="page-link"
-                               th:style="${paginaActual == pagina? 'background: #0AA1DD; border-color: #dee2e6':''}"
-                               th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${pagina}}"
-                               th:text="${pagina}">1</a>
-                        </li>
-                        <li class="page-item" th:classappend="${paginaActual == totalPaginas? 'disabled':''}">
-                            <a class="page-link"
-                               th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaSiguiente}}">Siguiente</a>
-                        </li>
-                    </ul>
-                </nav>
-
-            </section>
-
-            <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="canvasHorarios" aria-labelledby="offcanvasWithBothOptionsLabel">
-                <div class="offcanvas-header">
-                    <h2 class="offcanvas-title text-dark fw-bold" id="offcanvasWithBothOptionsLabel">Próximos horarios</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <div class="col-md-5 col-lg-6 filtro d-flex justify-content-start">
+                    <label class="labelFiltro">Especialidad</label>
+                    <select class="form-select" name="esp">
+                        <option value="0" th:selected="${idEspecialidad == 0}">Todas las especialidades</option>
+                        <option th:each="especialidad : ${especialidadList}"
+                                th:value="${especialidad.idEspecialidad}" th:text="${especialidad.nombre}"
+                                th:selected="${especialidad.idEspecialidad == idEspecialidad}"></option>
+                    </select>
                 </div>
-                <div class="offcanvas-body">
+                <div class="col-md-3 col-lg-2 d-flex justify-content-center">
+                    <input type="hidden" name="pag" value="1">
+                    <button class="botonFiltro" type="submit"><i class="bi bi-search"></i> Buscar</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-6 col-lg-4 col-xxl-3 doctor" th:each="doctor, i: ${doctorList}" th:id="${doctor.id_doctor}">
+                <div class="cardDoctor">
                     <div class="seccionFoto">
-                        <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
+                        <img class="fotoDoctor rounded-circle"
+                             th:src="@{/Paciente/imageDoctor(idDoctor=${doctor.id_doctor})}" alt="fotoDoctor">
                     </div>
                     <div class="seccionDescripcion">
-                        <div class="seccionNombre">Dr. Doctor</div>
-                        <div class="seccionEspecialidad">Especialidad</div>
+                        <div class="seccionNombre" th:text="'Dr. '+ ${doctor.nombre} +' '+ ${doctor.apellidos}">
+                            Ronald Richard
+                        </div>
+                        <div class="seccionEspecialidad" th:text="${doctor.especialidad.nombre}">Cirujano</div>
                     </div>
-                    <div class="seccionDisponibilidad" id="contenedor" style="width: 60%; margin: auto">
-                        <div class="seccionHorario">
-                            00:00 - 00:00
-                        </div>
-                        <div class="seccionHorario">
-                            00:00 - 00:00
-                        </div>
+                    <div class="d-grid">
+                        <a href="#canvasHorarios" class="botonVerHorarios mb-2 text-reset verHorarios" data-bs-toggle="offcanvas">
+                            Ver horarios
+                        </a>
+                    </div>
+                    <div class="d-grid">
+                        <a th:href="@{/Paciente/perfilDoctor(doc=${doctor.id_doctor})}"
+                           class="botonVerMasDoctor">Ver más</a>
                     </div>
                 </div>
             </div>
+            <div class="mensajeDeContenidoVacio d-none" id="noDoctores">
+                No se encontraron doctores disponibles
+            </div>
+        </div>
 
-            <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            <!-- End footer -->
+        <nav class="mt-2" id="paginacion">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${paginaPrevia == 0? 'disabled': ''}">
+                    <a class="page-link"
+                       th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaPrevia}}">Anterior</a>
+                </li>
+                <li class="page-item" th:each="pagina: ${paginas}"
+                    th:classappend="${paginaActual == pagina? 'active': ''}">
+                    <a class="page-link"
+                       th:style="${paginaActual == pagina? 'background: #0AA1DD; border-color: #dee2e6':''}"
+                       th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${pagina}}"
+                       th:text="${pagina}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${paginaActual == totalPaginas? 'disabled':''}">
+                    <a class="page-link"
+                       th:href="@{'/Paciente/doctores?sede='+${idSede}+'&esp='+${idEspecialidad}+'&pag='+${paginaSiguiente}}">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
 
-        </main>
+    </section>
 
-        <!-- Bootstrap CDN JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-                crossorigin="anonymous"></script>
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="canvasHorarios" aria-labelledby="offcanvasWithBothOptionsLabel" style="transition: transform .4s ease-in-out">
+        <div class="offcanvas-header">
+            <h2 class="offcanvas-title text-dark fw-bold" id="offcanvasWithBothOptionsLabel">Próximos horarios</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="seccionFoto">
+                <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
+            </div>
+            <div class="seccionDescripcion">
+                <div class="seccionNombre">Dr. Doctor</div>
+                <div class="seccionEspecialidad">Especialidad</div>
+            </div>
+            <div class="seccionDisponibilidad" id="contenedor" style="width: 60%; margin: auto">
+                <div class="seccionHorario">
+                    00:00 - 00:00
+                </div>
+                <div class="seccionHorario">
+                    00:00 - 00:00
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
+    <!-- ====== Footer ====== -->
+    <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+    <!-- End footer -->
 
-        <!-- JQuery -->
-        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+</main>
+<script>
+    var headerColorPaciente = "[[${headerColorPaciente}]]";
+    localStorage.setItem('headerColorPaciente', headerColorPaciente);
 
-        <script>
-            // mostrar mensaje de no doctores
-            let num = $(".doctor").length;
-            if (num === 0) {
-                $("#noDoctores").removeClass("d-none");
-                $("#paginacion").addClass("d-none");
-            }
+    function updateHeaderColorPaciente() {
+        var color = headerColorPaciente;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorPaciente();
+</script>
 
-            // mostrar horarios
-            $(".verHorarios").click(function (e){
-                let caja = $(e.target);
-                let canvas = $("#canvasHorarios");
-                let contenedor = $("#contenedor");
-                let doctor = caja.parents(".doctor").attr("id");
-                let foto = caja.parents(".doctor").find(".fotoDoctor").attr("src");
-                let nombre = caja.parents(".doctor").find(".seccionNombre").text();
-                let especialidad = caja.parents(".doctor").find(".seccionEspecialidad").text();
+<!-- Bootstrap CDN JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 
-                canvas.find(".fotoDoctor").attr("src", foto);
-                canvas.find(".seccionNombre").text(nombre);
-                canvas.find(".seccionEspecialidad").text(especialidad);
-                contenedor.empty();
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
 
-                $.get(getUrl()+"/Paciente/api/horarios/proximos/"+doctor)
-                    .done(function (data){
-                        for (let i = 0; i < data.horarios.length; i++){
-                            contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>"+
-                                data.horarios[i].dia+": "+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+
-                                "</div>")
-                        }
-                    }).fail(function (e){
-                        console.log("error");
-                })
-            })
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
-            function getUrl(){
-                return window.location.protocol+"//"+window.location.hostname+":8080";
-            }
+<script>
+    // mostrar mensaje de no doctores
+    let num = $(".doctor").length;
+    if (num === 0) {
+        $("#noDoctores").removeClass("d-none");
+        $("#paginacion").addClass("d-none");
+    }
 
-        </script>
-    </body>
+    // mostrar horarios
+    $(".verHorarios").click(function (e){
+        let caja = $(e.target);
+        let canvas = $("#canvasHorarios");
+        let contenedor = $("#contenedor");
+        let doctor = caja.parents(".doctor").attr("id");
+        let foto = caja.parents(".doctor").find(".fotoDoctor").attr("src");
+        let nombre = caja.parents(".doctor").find(".seccionNombre").text();
+        let especialidad = caja.parents(".doctor").find(".seccionEspecialidad").text();
+
+        canvas.find(".fotoDoctor").attr("src", foto);
+        canvas.find(".seccionNombre").text(nombre);
+        canvas.find(".seccionEspecialidad").text(especialidad);
+        contenedor.empty();
+
+        $.get(getUrl()+"/Paciente/api/horarios/proximos/"+doctor)
+            .done(function (data){
+
+                if(data.horarios.length === 0){
+                    contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>" +
+                        data.horarios[i].dia + ": No hay horarios disponibles</div>")
+                }
+                else{
+                    for (let i = 0; i < data.horarios.length; i++){
+                        contenedor.append("<div class='seccionHorario'><i class='bi bi-clock me-1'></i>"+
+                            data.horarios[i].dia+": "+data.horarios[i].inicio.substring(0,5)+" - "+data.horarios[i].fin.substring(0,5)+
+                            "</div>")
+                    }
+                }
+            }).fail(function (e){
+            console.log("error");
+        })
+    })
+
+    function getUrl(){
+        return window.location.protocol+"//"+window.location.hostname+":8080";
+    }
+
+</script>
+</body>
 </html>

@@ -18,6 +18,7 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
   <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
   <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
@@ -70,7 +71,7 @@
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Regístrate</h5>
-                    <p class="text-center small">Ingresa los datos solicitados para comenzar como paciente en la clínica.</p>
+                    <p class="text-center small">Ingresa los datos solicitados para comenzar como paciente en la clínica. Debes completar todos los casilleros marcados como obligatorios: (<span style="color:red;">*</span>)</p>
                   </div>
 
                   <form class="row g-3" th:method="post" th:action="@{/signin/save}" th:object="${paciente}">
@@ -78,8 +79,8 @@
                       <div class="col-md-12">
                         <label class="form-label">DNI<span style="color:red;">*</span></label>
                         <div class="input-group">
-                          <input type="number" id="dni" class="form-control" th:field="*{idPaciente}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}" aria-describedby="consulta">
-                          <button class="btn btn-primary" type="button" id="consulta">Consulta</button>
+                          <input type="number" id="idPaciente" class="form-control" th:field="*{idPaciente}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('idPaciente')?'is-invalid':''}" aria-describedby="consulta">
+                          <button class="btn btn-primary" type="button" id="consulta">Consultar</button>
                           <div class="invalid-feedback" th:if="${#fields.hasErrors('idPaciente')}"
                                th:errors="*{idPaciente}"></div>
                         </div>
@@ -87,30 +88,30 @@
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Nombres<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}" disabled="disabled" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                        <input style="background-color: #e9ecef;opacity: 1;" type="text" class="form-control" id="nombre" th:field="*{nombre}" readonly="readonly" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                              th:errors="*{nombre}" ></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Apellidos<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" id="apellidos" th:field="*{apellidos}" disabled="disabled" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
+                        <input style="background-color: #e9ecef;opacity: 1;" type="text" class="form-control" id="apellidos" th:field="*{apellidos}" readonly="readonly" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
                              th:errors="*{apellidos}"></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Correo electrónico<span style="color:red;">*</span></label>
-                        <input type="email" class="form-control" th:field="*{correo}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                        <input type="email" class="form-control" id="correo" th:field="*{correo}" th:readonly="${token!=null}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
                              th:errors="*{correo}"></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Seguro médico<span style="color:red;">*</span></label>
-                        <select class="form-select" th:field="*{seguro}">
+                        <select class="form-select" id="seguro" th:field="*{seguro}">
                           <option th:each="seguro: ${seguros}" th:value="${seguro.idSeguro}" th:text="${seguro.nombre}"></option>
                         </select>
                       </div>
                       <div th:if="${token==null}" class="col-md-12">
-                        <label for="si" class="form-label">¿Tienes alguna alergia?</label>
+                        <label for="si" class="form-label">¿Tienes alguna alergia? <span style="color:red;">*</span></label>
                         <div class="input-group">
                           <div class="col-md-6">
                             <div class="form-check">
@@ -138,25 +139,28 @@
                     <div class="row col-md-6">
                       <div class="col-md-12">
                         <label class="form-label">Distrito<span style="color:red;">*</span></label>
-                        <select class="form-select" th:field="*{distrito}">
+                        <select id="distrito" class="form-select" th:field="*{distrito}">
                           <option th:each="distrito :${distritos}" th:value="${distrito.idDistrito}" th:text="${distrito.nombre}"></option>
                         </select>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Dirección<span style="color:red;">*</span></label>
-                        <input type="text" class="form-control" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}">
+                        <input id="direccion" type="text" class="form-control" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}"
                              th:errors="*{direccion}"></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Fecha de nacimiento<span style="color:red;">*</span></label>
-                        <input type="date" class="form-control" placeholder="dd/mm/yyyy" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')?'is-invalid':''}">
+                        <div class="input-group">
+                          <input type="text" id="fechanacimiento" readonly class="form-control datePicker" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')?'is-invalid':''}">
+                          <span class="input-group-text" id="basic-addon2"><i class="bi bi-calendar3"></i></span>
+                        </div>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('fechanacimiento')}"
                              th:errors="*{fechanacimiento}"></div>
                       </div>
                       <div class="col-md-12">
                         <label class="form-label">Teléfono<span style="color:red;">*</span></label>
-                        <input type="number" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}">
+                        <input type="number" id="telefono" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}"
                              th:errors="*{telefono}"></div>
                       </div>
@@ -170,28 +174,23 @@
                       <div style="padding-bottom: 5px;" class="col-md-12">
                         <hr>  
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="tyc">
-                          <p class="small mb-0">Acepto los <a href="#">términos y condiciones</a> al completar este registro.</p>
+                          <input class="form-check-input" type="checkbox" id="tyc" name="consentimientos" value="1">
+                          <p class="small mb-0">Acepto la <a href="#">Política de Privacidad</a>, la divulgación de historiales médicos y el acuerdo financiero de la clínica. <span style="color:red;">*</span></p>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="consentimiento1">
-                          <p class="small mb-0">Quiero recibir actualizaciones y programas de la clínica mediante el correo.</p>
+                          <input class="form-check-input" type="checkbox" id="c1" name="consentimientos" value="5">
+                          <p class="small mb-0">Estoy de acuerdo en permitir que la clínica se comunique conmigo electrónicamente.</p>
                         </div>
                       </div>
                       <br>
                       <div style="padding-bottom: 5px;" class="text-center">
-                        <button type="submit" class="btn btn-primary">Continuar</button>
+                        <button type="submit" id="continuar" disabled="disabled" class="btn btn-primary">Continuar</button>
                       </div>
                       <div class="col-12">
                         <p class="small mb-0">¿Ya tienes una cuenta? <a th:href="@{/login}">Inicia sesión aquí.</a></p>
                       </div>
                     </div>
-                    
-                    
                   </form>
-
-                  
-
                 </div>
               </div>
 
@@ -227,6 +226,9 @@
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"
+          integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
   <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -248,9 +250,85 @@
     si.addEventListener('change', updateStatus)
     no.addEventListener('change', updateStatus)
   </script>
+  <script th:inline="javascript">
+    $(function(){
+      $(".datePicker").datepicker({
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        minDate: -32850,
+        maxDate: -3650
+      });
+    })
+  </script>
   <script>
+    function habilitar(){
+      let continuar = $("#continuar");
+      let dni1 = $("#idPaciente").val();
+      let nombre1 = $("#nombre").val();
+      let apellidos1 = $("#apellidos").val();
+      let correo = $("#correo").val();
+      let seguro = $("#seguro").val();
+      let distrito = $("#distrito").val();
+      let direccion = $("#direccion").val();
+      let fecha = $("#fechanacimiento").val();
+      let telefono = $("#telefono").val();
+      let genero = $("#genero").val();
+      let validar = 0;
+      if ($.trim(dni1) !== ""){
+        validar ++;
+      }
+      if ($.trim(nombre1) !== ""){
+        validar ++;
+      }
+      if ($.trim(apellidos1) !== ""){
+        validar ++;
+      }
+      if ($.trim(correo) !== ""){
+        validar ++;
+      }
+      if ($.trim(seguro) !== ""){
+        validar ++;
+      }
+      if ($.trim(distrito) !== ""){
+        validar ++;
+      }
+      if ($.trim(direccion) !== ""){
+        validar ++;
+      }
+      if ($.trim(fecha) !== ""){
+        validar ++;
+      }
+      if ($.trim(telefono) !== ""){
+        validar ++;
+      }
+      if ($.trim(genero) !== ""){
+        validar ++;
+      }
+      if($("#tyc").prop('checked')) {
+        validar ++;
+      }
+      console.log("validos: ", validar);
+      if (validar === 11){
+        continuar.removeAttr("disabled");
+      }else{
+        continuar.attr("disabled", "disabled");
+      }
+    }
+    document.getElementById("idPaciente").addEventListener('keyup', habilitar);
+    document.getElementById("nombre").addEventListener('change', habilitar);
+    document.getElementById("apellidos").addEventListener('change', habilitar);
+    document.getElementById("correo").addEventListener('keyup', habilitar);
+    document.getElementById("seguro").addEventListener('change', habilitar);
+    document.getElementById("distrito").addEventListener('change', habilitar);
+    document.getElementById("direccion").addEventListener('keyup', habilitar);
+    document.getElementById("fechanacimiento").addEventListener('change', habilitar);
+    document.getElementById("telefono").addEventListener('keyup', habilitar);
+    document.getElementById("genero").addEventListener('change', habilitar);
+    document.getElementById("tyc").addEventListener('change', habilitar);
+
     $(document).ready(function () {
-      $('#dni').on('input', function() {
+      $('#idPaciente').on('input', function() {
         var dniValue = $(this).val();
         var validCharacters = /^[0-9]{1,8}$/;
 
@@ -259,10 +337,21 @@
           $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
         }
       });
+      $('#telefono').on('input', function() {
+        var dniValue = $(this).val();
+        var validCharacters = /^[0-9]{1,9}$/;
+
+        if (!validCharacters.test(dniValue)) {
+          $(this).val(dniValue.replace(/\D/g, '')); // Remover todos los caracteres no numéricos
+          $(this).val(dniValue.slice(0, -1)); // Eliminar el último carácter ingresado
+        }
+      });
 
       $("#consulta").click(function (){
-        let dni = $("#dni").val();
-        $("#dni").removeClass("is-invalid");
+        $("#consulta").attr("disabled","disabled");
+        $("#consulta").html("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>");
+        let dni = $("#idPaciente").val();
+        $("#idPaciente").removeClass("is-invalid");
         $("#errorDni").hide();
         $("#nombre").val("");
         $("#apellidos").val("");
@@ -270,47 +359,60 @@
         if (dni === "") {
           console.log("alert");
           alert("Debe ingresar un DNI");
+
+          $("#consulta").removeAttr("disabled");
+          $("#consulta").html("Consultar");
         }else {
-          console.log("validacion en curso")
           $.ajax({
             method: "GET",
             crossDomain: true,
             url: getUrl()+"/validarDni/"+dni
-          }).done(function (result){
-            if (result.msg === "Éxito"){
+          }).done(function (resultado){
+            console.log(dni);
+            if (resultado.msg === "Éxito"){
               $.ajax({
                 method: "GET",
                 dataType: "json",
                 crossDomain: true,
-                headers: {"Authorization": "Bearer 43fa71cb7f05b6705d5c79c73497ea314cfec168a6a55ae740f3b5579cb24fe4"},
+                headers: {"Authorization": "Bearer 5fe50f076dafad000ed90cd7d442fdd13381fe61cef4bddfb583614504a6b6de"},
                 url: "https://apiperu.dev/api/dni/" + dni
               }).done(function (info) {
                 console.log(info);
                 if (info.success === true) {
                   console.log("exitoso");
-                  $("#nombre").val(info.data.nombres);
+                  $("#nombre").val(info.data.nombres.replace(/[Ñ]/, 'N'));
                   console.log(info.data.nombres, info.data.apellido_paterno, info.data.apellido_materno);
-                  $("#apellidos").val(info.data.apellido_paterno + " " + info.data.apellido_materno);
+                  $("#apellidos").val(info.data.apellido_paterno.replace(/[Ñ]/, 'N') + " " + info.data.apellido_materno.replace(/[Ñ]/, 'N'));
+
+                  $("#consulta").removeAttr("disabled");
+                  $("#consulta").html("Consultar");
                 } else {
                   console.log("error en encontrar dni");
-                  $("#dni").addClass("is-invalid");
+                  $("#idPaciente").addClass("is-invalid");
                   $("#errorDni").text("El DNI ingresado no es válido");
                   $("#errorDni").show();
                   $("#nombre").val("");
                   $("#apellidos").val("");
+
+                  $("#consulta").removeAttr("disabled");
+                  $("#consulta").html("Consultar");
                 }
               })
             } else {
-              console.log("error en validacion", result.err);
-              $("#dni").addClass("is-invalid");
-              $("#errorDni").text(result.err);
+              console.log("error en validacion", resultado.err);
+              $("#idPaciente").addClass("is-invalid");
+              $("#errorDni").text(resultado.err);
               $("#errorDni").show();
+
+              $("#consulta").removeAttr("disabled");
+              $("#consulta").html("Consultar");
             }
           })
         }
-      })
+      });
     })
     function getUrl(){
+      console.log(window.location.protocol+"//"+window.location.hostname+":8080");
       return window.location.protocol+"//"+window.location.hostname+":8080";
     }
   </script>

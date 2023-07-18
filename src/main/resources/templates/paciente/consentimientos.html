@@ -1,87 +1,98 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Consentimientos</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paciente - Consentimientos</title>
 
-        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
+    <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
-    </head>
-    <body>
 
-        <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
-        <!-- End Header -->
+</head>
+<body>
 
-        <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('consentimientos')}"></div>
-        <!-- End Sidebar-->
+<!-- ======= Header ======= -->
+<div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
+<!-- End Header -->
 
-        <main id="main" class="mainsite-content">
+<!-- ======= Sidebar ======= -->
+<div th:replace="~{paciente/fragments/sidebar.html :: sidebar('consentimientos')}"></div>
+<!-- End Sidebar-->
 
-            <h1 class="encabezado">Consentimientos dados</h1>
-            <section class="seccionPrincipal">
+<main id="main" class="mainsite-content">
 
-                <form method="post" th:action="@{/Paciente/consentimientos/actualizar}">
+    <h1 class="encabezado">Consentimientos dados</h1>
+    <section class="seccionPrincipal">
 
-                    <div th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"
-                         class="alert alert-success mt-3" role="alert"></div>
+        <form method="post" th:action="@{/Paciente/consentimientos/actualizar}">
 
-                    <div class="form-check consentimiento" th:each="consentimiento : ${consentimientos}">
-                        <input class="form-check-input" type="checkbox"
-                               th:id="${consentimiento.consentimiento.id_consentimiento}"
-                               th:name="${consentimiento.consentimiento.id_consentimiento}"
-                               th:checked="${consentimiento.valor==1}">
-                        <label class="form-check-label" th:for="${consentimiento.consentimiento.id_consentimiento}"
-                               th:text="${consentimiento.consentimiento.consentimiento}">
-                            Consentimiento
-                        </label>
-                    </div>
+            <div th:if="${msgActualizacion != null}" th:text="${msgActualizacion}"
+                 class="alert alert-success mt-3" role="alert"></div>
 
-                    <a href="#" class="botonAceptar btn my-4" data-bs-toggle="modal"
-                       data-bs-target="#actualizarModal">Actualizar</a>
+            <div class="form-check consentimiento" th:each="consentimiento : ${consentimientos}">
+                <input class="form-check-input" type="checkbox"
+                       th:id="${consentimiento.consentimiento.id_consentimiento}"
+                       th:name="${consentimiento.consentimiento.id_consentimiento}"
+                       th:checked="${consentimiento.valor==1}">
+                <label class="form-check-label" th:for="${consentimiento.consentimiento.id_consentimiento}"
+                       th:text="${consentimiento.consentimiento.consentimiento}">
+                    Consentimiento
+                </label>
+            </div>
 
-                    <!-- Modal Actualizar-->
-                    <div class="modal fade" id="actualizarModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
-                                </div>
-                                <div class="modal-body">
-                                    <span class="textoModal">¿Está seguro que desea actualizar sus consentimientos?</span>
-                                </div>
-                                <div class="modal-footer mx-auto">
-                                    <button type="submit" style="margin: 0 10px 0 0;"
-                                            class="botonAceptar">Actualizar
-                                    </button>
-                                    <a href="#" class="botonCancelar ms-2"
-                                       data-bs-dismiss="modal">Cancelar</a>
-                                </div>
-                            </div>
+            <a href="#" class="botonAceptar btn my-4" data-bs-toggle="modal"
+               data-bs-target="#actualizarModal">Actualizar</a>
+
+            <!-- Modal Actualizar-->
+            <div class="modal fade" id="actualizarModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
+                        </div>
+                        <div class="modal-body">
+                            <span class="textoModal">¿Está seguro que desea actualizar sus consentimientos?</span>
+                        </div>
+                        <div class="modal-footer mx-auto">
+                            <button type="submit" style="margin: 0 10px 0 0;"
+                                    class="botonAceptar">Actualizar
+                            </button>
+                            <a href="#" class="botonCancelar ms-2"
+                               data-bs-dismiss="modal">Cancelar</a>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                </form>
+        </form>
 
-            </section>
+    </section>
 
-            <!-- ====== Footer ====== -->
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            <!-- End footer -->
+    <!-- ====== Footer ====== -->
+    <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+    <!-- End footer -->
 
-        </main><!-- End #main -->
+</main><!-- End #main -->
+<script>
+    var headerColorPaciente = "[[${headerColorPaciente}]]";
+    localStorage.setItem('headerColorPaciente', headerColorPaciente);
 
-        <!-- Bootstrap CDN JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-                crossorigin="anonymous"></script>
+    function updateHeaderColorPaciente() {
+        var color = headerColorPaciente;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorPaciente();
+</script>
 
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
+<!-- Bootstrap CDN JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 
-    </body>
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
 </html>

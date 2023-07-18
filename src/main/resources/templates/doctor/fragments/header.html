@@ -25,11 +25,11 @@
         </a>
       </li><!-- End Search Icon-->
 
-      <li>
+      <li class="nav-item dropdown me-3">
         <div th:if="${session.superAdminLogueadoComoDoctor}">
           <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin}" method="POST">
-            <button type="submit" class="btn btn-primary">
-              <i class="fas fa-home"></i> Volver a SuperAdmin
+            <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Volver a SuperAdmin">
+              <i class="fas fa-home"></i>
             </button>
           </form>
         </div>
@@ -183,14 +183,15 @@
 
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
            data-bs-toggle="dropdown">
-          <img th:if="${doctor.foto != null}" th:src="@{'/usuario/foto/'+${doctor.getId_doctor()}}" alt="Profile" class="rounded-circle">
-          <img th:unless="${doctor.foto != null}" th:src="@{/assets/img/userPorDefecto.jpg}" alt="Profile" class="rounded-circle">
+          <img th:if="${doctor.foto != null}" style="width: 50px;height: 50px" th:src="@{'/usuario/foto/'+${doctor.getId_doctor()}}" alt="Profile" class="rounded-circle">
+          <img th:unless="${doctor.foto != null}" style="width: 50px;height: 50px" th:src="@{/assets/img/userPorDefecto.jpg}" alt="Profile" class="rounded-circle">
           <span th:text="'Dr. '+${doctor.nombre}+' '+${doctor.apellidos}" class="d-none d-md-block dropdown-toggle ps-2"></span>
         </a><!-- End Profile Iamge Icon -->
 
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li  class="dropdown-header">
             <h6 th:text="${doctor.nombre}+' '+${doctor.apellidos}"></h6>
+            <span>Doctor</span>
           </li>
           <li>
             <hr class="dropdown-divider">
