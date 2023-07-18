@@ -917,7 +917,7 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
 
-        List<Pago> pagoList = pagoRepository.buscarPorPaciente(paciente.getIdPaciente());
+        List<Pago> pagoList = pagoRepository.pagosValidosPorPaciente(paciente.getIdPaciente());
 
         model.addAttribute("pagoList", pagoList);
         return "paciente/pagos";
