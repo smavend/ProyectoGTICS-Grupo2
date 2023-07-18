@@ -783,7 +783,7 @@ public class PacienteController {
     public String guardarContrasena(@RequestParam("actual") String contrasenaActual,
                                     @RequestParam("nueva1") String contrasenaNueva1,
                                     @RequestParam("nueva2") String contrasenaNueva2,
-                                    RedirectAttributes attr, Authentication authentication,
+                                    Model model, RedirectAttributes attr, Authentication authentication,
                                     HttpSession session) {
 
         String userEmail;
@@ -804,11 +804,19 @@ public class PacienteController {
             if (contrasenaNueva1.equals(contrasenaNueva2)) {
 
                 if (!contrasenaNueva1.equals("")) {
-                    credencialesRepository.save(nuevasCredenciales);
-                    attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
-                    return "redirect:/Paciente/perfil";
+
+                    if (contrasenaNueva1.length()>=6){
+                        credencialesRepository.save(nuevasCredenciales);
+                        attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
+                        attr.addFlashAttribute("pass", contrasenaNueva1);
+                        return "redirect:/Paciente/perfil";
+                    }
+                    else{
+                        attr.addFlashAttribute("error2", "La contraseña debe tener como mínimo 6 dígitos");
+                    }
+
                 } else {
-                    attr.addFlashAttribute("erro2", "Ingrese una nueva contraseña válida");
+                    attr.addFlashAttribute("error2", "Ingrese una nueva contraseña válida");
                 }
 
             } else {
@@ -894,11 +902,6 @@ public class PacienteController {
         model.addAttribute("doctorList", doctorList);
         model.addAttribute("sedeList", sedeList);
         model.addAttribute("especialidadList", especialidadList);
-
-        // Obtener disponibilidad de los próximos dos días
-
-        model.addAttribute("dia1", LocalDateTime.now().plusDays(1));
-        model.addAttribute("dia2", LocalDateTime.now().plusDays(2));
 
         return "paciente/doctores";
 

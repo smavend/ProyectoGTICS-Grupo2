@@ -527,9 +527,12 @@ public class SuperAdminController {
     }
 
     @PostMapping("/GuardarPacientes")
-    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds,HttpServletRequest request) {
+    public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds,HttpServletRequest request, RedirectAttributes attr) {
+        List<HashMap<String, String>> credenciales = new ArrayList<>();
         for(String id : pacientesIds) {
             pacienteRepository.findById(id).ifPresent(paciente -> {
+                HashMap<String, String> user = new HashMap<>();
+
                 paciente.setEstado(1);
                 pacienteRepository.save(paciente);
                 String passRandom = securityConfig.generateRandomPassword();
@@ -558,8 +561,15 @@ public class SuperAdminController {
                 System.out.println(link);
                 System.out.println("servername:"+domain);
                 correoService.props(paciente.getCorreo(),passRandom, link);
+
+                user.put("correo", paciente.getCorreo());
+                user.put("pass", passRandom);
+                credenciales.add(user);
+
             });
         }
+
+        attr.addFlashAttribute("credenciales", credenciales);
 
         return "redirect:/SuperAdminHomePage/TareaPacientes";
     }
