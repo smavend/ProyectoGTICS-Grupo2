@@ -152,7 +152,7 @@
                       <div class="col-md-12">
                         <label class="form-label">Fecha de nacimiento<span style="color:red;">*</span></label>
                         <div class="input-group">
-                          <input type="text" id="fechanacimiento" class="form-control" placeholder="dd/mm/yyyy" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')?'is-invalid':''}">
+                          <input type="text" id="fechanacimiento" readonly class="form-control datePicker" th:field="*{fechanacimiento}" th:classappend="${#fields.hasErrors('fechanacimiento')?'is-invalid':''}">
                           <span class="input-group-text" id="basic-addon2"><i class="bi bi-calendar3"></i></span>
                         </div>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('fechanacimiento')}"
@@ -174,12 +174,12 @@
                       <div style="padding-bottom: 5px;" class="col-md-12">
                         <hr>  
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="tyc">
-                          <p class="small mb-0">Acepto los <a href="#">términos y condiciones</a> al completar este registro. <span style="color:red;">*</span></p>
+                          <input class="form-check-input" type="checkbox" id="tyc" name="consentimientos" value="1">
+                          <p class="small mb-0">Acepto la <a href="#">Política de Privacidad</a>, la divulgación de historiales médicos y el acuerdo financiero de la clínica. <span style="color:red;">*</span></p>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="consentimiento1">
-                          <p class="small mb-0">Quiero recibir actualizaciones y programas de la clínica mediante el correo.</p>
+                          <input class="form-check-input" type="checkbox" id="c1" name="consentimientos" value="5">
+                          <p class="small mb-0">Estoy de acuerdo en permitir que la clínica se comunique conmigo electrónicamente.</p>
                         </div>
                       </div>
                       <br>
@@ -190,12 +190,7 @@
                         <p class="small mb-0">¿Ya tienes una cuenta? <a th:href="@{/login}">Inicia sesión aquí.</a></p>
                       </div>
                     </div>
-                    
-                    
                   </form>
-
-                  
-
                 </div>
               </div>
 
@@ -255,15 +250,18 @@
     si.addEventListener('change', updateStatus)
     no.addEventListener('change', updateStatus)
   </script>
-  <script>
+  <script th:inline="javascript">
     $(function(){
-      $("#fechanacimiento").datepicker({
+      $(".datePicker").datepicker({
         dateFormat: 'dd-mm-yy',
         changeMonth: true,
         changeYear: true,
-        maxDate : -3650,
+        minDate: -32850,
+        maxDate: -3650
       });
     })
+  </script>
+  <script>
     function habilitar(){
       let continuar = $("#continuar");
       let dni1 = $("#idPaciente").val();
@@ -376,7 +374,7 @@
                 method: "GET",
                 dataType: "json",
                 crossDomain: true,
-                headers: {"Authorization": "Bearer 43fa71cb7f05b6705d5c79c73497ea314cfec168a6a55ae740f3b5579cb24fe4"},
+                headers: {"Authorization": "Bearer 5fe50f076dafad000ed90cd7d442fdd13381fe61cef4bddfb583614504a6b6de"},
                 url: "https://apiperu.dev/api/dni/" + dni
               }).done(function (info) {
                 console.log(info);

@@ -1,242 +1,252 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Paciente - Cuestionario</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paciente - Cuestionario</title>
 
-        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
+    <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
 
-    </head>
-    <body>
+</head>
+<body>
 
-        <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
-        <!-- End Header -->
+<!-- ======= Header ======= -->
+<div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
+<!-- End Header -->
 
-        <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('cuestionarios')}"></div>
-        <!-- End Sidebar-->
+<!-- ======= Sidebar ======= -->
+<div th:replace="~{paciente/fragments/sidebar.html :: sidebar('cuestionarios')}"></div>
+<!-- End Sidebar-->
 
-        <main id="main" class="main site-content">
-            <h1 class="encabezado" th:text="'Cuestionario de '+${cuestionario.cita.doctor.especialidad.nombre}">Cuestionario Cardiología</h1>
-            <section class="seccionPrincipal">
+<main id="main" class="main site-content">
+    <h1 class="encabezado" th:text="'Cuestionario de '+${cuestionario.cita.doctor.especialidad.nombre}">Cuestionario Cardiología</h1>
+    <section class="seccionPrincipal">
 
-                <form method="post" th:action="@{/Paciente/guardarCuestionario}" th:object="${cuestionario}">
-                    <!--
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario">
-                            ¿Ha presentado dolor abdominal en los últimos 5 días?
+        <form method="post" th:action="@{/Paciente/guardarCuestionario}" th:object="${cuestionario}">
+            <!--
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario">
+                    ¿Ha presentado dolor abdominal en los últimos 5 días?
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault">
+                    <label class="form-check-label">
+                        Sí
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault">
+                    <label class="form-check-label">
+                        No
+                    </label>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario">
+                    Pregunta médica número 2:
+                </div>
+                <div class="respuestaCuestionario">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox">
+                        <label class="form-check-label">Opción 1</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox">
+                        <label class="form-check-label">Opción 2</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox">
+                        <label class="form-check-label">Opción 3</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox">
+                        <label class="form-check-label">Opción 4</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario">
+                    Pregunta médica número 5:
+                </div>
+                <div class="respuestaCuestionario">
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Selecciona una opción</option>
+                        <option value="1">Opción 1</option>
+                        <option value="2">Opción 2</option>
+                        <option value="3">Opción 3</option>
+                    </select>
+                </div>
+            </div>
+            -->
+
+            <input type="hidden" th:field="*{cuestionario}">
+            <input type="hidden" th:field="*{cita}">
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP1()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r1}" th:classappend="${#fields.hasErrors('r1')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r1')}" th:errors="*{r1}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP2()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r2}" th:classappend="${#fields.hasErrors('r2')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r2')}" th:errors="*{r2}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP3()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r3}" th:classappend="${#fields.hasErrors('r3')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r3')}" th:errors="*{r3}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP4()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r4}" th:classappend="${#fields.hasErrors('r4')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r4')}" th:errors="*{r4}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP5()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r5}" th:classappend="${#fields.hasErrors('r5')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r5')}" th:errors="*{r5}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP6()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r6}" th:classappend="${#fields.hasErrors('r6')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r6')}" th:errors="*{r6}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP7()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r7}" th:classappend="${#fields.hasErrors('r7')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r7')}" th:errors="*{r7}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP8()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r8}" th:classappend="${#fields.hasErrors('r8')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r8')}" th:errors="*{r8}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP9()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r9}" th:classappend="${#fields.hasErrors('r9')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r9')}" th:errors="*{r9}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP10()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r10}" th:classappend="${#fields.hasErrors('r10')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r10')}" th:errors="*{r10}"></div>
+                </div>
+            </div>
+
+            <div class="seccionCuestionario">
+                <div class="textoCuestionario mb-3" th:text="${preguntas.getP11()}">
+                    Pregunta médica número 1:
+                </div>
+                <div class="respuestaCuestionario">
+                    <input class="form-control" type="text" th:field="*{r11}" th:classappend="${#fields.hasErrors('r11')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('r11')}" th:errors="*{r11}"></div>
+                </div>
+            </div>
+
+            <input type="hidden" th:field="*{estado}">
+
+            <a href="#" class="btn botonAceptar mt-5 mb-3 me-2" data-bs-toggle="modal"
+               data-bs-target="#actualizarModal" th:if="${cuestionario.estado == 0}">Enviar</a>
+            <a th:href="@{/Paciente/cuestionarios}"
+               class="btn botonCancelar mt-5 mb-3" th:text="${cuestionario.estado == 0? 'Cancelar':'Regresar'}">Cancelar
+            </a>
+
+            <!-- Modal Actualizar-->
+            <div th:if="${cuestionario.estado == 0}" class="modal fade" id="actualizarModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault">
-                            <label class="form-check-label">
-                                Sí
-                            </label>
+                        <div class="modal-body">
+                            <span class="textoModal">¿Está seguro que desea enviar el cuestionario?</span>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault">
-                            <label class="form-check-label">
-                                No
-                            </label>
+                        <div class="modal-footer mx-auto">
+                            <button type="submit"
+                                    class="botonAceptar">Enviar
+                            </button>
+                            <a href="#" class="botonCancelar"
+                               data-bs-dismiss="modal">Cancelar</a>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario">
-                            Pregunta médica número 2:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                                <label class="form-check-label">Opción 1</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                                <label class="form-check-label">Opción 2</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                                <label class="form-check-label">Opción 3</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                                <label class="form-check-label">Opción 4</label>
-                            </div>
-                        </div>
-                    </div>
+        </form>
+    </section>
+</main>
+<script>
+    var headerColorPaciente = "[[${headerColorPaciente}]]";
+    localStorage.setItem('headerColorPaciente', headerColorPaciente);
 
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario">
-                            Pregunta médica número 5:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>Selecciona una opción</option>
-                                <option value="1">Opción 1</option>
-                                <option value="2">Opción 2</option>
-                                <option value="3">Opción 3</option>
-                            </select>
-                        </div>
-                    </div>
-                    -->
+    function updateHeaderColorPaciente() {
+        var color = headerColorPaciente;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorPaciente();
+</script>
 
-                    <input type="hidden" th:field="*{cuestionario}">
-                    <input type="hidden" th:field="*{cita}">
+<!-- Bootstrap CDN JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP1()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r1}" th:classappend="${#fields.hasErrors('r1')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r1')}" th:errors="*{r1}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP2()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r2}" th:classappend="${#fields.hasErrors('r2')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r2')}" th:errors="*{r2}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP3()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r3}" th:classappend="${#fields.hasErrors('r3')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r3')}" th:errors="*{r3}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP4()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r4}" th:classappend="${#fields.hasErrors('r4')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r4')}" th:errors="*{r4}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP5()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r5}" th:classappend="${#fields.hasErrors('r5')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r5')}" th:errors="*{r5}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP6()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r6}" th:classappend="${#fields.hasErrors('r6')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r6')}" th:errors="*{r6}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP7()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r7}" th:classappend="${#fields.hasErrors('r7')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r7')}" th:errors="*{r7}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP8()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r8}" th:classappend="${#fields.hasErrors('r8')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r8')}" th:errors="*{r8}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP9()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r9}" th:classappend="${#fields.hasErrors('r9')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r9')}" th:errors="*{r9}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP10()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r10}" th:classappend="${#fields.hasErrors('r10')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r10')}" th:errors="*{r10}"></div>
-                        </div>
-                    </div>
-
-                    <div class="seccionCuestionario">
-                        <div class="textoCuestionario mb-3" th:text="${preguntas.getP11()}">
-                            Pregunta médica número 1:
-                        </div>
-                        <div class="respuestaCuestionario">
-                            <input class="form-control" type="text" th:field="*{r11}" th:classappend="${#fields.hasErrors('r11')?'is-invalid':''}" th:readonly="${cuestionario.estado == 1}">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('r11')}" th:errors="*{r11}"></div>
-                        </div>
-                    </div>
-
-                    <input type="hidden" th:field="*{estado}">
-
-                    <a href="#" class="btn botonAceptar mt-5 mb-3 me-2" data-bs-toggle="modal"
-                       data-bs-target="#actualizarModal" th:if="${cuestionario.estado == 0}">Enviar</a>
-                    <a th:href="@{/Paciente/cuestionarios}"
-                       class="btn botonCancelar mt-5 mb-3" th:text="${cuestionario.estado == 0? 'Cancelar':'Regresar'}">Cancelar
-                    </a>
-
-                    <!-- Modal Actualizar-->
-                    <div th:if="${cuestionario.estado == 0}" class="modal fade" id="actualizarModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
-                                </div>
-                                <div class="modal-body">
-                                    <span class="textoModal">¿Está seguro que desea enviar el cuestionario?</span>
-                                </div>
-                                <div class="modal-footer mx-auto">
-                                    <button type="submit"
-                                            class="botonAceptar">Enviar
-                                    </button>
-                                    <a href="#" class="botonCancelar"
-                                       data-bs-dismiss="modal">Cancelar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-            </section>
-        </main>
-
-        <!-- Bootstrap CDN JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-                crossorigin="anonymous"></script>
-        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
-    </body>
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+</body>
 </html>

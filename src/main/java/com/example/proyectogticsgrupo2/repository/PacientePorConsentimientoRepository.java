@@ -27,4 +27,10 @@ public interface PacientePorConsentimientoRepository extends JpaRepository<Pacie
             "set valor = 0 " +
             "where paciente_id_paciente = ?1")
     void actualizarConsentimientosANegativo(String idPaciente);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "insert into paciente_has_consentimientos (paciente_id_paciente, consentimientos_id_consentimiento, valor) values (?1,?2,?3)")
+    void cargarConsentimentos(String idPaciente, int idConsent, int valor);
+
 }

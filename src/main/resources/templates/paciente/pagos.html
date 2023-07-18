@@ -1,599 +1,608 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Paciente - Pagos</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paciente - Pagos</title>
 
-        <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
+    <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
-        <!-- DATATABLES -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <!-- DATATABLES -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 
-    </head>
-    <body>
+</head>
+<body>
 
-        <!-- ======= Header ======= -->
-        <div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
-        <!-- End Header -->
+<!-- ======= Header ======= -->
+<div th:replace="~{paciente/fragments/header.html :: header(paciente = ${session.paciente})}"></div>
+<!-- End Header -->
 
-        <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
-        <!-- End Sidebar-->
+<!-- ======= Sidebar ======= -->
+<div th:replace="~{paciente/fragments/sidebar.html :: sidebar('pagos')}"></div>
+<!-- End Sidebar-->
 
-        <main id="main" class="main site-content">
+<main id="main" class="main site-content">
 
-            <h1 class="encabezado">Historial de pagos</h1>
-            <!--<div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>-->
-            <section class="seccionPrincipal">
+    <h1 class="encabezado">Historial de pagos</h1>
+    <!--<div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>-->
+    <section class="seccionPrincipal">
 
-                <a id="boton_todos" class="btn botonTipo botonTipoSeleccionado" onclick="buscarPagosTodos()">Todos</a>
-                <a id="boton_pendientes" class="btn botonTipo" onclick="buscarPagosPendientes()">Pendientes</a>
-                <a id="boton_cancelados" class="btn botonTipo" onclick="buscarPagosCancelados()">Cancelados</a>
+        <a id="boton_todos" class="btn botonTipo botonTipoSeleccionado" onclick="buscarPagosTodos()">Todos</a>
+        <a id="boton_pendientes" class="btn botonTipo" onclick="buscarPagosPendientes()">Pendientes</a>
+        <a id="boton_cancelados" class="btn botonTipo" onclick="buscarPagosCancelados()">Cancelados</a>
 
-                <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
+        <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
 
-                <table class="table pt-2 pb-4" id="tablax">
-                    <thead>
-                        <tr>
-                            <th>Concepto</th>
-                            <th>Doctor</th>
-                            <th>Fecha de cita</th>
-                            <th>Fecha de pago</th>
-                            <th>Pago S/</th>
-                            <th>Tipo de pago</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="pago: ${pagoList}" class="fila_cita"
-                            th:classappend="${pago.estadoPago == 0?'cita_pendiente':'cita_cancelada'}"
-                            th:attr="data-id-especialidad=${pago.cita.doctor.especialidad.idEspecialidad}">
-                            <td id="especialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.nombre}" th:text="${pago.cita.doctor.especialidad.nombre}"></td>
-                            <td id="doctor" th:attr="data-valor=${pago.cita.doctor.getNombreYApellido()}" th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
-                            <td id="fechaCita" th:attr="data-valor=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}" th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
-                            <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'-'}">
-                                Fecha de pago
-                            </td>
-                            <td id="precio" th:class="precio-calculado"></td>
-                            <td th:text="${pago.tipoPago}">Visa ***1234</td>
-                            <!-- columna estado -->
-                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
-                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
-                                <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
-                                <button class="botonPagar botonPagarModal" id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></button>
-                            </td>
-                            <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
-                        </tr>
-                    </tbody>
-                </table>
+        <table class="table pt-2 pb-4" id="tablax">
+            <thead>
+            <tr>
+                <th>Concepto</th>
+                <th>Doctor</th>
+                <th>Fecha de cita</th>
+                <th>Fecha de pago</th>
+                <th>Pago S/</th>
+                <th>Tipo de pago</th>
+                <th>Estado</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pago: ${pagoList}" class="fila_cita"
+                th:classappend="${pago.estadoPago == 0?'cita_pendiente':'cita_cancelada'}"
+                th:attr="data-id-especialidad=${pago.cita.doctor.especialidad.idEspecialidad}">
+                <td id="especialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.nombre}" th:text="${pago.cita.doctor.especialidad.nombre}"></td>
+                <td id="doctor" th:attr="data-valor=${pago.cita.doctor.getNombreYApellido()}" th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
+                <td id="fechaCita" th:attr="data-valor=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}" th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
+                <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'-'}">
+                    Fecha de pago
+                </td>
+                <td id="precio" th:class="precio-calculado"></td>
+                <td th:text="${pago.tipoPago}">Visa ***1234</td>
+                <!-- columna estado -->
+                <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
+                <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
+                    <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
+                    <button class="botonPagar botonPagarModal" id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></button>
+                </td>
+                <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
+            </tr>
+            </tbody>
+        </table>
 
-            </section>
+    </section>
 
-            <!-- Modal Pagar -->
-            <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1"
-                 aria-labelledby="modal-pago-label"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header row-cols-auto" style="background-color: gainsboro">
-                            <p>
-                            <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
-                                tarjeta</h5>
-                            <img th:src="@{/assets/img/cards.png}" style="height: 50px"
-                                 class="col-lg-4">
-                            <button type="button" class="btn-close col-lg-2 fw-bold"
-                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                            </p>
+    <!-- Modal Pagar -->
+    <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1"
+         aria-labelledby="modal-pago-label"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header row-cols-auto" style="background-color: gainsboro">
+                    <p>
+                    <h5 class="modal-title col-lg-5 fw-bold" id="modal-pago-label">Pagar con
+                        tarjeta</h5>
+                    <img th:src="@{/assets/img/cards.png}" style="height: 50px"
+                         class="col-lg-4">
+                    <button type="button" class="btn-close col-lg-2 fw-bold"
+                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </p>
 
-                        </div>
-                        <div class="modal-body">
-                            <form method="post" id="formValidarPago" action="pagos.html">
-                                <div class="mb-3 w-75">
-                                    <label class="form-label">Nombre del titular de la tarjeta</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-person-fill"></i></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="titularTarjeta">
-                                    </div>
-                                    <div class="invalid-feedback" id="errorTitularTarjeta" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
-                                </div>
-                                <div class="mb-3 w-75">
-                                    <label class="form-label">Número de la tarjeta</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="numeroTarjeta">
-                                    </div>
-                                    <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
-                                    <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El número de tarjeta debe tener 16 dígitos</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Fecha de expiración</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="MM-yyyy" id="fechaExpiracion">
-                                        </div>
-                                        <div class="invalid-feedback" id="errorFechaExpiracion" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
-                                        <div class="invalid-feedback" id="errorFechaInvalida" style="display: none;margin-top: -7px; margin-bottom: 10px">Ingrese una fecha válida MM-yyyy</div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Código de seguridad</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" id="codigoSegTarjeta">
-                                        </div>
-                                        <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
-                                        <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El código debe tener 3 dígitos</div>
-                                    </div>
-                                </div>
-                                <div class="mb-4 w-75">
-                                    <label class="form-label">Correo Electrónico</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="correoTarjeta">
-                                    </div>
-                                    <div class="invalid-feedback" id="errorCorreoTarjeta" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
-                                    <div class="invalid-feedback" id="errorCorreoInvalido" style="display: none;margin-top: -7px; margin-bottom: 10px">Ingrese un correo válido</div>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary w-25"
-                                            style="background-color: #0AA1DD"><p class="fw-bold">Siguiente</p></button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                 </div>
-            </div>
-
-            <!-- Modal Confirmar Pago -->
-            <div class="modal fade" data-bs-target="#modal-pago" id="modal-confirmar-pago" tabindex="-1"
-                 aria-labelledby="modal-pago-label"
-                 aria-hidden="true" style="font-size: 1.3rem">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header row-cols-auto justify-content-between" style="background-color: gainsboro">
-                            <div class="d-flex align-items-center">
-                                <img style="height: 30px;" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
-                                <span class="fw-bold ms-2">Clínica INTERPUCP</span>
+                <div class="modal-body">
+                    <form method="post" id="formValidarPago" action="pagos.html">
+                        <div class="mb-3 w-75">
+                            <label class="form-label">Nombre del titular de la tarjeta</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="bi bi-person-fill"></i></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="titularTarjeta">
                             </div>
-                            <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            <div class="invalid-feedback" id="errorTitularTarjeta" style="display: none;margin-top: -7px">Este campo no puede estar vacío</div>
                         </div>
-                        <div class="modal-body">
-                            <form id="formPagar" method="post" th:action="@{/Paciente/guardarPago}">
-                                <input type="hidden" id="idPagoTarjeta" name="idPago"/>
-                                <input type="hidden" id="idCitaPagar" name="idCita"/>
-                                <div style="display:none;"><input type="text" class="form-control" name="confirmado" value="true"></div>
-                                <div class="row">
-                                    <div class="justify-content-start">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-arrow-left col-lg-4" onclick="volverModal()"></i>
-                                            <span class="fw-bold">Confirmar Pago</span>
-                                        </div>
-                                    </div>
+                        <div class="mb-3 w-75">
+                            <label class="form-label">Número de la tarjeta</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
                                 </div>
-                                <div class="row mt-4 mb-4">
-                                    <div>
-                                        <p class="infoModalPagar">Doctor:<span class="infoModalPagarDato" id="doctorPagar"></span></p>
-                                        <p class="infoModalPagar">Especialidad:<span class="infoModalPagarDato" id="especialidadPagar"></span></p>
-                                        <p class="infoModalPagar">Fecha de la cita:<span class="infoModalPagarDato" id="fechaPagar"></span></p>
-                                        <p class="infoModalPagar">Número de tarjeta:<span class="infoModalPagarDato" id="nroTarjetaPagar"></span></p>
-                                        <p class="infoModalPagar">Correo electrónico:<span class="infoModalPagarDato" id="correoTarjetaPagar"></span></p>
-                                        <p class="infoModalPrecioPagar">Precio total:<span class="infoModalPagarDato fw-bold" id="precioPagar"></span></p>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary w-25"
-                                            style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
-                                </div>
-                            </form>
+                                <input type="text" class="form-control" id="numeroTarjeta">
+                            </div>
+                            <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
+                            <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El número de tarjeta debe tener 16 dígitos</div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha de expiración</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="bi bi-calendar-event-fill"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="MM-yyyy" id="fechaExpiracion">
+                                </div>
+                                <div class="invalid-feedback" id="errorFechaExpiracion" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
+                                <div class="invalid-feedback" id="errorFechaInvalida" style="display: none;margin-top: -7px; margin-bottom: 10px">Ingrese una fecha válida MM-yyyy</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Código de seguridad</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="codigoSegTarjeta">
+                                </div>
+                                <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
+                                <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El código debe tener 3 dígitos</div>
+                            </div>
+                        </div>
+                        <div class="mb-4 w-75">
+                            <label class="form-label">Correo Electrónico</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="correoTarjeta">
+                            </div>
+                            <div class="invalid-feedback" id="errorCorreoTarjeta" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
+                            <div class="invalid-feedback" id="errorCorreoInvalido" style="display: none;margin-top: -7px; margin-bottom: 10px">Ingrese un correo válido</div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary w-25"
+                                    style="background-color: #0AA1DD"><p class="fw-bold">Siguiente</p></button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Modal Pago Realizado-->
-            <div class="modal fade" id="modal-pago-realizado" tabindex="-1" aria-labelledby="modal-pago-label"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header row-cols-auto">
-                            <button type="button" class="btn-close col-lg-2 fw-bold"
-                                    data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="cardConfirmacion">
-                                <div class="cardTitulo">
-                                    Pago Realizado con éxito
-                                </div>
-                                <div class="cardCuerpo">
-                                    <div class="cardTexto">Para ver su recibo visite la sección PAGOS</div>
-                                    <a class="btn botonVolverInicio" th:href="@{/Paciente/pagos}">Revisar pagos</a>
+    <!-- Modal Confirmar Pago -->
+    <div class="modal fade" data-bs-target="#modal-pago" id="modal-confirmar-pago" tabindex="-1"
+         aria-labelledby="modal-pago-label"
+         aria-hidden="true" style="font-size: 1.3rem">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header row-cols-auto justify-content-between" style="background-color: gainsboro">
+                    <div class="d-flex align-items-center">
+                        <img style="height: 30px;" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
+                        <span class="fw-bold ms-2">Clínica INTERPUCP</span>
+                    </div>
+                    <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPagar" method="post" th:action="@{/Paciente/guardarPago}">
+                        <input type="hidden" id="idPagoTarjeta" name="idPago"/>
+                        <input type="hidden" id="idCitaPagar" name="idCita"/>
+                        <div style="display:none;"><input type="text" class="form-control" name="confirmado" value="true"></div>
+                        <div class="row">
+                            <div class="justify-content-start">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-arrow-left col-lg-4" onclick="volverModal()"></i>
+                                    <span class="fw-bold">Confirmar Pago</span>
                                 </div>
                             </div>
                         </div>
+                        <div class="row mt-4 mb-4">
+                            <div>
+                                <p class="infoModalPagar">Doctor:<span class="infoModalPagarDato" id="doctorPagar"></span></p>
+                                <p class="infoModalPagar">Especialidad:<span class="infoModalPagarDato" id="especialidadPagar"></span></p>
+                                <p class="infoModalPagar">Fecha de la cita:<span class="infoModalPagarDato" id="fechaPagar"></span></p>
+                                <p class="infoModalPagar">Número de tarjeta:<span class="infoModalPagarDato" id="nroTarjetaPagar"></span></p>
+                                <p class="infoModalPagar">Correo electrónico:<span class="infoModalPagarDato" id="correoTarjetaPagar"></span></p>
+                                <p class="infoModalPrecioPagar">Precio total:<span class="infoModalPagarDato fw-bold" id="precioPagar"></span></p>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary w-25"
+                                    style="background-color: #0AA1DD"><p class="fw-bold">Pagar</p></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pago Realizado-->
+    <div class="modal fade" id="modal-pago-realizado" tabindex="-1" aria-labelledby="modal-pago-label"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header row-cols-auto">
+                    <button type="button" class="btn-close col-lg-2 fw-bold"
+                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="cardConfirmacion">
+                        <div class="cardTitulo">
+                            Pago Realizado con éxito
+                        </div>
+                        <div class="cardCuerpo">
+                            <div class="cardTexto">Para ver su recibo visite la sección PAGOS</div>
+                            <a class="btn botonVolverInicio" th:href="@{/Paciente/pagos}">Revisar pagos</a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
-            <!-- End footer -->
+    <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
+    <!-- End footer -->
 
-        </main><!-- End #main -->
+</main><!-- End #main -->
+<script>
+    var headerColorPaciente = "[[${headerColorPaciente}]]";
+    localStorage.setItem('headerColorPaciente', headerColorPaciente);
 
-        <!-- Bootstrap CDN JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-                crossorigin="anonymous"></script>
+    function updateHeaderColorPaciente() {
+        var color = headerColorPaciente;
+        document.getElementById('header').style.backgroundColor = color;
+    }
+    updateHeaderColorPaciente();
+</script>
+<!-- Bootstrap CDN JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
 
-        <!-- JQUERY -->
-        <script src="https://code.jquery.com/jquery-3.4.1.js"
-                integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
-        </script>
-        <!-- DATATABLES -->
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
-        </script>
-        <!-- BOOTSTRAP DATATABLES -->
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
-        </script>
+<!-- JQUERY -->
+<script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+</script>
+<!-- DATATABLES -->
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+</script>
+<!-- BOOTSTRAP DATATABLES -->
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
+</script>
 
-        <!--Cálculo de precio de cita-->
-        <script>
-            function calcularPrecio(idEspecialidad){
-                var precioIni;
-                switch (idEspecialidad){
-                    case 1: precioIni = 150;break;
-                    case 2: precioIni = 120;break;
-                    case 3: precioIni = 80;break;
-                    case 4: precioIni = 90;break;
-                    case 5: precioIni=100;break;
-                    case 6: precioIni=130;break;
-                    case 7: precioIni=80;break;
-                    case 8: precioIni=90;break;
-                    case 9: precioIni=110;break;
-                    case 10: precioIni=120;break;
-                    case 11: precioIni=150;break;
-                    case 12: precioIni=140;break;
-                    case 13: precioIni=110;break;
-                    case 14: precioIni=100;break;
-                    case 15: precioIni=150;break;
-                    case 16: precioIni=90;break;
-                    case 17: precioIni=120;break;
+<!--Cálculo de precio de cita-->
+<script>
+    function calcularPrecio(idEspecialidad){
+        var precioIni;
+        switch (idEspecialidad){
+            case 1: precioIni = 150;break;
+            case 2: precioIni = 120;break;
+            case 3: precioIni = 80;break;
+            case 4: precioIni = 90;break;
+            case 5: precioIni=100;break;
+            case 6: precioIni=130;break;
+            case 7: precioIni=80;break;
+            case 8: precioIni=90;break;
+            case 9: precioIni=110;break;
+            case 10: precioIni=120;break;
+            case 11: precioIni=150;break;
+            case 12: precioIni=140;break;
+            case 13: precioIni=110;break;
+            case 14: precioIni=100;break;
+            case 15: precioIni=150;break;
+            case 16: precioIni=90;break;
+            case 17: precioIni=120;break;
+        }
+        var precioCalculado = precioIni * coaseguro;
+        return precioCalculado
+    }
+</script>
+
+<!-- DATATABLES SCRIPT -->
+<script>
+    var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
+    $('#idPagoTarjeta').val(idPagoTarjeta);
+    var idCitaPagar = document.getElementById('idCita').dataset.valor;
+    $('#idCitaPagar').val(idCitaPagar);
+    var codigoRecibo;
+    $(document).ready(function () {
+        $('#tablax').DataTable({
+            language: {
+                processing: "Tratamiento en curso...",
+                search: "Buscar&nbsp;:",
+                lengthMenu: " ",
+                info: "Página _PAGE_ de _PAGES_",
+                infoEmpty: "No hay pagos registrados",
+                infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                infoPostFix: "",
+                loadingRecords: "Cargando...",
+                zeroRecords: "No hay pagos registrados",
+                emptyTable: "No hay datos disponibles en la tabla.",
+                paginate: {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Último"
+                },
+                aria: {
+                    sortAscending: ": active para ordenar la columna en orden ascendente",
+                    sortDescending: ": active para ordenar la columna en orden descendente"
                 }
-                var precioCalculado = precioIni * coaseguro;
-                return precioCalculado
+            },
+            pageLength: 6,
+            bInfo: false,
+            columns: [
+                null,
+                null,
+                null,
+                null,
+                {orderable: false},
+                {orderable: false},
+                {orderable: false}
+            ],
+            columnDefs: [
+                {
+                    searchable: false,
+                    targets: [4, 5, 6]
+                }
+            ]
+        });
+        $(".fila_cita").each(function (){
+            var idEspecialidad = $(this).data('id-especialidad');
+            var precioCalculado = calcularPrecio(idEspecialidad);
+            $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
+        })
+    });
+</script>
+
+<!--Script para Modal-->
+<script th:inline="javascript">
+    const activarModal = /*[[${activarModal}]]*/ false;
+    if (activarModal) {
+        $('#modal-pago').modal('show');
+    }
+    var doctorPagar;
+    var precioPagar;
+    var fechaCita;
+    var especialidadPagar;
+    var numeroTarjeta;
+    var correoTarjeta;
+    function mostrarModal(){
+        $('.modal')
+        var botonPagar = $(event.target);
+        var fila = botonPagar.closest('tr');
+        precioPagar = fila.find('#precio').text();
+        doctorPagar = fila.find('#doctor').text();
+        fechaCita = fila.find('#fechaCita').text();
+        especialidadPagar = fila.find('#especialidad').text();
+
+        $('#modal-pago').modal('show');
+    }
+
+    $("#formValidarPago").submit(function (event) {
+        event.preventDefault();
+        var titularTarjeta = $("#titularTarjeta").val();
+        numeroTarjeta = $("#numeroTarjeta").val();
+        var fechaTarjeta = $("#fechaExpiracion").val();
+        var codigoSegTarjeta = $("#codigoSegTarjeta").val();
+        correoTarjeta = $("#correoTarjeta").val();
+        var errorTitular, errorNumero, errorFecha, errorCodigo, errorCorreo = false;
+        function showError(elementId) {
+            $('#' + elementId).slideDown(500);
+        }
+        function hideError(elementId) {
+            $('#' + elementId).slideUp(400);
+        }
+        if (titularTarjeta === "") {
+            showError("errorTitularTarjeta");
+            //document.getElementById("errorTitularTarjeta").style.display = "block";
+            //$("#errorTitularTarjeta").show(500).delay(1000).hide(500);
+            errorTitular = true;
+        }else {
+            hideError("errorTitularTarjeta");
+            //document.getElementById("errorTitularTarjeta").style.display = "none";
+            errorTitular = false;
+        }
+        if (numeroTarjeta === "") {
+            showError("nroTarjetaVacio");
+            //document.getElementById("nroTarjetaVacio").style.display = "block";
+            //$("#nroTarjetaVacio").show(500).delay(1000).hide(500);
+            errorNumero = true;
+        }else {
+            hideError("nroTarjetaVacio");
+            //document.getElementById("nroTarjetaVacio").style.display = "none";
+            if (numeroTarjeta.length !== 19) {
+                showError("nroTarjetaDig");
+                //document.getElementById("nroTarjetaDig").style.display = "block";
+                //$('#nroTarjetaDig').show(500).delay(1000).hide(500);
+                errorNumero = true;
+            }else {
+                hideError("nroTarjetaDig");
+                //document.getElementById("nroTarjetaDig").style.display = "none";
+                errorNumero = false;
             }
-        </script>
-
-        <!-- DATATABLES SCRIPT -->
-        <script>
-            var idPagoTarjeta = document.getElementById('idPagar').dataset.valor;
-            $('#idPagoTarjeta').val(idPagoTarjeta);
-            var idCitaPagar = document.getElementById('idCita').dataset.valor;
-            $('#idCitaPagar').val(idCitaPagar);
-            var codigoRecibo;
-            $(document).ready(function () {
-                $('#tablax').DataTable({
-                    language: {
-                        processing: "Tratamiento en curso...",
-                        search: "Buscar&nbsp;:",
-                        lengthMenu: " ",
-                        info: "Página _PAGE_ de _PAGES_",
-                        infoEmpty: "No hay pagos registrados",
-                        infoFiltered: "(filtrado de _MAX_ elementos en total)",
-                        infoPostFix: "",
-                        loadingRecords: "Cargando...",
-                        zeroRecords: "No hay pagos registrados",
-                        emptyTable: "No hay datos disponibles en la tabla.",
-                        paginate: {
-                            first: "Primero",
-                            previous: "Anterior",
-                            next: "Siguiente",
-                            last: "Último"
-                        },
-                        aria: {
-                            sortAscending: ": active para ordenar la columna en orden ascendente",
-                            sortDescending: ": active para ordenar la columna en orden descendente"
-                        }
-                    },
-                    pageLength: 6,
-                    bInfo: false,
-                    columns: [
-                        null,
-                        null,
-                        null,
-                        null,
-                        {orderable: false},
-                        {orderable: false},
-                        {orderable: false}
-                    ],
-                    columnDefs: [
-                        {
-                            searchable: false,
-                            targets: [4, 5, 6]
-                        }
-                    ]
-                });
-                $(".fila_cita").each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                })
-            });
-        </script>
-
-        <!--Script para Modal-->
-        <script th:inline="javascript">
-            const activarModal = /*[[${activarModal}]]*/ false;
-            if (activarModal) {
-                $('#modal-pago').modal('show');
+        }
+        if (fechaTarjeta.trim() === '') {
+            showError("errorFechaExpiracion");
+            //document.getElementById("errorFechaExpiracion").style.display = 'block';
+            errorFecha = true;
+        } else {
+            hideError("errorFechaExpiracion");
+            //document.getElementById("errorFechaExpiracion").style.display = 'none';
+            if(fechaValida==1){
+                showError("errorFechaInvalida");
+                //document.getElementById("errorFechaInvalida").style.display = "block";
+                errorFecha = true;
+            }else {
+                hideError("errorFechaInvalida");
+                //document.getElementById("errorFechaInvalida").style.display = "none";
+                errorFecha = false;
             }
-            var doctorPagar;
-            var precioPagar;
-            var fechaCita;
-            var especialidadPagar;
-            var numeroTarjeta;
-            var correoTarjeta;
-            function mostrarModal(){
-                $('.modal')
-                var botonPagar = $(event.target);
-                var fila = botonPagar.closest('tr');
-                precioPagar = fila.find('#precio').text();
-                doctorPagar = fila.find('#doctor').text();
-                fechaCita = fila.find('#fechaCita').text();
-                especialidadPagar = fila.find('#especialidad').text();
-
-                $('#modal-pago').modal('show');
+        }
+        if (codigoSegTarjeta === "") {
+            showError("codigoTarjetaVacio");
+            //document.getElementById("codigoTarjetaVacio").style.display = "block";
+            //$("#codigoTarjetaVacio").show(500).delay(1000).hide(500);
+            errorCodigo = true;
+        }else {
+            hideError("codigoTarjetaVacio");
+            //document.getElementById("codigoTarjetaVacio").style.display = "none";
+            if (codigoSegTarjeta.length !== 3) {
+                showError("codigoTarjetaDig");
+                //document.getElementById("codigoTarjetaDig").style.display = "block";
+                //$('#codigoTarjetaDig').show(500).delay(1000).hide(500);
+                errorCodigo = true;
+            }else {
+                hideError("codigoTarjetaDig");
+                //document.getElementById("codigoTarjetaDig").style.display = "none";
+                errorCodigo = false;
             }
-
-            $("#formValidarPago").submit(function (event) {
-                event.preventDefault();
-                var titularTarjeta = $("#titularTarjeta").val();
-                numeroTarjeta = $("#numeroTarjeta").val();
-                var fechaTarjeta = $("#fechaExpiracion").val();
-                var codigoSegTarjeta = $("#codigoSegTarjeta").val();
-                correoTarjeta = $("#correoTarjeta").val();
-                var errorTitular, errorNumero, errorFecha, errorCodigo, errorCorreo = false;
-                function showError(elementId) {
-                    $('#' + elementId).slideDown(500);
-                }
-                function hideError(elementId) {
-                    $('#' + elementId).slideUp(400);
-                }
-                if (titularTarjeta === "") {
-                    showError("errorTitularTarjeta");
-                    //document.getElementById("errorTitularTarjeta").style.display = "block";
-                    //$("#errorTitularTarjeta").show(500).delay(1000).hide(500);
-                    errorTitular = true;
-                }else {
-                    hideError("errorTitularTarjeta");
-                    //document.getElementById("errorTitularTarjeta").style.display = "none";
-                    errorTitular = false;
-                }
-                if (numeroTarjeta === "") {
-                    showError("nroTarjetaVacio");
-                    //document.getElementById("nroTarjetaVacio").style.display = "block";
-                    //$("#nroTarjetaVacio").show(500).delay(1000).hide(500);
-                    errorNumero = true;
-                }else {
-                    hideError("nroTarjetaVacio");
-                    //document.getElementById("nroTarjetaVacio").style.display = "none";
-                    if (numeroTarjeta.length !== 19) {
-                        showError("nroTarjetaDig");
-                        //document.getElementById("nroTarjetaDig").style.display = "block";
-                        //$('#nroTarjetaDig').show(500).delay(1000).hide(500);
-                        errorNumero = true;
-                    }else {
-                        hideError("nroTarjetaDig");
-                        //document.getElementById("nroTarjetaDig").style.display = "none";
-                        errorNumero = false;
-                    }
-                }
-                if (fechaTarjeta.trim() === '') {
-                    showError("errorFechaExpiracion");
-                    //document.getElementById("errorFechaExpiracion").style.display = 'block';
-                    errorFecha = true;
-                } else {
-                    hideError("errorFechaExpiracion");
-                    //document.getElementById("errorFechaExpiracion").style.display = 'none';
-                    if(fechaValida==1){
-                        showError("errorFechaInvalida");
-                        //document.getElementById("errorFechaInvalida").style.display = "block";
-                        errorFecha = true;
-                    }else {
-                        hideError("errorFechaInvalida");
-                        //document.getElementById("errorFechaInvalida").style.display = "none";
-                        errorFecha = false;
-                    }
-                }
-                if (codigoSegTarjeta === "") {
-                    showError("codigoTarjetaVacio");
-                    //document.getElementById("codigoTarjetaVacio").style.display = "block";
-                    //$("#codigoTarjetaVacio").show(500).delay(1000).hide(500);
-                    errorCodigo = true;
-                }else {
-                    hideError("codigoTarjetaVacio");
-                    //document.getElementById("codigoTarjetaVacio").style.display = "none";
-                    if (codigoSegTarjeta.length !== 3) {
-                        showError("codigoTarjetaDig");
-                        //document.getElementById("codigoTarjetaDig").style.display = "block";
-                        //$('#codigoTarjetaDig').show(500).delay(1000).hide(500);
-                        errorCodigo = true;
-                    }else {
-                        hideError("codigoTarjetaDig");
-                        //document.getElementById("codigoTarjetaDig").style.display = "none";
-                        errorCodigo = false;
-                    }
-                }
-                if (correoTarjeta === "") {
-                    showError("errorCorreoTarjeta");
-                    //document.getElementById("errorCorreoTarjeta").style.display = "block";
-                    //$("#errorCorreoTarjeta").show(500).delay(1000).hide(500);
-                    errorCorreo = true;
-                }else {
-                    hideError("errorCorreoTarjeta");
-                    //document.getElementById("errorCorreoTarjeta").style.display = "none";
-                    if(correoValido==1){
-                        showError("errorCorreoInvalido");
-                        //document.getElementById("errorCorreoInvalido").style.display = 'block';
-                        errorCorreo =true;
-                    }else{
-                        hideError("errorCorreoTarjeta");
-                        //document.getElementById("errorCorreoInvalido").style.display = 'none';
-                        errorCorreo = false;
-                    }
-                }
-                if (!errorTitular && !errorNumero && !errorFecha && !errorCodigo && !errorCorreo) {
-                    $("#modal-pago").modal("hide");
-                    $("#modal-confirmar-pago").modal("show");
-                    $('#doctorPagar').text(doctorPagar);
-                    $('#precioPagar').text(precioPagar);
-                    $('#fechaPagar').text(fechaCita);
-                    $('#especialidadPagar').text(especialidadPagar);
-                    $('#nroTarjetaPagar').text("Visa **** **** **** "+numeroTarjeta.slice(-4));
-                    $('#correoTarjetaPagar').text(correoTarjeta);
-                }
-            });
-            function volverModal(){
-                $('#modal-pago').modal('show');
-                $('#modal-confirmar-pago').modal('hide');
+        }
+        if (correoTarjeta === "") {
+            showError("errorCorreoTarjeta");
+            //document.getElementById("errorCorreoTarjeta").style.display = "block";
+            //$("#errorCorreoTarjeta").show(500).delay(1000).hide(500);
+            errorCorreo = true;
+        }else {
+            hideError("errorCorreoTarjeta");
+            //document.getElementById("errorCorreoTarjeta").style.display = "none";
+            if(correoValido==1){
+                showError("errorCorreoInvalido");
+                //document.getElementById("errorCorreoInvalido").style.display = 'block';
+                errorCorreo =true;
+            }else{
+                hideError("errorCorreoTarjeta");
+                //document.getElementById("errorCorreoInvalido").style.display = 'none';
+                errorCorreo = false;
             }
+        }
+        if (!errorTitular && !errorNumero && !errorFecha && !errorCodigo && !errorCorreo) {
+            $("#modal-pago").modal("hide");
+            $("#modal-confirmar-pago").modal("show");
+            $('#doctorPagar').text(doctorPagar);
+            $('#precioPagar').text(precioPagar);
+            $('#fechaPagar').text(fechaCita);
+            $('#especialidadPagar').text(especialidadPagar);
+            $('#nroTarjetaPagar').text("Visa **** **** **** "+numeroTarjeta.slice(-4));
+            $('#correoTarjetaPagar').text(correoTarjeta);
+        }
+    });
+    function volverModal(){
+        $('#modal-pago').modal('show');
+        $('#modal-confirmar-pago').modal('hide');
+    }
 
-            var msg = /*[[${msg}]]*/ null;
+    var msg = /*[[${msg}]]*/ null;
 
-            if (msg !== null) {
-                $(document).ready(function() {
-                    $('#modal-pago-realizado').modal('show');
-                });
+    if (msg !== null) {
+        $(document).ready(function() {
+            $('#modal-pago-realizado').modal('show');
+        });
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const numeroTarjetaInput = document.getElementById("numeroTarjeta");
+        numeroTarjetaInput.addEventListener("input", function() {
+            let numeroTarjeta = this.value.replace(/-/g, '');
+            if (numeroTarjeta.length > 4) {
+                numeroTarjeta = numeroTarjeta.match(/.{1,4}/g).join('-');
             }
-        </script>
+            this.value = numeroTarjeta;
+        });
+    });
+</script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const numeroTarjetaInput = document.getElementById("numeroTarjeta");
-                numeroTarjetaInput.addEventListener("input", function() {
-                    let numeroTarjeta = this.value.replace(/-/g, '');
-                    if (numeroTarjeta.length > 4) {
-                        numeroTarjeta = numeroTarjeta.match(/.{1,4}/g).join('-');
-                    }
-                    this.value = numeroTarjeta;
-                });
-            });
-        </script>
+<script>
+    var fechaValida;
+    var correoValido;
+    document.addEventListener("DOMContentLoaded", function() {
+        const numeroTarjetaInput = document.getElementById("numeroTarjeta");
+        numeroTarjetaInput.addEventListener("input", function() {
+            let numeroTarjeta = this.value.replace(/[^\d-]/g, '');
+            this.value = numeroTarjeta.slice(0, 19);
+        });
+        const codigoSegTarjetaInput = document.getElementById("codigoSegTarjeta");
+        codigoSegTarjetaInput.addEventListener("input", function() {
+            let codTarjeta = this.value.replace(/[^\d-]/g, '');
+            this.value = codTarjeta.slice(0, 3);
+        });
 
-        <script>
-            var fechaValida;
-            var correoValido;
-            document.addEventListener("DOMContentLoaded", function() {
-                const numeroTarjetaInput = document.getElementById("numeroTarjeta");
-                numeroTarjetaInput.addEventListener("input", function() {
-                    let numeroTarjeta = this.value.replace(/[^\d-]/g, '');
-                    this.value = numeroTarjeta.slice(0, 19);
-                });
-                const codigoSegTarjetaInput = document.getElementById("codigoSegTarjeta");
-                codigoSegTarjetaInput.addEventListener("input", function() {
-                    let codTarjeta = this.value.replace(/[^\d-]/g, '');
-                    this.value = codTarjeta.slice(0, 3);
-                });
-
-                const fechaExpiracionInput = document.getElementById("fechaExpiracion");
-                fechaExpiracionInput.addEventListener("input", function() {
-                    let fechaExpiracion = this.value.replace(/[^\d-]/g, '');
-                    this.value = fechaExpiracion.slice(0, 7);
-                });
-                fechaExpiracionInput.addEventListener("blur", function() {
-                    const fechaExpiracion = this.value;
-                    const regex = /^(0[1-9]|1[0-2])-(20[2-9]\d)$/;
-                    if (!regex.test(fechaExpiracion)) {
-                        fechaValida = 1;
-                    } else {
-                        fechaValida = 0;
-                    }
-                });
-                const correoTarjetaInput = document.getElementById("correoTarjeta");
-
-                correoTarjetaInput.addEventListener("blur", function() {
-                    const correoTarjeta = this.value;
-                    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!regex.test(correoTarjeta)) {
-                        correoValido = 1;
-                    } else {
-                        correoValido = 0;
-                    }
-                });
-            });
-        </script>
-
-
-
-        <!-- Script para botones filtro -->
-        <script>
-            const botonTodos = $("#boton_todos");
-            const botonPendientes = $("#boton_pendientes");
-            const botonCancelados = $("#boton_cancelados");
-            const citas = $(".fila_cita");
-            const coaseguro = document.getElementById('coaseguro').dataset.valor;
-            function buscarPagosPendientes() {
-                botonPendientes.addClass("botonTipoSeleccionado");
-                botonTodos.removeClass("botonTipoSeleccionado");
-                botonCancelados.removeClass("botonTipoSeleccionado");
-
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    if ($(this).hasClass("cita_pendiente")){
-                        $(this).show();
-                    }
-                    else{
-                        $(this).hide();
-                    }
-                })
+        const fechaExpiracionInput = document.getElementById("fechaExpiracion");
+        fechaExpiracionInput.addEventListener("input", function() {
+            let fechaExpiracion = this.value.replace(/[^\d-]/g, '');
+            this.value = fechaExpiracion.slice(0, 7);
+        });
+        fechaExpiracionInput.addEventListener("blur", function() {
+            const fechaExpiracion = this.value;
+            const regex = /^(0[1-9]|1[0-2])-(20[2-9]\d)$/;
+            if (!regex.test(fechaExpiracion)) {
+                fechaValida = 1;
+            } else {
+                fechaValida = 0;
             }
+        });
+        const correoTarjetaInput = document.getElementById("correoTarjeta");
 
-            function buscarPagosCancelados() {
-                botonCancelados.addClass("botonTipoSeleccionado");
-                botonTodos.removeClass("botonTipoSeleccionado");
-                botonPendientes.removeClass("botonTipoSeleccionado");
-
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    if ($(this).hasClass("cita_cancelada")){
-                        $(this).show();
-                    }
-                    else{
-                        $(this).hide();
-                    }
-                })
+        correoTarjetaInput.addEventListener("blur", function() {
+            const correoTarjeta = this.value;
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(correoTarjeta)) {
+                correoValido = 1;
+            } else {
+                correoValido = 0;
             }
+        });
+    });
+</script>
 
-            function buscarPagosTodos() {
-                botonTodos.addClass("botonTipoSeleccionado");
-                botonPendientes.removeClass("botonTipoSeleccionado");
-                botonCancelados.removeClass("botonTipoSeleccionado");
 
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    $(this).show();
-                })
+
+<!-- Script para botones filtro -->
+<script>
+    const botonTodos = $("#boton_todos");
+    const botonPendientes = $("#boton_pendientes");
+    const botonCancelados = $("#boton_cancelados");
+    const citas = $(".fila_cita");
+    const coaseguro = document.getElementById('coaseguro').dataset.valor;
+    function buscarPagosPendientes() {
+        botonPendientes.addClass("botonTipoSeleccionado");
+        botonTodos.removeClass("botonTipoSeleccionado");
+        botonCancelados.removeClass("botonTipoSeleccionado");
+
+        citas.each(function (){
+            var idEspecialidad = $(this).data('id-especialidad');
+            var precioCalculado = calcularPrecio(idEspecialidad);
+            $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
+            if ($(this).hasClass("cita_pendiente")){
+                $(this).show();
             }
-        </script>
-    </body>
+            else{
+                $(this).hide();
+            }
+        })
+    }
+
+    function buscarPagosCancelados() {
+        botonCancelados.addClass("botonTipoSeleccionado");
+        botonTodos.removeClass("botonTipoSeleccionado");
+        botonPendientes.removeClass("botonTipoSeleccionado");
+
+        citas.each(function (){
+            var idEspecialidad = $(this).data('id-especialidad');
+            var precioCalculado = calcularPrecio(idEspecialidad);
+            $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
+            if ($(this).hasClass("cita_cancelada")){
+                $(this).show();
+            }
+            else{
+                $(this).hide();
+            }
+        })
+    }
+
+    function buscarPagosTodos() {
+        botonTodos.addClass("botonTipoSeleccionado");
+        botonPendientes.removeClass("botonTipoSeleccionado");
+        botonCancelados.removeClass("botonTipoSeleccionado");
+
+        citas.each(function (){
+            var idEspecialidad = $(this).data('id-especialidad');
+            var precioCalculado = calcularPrecio(idEspecialidad);
+            $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
+            $(this).show();
+        })
+    }
+</script>
+</body>
 </html>
