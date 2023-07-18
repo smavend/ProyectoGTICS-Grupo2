@@ -255,13 +255,13 @@
             <hr class="dropdown-divider">
           </li>
 
-          <li>
-            <form th:action="@{/logout}" method="post">
+          <li id="botonLogout">
+            <form th:action="@{/logout}" method="post" id="logoutForm">
+            </form>
             <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
               <i class="bi bi-box-arrow-right"></i>
               <span>Cerrar Sesión</span>
             </button>
-            </form>
           </li>
 
         </ul><!-- End Profile Dropdown Items -->
@@ -444,6 +444,7 @@
 
   <script th:src="@{/chatSetup/config.js}"></script>
   <script th:src="@{/chatSetup/firebase.js}"></script>
+  <script th:src="@{/assets/js/funciones_chat.js}"></script>
 
   <script th:inline="javascript" th:if="${credenciales != null}">
     let credenciales = [[${credenciales}]];
