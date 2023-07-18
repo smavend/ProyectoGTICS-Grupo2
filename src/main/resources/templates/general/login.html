@@ -29,12 +29,51 @@
 
         <!-- Template Main CSS File -->
         <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
+        <link th:href="@{/assets_home/css/style.css}" rel="stylesheet">
+
         <style>
             body {
                 background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1504439468489-c8920d796a29?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80");
                 background-repeat: no-repeat;
                 background-size: cover;
 
+            }
+
+            /*--------------------------------------------------------------
+            # Loading
+            --------------------------------------------------------------*/
+            #loading {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 9999;
+                overflow: hidden;
+                background: rgb(0, 0, 0, 0.3);
+            }
+
+            #loading:before {
+                content: "";
+                position: fixed;
+                top: calc(50% - 30px);
+                left: calc(50% - 30px);
+                border: 6px solid #1977cc;
+                border-top-color: #d1e6f9;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                animation: animate-loading 1s linear infinite;
+            }
+
+            @keyframes animate-loading {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
             }
         </style>
 
@@ -128,6 +167,7 @@
             </div>
         </main><!-- End #main -->
 
+        <div style="display: none" id="loading"></div>
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
 
@@ -143,17 +183,14 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+        <!-- JQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.4.js"
+                integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
         <!-- CDN LOGUEO CHAT -->
         <script
                 src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"
                 integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer"
-        ></script>
-        <script
-                src="https://cdnjs.cloudflare.com/ajax/libs/validator/13.6.0/validator.min.js"
-                integrity="sha512-xYHcfaQeUiKHs9YsHqjpyLaHnh+q7y8kYuOGdh5FkJeK7Z+dZct7Yoa7h+PtsrKRh03t8eJZuSeCN7b0dkrFwA=="
                 crossorigin="anonymous"
                 referrerpolicy="no-referrer"
         ></script>
@@ -168,57 +205,71 @@
         <script th:src="@{/chatSetup/firebase.js}"></script>
 
         <script>
-            // Logueo en Firebase y CometChat
+            const loading = document.querySelector("#loading");
             const emailLoginInputElement = document.getElementById("username");
             const passwordLoginInputElement = document.getElementById("password");
             const loginBtn = document.getElementById("botonIngresar");
-            const logoutButon = document.getElementById("botonSalir");
+            function ocultarLoading() {
+                loading.style.display = "none";
+            }
+            function mostrarLoading() {
+                loading.style.display = "block";
+            }
 
-            loginBtn.addEventListener("click", function (){
+            // Para que <a> funcione como <button>
+            emailLoginInputElement.addEventListener("keypress", function (e){
+                if (e.key === "Enter"){
+                    loginBtn.click();
+                }
+            })
+
+            passwordLoginInputElement.addEventListener("keypress", function (e){
+                if (e.key === "Enter"){
+                    loginBtn.click();
+                }
+            })
+
+            // Logueo en Firebase y CometChat
+            loginBtn.addEventListener("click", function () {
+                mostrarLoading();
                 const email = emailLoginInputElement ? emailLoginInputElement.value : null;
                 const password = passwordLoginInputElement ? passwordLoginInputElement.value : null;
 
-                if(isUserCredentialsValid({email, password})) {
-                    console.log("Validator: Ok");
+                auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
+                    const userEmail = userCredential.user.email;
+                    realTimeDb.ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function (snapshot) {
+                        const val = snapshot.val();
 
-                    auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
-                        const userEmail = userCredential.user.email;
-                        realTimeDb.ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
-                            const val = snapshot.val();
+                        if (val) {
+                            const keys = Object.keys(val);
+                            const user = val[keys[0]];
 
-                            if (val){
-                                const keys = Object.keys(val);
-                                const user = val[keys[0]];
-
-                                if (user && user.id) {
-                                    CometChatWidget.init({
-                                        "appID": `${config.CometChatAppId}`,
-                                        "appRegion": `${config.CometChatRegion}`,
-                                        "authKey": `${config.CometChatAuthKey}`
-                                    }).then(response => {
-                                        CometChatWidget.login({uid: user.id}).then((loggedInUser) => {
-                                           console.log("CometChat: Usuario logueado");
-                                           document.getElementById("loginForm").submit();
-                                        });
+                            if (user && user.id) {
+                                CometChatWidget.init({
+                                    "appID": `${config.CometChatAppId}`,
+                                    "appRegion": `${config.CometChatRegion}`,
+                                    "authKey": `${config.CometChatAuthKey}`
+                                }).then(response => {
+                                    CometChatWidget.login({uid: user.id}).then((loggedInUser) => {
+                                        console.log("CometChat: Usuario logueado");
+                                        document.getElementById("loginForm").submit();
+                                        ocultarLoading();
                                     });
-                                }else {
-                                    console.log("Búsqueda: Error");
-                                }
+                                });
+                            } else {
+                                ocultarLoading();
+                                console.log("Búsqueda: Error");
                             }
-                        });
-                    })
-                        .catch((error) => {
-                            console.log("Firebase: Error")
-                        });
-                }else{
-                    console.log("Validator: Error")
-                }
+                        }
+                    });
+                })
+                    .catch((error) => {
+                        ocultarLoading();
+                        document.getElementById("loginForm").submit();
+                        // Mostrar validaciones
+                        console.log("Firebase: Error")
+                    });
             });
-
-            function isUserCredentialsValid({email, password}) {
-                return email && password && validator.isEmail(email) && validator.isLength(password, {min: 6});
-            }
-
         </script>
     </body>
 
