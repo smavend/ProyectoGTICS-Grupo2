@@ -61,8 +61,6 @@ public class DoctorController {
     private final PagoRepository pagoRepository;
 
     final StylevistasRepository stylevistasRepository;
-
-
     final SecurityConfig securityConfig;
 
 
@@ -71,6 +69,7 @@ public class DoctorController {
                             EspecialidadRepository especialidadRepository,
                             SedeRepository sedeRepository, HorarioRepository horarioRepository,
                             CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository, PagoRepository pagoRepository, SecurityConfig securityConfig,StylevistasRepository stylevistasRepository) {
+
         this.doctorRepository = doctorRepository;
         this.pacienteRepository = pacienteRepository;
         this.citaRepository = citaRepository;
@@ -89,6 +88,7 @@ public class DoctorController {
 
     @GetMapping(value = {"/dashboard", "/", ""}) //actual
     public String dashboard(Model model, HttpSession session, Authentication authentication, HttpServletRequest request) {
+
 
         Optional<Stylevistas> style = stylevistasRepository.findById(4);
         if (style.isPresent()) {
@@ -296,6 +296,7 @@ public class DoctorController {
         cuestionarioPorCita.setR9("·");
         cuestionarioPorCita.setR10("·");
         cuestionarioPorCita.setR11("·");
+        cuestionarioPorCita.setOpcion_inicio_sesion(0);
         cuestionarioPorCitaRepository.save(cuestionarioPorCita);
 
         return "redirect:/doctor/dashboard";

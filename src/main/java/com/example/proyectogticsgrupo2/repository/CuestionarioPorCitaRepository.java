@@ -35,4 +35,9 @@ public interface CuestionarioPorCitaRepository extends JpaRepository<Cuestionari
                              Integer idCuestionario, Integer idCita);
 
     Optional<CuestionarioPorCita> findByIdIdCita(int idCita);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `proyectogtics`.`cuestionario_x_cita` SET `opcion_inicio_sesion` = '1' WHERE (`cuestionario_id_cuestionario` = ?1) and (`cita_id_cita` = ?2)")
+    void actualizarOpcionSesion(int idCuestionario, int idCita);
 }
