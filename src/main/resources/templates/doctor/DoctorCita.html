@@ -48,6 +48,9 @@
         <link th:href="@{assets/css/styleDoctor.css}" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+
     </head>
     <body>
         <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
@@ -196,6 +199,7 @@
 
             </section>
         </main>
+        <div id="loading"></div>
 
         <!-- ======= Footer ======= -->
         <footer id="footer" class="footer">
@@ -287,6 +291,8 @@
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
     </body>
 </html>

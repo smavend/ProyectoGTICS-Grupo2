@@ -224,6 +224,15 @@
                                 <!-- General Form Elements -->
                                 <form id="my-form" th:action="@{'/SuperAdminHomePage/actualizarFormulario/' + ${formulario.id}}" method="POST"
                                       onsubmit="return convertFormStructureToJSON()">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-3">
+                                            <label class="col-form-label" contentEditable="false">Ruta al Controlador</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" name="ruta" th:value="${formulario.rutaController}" required>
+                                        </div>
+                                    </div>
+
                                     <div id="form-rows">
                                         <!-- Las filas del formulario se agregarán aquí -->
                                     </div>

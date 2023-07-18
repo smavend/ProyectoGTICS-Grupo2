@@ -24,6 +24,7 @@
         <link href="https://fonts.gstatic.com" rel="preconnect">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
               rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
         <!-- Vendor CSS Files -->
         <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -36,6 +37,9 @@
 
         <!-- Template Main CSS File -->
         <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
     </head>
     <body>
@@ -321,6 +325,7 @@
 
             </section>
         </main>
+        <div id="loading"></div>
         <footer id="footer" class="footer">
 
             <div class="credits">
@@ -381,5 +386,8 @@
                 });
             });
         </script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
     </body>
 </html>

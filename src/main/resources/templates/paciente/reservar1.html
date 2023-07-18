@@ -6,7 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Paciente - Reservar cita</title>
 
+
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
+
 
     </head>
     <body>
@@ -72,7 +74,10 @@
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('idSede')}"
                                          th:errors="*{idSede}"></div>
                                 </div>
-
+                            </div>
+                            <div id="opcionesCitaPendiente" class="text-center mb-3 w-75" style="display: none">
+                                <div class="text-muted text-center mb-4" id="mensaje" style="font-size: .9rem">Mensaje</div>
+                                <a id="botonCitaPendiente" class="botonSecundario">Reservar cita pendiente</a>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center py-3">
@@ -85,6 +90,7 @@
             </div>
 
         </main><!-- End #main -->
+        <div id="loading"></div>
 
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -98,7 +104,71 @@
         <script src="https://code.jquery.com/jquery-3.7.0.js"
                 integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
-        <!-- Funciones y Ajax -->
-        <script th:src="@{/assets/js/paciente_ReservarCita.js}"></script>
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
+        <script th:inline="javascript">
+            // Obtener especialidades y mostrar citas pendientes
+            $("#select_modalidad").click(function () {
+                let selectEsp = $("#select_especialidad");
+                let campoSede = $("#campoSede");
+                let modalidad = $(this).val();
+
+                if (modalidad !== "") {
+
+                    // Obtener especialidades
+                    $.ajax({
+                        method: "GET",
+                        url: getUrl() + "/Paciente/api/especialidades/" + modalidad
+                    }).done(function (data) {
+                        selectEsp.empty();
+                        selectEsp.append("<option value=''>-- Seleccione una especialidad --</option>");
+                        for (let i = 0; i < data.especialidades.length; i++) {
+                            selectEsp.append("<option value='" + data.especialidades[i].idEspecialidad + "'>" + data.especialidades[i].nombre + "</option>");
+                        }
+                    }).fail(function (e) {
+                        console.log("error");
+                    });
+
+                    if (modalidad === "1") {
+                        campoSede.slideUp();
+                        $("#campoSede option[value=1]").attr("selected", "selected");
+                    } else if (modalidad === "0") {
+                        campoSede.slideDown();
+                        $("#campoSede option[value='']").attr("selected", "selected");
+                    }
+                }
+            });
+
+            // Mostar si existe citas pendientes
+            $("#select_especialidad").change(function () {
+                let paciente = [[${session.paciente.idPaciente}]];
+                let mensaje = $("#mensaje");
+                let botonCitaPendiente = $("#botonCitaPendiente");
+                let contenedor = $("#opcionesCitaPendiente");
+
+                let especialidad = $(this).find(":selected").text();
+
+                $.get(getUrl() + "/Paciente/api/citas/pendientes/" + paciente)
+                    .done(function (data) {
+                        if (data.citas.length > 0) { // existen citas pendientes
+                            for (let i = 0; i < data.citas.length; i++){
+                                if (especialidad === data.citas[i].especialidad){
+                                    mensaje.text("Usted tiene 1 cita pendiente en la especialidad de: " + especialidad + ". Desea reservar la cita pendiente?")
+                                    botonCitaPendiente.attr("href", "/Paciente/reservaPendiente?c="+data.citas[i].id);
+                                    contenedor.slideDown();
+                                }
+                                else{
+                                    botonCitaPendiente.attr("href", "#");
+                                    contenedor.slideUp();
+                                }
+                            }
+                        }
+                    }).fail(function (e) {
+                    console.log("error");
+                });
+            });
+
+        </script>
+
     </body>
 </html>

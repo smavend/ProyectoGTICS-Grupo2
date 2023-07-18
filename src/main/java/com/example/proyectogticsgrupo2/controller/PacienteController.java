@@ -448,7 +448,6 @@ public class PacienteController {
             else{
                 attr.addFlashAttribute("msg", "Cancelación de cita inválida");
             }
-
         }
         else {
             attr.addFlashAttribute("msg", "Ocurrió un error al cancelar la cita");
@@ -484,9 +483,6 @@ public class PacienteController {
 
     @GetMapping("/perfil/editar")
     public String editarPerfil(Model model, HttpSession session, Authentication authentication) {
-
-        /*Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
-        session.setAttribute("paciente", paciente);*/
 
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -921,7 +917,7 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
 
-        List<Pago> pagoList = pagoRepository.buscarPorPaciente(paciente.getIdPaciente());
+        List<Pago> pagoList = pagoRepository.pagosValidosPorPaciente(paciente.getIdPaciente());
 
         model.addAttribute("pagoList", pagoList);
         return "paciente/pagos";
@@ -986,9 +982,14 @@ public class PacienteController {
 
             Paciente paciente = pacienteRepository.findByCorreo(userEmail);
             session.setAttribute("paciente", paciente);
-
             pagoRepository.guardarPago(idPago);
-            citaRepository.actualizarEstadoEnEspera(idCita);
+
+            Integer idCitaPrevia = citaRepository.buscarIdCitaPrevia(idCita);
+            if(idCitaPrevia==null){
+                citaRepository.actualizarEstadoEnEspera(1,idCita);
+            }else{
+                citaRepository.actualizarEstadoEnEspera(5, idCita);
+            }
             List<Pago> pagoList = pagoRepository.findAll();
             model.addAttribute("pagoList", pagoList);
             model.addAttribute("activarModalPagado", true);

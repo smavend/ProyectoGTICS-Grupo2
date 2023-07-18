@@ -36,6 +36,9 @@
 
         <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+
     </head>
 
     <body>
@@ -552,6 +555,7 @@
             </section>
 
         </main><!-- End #main -->
+        <div id="loading"></div>
 
         <!-- ======= Footer ======= -->
         <footer id="footer" class="footer">
@@ -618,6 +622,9 @@
                 div.style.display = div.style.display === "none" ? "block" : "none";
             }
         </script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+
     </body>
 
 

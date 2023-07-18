@@ -41,8 +41,8 @@
                             <th>Doctor</th>
                             <th>Fecha de cita</th>
                             <th>Fecha de pago</th>
-                            <th>Pago S/</th>
-                            <th>Tipo de pago</th>
+                            <th>Precio</th>
+                            <th>Tipo de cita</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
@@ -52,17 +52,14 @@
                             th:attr="data-id-especialidad=${pago.cita.doctor.especialidad.idEspecialidad}">
                             <td id="especialidad" th:attr="data-valor=${pago.cita.doctor.especialidad.nombre}" th:text="${pago.cita.doctor.especialidad.nombre}"></td>
                             <td id="doctor" th:attr="data-valor=${pago.cita.doctor.getNombreYApellido()}" th:text="${pago.cita.doctor.getNombreYApellido()}"></td>
-                            <td id="fechaCita" th:attr="data-valor=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}" th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy')}"></td>
-                            <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'-'}">
-                                Fecha de pago
-                            </td>
+                            <td id="fechaCita" th:attr="data-valor=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}" th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy  /  HH:mm')}+' Hrs.'"></td>
+                            <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'Por cancelar'}"></td>
                             <td id="precio" th:class="precio-calculado"></td>
-                            <td th:text="${pago.tipoPago}">Visa ***1234</td>
+                            <td th:text="${pago.cita.modalidad == 0? 'Presencial':'Virtual'}"></td>
                             <!-- columna estado -->
-                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 0}">Pendiente de pago</td>
-                            <td th:if="${pago.estadoPago == 0 && pago.cita.modalidad == 1}">
-                                <button class="botonPagar botonPagarModal" id="idPagar" th:attr="data-valor=${pago.id}" onclick="mostrarModal()">Pagar</button>
-                                <button class="botonPagar botonPagarModal" id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></button>
+                            <td th:if="${pago.estadoPago == 0}">
+                                <button class="botonPagar" id="idPagar" th:attr="data-valor=${pago.id}, data-valor-inicio=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}" onclick="mostrarTipoDePago()">Pagar</button>
+                                <div id="idCita" th:attr="data-valor=${pago.cita.id_cita}" style="display: none"></div>
                             </td>
                             <td th:if="${pago.estadoPago == 1}"><a class="botonVerRecibo" th:href="@{/Paciente/recibo(idPago=${pago.id})}">Ver recibo</a></td>
                         </tr>
@@ -70,6 +67,63 @@
                 </table>
 
             </section>
+
+            <!-- Modal Tipo de Pago -->
+            <div class="modal fade" data-bs-target="#modal-pago" id="modal-tipo-pago" tabindex="-1"
+                 aria-labelledby="modal-pago-label"
+                 aria-hidden="true" style="font-size: 1.3rem">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto justify-content-between" style="background-color: gainsboro">
+                            <div class="d-flex align-items-center">
+                                <img style="height: 30px;" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
+                                <span class="fw-semibold ms-2">Clínica INTERPUCP</span>
+                            </div>
+                            <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row my-2">
+                                <div class="col-12 text-center">
+                                    <span>Seleccione el tipo de pago</span>
+                                </div>
+                            </div>
+                            <div class="row py-5 px-5">
+                                <div class="col-sm-6" onclick="mostrarModalPago()">
+                                    <a class="text-reset">
+                                        <div class="cardLogo me-sm-2">
+                                            <span class="d-inline-block align-middle">
+                                                <i class="bi bi-credit-card"></i>
+                                                <p class="d-inline-block align-middle mb-0 ms-2 fw-semibold">Tarjeta</p>
+                                            </span>
+                                            <div class="mt-4 fw-semibold fs-4 text-center">
+                                                Realiza tu pago vía web
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 mt-3 mt-sm-0">
+                                    <a class="text-reset" th:href="@{/Paciente/recibo(idPago=)}" id="modal-link">
+                                        <div class="cardLogo me-sm-2">
+                                            <span class="d-inline-block align-middle">
+                                                <i class="bi bi-cash-coin"></i>
+                                                <p class="d-inline-block align-middle mb-0 ms-2 fw-semibold">Efectivo</p>
+                                            </span>
+                                            <div class="mt-4 fw-semibold fs-4 text-center">
+                                                Realiza tu pago en caja
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-10 text-center fs-6">
+                                    <span>Recuerde realizar su pago como máximo 1 hora antes del inicio de su cita programada</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Modal Pagar -->
             <div class="modal fade" data-bs-target="#modal-pago" id="modal-pago" tabindex="-1"
@@ -106,7 +160,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="numeroTarjeta">
+                                        <input type="text" class="form-control" id="numeroTarjeta" placeholder="XXXX-XXXX-XXXX-XXXX">
                                     </div>
                                     <div class="invalid-feedback" id="nroTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
                                     <div class="invalid-feedback" id="nroTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El número de tarjeta debe tener 16 dígitos</div>
@@ -129,7 +183,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" id="codigoSegTarjeta">
+                                            <input type="text" class="form-control" id="codigoSegTarjeta" placeholder="XXX">
                                         </div>
                                         <div class="invalid-feedback" id="codigoTarjetaVacio" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
                                         <div class="invalid-feedback" id="codigoTarjetaDig" style="display: none;margin-top: -7px; margin-bottom: 10px">El código debe tener 3 dígitos</div>
@@ -141,7 +195,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="correoTarjeta">
+                                        <input type="text" class="form-control" id="correoTarjeta" placeholder="user@example.com">
                                     </div>
                                     <div class="invalid-feedback" id="errorCorreoTarjeta" style="display: none;margin-top: -7px; margin-bottom: 10px">Este campo no puede estar vacío</div>
                                     <div class="invalid-feedback" id="errorCorreoInvalido" style="display: none;margin-top: -7px; margin-bottom: 10px">Ingrese un correo válido</div>
@@ -226,10 +280,38 @@
                 </div>
             </div>
 
+            <!-- Modal Pago Inválido-->
+            <div class="modal fade" id="modal-pago-invalido" tabindex="-1" aria-labelledby="modal-pago-label"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header row-cols-auto justify-content-between" style="background-color: gainsboro">
+                            <div class="d-flex align-items-center">
+                                <img style="height: 30px;" th:src="@{/assets/img/logoClinicaPNG.png}" alt="Logo de la clínica">
+                                <span class="fw-semibold ms-2" style="font-size: 1.3rem">Clínica INTERPUCP</span>
+                            </div>
+                            <button type="button" class="btn-close col-lg-2 fw-bold" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="cardConfirmacion">
+                                <div class="cardTitulo">
+                                    Pago inválido
+                                </div>
+                                <div class="cardCuerpo">
+                                    <div class="cardTexto">Se debió pagar como máximo 1 hora antes del inicio de su cita programada</div>
+                                    <a class="btn botonVolverInicio" onclick="$('#modal-pago-invalido').modal('hide')">Volver</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div th:replace="~{paciente/fragments/footer.html :: footer}"></div>
             <!-- End footer -->
 
         </main><!-- End #main -->
+        <div id="loading"></div>
 
         <!-- Bootstrap CDN JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -238,6 +320,8 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
         <!-- JQUERY -->
         <script src="https://code.jquery.com/jquery-3.4.1.js"
@@ -285,8 +369,9 @@
             var idCitaPagar = document.getElementById('idCita').dataset.valor;
             $('#idCitaPagar').val(idCitaPagar);
             var codigoRecibo;
+            var table;
             $(document).ready(function () {
-                $('#tablax').DataTable({
+                table = $('#tablax').DataTable({
                     language: {
                         processing: "Tratamiento en curso...",
                         search: "Buscar&nbsp;:",
@@ -316,9 +401,9 @@
                         null,
                         null,
                         null,
-                        {orderable: false},
-                        {orderable: false},
-                        {orderable: false}
+                        { orderable: false },
+                        { orderable: false },
+                        { orderable: false }
                     ],
                     columnDefs: [
                         {
@@ -327,12 +412,21 @@
                         }
                     ]
                 });
-                $(".fila_cita").each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                })
+                function calcularPreciosEnTodasLasPaginas() {
+                    $(".fila_cita").each(function () {
+                        var idEspecialidad = $(this).data('id-especialidad');
+                        var precioCalculado = calcularPrecio(idEspecialidad);
+                        $(this).find('.precio-calculado').text('S/. ' + precioCalculado.toFixed(2));
+                    })
+                }
+                calcularPreciosEnTodasLasPaginas();
+                table.on('draw.dt', function () {
+                    calcularPreciosEnTodasLasPaginas();
+                });
             });
+            function updateTable(data) {
+                table.clear().rows.add(data).draw();
+            }
         </script>
 
         <!--Script para Modal-->
@@ -341,21 +435,40 @@
             if (activarModal) {
                 $('#modal-pago').modal('show');
             }
+
             var doctorPagar;
             var precioPagar;
             var fechaCita;
             var especialidadPagar;
             var numeroTarjeta;
             var correoTarjeta;
-            function mostrarModal(){
-                $('.modal')
+            function mostrarTipoDePago(){
+                var idPagoValue = $(event.target).data('valor');
+                var inicioCitaStr = $(event.target).data('valor-inicio');
+                var fechaHoraActual = new Date();
+                var inicioCita = new Date(inicioCitaStr.slice(6, 10) + "-" + inicioCitaStr.slice(3, 5) + "-" + inicioCitaStr.slice(0, 2) + " " + inicioCitaStr.slice(11));
+                var diferenciaMinutos = (inicioCita.getTime() - fechaHoraActual.getTime()) / 60000;
+
                 var botonPagar = $(event.target);
+
                 var fila = botonPagar.closest('tr');
                 precioPagar = fila.find('#precio').text();
                 doctorPagar = fila.find('#doctor').text();
                 fechaCita = fila.find('#fechaCita').text();
                 especialidadPagar = fila.find('#especialidad').text();
 
+                if(diferenciaMinutos>60){
+                    $('#modal-link').attr('href', '/Paciente/recibo?idPago=' + idPagoValue);
+                    $('#modal-tipo-pago').modal('show');
+                }else{
+                    $('#modal-pago-invalido').modal('show');
+                }
+
+            }
+
+            function mostrarModalPago(){
+                $('.modal')
+                $('#modal-tipo-pago').modal('hide');
                 $('#modal-pago').modal('show');
             }
 
@@ -546,22 +659,14 @@
             const botonCancelados = $("#boton_cancelados");
             const citas = $(".fila_cita");
             const coaseguro = document.getElementById('coaseguro').dataset.valor;
+
             function buscarPagosPendientes() {
                 botonPendientes.addClass("botonTipoSeleccionado");
                 botonTodos.removeClass("botonTipoSeleccionado");
                 botonCancelados.removeClass("botonTipoSeleccionado");
 
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    if ($(this).hasClass("cita_pendiente")){
-                        $(this).show();
-                    }
-                    else{
-                        $(this).hide();
-                    }
-                })
+                const pagosPendientes = citas.filter('.cita_pendiente').toArray();
+                updateTable(pagosPendientes);
             }
 
             function buscarPagosCancelados() {
@@ -569,17 +674,8 @@
                 botonTodos.removeClass("botonTipoSeleccionado");
                 botonPendientes.removeClass("botonTipoSeleccionado");
 
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    if ($(this).hasClass("cita_cancelada")){
-                        $(this).show();
-                    }
-                    else{
-                        $(this).hide();
-                    }
-                })
+                const pagosCancelados = citas.filter('.cita_cancelada').toArray();
+                updateTable(pagosCancelados);
             }
 
             function buscarPagosTodos() {
@@ -587,12 +683,7 @@
                 botonPendientes.removeClass("botonTipoSeleccionado");
                 botonCancelados.removeClass("botonTipoSeleccionado");
 
-                citas.each(function (){
-                    var idEspecialidad = $(this).data('id-especialidad');
-                    var precioCalculado = calcularPrecio(idEspecialidad);
-                    $(this).find('.precio-calculado').text('S/. '+precioCalculado.toFixed(2));
-                    $(this).show();
-                })
+                updateTable(citas.toArray());
             }
         </script>
     </body>

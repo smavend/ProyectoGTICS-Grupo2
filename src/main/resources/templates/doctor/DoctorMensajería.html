@@ -15,7 +15,9 @@
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
         <!-- Vendor CSS Files -->
         <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -29,6 +31,9 @@
         <!-- Template Main CSS File -->
         <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
         <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
+
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
 
         <!--Links para mensajeria-->
@@ -45,281 +50,23 @@
     </head>
 
     <body>
-    <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
-    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('mensajeria')}"></div>
+        <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+        <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('mensajeria')}"></div>
 
-        <main id="main" class="main ">
+        <main id="main" class="main site-content py-1 px-3">
 
-            <section  >
-                <div class="row d-flex justify-content ">
-                    <div  class = "bg-white col-md-4 col-sm-2 p-6 ">
-                        <h3 class=" m-3">Tus chats</h3>
+            <div id="cometchat" style="width: 80%; height: 628px">
 
-                        <div class = "scrollable1 px-3 list-group"  >
-                            <button class="list-group-item fondo list-group-item-action active d-flex  justify-content p-3 mb-2 rounded border" data-bs-toggle="tab" data-bs-target="#sms1"  >
-                                <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-2"/>
-                                <div class="overflow-hidden">
-                                    <div class = "d-flex justify-content-between mb-0">
-                                        <span class="fw-bold">Diego Juan Velazquez Torres</span>
-                                        <small>09:55 am</small>
-                                    </div>
-                                    <small class ="ellipsis"> Ten en cuenta que para que la propiedad 'overflow-ellipsis' funcione correctamente, el contenedor que contiene el texto debe tener una anchura fija o estar limitado por otro elemento. De lo contrario, el texto no se cortará y se mostrará completo, ignorando la propiedad 'overflow-ellipsis'.</small>
-                                </div>
-                            </button>
-
-
-
-                        </div>
-                        <br>
-
-                    </div>
-                    <div class = "col-md-8 col-sm-10" style="background-color: #F2F2F2" >
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active " id="sms1">
-                                <div class=" d-flex  justify-content p-4 px-5 mb-2  border-bottom"  >
-                                    <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-3"/>
-                                    <div class="overflow-hidden">
-                                        <div class = "d-flex justify-content-between mb-0">
-                                            <span class="fw-bold">Dieguiño Juan Velazquez Torres</span>
-                                        </div>
-                                        <p>En línea</p>
-                                    </div>
-                                </div>
-                                <div class = "scrollable2 px-5"  >
-                                    <div class="d-flex mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
-                                            <div class="bg-white p-2 ms-2 rounded">
-                                                <p class="mb-1 fw-bold">Diego Velazquez</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <small class=" ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row-reverse mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
-                                            <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                                                <p class="mb-1 fw-bold">Alexandra Manrique</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div class ="text-end">
-                                                <small class="ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
-                                            <div class="bg-white p-2 ms-2 rounded">
-                                                <p class="mb-1 fw-bold">Diego Velazquez</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <small class=" ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row-reverse mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
-                                            <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                                                <p class="mb-1 fw-bold">Alexandra Manrique</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div class ="text-end">
-                                                <small class="ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-3  d-flex align-items-center">
-                                    <input type="text" class="form-control me-2  border-0" placeholder="Escribe tu mensaje...">
-                                    <button type="button" class="btn btn-primary">Enviar</button>
-                                </div>
-                            </div>
-
-
-
-                            <div class="tab-pane fade  " id="sms2">
-                                <div class=" d-flex  justify-content p-4 px-5 mb-2  border-bottom"  >
-                                    <img th:src="@{/assets/img/p3.jpg}" width="70" height="70" class = "rounded-circle me-3"/>
-                                    <div class="overflow-hidden">
-                                        <div class = "d-flex justify-content-between mb-0">
-                                            <span class="fw-bold">Jorge Juan Velazquez Torres</span>
-                                        </div>
-                                        <p>En línea</p>
-                                    </div>
-                                </div>
-                                <div class = "scrollable2 px-5"  >
-                                    <div class="d-flex mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
-                                            <div class="bg-white p-2 ms-2 rounded">
-                                                <p class="mb-1 fw-bold">Diego Velazquez</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <small class=" ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row-reverse mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
-                                            <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                                                <p class="mb-1 fw-bold">Alexandra Manrique</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div class ="text-end">
-                                                <small class="ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
-                                            <div class="bg-white p-2 ms-2 rounded">
-                                                <p class="mb-1 fw-bold">Diego Velazquez</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <small class=" ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row-reverse mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
-                                            <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                                                <p class="mb-1 fw-bold">Alexandra Manrique</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div class ="text-end">
-                                                <small class="ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-3  d-flex align-items-center">
-                                    <input type="text" class="form-control me-2  border-0" placeholder="Escribe tu mensaje...">
-                                    <button type="button" class="btn btn-primary">Enviar</button>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade  " id="sms3">
-                                <div class=" d-flex  justify-content p-4 px-5 mb-2  border-bottom"  >
-                                    <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class = "rounded-circle me-3"/>
-                                    <div class="overflow-hidden">
-                                        <div class = "d-flex justify-content-between mb-0">
-                                            <span class="fw-bold">Diego Juan Velazquez Torres</span>
-                                        </div>
-                                        <p>En línea</p>
-                                    </div>
-                                </div>
-                                <div class = "scrollable2 px-5"  >
-                                    <div class="d-flex mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
-                                            <div class="bg-white p-2 ms-2 rounded">
-                                                <p class="mb-1 fw-bold">Diego Velazquez</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <small class=" ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row-reverse mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
-                                            <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                                                <p class="mb-1 fw-bold">Alexandra Manrique</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div class ="text-end">
-                                                <small class="ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11 ">
-                                            <div class="bg-white p-2 ms-2 rounded">
-                                                <p class="mb-1 fw-bold">Diego Velazquez</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <small class=" ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row-reverse mb-4">
-
-                                        <img th:src="@{/assets/img/p2.jpg}" width="70" height="70" class=" rounded-circle align-self-end"/>
-                                        <div class = "flex flex-col col-lg-6 col-md-9 col-sm-11">
-                                            <div class="text-white p-2 me-2 rounded " style="background-color: #5882FA">
-                                                <p class="mb-1 fw-bold">Alexandra Manrique</p>
-                                                <small class=" ">
-                                                    El mundo es un lugar maravilloso pero lamentablemente conocemos muy poco sobre él. Al menos, mucho menos de lo que podríamos.
-                                                </small>
-                                            </div>
-                                            <div class ="text-end">
-                                                <small class="ms-2">09:55 am</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-3  d-flex align-items-center">
-                                    <input type="text" class="form-control me-2  border-0" placeholder="Escribe tu mensaje...">
-                                    <button type="button" class="btn btn-primary">Enviar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </div>
 
         </main><!-- End #main -->
+        <div id="loading"></div>
 
         <!-- ======= Footer ======= -->
 
 
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a>
 
         <!-- Vendor JS Files -->
         <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
@@ -334,7 +81,38 @@
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/jsDoctor.js}"></script>
 
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
+        <!-- Script para iniciar chat -->
+        <script>
+
+            window.addEventListener("DOMContentLoaded", function (){
+                CometChatWidget.init({
+                    "appID": `${config.CometChatAppId}`,
+                    "appRegion": `${config.CometChatRegion}`,
+                    "authKey": `${config.CometChatAuthKey}`
+                }).then(response => {
+                    CometChatWidget.CometChat.getLoggedinUser().then(
+                        user => {
+                            if (user && user.uid) {
+                                CometChatWidget.launch({
+                                    "widgetID": `${config.CometChatWidgetId}`,
+                                    "target": "#cometchat",
+                                    "roundedCorners": "true",
+                                    "height": "100%",
+                                    "width": "100%",
+                                    "defaultID": `${user.uid}`, //default UID (user) or GUID (group) to show,
+                                    "defaultType": 'user' //user or group
+                                });
+                            }
+                        },error => {
+
+                        }
+                    );
+                });
+            })
+
+        </script>
 
     </body>
 
