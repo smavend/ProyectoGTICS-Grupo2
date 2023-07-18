@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+
+        <div th:fragment="chatScripts">
+            <!-- CDN y Funciones CometChat-->
+
+            <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.0/firebase.js"
+                    integrity="sha512-7NBxPO/qRUrKc+Wi9GbYz0YEzMpi2UMP3mtLcswnvzI0vUFP5Jb7HNVd1V8NmEhXpSe3ZLsoGEhwRHpAZDpYPQ=="
+                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer"
+            ></script>
+
+            <script th:src="@{/chatSetup/config.js}"></script>
+            <script th:src="@{/chatSetup/firebase.js}"></script>
+            <script th:src="@{/assets/js/paciente_Funciones.js}"></script>
+
+            <!--
+    <script>
+        function enumerarNoVistos() {
+            var url1 = getUrl() + "/Paciente/notificacionNoVistos";
+            $.ajax({
+                url: url1,
+                method: "GET",
+                dataType: "json",
+                success: function (response) {
+                    // Obtener el span por su ID y establecer el valor del response como su contenido
+                    $("#cantidadNotificacionGlobo").text(response);
+                    $("#cantidadNotificacionDesplegable").text('Tiene '+response+' notificaciones nueva(s)');
+                },
+                error: function () {
+                    console.log("Error al obtener la lista de correos electrónicos");
+                }
+            });
+        }
+
+        function listarNotificacionesTitulo() {
+            var url2 = getUrl() + "/Paciente/notificacionListaTitulo";
+            $.ajax({
+                url: url2,
+                method: "GET",
+                dataType: "json",
+                success: function (response) {
+                    $("#titulo0").text(response[0]);
+                    $("#titulo1").text(response[1]);
+                    $("#titulo2").text(response[2]);
+                },
+                error: function () {
+                    console.log("Error al obtener la lista de correos electrónicos");
+                }
+            });
+        }
+
+        function listarNotificacionesDescripcion() {
+            var url3 = getUrl() + "/Paciente/notificacionListaDescripcion";
+            $.ajax({
+                url: url3,
+                method: "GET",
+                dataType: "json",
+                success: function (response) {
+                    $("#descripcion0").text(response[0]);
+                    $("#descripcion1").text(response[1]);
+                    $("#descripcion2").text(response[2]);
+                },
+                error: function () {
+                    console.log("Error al obtener la lista de correos electrónicos");
+                }
+            });
+        }
+
+        function notificacionListaHora() {
+            var url4 = getUrl() + "/Paciente/notificacionListaHora";
+            $.ajax({
+                url: url4,
+                method: "GET",
+                dataType: "json",
+                success: function (response) {
+                    $("#tiempo0").text(response[0]);
+                    $("#tiempo1").text(response[1]);
+                    $("#tiempo2").text(response[2]);
+                },
+                error: function () {
+                    console.log("Error al obtener la lista de correos electrónicos");
+                }
+            });
+        }
+
+        function SetearRevisadoA1() {
+            var url5 = getUrl() + "/Paciente/SetearRevisadoA1";
+            $.ajax({
+                url: url5,
+                method: "GET",
+                dataType: "json",
+            });
+        }
+
+        function handleClick() {
+            SetearRevisadoA1();
+        }
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Llamar a la función inicialmente
+            enumerarNoVistos();
+            listarNotificacionesTitulo();
+            listarNotificacionesDescripcion();
+            notificacionListaHora();
+
+            setInterval(enumerarNoVistos, 1000);
+            setInterval(listarNotificacionesTitulo, 1000);
+            setInterval(listarNotificacionesDescripcion, 1000);
+            setInterval(notificacionListaHora, 1000);
+        });
+
+        $("#botonCampanaAparecerDesaparecer").click(handleClick);
+
+    </script>-->
+
+
+        </div>
+
+    </body>
+</html>

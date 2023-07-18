@@ -512,7 +512,6 @@ public class PacienteController {
             else{
                 attr.addFlashAttribute("msg", "Cancelación de cita inválida");
             }
-
         }
         else {
             attr.addFlashAttribute("msg", "Ocurrió un error al cancelar la cita");
@@ -1064,7 +1063,7 @@ public class PacienteController {
         session.setAttribute("paciente", paciente);
         model.addAttribute("coaseguro", paciente.getSeguro().getCoaseguro());
 
-        List<Pago> pagoList = pagoRepository.buscarPorPaciente(paciente.getIdPaciente());
+        List<Pago> pagoList = pagoRepository.pagosValidosPorPaciente(paciente.getIdPaciente());
 
         model.addAttribute("pagoList", pagoList);
         return "paciente/pagos";
@@ -1140,23 +1139,28 @@ public class PacienteController {
         } else {
             session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
 */
-        String userEmail;
-        if (session.getAttribute("impersonatedUser") != null) {
-            userEmail = (String) session.getAttribute("impersonatedUser");
-        } else {
-            userEmail = authentication.getName();
-        }
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
 
-        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
-        session.setAttribute("paciente", paciente);
+            Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+            session.setAttribute("paciente", paciente);
+            pagoRepository.guardarPago(idPago);
 
-        pagoRepository.guardarPago(idPago);
-        citaRepository.actualizarEstadoEnEspera(idCita);
-        List<Pago> pagoList = pagoRepository.findAll();
-        model.addAttribute("pagoList", pagoList);
-        model.addAttribute("activarModalPagado", true);
-        attr.addFlashAttribute("msg", "Pago realizado");
-        return "redirect:/Paciente/pagos";
+            Integer idCitaPrevia = citaRepository.buscarIdCitaPrevia(idCita);
+            if(idCitaPrevia==null){
+                citaRepository.actualizarEstadoEnEspera(1,idCita);
+            }else{
+                citaRepository.actualizarEstadoEnEspera(5, idCita);
+            }
+            List<Pago> pagoList = pagoRepository.findAll();
+            model.addAttribute("pagoList", pagoList);
+            model.addAttribute("activarModalPagado", true);
+            attr.addFlashAttribute("msg", "Pago realizado");
+            return "redirect:/Paciente/pagos";
 
     }
 

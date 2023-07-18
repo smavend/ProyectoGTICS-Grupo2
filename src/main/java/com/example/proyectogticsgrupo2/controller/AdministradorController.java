@@ -9,8 +9,6 @@ import com.example.proyectogticsgrupo2.service.CorreoNuevoPaciente;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,8 +30,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,11 +50,12 @@ public class AdministradorController {
     final CredencialesRepository credencialesRepository;
     final TemporalRepository temporalRepository;
     final SecurityConfig securityConfig;
+    final PacientePorConsentimientoRepository ppcRepository;
 
     final StylevistasRepository stylevistasRepository;
 
 
-    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig,StylevistasRepository stylevistasRepository) {
+    public AdministradorController(PacienteRepository pacienteRepository, DoctorRepository doctorRepository, SeguroRepository seguroRepository, AdministrativoRepository administrativoRepository, DistritoRepository distritoRepository, EspecialidadRepository especialidadRepository, SedeRepository sedeRepository, AdministradorRepository administradorRepository, CredencialesRepository credencialesRepository, TemporalRepository temporalRepository, SecurityConfig securityConfig, PacientePorConsentimientoRepository ppcRepository, StylevistasRepository stylevistasRepository) {
 
         this.pacienteRepository = pacienteRepository;
         this.doctorRepository = doctorRepository;
@@ -70,6 +68,7 @@ public class AdministradorController {
         this.credencialesRepository = credencialesRepository;
         this.temporalRepository = temporalRepository;
         this.securityConfig = securityConfig;
+        this.ppcRepository = ppcRepository;
         this.stylevistasRepository = stylevistasRepository;
     }
     //#####################################33
@@ -276,6 +275,12 @@ public class AdministradorController {
                 paciente.setFotocontenttype(null);
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
+
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 1,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 2,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 3,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 4,1);
+                ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 5,1);
 
                 String passRandom= securityConfig.generateRandomPassword();
                 PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();

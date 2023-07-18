@@ -1,171 +1,174 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Recibo - Doctor</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-    <!-- Favicons -->
-    <link th:href="@{/assets/img/logo.png}" rel="icon">
-    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+        <title>Recibo - Doctor</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+        <!-- Favicons -->
+        <link th:href="@{/assets/img/logo.png}" rel="icon">
+        <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-          rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <!-- Google Fonts -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
-    <!-- Vendor CSS Files -->
-    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+        <!-- Vendor CSS Files -->
+        <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
-    <!-- Template Main CSS File -->
-    <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
-    <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
+        <!-- Template Main CSS File -->
+        <!--<link th:href="@{/assets/css/style.css" rel="stylesheet"> -->
+        <link th:href="@{/assets/css/styleDoctor.css}" rel="stylesheet">
 
+        <!-- CDN CometChat -->
+        <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
-    <!--Links para mensajeria-->
+        <!--Links para mensajeria-->
 
-    <!--End link mensajeria-->
+        <!--End link mensajeria-->
 
-    <!-- =======================================================
-    * Template Name: NiceAdmin
-    * Updated: Mar 09 2023 with Bootstrap v5.2.3
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
-</head>
+        <!-- =======================================================
+        * Template Name: NiceAdmin
+        * Updated: Mar 09 2023 with Bootstrap v5.2.3
+        * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+        * Author: BootstrapMade.com
+        * License: https://bootstrapmade.com/license/
+        ======================================================== -->
+    </head>
 
-<body>
-<div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
-<div th:replace="~{doctor/fragments/sidebar.html :: sidebar('')}"></div>
+    <body>
+    <div th:replace="~{doctor/fragments/header.html :: header(doctor = ${session.doctor})}"></div>
+    <div th:replace="~{doctor/fragments/sidebar.html :: sidebar('')}"></div>
 
-<main id="main" class="main">
+        <main id="main" class="main">
 
-    <h1 th:text="'Recibo - '+${pago.codigoRecibo}" style="font-size: 2.5rem;font-weight: 700; width: 50%; margin: 0 50px; color: #435067"></h1>
-    <div style="margin-top: 10px;border-radius: 20px;" class="card top-selling overflow-auto container">
+            <h1 th:text="'Recibo - '+${pago.codigoRecibo}" style="font-size: 2.5rem;font-weight: 700; width: 50%; margin: 0 50px; color: #435067"></h1>
+            <div style="margin-top: 10px;border-radius: 20px;" class="card top-selling overflow-auto container">
 
-        <section style="margin: 30px">
-            <div class="row encabezadoRecibo">
-                <div class="col-10">
-                    <h2 th:text="'Recibo - '+${#temporals.format(pago.fechaCancelada, 'dd-MM-yyyy')}"></h2>
-                </div>
-                <div class="col-2">
-                    <button class="btn btn-secondary " onclick="imprimir()">Imprimir</button>
-                </div>
-            </div>
-
-            <!-- Información de la clínica -->
-            <div class="informacionClinica">
-                <p>
-                    <span style="font-size: 1.6rem;line-height: 2">Clínica INTERPUC</span>
-                    <br>
-                <p style="margin-bottom: 0px" th:text="${cita2.sede.direccion}"></p>
-                Lima, Perú
-                <br>
-                www.interpucp.com.pe
-                </p>
-            </div>
-
-            <!-- Informacion recibo y pago -->
-            <div class="row informacionRecibo">
-                <div class="col-6">
-                    <strong>Abonado:<span th:text="${doctor.getNombre() + ' ' + doctor.getApellidos()}"
-                                          style="font-weight: 400; margin-left: 13px;"
-                                          class="informacionReciboDato"></span></strong>
-                    <br>
-                    <strong>Fecha de la cita:<span th:text="${cita2.inicio}"
-                                                   style="font-weight: 400; margin-left: 13px;"
-                                                   class="informacionReciboDato"></span></strong>
-
-
-                </div>
-                <div class="col-6">
-                    <strong>Fecha cancelada:<span th:text="${pago.fechaCancelada}"
-                                                  style="font-weight: 400; margin-left: 13px;"
-                                                  class="informacionReciboDato"></span></strong>
-                    <br>
-
-                </div>
-            </div>
-
-            <br><br>
-
-            <section class="informacionPago">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Por concepto de</th>
-                        <th>Paciente</th>
-                        <th>Cantidad</th>
-                        <th>Importe total</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td th:text="${doctor.especialidad.nombre}"></td>
-                        <td th:text="${cita2.paciente.nombre+' '+cita2.paciente.apellidos}"></td>
-                        <td>1</td>
-                        <td th:text="${'S/.'+cita.getPago_doctor()}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </section>
-        </section>
-        <section id="pieDePagina">
-            <footer class="footer">
-                <div class="container">
-                    <div class="row">
-                        <div class="d-flex align-items-center col-md-10">
-                            <img style="height: 30px; margin-left: 30px"
-                                 th:src="@{/assets/img/logoClinicaPNG.png}"
-                                 alt="Logo de la clínica">
-                            <span class="fw-bold d-none d-lg-block">Clínica INTERPUCP</span>
+                <section style="margin: 30px">
+                    <div class="row encabezadoRecibo">
+                        <div class="col-10">
+                            <h2 th:text="'Recibo - '+${#temporals.format(pago.fechaCancelada, 'dd-MM-yyyy')}"></h2>
                         </div>
-                        <div class="d-flex align-items-center col-md-auto">
-                            <div class="col-md-3">
-                                <i class="bi bi-telephone-fill"></i>
-                            </div>
-                            <div class="col-md-auto justify-content-end">
-                                <span class="fw-bold d-none d-lg-block">987-154-200</span>
-                            </div>
+                        <div class="col-2">
+                            <button class="btn btn-secondary " onclick="imprimir()">Imprimir</button>
                         </div>
                     </div>
-                </div>
-            </footer>
-        </section>
-    </div>
+
+                    <!-- Información de la clínica -->
+                    <div class="informacionClinica">
+                        <p>
+                            <span style="font-size: 1.6rem;line-height: 2">Clínica INTERPUC</span>
+                            <br>
+                            <p style="margin-bottom: 0px" th:text="${cita2.sede.direccion}"></p>
+                            Lima, Perú
+                            <br>
+                            www.interpucp.com.pe
+                        </p>
+                    </div>
+
+                    <!-- Informacion recibo y pago -->
+                    <div class="row informacionRecibo">
+                        <div class="col-6">
+                            <strong>Abonado:<span th:text="${doctor.getNombre() + ' ' + doctor.getApellidos()}"
+                                                  style="font-weight: 400; margin-left: 13px;"
+                                                  class="informacionReciboDato"></span></strong>
+                            <br>
+                            <strong>Fecha de la cita:<span th:text="${cita2.inicio}"
+                                                           style="font-weight: 400; margin-left: 13px;"
+                                                           class="informacionReciboDato"></span></strong>
 
 
-</main>
+                        </div>
+                        <div class="col-6">
+                            <strong>Fecha cancelada:<span th:text="${pago.fechaCancelada}"
+                                                          style="font-weight: 400; margin-left: 13px;"
+                                                          class="informacionReciboDato"></span></strong>
+                            <br>
 
-<script>
-    function imprimir() {
-        window.print();
-    }
+                        </div>
+                    </div>
 
-</script>
+                    <br><br>
 
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
+                    <section class="informacionPago">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Por concepto de</th>
+                                    <th>Paciente</th>
+                                    <th>Cantidad</th>
+                                    <th>Importe total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td th:text="${doctor.especialidad.nombre}"></td>
+                                    <td th:text="${cita2.paciente.nombre+' '+cita2.paciente.apellidos}"></td>
+                                    <td>1</td>
+                                    <td th:text="${'S/.'+cita.getPago_doctor()}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </section>
+                <section id="pieDePagina">
+                    <footer class="footer">
+                        <div class="container">
+                            <div class="row">
+                                <div class="d-flex align-items-center col-md-10">
+                                    <img style="height: 30px; margin-left: 30px"
+                                         th:src="@{/assets/img/logoClinicaPNG.png}"
+                                         alt="Logo de la clínica">
+                                    <span class="fw-bold d-none d-lg-block">Clínica INTERPUCP</span>
+                                </div>
+                                <div class="d-flex align-items-center col-md-auto">
+                                    <div class="col-md-3">
+                                        <i class="bi bi-telephone-fill"></i>
+                                    </div>
+                                    <div class="col-md-auto justify-content-end">
+                                        <span class="fw-bold d-none d-lg-block">987-154-200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </section>
+            </div>
 
-    <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
 
-    </div>
-</footer><!-- End Footer -->
+        </main>
+
+        <script>
+            function imprimir() {
+                window.print();
+            }
+
+        </script>
+        <div id="loading"></div>
+
+        <!-- ======= Footer ======= -->
+        <footer id="footer" class="footer">
+
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+
+            </div>
+        </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
@@ -199,12 +202,13 @@
         crossorigin="anonymous"></script>
 <script th:src="@{/assets/js/jsDoctor.js}"></script>
 
-<!-- Scripts Calendario -->
+        <!-- Scripts Calendario -->
 
 
 <!-- Agregar la biblioteca FullCalendar -->
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
 
+        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
 </body>
 

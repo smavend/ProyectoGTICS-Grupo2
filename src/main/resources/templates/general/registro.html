@@ -366,7 +366,7 @@
           $.ajax({
             method: "GET",
             crossDomain: true,
-            url: getUrl()+"/validarDni/"+dni
+            url: getUrl()+"/validarDni/" + dni
           }).done(function (resultado){
             console.log(dni);
             if (resultado.msg === "Éxito"){
