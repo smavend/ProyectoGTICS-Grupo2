@@ -126,8 +126,12 @@ public class AdministrativoController {
         Administrativo admi = administrativoRepository.findByCorreo(userEmail);
         session.setAttribute("administrativo", admi);
 
+
         String idAdmi = admi.getIdAdministrativo();
 
+
+        AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
+        model.addAttribute("datos", aes);
         model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
         model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
         Optional<Stylevistas> style = stylevistasRepository.findById(3);
@@ -163,6 +167,8 @@ public class AdministrativoController {
 
                 if (paciente.getAdministrativo().getIdAdministrativo().equals(idAdmi)) {
                     model.addAttribute("paciente", paciente);
+                    AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
+                    model.addAttribute("datos", aes);
                     model.addAttribute("alergias", alergiaRepository.buscarPorPacienteId(id));
                     model.addAttribute("listaDistritos", distritoRepository.findAll());
 
@@ -204,6 +210,8 @@ public class AdministrativoController {
             String idAdmi = admi.getIdAdministrativo();
             if(temp.getAdministrativo().getIdAdministrativo().equals(idAdmi)) {
                 model.addAttribute("temporal", temp);
+                AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
+                model.addAttribute("datos", aes);
                 model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
                 model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
                 return "administrativo/editarTemp";
@@ -232,6 +240,8 @@ public class AdministrativoController {
         Administrativo admi = administrativoRepository.findByCorreo(userEmail);
         session.setAttribute("administrativo", admi);
         String idAdmi = admi.getIdAdministrativo();
+        AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
+        model.addAttribute("datos", aes);
 
         model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
         model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
@@ -265,6 +275,8 @@ public class AdministrativoController {
         String idAdmi = admi.getIdAdministrativo();
 
         if(bindingResult.hasErrors()){
+            AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
+            model.addAttribute("datos", aes);
             model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
             model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             Optional<Stylevistas> style2 = stylevistasRepository.findById(3);
@@ -375,6 +387,8 @@ public class AdministrativoController {
             if (existDni){
                 bindingResult.rejectValue("correo", "errorCorreo", "El correo ingresado ya está registrado");
             }
+            AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
+            model.addAttribute("datos", aes);
             model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
             model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
             return "administrativo/editarTemp";
@@ -479,7 +493,7 @@ public class AdministrativoController {
         } else {
             userEmail = authentication.getName();
         }
-        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
+        Administrativo administrativo = administrativoRepository.findByCorreo(userEmail);
         Optional<Paciente> paciente1 = pacienteRepository.findByIdPaciente(idPaciente);
         if (paciente1.isPresent()){
             Alergia alergia1 = new Alergia();
@@ -506,8 +520,8 @@ public class AdministrativoController {
         } else {
             userEmail = authentication.getName();
         }
-        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
-        session.setAttribute("paciente", paciente);
+        Administrativo administrativo = administrativoRepository.findByCorreo(userEmail);
+        session.setAttribute("administrativo", administrativo);
 
         Optional<Alergia> optionalAlergia = alergiaRepository.findById(idAlergia);
         if (optionalAlergia.isPresent()) {
