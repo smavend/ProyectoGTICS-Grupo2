@@ -214,6 +214,7 @@ public class AdministrativoController {
                 model.addAttribute("datos", aes);
                 model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
                 model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
+
                 return "administrativo/editarTemp";
             }
         }
@@ -394,11 +395,12 @@ public class AdministrativoController {
             return "administrativo/editarTemp";
         }else {
             temporalRepository.actualizarInvitado(temporal.getCorreo(), temporal.getId_temporal());
-            Optional<Token> tokenOpt = tokenRepository.findById(temporal.getDni());
-            Token token = tokenOpt.get();
+            Token token = new Token();
             TokenService tokenService = new TokenService();
+            token.setIdPaciente(temporal.getDni());
             token.setToken(tokenService.generateToken());
             token.setFechaExpiracion(LocalDateTime.now().plusDays(2));
+            token.setTabla(1);
             tokenRepository.save(token);
 
             CorreoPacienteService correoPacienteService = new CorreoPacienteService();
@@ -411,26 +413,48 @@ public class AdministrativoController {
 
     @PostMapping("/administrativo/guardar")
     public String actualizarPaciente(@ModelAttribute("paciente") @Valid Paciente paciente,
-                                     BindingResult bindingResult){
+                                     BindingResult bindingResult,
+                                     HttpSession session,
+                                     Authentication authentication,
+                                     Model model){
         List<Paciente> pacientes = pacienteRepository.findAll();
         boolean existDni = false;
         for (Paciente p : pacientes) {
             if (p.getCorreo().equals(paciente.getCorreo())) {
-                existDni = true;
-                break;
+                if (!p.getIdPaciente().equals(paciente.getIdPaciente())){
+                    existDni = true;
+                    break;
+                }
             }
         }
         List<Temporal> temp = temporalRepository.findAll();
         for (Temporal t : temp) {
             if (t.getCorreo().equals(paciente.getCorreo())) {
-                existDni = true;
-                break;
+                if (!t.getDni().equals(paciente.getIdPaciente())){
+                    existDni = true;
+                    break;
+                }
             }
         }
         if (bindingResult.hasErrors() || existDni){
             if (existDni){
                 bindingResult.rejectValue("correo", "errorCorreo", "El correo ingresado ya está registrado");
             }
+            String userEmail;
+            if (session.getAttribute("impersonatedUser") != null) {
+                userEmail = (String) session.getAttribute("impersonatedUser");
+            } else {
+                userEmail = authentication.getName();
+            }
+            Administrativo admi = administrativoRepository.findByCorreo(userEmail);
+            String idAdmi = admi.getIdAdministrativo();
+            session.setAttribute("administrativo", admi);
+            AdministrativoPorEspecialidadPorSede aes = aesRepository.buscarPorAdministrativoId(idAdmi);
+            model.addAttribute("datos", aes);
+            model.addAttribute("listaNotificaciones", notificacionRepository.buscarPorAdministrativoYActual(idAdmi));
+            model.addAttribute("listaMensajes", pacienteRepository.obtenerMensajeDatos(idAdmi));
+            model.addAttribute("alergias", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
+            model.addAttribute("listaDistritos", distritoRepository.findAll());
             return "administrativo/editar";
         }
         else {
