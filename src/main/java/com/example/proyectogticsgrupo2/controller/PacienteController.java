@@ -1101,10 +1101,6 @@ public class PacienteController {
     @GetMapping("/pagar")
     public String pagar(@ModelAttribute("tarjetaPago") TarjetaPago tarjetaPago, @RequestParam("idPago") Integer idPago, Model model, HttpSession session, Authentication authentication) {
 
-/*
-        session.setAttribute("paciente", pacienteRepository.findByCorreo(authentication.getName()));
-*/
-
         Optional<Stylevistas> style = stylevistasRepository.findById(5);
         if (style.isPresent()) {
             Stylevistas styleActual = style.get();
@@ -1207,7 +1203,6 @@ public class PacienteController {
 
        /* Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         session.setAttribute("paciente", paciente);*/
-
 
         Optional<Stylevistas> style = stylevistasRepository.findById(5);
         if (style.isPresent()) {
@@ -1387,6 +1382,7 @@ public class PacienteController {
     }
 
     // SECCIÓN NOTIFICACIONES
+    /*
     @GetMapping(value = {"/notificacionNoVistos"})
     @ResponseBody
     public Integer notificacionNoVistos(Model model, HttpSession session, Authentication authentication) {
@@ -1403,7 +1399,7 @@ public class PacienteController {
         List<Notificacion> listaNotificaciones = notificacionRepository.buscarNotificacionesNoLeidas(paciente.getIdPaciente());
         List<Integer> listaNoVistos = new ArrayList<>();
 
-        /*List<SpringSession> sesiones=springSessionRepository.buscarSesiones();*/
+        //List<SpringSession> sesiones=springSessionRepository.buscarSesiones();
 
         for (int i = 0; i < listaNotificaciones.size(); i++) {
             listaNoVistos.add(listaNotificaciones.get(i).getRevisado());
@@ -1592,7 +1588,7 @@ public class PacienteController {
         }
 
 
-    }
+    }*/
     //Fin notificaciones
 
     /* FUNCIONES UTILIZADAS */

@@ -37,7 +37,6 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true) //TENER CUIDADO CON El PUNTO Y COMA AL FINAL DEL QUERY PQ SINO, NO FUNCIONA
     List<Cita> listaCitasSesion(String id,int sede);
 
-
     @Query(nativeQuery = true, value = "select c.* from cita c " +
             "inner join paciente p on (c.paciente_id_paciente = p.id_paciente) " +
             "where NOW() <= c.fin and p.id_paciente = ?1 and c.estado != 4 " +
