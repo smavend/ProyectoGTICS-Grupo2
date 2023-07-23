@@ -909,63 +909,103 @@ public class SuperAdminController {
 
 
         if (selectUsuario.equals("administrador")) {
-            //Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
-            Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
-            administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
-            Optional<Administrador> administrador = administradorRepository.findById(dni);
-            String passRandom = securityConfig.generateRandomPassword();
-            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
-            // Ahora puedes usar el passwordEncoder para codificar una contraseña
-            String encodedPassword = passwordEncoder.encode(passRandom);
-            credencialesRepository.crearCredenciales(administrador.get().getIdAdministrador(), administrador.get().getCorreo(), encodedPassword);
-            CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
-            correoService.props(administrador.get().getCorreo(), passRandom);
 
-            List<HashMap<String, String>> credenciales = new ArrayList<>();
-            HashMap<String, String> user = new HashMap<>();
-            user.put("correo", administrador.get().getCorreo());
-            user.put("pass", passRandom);
-            credenciales.add(user);
+            // Creación de usuario en comechat
+            try {
+                OkHttpClient client = new OkHttpClient();
 
-            redirectAttributes.addFlashAttribute("credenciales", credenciales);
+                com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                com.squareup.okhttp.RequestBody body = com.squareup.okhttp.RequestBody.create(mediaType, "{\"uid\":\"x-"+dni+"\",\"name\":\"Admin. "+nombres+" "+apellidos+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/2304/2304226.png\"}");
 
+                Request r = new Request.Builder()
+                        .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
+                        .post(body)
+                        .addHeader("accept", "application/json")
+                        .addHeader("content-type", "application/json")
+                        .addHeader("apiKey", "dd589271e9972f36340008c6131756b70313cecb")
+                        .build();
+
+                Response response = client.newCall(r).execute();
+
+                if (response.isSuccessful()){
+
+                    Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
+                    administradorRepository.insertarAdministrador(dni, nombres, apellidos, sede_enviar.getIdSede(), correoUser);
+                    Optional<Administrador> administrador = administradorRepository.findById(dni);
+                    String passRandom = securityConfig.generateRandomPassword();
+                    PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+                    // Ahora puedes usar el passwordEncoder para codificar una contraseña
+                    String encodedPassword = passwordEncoder.encode(passRandom);
+                    credencialesRepository.crearCredenciales(administrador.get().getIdAdministrador(), administrador.get().getCorreo(), encodedPassword);
+                    CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
+                    correoService.props(administrador.get().getCorreo(), passRandom);
+
+                }else{
+                    response.body().close();
+                }
+            }
+            catch (IOException e){
+                // Error al registrar en cometchat
+                e.printStackTrace();
+            }
 
         } else if (selectUsuario.equals("administrativo")) {
-            Administrativo administrativonuevo = new Administrativo();
-            administrativonuevo.setIdAdministrativo(dni);
-            administrativonuevo.setNombre(nombres);
-            administrativonuevo.setApellidos(apellidos);
-            administrativonuevo.setCorreo(correoUser);
-            administrativonuevo.setEstado(1);
-            administrativoRepository.save(administrativonuevo);
-//          Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
-            Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
-            AdministrativoPorEspecialidadPorSede administrativoPorEspecialidadPorSede = new AdministrativoPorEspecialidadPorSede();
-            administrativoPorEspecialidadPorSede.setSedeId(sede_enviar);
-            administrativoPorEspecialidadPorSede.setAdministrativoId(administrativonuevo);
-            administrativoPorEspecialidadPorSede.setTorre("Por Asignar");
-            administrativoPorEspecialidadPorSede.setPiso("Por Asignar");
-            String torre = "N.D";
-            String piso = "N.D";
-            Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
-            administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
-            administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
 
-            String passRandom = securityConfig.generateRandomPassword();
-            PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
-            // Ahora puedes usar el passwordEncoder para codificar una contraseña
-            String encodedPassword = passwordEncoder.encode(passRandom);
-            credencialesRepository.crearCredenciales(administrativonuevo.getIdAdministrativo(), administrativonuevo.getCorreo(), encodedPassword);
-            CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
-            correoService.props(administrativonuevo.getCorreo(), passRandom);
+            // Creación de usuario en comechat
+            try {
+                OkHttpClient client = new OkHttpClient();
 
-            List<HashMap<String, String>> credenciales = new ArrayList<>();
-            HashMap<String, String> user = new HashMap<>();
-            user.put("correo", administrativonuevo.getCorreo());
-            user.put("pass", passRandom);
-            credenciales.add(user);
+                com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                com.squareup.okhttp.RequestBody body = com.squareup.okhttp.RequestBody.create(mediaType, "{\"uid\":\"a-"+dni+"\",\"name\":\"Admin. "+nombres+" "+apellidos+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/3059/3059330.png\"}");
 
-            redirectAttributes.addFlashAttribute("credenciales", credenciales);
+                Request r = new Request.Builder()
+                        .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
+                        .post(body)
+                        .addHeader("accept", "application/json")
+                        .addHeader("content-type", "application/json")
+                        .addHeader("apiKey", "dd589271e9972f36340008c6131756b70313cecb")
+                        .build();
+
+                Response response = client.newCall(r).execute();
+
+                if (response.isSuccessful()){
+
+                    Administrativo administrativonuevo = new Administrativo();
+                    administrativonuevo.setIdAdministrativo(dni);
+                    administrativonuevo.setNombre(nombres);
+                    administrativonuevo.setApellidos(apellidos);
+                    administrativonuevo.setCorreo(correoUser);
+                    administrativonuevo.setEstado(1);
+                    administrativoRepository.save(administrativonuevo);
+                    //Clinica clinica_enviar = clinicaRepository.buscarClinicaPorNombre(clinica.getNombre());
+                    Sede sede_enviar = sedeRepository.buscarPorNombreDeSede(sede);
+                    AdministrativoPorEspecialidadPorSede administrativoPorEspecialidadPorSede = new AdministrativoPorEspecialidadPorSede();
+                    administrativoPorEspecialidadPorSede.setSedeId(sede_enviar);
+                    administrativoPorEspecialidadPorSede.setAdministrativoId(administrativonuevo);
+                    administrativoPorEspecialidadPorSede.setTorre("Por Asignar");
+                    administrativoPorEspecialidadPorSede.setPiso("Por Asignar");
+                    String torre = "N.D";
+                    String piso = "N.D";
+                    Especialidad especialidad_enviar = especialidadRepository.findByNombre(especialidad);
+                    administrativoPorEspecialidadPorSede.setEspecialidadId(especialidad_enviar);
+                    administrativoPorEspecialidadPorSedeRepository.insertarTablaAdministrativoXEspecialidadXSede(sede_enviar.getIdSede(), administrativonuevo.getIdAdministrativo(), String.valueOf(especialidad_enviar.getIdEspecialidad()), torre, piso);
+
+                    String passRandom = securityConfig.generateRandomPassword();
+                    PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
+                    // Ahora puedes usar el passwordEncoder para codificar una contraseña
+                    String encodedPassword = passwordEncoder.encode(passRandom);
+                    credencialesRepository.crearCredenciales(administrativonuevo.getIdAdministrativo(), administrativonuevo.getCorreo(), encodedPassword);
+                    CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
+                    correoService.props(administrativonuevo.getCorreo(), passRandom);
+
+                }else{
+                    response.body().close();
+                }
+
+            }catch (IOException e){
+                // Error al registrar en cometchat
+                e.printStackTrace();
+            }
 
         }
 
