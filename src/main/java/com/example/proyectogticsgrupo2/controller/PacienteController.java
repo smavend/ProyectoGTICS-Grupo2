@@ -4,6 +4,11 @@ import com.example.proyectogticsgrupo2.config.SecurityConfig;
 import com.example.proyectogticsgrupo2.dto.TorreYPisoDTO;
 import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
+import com.example.proyectogticsgrupo2.service.CorreoCitaRegistrada;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -309,12 +314,11 @@ public class PacienteController {
 
     @PostMapping("/reservar3")
     public String reservar4(@ModelAttribute("citaTemporal") CitaTemporal citaTemporal,
-
                             @RequestParam(name = "citaPendiente", required = false) Boolean citaPendiente,
                             @RequestParam(name = "examenPendiente", required = false) Boolean examenPendiente,
                             @RequestParam(name = "codigoRecibo") String codigoRecibo,
                             Model model, HttpSession session, Authentication authentication,
-                            HttpServletRequest request) {
+                            HttpServletRequest request, RedirectAttributes attr) {
 
         Optional<Stylevistas> style = stylevistasRepository.findById(5);
         if (style.isPresent()) {
@@ -331,6 +335,7 @@ public class PacienteController {
         } else {
             userEmail = authentication.getName();
         }
+
         pacienteRepository.anularCitaNoCancelada();
         Paciente paciente = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", paciente);
@@ -374,22 +379,50 @@ public class PacienteController {
 
         }
 
-        // Enviar correo al paciente - inhabilidado para que no demore tanto xd
-
-        /*
+        // Enviar correo al paciente
         CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
         String host = request.getServerName()+":"+request.getLocalPort();
         correo.props(host, paciente.getCorreo(), cita);
-         */
 
+        // Añadir chat con doctor
+        try {
+            OkHttpClient client = new OkHttpClient();
 
-        model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
-        model.addAttribute("especialidad", especialidad);
-        model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
-        //model.addAttribute("precio", administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita());
-        Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
-        model.addAttribute("precio", precioBase * paciente.getSeguro().getCoaseguro());
+            com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+            RequestBody body = RequestBody.create(mediaType, "{\"accepted\":[\"d-"+doctor.getId_doctor()+"\"]}");
+            Request r = new Request.Builder()
+                    .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-"+paciente.getIdPaciente()+"/friends")
+                    .delete(body)
+                    .addHeader("accept", "application/json")
+                    .addHeader("content-type", "application/json")
+                    .addHeader("apikey", "dd589271e9972f36340008c6131756b70313cecb")
+                    .build();
 
+            Response response = client.newCall(r).execute();
+
+            if (response.isSuccessful()){
+
+                // CAMBIAR PROCESO DE REGISTRO DE CITA A ESTA SECCIÓN
+
+                // Mostrar información en vista
+                model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
+                model.addAttribute("especialidad", especialidad);
+                model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
+                Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
+                model.addAttribute("precio", precioBase * paciente.getSeguro().getCoaseguro());
+            }
+            else{
+                response.body().close();
+            }
+
+        }catch (IOException e){
+            // Error al añadir contacto
+            e.printStackTrace();
+            attr.addFlashAttribute("msgError", "La cita: "+codigoRecibo+" no pudo ser creada correctamente: CometChatError");
+            return "redirect:/Paciente";
+        }
+
+        // CAMBIAR POR REDIRECT:/
         return "paciente/confirmacion";
     }
 
