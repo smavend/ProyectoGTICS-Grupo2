@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1331,7 +1330,7 @@ public class PacienteController {
         List<PacientePorConsentimiento> consentimientos = pacientePorConsentimientoRepository.findByIdIdPaciente(paciente.getIdPaciente());
 
         model.addAttribute("consentimientos", consentimientos);
-        return "paciente/consentimientos";
+        return "paciente/configuracion";
     }
 
     @PostMapping("/consentimientos/actualizar")
