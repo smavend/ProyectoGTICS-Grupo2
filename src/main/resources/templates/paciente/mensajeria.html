@@ -8,6 +8,8 @@
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
+
+
     </head>
     <body>
 
@@ -26,20 +28,18 @@
         </main><!-- End #main -->
         <div id="loading"></div>
 
-        <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
+        <th:block th:replace="~{paciente/fragments/scripts.html::pacienteScripts}"></th:block>
 
-        <!-- Script para iniciar chat -->
+        <!-- Script para iniciar chat y desloguear chat-->
         <script th:inline="javascript">
             window.addEventListener("DOMContentLoaded", function () {
                 mostrarLoading();
                 let cometChatUID = "p-" + [[${session.paciente.idPaciente}]];
-
                 CometChatWidget.init({
                     "appID": `${config.CometChatAppId}`,
                     "appRegion": `${config.CometChatRegion}`,
                     "authKey": `${config.CometChatAuthKey}`
                 }).then(response => {
-
                     CometChatWidget.login({uid: cometChatUID}).then((loggedInUser) => {
                         CometChatWidget.launch({
                             "widgetID": `${config.CometChatWidgetId}`,
