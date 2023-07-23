@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Paciente - Consentimientos</title>
+        <title>Paciente - Configuración</title>
 
         <th:block th:replace="~{paciente/fragments/head.html::estilos}"></th:block>
 
@@ -16,13 +16,15 @@
         <!-- End Header -->
 
         <!-- ======= Sidebar ======= -->
-        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('consentimientos')}"></div>
+        <div th:replace="~{paciente/fragments/sidebar.html :: sidebar('')}"></div>
         <!-- End Sidebar-->
 
         <main id="main" class="mainsite-content">
 
-            <h1 class="encabezado">Consentimientos dados</h1>
+            <h1 class="encabezado">Configuración</h1>
             <section class="seccionPrincipal">
+
+                <h2 class="encabezado mt-4 mb-2 ms-1 fs-3">Consentimientos dados</h2>
 
                 <form method="post" th:action="@{/Paciente/consentimientos/actualizar}">
 
@@ -51,8 +53,8 @@
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5 tituloNavBar">Confirmación</h1>
                                 </div>
-                                <div class="modal-body">
-                                    <span class="textoModal">¿Está seguro que desea actualizar sus consentimientos?</span>
+                                <div class="modal-body text-center">
+                                    <span class="textoModal">¿Está seguro que desea actualizar su configuración?</span>
                                 </div>
                                 <div class="modal-footer mx-auto">
                                     <button type="submit" style="margin: 0 10px 0 0;"

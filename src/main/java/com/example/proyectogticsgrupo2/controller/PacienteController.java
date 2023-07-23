@@ -40,25 +40,28 @@ import java.util.stream.IntStream;
 @RequestMapping("/Paciente")
 public class PacienteController {
 
-    final PacienteRepository pacienteRepository;
-    final SedeRepository sedeRepository;
-    final EspecialidadRepository especialidadRepository;
-    final AlergiaRepository alergiaRepository;
-    final SeguroRepository seguroRepository;
-    final DistritoRepository distritoRepository;
-    final DoctorRepository doctorRepository;
-    final PacientePorConsentimientoRepository pacientePorConsentimientoRepository;
-    final CitaRepository citaRepository;
-    final CitaTemporalRepository citaTemporalRepository;
-    final PagoRepository pagoRepository;
-    final HorarioRepository horarioRepository;
-    final CredencialesRepository credencialesRepository;
-    final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
-    final CuestionarioRepository cuestionarioRepository;
-    final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
-    final NotificacionRepository notificacionRepository;
-    final SecurityConfig securityConfig;
-    final StylevistasRepository stylevistasRepository;
+    private final PacienteRepository pacienteRepository;
+    private final SedeRepository sedeRepository;
+    private final EspecialidadRepository especialidadRepository;
+    private final AlergiaRepository alergiaRepository;
+    private final SeguroRepository seguroRepository;
+    private final DistritoRepository distritoRepository;
+    private final DoctorRepository doctorRepository;
+    private final PacientePorConsentimientoRepository pacientePorConsentimientoRepository;
+    private final CitaRepository citaRepository;
+    private final CitaTemporalRepository citaTemporalRepository;
+    private final PagoRepository pagoRepository;
+    private final HorarioRepository horarioRepository;
+    private final CredencialesRepository credencialesRepository;
+    private final CuestionarioPorCitaRepository cuestionarioPorCitaRepository;
+    private final CuestionarioRepository cuestionarioRepository;
+    private final AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository;
+    private final NotificacionRepository notificacionRepository;
+    private final SecurityConfig securityConfig;
+    private final StylevistasRepository stylevistasRepository;
+    private final AdministradorRepository administradorRepository;
+    private final AdministrativoRepository administrativoRepository;
+    private final SuperAdminRepository superAdminRepository;
 
     public PacienteController(PacienteRepository pacienteRepository, EspecialidadRepository especialidadRepository,
                               SedeRepository sedeRepository, AlergiaRepository alergiaRepository, SeguroRepository seguroRepository,
@@ -66,7 +69,9 @@ public class PacienteController {
                               CitaRepository citaRepository, PagoRepository pagoRepository, CitaTemporalRepository citaTemporalRepository, HorarioRepository horarioRepository,
                               CredencialesRepository credencialesRepository, CuestionarioPorCitaRepository cuestionarioPorCitaRepository, CuestionarioRepository cuestionarioRepository,
                               AdministrativoPorEspecialidadPorSedeRepository administrativoPorEspecialidadPorSedeRepository, NotificacionRepository notificacionRepository, SecurityConfig securityConfig,
-                              StylevistasRepository stylevistasRepository) {
+                              StylevistasRepository stylevistasRepository, AdministradorRepository administradorRepository,
+                              AdministrativoRepository administrativoRepository,
+                              SuperAdminRepository superAdminRepository) {
 
         this.pacienteRepository = pacienteRepository;
         this.especialidadRepository = especialidadRepository;
@@ -87,6 +92,9 @@ public class PacienteController {
         this.notificacionRepository = notificacionRepository;
         this.securityConfig = securityConfig;
         this.stylevistasRepository = stylevistasRepository;
+        this.administradorRepository = administradorRepository;
+        this.administrativoRepository = administrativoRepository;
+        this.superAdminRepository = superAdminRepository;
     }
 
     /* INICIO */
@@ -617,6 +625,13 @@ public class PacienteController {
         Paciente p = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", p);
 
+        // Validación de correo repetido
+        Paciente pacienteRepetido = pacienteRepository.findByCorreo(paciente.getCorreo());
+        Doctor doctorRepetido = doctorRepository.findByCorreo(paciente.getCorreo());
+        Administrador administradorRepetido = administradorRepository.findByCorreo(paciente.getCorreo());
+        Administrativo administrativoRepetido = administrativoRepository.findByCorreo(paciente.getCorreo());
+        SuperAdmin superAdminRepetido = superAdminRepository.findByCorreo(paciente.getCorreo());
+
         String fileName = file.getOriginalFilename();
 
         if (p.getIdPaciente().equals(paciente.getIdPaciente())) {
@@ -625,14 +640,21 @@ public class PacienteController {
                 attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
                 return "redirect:/Paciente/perfil/editar";
             }
-
             if (bindingResult.hasErrors()) {
                 System.out.println("Error: " + bindingResult.getAllErrors());
                 model.addAttribute("seguroList", seguroRepository.findAll());
                 model.addAttribute("alergiasPaciente", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
                 model.addAttribute("distritoList", distritoRepository.findAll());
                 return "paciente/perfilEditar";
-            } else {
+            }
+            else if(pacienteRepetido != null | doctorRepetido != null | administradorRepetido != null | administrativoRepetido != null | superAdminRepetido != null){
+                bindingResult.rejectValue("correo", "errorCorreo", "El correo ingresado ya se encuentra registrado");
+                model.addAttribute("seguroList", seguroRepository.findAll());
+                model.addAttribute("alergiasPaciente", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
+                model.addAttribute("distritoList", distritoRepository.findAll());
+                return "paciente/perfilEditar";
+            }
+            else {
                 try {
                     if (file.isEmpty()) {
                         paciente.setFoto(p.getFoto());
@@ -651,7 +673,7 @@ public class PacienteController {
                         credencialesRepository.save(nuevasCredenciales);
                         pacienteRepository.save(paciente);
 
-                        logout(request, response); // borrando cookies
+                        logout(request, response); // cerrando sesión
 
                         return "redirect:/login";
                     }
@@ -1283,8 +1305,8 @@ public class PacienteController {
         return "redirect:/Paciente/cuestionarios";
     }
 
-    /* SECCIÓN CONSENTIMIENTOS */
-    @GetMapping("/consentimientos")
+    /* SECCIÓN CONSENTIMIENTOS - AHORA EN CONFIGURACIÓN */
+    @GetMapping("/config")
     public String consentimientos(Model model, HttpSession session, Authentication authentication) {
 
         Optional<Stylevistas> style = stylevistasRepository.findById(5);

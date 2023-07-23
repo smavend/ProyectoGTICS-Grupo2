@@ -226,7 +226,7 @@
 
         <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
-        <!-- JS para validar cambio de correo -->
+        <!-- JS aviso cambio de correo -->
         <script th:inline="javascript">
             let correo = [[${session.paciente.correo}]];
             $("#input_correo").keyup(function () {
@@ -237,26 +237,5 @@
                 }
             })
         </script>
-
-        <!-- SCRIPT para mostrar errores -->
-        <!--
-        <script>
-            const formatoString = /^([A-Za-záÁéÉíÍóÓúÚñÑüÜ\s']+)(\s+[A-Za-záÁéÉíÍóÓúÚñÑüÜ\s']+)*$/;
-            const formatoCorreo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-            let msg = $(".invalid-feedback");
-            $(".input-texto").keyup(function (event){
-                let input = $(event.target);
-                let id = input.attr("id");
-                if (formatoString.test(input.val())){
-                    input.removeClass("is-invalid");
-                }
-                else{
-                    input.addClass("is-invalid");
-                }
-            })
-
-        </script>
-        -->
     </body>
 </html>
