@@ -29,32 +29,51 @@
         <th:block th:replace="~{paciente/fragments/scripts.html::chatScripts}"></th:block>
 
         <!-- Script para iniciar chat -->
-        <script>
+        <script th:inline="javascript">
             window.addEventListener("DOMContentLoaded", function () {
+                mostrarLoading();
+                let cometChatUID = "p-" + [[${session.paciente.idPaciente}]];
+
                 CometChatWidget.init({
                     "appID": `${config.CometChatAppId}`,
                     "appRegion": `${config.CometChatRegion}`,
                     "authKey": `${config.CometChatAuthKey}`
                 }).then(response => {
-                    CometChatWidget.CometChat.getLoggedinUser().then(
-                        user => {
-                            if (user && user.uid) {
-                                CometChatWidget.launch({
-                                    "widgetID": `${config.CometChatWidgetId}`,
-                                    "target": "#cometchat",
-                                    "roundedCorners": "true",
-                                    "height": "100%",
-                                    "width": "100%",
-                                    "defaultID": `${user.uid}`, //default UID (user) or GUID (group) to show,
-                                    "defaultType": 'user' //user or group
-                                });
-                            }
-                        }, error => {
 
-                        }
-                    );
+                    CometChatWidget.login({uid: cometChatUID}).then((loggedInUser) => {
+                        CometChatWidget.launch({
+                            "widgetID": `${config.CometChatWidgetId}`,
+                            "target": "#cometchat",
+                            "roundedCorners": "true",
+                            "height": "100%",
+                            "width": "100%",
+                            "defaultID": cometChatUID,
+                            "defaultType": 'user'
+                        });
+                        ocultarLoading();
+                    });
                 });
             })
+
+            window.onbeforeunload = function () {
+                mostrarLoading();
+                CometChatWidget.CometChat.getLoggedinUser().then(
+                    user => {
+                        if (user) {
+                            CometChatWidget.logout().then(response => {
+                                console.log("Sesión de usuario encontrada");
+                                document.getElementById("logoutForm").submit();
+                                ocultarLoading();
+                            });
+                        } else {
+                            console.log("Sesión no encontrada");
+                            document.getElementById("logoutForm").submit();
+                            ocultarLoading();
+                        }
+                    }, error => {
+                    }
+                );
+            }
 
         </script>
 

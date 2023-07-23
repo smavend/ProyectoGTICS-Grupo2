@@ -6,6 +6,9 @@ import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoService;
 import com.example.proyectogticsgrupo2.service.CorreoServiceSuperAdmin;
 import com.example.proyectogticsgrupo2.service.SuperAdminService;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -60,6 +63,7 @@ public class SuperAdminController {
     final StylevistasRepository stylevistasRepository;
 
     final FormularioJsonRepository formularioJsonRepository;
+    final PacientePorConsentimientoRepository ppcRepository;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -80,7 +84,8 @@ public class SuperAdminController {
                                 SecurityConfig securityConfig,
                                 CredencialesRepository credencialesRepository, StylevistasRepository stylevistasRepository,
                                 FormularioJsonRepository formularioJsonRepository,
-                                UserDetailsService userDetailsService) {
+                                UserDetailsService userDetailsService,
+                                PacientePorConsentimientoRepository ppcRepository) {
         this.pacienteRepository = pacienteRepository;
         this.administradorRepository = administradorRepository;
         this.administrativoRepository = administrativoRepository;
@@ -95,6 +100,7 @@ public class SuperAdminController {
         this.stylevistasRepository = stylevistasRepository;
         this.formularioJsonRepository = formularioJsonRepository;
         this.userDetailsService = userDetailsService;
+        this.ppcRepository = ppcRepository;
 
     }
 
@@ -528,18 +534,17 @@ public class SuperAdminController {
 
     @PostMapping("/GuardarPacientes")
     public String guardarPacientes(@RequestParam("pacientes") List<String> pacientesIds,HttpServletRequest request, RedirectAttributes attr) {
-        List<HashMap<String, String>> credenciales = new ArrayList<>();
         for(String id : pacientesIds) {
             pacienteRepository.findById(id).ifPresent(paciente -> {
-                HashMap<String, String> user = new HashMap<>();
 
                 paciente.setEstado(1);
-                pacienteRepository.save(paciente);
+                // ----- Atributos de paciente listos
+
                 String passRandom = securityConfig.generateRandomPassword();
                 PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
                 String encodedPassword = passwordEncoder.encode(passRandom);
-                // Asegúrate de tener los métodos getIdPaciente y getCorreo en tu clase Paciente
-                credencialesRepository.crearCredenciales(paciente.getIdPaciente(), paciente.getCorreo(), encodedPassword);
+                // ---- Atributos de credenciales listos
+
                 CorreoService correoService = new CorreoService();
                 InetAddress address = null;
                 try {
@@ -560,16 +565,48 @@ public class SuperAdminController {
                 String link = request.getServerName()+":"+request.getLocalPort();
                 System.out.println(link);
                 System.out.println("servername:"+domain);
-                correoService.props(paciente.getCorreo(),passRandom, link);
+                // ---- Parámetros de envío de correo listo
 
-                user.put("correo", paciente.getCorreo());
-                user.put("pass", passRandom);
-                credenciales.add(user);
+                try {
+
+                    OkHttpClient client = new OkHttpClient();
+
+                    com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                    com.squareup.okhttp.RequestBody body = com.squareup.okhttp.RequestBody.create(mediaType, "{\"uid\":\"p-"+paciente.getIdPaciente()+"\",\"name\":\"Pac. "+paciente.getNombreYApellido()+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/2786/2786261.png\"}");
+
+                    Request r = new Request.Builder()
+                            .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
+                            .post(body)
+                            .addHeader("accept", "application/json")
+                            .addHeader("content-type", "application/json")
+                            .addHeader("apiKey", "dd589271e9972f36340008c6131756b70313cecb")
+                            .build();
+
+                    Response response = client.newCall(r).execute();
+
+                    if (response.isSuccessful()) {
+                        pacienteRepository.save(paciente);
+
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 1,1);
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 2,1);
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 3,1);
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 4,1);
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 5,1);
+
+                        credencialesRepository.crearCredenciales(paciente.getIdPaciente(), paciente.getCorreo(), encodedPassword);
+                        correoService.props(paciente.getCorreo(),passRandom, link);
+                    }
+                    else {
+                        response.body().close();
+                    }
+
+                }catch (IOException e){
+                    // Error al registrar en cometchat
+                    e.printStackTrace();
+                }
 
             });
         }
-
-        attr.addFlashAttribute("credenciales", credenciales);
 
         return "redirect:/SuperAdminHomePage/TareaPacientes";
     }

@@ -141,8 +141,8 @@
                                                     contraseña?</a>
                                             </div>
                                             <div class="col-12">
-                                                <a class="btn btn-primary w-100" type="submit" id="botonIngresar">Ingresar</a>
-                                                <!--<button class="btn btn-primary w-100" type="submit" id="botonIngresar">Ingresar</button>-->
+                                                <!--<a class="btn btn-primary w-100" type="submit" id="botonIngresar">Ingresar</a>-->
+                                                <button class="btn btn-primary w-100" type="submit" id="botonIngresar">Ingresar</button>
                                             </div>
                                             <div class="col-12">
                                                 <p class="small mb-0">¿Aún no tienes una cuenta? <a
@@ -167,7 +167,6 @@
             </div>
         </main><!-- End #main -->
 
-        <div style="display: none" id="loading"></div>
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
 
@@ -186,91 +185,6 @@
         <!-- JQuery CDN -->
         <script src="https://code.jquery.com/jquery-3.6.4.js"
                 integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-
-        <!-- CDN LOGUEO CHAT -->
-        <script
-                src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"
-                integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer"
-        ></script>
-        <script
-                src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.0/firebase.js"
-                integrity="sha512-7NBxPO/qRUrKc+Wi9GbYz0YEzMpi2UMP3mtLcswnvzI0vUFP5Jb7HNVd1V8NmEhXpSe3ZLsoGEhwRHpAZDpYPQ=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer"
-        ></script>
-
-        <script th:src="@{/chatSetup/config.js}"></script>
-        <script th:src="@{/chatSetup/firebase.js}"></script>
-
-        <script>
-            const loading = document.querySelector("#loading");
-            const emailLoginInputElement = document.getElementById("username");
-            const passwordLoginInputElement = document.getElementById("password");
-            const loginBtn = document.getElementById("botonIngresar");
-            function ocultarLoading() {
-                loading.style.display = "none";
-            }
-            function mostrarLoading() {
-                loading.style.display = "block";
-            }
-
-            // Para que <a> funcione como <button>
-            emailLoginInputElement.addEventListener("keypress", function (e){
-                if (e.key === "Enter"){
-                    loginBtn.click();
-                }
-            })
-
-            passwordLoginInputElement.addEventListener("keypress", function (e){
-                if (e.key === "Enter"){
-                    loginBtn.click();
-                }
-            })
-
-            // Logueo en Firebase y CometChat
-            loginBtn.addEventListener("click", function () {
-                mostrarLoading();
-                const email = emailLoginInputElement ? emailLoginInputElement.value : null;
-                const password = passwordLoginInputElement ? passwordLoginInputElement.value : null;
-
-                auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
-                    const userEmail = userCredential.user.email;
-                    realTimeDb.ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function (snapshot) {
-                        const val = snapshot.val();
-
-                        if (val) {
-                            const keys = Object.keys(val);
-                            const user = val[keys[0]];
-
-                            if (user && user.id) {
-                                CometChatWidget.init({
-                                    "appID": `${config.CometChatAppId}`,
-                                    "appRegion": `${config.CometChatRegion}`,
-                                    "authKey": `${config.CometChatAuthKey}`
-                                }).then(response => {
-                                    CometChatWidget.login({uid: user.id}).then((loggedInUser) => {
-                                        console.log("CometChat: Usuario logueado");
-                                        document.getElementById("loginForm").submit();
-                                        ocultarLoading();
-                                    });
-                                });
-                            } else {
-                                ocultarLoading();
-                                console.log("Búsqueda: Error");
-                            }
-                        }
-                    });
-                })
-                    .catch((error) => {
-                        ocultarLoading();
-                        document.getElementById("loginForm").submit();
-                        // Mostrar validaciones
-                        console.log("Firebase: Error")
-                    });
-            });
-        </script>
     </body>
 
 </html>

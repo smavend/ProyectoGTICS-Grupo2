@@ -8,6 +8,10 @@ import com.example.proyectogticsgrupo2.metodos.ReporteExcel;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.example.proyectogticsgrupo2.service.CorreoNuevoPaciente;
 import com.example.proyectogticsgrupo2.service.CorreoService;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.core.io.Resource;
@@ -330,12 +334,10 @@ public class AdministradorController {
     public String guardarTemporales(HttpServletRequest request, Model model,@RequestParam("usuarios") List<Integer> ids, Paciente paciente, RedirectAttributes attr) throws UnknownHostException {
         List<Temporal> pacientesTemp = temporalRepository.findAllById(ids);
 
-        List<HashMap<String, String>> credenciales = new ArrayList<>(); //Envio de credenciales a la vista
 
             //Cuanto funcione perfectamente los temporales, entonces los filtro por llenado 1
             // y usare el datablindig
             for (Temporal pacitemp : pacientesTemp){
-                HashMap<String,String> user = new HashMap<>();
 
                 paciente.setIdPaciente(pacitemp.getDni());
                 paciente.setNombre(pacitemp.getNombre());
@@ -353,23 +355,28 @@ public class AdministradorController {
                 paciente.setFoto(null);
                 paciente.setFotoname(null);
                 paciente.setFotocontenttype(null);
+                // ----- Atributos de paciente listos
+
+                /*
                 pacienteRepository.save(paciente);
                 temporalRepository.deleteById(pacitemp.getId_temporal());
                 tokenRepository.deleteById(paciente.getIdPaciente());
+                */
 
+                /*
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 1,1);
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 2,1);
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 3,1);
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 4,1);
                 ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 5,1);
+                */
 
                 String passRandom= securityConfig.generateRandomPassword();
                 PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
-                // Ahora puedes usar el passwordEncoder para codificar una contraseña
                 String encodedPassword = passwordEncoder.encode(passRandom);
-                credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
-                CorreoNuevoPaciente correoNuevoPaciente= new CorreoNuevoPaciente();
+                // ----- Atributos de credenciales listos
 
+                CorreoNuevoPaciente correoNuevoPaciente= new CorreoNuevoPaciente();
                 InetAddress address = InetAddress.getLocalHost();
                 byte[] bIPAddress = address.getAddress();
                 String sIPAddress = "";
@@ -381,22 +388,53 @@ public class AdministradorController {
                     sIPAddress += unsignedByte;
                 }
                 String link = request.getServerName()+":"+request.getLocalPort();
+                // ----- Parámetros para envío de correo listos
 
-                correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
+                // Creación de usuario en CometChat
+                try {
+                    OkHttpClient client = new OkHttpClient();
 
-                //Envio de credenciales a la vista
-                user.put("correo", paciente.getCorreo());
-                user.put("pass", passRandom);
-                credenciales.add(user);
+                    com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                    RequestBody body = RequestBody.create(mediaType, "{\"uid\":\"p-"+paciente.getIdPaciente()+"\",\"name\":\"Pac. "+paciente.getNombreYApellido()+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/2786/2786261.png\"}");
+
+                    Request r = new Request.Builder()
+                            .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
+                            .post(body)
+                            .addHeader("accept", "application/json")
+                            .addHeader("content-type", "application/json")
+                            .addHeader("apiKey", "dd589271e9972f36340008c6131756b70313cecb")
+                            .build();
+
+                    Response response = client.newCall(r).execute();
+
+                    if (response.isSuccessful()){
+                        pacienteRepository.save(paciente);
+                        temporalRepository.deleteById(pacitemp.getId_temporal());
+                        tokenRepository.deleteById(paciente.getIdPaciente());
+
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 1,1);
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 2,1);
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 3,1);
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 4,1);
+                        ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 5,1);
+
+                        credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
+                        correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
+                    }
+                    else{
+                        response.body().close();
+                    }
+
+                }catch (IOException e){
+                    // Error al registrar en Cometchat
+                    e.printStackTrace();
+                    attr.addFlashAttribute("msgPaciError", "Error en la creación de pacientes: CometChatError");
+                }
 
             }
-        List<Paciente> listaPaciente =pacienteRepository.findAll();
-        List<Doctor> listaDoctores = doctorRepository.findAll();
-        model.addAttribute("listaDoctores",listaDoctores);
-        model.addAttribute("listaPaciente", listaPaciente);
-        model.addAttribute("credenciales",credenciales);
-        model.addAttribute("msgPaci","Pacientes creados exitosamente");
-            return "administrador/dashboard";
+
+        attr.addFlashAttribute("msgPaci","Pacientes creados exitosamente");
+            return "redirect:administrador/dashboard";
 
     }
     @GetMapping("/perfil")
@@ -445,7 +483,6 @@ public class AdministradorController {
                 paciente.getSeguro()==null || paciente.getDistrito()==null || paciente.getFechanacimiento()==null){
             if(opt.isPresent()){
                 bindingResult.rejectValue("idPaciente","errorDoctor","Este DNI ya se encuentra registrado");
-
             }
             if (pacienteCorreoExist!=null) {
                 bindingResult.rejectValue("correo","errorCorreoDoc","Este correo ya se encuentra registrado");
@@ -485,14 +522,14 @@ public class AdministradorController {
             }
             paciente.setEstado(1);
             paciente.setFecharegistro(LocalDateTime.now());
-            pacienteRepository.save(paciente);
+            // ----- Atributos de paciente listos
+
             String passRandom= securityConfig.generateRandomPassword();
             PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
-            // Ahora puedes usar el passwordEncoder para codificar una contraseña
             String encodedPassword = passwordEncoder.encode(passRandom);
-            credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
-            CorreoNuevoPaciente correoNuevoPaciente = new CorreoNuevoPaciente();
+            // ----- Atributos de credenciales listos
 
+            CorreoNuevoPaciente correoNuevoPaciente = new CorreoNuevoPaciente();
             InetAddress address = InetAddress.getLocalHost();
             byte[] bIPAddress = address.getAddress();
             String sIPAddress = "";
@@ -504,22 +541,49 @@ public class AdministradorController {
                 sIPAddress += unsignedByte;
             }
             String link = request.getServerName()+":"+request.getLocalPort();
-            correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
+            // ----- Parámetros de envío de correo listos
 
-            //Envio de credenciales a la vista
-            List<HashMap<String, String>> credenciales = new ArrayList<>();
-            HashMap<String,String> user = new HashMap<>();
-            user.put("correo", paciente.getCorreo());
-            user.put("pass", passRandom);
-            credenciales.add(user);
+            // Creación de usuario en CometChat
+            try {
+                OkHttpClient client = new OkHttpClient();
 
-            List<Paciente> listaPaciente =pacienteRepository.findAll();
-            List<Doctor> listaDoctores = doctorRepository.findAll();
-            model.addAttribute("listaDoctores",listaDoctores);
-            model.addAttribute("listaPaciente", listaPaciente);
-            model.addAttribute("credenciales",credenciales);
-            model.addAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
-            return "administrador/dashboard";
+                com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                RequestBody body = RequestBody.create(mediaType, "{\"uid\":\"p-"+paciente.getIdPaciente()+"\",\"name\":\"Pac. "+paciente.getNombreYApellido()+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/2786/2786261.png\"}");
+
+                Request r = new Request.Builder()
+                        .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
+                        .post(body)
+                        .addHeader("accept", "application/json")
+                        .addHeader("content-type", "application/json")
+                        .addHeader("apiKey", "dd589271e9972f36340008c6131756b70313cecb")
+                        .build();
+
+                Response response = client.newCall(r).execute();
+
+                if (response.isSuccessful()){
+                    pacienteRepository.save(paciente);
+
+                    ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 1,1);
+                    ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 2,1);
+                    ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 3,1);
+                    ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 4,1);
+                    ppcRepository.cargarConsentimentos(paciente.getIdPaciente(), 5,1);
+
+                    credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
+                    correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
+
+                    attr.addFlashAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
+                }
+                else{
+                    response.body().close();
+                }
+
+            }catch (IOException e){
+                // Error al registrar en cometchat
+                attr.addFlashAttribute("msgPaciError","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" no pudo ser creado correctamente: CometChatError");
+                e.printStackTrace();
+            }
+            return "redirect:/administrador/dashboard";
         }
     }
     //###########################################################################
@@ -582,16 +646,14 @@ public class AdministradorController {
                 }
             }
             doctor.setEstado(1);
-            doctorRepository.save(doctor);
+            // ----- Atributos de doctor listos
 
             String passRandom= securityConfig.generateRandomPassword();
             PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
-            // Ahora puedes usar el passwordEncoder para codificar una contraseña
             String encodedPassword = passwordEncoder.encode(passRandom);
+            // ----- Atributos de credenciales listos
 
-            credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),encodedPassword);
             CorreoService correoService = new CorreoService();
-
             InetAddress address = InetAddress.getLocalHost();
             String domain = request.getServerName();
             byte[] bIPAddress = address.getAddress();
@@ -606,22 +668,41 @@ public class AdministradorController {
             String link = request.getServerName()+":"+request.getLocalPort();
             System.out.println(link);
             System.out.println("servername:"+domain);
-            correoService.props(doctor.getCorreo(),passRandom, link);
+            // ----- Parámetros de envío de correo listos
 
-            //Envio de credenciales a la vista
-            List<HashMap<String, String>> credenciales = new ArrayList<>();
-            HashMap<String,String> user = new HashMap<>();
-            user.put("correo", doctor.getCorreo());
-            user.put("pass", passRandom);
-            credenciales.add(user);
+            // Creación de usuario en CometChat
+            try {
+                OkHttpClient client = new OkHttpClient();
 
-            List<Paciente> listaPaciente =pacienteRepository.findAll();
-            List<Doctor> listaDoctores = doctorRepository.findAll();
-            model.addAttribute("listaDoctores",listaDoctores);
-            model.addAttribute("listaPaciente", listaPaciente);
-            model.addAttribute("credenciales",credenciales);
-            model.addAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
+                com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                RequestBody body = RequestBody.create(mediaType, "{\"uid\":\"d-"+doctor.getId_doctor()+"\",\"name\":\"Doc. "+doctor.getNombreYApellido()+"\",\"avatar\":\"https://www.iconpacks.net/icons/1/free-doctor-icon-313-thumb.png\"}");
 
+                Request r = new Request.Builder()
+                        .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
+                        .post(body)
+                        .addHeader("accept", "application/json")
+                        .addHeader("content-type", "application/json")
+                        .addHeader("apiKey", "dd589271e9972f36340008c6131756b70313cecb")
+                        .build();
+
+                Response response = client.newCall(r).execute();
+
+                if (response.isSuccessful()){
+                    doctorRepository.save(doctor);
+                    credencialesRepository.crearCredenciales(doctor.getId_doctor(),doctor.getCorreo(),encodedPassword);
+                    correoService.props(doctor.getCorreo(),passRandom, link);
+
+                    attr.addFlashAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
+                }
+                else{
+                    response.body().close();
+                }
+
+            }catch (IOException e){
+                // Error al registrar en cometchat
+                e.printStackTrace();
+                attr.addFlashAttribute("msgDocError", "El doctor "+doctor.getNombreYApellido()+" no pudo ser creado correctamente: CometChatError");
+            }
 
             Optional<Stylevistas> style = stylevistasRepository.findById(2);
             if (style.isPresent()) {
@@ -632,7 +713,7 @@ public class AdministradorController {
             } else {
                 // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
             }
-            return "administrador/dashboard";
+            return "redirect:/administrador/dashboard";
         }
     }
     @GetMapping("/calendario")

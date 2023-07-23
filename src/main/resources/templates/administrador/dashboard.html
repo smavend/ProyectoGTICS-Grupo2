@@ -328,6 +328,7 @@
                   <a class="btn btn-primary" th:href="@{/administrador/crearDoctor}"><i class="bi bi-person-fill-add "></i></a>
                 </div>
                 <div th:if="${msgDoc != null}" th:text="${msgDoc}" class="alert alert-success" role="alert"></div>
+              <div th:if="${msgDocError != null}" th:text="${msgDocError}" class="alert alert-danger" role="alert"></div>
               <div class="table-responsive">
                   <table class="table" id="datatable">
                     <thead>
@@ -374,6 +375,7 @@
                   <a class="btn btn-primary" th:href="@{/administrador/crearPaciente}"><i class="bi bi-person-fill-add"></i></a>
                 </div>
                 <div th:if="${msgPaci != null}" th:text="${msgPaci}" class="alert alert-success" role="alert"></div>
+              <div th:if="${msgPaciError != null}" th:text="${msgPaciError}" class="alert alert-danger" role="alert"></div>
                   <div class="table-responsive">
                     <table class="table table-hover" id="datatable2">
                     <thead>
@@ -445,51 +447,6 @@
   <script th:src="@{/chatSetup/config.js}"></script>
   <script th:src="@{/chatSetup/firebase.js}"></script>
   <script th:src="@{/assets/js/funciones_chat.js}"></script>
-
-  <script th:inline="javascript" th:if="${credenciales != null}">
-    let credenciales = [[${credenciales}]];
-    for (let i = 0; i < credenciales.length; i++) {
-      let email = credenciales[i].correo;
-      let password = credenciales[i].pass;
-      let userAvatar = "https://data-us.cometchat.io/assets/images/avatars/spiderman.png";
-      let userUuid = uuid.v4();
-
-      auth.createUserWithEmailAndPassword(email, password).then((userCrendentials) => { // guardar en FB
-        console.log("guardado en FB");
-        if (userCrendentials) {
-          realTimeDb.ref(`users/${userUuid}`).set({
-            id: userUuid,
-            email,
-            avatar: userAvatar
-          }).then(() => { // guardar en CC
-            let user = new CometChatWidget.CometChat.User(userUuid);
-            user.setName(email);
-            user.setAvatar(userAvatar);
-            console.log("guardando en CC");
-            CometChatWidget.init({
-              "appID": `${config.CometChatAppId}`,
-              "appRegion": `${config.CometChatRegion}`,
-              "authKey": `${config.CometChatAuthKey}`
-            }).then(response => {
-              CometChatWidget.createOrUpdateUser(user).then(user => {
-                console.log("guardado en CC");
-                //ocultarLoading();
-              }, error => {
-                //ocultarLoading();
-              });
-            }, error => {
-              //ocultarLoading();
-            });
-            // fin registro
-          });
-        }
-      }).catch((error) => {
-        //ocultarLoading();
-        console.log("error al registrar en FB");
-      });
-
-    }
-  </script>
 
 <script>
   var headerColorAdministrador = "[[${headerColorAdministrador}]]";
