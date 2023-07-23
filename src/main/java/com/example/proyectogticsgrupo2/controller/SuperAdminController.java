@@ -913,9 +913,8 @@ public class SuperAdminController {
             // Creación de usuario en comechat
             try {
                 OkHttpClient client = new OkHttpClient();
-
                 com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
-                com.squareup.okhttp.RequestBody body = com.squareup.okhttp.RequestBody.create(mediaType, "{\"uid\":\"x-"+dni+"\",\"name\":\"Admin. "+nombres+" "+apellidos+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/2304/2304226.png\"}");
+                com.squareup.okhttp.RequestBody body = com.squareup.okhttp.RequestBody.create(mediaType, "{\"uid\":\"x-"+dni+"\",\"name\":\"Administrador "+nombres+" "+apellidos+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/4764/4764524.png\"}");
 
                 Request r = new Request.Builder()
                         .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
@@ -956,7 +955,7 @@ public class SuperAdminController {
                 OkHttpClient client = new OkHttpClient();
 
                 com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
-                com.squareup.okhttp.RequestBody body = com.squareup.okhttp.RequestBody.create(mediaType, "{\"uid\":\"a-"+dni+"\",\"name\":\"Admin. "+nombres+" "+apellidos+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/3059/3059330.png\"}");
+                com.squareup.okhttp.RequestBody body = com.squareup.okhttp.RequestBody.create(mediaType, "{\"uid\":\"a-"+dni+"\",\"name\":\"Administrativo "+nombres+" "+apellidos+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/560/560199.png\"}");
 
                 Request r = new Request.Builder()
                         .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
