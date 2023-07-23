@@ -548,7 +548,7 @@ public class AdministradorController {
                 OkHttpClient client = new OkHttpClient();
 
                 com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(mediaType, "{\"uid\":\"p-"+paciente.getIdPaciente()+"\",\"name\":\"Pac. "+paciente.getNombreYApellido()+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/2786/2786261.png\"}");
+                RequestBody body = RequestBody.create(mediaType, "{\"uid\":\"p-"+paciente.getIdPaciente()+"\",\"name\":\"Paciente "+paciente.getNombreYApellido()+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/2786/2786261.png\"}");
 
                 Request r = new Request.Builder()
                         .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
@@ -675,7 +675,7 @@ public class AdministradorController {
                 OkHttpClient client = new OkHttpClient();
 
                 com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(mediaType, "{\"uid\":\"d-"+doctor.getId_doctor()+"\",\"name\":\"Doc. "+doctor.getNombreYApellido()+"\",\"avatar\":\"https://www.iconpacks.net/icons/1/free-doctor-icon-313-thumb.png\"}");
+                RequestBody body = RequestBody.create(mediaType, "{\"uid\":\"d-"+doctor.getId_doctor()+"\",\"name\":\"Doctor "+doctor.getNombreYApellido()+"\",\"avatar\":\"https://cdn-icons-png.flaticon.com/512/6176/6176476.png\"}");
 
                 Request r = new Request.Builder()
                         .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users")
@@ -805,7 +805,7 @@ public class AdministradorController {
             // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
         }
 
-        return "administrador/mensajeria2";
+        return "administrador/mensajeria";
 
 
 

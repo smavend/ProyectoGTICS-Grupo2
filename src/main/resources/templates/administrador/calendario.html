@@ -1,667 +1,690 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Calendario - Administrador</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link th:href="@{/assets/img/favicon.png}" rel="icon">
-  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
-  <!-- Vendor CSS Files -->
-  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <!--<link th:href="@{/assets/css/style.css}" rel="stylesheet"> -->
-  <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
-
-</head>
-
-<!-- =======================================================
-* Template Name: NiceAdmin
-* Updated: Mar 09 2023 with Bootstrap v5.2.3
-* Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-= --><!-- CDN CometChat -->
-    <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
-</head>
-
-<body>
-
-<!-- ======= Header ======= -->
-<header id="header" class="header fixed-top d-flex align-items-center">
-
-  <div class="d-flex align-items-center justify-content-between">
-
-    <a href="index}" class="logo d-flex align-items-center">
-      <img th:src="@{/assets/img/logo.png}" alt="">
-      <span class="d-none d-lg-block">Clinica INTERPUCP</span>
-    </a>
-    <i class="bi bi-list toggle-sidebar-btn"></i>
-  </div><!-- End Logo -->
-
-
-
-  <nav class="header-nav ms-auto">
-    <ul class="d-flex align-items-center">
-
-      <li class="nav-item dropdown me-3">
-        <div th:if="${session.superAdminLogueadoComoAdministrador}">
-          <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin_being_Administrador}" method="POST">
-            <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Volver a SuperAdmin">
-              <i class="fas fa-home"></i>
-            </button>
-          </form>
-        </div>
-      </li>
-
-      <!--<li class="nav-item dropdown">
-			<div class="form-check form-switch">
-			<input class="form-check-input" type="checkbox" id="darkModeSwitch">
-			<label class="form-check-label" for="darkModeSwitch"></label>
-			</div>
-
-		</li>-->
-      <li class="nav-item dropdown">
-
-        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-          <i class="bi bi-bell"></i>
-          <span class="badge bg-primary badge-number">4</span>
-        </a><!-- End Notification Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-          <li class="dropdown-header">
-            You have 4 new notifications
-            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-exclamation-circle text-warning"></i>
-            <div>
-              <h4>Lorem Ipsum</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>30 min. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-x-circle text-danger"></i>
-            <div>
-              <h4>Atque rerum nesciunt</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>1 hr. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-check-circle text-success"></i>
-            <div>
-              <h4>Sit rerum fuga</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>2 hrs. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-info-circle text-primary"></i>
-            <div>
-              <h4>Dicta reprehenderit</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>4 hrs. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li class="dropdown-footer">
-            <a href="#">Show all notifications</a>
-          </li>
-
-        </ul><!-- End Notification Dropdown Items -->
-
-      </li><!-- End Notification Nav -->
-
-      <li class="nav-item dropdown">
-
-        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-          <i class="bi bi-chat-left-text"></i>
-          <span class="badge bg-success badge-number">3</span>
-        </a><!-- End Messages Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-          <li class="dropdown-header">
-            You have 3 new messages
-            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="message-item">
-            <a href="#">
-              <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
-              <div>
-                <h4>Maria Hudson</h4>
-                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="message-item">
-            <a href="#">
-              <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
-              <div>
-                <h4>Anna Nelson</h4>
-                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                <p>6 hrs. ago</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="message-item">
-            <a href="#">
-              <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
-              <div>
-                <h4>David Muldon</h4>
-                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                <p>8 hrs. ago</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="dropdown-footer">
-            <a th:href="@{/administrador/mensajeria2}">Ver todos los mensajes</a>
-          </li>
-
-        </ul><!-- End Messages Dropdown Items -->
-
-      </li><!-- End Messages Nav -->
-
-      <li class="nav-item dropdown pe-3">
-
-        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img th:src="@{/assets/img/userPorDefecto.jpg}" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2"th:text="'Admin, '+${session.administrador.nombre}">J. Dominguez</span>
-        </a><!-- End Profile Iamge Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-          <li class="dropdown-header">
-            <h6>Jorge Dominguez</h6>
-            <span>Administrador de sede</span>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-         <!---->
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/config}">
-              <i class="bi bi-gear"></i>
-              <span>Configuraciones</span>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <form th:action="@{/logout}" method="post">
-              <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Cerrar Sesión</span>
-              </button>
-            </form>
-          </li>
-
-        </ul><!-- End Profile Dropdown Items -->
-      </li><!-- End Profile Nav -->
-
-    </ul>
-  </nav><!-- End Icons Navigation -->
-
-</header><!-- End Header -->
-
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar">
-
-  <ul class="sidebar-nav" id="sidebar-nav">
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/administrador/dashboard}">
-        <i class="bi bi-grid"></i>
-        <span>Dashboard</span>
-      </a>
-    </li><!-- End Dashboard Nav -->
-    <li class="nav-item">
-      <a class="nav-link collapsed " th:href="@{/administrador/finanzas}">
-        <i class="bi bi-bar-chart"></i>
-        <span>Finanzas</span>
-      </a>
-    </li><!-- End Profile Page Nav -->
-    <li class="nav-item">
-      <a class="nav-link " th:href="@{/administrador/calendario}">
-        <i class="bi bi-card-list"></i>
-        <span>Calendario General</span>
-      </a>
-    </li><!-- End Profile Page Nav -->
-    <a class="nav-link collapsed" th:href="@{/administrador/mensajeria2}">
-      <i class="bi bi-wechat"></i>
-      <span>Mensajería</span>
-    </a>
-    </li>
-     <li class="nav-item">
-      <a class="nav-link collapsed " th:href="@{/administrador/registro}">
-        <i class="bi bi-ui-checks"></i>
-        <span>Registro Masivo</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link  collapsed" th:href="@{/administrador/config}">
-        <i class="bi bi-gear"></i>
-        <span>Configuraciones</span>
-      </a>
-    </li>
-  </ul>
-  <div  style="border: 3px; padding: 10px; border-radius: 5px; background-color: #F5F5F5;">
-    <div class="pagetitle">
-      <h1>Leyenda:</h1>
-    </div>
-    <p><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: rgb(55, 154, 184); margin-right: 5px;"></span>Cita virtual</p>
-    <p><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #86C69B; margin-right: 5px;"></span>Cita presencial</p>
-  </div>
-
-
-</aside><!-- End Sidebar-->
-
-<main id="main" class="main">
-
-
-  <section class="section dashboard">
-
-    <div>
-      <div class="row bg-white p-3">
-
-        <!-- FUNCIONAMIENTO DE CALENDARIO -->
-        <div id='calendar'></div>
-        <!-- Código HTML para las citas presenciales -->
-        <div th:each="cita, citaIndex : ${citasPresenciales}">
-          <input th:id="'citaInicioPresencial' + ${citaIndex.index}"
-                 type="hidden" th:value="${cita.inicio}"/>
-          <input th:id="'citaPresencialModalidad' + ${citaIndex.index}"
-                 type="hidden" th:value="${cita.modalidad}"/>
-          <input th:id="'citaPresencialIndex' + ${citaIndex.index}"
-                 type="hidden" th:value="${citaIndex.index}"/>
-          <input th:id="'citaPresencialApellido' + ${citaIndex.index}"
-                 type="hidden" th:value="${cita.paciente.apellidos}"/>
-        </div>
-
-        <!-- Código HTML para las citas virtuales -->
-        <div th:each="cita, citaIndex : ${citasVirtuales}">
-          <input th:id="'citaInicioVirtual' + ${citaIndex.index}" type="hidden"
-                 th:value="${cita.inicio}"/>
-          <input th:id="'citaVirtualModalidad' + ${citaIndex.index}"
-                 type="hidden" th:value="${cita.modalidad}"/>
-          <input th:id="'citaVirtualIndex' + ${citaIndex.index}"
-                 type="hidden" th:value="${citaIndex.index}"/>
-          <input th:id="'citaVirtualApellido' + ${citaIndex.index}"
-                 type="hidden" th:value="${cita.paciente.apellidos}"/>
-        </div>
-
-        <input id="contadorPresencial" type="hidden" th:value="${cantidadCitasPresenciales}">
-        <input id="contadorVirtual" type="hidden" th:value="${cantidadCitasVirtuales}">
-
-
-        <div th:each="cita, citaIndex : ${citasPresenciales}">
-          <button th:id="'popupPresencial' + ${citaIndex.index}" style="display: none;" type="button" class="btn btn-primary"
-                  data-bs-toggle="modal" th:data-bs-target="'#myModalPresencial' + ${citaIndex.index}">
-            Abrir Pop-up
-          </button>
-
-          <div class="modal fade" th:id="'myModalPresencial' + ${citaIndex.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <img style="height: 60px"
-                       th:src="@{/assets/img/logoClinicaPNG.png}"
-                       alt="Logo de la clínica">
-                  <h1 class="modal-title fs-5 tituloNavBar">Clínica INTERPUCP</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+        <title>Calendario - Administrador</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+
+        <!-- Favicons -->
+        <link th:href="@{/assets/img/favicon.png}" rel="icon">
+        <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+        <!-- Vendor CSS Files -->
+        <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+        <!-- Template Main CSS File -->
+        <!--<link th:href="@{/assets/css/style.css}" rel="stylesheet"> -->
+        <link th:href="@{/assets/css/styleadministrador.css}" rel="stylesheet">
+
+    </head>
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Mar 09 2023 with Bootstrap v5.2.3
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    = -->
+    </head>
+
+    <body>
+
+        <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top d-flex align-items-center">
+
+            <div class="d-flex align-items-center justify-content-between">
+
+                <a href="index}" class="logo d-flex align-items-center">
+                    <img th:src="@{/assets/img/logo.png}" alt="">
+                    <span class="d-none d-lg-block">Clinica INTERPUCP</span>
+                </a>
+                <i class="bi bi-list toggle-sidebar-btn"></i>
+            </div><!-- End Logo -->
+
+
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+
+                    <li class="nav-item dropdown me-3">
+                        <div th:if="${session.superAdminLogueadoComoAdministrador}">
+                            <form th:action="@{/SuperAdminHomePage/returnToSuperAdmin_being_Administrador}"
+                                  method="POST">
+                                <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" title="Volver a SuperAdmin">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+
+                    <!--<li class="nav-item dropdown">
+                          <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+                          <label class="form-check-label" for="darkModeSwitch"></label>
+                          </div>
+
+                      </li>-->
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-primary badge-number">4</span>
+                        </a><!-- End Notification Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                            <li class="dropdown-header">
+                                You have 4 new notifications
+                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="notification-item">
+                                <i class="bi bi-exclamation-circle text-warning"></i>
+                                <div>
+                                    <h4>Lorem Ipsum</h4>
+                                    <p>Quae dolorem earum veritatis oditseno</p>
+                                    <p>30 min. ago</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="notification-item">
+                                <i class="bi bi-x-circle text-danger"></i>
+                                <div>
+                                    <h4>Atque rerum nesciunt</h4>
+                                    <p>Quae dolorem earum veritatis oditseno</p>
+                                    <p>1 hr. ago</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="notification-item">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <div>
+                                    <h4>Sit rerum fuga</h4>
+                                    <p>Quae dolorem earum veritatis oditseno</p>
+                                    <p>2 hrs. ago</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="notification-item">
+                                <i class="bi bi-info-circle text-primary"></i>
+                                <div>
+                                    <h4>Dicta reprehenderit</h4>
+                                    <p>Quae dolorem earum veritatis oditseno</p>
+                                    <p>4 hrs. ago</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="dropdown-footer">
+                                <a href="#">Show all notifications</a>
+                            </li>
+
+                        </ul><!-- End Notification Dropdown Items -->
+
+                    </li><!-- End Notification Nav -->
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-chat-left-text"></i>
+                            <span class="badge bg-success badge-number">3</span>
+                        </a><!-- End Messages Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                            <li class="dropdown-header">
+                                You have 3 new messages
+                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>Maria Hudson</h4>
+                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>4 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>Anna Nelson</h4>
+                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>6 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>David Muldon</h4>
+                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>8 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="dropdown-footer">
+                                <a th:href="@{/administrador/mensajeria2}">Ver todos los mensajes</a>
+                            </li>
+
+                        </ul><!-- End Messages Dropdown Items -->
+
+                    </li><!-- End Messages Nav -->
+
+                    <li class="nav-item dropdown pe-3">
+
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                           data-bs-toggle="dropdown">
+                            <img th:src="@{/assets/img/userPorDefecto.jpg}" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2"
+                                  th:text="'Admin, '+${session.administrador.nombre}">J. Dominguez</span>
+                        </a><!-- End Profile Iamge Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6>Jorge Dominguez</h6>
+                                <span>Administrador de sede</span>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <!---->
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" th:href="@{/administrador/config}">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Configuraciones</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button type="submit" class="dropdown-item d-flex align-items-center" href="#">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        <span>Cerrar Sesión</span>
+                                    </button>
+                                </form>
+                            </li>
+
+                        </ul><!-- End Profile Dropdown Items -->
+                    </li><!-- End Profile Nav -->
+
+                </ul>
+            </nav><!-- End Icons Navigation -->
+
+        </header><!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <aside id="sidebar" class="sidebar">
+
+            <ul class="sidebar-nav" id="sidebar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/administrador/dashboard}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed " th:href="@{/administrador/finanzas}">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>Finanzas</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+                <li class="nav-item">
+                    <a class="nav-link " th:href="@{/administrador/calendario}">
+                        <i class="bi bi-card-list"></i>
+                        <span>Calendario General</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+                <a class="nav-link collapsed" th:href="@{/administrador/mensajeria2}">
+                    <i class="bi bi-wechat"></i>
+                    <span>Mensajería</span>
+                </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed " th:href="@{/administrador/registro}">
+                        <i class="bi bi-ui-checks"></i>
+                        <span>Registro Masivo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  collapsed" th:href="@{/administrador/config}">
+                        <i class="bi bi-gear"></i>
+                        <span>Configuraciones</span>
+                    </a>
+                </li>
+            </ul>
+            <div style="border: 3px; padding: 10px; border-radius: 5px; background-color: #F5F5F5;">
+                <div class="pagetitle">
+                    <h1>Leyenda:</h1>
                 </div>
-                <div class="modal-body">
-                  <div class="row informacionModal">
-                    <div class="col-6">
-                      <p>Nombres y apellidos:<span class="informacionModalDato"
-                                                   th:text="${cita.paciente.getNombreYApellido()}"></span>
-                      </p>
-                      <p>Seguro:<span class="informacionModalDato"
-                                      th:text="${cita.paciente.seguro.nombre}"></span></p>
-                      <p>Teléfono:<span class="informacionModalDato"
-                                        th:text="${cita.paciente.telefono}"></span></p>
-                    </div>
-                    <div class="col-6">
-                      <p>Fecha de nacimiento:<span class="informacionModalDato"
-                                                   th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}"></span>
-                      </p>
-                      <p>Dirección:<span
-                              class="informacionModalDato" th:text="${cita.paciente.direccion}"></span>
-                      </p>
-                      <p>Correo:<span class="informacionModalDato" th:text="${cita.paciente.correo}"></span>
-                      </p>
-                    </div>
-
-                  </div>
-
-                  <span class="textoModal"
-                        th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
-                  <div class="row informacionModal">
-                    <div class="col-6">
-                      <p>Especialidad:<span class="informacionModalDato"
-                                            th:text="${cita.doctor.especialidad.nombre}"></span>
-                      </p>
-                      <p>Tipo de cita:<span class="informacionModalDato"
-                                            th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
-                      </p>
-
-                    </div>
-                    <div class="col-6">
-                      <p>Doctor:<span class="informacionModalDato"
-                                      th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}"></span>
-                      </p>
-                      <p>Sede:<span
-                              class="informacionModalDato"
-                              th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}"></span>
-                      </p>
-
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-              </div>
+                <p><span
+                        style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: rgb(55, 154, 184); margin-right: 5px;"></span>Cita
+                    virtual</p>
+                <p><span
+                        style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #86C69B; margin-right: 5px;"></span>Cita
+                    presencial</p>
             </div>
-          </div>
-        </div>
 
-        <div th:each="cita, citaIndex : ${citasVirtuales}">
-          <button th:id="'popupVirtual' + ${citaIndex.index}" style="display: none;" type="button" class="btn btn-primary"
-                  data-bs-toggle="modal" th:data-bs-target="'#myModalVirtual' + ${citaIndex.index}">
-            Abrir Pop-up
-          </button>
 
-          <div class="modal fade" th:id="'myModalVirtual' + ${citaIndex.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <img style="height: 60px"
-                       th:src="@{/assets/img/logoClinicaPNG.png}"
-                       alt="Logo de la clínica">
-                  <h1 class="modal-title fs-5 tituloNavBar">Clínica INTERPUCP</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </aside><!-- End Sidebar-->
+
+        <main id="main" class="main">
+
+
+            <section class="section dashboard">
+
+                <div>
+                    <div class="row bg-white p-3">
+
+                        <!-- FUNCIONAMIENTO DE CALENDARIO -->
+                        <div id='calendar'></div>
+                        <!-- Código HTML para las citas presenciales -->
+                        <div th:each="cita, citaIndex : ${citasPresenciales}">
+                            <input th:id="'citaInicioPresencial' + ${citaIndex.index}"
+                                   type="hidden" th:value="${cita.inicio}"/>
+                            <input th:id="'citaPresencialModalidad' + ${citaIndex.index}"
+                                   type="hidden" th:value="${cita.modalidad}"/>
+                            <input th:id="'citaPresencialIndex' + ${citaIndex.index}"
+                                   type="hidden" th:value="${citaIndex.index}"/>
+                            <input th:id="'citaPresencialApellido' + ${citaIndex.index}"
+                                   type="hidden" th:value="${cita.paciente.apellidos}"/>
+                        </div>
+
+                        <!-- Código HTML para las citas virtuales -->
+                        <div th:each="cita, citaIndex : ${citasVirtuales}">
+                            <input th:id="'citaInicioVirtual' + ${citaIndex.index}" type="hidden"
+                                   th:value="${cita.inicio}"/>
+                            <input th:id="'citaVirtualModalidad' + ${citaIndex.index}"
+                                   type="hidden" th:value="${cita.modalidad}"/>
+                            <input th:id="'citaVirtualIndex' + ${citaIndex.index}"
+                                   type="hidden" th:value="${citaIndex.index}"/>
+                            <input th:id="'citaVirtualApellido' + ${citaIndex.index}"
+                                   type="hidden" th:value="${cita.paciente.apellidos}"/>
+                        </div>
+
+                        <input id="contadorPresencial" type="hidden" th:value="${cantidadCitasPresenciales}">
+                        <input id="contadorVirtual" type="hidden" th:value="${cantidadCitasVirtuales}">
+
+
+                        <div th:each="cita, citaIndex : ${citasPresenciales}">
+                            <button th:id="'popupPresencial' + ${citaIndex.index}" style="display: none;" type="button"
+                                    class="btn btn-primary"
+                                    data-bs-toggle="modal"
+                                    th:data-bs-target="'#myModalPresencial' + ${citaIndex.index}">
+                                Abrir Pop-up
+                            </button>
+
+                            <div class="modal fade" th:id="'myModalPresencial' + ${citaIndex.index}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <img style="height: 60px"
+                                                 th:src="@{/assets/img/logoClinicaPNG.png}"
+                                                 alt="Logo de la clínica">
+                                            <h1 class="modal-title fs-5 tituloNavBar">Clínica INTERPUCP</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row informacionModal">
+                                                <div class="col-6">
+                                                    <p>Nombres y apellidos:<span class="informacionModalDato"
+                                                                                 th:text="${cita.paciente.getNombreYApellido()}"></span>
+                                                    </p>
+                                                    <p>Seguro:<span class="informacionModalDato"
+                                                                    th:text="${cita.paciente.seguro.nombre}"></span></p>
+                                                    <p>Teléfono:<span class="informacionModalDato"
+                                                                      th:text="${cita.paciente.telefono}"></span></p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p>Fecha de nacimiento:<span class="informacionModalDato"
+                                                                                 th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}"></span>
+                                                    </p>
+                                                    <p>Dirección:<span
+                                                            class="informacionModalDato"
+                                                            th:text="${cita.paciente.direccion}"></span>
+                                                    </p>
+                                                    <p>Correo:<span class="informacionModalDato"
+                                                                    th:text="${cita.paciente.correo}"></span>
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+                                            <span class="textoModal"
+                                                  th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                            <div class="row informacionModal">
+                                                <div class="col-6">
+                                                    <p>Especialidad:<span class="informacionModalDato"
+                                                                          th:text="${cita.doctor.especialidad.nombre}"></span>
+                                                    </p>
+                                                    <p>Tipo de cita:<span class="informacionModalDato"
+                                                                          th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
+                                                    </p>
+
+                                                </div>
+                                                <div class="col-6">
+                                                    <p>Doctor:<span class="informacionModalDato"
+                                                                    th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}"></span>
+                                                    </p>
+                                                    <p>Sede:<span
+                                                            class="informacionModalDato"
+                                                            th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}"></span>
+                                                    </p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Cerrar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div th:each="cita, citaIndex : ${citasVirtuales}">
+                            <button th:id="'popupVirtual' + ${citaIndex.index}" style="display: none;" type="button"
+                                    class="btn btn-primary"
+                                    data-bs-toggle="modal" th:data-bs-target="'#myModalVirtual' + ${citaIndex.index}">
+                                Abrir Pop-up
+                            </button>
+
+                            <div class="modal fade" th:id="'myModalVirtual' + ${citaIndex.index}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <img style="height: 60px"
+                                                 th:src="@{/assets/img/logoClinicaPNG.png}"
+                                                 alt="Logo de la clínica">
+                                            <h1 class="modal-title fs-5 tituloNavBar">Clínica INTERPUCP</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row informacionModal">
+                                                <div class="col-6">
+                                                    <p>Nombres y apellidos:<span class="informacionModalDato"
+                                                                                 th:text="${cita.paciente.getNombreYApellido()}"></span>
+                                                    </p>
+                                                    <p>Seguro:<span class="informacionModalDato"
+                                                                    th:text="${cita.paciente.seguro.nombre}"></span></p>
+                                                    <p>Teléfono:<span class="informacionModalDato"
+                                                                      th:text="${cita.paciente.telefono}"></span></p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p>Fecha de nacimiento:<span class="informacionModalDato"
+                                                                                 th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}"></span>
+                                                    </p>
+                                                    <p>Dirección:<span
+                                                            class="informacionModalDato"
+                                                            th:text="${cita.paciente.direccion}"></span>
+                                                    </p>
+                                                    <p>Correo:<span class="informacionModalDato"
+                                                                    th:text="${cita.paciente.correo}"></span>
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                            <span class="textoModal"
+                                                  th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                            <div class="row informacionModal">
+                                                <div class="col-6">
+                                                    <p>Especialidad:<span class="informacionModalDato"
+                                                                          th:text="${cita.doctor.especialidad.nombre}"></span>
+                                                    </p>
+                                                    <p>Tipo de cita:<span class="informacionModalDato"
+                                                                          th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
+                                                    </p>
+
+                                                </div>
+                                                <div class="col-6">
+                                                    <p>Doctor:<span class="informacionModalDato"
+                                                                    th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}"></span>
+                                                    </p>
+                                                    <p>Sede:<span
+                                                            class="informacionModalDato"
+                                                            th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}"></span>
+                                                    </p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Cerrar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                var calendarEl = document.getElementById('calendar');
+                                var eventsPresencial = [];
+                                var eventsVirtual = [];
+                                var cantidadCitasPresenciales = document.getElementById('contadorPresencial').value;
+                                var cantidadCitasVirtuales = document.getElementById('contadorVirtual').value;
+
+                                for (var i = 0; i < parseInt(cantidadCitasPresenciales); i++) {
+                                    eventsPresencial.push({
+                                        start: document.getElementById('citaInicioPresencial' + i).value,
+                                        color: '#86C69B',
+                                        title: '- ' + document.getElementById('citaPresencialApellido' + i).value,
+                                        modalidad: document.getElementById('citaPresencialModalidad' + i).value,
+                                        index: document.getElementById('citaPresencialIndex' + i).value,
+                                    });
+
+                                }
+
+                                for (var j = 0; j < parseInt(cantidadCitasVirtuales); j++) {
+                                    eventsVirtual.push({
+                                        start: document.getElementById('citaInicioVirtual' + j).value,
+                                        color: '#379AB8',
+                                        title: '- ' + document.getElementById('citaVirtualApellido' + j).value,
+                                        modalidad: document.getElementById('citaVirtualModalidad' + j).value,
+                                        index: document.getElementById('citaVirtualIndex' + j).value,
+                                    });
+                                }
+
+                                var events = eventsPresencial.concat(eventsVirtual);
+
+                                var calendar = new FullCalendar.Calendar(calendarEl, {
+                                    eventTimeFormat: {
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        meridiem: 'short'
+                                    },
+                                    headerToolbar: {
+                                        left: 'prev,next today',
+                                        center: 'title',
+                                        right: 'dayGridMonth'
+                                    },
+                                    navLinks: true,
+                                    selectable: true,
+                                    selectMirror: true,
+                                    select: function (arg) {
+
+                                    },
+                                    eventClick: function (arg) {
+
+                                        var eventInfo = {
+                                            start: arg.event.extendedProps.start,
+                                            color: arg.event.backgroundColor,
+                                            title: arg.event.title,
+                                            modalidad: arg.event.extendedProps.modalidad,
+                                            index: arg.event.extendedProps.index,
+                                        };
+
+                                        if (eventInfo.modalidad === '1') {
+                                            var indexValue = arg.event.extendedProps.index;
+                                            var botonPrincipal = document.getElementById("popupVirtual" + indexValue);
+                                            botonPrincipal.click();
+                                        } else if (eventInfo.modalidad === '0') {
+                                            var indexValue = arg.event.extendedProps.index;
+                                            var botonPrincipal = document.getElementById("popupPresencial" + indexValue);
+                                            botonPrincipal.click();
+                                        }
+
+                                    },
+
+                                    eventMouseEnter: function (arg) {
+                                        arg.el.style.cursor = 'pointer';
+                                    },
+                                    eventMouseLeave: function (arg) {
+                                        arg.el.style.cursor = '';
+                                    },
+                                    editable: false,
+                                    dayMaxEvents: true,
+                                    events: events
+                                });
+
+                                calendar.render();
+                            });
+
+                        </script>
+
+
+                        <!-- FIN DE FUNCIONAMIENTO DE CALENDARIO -->
+                    </div>
                 </div>
-                <div class="modal-body">
-                  <div class="row informacionModal">
-                    <div class="col-6">
-                      <p>Nombres y apellidos:<span class="informacionModalDato"
-                                                   th:text="${cita.paciente.getNombreYApellido()}"></span>
-                      </p>
-                      <p>Seguro:<span class="informacionModalDato"
-                                      th:text="${cita.paciente.seguro.nombre}"></span></p>
-                      <p>Teléfono:<span class="informacionModalDato"
-                                        th:text="${cita.paciente.telefono}"></span></p>
-                    </div>
-                    <div class="col-6">
-                      <p>Fecha de nacimiento:<span class="informacionModalDato"
-                                                   th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}"></span>
-                      </p>
-                      <p>Dirección:<span
-                              class="informacionModalDato" th:text="${cita.paciente.direccion}"></span>
-                      </p>
-                      <p>Correo:<span class="informacionModalDato" th:text="${cita.paciente.correo}"></span>
-                      </p>
-                    </div>
+            </section>
 
-                  </div>
-                  <span class="textoModal"
-                        th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
-                  <div class="row informacionModal">
-                    <div class="col-6">
-                      <p>Especialidad:<span class="informacionModalDato"
-                                            th:text="${cita.doctor.especialidad.nombre}"></span>
-                      </p>
-                      <p>Tipo de cita:<span class="informacionModalDato"
-                                            th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
-                      </p>
+        </main><!-- End #main -->
 
-                    </div>
-                    <div class="col-6">
-                      <p>Doctor:<span class="informacionModalDato"
-                                      th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}"></span>
-                      </p>
-                      <p>Sede:<span
-                              class="informacionModalDato"
-                              th:text="${cita.sede.nombre}+' / '+${cita.sede.direccion}"></span>
-                      </p>
+        <!-- ======= Footer ======= -->
+        <footer id="footer" class="footer">
 
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-              </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+
             </div>
-          </div>
-        </div>
+        </footer><!-- End Footer -->
+
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a>
+
+        <!-- Vendor JS Files -->
+        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+        <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
+
+
+        <!-- Template Main JS File -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
+        <!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
 
         <script>
-          document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-            var eventsPresencial = [];
-            var eventsVirtual = [];
-            var cantidadCitasPresenciales = document.getElementById('contadorPresencial').value;
-            var cantidadCitasVirtuales = document.getElementById('contadorVirtual').value;
+            var headerColorAdministrador = "[[${headerColorAdministrador}]]";
+            localStorage.setItem('headerColorAdministrador', headerColorAdministrador);
 
-            for (var i = 0; i < parseInt(cantidadCitasPresenciales); i++) {
-              eventsPresencial.push({
-                start: document.getElementById('citaInicioPresencial' + i).value,
-                color: '#86C69B',
-                title: '- ' + document.getElementById('citaPresencialApellido' + i).value,
-                modalidad: document.getElementById('citaPresencialModalidad' + i).value,
-                index: document.getElementById('citaPresencialIndex' + i).value,
-              });
-
+            function updateHeaderColorAdministrador() {
+                var color = headerColorAdministrador;
+                document.getElementById('header').style.backgroundColor = color;
             }
 
-            for (var j = 0; j < parseInt(cantidadCitasVirtuales); j++) {
-              eventsVirtual.push({
-                start: document.getElementById('citaInicioVirtual' + j).value,
-                color: '#379AB8',
-                title: '- ' + document.getElementById('citaVirtualApellido' + j).value,
-                modalidad: document.getElementById('citaVirtualModalidad' + j).value,
-                index: document.getElementById('citaVirtualIndex' + j).value,
-              });
-            }
-
-            var events = eventsPresencial.concat(eventsVirtual);
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-              eventTimeFormat: {
-                hour: 'numeric',
-                minute: '2-digit',
-                meridiem: 'short'
-              },
-              headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth'
-              },
-              navLinks: true,
-              selectable: true,
-              selectMirror: true,
-              select: function (arg) {
-
-              },
-              eventClick: function (arg) {
-
-                var eventInfo = {
-                  start: arg.event.extendedProps.start,
-                  color: arg.event.backgroundColor,
-                  title: arg.event.title,
-                  modalidad: arg.event.extendedProps.modalidad,
-                  index: arg.event.extendedProps.index,
-                };
-
-                if(eventInfo.modalidad=== '1'){
-                  var indexValue = arg.event.extendedProps.index;
-                  var botonPrincipal = document.getElementById("popupVirtual"+indexValue);
-                  botonPrincipal.click();
-                }else if (eventInfo.modalidad=== '0'){
-                  var indexValue = arg.event.extendedProps.index;
-                  var botonPrincipal = document.getElementById("popupPresencial"+indexValue);
-                  botonPrincipal.click();
-                }
-
-              },
-
-              eventMouseEnter: function (arg) {
-                arg.el.style.cursor = 'pointer';
-              },
-              eventMouseLeave: function (arg) {
-                arg.el.style.cursor = '';
-              },
-              editable: false,
-              dayMaxEvents: true,
-              events: events
-            });
-
-            calendar.render();
-          });
-
+            updateHeaderColorAdministrador();
         </script>
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/jsAdministrador.js}"></script>
+        <script th:src="@{/assets/js/index.js}"></script>
+        <script th:src="@{/assets/js/datatables.js}"></script>
+        <script th:src="@{/assets/js/moment.js}"></script>
+        <script>
+            function toggleDiv() {
+                var div = document.getElementById("miDiv");
+                div.classList.toggle("show");
 
-
-        <!-- FIN DE FUNCIONAMIENTO DE CALENDARIO -->
-      </div>
-    </div>
-  </section>
-
-</main><!-- End #main --><th:block th:replace="~{paciente/fragments/scripts.html::chatGeneral}"></th:block>
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-
-  <div class="credits">
-    <!-- All the links in the footer should remain intact. -->
-    <!-- You can delete the links only if you purchased the pro version. -->
-    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-
-  </div>
-</footer><!-- End Footer -->
-
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-        class="bi bi-arrow-up-short"></i></a>
-
-<!-- Vendor JS Files -->
-<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-<!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
-
-
-<!-- Template Main JS File -->
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-<!-- Agregamos las librerías de jQuery y Bootstrap 5 -->
-
-<script>
-  var headerColorAdministrador = "[[${headerColorAdministrador}]]";
-  localStorage.setItem('headerColorAdministrador', headerColorAdministrador);
-
-  function updateHeaderColorAdministrador() {
-    var color = headerColorAdministrador;
-    document.getElementById('header').style.backgroundColor = color;
-  }
-
-  updateHeaderColorAdministrador();
-</script>
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/jsAdministrador.js}"></script>
-<script th:src="@{/assets/js/index.js}"></script>
-<script th:src="@{/assets/js/datatables.js}"></script>
-<script th:src="@{/assets/js/moment.js}"></script>
-<script>
-  function toggleDiv() {
-    var div = document.getElementById("miDiv");
-    div.classList.toggle("show");
-
-    if (!div.classList.contains("show")) {
-      div.style.height = "0";
-    } else {
-      div.style.height = "auto";
-    }
-  }
-</script>
-</body>
+                if (!div.classList.contains("show")) {
+                    div.style.height = "0";
+                } else {
+                    div.style.height = "auto";
+                }
+            }
+        </script>
+    </body>
 
 </html>
