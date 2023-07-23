@@ -1,193 +1,203 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Editar formulario de referido</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+        <title>Editar formulario de referido</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
 
-  <!-- Favicons -->
-  <link th:href="@{/assets/img/favicon.png}" rel="icon">
-  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+        <!-- Favicons -->
+        <link th:href="@{/assets/img/favicon.png}" rel="icon">
+        <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <!-- Google Fonts -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-  <!-- Vendor CSS Files -->
-  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+        <!-- Vendor CSS Files -->
+        <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+        <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
-  <!-- Template Main CSS File -->
-  <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
-  <!-- CDN CometChat -->
-  <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+        <!-- Template Main CSS File -->
+        <link th:href="@{/assets/css/style_administrativo.css}" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Updated: Mar 09 2023 with Bootstrap v5.2.3
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-</head>
+        <!-- =======================================================
+        * Template Name: NiceAdmin
+        * Updated: Mar 09 2023 with Bootstrap v5.2.3
+        * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+        * Author: BootstrapMade.com
+        * License: https://bootstrapmade.com/license/
+        ======================================================== -->
+    </head>
 
-<body>
+    <body>
 
-<!-- ======= Header ======= -->
-<div th:replace="~{administrativo/fragments/header.html :: header}"></div>
-<!-- End Header -->
+        <!-- ======= Header ======= -->
+        <div th:replace="~{administrativo/fragments/header.html :: header}"></div>
+        <!-- End Header -->
 
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar">
+        <!-- ======= Sidebar ======= -->
+        <aside id="sidebar" class="sidebar">
 
-  <ul class="sidebar-nav" id="sidebar-nav">
+            <ul class="sidebar-nav" id="sidebar-nav">
 
-    <li class="nav-item">
-      <a class="nav-link " th:href="@{/administrativo}">
-        <i class="bi bi-grid"></i>
-        <span>Dashboard</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link collapsed" th:href="@{/administrativo/mensajeria}">
-        <i class="bi bi-people"></i>
-        <span>Mensajería</span>
-      </a>
-    </li><!-- End Dashboard Nav -->
-    </li><!-- End Dashboard Nav -->
+                <li class="nav-item">
+                    <a class="nav-link " th:href="@{/administrativo}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:href="@{/administrativo/mensajeria}">
+                        <i class="bi bi-people"></i>
+                        <span>Mensajería</span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+                </li><!-- End Dashboard Nav -->
 
-  </ul>
+            </ul>
 
-</aside><!-- End Sidebar-->
+        </aside><!-- End Sidebar-->
 
-<main id="main" class="main">
+        <main id="main" class="main">
 
-  <div class="pagetitle">
-    <h1>Editar formulario de referido</h1>
-    <nav>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a>Administrativo</a></li>
-        <li class="breadcrumb-item"><a th:href="@{/administrativo}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Editar</li>
-      </ol>
-    </nav>
-  </div><!-- End Page Title -->
+            <div class="pagetitle">
+                <h1>Editar formulario de referido</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a>Administrativo</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/administrativo}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Editar</li>
+                    </ol>
+                </nav>
+            </div><!-- End Page Title -->
 
-  <section class="section">
-    <div class="row">
-      <div class="col-lg-10 container">
+            <section class="section">
+                <div class="row">
+                    <div class="col-lg-10 container">
 
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title" th:inline="text">
-              <th:block th:utext="${temporal.getNombreYApellido()}"/>
-              <span>| Paciente referido</span></h5>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title" th:inline="text">
+                                    <th:block th:utext="${temporal.getNombreYApellido()}"/>
+                                    <span>| Paciente referido</span></h5>
 
-            <!-- General Form Elements -->
-            <form method="post" th:action="@{/administrativo/guardar/invitado}" class="row g-3" th:object="${temporal}">
-              <input type="hidden" name="id_temporal" th:value="*{id_temporal}">
-              <input type="hidden" name="dni" th:value="*{dni}">
-              <input type="hidden" name="nombre" th:value="*{nombre}">
-              <input type="hidden" name="apellidos" th:value="*{apellidos}">
-              <div class="col-md-6">
-                <label class="form-label">Correo</label>
-                <input type="email" class="form-control" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
-                     th:errors="*{correo}"></div>
-              </div>
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                <a type="button" class="btn btn-secondary" th:href="@{/administrativo}">Cancelar</a>
-              </div>
+                                <!-- General Form Elements -->
+                                <form method="post" th:action="@{/administrativo/guardar/invitado}" class="row g-3"
+                                      th:object="${temporal}">
+                                    <input type="hidden" name="id_temporal" th:value="*{id_temporal}">
+                                    <input type="hidden" name="dni" th:value="*{dni}">
+                                    <input type="hidden" name="nombre" th:value="*{nombre}">
+                                    <input type="hidden" name="apellidos" th:value="*{apellidos}">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Correo</label>
+                                        <input type="email" class="form-control" th:field="*{correo}"
+                                               th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}"
+                                             th:errors="*{correo}"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                        <a type="button" class="btn btn-secondary"
+                                           th:href="@{/administrativo}">Cancelar</a>
+                                    </div>
 
-              <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <div class="modal-title" id="staticBackdropLabel"></div>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <div class="modal-title" id="staticBackdropLabel"></div>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Guardar cambios
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Cancelar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                      <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+            </section>
 
-</main><!-- End #main -->
+        </main><!-- End #main -->
 
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-  <div class="copyright">
-    &copy; Copyright <strong><span>Clínica</span></strong>. All Rights Reserved
-  </div>
-  <div class="credits">
-    <!-- All the links in the footer should remain intact. -->
-    <!-- You can delete the links only if you purchased the pro version. -->
-    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-  </div>
-</footer><!-- End Footer -->
+        <!-- ======= Footer ======= -->
+        <footer id="footer" class="footer">
+            <div class="copyright">
+                &copy; Copyright <strong><span>Clínica</span></strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+        </footer><!-- End Footer -->
 
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-  <th:block th:replace="~{paciente/fragments/scripts.html::chatGeneral}"></th:block>
-<script>
-  var headerColorAdministrtivo = "[[${headerColorAdministrativo}]]";
-  localStorage.setItem('headerColorAdministrativo', headerColorAdministrtivo);
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a>
 
-  function updateHeaderColorAdministrador() {
-    var color = headerColorAdministrtivo;
-    document.getElementById('header').style.backgroundColor = color;
-  }
-  updateHeaderColorAdministrador();
-</script>
-<!-- Vendor JS Files -->
-<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+        <script>
+            var headerColorAdministrtivo = "[[${headerColorAdministrativo}]]";
+            localStorage.setItem('headerColorAdministrativo', headerColorAdministrtivo);
 
-<!-- Template Main JS File -->
-<script th:src="@{/assets/js/main.js}"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            function updateHeaderColorAdministrador() {
+                var color = headerColorAdministrtivo;
+                document.getElementById('header').style.backgroundColor = color;
+            }
 
-<script>
-  $(document).ready(function() {
-    $('#staticBackdrop').on('show.bs.modal', function(event) {
-      var button = event.relatedTarget;
-      var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
-      $('#staticBackdropLabel').html(`Confirmación`);
-      $('.modal-body').html(`Al aceptar, se cambiarán definitivamente la edición realizada. ¿Está seguro de continuar?`);
-    });
+            updateHeaderColorAdministrador();
+        </script>
+        <!-- Vendor JS Files -->
+        <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+        <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+        <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+        <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+        <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+        <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+        <!-- Template Main JS File -->
+        <script th:src="@{/assets/js/main.js}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#staticBackdrop').on('show.bs.modal', function (event) {
+                    var button = event.relatedTarget;
+                    var $row = $(button).closest('tr') // Asegúrate de buscar solo filas visibles
+                    $('#staticBackdropLabel').html(`Confirmación`);
+                    $('.modal-body').html(`Al aceptar, se cambiarán definitivamente la edición realizada. ¿Está seguro de continuar?`);
+                });
 
 
-  });
-</script>
+            });
+        </script>
 
-</body>
+    </body>
 
 </html>
