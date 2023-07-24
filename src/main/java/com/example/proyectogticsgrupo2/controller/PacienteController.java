@@ -697,18 +697,50 @@ public class PacienteController {
                         paciente.setFotocontenttype(file.getContentType());
                     }
 
+                    pacienteRepository.save(paciente);
+
+                    // Actualización de nombre en cometchat
+                    if (!p.getNombreYApellido().equals(paciente.getNombreYApellido())){
+                        try {
+                            OkHttpClient client = new OkHttpClient();
+
+                            com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                            RequestBody body = RequestBody.create(mediaType, "{\"name\":\"Paciente "+paciente.getNombreYApellido()+"\"}");
+                            Request r = new Request.Builder()
+                                    .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-"+paciente.getIdPaciente())
+                                    .put(body)
+                                    .addHeader("accept", "application/json")
+                                    .addHeader("content-type", "application/json")
+                                    .addHeader("apikey", "dd589271e9972f36340008c6131756b70313cecb")
+                                    .build();
+
+                            Response resp = client.newCall(r).execute();
+
+                            if (resp.isSuccessful()){
+                                resp.body().close();
+                            }
+                            else{
+                                attr.addFlashAttribute("msgError", "Ocurrió un error al actualizar perfil: CometChatError");
+                                resp.body().close();
+                            }
+
+                        }catch (IOException e){
+                            e.printStackTrace();
+                            attr.addFlashAttribute("msgError", "Ocurrió un error al actualizar perfil: IOExceptionError");
+                        }
+                    }
+
+                    // Actualizacion de correo
                     if (!p.getCorreo().equals(paciente.getCorreo())) {
                         Credenciales credenciales = credencialesRepository.buscarPorId(p.getIdPaciente());
                         Credenciales nuevasCredenciales = new Credenciales(p.getIdPaciente(), paciente.getCorreo(), credenciales.getContrasena());
 
                         credencialesRepository.save(nuevasCredenciales);
-                        pacienteRepository.save(paciente);
 
                         logout(request, response); // cerrando sesión
 
                         return "redirect:/login";
                     }
-                    pacienteRepository.save(paciente);
 
                     attr.addFlashAttribute("msgActualizacion", "Su perfil se ha actualizado correctamente");
                     return "redirect:/Paciente/perfil";

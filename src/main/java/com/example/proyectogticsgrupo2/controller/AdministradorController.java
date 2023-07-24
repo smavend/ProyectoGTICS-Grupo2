@@ -420,15 +420,18 @@ public class AdministradorController {
 
                         credencialesRepository.crearCredenciales(paciente.getIdPaciente(),paciente.getCorreo(),encodedPassword);
                         correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
+                        response.body().close();
                     }
                     else{
+                        attr.addFlashAttribute("msgPaciError", "Error en la creación del paciente "+paciente.getIdPaciente()+": CometChatError");
                         response.body().close();
+                        return "redirect:/administrador/dashboard";
                     }
 
                 }catch (IOException e){
                     // Error al registrar en Cometchat
                     e.printStackTrace();
-                    attr.addFlashAttribute("msgPaciError", "Error en la creación de pacientes: CometChatError");
+                    attr.addFlashAttribute("msgPaciError", "Error en la creación de pacientes: IOExceptionError");
                 }
 
             }
@@ -573,14 +576,15 @@ public class AdministradorController {
                     correoNuevoPaciente.props(paciente.getCorreo(),passRandom, link);
 
                     attr.addFlashAttribute("msgPaci","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" creado exitosamente");
+                    response.body().close();
                 }
                 else{
-                    response.body().close();
+                    attr.addFlashAttribute("msgPaciError", "El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" no pudo ser creado correctamente: CometChatError")
                 }
 
             }catch (IOException e){
                 // Error al registrar en cometchat
-                attr.addFlashAttribute("msgPaciError","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" no pudo ser creado correctamente: CometChatError");
+                attr.addFlashAttribute("msgPaciError","El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" no pudo ser creado correctamente: IOExceptionError");
                 e.printStackTrace();
             }
             return "redirect:/administrador/dashboard";
@@ -693,15 +697,17 @@ public class AdministradorController {
                     correoService.props(doctor.getCorreo(),passRandom, link);
 
                     attr.addFlashAttribute("msgDoc","El doctor "+ doctor.getNombre()+' '+doctor.getApellidos()+" creado exitosamente");
+                    response.body().close();
                 }
                 else{
+                    attr.addFlashAttribute("msgDocError", "El doctor "+doctor.getNombreYApellido()+" no pudo ser creado correctamente: CometChatError");
                     response.body().close();
                 }
 
             }catch (IOException e){
                 // Error al registrar en cometchat
                 e.printStackTrace();
-                attr.addFlashAttribute("msgDocError", "El doctor "+doctor.getNombreYApellido()+" no pudo ser creado correctamente: CometChatError");
+                attr.addFlashAttribute("msgDocError", "El doctor "+doctor.getNombreYApellido()+" no pudo ser creado correctamente: IOExceptionError");
             }
 
             Optional<Stylevistas> style = stylevistasRepository.findById(2);
