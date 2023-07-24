@@ -595,13 +595,16 @@ public class SuperAdminController {
 
                         credencialesRepository.crearCredenciales(paciente.getIdPaciente(), paciente.getCorreo(), encodedPassword);
                         correoService.props(paciente.getCorreo(),passRandom, link);
+                        response.body().close();
                     }
                     else {
+                        System.out.println("CometChatError: Error al crear paciente "+id);
                         response.body().close();
                     }
 
                 }catch (IOException e){
                     // Error al registrar en cometchat
+                    System.out.println("IOExceptionError: Error al crear paciente "+id);
                     e.printStackTrace();
                 }
 
@@ -938,13 +941,16 @@ public class SuperAdminController {
                     credencialesRepository.crearCredenciales(administrador.get().getIdAdministrador(), administrador.get().getCorreo(), encodedPassword);
                     CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
                     correoService.props(administrador.get().getCorreo(), passRandom);
+                    response.body().close();
 
                 }else{
+                    System.out.println("CometChatError: Error al crear administrador");
                     response.body().close();
                 }
             }
             catch (IOException e){
                 // Error al registrar en cometchat
+                System.out.println("IOExceptionError: Error al crear administrador");
                 e.printStackTrace();
             }
 
@@ -996,13 +1002,16 @@ public class SuperAdminController {
                     credencialesRepository.crearCredenciales(administrativonuevo.getIdAdministrativo(), administrativonuevo.getCorreo(), encodedPassword);
                     CorreoServiceSuperAdmin correoService = new CorreoServiceSuperAdmin();
                     correoService.props(administrativonuevo.getCorreo(), passRandom);
+                    response.body().close();
 
                 }else{
+                    System.out.println("CometChatError: Error al crear administrativo");
                     response.body().close();
                 }
 
             }catch (IOException e){
                 // Error al registrar en cometchat
+                System.out.println("IOExceptionError: Error al crear administrativo");
                 e.printStackTrace();
             }
 
