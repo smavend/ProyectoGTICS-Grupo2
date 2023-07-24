@@ -5,6 +5,9 @@ import com.example.proyectogticsgrupo2.entity.*;
 import com.example.proyectogticsgrupo2.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -804,7 +807,7 @@ public class DoctorController {
 
     @PostMapping("/guardarReporte")
     public String guardarReporte(@Validated(Cita.validacion.class) @ModelAttribute("cita") Cita cita, BindingResult bindingResult, @RequestParam("especialidadExamenPendiente") int idEspecExamenPendiente,
-                                 HttpSession session, Authentication authentication, Model model) {
+                                 HttpSession session, Authentication authentication, Model model, RedirectAttributes attr) {
         /*Doctor doctor_session = doctorRepository.findByCorreo(authentication.getName());*/
         String userEmail;
         if (session.getAttribute("impersonatedUser") != null) {
@@ -842,8 +845,39 @@ public class DoctorController {
             return "doctor/DoctorCita"; // se podria cambiar a DOctorCita
         } else {
 
-            cita.setEstado(4);
-            citaRepository.save(cita); // guardar cita finalizada
+            // Eliminando chat con paciente
+            try {
+                OkHttpClient client = new OkHttpClient();
+
+                com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                com.squareup.okhttp.RequestBody body = com.squareup.okhttp.RequestBody.create(mediaType, "{\"friends\":[\"p-"+cita.getPaciente().getIdPaciente()+"\"]}");
+                Request r = new Request.Builder()
+                        .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/d-"+cita.getDoctor().getId_doctor()+"/friends")
+                        .delete(body)
+                        .addHeader("accept", "application/json")
+                        .addHeader("content-type", "application/json")
+                        .addHeader("apikey", "dd589271e9972f36340008c6131756b70313cecb")
+                        .build();
+
+                Response response = client.newCall(r).execute();
+                if (response.isSuccessful()){
+                    cita.setEstado(4);
+                    citaRepository.save(cita); // guardar cita finalizada
+                    response.body().close();
+                    attr.addFlashAttribute("msgActualizacion", "Cita finalizada");
+                }
+                else{
+                    cita.setEstado(4);
+                    citaRepository.save(cita); // guardar cita finalizada
+                    attr.addFlashAttribute("error", "Cita finalizada con un error: CometChatError");
+                }
+
+            }catch (IOException e){
+                e.printStackTrace();
+                cita.setEstado(4);
+                citaRepository.save(cita); // guardar cita finalizada
+                attr.addFlashAttribute("error", "Cita finalizada con un error: IOExceptionError");
+            }
 
             if (idEspecExamenPendiente == 4 || idEspecExamenPendiente == 5 || idEspecExamenPendiente == 6){ // si se le asigno un examen pendiente al paciente
 

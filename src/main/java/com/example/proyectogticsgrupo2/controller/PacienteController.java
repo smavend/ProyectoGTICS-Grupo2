@@ -320,69 +320,9 @@ public class PacienteController {
                             Model model, HttpSession session, Authentication authentication,
                             HttpServletRequest request, RedirectAttributes attr) {
 
-        Optional<Stylevistas> style = stylevistasRepository.findById(5);
-        if (style.isPresent()) {
-            Stylevistas styleActual = style.get();
-
-            model.addAttribute("headerColorPaciente", styleActual.getHeader());
-        } else {
-            // Puedes manejar aquí el caso en que no se encuentra el 'stylevistas'
-        }
-
-        String userEmail;
-        if (session.getAttribute("impersonatedUser") != null) {
-            userEmail = (String) session.getAttribute("impersonatedUser");
-        } else {
-            userEmail = authentication.getName();
-        }
-
         pacienteRepository.anularCitaNoCancelada();
-        Paciente paciente = pacienteRepository.findByCorreo(userEmail);
-        session.setAttribute("paciente", paciente);
-
-        String tipoPago;
-        if (citaTemporal.getModalidad() == 0) {
-            tipoPago = "Efectivo";
-        } else {
-            tipoPago = "Tarjeta";
-        }
-
+        Paciente paciente = pacienteRepository.findByCorreo(authentication.getName());
         Doctor doctor = doctorRepository.findById(citaTemporal.getIdDoctor()).get();
-
-        String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getInicio().toString();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
-        LocalDateTime fin = inicio.plusMinutes(doctor.getDuracion_cita_minutos());
-
-        Especialidad especialidad = especialidadRepository.findById(citaTemporal.getIdEspecialidad()).get();
-
-        // VALIDAR LO QUE OCURRE EN CASO SE ESTE RECIBIENDO UNA CITA PENDIENTE
-        Cita cita;
-        if (citaPendiente != null & examenPendiente == null) {
-
-            citaRepository.reservarCitaPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getId());
-            pagoRepository.nuevoPagoPagado(citaTemporal.getId(), tipoPago, codigoRecibo);
-            cita = citaRepository.findById(citaTemporal.getId()).get();
-
-        } else if (examenPendiente != null & citaPendiente == null) {
-
-            citaRepository.reservarExamenPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getId());
-            pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago, codigoRecibo);
-            cita = citaRepository.findById(citaTemporal.getId()).get();
-
-        } else {
-
-            citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), especialidad.getIdEspecialidad());
-            int idCita = citaRepository.obtenerUltimoId();
-            pagoRepository.nuevoPago(idCita, tipoPago, codigoRecibo);
-            cita = citaRepository.findById(idCita).get();
-
-        }
-
-        // Enviar correo al paciente
-        CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
-        String host = request.getServerName()+":"+request.getLocalPort();
-        correo.props(host, paciente.getCorreo(), cita);
 
         // Añadir chat con doctor
         try {
@@ -392,38 +332,69 @@ public class PacienteController {
             RequestBody body = RequestBody.create(mediaType, "{\"accepted\":[\"d-"+doctor.getId_doctor()+"\"]}");
             Request r = new Request.Builder()
                     .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-"+paciente.getIdPaciente()+"/friends")
-                    .delete(body)
+                    .post(body)
                     .addHeader("accept", "application/json")
                     .addHeader("content-type", "application/json")
                     .addHeader("apikey", "dd589271e9972f36340008c6131756b70313cecb")
                     .build();
 
             Response response = client.newCall(r).execute();
-
             if (response.isSuccessful()){
 
-                // CAMBIAR PROCESO DE REGISTRO DE CITA A ESTA SECCIÓN
+                String tipoPago;
+                if (citaTemporal.getModalidad() == 0) {
+                    tipoPago = "Efectivo";
+                } else {
+                    tipoPago = "Tarjeta";
+                }
 
-                // Mostrar información en vista
-                model.addAttribute("sede", sedeRepository.findById(citaTemporal.getIdSede()).get());
-                model.addAttribute("especialidad", especialidad);
-                model.addAttribute("doctor", doctorRepository.findById(citaTemporal.getIdDoctor()).get());
-                Float precioBase = administrativoPorEspecialidadPorSedeRepository.buscarPorSedeYEspecialidad(citaTemporal.getIdSede(), citaTemporal.getIdEspecialidad()).getPrecio_cita();
-                model.addAttribute("precio", precioBase * paciente.getSeguro().getCoaseguro());
+                String inicioString = citaTemporal.getFecha().toString() + ' ' + citaTemporal.getInicio().toString();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                LocalDateTime inicio = LocalDateTime.parse(inicioString, formatter);
+                LocalDateTime fin = inicio.plusMinutes(doctor.getDuracion_cita_minutos());
+
+                // Validar casos de cita o examen pendiente y reservar cita
+                Cita cita;
+                if (citaPendiente != null & examenPendiente == null) {
+
+                    citaRepository.reservarCitaPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getId());
+                    pagoRepository.nuevoPagoPagado(citaTemporal.getId(), tipoPago, codigoRecibo);
+                    cita = citaRepository.findById(citaTemporal.getId()).get();
+
+                } else if (examenPendiente != null & citaPendiente == null) {
+
+                    citaRepository.reservarExamenPendiente(doctor.getId_doctor(), inicio, fin, citaTemporal.getId());
+                    pagoRepository.nuevoPago(citaTemporal.getId(), tipoPago, codigoRecibo);
+                    cita = citaRepository.findById(citaTemporal.getId()).get();
+
+                } else {
+
+                    citaRepository.reservarCita(paciente.getIdPaciente(), citaTemporal.getIdDoctor(), inicio, fin, citaTemporal.getModalidad(), citaTemporal.getIdSede(), paciente.getSeguro().getIdSeguro(), citaTemporal.getIdEspecialidad());
+                    int idCita = citaRepository.obtenerUltimoId();
+                    pagoRepository.nuevoPago(idCita, tipoPago, codigoRecibo);
+                    cita = citaRepository.findById(idCita).get();
+
+                }
+
+                // Enviar correo al paciente
+                CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
+                String host = request.getServerName()+":"+request.getLocalPort();
+                correo.props(host, paciente.getCorreo(), cita);
+
+                attr.addFlashAttribute("citaAgendada", true);
+                response.body().close();
             }
             else{
-                response.body().close();
+                // Error al añadir chat de doctor
+                attr.addFlashAttribute("error", "CometChatError");
             }
 
         }catch (IOException e){
-            // Error al añadir contacto
+            // Error al añadir chat de doctor
             e.printStackTrace();
-            attr.addFlashAttribute("msgError", "La cita: "+codigoRecibo+" no pudo ser creada correctamente: CometChatError");
-            return "redirect:/Paciente";
+            attr.addFlashAttribute("error", "IOExceptionError");
         }
-
-        // CAMBIAR POR REDIRECT:/
-        return "paciente/confirmacion";
+        return "redirect:/Paciente";
     }
 
     @GetMapping("/pendientes")
@@ -558,17 +529,45 @@ public class PacienteController {
         Optional<Cita> optionalCita = citaRepository.findById(idCita);
         pacienteRepository.anularCitaNoCancelada();
         if (optionalCita.isPresent()) {
+            Cita cita = optionalCita.get();
             Pago pago = pagoRepository.buscarPorCita(idCita);
 
             if (pago.getEstadoPago() == 0) {
-                pagoRepository.deleteById(pago.getId());
-                citaRepository.deleteById(idCita);
-                attr.addFlashAttribute("msg", "Cita cancelada correctamente");
+
+                // Elminar chat con doctor
+                try {
+                    OkHttpClient client = new OkHttpClient();
+
+                    com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
+                    RequestBody body = RequestBody.create(mediaType, "{\"friends\":[\"d-"+cita.getDoctor().getId_doctor()+"\"]}");
+                    Request r = new Request.Builder()
+                            .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-"+cita.getPaciente().getIdPaciente()+"/friends")
+                            .delete(body)
+                            .addHeader("accept", "application/json")
+                            .addHeader("content-type", "application/json")
+                            .addHeader("apikey", "dd589271e9972f36340008c6131756b70313cecb")
+                            .build();
+
+                    Response response = client.newCall(r).execute();
+                    if (response.isSuccessful()){
+                        pagoRepository.deleteById(pago.getId());
+                        citaRepository.deleteById(idCita);
+                        attr.addFlashAttribute("msgOk", "Cita cancelada correctamente");
+                        response.body().close();
+                    }
+                    else{
+                        attr.addFlashAttribute("msgError", "Ocurrió un error al cancelar la cita: CometChatError");
+                    }
+
+                }catch (IOException e){
+                    e.printStackTrace();
+                    attr.addFlashAttribute("msgError", "Ocurrió un error al cancelar la cita: IOExceptionError");
+                }
             } else {
-                attr.addFlashAttribute("msg", "Cancelación de cita inválida");
+                attr.addFlashAttribute("msgError", "Cancelación de cita inválida");
             }
         } else {
-            attr.addFlashAttribute("msg", "Ocurrió un error al cancelar la cita");
+            attr.addFlashAttribute("msgError", "Ocurrió un error al cancelar la cita: CitaInválida");
         }
 
         return "redirect:/Paciente/citas";
