@@ -329,9 +329,9 @@ public class PacienteController {
             OkHttpClient client = new OkHttpClient();
 
             com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, "{\"accepted\":[\"d-"+doctor.getId_doctor()+"\"]}");
+            RequestBody body = RequestBody.create(mediaType, "{\"accepted\":[\"d-" + doctor.getId_doctor() + "\"]}");
             Request r = new Request.Builder()
-                    .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-"+paciente.getIdPaciente()+"/friends")
+                    .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-" + paciente.getIdPaciente() + "/friends")
                     .post(body)
                     .addHeader("accept", "application/json")
                     .addHeader("content-type", "application/json")
@@ -339,7 +339,7 @@ public class PacienteController {
                     .build();
 
             Response response = client.newCall(r).execute();
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
 
                 String tipoPago;
                 if (citaTemporal.getModalidad() == 0) {
@@ -378,18 +378,17 @@ public class PacienteController {
 
                 // Enviar correo al paciente
                 CorreoCitaRegistrada correo = new CorreoCitaRegistrada(administrativoPorEspecialidadPorSedeRepository);
-                String host = request.getServerName()+":"+request.getLocalPort();
+                String host = request.getServerName() + ":" + request.getLocalPort();
                 correo.props(host, paciente.getCorreo(), cita);
 
                 attr.addFlashAttribute("citaAgendada", true);
                 response.body().close();
-            }
-            else{
+            } else {
                 // Error al añadir chat de doctor
                 attr.addFlashAttribute("error", "CometChatError");
             }
 
-        }catch (IOException e){
+        } catch (IOException e) {
             // Error al añadir chat de doctor
             e.printStackTrace();
             attr.addFlashAttribute("error", "IOExceptionError");
@@ -539,9 +538,9 @@ public class PacienteController {
                     OkHttpClient client = new OkHttpClient();
 
                     com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
-                    RequestBody body = RequestBody.create(mediaType, "{\"friends\":[\"d-"+cita.getDoctor().getId_doctor()+"\"]}");
+                    RequestBody body = RequestBody.create(mediaType, "{\"friends\":[\"d-" + cita.getDoctor().getId_doctor() + "\"]}");
                     Request r = new Request.Builder()
-                            .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-"+cita.getPaciente().getIdPaciente()+"/friends")
+                            .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-" + cita.getPaciente().getIdPaciente() + "/friends")
                             .delete(body)
                             .addHeader("accept", "application/json")
                             .addHeader("content-type", "application/json")
@@ -549,17 +548,16 @@ public class PacienteController {
                             .build();
 
                     Response response = client.newCall(r).execute();
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         pagoRepository.deleteById(pago.getId());
                         citaRepository.deleteById(idCita);
                         attr.addFlashAttribute("msgOk", "Cita cancelada correctamente");
                         response.body().close();
-                    }
-                    else{
+                    } else {
                         attr.addFlashAttribute("msgError", "Ocurrió un error al cancelar la cita: CometChatError");
                     }
 
-                }catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                     attr.addFlashAttribute("msgError", "Ocurrió un error al cancelar la cita: IOExceptionError");
                 }
@@ -656,16 +654,16 @@ public class PacienteController {
         Paciente p = pacienteRepository.findByCorreo(userEmail);
         session.setAttribute("paciente", p);
 
-        // Validación de correo repetido
-        Paciente pacienteRepetido = pacienteRepository.findByCorreo(paciente.getCorreo());
-        Doctor doctorRepetido = doctorRepository.findByCorreo(paciente.getCorreo());
-        Administrador administradorRepetido = administradorRepository.findByCorreo(paciente.getCorreo());
-        Administrativo administrativoRepetido = administrativoRepository.findByCorreo(paciente.getCorreo());
-        SuperAdmin superAdminRepetido = superAdminRepository.findByCorreo(paciente.getCorreo());
-
-        String fileName = file.getOriginalFilename();
-
         if (p.getIdPaciente().equals(paciente.getIdPaciente())) {
+
+            // Validación de correo repetido
+            Paciente pacienteRepetido = pacienteRepository.findByCorreo(paciente.getCorreo());
+            Doctor doctorRepetido = doctorRepository.findByCorreo(paciente.getCorreo());
+            Administrador administradorRepetido = administradorRepository.findByCorreo(paciente.getCorreo());
+            Administrativo administrativoRepetido = administrativoRepository.findByCorreo(paciente.getCorreo());
+            SuperAdmin superAdminRepetido = superAdminRepository.findByCorreo(paciente.getCorreo());
+
+            String fileName = file.getOriginalFilename();
 
             if (fileName.contains("..") || fileName.contains(" ")) {
                 attr.addFlashAttribute("msgError", "El archivo contiene caracteres inválidos");
@@ -678,14 +676,13 @@ public class PacienteController {
                 model.addAttribute("distritoList", distritoRepository.findAll());
                 return "paciente/perfilEditar";
             }
-            else if(pacienteRepetido != null | doctorRepetido != null | administradorRepetido != null | administrativoRepetido != null | superAdminRepetido != null){
+            else if ((pacienteRepetido != null & !paciente.getCorreo().equals(p.getCorreo())) | doctorRepetido != null | administradorRepetido != null | administrativoRepetido != null | superAdminRepetido != null) {
                 bindingResult.rejectValue("correo", "errorCorreo", "El correo ingresado ya se encuentra registrado");
                 model.addAttribute("seguroList", seguroRepository.findAll());
                 model.addAttribute("alergiasPaciente", alergiaRepository.buscarPorPacienteId(paciente.getIdPaciente()));
                 model.addAttribute("distritoList", distritoRepository.findAll());
                 return "paciente/perfilEditar";
-            }
-            else {
+            } else {
                 try {
                     if (file.isEmpty()) {
                         paciente.setFoto(p.getFoto());
@@ -697,17 +694,15 @@ public class PacienteController {
                         paciente.setFotocontenttype(file.getContentType());
                     }
 
-                    pacienteRepository.save(paciente);
-
                     // Actualización de nombre en cometchat
-                    if (!p.getNombreYApellido().equals(paciente.getNombreYApellido())){
+                    if (!p.getNombreYApellido().equals(paciente.getNombreYApellido())) {
                         try {
                             OkHttpClient client = new OkHttpClient();
 
                             com.squareup.okhttp.MediaType mediaType = com.squareup.okhttp.MediaType.parse("application/json");
-                            RequestBody body = RequestBody.create(mediaType, "{\"name\":\"Paciente "+paciente.getNombreYApellido()+"\"}");
+                            RequestBody body = RequestBody.create(mediaType, "{\"name\":\"Paciente " + paciente.getNombreYApellido() + "\"}");
                             Request r = new Request.Builder()
-                                    .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-"+paciente.getIdPaciente())
+                                    .url("https://24272635d8f091a1.api-eu.cometchat.io/v3/users/p-" + paciente.getIdPaciente())
                                     .put(body)
                                     .addHeader("accept", "application/json")
                                     .addHeader("content-type", "application/json")
@@ -716,18 +711,22 @@ public class PacienteController {
 
                             Response resp = client.newCall(r).execute();
 
-                            if (resp.isSuccessful()){
+                            if (resp.isSuccessful()) {
+                                pacienteRepository.save(paciente);
                                 resp.body().close();
-                            }
-                            else{
+                            } else {
                                 attr.addFlashAttribute("msgError", "Ocurrió un error al actualizar perfil: CometChatError");
                                 resp.body().close();
+                                return "redirect:/Paciente/perfil";
                             }
 
-                        }catch (IOException e){
+                        } catch (IOException e) {
                             e.printStackTrace();
                             attr.addFlashAttribute("msgError", "Ocurrió un error al actualizar perfil: IOExceptionError");
+                            return "redirect:/Paciente/perfil";
                         }
+                    } else {
+                        pacienteRepository.save(paciente);
                     }
 
                     // Actualizacion de correo
@@ -877,13 +876,12 @@ public class PacienteController {
 
                 if (!contrasenaNueva1.equals("")) {
 
-                    if (contrasenaNueva1.length()>=6){
+                    if (contrasenaNueva1.length() >= 6) {
                         credencialesRepository.save(nuevasCredenciales);
                         attr.addFlashAttribute("msgActualizacion", "Contraseña actualizada correctamente");
                         attr.addFlashAttribute("pass", contrasenaNueva1);
                         return "redirect:/Paciente/perfil";
-                    }
-                    else{
+                    } else {
                         attr.addFlashAttribute("error2", "La contraseña debe tener como mínimo 6 dígitos");
                     }
 

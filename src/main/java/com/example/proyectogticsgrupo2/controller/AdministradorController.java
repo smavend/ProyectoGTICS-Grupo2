@@ -579,7 +579,7 @@ public class AdministradorController {
                     response.body().close();
                 }
                 else{
-                    attr.addFlashAttribute("msgPaciError", "El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" no pudo ser creado correctamente: CometChatError")
+                    attr.addFlashAttribute("msgPaciError", "El paciente "+ paciente.getNombre()+' '+paciente.getApellidos()+" no pudo ser creado correctamente: CometChatError");
                 }
 
             }catch (IOException e){
