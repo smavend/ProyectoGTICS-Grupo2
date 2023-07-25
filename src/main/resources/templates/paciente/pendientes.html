@@ -26,9 +26,9 @@
             <h1 class="encabezado text-center" style="width: 90%">Reservar</h1>
             <div class="bodyReservar">
                 <div class="cardReservar text-center w-75 py-4">
-                    <span class="btn botonTipo botonTipoSeleccionado">Todos</span>
-                    <span class="btn botonTipo">Citas pendientes</span>
-                    <span class="btn botonTipo">Exámenes pendientes</span>
+                    <span class="btn botonTipo botonTipoSeleccionado" id="botonTodos" onclick="buscarPendientesTodos()">Todos</span>
+                    <span class="btn botonTipo" id="botonConsultas" onclick="buscarPendientesConsultas()">Consultas pendientes</span>
+                    <span class="btn botonTipo" id="botonExamenes" onclick="buscarPendientesExamenes()">Exámenes pendientes</span>
                     <div class="row p-5">
                         <table class="table pt-2 pb-4" id="tablaPendientes">
                             <thead>
@@ -40,7 +40,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="citaPendiente, i: ${citasPendientes}">
+                                <tr th:each="citaPendiente, i: ${citasPendientes}" class="cita"
+                                th:classappend="${citaPendiente.especialidad.es_examen == 1?'examen':'consulta'}">
                                     <td th:text="${citaPendiente.especialidad.nombre}">Traumatología</td>
                                     <td th:text="${citaPendiente.especialidad.es_examen == 1?'Examen':'Consulta'}">
                                         Examen
@@ -95,8 +96,9 @@
         <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
+            let tabla;
             $(document).ready(function () {
-                var tabla = $("#tablaPendientes").DataTable({
+                tabla = $("#tablaPendientes").DataTable({
                     dom: '<"toolbar">frtrip',
                     bInfo: false,
                     pageLength: 5,
@@ -124,6 +126,37 @@
                     }
                 });
             })
+
+            function updateTable(data) {
+                tabla.clear().rows.add(data).draw();
+            }
+
+            const botonTodos = $("#botonTodos");
+            const botonConsultas = $("#botonConsultas");
+            const botonExamenes = $("#botonExamenes");
+            const citas = $(".cita")
+
+            function buscarPendientesTodos(){
+                botonTodos.addClass("botonTipoSeleccionado");
+                botonConsultas.removeClass("botonTipoSeleccionado");
+                botonExamenes.removeClass("botonTipoSeleccionado");
+                updateTable(citas.toArray());
+            }
+
+            function buscarPendientesConsultas(){
+                botonConsultas.addClass("botonTipoSeleccionado");
+                botonTodos.removeClass("botonTipoSeleccionado");
+                botonExamenes.removeClass("botonTipoSeleccionado");
+                updateTable(citas.filter(".consulta").toArray());
+            }
+
+            function buscarPendientesExamenes(){
+                botonExamenes.addClass("botonTipoSeleccionado");
+                botonTodos.removeClass("botonTipoSeleccionado");
+                botonConsultas.removeClass("botonTipoSeleccionado");
+                updateTable(citas.filter(".examen").toArray());
+            }
+
         </script>
     </body>
 </html>

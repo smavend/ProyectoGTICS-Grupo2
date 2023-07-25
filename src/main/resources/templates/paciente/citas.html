@@ -29,8 +29,9 @@
             <div class="alert alert-danger mt-3" th:if="${msgError != null}" th:text="${msgError}"></div>
             <section class="seccionPrincipal">
 
-                <a class="btn botonTipo botonTipoSeleccionado botonCitas" onclick="buscarCitas()">Próximas citas</a>
-                <a class="btn botonTipo botonExamenes" onclick="buscarExamenes()">Próximos exámenes</a>
+                <a class="btn botonTipo botonTipoSeleccionado botonTodos" onclick="buscarCitasTodos()">Todos</a>
+                <a class="btn botonTipo botonConsultas" onclick="buscarCitasConsultas()">Próximas consultas</a>
+                <a class="btn botonTipo botonExamenes" onclick="buscarCitasExamenes()">Próximos exámenes</a>
 
                 <table class="table pt-2 pb-4" id="tabla_citas">
                     <thead>
@@ -45,7 +46,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="cita : ${proximasCitas}" class="filaCita">
+                        <tr th:each="cita : ${proximasCitas}" class="filaCita"
+                            th:classappend="${cita.especialidad.es_examen==1? 'citaExamen':'citaConsulta'}">
                             <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
                             <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
                             <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
@@ -262,6 +264,7 @@
 
         <!-- Template Main JS File -->
         <script th:src="@{/assets/js/main.js}"></script>
+
         <script>
             var headerColorPaciente = "[[${headerColorPaciente}]]";
             localStorage.setItem('headerColorPaciente', headerColorPaciente);
@@ -283,8 +286,8 @@
         <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
+        <!-- Script para cancelar cita -->
         <script>
-            // Script para cancelar cita
             $(".botonCancelarCita").click(function () {
                 let cita = $(this).attr("id");
                 let cancelarModal = $("#cancelarModal");
@@ -297,8 +300,9 @@
 
         <!-- Datatables -->
         <script>
+            let tabla;
             $(document).ready(function () {
-                let tabla = $("#tabla_citas").DataTable({
+                tabla = $("#tabla_citas").DataTable({
                     dom: '<"toolbar">frtip',
                     bInfo: false,
                     pageLength: 5,
@@ -330,41 +334,37 @@
                 });
             })
 
-            // Almacenar los datos originales de la tabla
-            let datosOriginales = tabla.data().toArray();
-
             // Función para actualizar la tabla con los datos filtrados
             function updateTable(data) {
-                tabla.clear().draw();
-                tabla.rows.add(data).draw();
+                tabla.clear().rows.add(data).draw();
             }
 
             // Script para botones filtro
-            const especialidadesExam = ["Cirugía cardiovascular", "Laboratorio", "Rayos X", "Ecografía"];
+            const botonTodos = $(".botonTodos");
+            const botonConsultas = $(".botonConsultas");
             const botonExamenes = $(".botonExamenes");
-            const botonCitas = $(".botonCitas");
+            const citas = $(".filaCita");
 
-            function buscarExamenes() {
-                botonExamenes.addClass("botonTipoSeleccionado");
-                botonCitas.removeClass("botonTipoSeleccionado");
-                const citas = $(".filaCita");
-                for (let i = 0; i < citas.length; i++) {
-                    let especialidad = citas[i].querySelector(".especialidad").innerText;
-                    if (!especialidadesExam.includes(especialidad)) {
-                        citas[i].classList.add("d-none");
-                    }
-                }
-                updateTable(citas.filter(':not(.d-none)').toArray());
-            }
-
-            function buscarCitas() {
+            function buscarCitasTodos(){
+                botonTodos.addClass("botonTipoSeleccionado");
+                botonConsultas.removeClass("botonTipoSeleccionado");
                 botonExamenes.removeClass("botonTipoSeleccionado");
-                botonCitas.addClass("botonTipoSeleccionado");
-                updateTable(datosOriginales);
+                updateTable(citas.toArray());
             }
 
-            $(".botonExamenes").click(buscarExamenes);
-            $(".botonCitas").click(buscarCitas);
+            function buscarCitasConsultas() {
+                botonConsultas.addClass("botonTipoSeleccionado");
+                botonTodos.removeClass("botonTipoSeleccionado");
+                botonExamenes.removeClass("botonTipoSeleccionado");
+                updateTable(citas.filter(".citaConsulta").toArray());
+            }
+
+            function buscarCitasExamenes() {
+                botonExamenes.addClass("botonTipoSeleccionado");
+                botonTodos.removeClass("botonTipoSeleccionado");
+                botonConsultas.removeClass("botonTipoSeleccionado");
+                updateTable(citas.filter(".citaExamen").toArray());
+            }
         </script>
 
     </body>

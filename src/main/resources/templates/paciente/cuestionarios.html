@@ -26,9 +26,9 @@
             <h1 class="encabezado">Cuestionarios</h1>
             <section class="seccionPrincipal">
 
-                <a class="btn botonTipo botonTipoSeleccionado">Todos</a>
-                <a class="btn botonTipo">Completos</a>
-                <a class="btn botonTipo">Incompletos</a>
+                <a class="btn botonTipo botonTipoSeleccionado" id="botonTodos" onclick="buscarCuestionariosTodos()">Todos</a>
+                <a class="btn botonTipo" id="botonCompletos" onclick="buscarCuestionariosCompletos()">Completos</a>
+                <a class="btn botonTipo" id="botonIncompletos" onclick="buscarCuestionariosIncompletos()">Incompletos</a>
 
                 <table class="table pt-2 pb-4" id="tabla_cuestionarios">
                     <thead>
@@ -41,8 +41,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="cuestionario:${cuestionarios}"
-                            th:class="${cuestionario.estado == 1? 'completado':'incompleto'}">
+                        <tr th:each="cuestionario:${cuestionarios}" class="cuestionario"
+                            th:classappend="${cuestionario.estado == 1? 'completo':'incompleto'}">
                             <td th:text="${cuestionario.cita.doctor.especialidad.nombre}">Lorem ipsum, dolor sit amet
                                 consec
                             </td>
@@ -93,7 +93,6 @@
                 var color = headerColorPaciente;
                 document.getElementById('header').style.backgroundColor = color;
             }
-
             updateHeaderColorPaciente();
         </script>
 
@@ -103,8 +102,9 @@
 
         <!-- Datatables -->
         <script>
+            let tabla;
             $(document).ready(function () {
-                $("#tabla_cuestionarios").DataTable({
+                tabla = $("#tabla_cuestionarios").DataTable({
                     dom: '<"toolbar">frtrip',
                     bInfo: false,
                     pageLength: 5,
@@ -133,6 +133,37 @@
                     }
                 });
             })
+
+            function updateTable(data) {
+                tabla.clear().rows.add(data).draw();
+            }
+
+            const botonTodos = $("#botonTodos");
+            const botonCompletos = $("#botonCompletos");
+            const botonIncompletos = $("#botonIncompletos");
+            const cuestionarios = $(".cuestionario");
+
+            function buscarCuestionariosTodos(){
+                botonTodos.addClass("botonTipoSeleccionado");
+                botonCompletos.removeClass("botonTipoSeleccionado");
+                botonIncompletos.removeClass("botonTipoSeleccionado");
+                updateTable(cuestionarios);
+            }
+
+            function buscarCuestionariosCompletos(){
+                botonCompletos.addClass("botonTipoSeleccionado");
+                botonTodos.removeClass("botonTipoSeleccionado");
+                botonIncompletos.removeClass("botonTipoSeleccionado");
+                updateTable(cuestionarios.filter(".completo").toArray());
+            }
+
+            function buscarCuestionariosIncompletos(){
+                botonIncompletos.addClass("botonTipoSeleccionado");
+                botonTodos.removeClass("botonTipoSeleccionado");
+                botonCompletos.removeClass("botonTipoSeleccionado");
+                updateTable(cuestionarios.filter(".incompleto").toArray());
+            }
+
         </script>
     </body>
 </html>
