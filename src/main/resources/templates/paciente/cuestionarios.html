@@ -26,11 +26,13 @@
             <h1 class="encabezado">Cuestionarios</h1>
             <section class="seccionPrincipal">
 
-                <a class="btn botonTipo botonTipoSeleccionado" id="botonTodos" onclick="buscarCuestionariosTodos()">Todos</a>
-                <a class="btn botonTipo" id="botonCompletos" onclick="buscarCuestionariosCompletos()">Completos</a>
-                <a class="btn botonTipo" id="botonIncompletos" onclick="buscarCuestionariosIncompletos()">Incompletos</a>
+                <div class="mb-4">
+                    <a class="btn botonTipo botonTipoSeleccionado" id="botonTodos" onclick="buscarCuestionariosTodos()">Todos</a>
+                    <a class="btn botonTipo" id="botonCompletos" onclick="buscarCuestionariosCompletos()">Completos</a>
+                    <a class="btn botonTipo" id="botonIncompletos" onclick="buscarCuestionariosIncompletos()">Incompletos</a>
+                </div>
 
-                <table class="table pt-2 pb-4" id="tabla_cuestionarios">
+                <table class="table pt-2 pb-4 text-nowrap" id="tabla_cuestionarios">
                     <thead>
                         <tr>
                             <th>Cita</th>

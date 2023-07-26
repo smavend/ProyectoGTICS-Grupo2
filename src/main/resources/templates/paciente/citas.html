@@ -29,11 +29,13 @@
             <div class="alert alert-danger mt-3" th:if="${msgError != null}" th:text="${msgError}"></div>
             <section class="seccionPrincipal">
 
-                <a class="btn botonTipo botonTipoSeleccionado botonTodos" onclick="buscarCitasTodos()">Todos</a>
-                <a class="btn botonTipo botonConsultas" onclick="buscarCitasConsultas()">Próximas consultas</a>
-                <a class="btn botonTipo botonExamenes" onclick="buscarCitasExamenes()">Próximos exámenes</a>
+                <div class="mb-4">
+                    <a class="btn botonTipo botonTipoSeleccionado botonTodos" onclick="buscarCitasTodos()">Todos</a>
+                    <a class="btn botonTipo botonConsultas" onclick="buscarCitasConsultas()">Consultas</a>
+                    <a class="btn botonTipo botonExamenes" onclick="buscarCitasExamenes()">Exámenes</a>
+                </div>
 
-                <table class="table pt-2 pb-4" id="tabla_citas">
+                <table class="table pt-2 pb-4 text-nowrap" id="tabla_citas">
                     <thead>
                         <tr>
                             <th>Especialidad</th>
@@ -86,7 +88,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="row informacionModal">
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <p>Nombres y apellidos:<span class="informacionModalDato"
                                                                      th:text="${cita.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
                                         </p>
@@ -95,7 +97,7 @@
                                         <p>Teléfono:<span class="informacionModalDato"
                                                           th:text="${cita.paciente.telefono}">934-250-488</span></p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <p>Fecha de nacimiento:<span class="informacionModalDato"
                                                                      th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}">25 años</span>
                                         </p>
@@ -106,10 +108,10 @@
                                         </p>
                                     </div>
                                 </div>
-                                <span class="textoModal"
-                                      th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                <div class="row justify-content-center mx-4"
+                                      th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></div>
                                 <div class="row informacionModal">
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <p>Especialidad:<span class="informacionModalDato"
                                                               th:text="${cita.doctor.especialidad.nombre}">Cardiología</span>
                                         </p>
@@ -120,7 +122,7 @@
                                                        th:text="${torresPisosPrecio[i.index].getTorre()}">B (Falta)</span>
                                         </p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <p>Doctor:<span class="informacionModalDato"
                                                         th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
                                         </p>
@@ -134,12 +136,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer w-100">
-                                <a th:id="${cita.id_cita}" th:if="${cita.estado == 0}"
-                                   class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
-                                <strong th:classappend="${cita.estado == 1? 'm-auto':''}"
-                                        th:text="${cita.estado == 1?'Pago realizado':'Proceda a realizar el pago respectivo en caja'}">Proceda
-                                    a realizar el pago respectivo en caja</strong>
+                            <div class="modal-footer">
+                                <div class="row w-100">
+                                    <div class="col-lg-6 text-center mb-2">
+                                        <strong th:classappend="${cita.estado == 1? 'm-auto':''}"
+                                                th:text="${cita.estado == 1?'Pago realizado':'Proceda a realizar el pago respectivo en caja'}">Proceda
+                                            a realizar el pago respectivo en caja</strong>
+                                    </div>
+                                    <div class="col-lg-6 text-center">
+                                        <a th:id="${cita.id_cita}" th:if="${cita.estado == 0}"
+                                           class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -162,7 +170,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="row informacionModal">
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <p>Nombres y apellidos:<span class="informacionModalDato"
                                                                      th:text="${cita.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
                                         </p>
@@ -171,7 +179,7 @@
                                         <p>Teléfono:<span class="informacionModalDato"
                                                           th:text="${cita.paciente.telefono}">934-250-488</span></p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <p>Fecha de nacimiento:<span class="informacionModalDato"
                                                                      th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}">25 años</span>
                                         </p>
@@ -182,10 +190,10 @@
                                         </p>
                                     </div>
                                 </div>
-                                <span class="textoModal"
-                                      th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' del '+${#temporals.format(cita.inicio,'MM')}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></span>
+                                <div class="row justify-content-center mx-4"
+                                     th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' del '+${#temporals.format(cita.inicio,'MM')}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></div>
                                 <div class="row informacionModal">
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <p>Especialidad:<span class="informacionModalDato"
                                                               th:text="${cita.doctor.especialidad.nombre}">Psicología</span>
                                         </p>
@@ -197,28 +205,36 @@
                                                 th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelada en banca móvil</span>
                                         </p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <p>Doctor:<span class="informacionModalDato"
                                                         th:text="${cita.doctor.nombreYApellido}">José Perez Miranda</span>
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer w-100">
-                                <a th:id="${cita.id_cita}" th:if="${cita.estado == 0}"
-                                   class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
-                                <a th:classappend="${cita.estado == 1? 'm-auto':''}"
-                                   th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link != null}"
-                                   class="btn botonAceptar" th:href="@{'/Paciente/sesionVirtual?c='+${cita.id_cita}}">Acceder
-                                    a sesión virtual</a>
-                                <a th:classappend="${cita.estado == 1? 'm-auto':''}"
-                                   th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}"
-                                   style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha sido
-                                    creada</a>
-                                <a th:classappend="${cita.estado == 1? 'm-auto':''}"
-                                   th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}"
-                                   style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a la
-                                    cita</a>
+                            <div class="modal-footer">
+                                <div class="row w-100">
+                                    <div class="col-lg-6 text-center mb-2">
+                                        <a th:classappend="${cita.estado == 1? 'm-auto':''}"
+                                           th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link != null}"
+                                           class="btn botonAceptar"
+                                           th:href="@{'/Paciente/sesionVirtual?c='+${cita.id_cita}}">Acceder
+                                            a sesión virtual</a>
+                                        <a th:classappend="${cita.estado == 1? 'm-auto':''}"
+                                           th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}"
+                                           style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha sido
+                                            creada</a>
+                                        <a th:classappend="${cita.estado == 1? 'm-auto':''}"
+                                           th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}"
+                                           style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a
+                                            la
+                                            cita</a>
+                                    </div>
+                                    <div th:if="${cita.estado == 0}" class="col-lg-6 text-center">
+                                        <a th:id="${cita.id_cita}"
+                                           class="btn botonCancelar botonCancelarCita me-auto">Cancelar cita</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -278,9 +294,6 @@
         </script>
 
         <th:block th:replace="~{paciente/fragments/scripts.html::pacienteScripts}"></th:block>
-
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
 
         <!-- DATATABLES CDN -->
         <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
@@ -345,7 +358,7 @@
             const botonExamenes = $(".botonExamenes");
             const citas = $(".filaCita");
 
-            function buscarCitasTodos(){
+            function buscarCitasTodos() {
                 botonTodos.addClass("botonTipoSeleccionado");
                 botonConsultas.removeClass("botonTipoSeleccionado");
                 botonExamenes.removeClass("botonTipoSeleccionado");

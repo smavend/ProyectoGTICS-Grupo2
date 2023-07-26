@@ -28,13 +28,15 @@
             <!--<div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>-->
             <section class="seccionPrincipal">
 
-                <a id="boton_todos" class="btn botonTipo botonTipoSeleccionado" onclick="buscarPagosTodos()">Todos</a>
-                <a id="boton_pendientes" class="btn botonTipo" onclick="buscarPagosPendientes()">Pendientes</a>
-                <a id="boton_cancelados" class="btn botonTipo" onclick="buscarPagosCancelados()">Cancelados</a>
+                <div class="mb-4">
+                    <a id="boton_todos" class="btn botonTipo botonTipoSeleccionado" onclick="buscarPagosTodos()">Todos</a>
+                    <a id="boton_pendientes" class="btn botonTipo" onclick="buscarPagosPendientes()">Pendientes</a>
+                    <a id="boton_cancelados" class="btn botonTipo" onclick="buscarPagosCancelados()">Cancelados</a>
+                </div>
 
                 <div id="coaseguro" th:attr="data-valor=${coaseguro}"></div>
 
-                <table class="table pt-2 pb-4" id="tablax">
+                <table class="table pt-2 pb-4 text-nowrap" id="tablax">
                     <thead>
                         <tr>
                             <th>Concepto</th>

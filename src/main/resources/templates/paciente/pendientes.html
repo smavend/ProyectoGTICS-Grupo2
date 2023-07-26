@@ -26,11 +26,13 @@
             <h1 class="encabezado text-center" style="width: 90%">Reservar</h1>
             <div class="bodyReservar">
                 <div class="cardReservar text-center w-75 py-4">
-                    <span class="btn botonTipo botonTipoSeleccionado" id="botonTodos" onclick="buscarPendientesTodos()">Todos</span>
-                    <span class="btn botonTipo" id="botonConsultas" onclick="buscarPendientesConsultas()">Consultas pendientes</span>
-                    <span class="btn botonTipo" id="botonExamenes" onclick="buscarPendientesExamenes()">Exámenes pendientes</span>
+                    <div class="mb-4">
+                        <span class="btn botonTipo botonTipoSeleccionado" id="botonTodos" onclick="buscarPendientesTodos()">Todos</span>
+                        <span class="btn botonTipo" id="botonConsultas" onclick="buscarPendientesConsultas()">Consultas pendientes</span>
+                        <span class="btn botonTipo" id="botonExamenes" onclick="buscarPendientesExamenes()">Exámenes pendientes</span>
+                    </div>
                     <div class="row p-5">
-                        <table class="table pt-2 pb-4" id="tablaPendientes">
+                        <table class="table pt-2 pb-4 text-nowrap" id="tablaPendientes">
                             <thead>
                                 <tr>
                                     <th class="text-center">Especialidad</th>
