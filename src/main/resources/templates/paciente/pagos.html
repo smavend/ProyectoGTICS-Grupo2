@@ -46,7 +46,7 @@
                                 <th>Fecha de cita</th>
                                 <th>Fecha de pago</th>
                                 <th>Precio</th>
-                                <th>Tipo de cita</th>
+                                <th class="text-center">Tipo de cita</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
@@ -63,9 +63,12 @@
                                     th:text="${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy  /  HH:mm')}+' Hrs.'"></td>
                                 <td th:text="${pago.fechaCancelada != null? #temporals.format(pago.fechaCancelada, 'dd-MM-yyyy'):'Por cancelar'}"></td>
                                 <td id="precio" th:class="precio-calculado"></td>
-                                <td th:text="${pago.cita.modalidad == 0? 'Presencial':'Virtual'}"></td>
+                                <td class="text-center">
+                                    <span th:classappend="${pago.cita.modalidad == 0? 'presencial':'virtual'}"
+                                          th:text="${pago.cita.modalidad == 0? 'Presencial':'Virtual'}"></span>
+                                </td>
                                 <!-- columna estado -->
-                                <td th:if="${pago.estadoPago == 0}">
+                                <td th:if="${pago.estadoPago == 0}" class="text-center">
                                     <button class="botonPagar" id="idPagar"
                                             th:attr="data-valor=${pago.id}, data-valor-inicio=${#temporals.format(pago.cita.inicio, 'dd-MM-yyyy HH:mm')}, data-valor-id-cita=${pago.cita.id_cita}"
                                             onclick="mostrarTipoDePago()">Pagar

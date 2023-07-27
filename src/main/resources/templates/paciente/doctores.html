@@ -109,19 +109,19 @@
 
         <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="canvasHorarios"
              aria-labelledby="offcanvasWithBothOptionsLabel" style="transition: transform .4s ease-in-out">
-            <div class="offcanvas-header">
-                <h2 class="offcanvas-title text-dark fw-bold" id="offcanvasWithBothOptionsLabel">Próximos horarios</h2>
+            <div class="offcanvas-header fs-2">
+                <div class="offcanvas-title text-dark fw-bold" id="offcanvasWithBothOptionsLabel">Próximos horarios</div>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
                 <div class="seccionFoto">
                     <img class="fotoDoctor rounded-circle" th:src="@{/assets/img/doctor1.jpg}">
                 </div>
-                <div class="seccionDescripcion">
-                    <div class="seccionNombre">Dr. Doctor</div>
-                    <div class="seccionEspecialidad">Especialidad</div>
+                <div class="seccionDescripcion mb-3">
+                    <div class="seccionNombre fs-4">Dr. Doctor</div>
+                    <div class="seccionEspecialidad fs-5">Especialidad</div>
                 </div>
-                <div class="seccionDisponibilidad" id="contenedor" style="width: 60%; margin: auto">
+                <div class="seccionDisponibilidad" id="contenedor" style="width: 80%; margin: auto">
                     <div class="seccionHorario">
                         00:00 - 00:00
                     </div>

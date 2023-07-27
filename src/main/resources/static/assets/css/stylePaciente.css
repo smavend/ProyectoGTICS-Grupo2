@@ -21,14 +21,13 @@ a:hover {
     color: #717ff5;
     text-decoration: none;
 }
-
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-font-family: "Nunito", sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -409,7 +408,7 @@ line-height: 1;
 }
 
 .logo span {
-    font-family: "Nunito", sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .header {
@@ -1722,7 +1721,7 @@ p{
     background-color: #f3f8fe;
     border-radius: 15px;
     box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.1);
-    padding: 10px 0;
+    padding: 18px 30px;
     margin-bottom: 10px;
 }
 
@@ -1741,7 +1740,7 @@ p{
 
 .seccionHorario{
     font-weight: 600;
-    font-size: .9rem;
+    font-size: 1rem;
     color: #575757;
     margin: 5px 0;
     text-align: center;

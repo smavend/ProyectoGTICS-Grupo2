@@ -98,11 +98,11 @@ textarea::-webkit-scrollbar-track {
 
 .seccionPrincipal th{
     font-size: 1rem;
-    padding: 15px 0 15px 20px;
+    padding: 15px 0 15px 0;
 }
 
 .seccionPrincipal td{
-    padding: 20px 0 20px 20px;
+    padding: 20px 0 20px 5px;
 }
 
 .informacionModal{
@@ -845,7 +845,7 @@ table a:hover {
     font-size: 15px;
     font-weight: 600;
     color: #4154f1;
-    transition: 0.3;
+    transition: 0.3s;
     background: #f6f9ff;
     padding: 10px 15px;
     border-radius: 4px;
@@ -896,7 +896,7 @@ table a:hover {
     font-size: 14px;
     font-weight: 600;
     color: #012970;
-    transition: 0.3;
+    transition: 0.3s;
     padding: 10px 0 10px 40px;
     transition: 0.3s;
 }
