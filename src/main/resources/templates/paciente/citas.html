@@ -35,41 +35,43 @@
                     <a class="btn botonTipo botonExamenes" onclick="buscarCitasExamenes()">Exámenes</a>
                 </div>
 
-                <table class="table pt-2 pb-4 text-nowrap" id="tabla_citas">
-                    <thead>
-                        <tr>
-                            <th>Especialidad</th>
-                            <th>Doctor</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Tipo de cita</th>
-                            <th>Estado de pago</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="cita : ${proximasCitas}" class="filaCita"
-                            th:classappend="${cita.especialidad.es_examen==1? 'citaExamen':'citaConsulta'}">
-                            <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
-                            <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
-                            <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
-                            <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">
-                                13:00 Hrs.
-                            </td>
-                            <td class="text-center">
+                <div style="overflow-y: auto">
+                    <table class="table pt-2 pb-4 text-nowrap" id="tabla_citas">
+                        <thead>
+                            <tr>
+                                <th>Especialidad</th>
+                                <th>Doctor</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Tipo de cita</th>
+                                <th>Estado de pago</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="cita : ${proximasCitas}" class="filaCita"
+                                th:classappend="${cita.especialidad.es_examen==1? 'citaExamen':'citaConsulta'}">
+                                <td th:text="${cita.doctor.especialidad.nombre}" class="especialidad">Psicología</td>
+                                <td th:text="${cita.doctor.getNombreYApellido()}">Pepito</td>
+                                <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">10/05/23</td>
+                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">
+                                    13:00 Hrs.
+                                </td>
+                                <td class="text-center">
                                     <span th:classappend="${cita.modalidad == 0? 'presencial':'virtual'}"
                                           th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
-                            </td>
-                            <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
-                            <td class="text-center">
-                                <a href="#" class="botonAceptar" data-bs-toggle="modal"
-                                   th:attr="data-bs-target='#citaModal'+${cita.id_cita}"
-                                   th:text="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.modalidad == 1?'Acceder a cita': 'Ver más'}">Ver
-                                    más</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td th:text="${cita.estado == 1? 'Cancelado':'Pendiente'}">Cancelado</td>
+                                <td class="text-center">
+                                    <a href="#" class="botonAceptar" data-bs-toggle="modal"
+                                       th:attr="data-bs-target='#citaModal'+${cita.id_cita}"
+                                       th:text="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.modalidad == 1?'Acceder a cita': 'Ver más'}">Ver
+                                        más</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <!-- Modal Presencial-->
                 <div th:each="cita, i : ${proximasCitas}" th:if="${cita.modalidad == 0}"
@@ -109,7 +111,7 @@
                                     </div>
                                 </div>
                                 <div class="row justify-content-center mx-4"
-                                      th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></div>
+                                     th:text="'Cita programada para el '+${#temporals.format(cita.inicio,'dd')}+' de '+${#temporals.monthName(cita.inicio)}+' del '+${#temporals.format(cita.inicio,'yyyy')}+' a las '+${#temporals.format(cita.inicio,'HH:mm')}+' Hrs.'"></div>
                                 <div class="row informacionModal">
                                     <div class="col-lg-6">
                                         <p>Especialidad:<span class="informacionModalDato"
@@ -222,11 +224,13 @@
                                             a sesión virtual</a>
                                         <a th:classappend="${cita.estado == 1? 'm-auto':''}"
                                            th:if="${cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual) && cita.link == null}"
-                                           style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha sido
+                                           style="cursor: context-menu;" class="btn botonSecundario">La cita aún no ha
+                                            sido
                                             creada</a>
                                         <a th:classappend="${cita.estado == 1? 'm-auto':''}"
                                            th:if="${!(cita.inicio.isBefore(momentoActual) && cita.fin.isAfter(momentoActual))}"
-                                           style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder a
+                                           style="cursor: context-menu" class="btn botonSecundario">Aún no puede acceder
+                                            a
                                             la
                                             cita</a>
                                     </div>
@@ -316,6 +320,7 @@
             let tabla;
             $(document).ready(function () {
                 tabla = $("#tabla_citas").DataTable({
+                    responsive: true,
                     dom: '<"toolbar">frtip',
                     bInfo: false,
                     pageLength: 5,

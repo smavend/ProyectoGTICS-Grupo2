@@ -1272,7 +1272,7 @@ p{
 
 .cardReservar{
     border-radius: 15px;
-    width: 65%;
+    width: 75%;
     margin: auto;
     background-color: white;
     box-shadow: 0 2px 20px rgba(0, 13, 35, 0.1);
@@ -1465,8 +1465,8 @@ p{
 
 .botonImprimir{
     font-family: 'Nunito', sans-serif;
-    padding: 7px 20px;
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 15px;
     border: none;
     transition: all 0.3s;
 }
@@ -1532,12 +1532,6 @@ p{
     margin: 0 25px;
 }
 
-botonTipo{
-    font-weight: 500;
-    color: black;
-    background-color: rgb(230, 230, 230);
-}
-
 .botonTipo,
 .botonTipoSeleccionado{
     font-size: .8rem;
@@ -1546,6 +1540,12 @@ botonTipo{
     margin-top: 10px;
     margin-right: 10px;
     padding: 8px 20px;
+}
+
+.botonTipo{
+    font-weight: 500;
+    color: black;
+    background-color: #f4f9f5;
 }
 
 .botonTipo:hover,

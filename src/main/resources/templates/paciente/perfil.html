@@ -161,36 +161,38 @@
                                 <p style="margin-left: 7px;" class="mb-4"><span
                                         class="fs-3 font-italic me-1 fw-semibold">Historial de citas</span></p>
 
-                                <table class="table pb-3 text-nowrap" id="tabla_historial">
-                                    <thead>
-                                        <tr>
-                                            <th>Especialidad</th>
-                                            <th>Doctor</th>
-                                            <th>Fecha</th>
-                                            <th>Hora</th>
-                                            <th>Tipo de cita</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="cita: ${historialCitas}">
-                                            <td th:text="${cita.doctor.especialidad.nombre}">Psicología</td>
-                                            <td th:text="${cita.doctor.getNombreYApellido()}">María Godoy</td>
-                                            <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">04/01/21</td>
-                                            <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">
-                                                13:00 Hrs.
-                                            </td>
-                                            <td class="text-center">
+                                <div style="overflow-y: auto">
+                                    <table class="table pb-3 text-nowrap" id="tabla_historial">
+                                        <thead>
+                                            <tr>
+                                                <th>Especialidad</th>
+                                                <th>Doctor</th>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Tipo de cita</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="cita: ${historialCitas}">
+                                                <td th:text="${cita.doctor.especialidad.nombre}">Psicología</td>
+                                                <td th:text="${cita.doctor.getNombreYApellido()}">María Godoy</td>
+                                                <td th:text="${#temporals.format(cita.inicio, 'dd-MM-yyyy')}">04/01/21</td>
+                                                <td th:text="${#temporals.format(cita.inicio, 'HH:mm')+' - '+#temporals.format(cita.fin, 'HH:mm')+' Hrs. '}">
+                                                    13:00 Hrs.
+                                                </td>
+                                                <td class="text-center">
                                                 <span th:classappend="${cita.modalidad == 0? 'presencial':'virtual'}"
                                                       th:text="${cita.modalidad == 0? 'Presencial':'Virtual'}">Presencial</span>
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="#" class="botonAceptar" data-bs-toggle="modal"
-                                                   th:attr="data-bs-target='#citaModal'+${cita.id_cita}">Ver más</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="#" class="botonAceptar" data-bs-toggle="modal"
+                                                       th:attr="data-bs-target='#citaModal'+${cita.id_cita}">Ver más</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -316,6 +318,7 @@
         <script>
             $(document).ready(function () {
                 $("#tabla_historial").DataTable({
+                    responsive: true,
                     dom: '<"toolbar">frtrip',
                     bInfo: false,
                     pageLength: 5,

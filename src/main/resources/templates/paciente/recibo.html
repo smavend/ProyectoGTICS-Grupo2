@@ -41,13 +41,13 @@
 
             <section class="seccionPrincipal recibo">
                 <div class="row encabezadoRecibo">
-                    <div class="col-10">
+                    <div class="col-8 col-sm-9 col-md-10">
                         <h2 class="subEncabezado"
                             th:text="'Cita '+${pago.cita.modalidad == 0? 'Presencial':'Virtual'}+' - '+${#temporals.format(pago.cita.inicio, 'dd/MM/yyyy')}">
                             Recibo - 13/12/2022</h2>
                     </div>
-                    <div id="botonImp" class="col-2">
-                        <button class="btn btn-secondary botonImprimir" onclick="imprimir()">Imprimir</button>
+                    <div id="botonImp" class="col-4 col-sm-3 col-md-2">
+                        <a class="btn btn-secondary botonImprimir" onclick="imprimir()">Imprimir</a>
                     </div>
                 </div>
 
@@ -86,8 +86,8 @@
                     </div>
                 </div>
 
-                <section class="informacionPago">
-                    <table class="table">
+                <section class="informacionPago" style="overflow-x:auto">
+                    <table class="table text-nowrap">
                         <thead>
                             <tr>
                                 <th>Por concepto de</th>
@@ -111,9 +111,9 @@
                         </tbody>
                     </table>
                 </section>
-                <div id="botonVolver" class="d-flex justify-content-end"
+                <div id="botonVolver" class="d-flex justify-content-md-end justify-content-center"
                      style="margin-top: 70px; margin-right: 80px; margin-bottom: 20px">
-                    <a th:href="@{/Paciente/pagos}" class="btn botonVolverPagos ms-3">Volver</a>
+                    <a th:href="@{/Paciente/pagos}" class="btn botonAceptar ms-3">Volver</a>
                 </div>
             </section>
 
@@ -139,9 +139,6 @@
         <script th:src="@{/assets/js/main.js}"></script>
 
         <th:block th:replace="~{paciente/fragments/scripts.html::pacienteScripts}"></th:block>
-
-        <!-- Template Main JS File -->
-        <script th:src="@{/assets/js/main.js}"></script>
 
         <!-- JQUERY -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

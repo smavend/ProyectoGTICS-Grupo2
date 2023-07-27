@@ -32,37 +32,39 @@
                     <a class="btn botonTipo" id="botonIncompletos" onclick="buscarCuestionariosIncompletos()">Incompletos</a>
                 </div>
 
-                <table class="table pt-2 pb-4 text-nowrap" id="tabla_cuestionarios">
-                    <thead>
-                        <tr>
-                            <th>Cita</th>
-                            <th>Fecha enviada</th>
-                            <th>Fecha completada</th>
-                            <th>Doctor</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="cuestionario:${cuestionarios}" class="cuestionario"
-                            th:classappend="${cuestionario.estado == 1? 'completo':'incompleto'}">
-                            <td th:text="${cuestionario.cita.doctor.especialidad.nombre}">Lorem ipsum, dolor sit amet
-                                consec
-                            </td>
-                            <td th:text="${cuestionario.fecha_enviado != null? #temporals.format(cuestionario.fecha_enviado, 'dd-MM-yyyy - HH:mm'): '-'}">
-                                14/07/2022
-                            </td>
-                            <td th:text="${cuestionario.fecha_completado != null? #temporals.format(cuestionario.fecha_completado, 'dd-MM-yyyy - HH:mm'):'-'}">
-                                -
-                            </td>
-                            <td th:text="${cuestionario.cita.doctor.getNombreYApellido()}">Juan Martinez R.</td>
-                            <td class="text-center">
-                                <a th:href="@{'/Paciente/cuestionario?cues='+${cuestionario.id.idCuestionario}+'&cita='+${cuestionario.id.idCita}}"
-                                   th:text="${cuestionario.estado == 0? 'Completar':'Revisar'}"
-                                   th:class="${cuestionario.estado == 0? 'botonAceptar':'botonSecundario'}">Completar</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-y: auto">
+                    <table class="table pt-2 pb-4 text-nowrap" id="tabla_cuestionarios">
+                        <thead>
+                            <tr>
+                                <th>Cita</th>
+                                <th>Fecha enviada</th>
+                                <th>Fecha completada</th>
+                                <th>Doctor</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="cuestionario:${cuestionarios}" class="cuestionario"
+                                th:classappend="${cuestionario.estado == 1? 'completo':'incompleto'}">
+                                <td th:text="${cuestionario.cita.doctor.especialidad.nombre}">Lorem ipsum, dolor sit amet
+                                    consec
+                                </td>
+                                <td th:text="${cuestionario.fecha_enviado != null? #temporals.format(cuestionario.fecha_enviado, 'dd-MM-yyyy - HH:mm'): '-'}">
+                                    14/07/2022
+                                </td>
+                                <td th:text="${cuestionario.fecha_completado != null? #temporals.format(cuestionario.fecha_completado, 'dd-MM-yyyy - HH:mm'):'-'}">
+                                    -
+                                </td>
+                                <td th:text="${cuestionario.cita.doctor.getNombreYApellido()}">Juan Martinez R.</td>
+                                <td class="text-center">
+                                    <a th:href="@{'/Paciente/cuestionario?cues='+${cuestionario.id.idCuestionario}+'&cita='+${cuestionario.id.idCita}}"
+                                       th:text="${cuestionario.estado == 0? 'Completar':'Revisar'}"
+                                       th:class="${cuestionario.estado == 0? 'botonAceptar':'botonSecundario'}">Completar</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </section>
 
@@ -107,6 +109,7 @@
             let tabla;
             $(document).ready(function () {
                 tabla = $("#tabla_cuestionarios").DataTable({
+                    responsive: true,
                     dom: '<"toolbar">frtrip',
                     bInfo: false,
                     pageLength: 5,
