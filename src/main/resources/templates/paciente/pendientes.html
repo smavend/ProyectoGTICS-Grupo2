@@ -36,9 +36,9 @@
                         <table class="table pt-2 pb-4 text-nowrap" id="tablaPendientes">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Especialidad</th>
-                                    <th class="text-center">Tipo</th>
-                                    <th class="text-center">Fecha límite</th>
+                                    <th>Especialidad</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha límite</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -52,7 +52,7 @@
                                     <td th:text="${#dates.format(fechasLimite[i.index], 'dd-MM-yyyy')}">
                                         00-00-00
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a th:href="@{'/Paciente/reservaPendiente?c='+${citaPendiente.id_cita}}"
                                            class="botonAceptar">Completar</a>
                                     </td>

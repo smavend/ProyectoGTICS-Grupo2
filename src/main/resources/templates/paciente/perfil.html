@@ -212,7 +212,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="row informacionModal">
-                                <div class="col-6">
+                                <div class="col-lg-6">
                                     <p>Nombres y apellidos:<span
                                             class="informacionModalDato"
                                             th:text="${cita.paciente.getNombreYApellido()}">Juanchito Palacios Castro</span>
@@ -222,7 +222,7 @@
                                     <p>Teléfono:<span class="informacionModalDato" th:text="${cita.paciente.telefono}">934-250-488</span>
                                     </p>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-lg-6">
                                     <p>Fecha de nacimiento:<span class="informacionModalDato"
                                                                  th:text="${#temporals.format(cita.paciente.fechanacimiento, 'dd-MM-yyyy')}">25 años</span>
                                     </p>
@@ -234,7 +234,7 @@
                                 </div>
                             </div>
                             <div class="row informacionModal">
-                                <div class="col-6">
+                                <div class="col-lg-6">
                                     <p>Especialidad:<span class="informacionModalDato"
                                                           th:text="${cita.doctor.especialidad.nombre}">Cardiología</span>
                                     </p>
@@ -248,7 +248,7 @@
                                                    th:text="'S/. '+${#numbers.formatDecimal(torresPisosPrecio[i.index].getPrecio()*paciente.seguro.getCoaseguro(), 1, 2)}">100</span>
                                     </p>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-lg-6">
                                     <p>Doctor:<span class="informacionModalDato"
                                                     th:text="${cita.doctor.nombre}+' '+${cita.doctor.apellidos}">José Perez Miranda</span>
                                     </p>
@@ -260,11 +260,11 @@
                                 </div>
                             </div>
                             <div class="row informacionModal">
-                                <div class="col-6">
+                                <div class="col-lg-6">
                                     <p>Diagnóstico:<span class="informacionModalDato" th:text="${cita.diagnostico}">Arrítmia cardiaca (Falta)</span>
                                     </p>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-lg-6">
                                     <p>Fecha:<span class="informacionModalDato"
                                                    th:text="${#temporals.format(cita.fin, 'dd-MM-yyyy')}">15/09/22</span>
                                     </p>

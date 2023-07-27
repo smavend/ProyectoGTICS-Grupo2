@@ -24,7 +24,7 @@
             <p class="text-center fw-medium mt-4" style="font-size: 1.2rem">Seleccione la sede de su preferencia para
                 acceder a nuestros
                 servicios</p>
-            <p class="text-center fw-semibold my-3 fs-4" style="color: #0d6efd">Sedes</p>
+            <p class="text-center fw-semibold my-3 fs-4" style="color: #435067">Sedes</p>
 
             <section id="Sedes">
                 <div class="row align-items-start contenedor mx-0">
@@ -37,7 +37,7 @@
                                     <h2 class="fw-bold" style="color: darkblue" th:text="${sede.nombre}">San Isidro</h2>
                                     <p th:text="${sede.direccion}">Av. Javier Prado Este 1066, Lima.</p>
                                     <div class="d-flex align-items-center justify-content-end"
-                                         style="margin-right: 30px">
+                                         style="margin-right: 30px;position: relative;bottom: 40px;">
                                         <span>Conoce la sede</span>
                                         <i class="fas fa-star ml-2 bi bi-arrow-right-circle-fill"
                                            style="color: darkgray"></i>
@@ -73,7 +73,7 @@
                             </div>
                             <div class="cardCuerpo">
                                 <div class="cardTexto">Para más detalles visite la sección CITAS</div>
-                                <a class="btn botonVolverInicio" th:href="@{/Paciente/citas}">Revisar citas</a>
+                                <a class="btn botonAceptar" th:href="@{/Paciente/citas}">Revisar citas</a>
                             </div>
                         </div>
                     </div>
